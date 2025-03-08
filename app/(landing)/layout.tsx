@@ -7,7 +7,7 @@ export default function LandingLayout({
   return (
     <>
       {/* GPU INTENSIVE BACKGROUND - Fixed background with gradient effects - these will stay in place during scroll */}
-      {/* <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/15 dark:from-primary/20 dark:to-primary/25"></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 dark:bg-primary/20 rounded-full filter blur-3xl animate-pulse"></div>
         <div
@@ -18,15 +18,6 @@ export default function LandingLayout({
           className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/5 dark:bg-primary/15 rounded-full filter blur-3xl animate-pulse"
           style={{ animationDelay: "3s", animationDuration: "8s" }}
         ></div>
-      </div> */}
-      
-      {/* Ultra-minimal background - virtually no GPU impact */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Simple solid color with extremely subtle gradient */}
-        <div className="absolute inset-0 bg-background"></div>
-        
-        {/* Optional: Very subtle border at top */}
-        <div className="absolute top-0 inset-x-0 h-1 bg-primary/10"></div>
       </div>
       
       {/* Main content container */}

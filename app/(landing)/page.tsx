@@ -5,23 +5,18 @@ import {
   RocketIcon,
   LightningBoltIcon,
   CheckCircledIcon,
-  PersonIcon,
   StarIcon,
-  QuestionMarkCircledIcon,
   ArrowRightIcon,
   Component1Icon,
   MixerHorizontalIcon,
   TimerIcon,
-  PlusIcon,
   CheckIcon,
   ChevronRightIcon,
-  HeartIcon,
   LockClosedIcon,
   BarChartIcon,
   HeartFilledIcon,
   StarFilledIcon,
 } from "@radix-ui/react-icons";
-import Image from "next/image";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -165,8 +160,6 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="py-20">
-        {/* Use a semi-transparent overlay instead of a solid background */}
-        <div className="absolute inset-0 bg-muted/20 backdrop-blur-[2px]"></div>
         
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-20">
@@ -239,8 +232,6 @@ export default function Home() {
 
       {/* Testimonials Section */}
       <section className="py-24">
-        {/* Use a semi-transparent overlay instead of a solid background */}
-        <div className="absolute inset-0 bg-primary/5 backdrop-blur-[1px]"></div>
         
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-20">
@@ -328,8 +319,6 @@ export default function Home() {
 
       {/* Pricing comparison section */}
       <section className="py-24">
-        {/* Use a semi-transparent overlay instead of a solid background */}
-        <div className="absolute inset-0 bg-muted/10 backdrop-blur-[1px]"></div>
         
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
@@ -442,53 +431,51 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-24 overflow-hidden">
-        {/* Only use minimal background effects here to let layout background shine through */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-        
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
-          <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-primary/20">
-            <div className="text-center mb-10">
-              <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
-                Ready to Achieve Your Dreams?
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Join AmbitiousYou today and start your journey towards becoming a
-                Superhuman.
-              </p>
-            </div>
+  
+  <div className="max-w-4xl mx-auto px-6 relative z-10">
+    <div className="bg-background/30 border border-primary/20 rounded-2xl p-10 shadow-xl backdrop-blur-sm">
+      <div className="text-center mb-10">
+        <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6 text-foreground`}>
+          Ready to Achieve Your Dreams?
+        </h2>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Join AmbitiousYou today and start your journey towards becoming a
+          Superhuman.
+        </p>
+      </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20">
-                <Link href="/signup" className="flex items-center gap-2">
-                  Get Started <RocketIcon className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
-                <Link href="/plans" className="flex items-center gap-2">
-                  View Plans <ArrowRightIcon className="h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-            
-            {/* Final social proof */}
-            <div className="mt-10 text-center">
-              <p className="text-sm text-muted-foreground mb-4">Join thousands of users already achieving their dreams</p>
-              <div className="flex justify-center">
-                <div className="flex -space-x-3">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="w-10 h-10 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs font-medium">
-                      {['JS', 'KL', 'AR', 'TM', 'BN'][i]}
-                    </div>
-                  ))}
-                  <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-xs font-medium">
-                    +3K
-                  </div>
-                </div>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20">
+          <Link href="/signup" className="flex items-center gap-2">
+            Get Started <RocketIcon className="h-5 w-5" />
+          </Link>
+        </Button>
+        <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
+          <Link href="/plans" className="flex items-center gap-2">
+            View Plans <ArrowRightIcon className="h-5 w-5" />
+          </Link>
+        </Button>
+      </div>
+      
+      {/* Final social proof */}
+      <div className="mt-10 text-center">
+        <p className="text-sm text-muted-foreground mb-4">Join thousands of users already achieving their dreams</p>
+        <div className="flex justify-center">
+          <div className="flex -space-x-3">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-10 h-10 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs font-medium">
+                {['JS', 'KL', 'AR', 'TM', 'BN'][i]}
               </div>
+            ))}
+            <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-xs font-medium">
+              +3K
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
     </div>
   );
 }
