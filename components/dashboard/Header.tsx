@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -151,9 +152,21 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/profile" className="w-full">
+                Profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/settings" className="w-full">
+                Settings
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/billing" className="w-full">
+                Billing
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Log out</DropdownMenuItem>
           </DropdownMenuContent>

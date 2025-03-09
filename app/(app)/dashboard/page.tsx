@@ -3,21 +3,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { 
-  BarChartIcon, 
-  CalendarIcon, 
-  CheckCircleIcon,
-  Clock, 
-  InfoIcon, 
-  LineChart, 
-  PlusCircle, 
-  Target, 
-  Zap,
-  Timer as TimerIcon, // Fixed icon name
-  TrendingUp as TrendingUpIcon, // Fixed icon name
-  Rocket,
-  Star
+import {
+  // Removing Lucide imports that we'll replace with Radix UI
+  Clock, // Keep using Lucide's Clock as Radix doesn't have a direct equivalent
+  Rocket, // Keep using Lucide's Rocket as Radix doesn't have a direct equivalent
 } from "lucide-react";
+import {
+  BarChartIcon,
+  CalendarIcon,
+  CheckCircledIcon,
+  ClockIcon,
+  InfoCircledIcon,
+  PlusCircledIcon,
+  TargetIcon,
+  LightningBoltIcon,
+  TimerIcon,
+  DoubleArrowUpIcon,
+  StarIcon,
+  StarFilledIcon,
+  PlusIcon,
+  RocketIcon
+} from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -43,7 +49,7 @@ export default function DashboardPage() {
               <p className="text-muted-foreground">Here's an overview of your ambitions and today's focus</p>
             </div>
             <Button variant="outline" className="gap-2">
-              <PlusCircle className="h-4 w-4" />
+              <PlusCircledIcon className="h-4 w-4" />
               New Ambition
             </Button>
           </div>
@@ -60,7 +66,7 @@ export default function DashboardPage() {
         <Card className="relative overflow-hidden">
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
-              <Target className="h-4 w-4 mr-1 text-primary" />
+              <TargetIcon className="h-4 w-4 mr-1 text-primary" />
               Active Ambitions
             </CardDescription>
             <CardTitle className="text-2xl font-bold">7</CardTitle>
@@ -78,7 +84,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
-              <CheckCircleIcon className="h-4 w-4 mr-1 text-green-500" />
+              <CheckCircledIcon className="h-4 w-4 mr-1 text-green-500" />
               Tasks Completed
             </CardDescription>
             <CardTitle className="text-2xl font-bold">23/31</CardTitle>
@@ -94,7 +100,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
-              <Zap className="h-4 w-4 mr-1 text-amber-500" />
+              <LightningBoltIcon className="h-4 w-4 mr-1 text-amber-500" />
               Active Streak
             </CardDescription>
             <CardTitle className="text-2xl font-bold">16 days</CardTitle>
@@ -117,7 +123,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
-              <TrendingUpIcon className="h-4 w-4 mr-1 text-blue-500" />
+              <DoubleArrowUpIcon className="h-4 w-4 mr-1 text-blue-500" />
               Productivity Score
             </CardDescription>
             <CardTitle className="text-2xl font-bold">92%</CardTitle>
@@ -125,7 +131,7 @@ export default function DashboardPage() {
           <CardContent className="pb-2">
             <div className="flex items-center">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                <StarFilledIcon key={i} className="h-4 w-4 text-amber-400" />
               ))}
               <span className="text-xs ml-2 text-green-500">+5% this week</span>
             </div>
@@ -237,7 +243,7 @@ export default function DashboardPage() {
                         <p className="text-sm text-muted-foreground">{task.ambition}</p>
                       </div>
                       <div className="flex items-center">
-                        <Clock className="h-3 w-3 mr-1 text-muted-foreground" />
+                        <ClockIcon className="h-3 w-3 mr-1 text-muted-foreground" />
                         <span className="text-xs text-muted-foreground">{task.dueTime}</span>
                       </div>
                     </div>
@@ -248,7 +254,7 @@ export default function DashboardPage() {
           </CardContent>
           <CardFooter className="border-t pt-4">
             <Button className="w-full">
-              <PlusCircle className="mr-2 h-4 w-4" /> Add New Task
+              <PlusIcon className="mr-2 h-4 w-4" /> Add New Task
             </Button>
           </CardFooter>
         </Card>
@@ -289,7 +295,7 @@ export default function DashboardPage() {
                   description: "Morning meditation routine",
                   ambition: "Mental Wellness",
                   time: "2 hours ago",
-                  icon: CheckCircleIcon,
+                  icon: CheckCircledIcon,
                   iconColor: "text-green-500"
                 },
                 {
@@ -297,7 +303,7 @@ export default function DashboardPage() {
                   description: "50% progress on Spanish course",
                   ambition: "Learn Spanish",
                   time: "Yesterday",
-                  icon: Target,
+                  icon: TargetIcon,
                   iconColor: "text-blue-500"
                 },
                 {
@@ -305,7 +311,7 @@ export default function DashboardPage() {
                   description: "Added new milestone to Marathon Training",
                   ambition: "Marathon Preparation",
                   time: "Yesterday",
-                  icon: LineChart,
+                  icon: BarChartIcon,
                   iconColor: "text-amber-500"
                 },
                 {
@@ -313,7 +319,7 @@ export default function DashboardPage() {
                   description: "7-day streak maintained",
                   ambition: "Daily Learning",
                   time: "2 days ago",
-                  icon: Zap,
+                  icon: LightningBoltIcon,
                   iconColor: "text-purple-500"
                 },
                 {
@@ -321,7 +327,7 @@ export default function DashboardPage() {
                   description: "Started 'Master Photography'",
                   ambition: "Master Photography",
                   time: "3 days ago",
-                  icon: PlusCircle,
+                  icon: PlusCircledIcon,
                   iconColor: "text-primary"
                 }
               ].map((activity, i) => (
@@ -374,7 +380,7 @@ export default function DashboardPage() {
                   label: "Premium",
                   bgClass: "bg-gradient-to-r from-blue-500/10 to-indigo-500/10",
                   buttonText: "Start Learning",
-                  icon: Rocket
+                  icon: RocketIcon
                 },
                 {
                   title: "Time Management for High Achievers",
@@ -410,7 +416,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4 mr-1" />
+                      <ClockIcon className="h-4 w-4 mr-1" />
                       {item.duration}
                     </div>
                     <Button size="sm" variant="outline" className="gap-1">
@@ -446,7 +452,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-start gap-3">
                   <div className="h-8 w-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                    <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                    <CheckCircledIcon className="h-4 w-4 text-green-500" />
                   </div>
                   <div>
                     <h4 className="font-medium text-green-600 dark:text-green-400">Productivity Increase</h4>
@@ -464,7 +470,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-start gap-3">
                   <div className="h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-                    <InfoIcon className="h-4 w-4 text-amber-500" />
+                    <InfoCircledIcon className="h-4 w-4 text-amber-500" />
                   </div>
                   <div>
                     <h4 className="font-medium text-amber-600 dark:text-amber-400">Focus Opportunity</h4>
