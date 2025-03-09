@@ -78,7 +78,7 @@ export function Sidebar() {
   return (
     <motion.div
       className="relative flex flex-col border-r border-border h-full bg-card"
-      animate={{ width: expanded ? 240 : 72 }}
+      animate={{ width: expanded ? 240 : 60 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
       <div className="flex items-center h-16 border-b border-border px-4">
@@ -97,14 +97,6 @@ export function Sidebar() {
             </motion.span>
           )}
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setExpanded(!expanded)}
-          className="ml-auto"
-        >
-          <MixerVerticalIcon className="h-4 w-4 rotate-90" />
-        </Button>
       </div>
 
       <ScrollArea className="flex-1 py-4">
@@ -144,6 +136,24 @@ export function Sidebar() {
 
       <div className="border-t border-border mt-auto py-4 px-2">
         <nav className="space-y-1">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setExpanded(!expanded)}
+                  className="flex justify-start items-center w-full gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
+                >
+                  <MixerVerticalIcon className="h-4 w-4 rotate-90" />
+                  {expanded && <span>Toggle Sidebar</span>}
+                </Button>
+              </TooltipTrigger>
+              {!expanded && (
+                <TooltipContent side="right">Toggle Sidebar</TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
           {bottomNavItems.map((item) => (
             <TooltipProvider key={item.href} delayDuration={100}>
               <Tooltip>
