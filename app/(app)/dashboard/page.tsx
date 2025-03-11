@@ -53,7 +53,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold tracking-tight mb-1">
-                Welcome back, Alex
+                Welcome back, John
               </h1>
               <p className="text-muted-foreground">
                 Here's an overview of your ambitions and today's focus
