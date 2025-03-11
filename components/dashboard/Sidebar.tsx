@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
+import Image from "next/image";
 
 const mainNavItems = [
   {
@@ -43,7 +44,7 @@ const mainNavItems = [
   },
   {
     title: "Time Tracking",
-    href: "/time",
+    href: "/time_tracking",
     icon: ClockIcon,
   },
   {
@@ -79,7 +80,13 @@ export function Sidebar() {
       <div className="flex items-center h-16 border-b border-border px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <TargetIcon className="h-5 w-5 text-primary-foreground" />
+            {/* <TargetIcon className="h-5 w-5 text-primary-foreground" /> */}
+            <Image
+              src="/favicon.ico"
+              alt="AmbitiousYou Logo"
+              width={32}
+              height={32}
+            />
           </div>
           {expanded && (
             <motion.span

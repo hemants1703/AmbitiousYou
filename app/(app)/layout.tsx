@@ -21,7 +21,7 @@ export default function DashboardLayout({
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Header />
-        <ScrollArea className="flex-1 overflow-scroll">
+        <ScrollArea className="flex-1 overflow-auto">
           <main className="flex-1 p-6 md:p-8 pt-6 max-w-7xl mx-auto w-full">
             {children}
           </main>

@@ -39,6 +39,8 @@ import {
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import Image from "next/image";
+import { ThemeToggler } from "@/components/ThemeToggler";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -78,12 +80,67 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="relative">
-          <BellIcon className="h-5 w-5" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px]">
-            3
-          </Badge>
-        </Button>
+        <ThemeToggler />
+
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative">
+              <BellIcon className="h-5 w-5" />
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px]">
+                3
+              </Badge>
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Notifications</SheetTitle>
+            </SheetHeader>
+            <div className="grid gap-4 p-4">
+              <div className="border-b pb-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <RocketIcon className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">New achievement unlocked!</p>
+                    <p className="text-xs text-muted-foreground">You've completed 5 consecutive days of progress.</p>
+                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-b pb-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
+                    <TargetIcon className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">Milestone reached</p>
+                    <p className="text-xs text-muted-foreground">Your "Learn Piano" ambition is 50% complete!</p>
+                    <p className="text-xs text-muted-foreground">Yesterday</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="pb-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-green-500/10">
+                    <ClockIcon className="h-4 w-4 text-green-500" />
+                  </div>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">Task reminder</p>
+                    <p className="text-xs text-muted-foreground">Don't forget to practice scales for 30 mins today</p>
+                    <p className="text-xs text-muted-foreground">2 days ago</p>
+                  </div>
+                </div>
+              </div>
+              
+              <Button variant="outline" size="sm" className="mt-2">
+                Mark all as read
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
 
         <Sheet>
           <SheetTrigger asChild>
@@ -95,7 +152,7 @@ export function Header() {
             <SheetHeader>
               <SheetTitle>Help & Resources</SheetTitle>
             </SheetHeader>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-4 p-4">
               <div className="grid gap-2">
                 <h3 className="text-sm font-medium">Getting Started</h3>
                 <p className="text-sm text-muted-foreground">

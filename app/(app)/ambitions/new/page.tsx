@@ -32,6 +32,7 @@ import {
 import { Milestone, Tag as TagIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function CreateNewAmbition() {
   const [date, setDate] = useState<Date>();
@@ -79,9 +80,11 @@ export default function CreateNewAmbition() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Button variant="ghost" size="sm" className="gap-1">
+          <Button variant="ghost" size="sm">
+            <Link href="/ambitions" className="gap-1 flex justify-center items-center">
             <ChevronLeftIcon className="h-4 w-4" />
             Back to Ambitions
+            </Link>
           </Button>
         </motion.div>
       </motion.div>
