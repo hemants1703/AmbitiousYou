@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ThemeSelector, AccentColorSelector } from "@/components/ThemeSelector";
 
 export default function Settings() {
   return (
@@ -75,7 +76,7 @@ export default function Settings() {
             </CardFooter>
           </Card>
           
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Public Profile</CardTitle>
               <CardDescription>Manage your public profile visibility</CardDescription>
@@ -99,7 +100,7 @@ export default function Settings() {
             <CardFooter className="flex justify-end">
               <Button>Save Preferences</Button>
             </CardFooter>
-          </Card>
+          </Card> */}
         </TabsContent>
 
         <TabsContent value="account" className="space-y-6">
@@ -277,54 +278,17 @@ export default function Settings() {
               <CardDescription>Customize how the application looks</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-medium mb-4">Color Theme</h3>
-                <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-                  <div className="border rounded-md p-4 flex flex-col gap-2 items-center hover:border-primary cursor-pointer">
-                    <div className="h-24 w-full rounded-md bg-background border"></div>
-                    <p className="font-medium">Light</p>
-                  </div>
-                  <div className="border-2 border-primary rounded-md p-4 flex flex-col gap-2 items-center cursor-pointer">
-                    <div className="h-24 w-full rounded-md bg-zinc-800"></div>
-                    <p className="font-medium">Dark</p>
-                  </div>
-                  <div className="border rounded-md p-4 flex flex-col gap-2 items-center hover:border-primary cursor-pointer">
-                    <div className="h-24 w-full rounded-md bg-background border">
-                      <div className="h-1/2 w-full bg-zinc-800"></div>
-                    </div>
-                    <p className="font-medium">System</p>
-                  </div>
-                </div>
-              </div>
+              <ThemeSelector />
               
-              <div>
-                <h3 className="font-medium mb-4">Accent Color</h3>
-                <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-                  <div className="border-2 border-primary rounded-md p-4 flex flex-col gap-2 items-center cursor-pointer">
-                    <div className="h-12 w-12 rounded-full bg-blue-600"></div>
-                    <p className="font-medium">Blue</p>
-                  </div>
-                  <div className="border rounded-md p-4 flex flex-col gap-2 items-center hover:border-primary cursor-pointer">
-                    <div className="h-12 w-12 rounded-full bg-purple-600"></div>
-                    <p className="font-medium">Purple</p>
-                  </div>
-                  <div className="border rounded-md p-4 flex flex-col gap-2 items-center hover:border-primary cursor-pointer">
-                    <div className="h-12 w-12 rounded-full bg-green-600"></div>
-                    <p className="font-medium">Green</p>
-                  </div>
-                  <div className="border rounded-md p-4 flex flex-col gap-2 items-center hover:border-primary cursor-pointer">
-                    <div className="h-12 w-12 rounded-full bg-orange-600"></div>
-                    <p className="font-medium">Orange</p>
-                  </div>
-                </div>
-              </div>
+              {/* <AccentColorSelector /> */}
             </CardContent>
-            <CardFooter className="flex justify-end">
+            {/* <CardFooter className="flex justify-end">
               <Button>Save Preferences</Button>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
           
-          <Card>
+          {/* Layout section, we might not need these feature yet... might be useful in future */}
+          {/* <Card>
             <CardHeader>
               <CardTitle>Layout</CardTitle>
               <CardDescription>Customize the application layout</CardDescription>
@@ -361,7 +325,7 @@ export default function Settings() {
             <CardFooter className="flex justify-end">
               <Button>Save Layout</Button>
             </CardFooter>
-          </Card>
+          </Card> */}
         </TabsContent>
       </Tabs>
     </div>

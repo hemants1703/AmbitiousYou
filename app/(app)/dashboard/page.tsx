@@ -1,6 +1,13 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +29,7 @@ import {
   StarIcon,
   StarFilledIcon,
   PlusIcon,
-  RocketIcon
+  RocketIcon,
 } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -35,7 +42,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-8 pb-10 overflow-auto">
       {/* Welcome Banner */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -45,19 +52,25 @@ export default function DashboardPage() {
         <div className="relative z-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight mb-1">Welcome back, Alex</h1>
-              <p className="text-muted-foreground">Here's an overview of your ambitions and today's focus</p>
+              <h1 className="text-3xl font-bold tracking-tight mb-1">
+                Welcome back, Alex
+              </h1>
+              <p className="text-muted-foreground">
+                Here's an overview of your ambitions and today's focus
+              </p>
             </div>
-            <Button variant="outline" className="gap-2">
-              <PlusCircledIcon className="h-4 w-4" />
-              New Ambition
+            <Button asChild variant="outline" >
+              <Link href="/ambitions/new" className="gap-2 flex justify-center items-center">
+                <PlusCircledIcon className="h-4 w-4" />
+                New Ambition
+              </Link>
             </Button>
           </div>
         </div>
       </motion.div>
-      
+
       {/* Key Stats */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.1 }}
@@ -73,14 +86,17 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="pb-2">
             <div className="flex items-center text-sm">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+              <Badge
+                variant="outline"
+                className="bg-primary/10 text-primary border-primary/20"
+              >
                 2 near completion
               </Badge>
             </div>
           </CardContent>
           <div className="absolute inset-0 pointer-events-none border-2 border-primary/10 rounded-xl" />
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
@@ -96,7 +112,7 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
@@ -108,18 +124,22 @@ export default function DashboardPage() {
           <CardContent className="pb-2">
             <div className="flex items-center">
               <div className="flex space-x-1">
-                {Array.from({length: 7}).map((_, i) => (
-                  <div 
+                {Array.from({ length: 7 }).map((_, i) => (
+                  <div
                     key={i}
-                    className={`h-2 w-2 rounded-full ${i < 6 ? 'bg-amber-400' : 'bg-muted'}`}
+                    className={`h-2 w-2 rounded-full ${
+                      i < 6 ? "bg-amber-400" : "bg-muted"
+                    }`}
                   />
                 ))}
               </div>
-              <span className="text-xs ml-2 text-muted-foreground">Best: 24 days</span>
+              <span className="text-xs ml-2 text-muted-foreground">
+                Best: 24 days
+              </span>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center">
@@ -138,9 +158,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       {/* Progress Overview */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2 }}
@@ -151,7 +171,9 @@ export default function DashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <div>
                 <CardTitle>Your Progress</CardTitle>
-                <CardDescription>Weekly ambition progress overview</CardDescription>
+                <CardDescription>
+                  Weekly ambition progress overview
+                </CardDescription>
               </div>
               <Tabs defaultValue="week" className="w-auto">
                 <TabsList className="grid w-[240px] grid-cols-3">
@@ -164,31 +186,40 @@ export default function DashboardPage() {
             <CardContent>
               {/* Simple Progress Chart */}
               <div className="h-[250px] flex items-end gap-2 mt-4">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => {
-                  const heights = [60, 85, 70, 40, 95, 80, 65];
-                  return (
-                    <div key={day} className="flex-1 flex flex-col items-center gap-2">
-                      <div 
-                        className={cn(
-                          "w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary/60 transition-all", 
-                          i === 4 && "from-primary to-primary/90"
-                        )} 
-                        style={{ height: `${heights[i]}%` }}
-                      />
-                      <span className="text-xs text-muted-foreground">{day}</span>
-                    </div>
-                  );
-                })}
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+                  (day, i) => {
+                    const heights = [60, 85, 70, 40, 95, 80, 65];
+                    return (
+                      <div
+                        key={day}
+                        className="flex-1 flex flex-col items-center gap-2"
+                      >
+                        <div
+                          className={cn(
+                            "w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary/60 transition-all",
+                            i === 4 && "from-primary to-primary/90"
+                          )}
+                          style={{ height: `${heights[i]}%` }}
+                        />
+                        <span className="text-xs text-muted-foreground">
+                          {day}
+                        </span>
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </CardContent>
           </Card>
         </div>
-        
+
         <Card className="h-full flex flex-col">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
               Today's Focus
-              <Badge variant="secondary" className="ml-2">5 tasks</Badge>
+              <Badge variant="secondary" className="ml-2">
+                5 tasks
+              </Badge>
             </CardTitle>
             <CardDescription>High priority tasks for today</CardDescription>
           </CardHeader>
@@ -201,50 +232,60 @@ export default function DashboardPage() {
                     ambition: "Work Promotion",
                     dueTime: "2:00 PM",
                     completed: false,
-                    priority: "high"
+                    priority: "high",
                   },
                   {
                     title: "30 min language practice",
                     ambition: "Learn Spanish",
                     dueTime: "4:30 PM",
                     completed: false,
-                    priority: "medium"
+                    priority: "medium",
                   },
                   {
                     title: "5K training run",
                     ambition: "Marathon Preparation",
                     dueTime: "6:00 PM",
                     completed: false,
-                    priority: "high"
+                    priority: "high",
                   },
                   {
                     title: "Read chapter 7",
                     ambition: "Finance Knowledge",
                     dueTime: "9:30 PM",
                     completed: false,
-                    priority: "low"
+                    priority: "low",
                   },
                   {
                     title: "Journal entry",
                     ambition: "Daily Reflection",
                     dueTime: "10:00 PM",
                     completed: false,
-                    priority: "medium"
-                  }
+                    priority: "medium",
+                  },
                 ].map((task, i) => (
-                  <div key={i} className={cn("p-3 rounded-md border", 
-                    task.priority === "high" ? "border-red-200 bg-red-50/50 dark:bg-red-950/20 dark:border-red-800/30" : 
-                    task.priority === "medium" ? "border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800/30" : 
-                    "border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800/30"
-                  )}>
+                  <div
+                    key={i}
+                    className={cn(
+                      "p-3 rounded-md border",
+                      task.priority === "high"
+                        ? "border-red-200 bg-red-50/50 dark:bg-red-950/20 dark:border-red-800/30"
+                        : task.priority === "medium"
+                        ? "border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800/30"
+                        : "border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800/30"
+                    )}
+                  >
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">{task.title}</h4>
-                        <p className="text-sm text-muted-foreground">{task.ambition}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {task.ambition}
+                        </p>
                       </div>
                       <div className="flex items-center">
                         <ClockIcon className="h-3 w-3 mr-1 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">{task.dueTime}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {task.dueTime}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -259,9 +300,9 @@ export default function DashboardPage() {
           </CardFooter>
         </Card>
       </motion.div>
-      
+
       {/* Recent Activity & Motivational Quote */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.3 }}
@@ -275,17 +316,22 @@ export default function DashboardPage() {
           <CardContent>
             <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
               <blockquote className="border-l-4 border-primary pl-4 italic">
-                "Success is not final, failure is not fatal: It is the courage to continue that counts."
+                "Success is not final, failure is not fatal: It is the courage
+                to continue that counts."
               </blockquote>
-              <p className="text-right text-sm text-muted-foreground mt-2">— Winston Churchill</p>
+              <p className="text-right text-sm text-muted-foreground mt-2">
+                — Winston Churchill
+              </p>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest updates from your ambitions</CardDescription>
+            <CardDescription>
+              Latest updates from your ambitions
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[220px] pr-4">
@@ -296,7 +342,7 @@ export default function DashboardPage() {
                   ambition: "Mental Wellness",
                   time: "2 hours ago",
                   icon: CheckCircledIcon,
-                  iconColor: "text-green-500"
+                  iconColor: "text-green-500",
                 },
                 {
                   title: "Reached milestone",
@@ -304,7 +350,7 @@ export default function DashboardPage() {
                   ambition: "Learn Spanish",
                   time: "Yesterday",
                   icon: TargetIcon,
-                  iconColor: "text-blue-500"
+                  iconColor: "text-blue-500",
                 },
                 {
                   title: "Updated ambition",
@@ -312,7 +358,7 @@ export default function DashboardPage() {
                   ambition: "Marathon Preparation",
                   time: "Yesterday",
                   icon: BarChartIcon,
-                  iconColor: "text-amber-500"
+                  iconColor: "text-amber-500",
                 },
                 {
                   title: "Achievement unlocked",
@@ -320,7 +366,7 @@ export default function DashboardPage() {
                   ambition: "Daily Learning",
                   time: "2 days ago",
                   icon: LightningBoltIcon,
-                  iconColor: "text-purple-500"
+                  iconColor: "text-purple-500",
                 },
                 {
                   title: "New ambition created",
@@ -328,26 +374,38 @@ export default function DashboardPage() {
                   ambition: "Master Photography",
                   time: "3 days ago",
                   icon: PlusCircledIcon,
-                  iconColor: "text-primary"
-                }
+                  iconColor: "text-primary",
+                },
               ].map((activity, i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.05 * i }}
                   className="flex items-start gap-4 mb-4"
                 >
-                  <div className={`h-10 w-10 rounded-full ${activity.iconColor === "text-primary" ? "bg-primary/20" : "bg-card"} border border-border flex items-center justify-center flex-shrink-0`}>
-                    <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
+                  <div
+                    className={`h-10 w-10 rounded-full ${
+                      activity.iconColor === "text-primary"
+                        ? "bg-primary/20"
+                        : "bg-card"
+                    } border border-border flex items-center justify-center flex-shrink-0`}
+                  >
+                    <activity.icon
+                      className={`h-5 w-5 ${activity.iconColor}`}
+                    />
                   </div>
                   <div className="flex-1">
                     <div className="flex justify-between">
                       <p className="font-medium">{activity.title}</p>
-                      <span className="text-xs text-muted-foreground">{activity.time}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {activity.time}
+                      </span>
                     </div>
                     <p className="text-sm">{activity.description}</p>
-                    <Badge variant="outline" className="mt-1 text-xs">{activity.ambition}</Badge>
+                    <Badge variant="outline" className="mt-1 text-xs">
+                      {activity.ambition}
+                    </Badge>
                   </div>
                 </motion.div>
               ))}
@@ -355,9 +413,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       {/* Learning & Insights */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.4 }}
@@ -375,25 +433,28 @@ export default function DashboardPage() {
               {[
                 {
                   title: "Advanced Goal Setting Techniques",
-                  description: "Master the art of setting and achieving ambitious goals",
+                  description:
+                    "Master the art of setting and achieving ambitious goals",
                   duration: "45 min",
                   label: "Premium",
                   bgClass: "bg-gradient-to-r from-blue-500/10 to-indigo-500/10",
                   buttonText: "Start Learning",
-                  icon: RocketIcon
+                  icon: RocketIcon,
                 },
                 {
                   title: "Time Management for High Achievers",
-                  description: "Optimize your schedule for maximum productivity",
+                  description:
+                    "Optimize your schedule for maximum productivity",
                   duration: "30 min",
                   label: "Featured",
-                  bgClass: "bg-gradient-to-r from-amber-500/10 to-orange-500/10",
+                  bgClass:
+                    "bg-gradient-to-r from-amber-500/10 to-orange-500/10",
                   buttonText: "Continue",
-                  icon: TimerIcon
-                }
+                  icon: TimerIcon,
+                },
               ].map((item, i) => (
-                <motion.div 
-                  key={i} 
+                <motion.div
+                  key={i}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 * i }}
@@ -407,7 +468,9 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <h4 className="font-medium">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                     <Badge variant="outline" className="ml-2">
@@ -433,7 +496,7 @@ export default function DashboardPage() {
             </Button>
           </CardFooter>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Weekly Insights</CardTitle>
@@ -443,7 +506,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
@@ -455,13 +518,18 @@ export default function DashboardPage() {
                     <CheckCircledIcon className="h-4 w-4 text-green-500" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-green-600 dark:text-green-400">Productivity Increase</h4>
-                    <p className="text-sm mt-1">You've completed 30% more tasks than last week. Keep up the momentum!</p>
+                    <h4 className="font-medium text-green-600 dark:text-green-400">
+                      Productivity Increase
+                    </h4>
+                    <p className="text-sm mt-1">
+                      You've completed 30% more tasks than last week. Keep up
+                      the momentum!
+                    </p>
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
@@ -473,13 +541,18 @@ export default function DashboardPage() {
                     <InfoCircledIcon className="h-4 w-4 text-amber-500" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-amber-600 dark:text-amber-400">Focus Opportunity</h4>
-                    <p className="text-sm mt-1">You've spent 20% less time on your top priority ambition this week. Consider reallocating your focus.</p>
+                    <h4 className="font-medium text-amber-600 dark:text-amber-400">
+                      Focus Opportunity
+                    </h4>
+                    <p className="text-sm mt-1">
+                      You've spent 20% less time on your top priority ambition
+                      this week. Consider reallocating your focus.
+                    </p>
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.3 }}
@@ -491,8 +564,13 @@ export default function DashboardPage() {
                     <BarChartIcon className="h-4 w-4 text-blue-500" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-blue-600 dark:text-blue-400">Progress Pattern</h4>
-                    <p className="text-sm mt-1">You're most productive on Wednesdays and Fridays. Consider scheduling important tasks on these days.</p>
+                    <h4 className="font-medium text-blue-600 dark:text-blue-400">
+                      Progress Pattern
+                    </h4>
+                    <p className="text-sm mt-1">
+                      You're most productive on Wednesdays and Fridays. Consider
+                      scheduling important tasks on these days.
+                    </p>
                   </div>
                 </div>
               </motion.div>

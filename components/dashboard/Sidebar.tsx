@@ -42,16 +42,17 @@ const mainNavItems = [
     href: "/ambitions/new",
     icon: PlusCircledIcon,
   },
-  {
-    title: "Time Tracking",
-    href: "/time_tracking",
-    icon: ClockIcon,
-  },
-  {
-    title: "Analytics",
-    href: "/analytics",
-    icon: BarChartIcon,
-  },
+  // Will be implemented in future versions
+  // {
+  //   title: "Time Tracking",
+  //   href: "/time_tracking",
+  //   icon: ClockIcon,
+  // },
+  // {
+  //   title: "Analytics",
+  //   href: "/analytics",
+  //   icon: BarChartIcon,
+  // },
 ];
 
 const bottomNavItems = [
@@ -73,7 +74,7 @@ export function Sidebar() {
 
   return (
     <motion.div
-      className="relative flex flex-col border-r border-border h-full bg-card"
+      className="relative flex flex-col border-r border-border h-full "
       animate={{ width: expanded ? 240 : 60 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >

@@ -95,13 +95,21 @@ export default function AllAmbitionsPage() {
     direction: "desc", // Default direction (newest first)
   });
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Extract unique categories and priorities for filter options
   const categories = [...new Set(ambitions.map(ambition => ambition.category))];
   const priorities = [...new Set(ambitions.map(ambition => ambition.priority))];
 
   // Filter ambitions based on selected filters
   const filteredAmbitions = ambitions.filter(ambition => {
-    // If no filters are applied, show all ambitions
+    // First check search query
+    if (searchQuery && !ambition.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
+        !ambition.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    
+    // If no filters are applied, show all ambitions (that match search)
     if (!filters.category && !filters.priority) return true;
 
     // Apply category filter
@@ -212,6 +220,22 @@ export default function AllAmbitionsPage() {
     show: { opacity: 1, y: 0 },
   };
 
+  // Helper function to highlight search terms
+  const highlightText = (text, searchTerm) => {
+    if (!searchTerm || searchTerm.trim() === "") return text;
+    
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    const parts = text.split(regex);
+    
+    return parts.map((part, index) => 
+      regex.test(part) ? (
+        <span key={index} className="bg-yellow-200 text-black rounded px-0.5">{part}</span>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <motion.div
@@ -234,7 +258,20 @@ export default function AllAmbitionsPage() {
       >
         <div className="relative w-full md:w-[350px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search ambitions..." className="pl-10" />
+          <Input 
+            placeholder="Search ambitions..." 
+            className="pl-10" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button 
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              onClick={() => setSearchQuery("")}
+            >
+              <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+            </button>
+          )}
         </div>
 
         <motion.div
@@ -309,7 +346,7 @@ export default function AllAmbitionsPage() {
               <Button variant="outline" size="sm" className="gap-1">
                 <Settings2 className="h-4 w-4" />
                 Sort{sortConfig.key && `: ${getSortOptionName()}`}
-                {sortConfig.direction === "asc" ? " (A-Z)" : " (Z-A)"}
+                {sortConfig.direction === "asc" ? ": Ascending" : ": Descending"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -390,7 +427,7 @@ export default function AllAmbitionsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           
-          <Button size="sm">
+          <Button asChild size="sm">
             <Link
               href={`/ambitions/new`}
               className="ml-auto md:ml-0 flex justify-center items-center gap-1"
@@ -458,9 +495,11 @@ export default function AllAmbitionsPage() {
                               {ambition.priority}
                             </Badge>
                           </div>
-                          <CardTitle className="mt-2">{ambition.title}</CardTitle>
+                          <CardTitle className="mt-2">
+                            {searchQuery ? highlightText(ambition.title, searchQuery) : ambition.title}
+                          </CardTitle>
                           <CardDescription className="line-clamp-2">
-                            {ambition.description}
+                            {searchQuery ? highlightText(ambition.description, searchQuery) : ambition.description}
                           </CardDescription>
                         </CardHeader>
                         <CardContent className="pb-2">
