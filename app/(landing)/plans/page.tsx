@@ -147,7 +147,7 @@ export default function Plans() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="relative flex flex-col justify-center items-center w-full pt-7 pb-24 px-4">
+      <section className="relative flex flex-col justify-center items-center w-full pt-7 pb-5 px-4">
         {/* Special offer badge - keep subtle transparency but remove backdrop-blur */}
         <div className="z-10 mb-10 bg-primary/5 border border-primary/10 rounded-full px-5 py-2 flex items-center gap-2 animate-fade-in">
           <span className="flex h-2 w-2 relative">
@@ -455,10 +455,6 @@ export default function Plans() {
           {/* Replace semi-transparent background */}
           <div className="bg-background rounded-2xl p-10 shadow-xl border border-primary/20">
             <div className="text-center mb-10">
-              <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
-                <HeartIcon className="mr-2 h-4 w-4" />
-                30-Day Money-Back Guarantee
-              </div>
               <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
                 Ready to Unlock Your Full Potential?
               </h2>
@@ -479,7 +475,7 @@ export default function Plans() {
             </div>
             
             {/* Security badges */}
-            <div className="mt-10 flex justify-center gap-6 items-center">
+            <div className="mt-5 flex justify-center gap-6 items-center">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <LockClosedIcon className="h-4 w-4" />
                 <span>Secure Payment</span>
@@ -487,10 +483,6 @@ export default function Plans() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <InfoCircledIcon className="h-4 w-4" />
                 <span>Cancel Anytime</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CheckCircledIcon className="h-4 w-4" />
-                <span>30-Day Guarantee</span>
               </div>
             </div>
           </div>

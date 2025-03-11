@@ -42,11 +42,6 @@ const mainNavItems = [
     icon: PlusCircledIcon,
   },
   {
-    title: "Calendar",
-    href: "/calendar",
-    icon: CalendarIcon,
-  },
-  {
     title: "Time Tracking",
     href: "/time",
     icon: ClockIcon,
@@ -134,7 +129,7 @@ export function Sidebar() {
         </div>
       </ScrollArea>
 
-      <div className="border-t border-border mt-auto py-4 px-2">
+      <div className="border-t border-border mt-auto py-2 px-2">
         <nav className="space-y-1">
           <TooltipProvider delayDuration={100}>
             <Tooltip>
