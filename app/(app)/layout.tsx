@@ -1,8 +1,7 @@
 import React from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Header } from "@/components/dashboard/Header";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Metadata } from "next";
+import { SidebarController } from "@/components/dashboard/SidebarController";
 
 export const metadata: Metadata = {
   title: {
@@ -18,15 +17,13 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Header />
+      <SidebarController>
         <ScrollArea className="flex-1 overflow-auto">
           <main className="flex-1 p-6 md:p-8 pt-6 max-w-7xl mx-auto w-full">
             {children}
           </main>
         </ScrollArea>
-      </div>
+      </SidebarController>
     </div>
   );
 }

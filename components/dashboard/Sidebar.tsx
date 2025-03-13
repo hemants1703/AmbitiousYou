@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -68,9 +68,17 @@ const bottomNavItems = [
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({ onMobileNavigate }) {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
+  const router = useRouter();
+
+  const handleNavigation = (href) => {
+    router.push(href);
+    if (window.innerWidth < 768) {
+      onMobileNavigate?.();
+    }
+  };
 
   return (
     <motion.div
@@ -111,6 +119,10 @@ export function Sidebar() {
                   <TooltipTrigger asChild>
                     <Link
                       href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavigation(item.href);
+                      }}
                       className={cn(
                         "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                         item.href === pathname
@@ -146,7 +158,7 @@ export function Sidebar() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setExpanded(!expanded)}
-                  className="flex justify-start items-center w-full gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
+                  className="max-sm:hidden flex justify-start items-center w-full gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
                 >
                   <MixerVerticalIcon className="h-4 w-4 rotate-90" />
                   {expanded && <span>Toggle Sidebar</span>}
@@ -163,6 +175,10 @@ export function Sidebar() {
                 <TooltipTrigger asChild>
                   <Link
                     href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavigation(item.href);
+                    }}
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                       item.href === pathname

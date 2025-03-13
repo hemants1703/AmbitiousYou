@@ -49,8 +49,14 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
 import { LightningBoltIcon } from "@radix-ui/react-icons";
+import { Menu } from "lucide-react"; // Make sure to install lucide-react if not already
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick: () => void;
+  isSidebarOpen: boolean;
+}
+
+export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [ambitions, setAmbitions] = useState([]);
@@ -85,7 +91,17 @@ export function Header() {
   }, [debouncedSearchQuery]);
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        onClick={onMenuClick} 
+        className="md:hidden"
+        aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+      
       <div className="flex-1 flex items-center gap-2">
         <Button variant="outline" size="sm" className="hidden md:flex gap-2" asChild>
           <Link href="/dashboard">
