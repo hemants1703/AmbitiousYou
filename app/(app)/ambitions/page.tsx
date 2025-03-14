@@ -237,7 +237,7 @@ export default function AllAmbitionsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 max-sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -278,7 +278,7 @@ export default function AllAmbitionsPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="flex gap-2 w-full md:w-auto"
+          className="flex gap-2 w-full md:w-auto flex-wrap"
         >
           <DropdownMenu open={isFilterOpen} onOpenChange={setIsFilterOpen}>
             <DropdownMenuTrigger asChild>
@@ -430,7 +430,7 @@ export default function AllAmbitionsPage() {
           <Button asChild size="sm">
             <Link
               href={`/ambitions/new`}
-              className="ml-auto md:ml-0 flex justify-center items-center gap-1"
+              className="md:ml-0 flex justify-center items-center gap-1"
             >
               <PlusCircle className="h-4 w-4" />
               New Ambition
@@ -445,7 +445,7 @@ export default function AllAmbitionsPage() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Tabs defaultValue="all" className="w-full">
-          <TabsList>
+          <TabsList className="max-md:self-center">
             <TabsTrigger value="all">All Ambitions</TabsTrigger>
             <TabsTrigger value="active">Active</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>

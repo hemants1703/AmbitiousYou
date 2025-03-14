@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/plans", label: "Plans" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/features", label: "Features" },
 ];
 

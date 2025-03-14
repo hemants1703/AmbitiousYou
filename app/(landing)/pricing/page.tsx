@@ -141,7 +141,7 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-export default function Plans() {
+export default function PricingPage() {
   const [billingCycle, setBillingCycle] = React.useState("monthly"); // Move state up
 
   return (
