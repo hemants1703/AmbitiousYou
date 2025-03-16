@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Compass } from "lucide-react"
@@ -17,11 +17,11 @@ export default function NotFound() {
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-muted-foreground">
-            We can't seem to find this page. Perhaps there was a typo in the URL, 
-            or maybe we're both looking in the wrong place?
+            We can&apos;t seem to find this page. Perhaps there was a typo in the URL, 
+            or maybe we&apos;re both looking in the wrong place?
           </p>
           <p className="text-sm text-muted-foreground">
-            Don't worry, even the best explorers take a wrong turn sometimes. Let's get you back on track!
+            Don&apos;t worry, even the best explorers take a wrong turn sometimes. Let&apos;s get you back on track!
           </p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-3 pb-6">

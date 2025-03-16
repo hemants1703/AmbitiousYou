@@ -13,7 +13,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format, addHours, addDays, subDays } from "date-fns";
+import { format, subDays } from "date-fns";
 import {
   CalendarIcon,
   ClockIcon,
@@ -222,7 +222,7 @@ export default function Time() {
           >
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle>Today's Time Entries</CardTitle>
+                <CardTitle>Today&apos;s Time Entries</CardTitle>
                 <CardDescription>Time tracked for {format(new Date(), "MMMM d, yyyy")}</CardDescription>
               </CardHeader>
               <CardContent>

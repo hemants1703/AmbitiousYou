@@ -19,7 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
@@ -39,7 +38,6 @@ import {
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import Image from "next/image";
 import { ThemeToggler } from "@/components/ThemeToggler";
 import { useRouter } from 'next/navigation';
 import { Search } from "lucide-react";
@@ -231,7 +229,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   </div>
                   <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">New achievement unlocked!</p>
-                    <p className="text-xs text-muted-foreground">You've completed 5 consecutive days of progress.</p>
+                    <p className="text-xs text-muted-foreground">You&apos;ve completed 5 consecutive days of progress.</p>
                     <p className="text-xs text-muted-foreground">2 hours ago</p>
                   </div>
                 </div>
@@ -257,7 +255,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   </div>
                   <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">Task reminder</p>
-                    <p className="text-xs text-muted-foreground">Don't forget to practice scales for 30 mins today</p>
+                    <p className="text-xs text-muted-foreground">Don&apos;t forget to practice scales for 30 mins today</p>
                     <p className="text-xs text-muted-foreground">2 days ago</p>
                   </div>
                 </div>

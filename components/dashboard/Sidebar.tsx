@@ -3,14 +3,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   DashboardIcon,
   TargetIcon,
   PlusCircledIcon,
-  CalendarIcon,
-  ClockIcon,
-  BarChartIcon,
   GearIcon,
   PersonIcon,
   MixerVerticalIcon,

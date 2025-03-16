@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ThemeToggler } from "./ThemeToggler";
+import Image from "next/image";
 
 export default function Footer() {
     const exploreLinks = [
@@ -30,7 +31,7 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="space-y-4">
                         <Link href="/" className="flex items-center gap-2 mb-4">
-                            <img src="/logo.svg" alt="AmbitiousYou Logo" className="size-10" />
+                            <Image src="/logo.svg" alt="AmbitiousYou Logo" className="size-10" />
                             <span className="text-3xl">
                                 <span className="font-light">Ambitious</span><span className="font-bold">You</span>
                             </span>

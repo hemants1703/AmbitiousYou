@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ThemeSelector, AccentColorSelector } from "@/components/ThemeSelector";
+import { ThemeSelector } from "@/components/ThemeSelector";
 
 export default function Settings() {
   return (
@@ -231,7 +231,7 @@ export default function Settings() {
           <Card>
             <CardHeader>
               <CardTitle>Notification Schedule</CardTitle>
-              <CardDescription>Set quiet hours when you won't receive notifications</CardDescription>
+              <CardDescription>Set quiet hours when you won&apos;t receive notifications</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">

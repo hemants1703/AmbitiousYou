@@ -9,25 +9,19 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  BarChartIcon,
-  CalendarIcon,
   ClockIcon,
   DownloadIcon,
   GearIcon,
   InfoCircledIcon,
   LightningBoltIcon,
-  MagnifyingGlassIcon,
   MixerHorizontalIcon,
   StarFilledIcon,
   TargetIcon
 } from "@radix-ui/react-icons";
 // For icons not available in Radix UI
-import { ArrowRight, ArrowUpRight, ArrowDownRight, LineChart, PieChart, TrendingUp } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
 
-export default function Analytics() {
-  const [dateRange, setDateRange] = useState("month");
-  const [ambitionFilter, setAmbitionFilter] = useState("all");
-  
+export default function Analytics() {  
   // Example data - would come from your API in a real app
   const ambitions = [
     { id: "1", name: "Learn Spanish", color: "bg-blue-500", progress: 65 },
@@ -354,7 +348,7 @@ export default function Analytics() {
                     </div>
                     <div>
                       <h4 className="font-medium text-green-600">Strong Progress Pattern</h4>
-                      <p className="text-sm mt-1">You've been consistently improving in "Learn Spanish" over the last 3 weeks.</p>
+                      <p className="text-sm mt-1">You&apos;ve been consistently improving in "Learn Spanish" over the last 3 weeks.</p>
                     </div>
                   </div>
                 </div>
@@ -444,7 +438,7 @@ export default function Analytics() {
           <Card>
             <CardHeader>
               <CardTitle>Time Investment Analysis</CardTitle>
-              <CardDescription>How you've been allocating your time across ambitions</CardDescription>
+              <CardDescription>How you&apos;ve been allocating your time across ambitions</CardDescription>
             </CardHeader>
             <CardContent className="h-[400px] flex items-center justify-center text-muted-foreground">
               Time analysis charts and graphs would appear here

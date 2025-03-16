@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
-import { Card, CardContent } from "@/components/ui/card"
 
 export function ThemeSelector() {
   const { theme, setTheme } = useTheme()

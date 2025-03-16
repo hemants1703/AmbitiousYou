@@ -6,10 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Link from "next/link";
 import {
-  CheckCircledIcon,
   CrossCircledIcon,
   BarChartIcon,
-  HeartIcon,
   LockClosedIcon,
   ArrowRightIcon,
   QuestionMarkCircledIcon,
@@ -20,7 +18,7 @@ import {
 
 const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept props
   // Define pricing data
-  const pricing = {
+  const pricing: object = {
     achiever: {
       monthly: {
         price: "$9.99",

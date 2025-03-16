@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion"; // Add this import for animations
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -19,14 +19,10 @@ import {
   CalendarIcon,
   CheckIcon,
   ChevronLeftIcon,
-  ClockIcon,
-  FlagIcon,
   ListBulletIcon,
   MixerHorizontalIcon,
   PlusCircledIcon,
-  TargetIcon,
   Cross1Icon,
-  CrossCircledIcon
 } from "@radix-ui/react-icons";
 // Import any missing icons from Lucide as fallback
 import { Milestone, Tag as TagIcon } from "lucide-react";
@@ -272,7 +268,7 @@ export default function CreateNewAmbition() {
               <Card>
                 <CardHeader>
                   <CardTitle>Progress Settings</CardTitle>
-                  <CardDescription>Define how you'll track progress for this ambition</CardDescription>
+                  <CardDescription>Define how you&apos;ll track progress for this ambition</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-4">
@@ -296,7 +292,7 @@ export default function CreateNewAmbition() {
                         />
                       </motion.div>
                       <p className="text-sm text-muted-foreground">
-                        Set the initial progress if you've already started working on this ambition
+                        Set the initial progress if you&apos;ve already started working on this ambition
                       </p>
                     </div>
                   </div>
@@ -370,7 +366,7 @@ export default function CreateNewAmbition() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="yes">Yes, track time spent</SelectItem>
-                        <SelectItem value="no">No, don't track time</SelectItem>
+                        <SelectItem value="no">No, don&apos;t track time</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

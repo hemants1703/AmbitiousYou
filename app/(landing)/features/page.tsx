@@ -100,7 +100,7 @@ export default function Features() {
               </h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed">
                 Our platform is designed specifically for those who refuse to
-                settle for mediocrity. See how we've helped thousands of
+                settle for mediocrity. See how we&apos;ve helped thousands of
                 ambitious professionals exceed their goals.
               </p>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">

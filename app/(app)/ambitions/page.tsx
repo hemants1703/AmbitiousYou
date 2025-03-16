@@ -16,14 +16,11 @@ import {
   CalendarIcon,
   CheckCircleIcon,
   ChevronRight,
-  Clock,
   Filter,
   Folder,
-  MoreHorizontal,
   PlusCircle,
   Search,
   Settings2,
-  Tag,
   Target,
 } from "lucide-react";
 import { motion } from "framer-motion";

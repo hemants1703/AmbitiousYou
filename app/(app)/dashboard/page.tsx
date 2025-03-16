@@ -1,5 +1,5 @@
 "use client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
   CardContent,
@@ -11,13 +11,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
-  // Removing Lucide imports that we'll replace with Radix UI
-  Clock, // Keep using Lucide's Clock as Radix doesn't have a direct equivalent
-  Rocket, // Keep using Lucide's Rocket as Radix doesn't have a direct equivalent
-} from "lucide-react";
-import {
   BarChartIcon,
-  CalendarIcon,
   CheckCircledIcon,
   ClockIcon,
   InfoCircledIcon,
@@ -26,13 +20,11 @@ import {
   LightningBoltIcon,
   TimerIcon,
   DoubleArrowUpIcon,
-  StarIcon,
   StarFilledIcon,
   PlusIcon,
   RocketIcon,
 } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -56,7 +48,7 @@ export default function DashboardPage() {
                 Welcome back, John
               </h1>
               <p className="text-muted-foreground">
-                Here's an overview of your ambitions and today's focus
+                Here&apos;s an overview of your ambitions and today&apos;s focus
               </p>
             </div>
             <Button asChild variant="outline" >
@@ -216,7 +208,7 @@ export default function DashboardPage() {
         <Card className="h-full flex flex-col">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
-              Today's Focus
+              Today&apos;s Focus
               <Badge variant="secondary" className="ml-2">
                 5 tasks
               </Badge>
@@ -316,8 +308,8 @@ export default function DashboardPage() {
           <CardContent>
             <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
               <blockquote className="border-l-4 border-primary pl-4 italic">
-                "Success is not final, failure is not fatal: It is the courage
-                to continue that counts."
+              &quot;Success is not final, failure is not fatal: It is the courage
+                to continue that counts.&quot;
               </blockquote>
               <p className="text-right text-sm text-muted-foreground mt-2">
                 — Winston Churchill
@@ -522,7 +514,7 @@ export default function DashboardPage() {
                       Productivity Increase
                     </h4>
                     <p className="text-sm mt-1">
-                      You've completed 30% more tasks than last week. Keep up
+                      You&apos;ve completed 30% more tasks than last week. Keep up
                       the momentum!
                     </p>
                   </div>
@@ -545,7 +537,7 @@ export default function DashboardPage() {
                       Focus Opportunity
                     </h4>
                     <p className="text-sm mt-1">
-                      You've spent 20% less time on your top priority ambition
+                      You&apos;ve spent 20% less time on your top priority ambition
                       this week. Consider reallocating your focus.
                     </p>
                   </div>
@@ -568,7 +560,7 @@ export default function DashboardPage() {
                       Progress Pattern
                     </h4>
                     <p className="text-sm mt-1">
-                      You're most productive on Wednesdays and Fridays. Consider
+                      You&apos;re most productive on Wednesdays and Fridays. Consider
                       scheduling important tasks on these days.
                     </p>
                   </div>

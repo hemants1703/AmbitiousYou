@@ -173,7 +173,7 @@ export default function Profile() {
             <Card>
               <CardHeader>
                 <CardTitle>Focus Distribution</CardTitle>
-                <CardDescription>Where you've been spending your time</CardDescription>
+                <CardDescription>Where you&apos;ve been spending your time</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -236,7 +236,7 @@ export default function Profile() {
               <div className="flex justify-between items-center">
                 <div>
                   <CardTitle>Your Ambitions</CardTitle>
-                  <CardDescription>Goals and aspirations you're actively pursuing</CardDescription>
+                  <CardDescription>Goals and aspirations you&apos;re actively pursuing</CardDescription>
                 </div>
                 <Button size="sm">New Ambition</Button>
               </div>
@@ -321,7 +321,7 @@ export default function Profile() {
           <Card>
             <CardHeader>
               <CardTitle>Your Achievements</CardTitle>
-              <CardDescription>Milestones and accomplishments you've reached</CardDescription>
+              <CardDescription>Milestones and accomplishments you&apos;ve reached</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

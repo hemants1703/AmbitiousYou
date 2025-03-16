@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -29,12 +29,9 @@ import Link from "next/link";
 import {
   CalendarIcon,
   CheckIcon,
-  ClockIcon,
   InfoCircledIcon,
   LightningBoltIcon,
-  MixerHorizontalIcon,
   ReloadIcon,
-  TrackNextIcon
 } from "@radix-ui/react-icons";
 import { 
   DropdownMenu, 
@@ -353,7 +350,7 @@ export default function IndividualAmbitionPage({ params }: { params: { ambitionI
                         animate="show"
                         className="space-y-8"
                       >
-                        {milestones.map((milestone, index) => (
+                        {milestones.map((milestone) => (
                           <motion.div
                             key={milestone.id}
                             variants={item}
@@ -548,7 +545,7 @@ export default function IndividualAmbitionPage({ params }: { params: { ambitionI
                 animate="show"
                 className="space-y-3"
               >
-                {tasks.map((task, index) => (
+                {tasks.map((task) => (
                   <motion.div 
                     key={task.id}
                     variants={item}
@@ -603,7 +600,7 @@ export default function IndividualAmbitionPage({ params }: { params: { ambitionI
                   animate="show"
                   className="space-y-10"
                 >
-                  {milestones.map((milestone, index) => (
+                  {milestones.map((milestone) => (
                     <motion.div
                       key={milestone.id}
                       variants={item}
