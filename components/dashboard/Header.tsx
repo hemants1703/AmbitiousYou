@@ -123,8 +123,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <HoverCard>
-          <HoverCardTrigger asChild>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative group">
               <div className="relative">
                 <motion.div 
@@ -147,8 +147,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                 7
               </Badge>
             </Button>
-          </HoverCardTrigger>
-          <HoverCardContent className="w-80 p-0" align="end">
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-80 p-0" align="end">
             <div className="p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -203,8 +203,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                 </div>
               </div>
             </div>
-          </HoverCardContent>
-        </HoverCard>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <ThemeToggler />
 
@@ -336,11 +336,6 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href="/profile" className="w-full">
-                Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
               <Link href="/settings" className="w-full">
                 Settings
               </Link>
@@ -460,7 +455,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
     </header>
   );
 
-  async function fetchSearchResults(query) {
+  async function fetchSearchResults(query: string) {
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
       if (!response.ok) throw new Error('Search failed');

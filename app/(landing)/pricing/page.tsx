@@ -89,9 +89,9 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
             </div>
             
             {/* Pro tier */}
-            <div className="bg-background border-2 border-primary shadow-lg rounded-xl p-8 relative flex flex-col -translate-y-4">
+            <div className="bg-background border-2 border-amber-400 shadow-lg rounded-xl p-8 relative flex flex-col -translate-y-4">
               <div className="absolute -top-4 inset-x-0 flex justify-center">
-                <div className="bg-primary text-primary-foreground text-sm py-1 px-4 rounded-full font-medium">
+                <div className="bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black text-sm py-1 px-4 rounded-full font-medium">
                   Most Popular
                 </div>
               </div>
@@ -242,7 +242,7 @@ export default function PricingPage() {
                     </Button>
                   </td>
                   <td className="p-4 text-center bg-primary/5 border-x border-border">
-                    <Button size="sm" asChild>
+                    <Button size="sm" asChild className="bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black font-bold p-4 shadow-sm transition-all duration-300">
                       <Link href="/signup?plan=achiever">Choose Achiever</Link>
                     </Button>
                   </td>
