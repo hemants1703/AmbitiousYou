@@ -54,8 +54,8 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5 transition-all">
-              <Link href="/plans" className="flex items-center gap-2">
-                View Plans <ArrowRightIcon className="h-5 w-5" />
+              <Link href="/features" className="flex items-center gap-2">
+                Explore Features <ArrowRightIcon className="h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -373,7 +373,7 @@ export default function Home() {
                 <span className="text-muted-foreground">/month</span>
               </div>
               <Button className="mb-8 shadow-md shadow-primary/20">
-                <Link href="/plans" className="flex justify-center items-center gap-2 w-full">
+                <Link href="/pricing" className="flex justify-center items-center gap-2 w-full">
                   Get Started <ArrowRightIcon className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
@@ -404,7 +404,7 @@ export default function Home() {
                 <span className="text-muted-foreground">/month</span>
               </div>
               <Button variant="outline" className="mb-8">
-                <Link href="/plans" className="flex justify-center items-center gap-2 w-full">
+                <Link href="/pricing" className="flex justify-center items-center gap-2 w-full">
                   Contact Sales <ArrowRightIcon className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
@@ -451,8 +451,8 @@ export default function Home() {
           </Link>
         </Button>
         <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
-          <Link href="/plans" className="flex items-center gap-2">
-            View Plans <ArrowRightIcon className="h-5 w-5" />
+          <Link href="/pricing" className="flex items-center gap-2">
+            View Pricing <ArrowRightIcon className="h-5 w-5" />
           </Link>
         </Button>
       </div>

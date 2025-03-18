@@ -12,7 +12,6 @@ import {
   ClockIcon,
   BarChartIcon,
   GearIcon,
-  PersonIcon,
   MixerVerticalIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -44,6 +43,11 @@ const mainNavItems = [
   },
   // Will be implemented in future versions
   // {
+  //   title: "Achievements",
+  //   href: "/achievements",
+  //   icon: RocketIcon,
+  // },
+  // {
   //   title: "Time Tracking",
   //   href: "/time_tracking",
   //   icon: ClockIcon,
@@ -61,19 +65,19 @@ const bottomNavItems = [
     href: "/settings",
     icon: GearIcon,
   },
-  {
-    title: "Profile",
-    href: "/profile",
-    icon: PersonIcon,
-  },
+  // {
+  //   title: "Profile",
+  //   href: "/profile",
+  //   icon: PersonIcon,
+  // },
 ];
 
-export function Sidebar({ onMobileNavigate }) {
+export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
   const router = useRouter();
 
-  const handleNavigation = (href) => {
+  const handleNavigation = (href: string) => {
     router.push(href);
     if (window.innerWidth < 768) {
       onMobileNavigate?.();
@@ -82,7 +86,7 @@ export function Sidebar({ onMobileNavigate }) {
 
   return (
     <motion.div
-      className="relative flex flex-col border-r border-border h-full "
+      className="relative flex flex-col border-r border-border h-full bg-background"
       animate={{ width: expanded ? 240 : 60 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
