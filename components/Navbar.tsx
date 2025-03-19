@@ -23,7 +23,7 @@ const navLinks = [
 export default function Navbar() {
   const [navbarToggled, setNavbarToggled] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navbarMenuRef = useRef(null);
+  const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
 
   // Handle scroll events to change navbar appearance
@@ -38,11 +38,12 @@ export default function Navbar() {
 
   // Close mobile menu when clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as HTMLElement;
       if (
         navbarMenuRef.current &&
-        !navbarMenuRef.current.contains(event.target) &&
-        !event.target.closest("button")
+        !navbarMenuRef.current.contains(target) &&
+        !target.closest("button")
       ) {
         setNavbarToggled(false);
       }
@@ -55,13 +56,27 @@ export default function Navbar() {
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
     if (navbarToggled) {
-      document.body.style.overflow = "hidden";
+      // Save the current scroll position
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
     } else {
-      document.body.style.overflow = "unset";
+      // Restore the scroll position
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      }
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      // Cleanup
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
     };
   }, [navbarToggled]);
 
@@ -82,6 +97,7 @@ export default function Navbar() {
           onClick={() => {
             if (navbarToggled) toggleNavbar();
           }}
+          className="z-50"
         >
           <AmbitiousYouLogo />
         </Link>
@@ -129,25 +145,25 @@ export default function Navbar() {
           <ThemeToggler />
           <button
             onClick={toggleNavbar}
-            className="relative w-10 h-10 flex items-center justify-center rounded-md focus:outline-none"
+            className="relative w-10 h-10 flex items-center justify-center rounded-md focus:outline-none z-50"
             aria-label="Toggle Menu"
           >
             <div className="absolute inset-0 rounded-md bg-primary/5 hover:bg-primary/10 transition-colors"></div>
             <div className="flex flex-col justify-center items-center w-6 h-6">
               <span
-                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
-                  navbarToggled ? "rotate-45 translate-y-1" : "-translate-y-1"
-                }`}
+              className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
+                navbarToggled ? "rotate-45" : "-translate-y-2"
+              }`}
               />
               <span
-                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
-                  navbarToggled ? "opacity-0 translate-x-3" : "opacity-100"
-                }`}
+              className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
+                navbarToggled ? "opacity-0" : "opacity-100"
+              }`}
               />
               <span
-                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
-                  navbarToggled ? "-rotate-45 -translate-y-1" : "translate-y-1"
-                }`}
+              className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
+                navbarToggled ? "-rotate-45" : "translate-y-2"
+              }`}
               />
             </div>
           </button>
@@ -157,13 +173,13 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         ref={navbarMenuRef}
-        className={`fixed inset-0 pt-16 bg-background/95 backdrop-blur-md z-40 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 top-0 left-0 w-full h-full bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ${
           navbarToggled
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            ? "opacity-100 pointer-events-auto z-40"
+            : "opacity-0 pointer-events-none z-0"
         }`}
       >
-        <div className="flex flex-col h-full justify-between px-6 py-10 overflow-auto">
+        <div className="flex flex-col h-full justify-between px-6 pt-24 pb-10 overflow-auto">
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground">NAVIGATION</p>
             {navLinks.map((link, index) => {
