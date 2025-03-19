@@ -1,7 +1,6 @@
-"use client";
-
 import Link from "next/link";
 import { ThemeToggler } from "./ThemeToggler";
+import AmbitiousYouLogo from "./AmbitiousYouLogo";
 
 export default function Footer() {
   const exploreLinks = [
@@ -30,15 +29,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <img
-                src="/logo.svg"
-                alt="AmbitiousYou Logo"
-                className="size-10"
-              />
-              <span className="text-3xl">
-                <span className="font-light">Ambitious</span>
-                <span className="font-bold">You</span>
-              </span>
+              <AmbitiousYouLogo />
             </Link>
             <p className="text-md text-muted-foreground">
               Helping you become superhuman by managing your ambitions and
@@ -175,22 +166,6 @@ export default function Footer() {
               <span className="text-sm text-muted-foreground">Theme:</span>
               <ThemeToggler />
             </div>
-            {/* <div className="pt-4">
-                            <h4 className="text-sm font-medium mb-2">Subscribe to our newsletter</h4>
-                            <form className="flex gap-2">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="flex-1 px-3 py-2 rounded-lg bg-background border text-sm"
-                                />
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 bg-[--custom-light] text-black rounded-lg hover:brightness-110 active:brightness-90 transition-all"
-                                >
-                                    Subscribe
-                                </button>
-                            </form>
-                        </div> */}
           </div>
         </div>
 

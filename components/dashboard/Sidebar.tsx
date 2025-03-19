@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useState } from "react";
 import Image from "next/image";
+import AmbitiousYouLogo from "../AmbitiousYouLogo";
 
 const mainNavItems = [
   {
@@ -90,7 +91,6 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
       <div className="flex items-center h-16 border-b border-border px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            {/* <TargetIcon className="h-5 w-5 text-primary-foreground" /> */}
             <Image
               src="/favicon.ico"
               alt="AmbitiousYou Logo"
@@ -103,9 +103,10 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-lg font-semibold"
+              className="text-2xl"
             >
-              AmbitiousYou
+              <span className="font-regular">Ambitious</span>
+              <span className="font-bold">You</span>
             </motion.span>
           )}
         </Link>
