@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "eslint.codeActionsOnSave.rules": null,
+    "prettier.bracketSameLine": true
+}
