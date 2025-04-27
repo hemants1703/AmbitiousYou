@@ -1,11 +1,8 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import SignUpForm from "./SignUpForm";
 
 export default function Signup() {
   return (
@@ -17,7 +14,8 @@ export default function Signup() {
             <div className="lg:w-1/2 p-8 flex flex-col justify-center bg-background">
               <CardHeader className="text-center lg:text-left">
                 <CardTitle className="text-5xl lg:text-6xl font-bold">
-                  Join <br /><span className="font-light">Ambitious</span>You
+                  Join <br />
+                  <span className="font-light">Ambitious</span>You
                 </CardTitle>
                 <p className="text-lg text-muted-foreground mt-2">
                   Create an account to get started
@@ -29,7 +27,8 @@ export default function Signup() {
             {/* Right side (Form components) */}
             <div className="lg:w-1/2 p-8 bg-background">
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <SignUpForm />
+                {/* <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName" className="block text-sm font-medium">
                       First Name
@@ -84,9 +83,9 @@ export default function Signup() {
                     placeholder="Confirm your password" 
                     className="mt-1" 
                   />
-                </div>
+                </div> */}
               </CardContent>
-              <CardFooter className="flex flex-col items-center space-y-4 mt-4">
+              {/* <CardFooter className="flex flex-col items-center space-y-4 mt-4">
                 <Button className="w-full">Create Account</Button>
                 <p className="text-sm text-muted-foreground">
                   Already have an account?{" "}
@@ -94,7 +93,7 @@ export default function Signup() {
                     Log In
                   </Link>
                 </p>
-              </CardFooter>
+              </CardFooter> */}
             </div>
           </div>
         </Card>
