@@ -1,9 +1,17 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function LandingLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default async function LandingLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const userLoggedIn = await supabase.auth.getUser();
+
+  // Check if the user is logged in
+  if (!userLoggedIn.error) {
+    redirect("/dashboard");
+  }
+
   return (
     <>
       {/* GPU INTENSIVE BACKGROUND - Fixed background with gradient effects - these will stay in place during scroll */}
@@ -19,13 +27,11 @@ export default function LandingLayout({
           style={{ animationDelay: "3s", animationDuration: "8s" }}
         ></div>
       </div>
-      
+
       {/* Main content container */}
       <main className="relative max-w-screen-2xl min-h-svh flex flex-col justify-between items-center mx-auto z-10 overflow-x-hidden">
         <Navbar />
-        <div className="mt-16">
-          {children}
-        </div>
+        <div className="mt-16">{children}</div>
         <Footer />
       </main>
     </>

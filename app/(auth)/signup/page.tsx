@@ -1,32 +1,30 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import * as Card from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import SignUpForm from "./SignUpForm";
+import SignUpForm from "./SignupForm";
 
 export default function Signup() {
   return (
     <div className="w-full flex items-center justify-center pt-12 pb-24">
       <div className="w-full max-w-5xl">
-        <Card className="shadow-2xl">
+        <Card.Card className="shadow-2xl">
           <div className="flex flex-col lg:flex-row">
             {/* Left side (Header content) */}
             <div className="lg:w-1/2 p-8 flex flex-col justify-center bg-background">
-              <CardHeader className="text-center lg:text-left">
-                <CardTitle className="text-5xl lg:text-6xl font-bold">
+              <Card.CardHeader className="text-center lg:text-left">
+                <Card.CardTitle className="text-5xl lg:text-6xl font-bold">
                   Join <br />
                   <span className="font-light">Ambitious</span>You
-                </CardTitle>
+                </Card.CardTitle>
                 <p className="text-lg text-muted-foreground mt-2">
                   Create an account to get started
                 </p>
-              </CardHeader>
+              </Card.CardHeader>
             </div>
             {/* Vertical separator only visible on desktop */}
             <Separator orientation="vertical" className="hidden lg:block" />
             {/* Right side (Form components) */}
             <div className="lg:w-1/2 p-8 bg-background">
-              <CardContent className="space-y-4">
+              <Card.CardContent className="space-y-4">
                 <SignUpForm />
                 {/* <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -84,7 +82,7 @@ export default function Signup() {
                     className="mt-1" 
                   />
                 </div> */}
-              </CardContent>
+              </Card.CardContent>
               {/* <CardFooter className="flex flex-col items-center space-y-4 mt-4">
                 <Button className="w-full">Create Account</Button>
                 <p className="text-sm text-muted-foreground">
@@ -96,7 +94,7 @@ export default function Signup() {
               </CardFooter> */}
             </div>
           </div>
-        </Card>
+        </Card.Card>
       </div>
     </div>
   );

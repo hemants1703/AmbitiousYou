@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,11 +17,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AmbitiousYou - Get ready to become a Superhuman!",
-  description: "Reduce your mental overload and manage all your ambitions at a single place, AmbitiousYou helps you become a Superhuman!",
-  keywords: ["ambitious", "you", "superhuman", "ambitions", "goals", "tasks", "productivity", "mental health", "mental overload", "ambitiousyou", "ambitious-you", "ambitious_you", "ambitiousyou.com", "ambitious-you.com", "ambitious_you.com"],
+  description:
+    "Reduce your mental overload and manage all your ambitions at a single place, AmbitiousYou helps you become a Superhuman!",
+  keywords: [
+    "ambitious",
+    "you",
+    "superhuman",
+    "ambitions",
+    "goals",
+    "tasks",
+    "productivity",
+    "mental health",
+    "mental overload",
+    "ambitiousyou",
+    "ambitious-you",
+    "ambitious_you",
+    "ambitiousyou.com",
+    "ambitious-you.com",
+    "ambitious_you.com",
+  ],
   openGraph: {
     title: "AmbitiousYou - Get ready to become a Superhuman!",
-    description: "Reduce your mental overload and manage all your ambitions at a single place, AmbitiousYou helps you become a Superhuman!",
+    description:
+      "Reduce your mental overload and manage all your ambitions at a single place, AmbitiousYou helps you become a Superhuman!",
     images: [
       {
         url: "/logo.ico",
@@ -29,20 +48,25 @@ export const metadata: Metadata = {
         alt: "AmbitiousYou Logo",
       },
     ],
-  }
+  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="antialiased">
         <Analytics />
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

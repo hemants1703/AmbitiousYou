@@ -4,14 +4,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LoaderIcon } from "lucide-react";
-import { signupAction } from "./actions";
+import { signupAction } from "../actions";
+import { toast } from "sonner";
 
-export default function SignUpForm() {
-  const [errors, action, isPending] = useActionState(signupAction, undefined);
+export type SignupState =
+  | {
+      errors?: {
+        firstName?: string[] | undefined;
+        lastName?: string[] | undefined;
+        email?: string[] | string;
+        password?: string[] | undefined;
+        message?: string | undefined;
+      };
+    }
+  | undefined;
+
+export default function SignupForm() {
+  const [signupErrors, action, isSignupPending] = useActionState<SignupState, FormData>(
+    signupAction,
+    undefined
+  );
+
+  useEffect(() => {
+    if (signupErrors?.errors?.message) {
+      toast.error(signupErrors.errors.message, {
+        description: "Please try again.",
+        duration: 5000,
+      });
+    }
+  }, [signupErrors?.errors?.message]);
 
   return (
     <form action={action} className="space-y-4">
@@ -20,23 +45,50 @@ export default function SignUpForm() {
           <Label htmlFor="firstName" className="block text-sm font-medium">
             First Name
           </Label>
-          <Input id="firstName" type="text" placeholder="First name" className="mt-1" required />
-          {errors?.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+          <Input
+            id="firstName"
+            name="firstName"
+            type="text"
+            placeholder="First name"
+            className="mt-1"
+            required
+          />
+          {signupErrors?.errors?.firstName && (
+            <p className="text-red-500 text-sm mt-1">{signupErrors.errors.firstName}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="lastName" className="block text-sm font-medium">
             Last Name
           </Label>
-          <Input id="lastName" type="text" placeholder="Last name" className="mt-1" required />
-          {errors?.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+          <Input
+            id="lastName"
+            name="lastName"
+            type="text"
+            placeholder="Last name"
+            className="mt-1"
+            required
+          />
+          {signupErrors?.errors?.lastName && (
+            <p className="text-red-500 text-sm mt-1">{signupErrors.errors.lastName}</p>
+          )}
         </div>
       </div>
       <div>
         <Label htmlFor="email" className="block text-sm font-medium">
           Email
         </Label>
-        <Input id="email" type="email" placeholder="Enter your email" className="mt-1" required />
-        {errors?.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Enter your email"
+          className="mt-1"
+          required
+        />
+        {signupErrors?.errors?.email && (
+          <p className="text-red-500 text-sm mt-1">{signupErrors.errors.email}</p>
+        )}
       </div>
       <div>
         <div className="flex items-center gap-2">
@@ -63,28 +115,18 @@ export default function SignUpForm() {
         </div>
         <Input
           id="password"
+          name="password"
           type="password"
           placeholder="Create a password"
           className="mt-1"
           required
         />
-        {errors?.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+        {signupErrors?.errors?.password && (
+          <p className="text-red-500 text-sm mt-1">{signupErrors.errors.password}</p>
+        )}
       </div>
-      {/* Confirm Password Field */}
-      {/* <div>
-        <Label htmlFor="confirmPassword" className="block text-sm font-medium">
-          Confirm Password
-        </Label>
-        <Input
-          id="confirmPassword"
-          type="password"
-          placeholder="Confirm your password"
-          className="mt-1"
-          required
-        />
-      </div> */}
-      <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? (
+      <Button type="submit" className="w-full" disabled={isSignupPending}>
+        {isSignupPending ? (
           <div className="flex justify-center items-center gap-2">
             <LoaderIcon className="animate-spin size-5" />
             Creating Account...

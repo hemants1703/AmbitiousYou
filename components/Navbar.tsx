@@ -20,11 +20,13 @@ const navLinks = [
   { href: "/features", label: "Features" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ userLoggedIn }: { userLoggedIn: boolean }) {
   const [navbarToggled, setNavbarToggled] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
+
+  console.log("User logged in:", userLoggedIn);
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -58,25 +60,25 @@ export default function Navbar() {
     if (navbarToggled) {
       // Save the current scroll position
       const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
+      document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      document.body.style.width = "100%";
     } else {
       // Restore the scroll position
       const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
       if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+        window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
       }
     }
 
     return () => {
       // Cleanup
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
     };
   }, [navbarToggled]);
 
@@ -115,9 +117,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`relative px-1 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {link.label}
@@ -129,15 +129,24 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
-            <ThemeToggler />
-            <Button variant="outline" size="sm" className="h-9 px-4" asChild>
-              <Link href="/login">Log in</Link>
-            </Button>
-            <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
-              <Link href="/signup">Sign up</Link>
-            </Button>
-          </div>
+          {userLoggedIn ? (
+            <div className="flex items-center gap-3">
+              <ThemeToggler />
+              <Button className="text-xl" size={"lg"} asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <ThemeToggler />
+              <Button variant="outline" size="sm" className="h-9 px-4" asChild>
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
+                <Link href="/signup">Sign up</Link>
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -151,19 +160,19 @@ export default function Navbar() {
             <div className="absolute inset-0 rounded-md bg-primary/5 hover:bg-primary/10 transition-colors"></div>
             <div className="flex flex-col justify-center items-center w-6 h-6">
               <span
-              className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
-                navbarToggled ? "rotate-45" : "-translate-y-2"
-              }`}
+                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
+                  navbarToggled ? "rotate-45" : "-translate-y-2"
+                }`}
               />
               <span
-              className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
-                navbarToggled ? "opacity-0" : "opacity-100"
-              }`}
+                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
+                  navbarToggled ? "opacity-0" : "opacity-100"
+                }`}
               />
               <span
-              className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
-                navbarToggled ? "-rotate-45" : "translate-y-2"
-              }`}
+                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
+                  navbarToggled ? "-rotate-45" : "translate-y-2"
+                }`}
               />
             </div>
           </button>
@@ -190,12 +199,8 @@ export default function Navbar() {
               return (
                 <div
                   key={link.href}
-                  className={`transform transition-transform duration-300 delay-${
-                    index * 100
-                  } ${
-                    navbarToggled
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-4 opacity-0"
+                  className={`transform transition-transform duration-300 delay-${index * 100} ${
+                    navbarToggled ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
                   }`}
                   style={{ transitionDelay: `${index * 75}ms` }}
                 >
@@ -217,9 +222,7 @@ export default function Navbar() {
           <div className="space-y-4 mt-auto">
             <div
               className={`transition-all duration-300 delay-300 ${
-                navbarToggled
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-4"
+                navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
               <Button variant="outline" className="w-full" asChild>
@@ -231,9 +234,7 @@ export default function Navbar() {
 
             <div
               className={`transition-all duration-300 delay-400 ${
-                navbarToggled
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-4"
+                navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
               <Button className="w-full" asChild>

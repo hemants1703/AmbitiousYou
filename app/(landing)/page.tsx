@@ -17,13 +17,22 @@ import {
   HeartFilledIcon,
   StarFilledIcon,
 } from "@radix-ui/react-icons";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-export default function Home() {
+export default async function Home() {
+  // If user is logged in, redirect to dashboard
+  const supabase = await createClient();
+  const userLoggedIn = await supabase.auth.getUser();
+  // if (!userLoggedIn.error) {
+  //   redirect("/dashboard");
+  // }
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -34,9 +43,11 @@ export default function Home() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-sm font-medium">New: AI-powered goal recommendations now available</span>
+          <span className="text-sm font-medium">
+            New: AI-powered goal recommendations now available
+          </span>
         </div>
-        
+
         <div className="text-center max-w-4xl mx-auto relative z-10">
           <h1
             className={`${playfair.className} text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/90 to-primary/70 leading-tight`}
@@ -44,22 +55,37 @@ export default function Home() {
             For Those Who Dare to Dream Beyond Limits
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Reduce your mental overload and manage all your ambitions at a
-            single place. AmbitiousYou helps you become a Superhuman.
+            Reduce your mental overload and manage all your ambitions at a single place.
+            AmbitiousYou helps you become a Superhuman.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
-              <Link href="/signup" className="flex items-center gap-2">
-                Get Started <RocketIcon className="h-5 w-5" />
-              </Link>
+          {userLoggedIn.error === null ? (
+            <Button className="text-xl" size={"lg"} asChild>
+              <Link href="/dashboard">Dashboard</Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5 transition-all">
-              <Link href="/features" className="flex items-center gap-2">
-                Explore Features <ArrowRightIcon className="h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
-          
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                asChild
+                size="lg"
+                className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+              >
+                <Link href="/signup" className="flex items-center gap-2">
+                  Get Started <RocketIcon className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
+              >
+                <Link href="/features" className="flex items-center gap-2">
+                  Explore Features <ArrowRightIcon className="h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+          )}
+
           {/* Social proof */}
           <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -92,7 +118,7 @@ export default function Home() {
                   app.ambitiousyou.pro
                 </div>
               </div>
-              
+
               {/* App interface mockup */}
               <div className="w-full h-[500px] bg-background/80 backdrop-blur-sm flex">
                 {/* Sidebar navigation mockup */}
@@ -101,33 +127,44 @@ export default function Home() {
                     <div className="w-8 h-8 rounded-full bg-primary/20"></div>
                     <div className="h-4 bg-muted w-24 rounded-md"></div>
                   </div>
-                  
+
                   <div className="space-y-3">
-                    {['Dashboard', 'Goals', 'Tasks', 'Analytics', 'Settings'].map((item) => (
-                      <div key={item} className={`h-7 rounded-md px-2 flex items-center text-xs ${item === 'Goals' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted/50 text-muted-foreground'}`}>
+                    {["Dashboard", "Goals", "Tasks", "Analytics", "Settings"].map((item) => (
+                      <div
+                        key={item}
+                        className={`h-7 rounded-md px-2 flex items-center text-xs ${item === "Goals" ? "bg-primary/10 text-primary font-medium" : "hover:bg-muted/50 text-muted-foreground"}`}
+                      >
                         {item}
                       </div>
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Main content mockup */}
                 <div className="flex-1 p-4">
                   <div className="mb-4">
                     <div className="h-8 w-60 bg-primary/5 rounded-md mb-2"></div>
                     <div className="h-4 w-96 bg-muted/50 rounded-md"></div>
                   </div>
-                  
+
                   {/* Goal cards */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
                     {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="border border-border rounded-lg p-4 bg-card/90 backdrop-blur-sm hover:border-primary/30 transition-all hover:shadow-md cursor-pointer">
+                      <div
+                        key={i}
+                        className="border border-border rounded-lg p-4 bg-card/90 backdrop-blur-sm hover:border-primary/30 transition-all hover:shadow-md cursor-pointer"
+                      >
                         <div className="flex justify-between mb-2">
                           <div className="h-6 w-36 bg-muted/40 rounded-md"></div>
-                          <div className={`h-6 w-20 rounded-full ${i === 2 ? 'bg-primary/20 border border-primary/30' : 'bg-muted/40'}`}></div>
+                          <div
+                            className={`h-6 w-20 rounded-full ${i === 2 ? "bg-primary/20 border border-primary/30" : "bg-muted/40"}`}
+                          ></div>
                         </div>
                         <div className="h-3 w-full bg-muted/30 rounded-full mb-3">
-                          <div className={`h-3 rounded-full bg-primary/60`} style={{ width: `${[70, 30, 100, 50][i-1]}%` }}></div>
+                          <div
+                            className={`h-3 rounded-full bg-primary/60`}
+                            style={{ width: `${[70, 30, 100, 50][i - 1]}%` }}
+                          ></div>
                         </div>
                         <div className="space-y-2 mt-4">
                           <div className="h-3 w-full bg-muted/30 rounded-md"></div>
@@ -148,7 +185,7 @@ export default function Home() {
               <span className="font-medium">Increase productivity by 47%</span>
             </div>
           </div>
-          
+
           <div className="absolute bottom-6 -left-6 bg-background/80 backdrop-blur-sm text-foreground px-4 py-2 rounded-full shadow-lg border border-primary/20 transform hover:scale-105 transition-transform cursor-pointer">
             <div className="flex items-center gap-2">
               <HeartFilledIcon className="h-4 w-4 text-pink-500" />
@@ -160,7 +197,6 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="py-20">
-        
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-20">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 backdrop-blur-sm text-primary font-medium text-sm">
@@ -173,8 +209,8 @@ export default function Home() {
               Transform How You Achieve Your Goals
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              AmbitiousYou provides the tools you need to set, track, and
-              accomplish your most ambitious goals.
+              AmbitiousYou provides the tools you need to set, track, and accomplish your most
+              ambitious goals.
             </p>
           </div>
 
@@ -184,42 +220,51 @@ export default function Home() {
               {
                 icon: <Component1Icon className="h-6 w-6 text-primary" />,
                 title: "Goal Hierarchy",
-                description: "Organize your ambitions from big dreams to daily tasks in a structured, manageable system."
+                description:
+                  "Organize your ambitions from big dreams to daily tasks in a structured, manageable system.",
               },
               {
                 icon: <MixerHorizontalIcon className="h-6 w-6 text-primary" />,
                 title: "Priority Management",
-                description: "Focus on what matters most with our intuitive priority system that adapts to your changing needs."
+                description:
+                  "Focus on what matters most with our intuitive priority system that adapts to your changing needs.",
               },
               {
                 icon: <TimerIcon className="h-6 w-6 text-primary" />,
                 title: "Progress Tracking",
-                description: "Visualize your journey with beautiful charts and analytics that keep you motivated."
+                description:
+                  "Visualize your journey with beautiful charts and analytics that keep you motivated.",
               },
               {
                 icon: <LockClosedIcon className="h-6 w-6 text-primary" />,
                 title: "Private & Secure",
-                description: "Your ambitions are personal. We use enterprise-grade encryption to keep your data safe."
+                description:
+                  "Your ambitions are personal. We use enterprise-grade encryption to keep your data safe.",
               },
               {
                 icon: <StarIcon className="h-6 w-6 text-primary" />,
                 title: "Smart Notifications",
-                description: "Get personalized reminders at the right time to keep you on track with your goals."
+                description:
+                  "Get personalized reminders at the right time to keep you on track with your goals.",
               },
               {
                 icon: <RocketIcon className="h-6 w-6 text-primary" />,
                 title: "AI Assistance",
-                description: "Receive intelligent suggestions to overcome obstacles and optimize your approach."
-              }
+                description:
+                  "Receive intelligent suggestions to overcome obstacles and optimize your approach.",
+              },
             ].map((feature, i) => (
-              <div key={i} className="group bg-card/80 backdrop-blur-sm rounded-xl p-7 shadow-md border border-border hover:border-primary/50 transition-all hover:shadow-xl">
+              <div
+                key={i}
+                className="group bg-card/80 backdrop-blur-sm rounded-xl p-7 shadow-md border border-border hover:border-primary/50 transition-all hover:shadow-xl"
+              >
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
-                <p className="text-muted-foreground">
-                  {feature.description}
-                </p>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  {feature.title}
+                </h3>
+                <p className="text-muted-foreground">{feature.description}</p>
                 <div className="mt-6 flex items-center text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                   <span>Learn more</span>
                   <ChevronRightIcon className="h-4 w-4 ml-1" />
@@ -232,7 +277,6 @@ export default function Home() {
 
       {/* Testimonials Section */}
       <section className="py-24">
-        
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-20">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 backdrop-blur-sm text-primary font-medium text-sm">
@@ -245,8 +289,8 @@ export default function Home() {
               What Our Users Say
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Join thousands of ambitious individuals who are achieving their
-              dreams with AmbitiousYou.
+              Join thousands of ambitious individuals who are achieving their dreams with
+              AmbitiousYou.
             </p>
           </div>
 
@@ -254,34 +298,38 @@ export default function Home() {
             {/* Testimonials with profile photos and ratings */}
             {[
               {
-                quote: "AmbitiousYou has been a game-changer for me. I've been able to achieve more in the past month than I did in the entire last year.",
+                quote:
+                  "AmbitiousYou has been a game-changer for me. I've been able to achieve more in the past month than I did in the entire last year.",
                 name: "John Doe",
                 title: "Entrepreneur",
-                rating: 5
+                rating: 5,
               },
               {
-                quote: "I've always been a dreamer, but AmbitiousYou has helped me turn my dreams into reality. The goal hierarchy system is brilliant!",
+                quote:
+                  "I've always been a dreamer, but AmbitiousYou has helped me turn my dreams into reality. The goal hierarchy system is brilliant!",
                 name: "Jane Smith",
                 title: "Product Designer",
-                rating: 5
+                rating: 5,
               },
               {
-                quote: "I've tried many goal-setting apps, but none of them come close to AmbitiousYou. It's simple, yet powerful.",
+                quote:
+                  "I've tried many goal-setting apps, but none of them come close to AmbitiousYou. It's simple, yet powerful.",
                 name: "Alex Johnson",
                 title: "Marketing Director",
-                rating: 5
-              }
+                rating: 5,
+              },
             ].map((testimonial, i) => (
-              <div key={i} className="bg-background/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-border relative">
+              <div
+                key={i}
+                className="bg-background/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-border relative"
+              >
                 {/* Quote mark */}
                 <div className="absolute -top-4 -left-4 bg-primary/10 rounded-full w-8 h-8 flex items-center justify-center">
                   <span className="text-primary text-xl font-serif">"</span>
                 </div>
-                
-                <p className="text-lg text-foreground/90 mb-8 italic">
-                  "{testimonial.quote}"
-                </p>
-                
+
+                <p className="text-lg text-foreground/90 mb-8 italic">"{testimonial.quote}"</p>
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
                     {testimonial.name.charAt(0)}
@@ -291,7 +339,7 @@ export default function Home() {
                     <div className="text-sm text-muted-foreground">{testimonial.title}</div>
                   </div>
                 </div>
-                
+
                 <div className="absolute top-6 right-6 flex">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <StarFilledIcon key={i} className="h-4 w-4 text-amber-400" />
@@ -300,15 +348,18 @@ export default function Home() {
               </div>
             ))}
           </div>
-          
+
           {/* Brands/Companies section */}
           <div className="mt-20 text-center">
             <p className="text-sm uppercase tracking-wider text-muted-foreground mb-8">
               Trusted by ambitious individuals at
             </p>
             <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8">
-              {['Google', 'Microsoft', 'Amazon', 'Apple', 'Meta'].map((brand) => (
-                <div key={brand} className="text-xl font-semibold opacity-50 hover:opacity-100 transition-opacity">
+              {["Google", "Microsoft", "Amazon", "Apple", "Meta"].map((brand) => (
+                <div
+                  key={brand}
+                  className="text-xl font-semibold opacity-50 hover:opacity-100 transition-opacity"
+                >
                   {brand}
                 </div>
               ))}
@@ -319,16 +370,13 @@ export default function Home() {
 
       {/* Pricing comparison section */}
       <section className="py-24">
-        
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 backdrop-blur-sm text-primary font-medium text-sm">
               <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
               Simple Pricing
             </div>
-            <h2
-              className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}
-            >
+            <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
               Choose Your Ambition Level
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -350,17 +398,19 @@ export default function Home() {
                   Start Free <ArrowRightIcon className="h-4 w-4" />
                 </Link>
               </Button>
-              
+
               <div className="space-y-3 mt-auto">
-                {['3 Active Goals', 'Basic Task Management', 'Core Analytics', '7-Day History'].map((feature) => (
-                  <div key={feature} className="flex items-start gap-3">
-                    <CheckCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
+                {["3 Active Goals", "Basic Task Management", "Core Analytics", "7-Day History"].map(
+                  (feature) => (
+                    <div key={feature} className="flex items-start gap-3">
+                      <CheckCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                      <span>{feature}</span>
+                    </div>
+                  )
+                )}
               </div>
             </div>
-            
+
             {/* Pro tier (highlighted) */}
             <div className="bg-card/90 backdrop-blur-sm rounded-xl p-8 border-2 border-primary shadow-lg relative flex flex-col">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground text-sm py-1 px-4 rounded-full font-medium">
@@ -377,15 +427,15 @@ export default function Home() {
                   Get Started <ArrowRightIcon className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
-              
+
               <div className="space-y-3 mt-auto">
                 {[
-                  'Unlimited Goals',
-                  'Advanced Task Management',
-                  'Detailed Analytics',
-                  'Unlimited History',
-                  'Priority Support',
-                  'Custom Categories'
+                  "Unlimited Goals",
+                  "Advanced Task Management",
+                  "Detailed Analytics",
+                  "Unlimited History",
+                  "Priority Support",
+                  "Custom Categories",
                 ].map((feature) => (
                   <div key={feature} className="flex items-start gap-3">
                     <CheckCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
@@ -394,7 +444,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            
+
             {/* Enterprise tier */}
             <div className="bg-card/80 backdrop-blur-sm rounded-xl p-8 border border-border shadow-md h-full flex flex-col">
               <h3 className="text-xl font-bold mb-2">Superhuman</h3>
@@ -408,15 +458,15 @@ export default function Home() {
                   Contact Sales <ArrowRightIcon className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
-              
+
               <div className="space-y-3 mt-auto">
                 {[
-                  'Everything in Achiever',
-                  'Team Collaboration',
-                  'AI Recommendations',
-                  'Custom Integrations',
-                  'Dedicated Support',
-                  'Advanced Security'
+                  "Everything in Achiever",
+                  "Team Collaboration",
+                  "AI Recommendations",
+                  "Custom Integrations",
+                  "Dedicated Support",
+                  "Advanced Security",
                 ].map((feature) => (
                   <div key={feature} className="flex items-start gap-3">
                     <CheckCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
@@ -431,51 +481,56 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-24 overflow-hidden">
-  
-  <div className="max-w-4xl mx-auto px-6 relative z-10">
-    <div className="bg-background/30 border border-primary/20 rounded-2xl p-10 shadow-xl backdrop-blur-sm">
-      <div className="text-center mb-10">
-        <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6 text-foreground`}>
-          Ready to Achieve Your Dreams?
-        </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Join AmbitiousYou today and start your journey towards becoming a
-          Superhuman.
-        </p>
-      </div>
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
+          <div className="bg-background/30 border border-primary/20 rounded-2xl p-10 shadow-xl backdrop-blur-sm">
+            <div className="text-center mb-10">
+              <h2
+                className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6 text-foreground`}
+              >
+                Ready to Achieve Your Dreams?
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Join AmbitiousYou today and start your journey towards becoming a Superhuman.
+              </p>
+            </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20">
-          <Link href="/signup" className="flex items-center gap-2">
-            Get Started <RocketIcon className="h-5 w-5" />
-          </Link>
-        </Button>
-        <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
-          <Link href="/pricing" className="flex items-center gap-2">
-            View Pricing <ArrowRightIcon className="h-5 w-5" />
-          </Link>
-        </Button>
-      </div>
-      
-      {/* Final social proof */}
-      <div className="mt-10 text-center">
-        <p className="text-sm text-muted-foreground mb-4">Join thousands of users already achieving their dreams</p>
-        <div className="flex justify-center">
-          <div className="flex -space-x-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-10 h-10 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs font-medium">
-                {['JS', 'KL', 'AR', 'TM', 'BN'][i]}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20">
+                <Link href="/signup" className="flex items-center gap-2">
+                  Get Started <RocketIcon className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
+                <Link href="/pricing" className="flex items-center gap-2">
+                  View Pricing <ArrowRightIcon className="h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Final social proof */}
+            <div className="mt-10 text-center">
+              <p className="text-sm text-muted-foreground mb-4">
+                Join thousands of users already achieving their dreams
+              </p>
+              <div className="flex justify-center">
+                <div className="flex -space-x-3">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-10 h-10 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs font-medium"
+                    >
+                      {["JS", "KL", "AR", "TM", "BN"][i]}
+                    </div>
+                  ))}
+                  <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-xs font-medium">
+                    +3K
+                  </div>
+                </div>
               </div>
-            ))}
-            <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-xs font-medium">
-              +3K
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
     </div>
   );
 }

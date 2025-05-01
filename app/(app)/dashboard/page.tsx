@@ -1,4 +1,5 @@
 "use client";
+
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -44,14 +45,12 @@ export default function DashboardPage() {
         <div className="relative z-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight mb-1">
-                Welcome back, John
-              </h1>
+              <h1 className="text-3xl font-bold tracking-tight mb-1">Welcome back, John</h1>
               <p className="text-muted-foreground">
                 Here&apos;s an overview of your ambitions and today&apos;s focus
               </p>
             </div>
-            <Button asChild variant="outline" >
+            <Button asChild variant="outline">
               <Link href="/ambitions/new" className="gap-2 flex justify-center items-center">
                 <PlusCircledIcon className="h-4 w-4" />
                 New Ambition
@@ -78,10 +77,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="pb-2">
             <div className="flex items-center text-sm">
-              <Badge
-                variant="outline"
-                className="bg-primary/10 text-primary border-primary/20"
-              >
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                 2 near completion
               </Badge>
             </div>
@@ -99,9 +95,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="pb-2">
             <Progress value={74} className="h-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              74% completion rate
-            </p>
+            <p className="text-xs text-muted-foreground mt-2">74% completion rate</p>
           </CardContent>
         </Card>
 
@@ -119,15 +113,11 @@ export default function DashboardPage() {
                 {Array.from({ length: 7 }).map((_, i) => (
                   <div
                     key={i}
-                    className={`h-2 w-2 rounded-full ${
-                      i < 6 ? "bg-amber-400" : "bg-muted"
-                    }`}
+                    className={`h-2 w-2 rounded-full ${i < 6 ? "bg-amber-400" : "bg-muted"}`}
                   />
                 ))}
               </div>
-              <span className="text-xs ml-2 text-muted-foreground">
-                Best: 24 days
-              </span>
+              <span className="text-xs ml-2 text-muted-foreground">Best: 24 days</span>
             </div>
           </CardContent>
         </Card>
@@ -163,9 +153,7 @@ export default function DashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <div>
                 <CardTitle>Your Progress</CardTitle>
-                <CardDescription>
-                  Weekly ambition progress overview
-                </CardDescription>
+                <CardDescription>Weekly ambition progress overview</CardDescription>
               </div>
               <Tabs defaultValue="week" className="w-auto">
                 <TabsList className="grid w-[240px] grid-cols-3">
@@ -178,28 +166,21 @@ export default function DashboardPage() {
             <CardContent>
               {/* Simple Progress Chart */}
               <div className="h-[250px] flex items-end gap-2 mt-4">
-                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-                  (day, i) => {
-                    const heights = [60, 85, 70, 40, 95, 80, 65];
-                    return (
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => {
+                  const heights = [60, 85, 70, 40, 95, 80, 65];
+                  return (
+                    <div key={day} className="flex-1 flex flex-col items-center gap-2">
                       <div
-                        key={day}
-                        className="flex-1 flex flex-col items-center gap-2"
-                      >
-                        <div
-                          className={cn(
-                            "w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary/60 transition-all",
-                            i === 4 && "from-primary to-primary/90"
-                          )}
-                          style={{ height: `${heights[i]}%` }}
-                        />
-                        <span className="text-xs text-muted-foreground">
-                          {day}
-                        </span>
-                      </div>
-                    );
-                  }
-                )}
+                        className={cn(
+                          "w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary/60 transition-all",
+                          i === 4 && "from-primary to-primary/90"
+                        )}
+                        style={{ height: `${heights[i]}%` }}
+                      />
+                      <span className="text-xs text-muted-foreground">{day}</span>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -262,22 +243,18 @@ export default function DashboardPage() {
                       task.priority === "high"
                         ? "border-red-200 bg-red-50/50 dark:bg-red-950/20 dark:border-red-800/30"
                         : task.priority === "medium"
-                        ? "border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800/30"
-                        : "border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800/30"
+                          ? "border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800/30"
+                          : "border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800/30"
                     )}
                   >
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">{task.title}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {task.ambition}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{task.ambition}</p>
                       </div>
                       <div className="flex items-center">
                         <ClockIcon className="h-3 w-3 mr-1 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">
-                          {task.dueTime}
-                        </span>
+                        <span className="text-xs text-muted-foreground">{task.dueTime}</span>
                       </div>
                     </div>
                   </div>
@@ -308,12 +285,10 @@ export default function DashboardPage() {
           <CardContent>
             <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
               <blockquote className="border-l-4 border-primary pl-4 italic">
-              &quot;Success is not final, failure is not fatal: It is the courage
-                to continue that counts.&quot;
+                &quot;Success is not final, failure is not fatal: It is the courage to continue that
+                counts.&quot;
               </blockquote>
-              <p className="text-right text-sm text-muted-foreground mt-2">
-                — Winston Churchill
-              </p>
+              <p className="text-right text-sm text-muted-foreground mt-2">— Winston Churchill</p>
             </div>
           </CardContent>
         </Card>
@@ -321,9 +296,7 @@ export default function DashboardPage() {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
-              Latest updates from your ambitions
-            </CardDescription>
+            <CardDescription>Latest updates from your ambitions</CardDescription>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[220px] pr-4">
@@ -378,21 +351,15 @@ export default function DashboardPage() {
                 >
                   <div
                     className={`h-10 w-10 rounded-full ${
-                      activity.iconColor === "text-primary"
-                        ? "bg-primary/20"
-                        : "bg-card"
+                      activity.iconColor === "text-primary" ? "bg-primary/20" : "bg-card"
                     } border border-border flex items-center justify-center flex-shrink-0`}
                   >
-                    <activity.icon
-                      className={`h-5 w-5 ${activity.iconColor}`}
-                    />
+                    <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
                   </div>
                   <div className="flex-1">
                     <div className="flex justify-between">
                       <p className="font-medium">{activity.title}</p>
-                      <span className="text-xs text-muted-foreground">
-                        {activity.time}
-                      </span>
+                      <span className="text-xs text-muted-foreground">{activity.time}</span>
                     </div>
                     <p className="text-sm">{activity.description}</p>
                     <Badge variant="outline" className="mt-1 text-xs">
@@ -416,17 +383,14 @@ export default function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Learning Recommendations</CardTitle>
-            <CardDescription>
-              Based on your ambitions and interests
-            </CardDescription>
+            <CardDescription>Based on your ambitions and interests</CardDescription>
           </CardHeader>
           <CardContent className="pb-0">
             <div className="space-y-4">
               {[
                 {
                   title: "Advanced Goal Setting Techniques",
-                  description:
-                    "Master the art of setting and achieving ambitious goals",
+                  description: "Master the art of setting and achieving ambitious goals",
                   duration: "45 min",
                   label: "Premium",
                   bgClass: "bg-gradient-to-r from-blue-500/10 to-indigo-500/10",
@@ -435,12 +399,10 @@ export default function DashboardPage() {
                 },
                 {
                   title: "Time Management for High Achievers",
-                  description:
-                    "Optimize your schedule for maximum productivity",
+                  description: "Optimize your schedule for maximum productivity",
                   duration: "30 min",
                   label: "Featured",
-                  bgClass:
-                    "bg-gradient-to-r from-amber-500/10 to-orange-500/10",
+                  bgClass: "bg-gradient-to-r from-amber-500/10 to-orange-500/10",
                   buttonText: "Continue",
                   icon: TimerIcon,
                 },
@@ -460,9 +422,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <h4 className="font-medium">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {item.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
                       </div>
                     </div>
                     <Badge variant="outline" className="ml-2">
@@ -492,9 +452,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Weekly Insights</CardTitle>
-            <CardDescription>
-              Data-driven insights to improve your progress
-            </CardDescription>
+            <CardDescription>Data-driven insights to improve your progress</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -514,8 +472,7 @@ export default function DashboardPage() {
                       Productivity Increase
                     </h4>
                     <p className="text-sm mt-1">
-                      You&apos;ve completed 30% more tasks than last week. Keep up
-                      the momentum!
+                      You&apos;ve completed 30% more tasks than last week. Keep up the momentum!
                     </p>
                   </div>
                 </div>
@@ -537,8 +494,8 @@ export default function DashboardPage() {
                       Focus Opportunity
                     </h4>
                     <p className="text-sm mt-1">
-                      You&apos;ve spent 20% less time on your top priority ambition
-                      this week. Consider reallocating your focus.
+                      You&apos;ve spent 20% less time on your top priority ambition this week.
+                      Consider reallocating your focus.
                     </p>
                   </div>
                 </div>
@@ -560,8 +517,8 @@ export default function DashboardPage() {
                       Progress Pattern
                     </h4>
                     <p className="text-sm mt-1">
-                      You&apos;re most productive on Wednesdays and Fridays. Consider
-                      scheduling important tasks on these days.
+                      You&apos;re most productive on Wednesdays and Fridays. Consider scheduling
+                      important tasks on these days.
                     </p>
                   </div>
                 </div>

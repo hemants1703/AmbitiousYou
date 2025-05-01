@@ -11,43 +11,24 @@ import {
   BarChartIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import * as Dropdown from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import * as Command from "@/components/ui/command";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { ThemeToggler } from "@/components/ThemeToggler";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { useDebounce } from '@/lib/hooks/use-debounce';
+import { useDebounce } from "@/lib/hooks/use-debounce";
 import { FlameIcon, CheckIcon } from "lucide-react";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
 import { LightningBoltIcon } from "@radix-ui/react-icons";
-import { Menu } from "lucide-react"; // Make sure to install lucide-react if not already
+import { Menu } from "lucide-react";
+import { toast } from "sonner";
+import { logoutAction } from "@/app/(auth)/actions";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -56,11 +37,19 @@ interface HeaderProps {
 
 export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [ambitions, setAmbitions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const router = useRouter();
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  const handleUserLogout = async () => {
+    const logoutUser = await logoutAction();
+
+    if (!logoutUser.success) {
+      toast.error("Failed to log out. Please try again.");
+    }
+  };
 
   // Handle keyboard shortcut to open command menu
   useEffect(() => {
@@ -90,16 +79,16 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        onClick={onMenuClick} 
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onMenuClick}
         className="md:hidden"
         aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
       >
         <Menu className="h-5 w-5" />
       </Button>
-      
+
       <div className="flex-1 flex items-center gap-2">
         <Button variant="outline" size="sm" className="hidden md:flex gap-2" asChild>
           <Link href="/dashboard">
@@ -123,19 +112,19 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <Dropdown.DropdownMenu>
+          <Dropdown.DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative group">
               <div className="relative">
-                <motion.div 
+                <motion.div
                   initial={{ scale: 1 }}
                   animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    repeatType: "reverse", 
+                  transition={{
+                    repeat: Infinity,
+                    repeatType: "reverse",
                     duration: 2,
                     ease: "easeInOut",
-                    repeatDelay: 5
+                    repeatDelay: 5,
                   }}
                   className="absolute -inset-1 rounded-full bg-gradient-to-r from-orange-500/50 to-amber-300/50 opacity-75 blur-sm group-hover:opacity-100"
                 />
@@ -147,8 +136,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                 7
               </Badge>
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-80 p-0" align="end">
+          </Dropdown.DropdownMenuTrigger>
+          <Dropdown.DropdownMenuContent className="w-80 p-0" align="end">
             <div className="p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -157,7 +146,9 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   </div>
                   <div>
                     <h4 className="text-sm font-bold">7 Day Streak!</h4>
-                    <p className="text-xs text-muted-foreground">Keep going to reach your next milestone</p>
+                    <p className="text-xs text-muted-foreground">
+                      Keep going to reach your next milestone
+                    </p>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" className="h-7 gap-1">
@@ -165,7 +156,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   <span className="text-xs">Check In</span>
                 </Button>
               </div>
-              
+
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold">Daily check-in</span>
@@ -181,16 +172,18 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
               </div>
 
               <div className="grid grid-cols-7 gap-1 pt-2">
-                {['M','T','W','T','F','S','S'].map((day, i) => (
+                {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
                   <div key={i} className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground mb-1">{day}</span>
-                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[10px] ${i < 7 ? 'bg-orange-500 text-white' : 'bg-muted text-muted-foreground'}`}>
+                    <div
+                      className={`h-6 w-6 rounded-full flex items-center justify-center text-[10px] ${i < 7 ? "bg-orange-500 text-white" : "bg-muted text-muted-foreground"}`}
+                    >
                       {i < 7 ? <CheckIcon className="h-3 w-3" /> : ""}
                     </div>
                   </div>
                 ))}
               </div>
-              
+
               <div className="bg-muted/50 p-3 rounded-md mt-2">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-8 rounded-full bg-purple-500/20 flex items-center justify-center">
@@ -203,8 +196,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                 </div>
               </div>
             </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </Dropdown.DropdownMenuContent>
+        </Dropdown.DropdownMenu>
 
         <ThemeToggler />
 
@@ -229,12 +222,14 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   </div>
                   <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">New achievement unlocked!</p>
-                    <p className="text-xs text-muted-foreground">You&apos;ve completed 5 consecutive days of progress.</p>
+                    <p className="text-xs text-muted-foreground">
+                      You&apos;ve completed 5 consecutive days of progress.
+                    </p>
                     <p className="text-xs text-muted-foreground">2 hours ago</p>
                   </div>
                 </div>
               </div>
-              
+
               <div className="border-b pb-3">
                 <div className="flex items-start gap-3">
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
@@ -242,12 +237,14 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   </div>
                   <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">Milestone reached</p>
-                    <p className="text-xs text-muted-foreground">Your "Learn Piano" ambition is 50% complete!</p>
+                    <p className="text-xs text-muted-foreground">
+                      Your "Learn Piano" ambition is 50% complete!
+                    </p>
                     <p className="text-xs text-muted-foreground">Yesterday</p>
                   </div>
                 </div>
               </div>
-              
+
               <div className="pb-3">
                 <div className="flex items-start gap-3">
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-green-500/10">
@@ -255,12 +252,14 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   </div>
                   <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">Task reminder</p>
-                    <p className="text-xs text-muted-foreground">Don&apos;t forget to practice scales for 30 mins today</p>
+                    <p className="text-xs text-muted-foreground">
+                      Don&apos;t forget to practice scales for 30 mins today
+                    </p>
                     <p className="text-xs text-muted-foreground">2 days ago</p>
                   </div>
                 </div>
               </div>
-              
+
               <Button variant="outline" size="sm" className="mt-2">
                 Mark all as read
               </Button>
@@ -282,8 +281,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
               <div className="grid gap-2">
                 <h3 className="text-sm font-medium">Getting Started</h3>
                 <p className="text-sm text-muted-foreground">
-                  Learn how to create your first ambition and track your
-                  progress effectively
+                  Learn how to create your first ambition and track your progress effectively
                 </p>
                 <Button size="sm" variant="outline" className="mt-2 w-full">
                   Watch Tutorial
@@ -311,74 +309,70 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
           </SheetContent>
         </Sheet>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full h-8 w-8 ml-1"
-            >
+        <Dropdown.DropdownMenu>
+          <Dropdown.DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatar.jpg" alt="User" />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>
+          </Dropdown.DropdownMenuTrigger>
+          <Dropdown.DropdownMenuContent align="end" className="w-56">
+            <Dropdown.DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">Jane Doe</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  jane@example.com
-                </p>
+                <p className="text-xs leading-none text-muted-foreground">jane@example.com</p>
                 <Badge className="mt-1 w-fit">Achiever Plan</Badge>
               </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            </Dropdown.DropdownMenuLabel>
+            <Dropdown.DropdownMenuSeparator />
+            <Dropdown.DropdownMenuItem>
               <Link href="/settings" className="w-full">
                 Settings
               </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
+            </Dropdown.DropdownMenuItem>
+            <Dropdown.DropdownMenuItem>
               <Link href="/billing" className="w-full">
                 Billing
               </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </Dropdown.DropdownMenuItem>
+            <Dropdown.DropdownMenuSeparator />
+            <Dropdown.DropdownMenuItem>
+              <button onClick={handleUserLogout}>Log Out</button>
+            </Dropdown.DropdownMenuItem>
+          </Dropdown.DropdownMenuContent>
+        </Dropdown.DropdownMenu>
       </div>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput 
-          placeholder="Search across your ambitions, tasks, and more..." 
+      <Command.CommandDialog open={open} onOpenChange={setOpen}>
+        <Command.CommandInput
+          placeholder="Search across your ambitions, tasks, and more..."
           value={searchQuery}
           onValueChange={setSearchQuery}
         />
-        <CommandList>
-          <CommandEmpty>
+        <Command.CommandList>
+          <Command.CommandEmpty>
             <div className="flex flex-col items-center justify-center py-6">
               <Search className="h-10 w-10 text-muted-foreground mb-2 opacity-50" />
               <p className="text-muted-foreground">No results found for "{searchQuery}"</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="mt-4"
                 onClick={() => {
                   setOpen(false);
-                  router.push('/ambitions/new');
+                  router.push("/ambitions/new");
                 }}
               >
                 Create New Ambition
               </Button>
             </div>
-          </CommandEmpty>
-          
+          </Command.CommandEmpty>
+
           {ambitions.length > 0 && (
-            <CommandGroup heading="Ambitions">
+            <Command.CommandGroup heading="Ambitions">
               {ambitions.map((ambition) => (
-                <CommandItem
+                <Command.CommandItem
                   key={ambition.id}
                   onSelect={() => {
                     router.push(`/ambitions/${ambition.id}`);
@@ -388,11 +382,13 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   <TargetIcon className="mr-2 h-4 w-4" />
                   <span>{ambition.title}</span>
                   {ambition.progress > 0 && (
-                    <span className="ml-auto text-xs text-muted-foreground">{ambition.progress}%</span>
+                    <span className="ml-auto text-xs text-muted-foreground">
+                      {ambition.progress}%
+                    </span>
                   )}
-                </CommandItem>
+                </Command.CommandItem>
               ))}
-              <CommandItem 
+              <Command.CommandItem
                 onSelect={() => {
                   router.push(`/ambitions?q=${encodeURIComponent(searchQuery)}`);
                   setOpen(false);
@@ -401,14 +397,14 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
               >
                 <Search className="mr-2 h-4 w-4" />
                 <span>View all results for "{searchQuery}"</span>
-              </CommandItem>
-            </CommandGroup>
+              </Command.CommandItem>
+            </Command.CommandGroup>
           )}
-          
+
           {tasks.length > 0 && (
-            <CommandGroup heading="Tasks">
+            <Command.CommandGroup heading="Tasks">
               {tasks.map((task) => (
-                <CommandItem
+                <Command.CommandItem
                   key={task.id}
                   onSelect={() => {
                     router.push(`/tasks/${task.id}`);
@@ -419,60 +415,66 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
                   <div className="flex flex-1 items-center justify-between">
                     <span>{task.title}</span>
                     <Badge variant={task.dueDate ? "outline" : "secondary"} className="ml-2">
-                      {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No deadline'}
+                      {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No deadline"}
                     </Badge>
                   </div>
-                </CommandItem>
+                </Command.CommandItem>
               ))}
-            </CommandGroup>
+            </Command.CommandGroup>
           )}
-          
-          <CommandGroup heading="Quick Actions">
-            <CommandItem onSelect={() => {
-              router.push('/ambitions/new');
-              setOpen(false);
-            }}>
+
+          <Command.CommandGroup heading="Quick Actions">
+            <Command.CommandItem
+              onSelect={() => {
+                router.push("/ambitions/new");
+                setOpen(false);
+              }}
+            >
               <PlusCircledIcon className="mr-2 h-4 w-4" />
               <span>Create New Ambition</span>
-            </CommandItem>
-            <CommandItem onSelect={() => {
-              router.push('/analytics');
-              setOpen(false);
-            }}>
+            </Command.CommandItem>
+            <Command.CommandItem
+              onSelect={() => {
+                router.push("/analytics");
+                setOpen(false);
+              }}
+            >
               <BarChartIcon className="mr-2 h-4 w-4" />
               <span>View Analytics</span>
-            </CommandItem>
-            <CommandItem onSelect={() => {
-              router.push('/dashboard');
-              setOpen(false);
-            }}>
+            </Command.CommandItem>
+            <Command.CommandItem
+              onSelect={() => {
+                router.push("/dashboard");
+                setOpen(false);
+              }}
+            >
               <RocketIcon className="mr-2 h-4 w-4" />
               <span>Go to Dashboard</span>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
+            </Command.CommandItem>
+          </Command.CommandGroup>
+        </Command.CommandList>
+      </Command.CommandDialog>
     </header>
   );
 
   async function fetchSearchResults(query: string) {
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-      if (!response.ok) throw new Error('Search failed');
+      if (!response.ok) throw new Error("Search failed");
       return await response.json();
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      console.error("Error fetching search results:", error);
       return { ambitions: [], tasks: [] };
     }
   }
 
   async function fetchRecentItems() {
     try {
-      const response = await fetch('/api/recent');
-      if (!response.ok) throw new Error('Failed to fetch recent items');
+      const response = await fetch("/api/recent");
+      if (!response.ok) throw new Error("Failed to fetch recent items");
       return await response.json();
     } catch (error) {
-      console.error('Error fetching recent items:', error);
+      console.error("Error fetching recent items:", error);
       return { ambitions: [], tasks: [] };
     }
   }
