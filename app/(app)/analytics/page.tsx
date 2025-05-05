@@ -3,11 +3,24 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   ClockIcon,
   DownloadIcon,
@@ -16,20 +29,25 @@ import {
   LightningBoltIcon,
   MixerHorizontalIcon,
   StarFilledIcon,
-  TargetIcon
+  TargetIcon,
 } from "@radix-ui/react-icons";
 // For icons not available in Radix UI
 import { ArrowRight, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function Analytics() {  
+export default function Analytics() {
+  const router = useRouter();
+
+  return router.push("/dashboard");
+
   // Example data - would come from your API in a real app
   const ambitions = [
     { id: "1", name: "Learn Spanish", color: "bg-blue-500", progress: 65 },
     { id: "2", name: "Marathon Training", color: "bg-green-500", progress: 40 },
     { id: "3", name: "Work Promotion", color: "bg-purple-500", progress: 25 },
-    { id: "4", name: "Financial Planning", color: "bg-amber-500", progress: 50 }
+    { id: "4", name: "Financial Planning", color: "bg-amber-500", progress: 50 },
   ];
-  
+
   const summaryData = {
     completionRate: 78,
     averageProgress: 45,
@@ -42,7 +60,7 @@ export default function Analytics() {
 
   return (
     <div className="container mx-auto space-y-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -74,7 +92,7 @@ export default function Analytics() {
           </Button>
         </div>
       </motion.div>
-      
+
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full md:w-[500px] grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -82,10 +100,10 @@ export default function Analytics() {
           <TabsTrigger value="time">Time</TabsTrigger>
           <TabsTrigger value="forecasts">Forecasts</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="overview" className="space-y-6 mt-6">
           {/* Key Performance Metrics */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -108,7 +126,7 @@ export default function Analytics() {
                 <Progress value={summaryData.completionRate} className="h-1 mt-3" />
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription className="flex items-center">
@@ -126,7 +144,7 @@ export default function Analytics() {
                 <Progress value={summaryData.averageProgress} className="h-1 mt-3" />
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription className="flex items-center">
@@ -144,7 +162,7 @@ export default function Analytics() {
                 <Progress value={summaryData.efficiency} className="h-1 mt-3" />
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription className="flex items-center">
@@ -163,11 +181,11 @@ export default function Analytics() {
               </CardContent>
             </Card>
           </motion.div>
-          
+
           {/* Main Charts Section */}
           <div className="grid gap-6 md:grid-cols-2">
             {/* Progress Over Time Chart */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -194,13 +212,13 @@ export default function Analytics() {
                 <CardContent>
                   {/* Placeholder for chart - in a real app you'd use a chart library */}
                   <div className="h-[250px] flex items-end gap-2">
-                    {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map((month, i) => {
+                    {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((month, i) => {
                       const heights = [45, 52, 48, 70, 66, 78];
                       return (
                         <div key={month} className="flex-1 flex flex-col items-center gap-2">
-                          <div 
-                            className="w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary/60 transition-all" 
-                            style={{ height: `${heights[i]}%` }} 
+                          <div
+                            className="w-full rounded-t-md bg-gradient-to-t from-primary/80 to-primary/60 transition-all"
+                            style={{ height: `${heights[i]}%` }}
                           />
                           <span className="text-xs text-muted-foreground">{month}</span>
                         </div>
@@ -210,9 +228,9 @@ export default function Analytics() {
                 </CardContent>
               </Card>
             </motion.div>
-            
+
             {/* Distribution by Category */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -229,7 +247,7 @@ export default function Analytics() {
                       { category: "Learning", percentage: 40, color: "bg-blue-500" },
                       { category: "Fitness", percentage: 25, color: "bg-green-500" },
                       { category: "Career", percentage: 20, color: "bg-purple-500" },
-                      { category: "Finance", percentage: 15, color: "bg-amber-500" }
+                      { category: "Finance", percentage: 15, color: "bg-amber-500" },
                     ].map((category) => (
                       <div key={category.category} className="space-y-2">
                         <div className="flex justify-between items-center">
@@ -247,9 +265,9 @@ export default function Analytics() {
               </Card>
             </motion.div>
           </div>
-          
+
           {/* Ambition Performance Comparison */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -283,18 +301,27 @@ export default function Analytics() {
               <CardContent>
                 <div className="space-y-6">
                   {ambitions.map((ambition) => (
-                    <div key={ambition.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg border">
+                    <div
+                      key={ambition.id}
+                      className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg border"
+                    >
                       <div className="space-y-2 flex-1">
                         <div className="flex items-center gap-2">
                           <div className={`h-4 w-4 rounded-full ${ambition.color}`}></div>
                           <h3 className="font-medium">{ambition.name}</h3>
                           {ambition.progress >= 60 && (
-                            <Badge variant="outline" className="ml-2 bg-green-500/10 text-green-500 border-green-500/20">
+                            <Badge
+                              variant="outline"
+                              className="ml-2 bg-green-500/10 text-green-500 border-green-500/20"
+                            >
                               On Track
                             </Badge>
                           )}
                           {ambition.progress < 30 && (
-                            <Badge variant="outline" className="ml-2 bg-red-500/10 text-red-500 border-red-500/20">
+                            <Badge
+                              variant="outline"
+                              className="ml-2 bg-red-500/10 text-red-500 border-red-500/20"
+                            >
                               Needs Focus
                             </Badge>
                           )}
@@ -303,18 +330,20 @@ export default function Analytics() {
                           <div className="flex-1">
                             <Progress value={ambition.progress} className="h-2" />
                           </div>
-                          <div className="w-12 text-right font-medium">
-                            {ambition.progress}%
-                          </div>
+                          <div className="w-12 text-right font-medium">{ambition.progress}%</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-6">
                         <div className="text-center">
-                          <div className="text-2xl font-bold">{Math.floor(Math.random() * 20) + 5}h</div>
+                          <div className="text-2xl font-bold">
+                            {Math.floor(Math.random() * 20) + 5}h
+                          </div>
                           <div className="text-xs text-muted-foreground">Time Spent</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold">{Math.floor(Math.random() * 15) + 3}</div>
+                          <div className="text-2xl font-bold">
+                            {Math.floor(Math.random() * 15) + 3}
+                          </div>
                           <div className="text-xs text-muted-foreground">Tasks Done</div>
                         </div>
                         <Button variant="outline" size="sm">
@@ -327,9 +356,9 @@ export default function Analytics() {
               </CardContent>
             </Card>
           </motion.div>
-          
+
           {/* Insights & Recommendations */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
@@ -348,11 +377,14 @@ export default function Analytics() {
                     </div>
                     <div>
                       <h4 className="font-medium text-green-600">Strong Progress Pattern</h4>
-                      <p className="text-sm mt-1">You&apos;ve been consistently improving in "Learn Spanish" over the last 3 weeks.</p>
+                      <p className="text-sm mt-1">
+                        You&apos;ve been consistently improving in "Learn Spanish" over the last 3
+                        weeks.
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
                   <div className="flex items-start gap-3">
                     <div className="h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
@@ -360,11 +392,14 @@ export default function Analytics() {
                     </div>
                     <div>
                       <h4 className="font-medium text-amber-600">Time Optimization</h4>
-                      <p className="text-sm mt-1">Your most productive hours are between 9-11am. Consider scheduling important tasks during this window.</p>
+                      <p className="text-sm mt-1">
+                        Your most productive hours are between 9-11am. Consider scheduling important
+                        tasks during this window.
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
                   <div className="flex items-start gap-3">
                     <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
@@ -372,13 +407,16 @@ export default function Analytics() {
                     </div>
                     <div>
                       <h4 className="font-medium text-blue-600">Efficiency Opportunity</h4>
-                      <p className="text-sm mt-1">Breaking down "Work Promotion" into smaller tasks could improve your completion rate by 35%.</p>
+                      <p className="text-sm mt-1">
+                        Breaking down "Work Promotion" into smaller tasks could improve your
+                        completion rate by 35%.
+                      </p>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Recommendations</CardTitle>
@@ -389,25 +427,30 @@ export default function Analytics() {
                   {
                     title: "Increase focus time on Marathon Training",
                     description: "Currently lagging 15% behind your target pace.",
-                    action: "Allocate Time"
+                    action: "Allocate Time",
                   },
                   {
                     title: "Review Financial Planning milestones",
                     description: "2 milestones are approaching their deadlines.",
-                    action: "Review"
+                    action: "Review",
                   },
                   {
                     title: "Create more specific tasks for Work Promotion",
                     description: "Current tasks are too broad which may reduce motivation.",
-                    action: "Edit Tasks"
+                    action: "Edit Tasks",
                   },
                 ].map((recommendation, i) => (
-                  <div key={i} className="flex items-center justify-between gap-4 p-4 rounded-lg border">
+                  <div
+                    key={i}
+                    className="flex items-center justify-between gap-4 p-4 rounded-lg border"
+                  >
                     <div>
                       <h4 className="font-medium">{recommendation.title}</h4>
                       <p className="text-sm text-muted-foreground">{recommendation.description}</p>
                     </div>
-                    <Button variant="outline" size="sm">{recommendation.action}</Button>
+                    <Button variant="outline" size="sm">
+                      {recommendation.action}
+                    </Button>
                   </div>
                 ))}
               </CardContent>
@@ -419,7 +462,7 @@ export default function Analytics() {
             </Card>
           </motion.div>
         </TabsContent>
-        
+
         <TabsContent value="progress" className="space-y-6 mt-6">
           {/* Progress-specific content */}
           <Card>
@@ -432,20 +475,22 @@ export default function Analytics() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="time" className="space-y-6 mt-6">
           {/* Time-specific content */}
           <Card>
             <CardHeader>
               <CardTitle>Time Investment Analysis</CardTitle>
-              <CardDescription>How you&apos;ve been allocating your time across ambitions</CardDescription>
+              <CardDescription>
+                How you&apos;ve been allocating your time across ambitions
+              </CardDescription>
             </CardHeader>
             <CardContent className="h-[400px] flex items-center justify-center text-muted-foreground">
               Time analysis charts and graphs would appear here
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="forecasts" className="space-y-6 mt-6">
           {/* Forecasts content */}
           <Card>

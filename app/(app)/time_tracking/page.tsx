@@ -3,12 +3,32 @@
 import { useState } from "react";
 import { motion } from "framer-motion"; // Added motion import
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,72 +44,77 @@ import {
 } from "@radix-ui/react-icons";
 // For icons not available in Radix UI
 import { Pause, Play, LineChart, Hourglass, Tag } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Time() {
+  const router = useRouter();
+
+  return router.push("/dashboard");
+
   const [activeTimer, setActiveTimer] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  
+
   // Example data - in a real app this would come from your backend
   const ambitions = [
     { id: "1", name: "Learn Spanish", color: "bg-blue-500", progress: 65 },
     { id: "2", name: "Marathon Training", color: "bg-green-500", progress: 40 },
     { id: "3", name: "Work Promotion", color: "bg-purple-500", progress: 25 },
-    { id: "4", name: "Financial Planning", color: "bg-amber-500", progress: 50 }
+    { id: "4", name: "Financial Planning", color: "bg-amber-500", progress: 50 },
   ];
-  
+
   const timeEntries = [
-    { 
-      id: "1", 
-      ambitionId: "1", 
-      activity: "Vocabulary practice", 
-      duration: "45:00", 
-      date: new Date(), 
-      start: "09:15", 
+    {
+      id: "1",
+      ambitionId: "1",
+      activity: "Vocabulary practice",
+      duration: "45:00",
+      date: new Date(),
+      start: "09:15",
       end: "10:00",
-      tags: ["study", "vocabulary"]
+      tags: ["study", "vocabulary"],
     },
-    { 
-      id: "2", 
-      ambitionId: "2", 
-      activity: "5K training run", 
-      duration: "32:15", 
-      date: new Date(), 
-      start: "07:00", 
+    {
+      id: "2",
+      ambitionId: "2",
+      activity: "5K training run",
+      duration: "32:15",
+      date: new Date(),
+      start: "07:00",
       end: "07:32",
-      tags: ["cardio", "morning"]
+      tags: ["cardio", "morning"],
     },
-    { 
-      id: "3", 
-      ambitionId: "3", 
-      activity: "Project planning", 
-      duration: "1:20:00", 
-      date: subDays(new Date(), 1), 
-      start: "14:30", 
+    {
+      id: "3",
+      ambitionId: "3",
+      activity: "Project planning",
+      duration: "1:20:00",
+      date: subDays(new Date(), 1),
+      start: "14:30",
       end: "15:50",
-      tags: ["planning", "focus"]
+      tags: ["planning", "focus"],
     },
-    { 
-      id: "4", 
-      ambitionId: "1", 
-      activity: "Grammar exercises", 
-      duration: "25:00", 
-      date: subDays(new Date(), 1), 
-      start: "19:00", 
+    {
+      id: "4",
+      ambitionId: "1",
+      activity: "Grammar exercises",
+      duration: "25:00",
+      date: subDays(new Date(), 1),
+      start: "19:00",
       end: "19:25",
-      tags: ["study", "grammar"]
-    }
+      tags: ["study", "grammar"],
+    },
   ];
-  
+
   const weeklyData = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
       { name: "Learn Spanish", data: [30, 45, 0, 25, 45, 60, 0] },
       { name: "Marathon Training", data: [45, 30, 35, 0, 25, 60, 45] },
       { name: "Work Promotion", data: [80, 65, 45, 70, 60, 0, 0] },
-      { name: "Financial Planning", data: [15, 0, 20, 25, 15, 0, 30] }
-    ]
+      { name: "Financial Planning", data: [15, 0, 20, 25, 15, 0, 30] },
+    ],
   };
-  
+
   const toggleTimer = (ambitionId: string) => {
     if (activeTimer === ambitionId) {
       setActiveTimer(null);
@@ -97,10 +122,10 @@ export default function Time() {
       setActiveTimer(ambitionId);
     }
   };
-  
+
   return (
     <div className="container mx-auto space-y-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -121,14 +146,14 @@ export default function Time() {
           </Button>
         </div>
       </motion.div>
-      
+
       <Tabs defaultValue="tracking" className="w-full">
         <TabsList className="grid w-full md:w-[400px] grid-cols-3">
           <TabsTrigger value="tracking">Tracking</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="tracking" className="space-y-6 mt-4">
           {/* Active Timer Section */}
           <motion.div
@@ -164,10 +189,10 @@ export default function Time() {
                                 )}
                               </div>
                             </div>
-                            
+
                             <div className="flex gap-2">
-                              <Button 
-                                variant={activeTimer === ambition.id ? "destructive" : "outline"} 
+                              <Button
+                                variant={activeTimer === ambition.id ? "destructive" : "outline"}
                                 size="sm"
                                 className="w-10 h-9 p-0"
                                 onClick={() => toggleTimer(ambition.id)}
@@ -183,17 +208,23 @@ export default function Time() {
                               </Button>
                             </div>
                           </div>
-                          
+
                           {activeTimer === ambition.id && (
                             <motion.div
                               initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
+                              animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
                               className="mt-4 space-y-2"
                             >
-                              <Label htmlFor={`activity-${ambition.id}`}>What are you working on?</Label>
+                              <Label htmlFor={`activity-${ambition.id}`}>
+                                What are you working on?
+                              </Label>
                               <div className="flex gap-2">
-                                <Input id={`activity-${ambition.id}`} placeholder="Describe your activity..." className="flex-1" />
+                                <Input
+                                  id={`activity-${ambition.id}`}
+                                  placeholder="Describe your activity..."
+                                  className="flex-1"
+                                />
                                 <Button>Save</Button>
                               </div>
                             </motion.div>
@@ -203,7 +234,7 @@ export default function Time() {
                     </motion.div>
                   ))}
                 </div>
-                
+
                 <div className="flex justify-center mt-6">
                   <Button variant="outline" className="flex items-center gap-1">
                     <PlusCircledIcon className="h-4 w-4" />
@@ -213,9 +244,9 @@ export default function Time() {
               </CardContent>
             </Card>
           </motion.div>
-          
+
           {/* Today's Entries */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -223,51 +254,55 @@ export default function Time() {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle>Today&apos;s Time Entries</CardTitle>
-                <CardDescription>Time tracked for {format(new Date(), "MMMM d, yyyy")}</CardDescription>
+                <CardDescription>
+                  Time tracked for {format(new Date(), "MMMM d, yyyy")}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {timeEntries.filter(entry => 
-                    entry.date.toDateString() === new Date().toDateString()
-                  ).map((entry, index) => {
-                    const ambition = ambitions.find(a => a.id === entry.ambitionId);
-                    return (
-                      <motion.div
-                        key={entry.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 * index }}
-                        className="flex items-center justify-between p-3 border rounded-md"
-                      >
-                        <div className="flex gap-3 items-center">
-                          <div className={`h-6 w-1 rounded-full ${ambition?.color}`} />
-                          <div>
-                            <p className="font-medium">{entry.activity}</p>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>{entry.start} - {entry.end}</span>
-                              <div className="w-1 h-1 rounded-full bg-muted-foreground" />
-                              <span>{ambition?.name}</span>
+                  {timeEntries
+                    .filter((entry) => entry.date.toDateString() === new Date().toDateString())
+                    .map((entry, index) => {
+                      const ambition = ambitions.find((a) => a.id === entry.ambitionId);
+                      return (
+                        <motion.div
+                          key={entry.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: 0.1 * index }}
+                          className="flex items-center justify-between p-3 border rounded-md"
+                        >
+                          <div className="flex gap-3 items-center">
+                            <div className={`h-6 w-1 rounded-full ${ambition?.color}`} />
+                            <div>
+                              <p className="font-medium">{entry.activity}</p>
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <span>
+                                  {entry.start} - {entry.end}
+                                </span>
+                                <div className="w-1 h-1 rounded-full bg-muted-foreground" />
+                                <span>{ambition?.name}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex gap-1">
-                            {entry.tags.map((tag, i) => (
-                              <Badge key={i} variant="secondary" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
+                          <div className="flex items-center gap-3">
+                            <div className="flex gap-1">
+                              {entry.tags.map((tag, i) => (
+                                <Badge key={i} variant="secondary" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                            <span className="font-medium tabular-nums">{entry.duration}</span>
                           </div>
-                          <span className="font-medium tabular-nums">{entry.duration}</span>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                  
-                  {timeEntries.filter(entry => 
-                    entry.date.toDateString() === new Date().toDateString()
+                        </motion.div>
+                      );
+                    })}
+
+                  {timeEntries.filter(
+                    (entry) => entry.date.toDateString() === new Date().toDateString()
                   ).length === 0 && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5 }}
@@ -275,7 +310,9 @@ export default function Time() {
                     >
                       <Hourglass className="h-12 w-12 mx-auto text-muted-foreground opacity-20" />
                       <h3 className="mt-4 font-medium">No time entries for today</h3>
-                      <p className="text-muted-foreground mt-1">Start a timer to track your progress</p>
+                      <p className="text-muted-foreground mt-1">
+                        Start a timer to track your progress
+                      </p>
                     </motion.div>
                   )}
                 </div>
@@ -292,9 +329,9 @@ export default function Time() {
             </Card>
           </motion.div>
         </TabsContent>
-        
+
         <TabsContent value="history" className="space-y-6 mt-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -329,8 +366,10 @@ export default function Time() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Ambitions</SelectItem>
-                        {ambitions.map(ambition => (
-                          <SelectItem key={ambition.id} value={ambition.id}>{ambition.name}</SelectItem>
+                        {ambitions.map((ambition) => (
+                          <SelectItem key={ambition.id} value={ambition.id}>
+                            {ambition.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -357,7 +396,7 @@ export default function Time() {
                     </TableHeader>
                     <TableBody>
                       {timeEntries.map((entry, index) => {
-                        const ambition = ambitions.find(a => a.id === entry.ambitionId);
+                        const ambition = ambitions.find((a) => a.id === entry.ambitionId);
                         return (
                           <motion.tr
                             key={entry.id}
@@ -373,7 +412,9 @@ export default function Time() {
                               </div>
                             </TableCell>
                             <TableCell>{format(entry.date, "MMM d, yyyy")}</TableCell>
-                            <TableCell>{entry.start} - {entry.end}</TableCell>
+                            <TableCell>
+                              {entry.start} - {entry.end}
+                            </TableCell>
                             <TableCell className="font-medium">{entry.duration}</TableCell>
                             <TableCell>
                               <div className="flex gap-1">
@@ -385,7 +426,9 @@ export default function Time() {
                               </div>
                             </TableCell>
                             <TableCell className="text-right">
-                              <Button variant="ghost" size="sm">Edit</Button>
+                              <Button variant="ghost" size="sm">
+                                Edit
+                              </Button>
                             </TableCell>
                           </motion.tr>
                         );
@@ -399,14 +442,18 @@ export default function Time() {
                   Showing <span className="font-medium">4</span> entries
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" disabled>Previous</Button>
-                  <Button variant="outline" size="sm" disabled>Next</Button>
+                  <Button variant="outline" size="sm" disabled>
+                    Previous
+                  </Button>
+                  <Button variant="outline" size="sm" disabled>
+                    Next
+                  </Button>
                 </div>
               </CardFooter>
             </Card>
           </motion.div>
         </TabsContent>
-        
+
         <TabsContent value="analytics" className="space-y-6 mt-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -430,7 +477,7 @@ export default function Time() {
                 </CardContent>
               </Card>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -450,7 +497,7 @@ export default function Time() {
                 </CardContent>
               </Card>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -467,7 +514,7 @@ export default function Time() {
                 </CardContent>
               </Card>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -485,7 +532,7 @@ export default function Time() {
               </Card>
             </motion.div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -538,9 +585,9 @@ export default function Time() {
                               <motion.div
                                 initial={{ height: 0 }}
                                 animate={{ height: `${height}%` }}
-                                transition={{ duration: 0.5, delay: 0.2 + (i * 0.1) }}
-                                key={dataset.name} 
-                                className={`w-full rounded-t ${ambitions[i]?.color}`} 
+                                transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                                key={dataset.name}
+                                className={`w-full rounded-t ${ambitions[i]?.color}`}
                                 title={`${dataset.name}: ${dataset.data[dayIndex]} mins`}
                               ></motion.div>
                             );
@@ -554,7 +601,7 @@ export default function Time() {
               </CardContent>
             </Card>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -567,8 +614,8 @@ export default function Time() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {ambitions.map((ambition, i) => (
-                  <motion.div 
-                    key={ambition.id} 
+                  <motion.div
+                    key={ambition.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: 0.1 * i }}
@@ -581,17 +628,27 @@ export default function Time() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-muted-foreground">
-                          {Math.round(weeklyData.datasets[i].data.reduce((a, b) => a + b, 0) / 60 * 10) / 10}h
+                          {Math.round(
+                            (weeklyData.datasets[i].data.reduce((a, b) => a + b, 0) / 60) * 10
+                          ) / 10}
+                          h
                         </span>
                         <span className="text-sm">
-                          {Math.round(weeklyData.datasets[i].data.reduce((a, b) => a + b, 0) / weeklyData.datasets.flatMap(d => d.data).reduce((a, b) => a + b, 0) * 100)}%
+                          {Math.round(
+                            (weeklyData.datasets[i].data.reduce((a, b) => a + b, 0) /
+                              weeklyData.datasets
+                                .flatMap((d) => d.data)
+                                .reduce((a, b) => a + b, 0)) *
+                              100
+                          )}
+                          %
                         </span>
                       </div>
                     </div>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: "100%" }}
-                      transition={{ duration: 0.5, delay: 0.2 + (i * 0.1) }}
+                      transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
                     >
                       <Progress value={ambition.progress} />
                     </motion.div>
@@ -600,7 +657,7 @@ export default function Time() {
               </CardContent>
             </Card>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -620,7 +677,7 @@ export default function Time() {
                     { tag: "cardio", minutes: 32 },
                     { tag: "morning", minutes: 32 },
                     { tag: "grammar", minutes: 25 },
-                    { tag: "vocabulary", minutes: 45 }
+                    { tag: "vocabulary", minutes: 45 },
                   ].map((item, index) => (
                     <motion.div
                       key={item.tag}
@@ -631,7 +688,9 @@ export default function Time() {
                       <Badge className="py-2 px-4 flex items-center gap-2">
                         <Tag className="h-4 w-4" />
                         <span>{item.tag}</span>
-                        <span className="bg-primary/20 px-2 py-0.5 rounded-full text-xs">{item.minutes}m</span>
+                        <span className="bg-primary/20 px-2 py-0.5 rounded-full text-xs">
+                          {item.minutes}m
+                        </span>
                       </Badge>
                     </motion.div>
                   ))}

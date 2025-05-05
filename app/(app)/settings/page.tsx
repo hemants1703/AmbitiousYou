@@ -105,10 +105,10 @@ export default async function Settings() {
 
               <ProfileTab profilesData={profilesData} userData={userData} />
             </Card.CardContent>
-            <Card.CardFooter className="flex justify-end space-x-2">
+            {/* <Card.CardFooter className="flex justify-end space-x-2">
               <Button variant="outline">Cancel</Button>
               <Button>Save Changes</Button>
-            </Card.CardFooter>
+            </Card.CardFooter> */}
           </Card.Card>
 
           {/* <Card>

@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileData } from "@/types";
 import { User } from "@supabase/supabase-js";
+import updateProfileAction from "./actions";
+import { toast } from "sonner";
 
 export default function ProfileTab({
   profilesData,
@@ -14,9 +16,25 @@ export default function ProfileTab({
   profilesData: ProfileData[];
   userData: User;
 }) {
-  const { firstName, lastName } = profilesData[0];
-  const { email } = userData;
-  const initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
+  let { firstName, lastName } = profilesData[0];
+  const { id: userId, email } = userData;
+  let initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
+
+  const handleProfileUpdate = async () => {
+    const { success, error, data } = await updateProfileAction(userId, firstName, lastName);
+
+    if (!success && error) {
+      toast.error("Error updating profile", {
+        description: error,
+      });
+      // console.error("Error updating profile: ", error);
+    }
+
+    if (success) {
+      toast.success("Profile updated successfully");
+      console.log("Profile updated successfully: ", data);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-8 md:flex-row">
@@ -34,11 +52,25 @@ export default function ProfileTab({
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="firstName">First name</Label>
-            <Input id="firstName" placeholder="John" defaultValue={firstName} />
+            <Input
+              id="firstName"
+              placeholder="John"
+              defaultValue={firstName}
+              onChange={(e) => {
+                firstName = e.target.value;
+              }}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="lastName">Last name</Label>
-            <Input id="lastName" placeholder="Doe" defaultValue={lastName} />
+            <Input
+              id="lastName"
+              placeholder="Doe"
+              defaultValue={lastName}
+              onChange={(e) => {
+                lastName = e.target.value;
+              }}
+            />
           </div>
         </div>
 
@@ -51,6 +83,11 @@ export default function ProfileTab({
             defaultValue={email}
             disabled
           />
+        </div>
+
+        <div className="flex justify-end space-x-2 mt-10">
+          <Button variant="outline">Cancel</Button>
+          <Button onClick={handleProfileUpdate}>Save Changes</Button>
         </div>
 
         {/* <div className="space-y-2">

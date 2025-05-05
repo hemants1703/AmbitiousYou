@@ -29,19 +29,27 @@ import { LightningBoltIcon } from "@radix-ui/react-icons";
 import { Menu } from "lucide-react";
 import { toast } from "sonner";
 import { logoutAction } from "@/app/(auth)/actions";
+import { User } from "@supabase/supabase-js";
+import { ProfileData } from "@/types";
 
 interface HeaderProps {
   onMenuClick: () => void;
   isSidebarOpen: boolean;
+  userData: User;
+  profileData: ProfileData[];
 }
 
-export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
+export function Header({ onMenuClick, isSidebarOpen, userData, profileData }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [ambitions, setAmbitions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const router = useRouter();
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  const { firstName, lastName } = profileData[0];
+  const initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
+  const { email } = userData;
 
   const handleUserLogout = async () => {
     const logoutUser = await logoutAction();
@@ -314,15 +322,15 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
             <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatar.jpg" alt="User" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarFallback>{initialsOfUsersName}</AvatarFallback>
               </Avatar>
             </Button>
           </Dropdown.DropdownMenuTrigger>
           <Dropdown.DropdownMenuContent align="end" className="w-56">
             <Dropdown.DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Jane Doe</p>
-                <p className="text-xs leading-none text-muted-foreground">jane@example.com</p>
+                <p className="text-sm font-medium leading-none">{`${firstName} ${lastName}`}</p>
+                <p className="text-xs leading-none text-muted-foreground">{email}</p>
                 <Badge className="mt-1 w-fit">Achiever Plan</Badge>
               </div>
             </Dropdown.DropdownMenuLabel>

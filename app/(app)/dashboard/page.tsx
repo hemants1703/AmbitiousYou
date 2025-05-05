@@ -1,14 +1,7 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import * as Tabs from "@/components/ui/tabs";
+import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,8 +23,28 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
+import { User } from "@supabase/supabase-js";
+import { getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  // const supabase = createClient();
+
+  // const { data, error: userDoesNotExist } = await supabase.auth.getUser();
+
+  // // Check if the user is logged in
+  // if (userDoesNotExist) {
+  //   toast.error("You are not logged in. Please log in to access the dashboard.");
+  // }
+
+  // const userData: User = data.user;
+  // const { id } = userData;
+
+  // const profileData = await getProfilesTableData(id);
+
+  // const { firstName } = profileData[0];
+
   return (
     <div className="flex flex-col gap-8 pb-10 overflow-auto">
       {/* Welcome Banner */}
@@ -45,7 +58,7 @@ export default function DashboardPage() {
         <div className="relative z-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight mb-1">Welcome back, John</h1>
+              <h1 className="text-3xl font-bold tracking-tight mb-1">Welcome back,</h1>
               <p className="text-muted-foreground">
                 Here&apos;s an overview of your ambitions and today&apos;s focus
               </p>
@@ -67,47 +80,47 @@ export default function DashboardPage() {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
       >
-        <Card className="relative overflow-hidden">
-          <CardHeader className="pb-2">
-            <CardDescription className="flex items-center">
+        <Card.Card className="relative overflow-hidden">
+          <Card.CardHeader className="pb-2">
+            <Card.CardDescription className="flex items-center">
               <TargetIcon className="h-4 w-4 mr-1 text-primary" />
               Active Ambitions
-            </CardDescription>
-            <CardTitle className="text-2xl font-bold">7</CardTitle>
-          </CardHeader>
-          <CardContent className="pb-2">
+            </Card.CardDescription>
+            <Card.CardTitle className="text-2xl font-bold">7</Card.CardTitle>
+          </Card.CardHeader>
+          <Card.CardContent className="pb-2">
             <div className="flex items-center text-sm">
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                 2 near completion
               </Badge>
             </div>
-          </CardContent>
+          </Card.CardContent>
           <div className="absolute inset-0 pointer-events-none border-2 border-primary/10 rounded-xl" />
-        </Card>
+        </Card.Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="flex items-center">
+        <Card.Card>
+          <Card.CardHeader className="pb-2">
+            <Card.CardDescription className="flex items-center">
               <CheckCircledIcon className="h-4 w-4 mr-1 text-green-500" />
               Tasks Completed
-            </CardDescription>
-            <CardTitle className="text-2xl font-bold">23/31</CardTitle>
-          </CardHeader>
-          <CardContent className="pb-2">
+            </Card.CardDescription>
+            <Card.CardTitle className="text-2xl font-bold">23/31</Card.CardTitle>
+          </Card.CardHeader>
+          <Card.CardContent className="pb-2">
             <Progress value={74} className="h-2" />
             <p className="text-xs text-muted-foreground mt-2">74% completion rate</p>
-          </CardContent>
-        </Card>
+          </Card.CardContent>
+        </Card.Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="flex items-center">
+        <Card.Card>
+          <Card.CardHeader className="pb-2">
+            <Card.CardDescription className="flex items-center">
               <LightningBoltIcon className="h-4 w-4 mr-1 text-amber-500" />
               Active Streak
-            </CardDescription>
-            <CardTitle className="text-2xl font-bold">16 days</CardTitle>
-          </CardHeader>
-          <CardContent className="pb-2">
+            </Card.CardDescription>
+            <Card.CardTitle className="text-2xl font-bold">16 days</Card.CardTitle>
+          </Card.CardHeader>
+          <Card.CardContent className="pb-2">
             <div className="flex items-center">
               <div className="flex space-x-1">
                 {Array.from({ length: 7 }).map((_, i) => (
@@ -119,26 +132,26 @@ export default function DashboardPage() {
               </div>
               <span className="text-xs ml-2 text-muted-foreground">Best: 24 days</span>
             </div>
-          </CardContent>
-        </Card>
+          </Card.CardContent>
+        </Card.Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="flex items-center">
+        <Card.Card>
+          <Card.CardHeader className="pb-2">
+            <Card.CardDescription className="flex items-center">
               <DoubleArrowUpIcon className="h-4 w-4 mr-1 text-blue-500" />
               Productivity Score
-            </CardDescription>
-            <CardTitle className="text-2xl font-bold">92%</CardTitle>
-          </CardHeader>
-          <CardContent className="pb-2">
+            </Card.CardDescription>
+            <Card.CardTitle className="text-2xl font-bold">92%</Card.CardTitle>
+          </Card.CardHeader>
+          <Card.CardContent className="pb-2">
             <div className="flex items-center">
               {[1, 2, 3, 4, 5].map((i) => (
                 <StarFilledIcon key={i} className="h-4 w-4 text-amber-400" />
               ))}
               <span className="text-xs ml-2 text-green-500">+5% this week</span>
             </div>
-          </CardContent>
-        </Card>
+          </Card.CardContent>
+        </Card.Card>
       </motion.div>
 
       {/* Progress Overview */}
@@ -149,21 +162,21 @@ export default function DashboardPage() {
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
         <div className="lg:col-span-2">
-          <Card className="h-full">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <Card.Card className="h-full">
+            <Card.CardHeader className="flex flex-row items-center justify-between pb-2">
               <div>
-                <CardTitle>Your Progress</CardTitle>
-                <CardDescription>Weekly ambition progress overview</CardDescription>
+                <Card.CardTitle>Your Progress</Card.CardTitle>
+                <Card.CardDescription>Weekly ambition progress overview</Card.CardDescription>
               </div>
-              <Tabs defaultValue="week" className="w-auto">
-                <TabsList className="grid w-[240px] grid-cols-3">
-                  <TabsTrigger value="week">Week</TabsTrigger>
-                  <TabsTrigger value="month">Month</TabsTrigger>
-                  <TabsTrigger value="year">Year</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </CardHeader>
-            <CardContent>
+              <Tabs.Tabs defaultValue="week" className="w-auto">
+                <Tabs.TabsList className="grid w-[240px] grid-cols-3">
+                  <Tabs.TabsTrigger value="week">Week</Tabs.TabsTrigger>
+                  <Tabs.TabsTrigger value="month">Month</Tabs.TabsTrigger>
+                  <Tabs.TabsTrigger value="year">Year</Tabs.TabsTrigger>
+                </Tabs.TabsList>
+              </Tabs.Tabs>
+            </Card.CardHeader>
+            <Card.CardContent>
               {/* Simple Progress Chart */}
               <div className="h-[250px] flex items-end gap-2 mt-4">
                 {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => {
@@ -182,21 +195,21 @@ export default function DashboardPage() {
                   );
                 })}
               </div>
-            </CardContent>
-          </Card>
+            </Card.CardContent>
+          </Card.Card>
         </div>
 
-        <Card className="h-full flex flex-col">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2">
+        <Card.Card className="h-full flex flex-col">
+          <Card.CardHeader className="pb-2">
+            <Card.CardTitle className="flex items-center gap-2">
               Today&apos;s Focus
               <Badge variant="secondary" className="ml-2">
                 5 tasks
               </Badge>
-            </CardTitle>
-            <CardDescription>High priority tasks for today</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1">
+            </Card.CardTitle>
+            <Card.CardDescription>High priority tasks for today</Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent className="flex-1">
             <ScrollArea className="h-[300px] pr-4">
               <div className="space-y-4">
                 {[
@@ -261,13 +274,13 @@ export default function DashboardPage() {
                 ))}
               </div>
             </ScrollArea>
-          </CardContent>
-          <CardFooter className="border-t pt-4">
+          </Card.CardContent>
+          <Card.CardFooter className="border-t pt-4">
             <Button className="w-full">
               <PlusIcon className="mr-2 h-4 w-4" /> Add New Task
             </Button>
-          </CardFooter>
-        </Card>
+          </Card.CardFooter>
+        </Card.Card>
       </motion.div>
 
       {/* Recent Activity & Motivational Quote */}
@@ -277,12 +290,12 @@ export default function DashboardPage() {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Daily Motivation</CardTitle>
-            <CardDescription>Your quote for today</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <Card.Card className="col-span-1">
+          <Card.CardHeader>
+            <Card.CardTitle>Daily Motivation</Card.CardTitle>
+            <Card.CardDescription>Your quote for today</Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent>
             <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
               <blockquote className="border-l-4 border-primary pl-4 italic">
                 &quot;Success is not final, failure is not fatal: It is the courage to continue that
@@ -290,15 +303,15 @@ export default function DashboardPage() {
               </blockquote>
               <p className="text-right text-sm text-muted-foreground mt-2">— Winston Churchill</p>
             </div>
-          </CardContent>
-        </Card>
+          </Card.CardContent>
+        </Card.Card>
 
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest updates from your ambitions</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <Card.Card className="lg:col-span-2">
+          <Card.CardHeader>
+            <Card.CardTitle>Recent Activity</Card.CardTitle>
+            <Card.CardDescription>Latest updates from your ambitions</Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent>
             <ScrollArea className="h-[220px] pr-4">
               {[
                 {
@@ -369,8 +382,8 @@ export default function DashboardPage() {
                 </motion.div>
               ))}
             </ScrollArea>
-          </CardContent>
-        </Card>
+          </Card.CardContent>
+        </Card.Card>
       </motion.div>
 
       {/* Learning & Insights */}
@@ -380,12 +393,12 @@ export default function DashboardPage() {
         transition={{ duration: 0.6, delay: 0.4 }}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>Learning Recommendations</CardTitle>
-            <CardDescription>Based on your ambitions and interests</CardDescription>
-          </CardHeader>
-          <CardContent className="pb-0">
+        <Card.Card>
+          <Card.CardHeader>
+            <Card.CardTitle>Learning Recommendations</Card.CardTitle>
+            <Card.CardDescription>Based on your ambitions and interests</Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent className="pb-0">
             <div className="space-y-4">
               {[
                 {
@@ -441,20 +454,22 @@ export default function DashboardPage() {
                 </motion.div>
               ))}
             </div>
-          </CardContent>
-          <CardFooter className="pt-4">
+          </Card.CardContent>
+          <Card.CardFooter className="pt-4">
             <Button variant="ghost" className="w-full text-primary">
               View All Recommendations
             </Button>
-          </CardFooter>
-        </Card>
+          </Card.CardFooter>
+        </Card.Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Weekly Insights</CardTitle>
-            <CardDescription>Data-driven insights to improve your progress</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <Card.Card>
+          <Card.CardHeader>
+            <Card.CardTitle>Weekly Insights</Card.CardTitle>
+            <Card.CardDescription>
+              Data-driven insights to improve your progress
+            </Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent>
             <div className="space-y-4">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -524,8 +539,8 @@ export default function DashboardPage() {
                 </div>
               </motion.div>
             </div>
-          </CardContent>
-        </Card>
+          </Card.CardContent>
+        </Card.Card>
       </motion.div>
     </div>
   );
