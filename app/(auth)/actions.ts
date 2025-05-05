@@ -5,9 +5,8 @@ import { redirect } from "next/navigation";
 import { LoginSchema, SignupSchema } from "./_lib/definitions";
 import { revalidatePath } from "next/cache";
 import { LoginState } from "./login/LoginForm";
-import { SignupState } from "./signup/SignUpForm";
+import { SignupState } from "./signup/SignupForm";
 
-// TODO: CREATE A NEW PROFILES TABLE AND SAVE THE USER FIRST AND LAST NAME IN THAT TABLE
 // This function is called when the user submits the signup form
 export async function signupAction(previousState: SignupState, formData: FormData) {
     // Validate the form data submitted by the user
@@ -29,16 +28,16 @@ export async function signupAction(previousState: SignupState, formData: FormDat
     // Create a SSR Supabase client instance
     const supabase = await createClient()
 
-    const data = {
+    const signupData = {
         email: formData.get('email') as string,
         password: formData.get('password') as string,
     }
 
     // SIGN UP THE USER
-    const { error } = await supabase.auth.signUp(data)
+    const { error: signupError } = await supabase.auth.signUp(signupData)
 
-    if (error) {
-        if (error.status === 422 && error.code === "user_already_exists") {
+    if (signupError) {
+        if (signupError.status === 422 && signupError.code === "user_already_exists") {
             return {
                 errors: {
                     // email: "An account with email already exists, try logging in instead.",
@@ -48,21 +47,42 @@ export async function signupAction(previousState: SignupState, formData: FormDat
         }
 
         // redirect('/error')
+    }
+
+    const createdUser = await supabase.auth.getUser();
+
+    if (createdUser.error) {
+        return {
+            errors: {
+                email: "An error occurred while creating your account.",
+            },
+        }
     } else {
 
-        const createdUser = await supabase.auth.getUser();
+        const { data: { user } } = createdUser;
 
-        if (createdUser.error) {
+        const userId = user.id;
+        const { firstName, lastName } = validationResult.data;
+
+        console.log("createdUser: ", createdUser);
+
+        const { data: profileCreationData, error: profileCreationError } = await supabase
+            .from('profiles')
+            .insert(
+                { userId, firstName, lastName, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            )
+            .select();
+
+        if (profileCreationError) {
+            console.error("Error creating user profile:", profileCreationError);
             return {
                 errors: {
-                    email: "An error occurred while creating your account.",
+                    message: "An error occurred while creating your profile.",
                 },
             }
         }
 
-        const userData = createdUser.data.user;
-
-        console.log("user created: ", userData);
+        console.log("user created: ", profileCreationData);
 
 
         revalidatePath('/', 'layout');

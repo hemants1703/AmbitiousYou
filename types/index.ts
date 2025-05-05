@@ -33,3 +33,32 @@ export interface AmbitionData {
     notes: string;
     tags: string;
 }
+
+export interface ProfileData {
+    id: string;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export interface AmbitionsData {
+    id: string;
+    userId: string;
+    ambitionName: string;
+    ambitionDefinition: string | null | "";
+    ambitionType: string;
+    ambitionStartDate: string | null | "";
+    ambitionEndDate: string | null | "";
+    ambitionCompletionDate: string | null | "";
+    ambitionStatus: string;
+    ambitionPriority: string;
+    ambitionCategory: string;
+    ambitionPercentageCompleted: number;
+    ambitionTasks: string[] | null | "";
+    ambitionNotes: string[] | null | "";
+    ambitionTags: string[] | null | "";
+    created_at: string;
+    updated_at: string;
+};

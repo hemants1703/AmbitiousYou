@@ -20,13 +20,11 @@ const navLinks = [
   { href: "/features", label: "Features" },
 ];
 
-export default function Navbar({ userLoggedIn }: { userLoggedIn: boolean }) {
+export default function Navbar() {
   const [navbarToggled, setNavbarToggled] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
-
-  console.log("User logged in:", userLoggedIn);
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -129,24 +127,15 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn: boolean }) {
             })}
           </div>
 
-          {userLoggedIn ? (
-            <div className="flex items-center gap-3">
-              <ThemeToggler />
-              <Button className="text-xl" size={"lg"} asChild>
-                <Link href="/dashboard">Dashboard</Link>
-              </Button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <ThemeToggler />
-              <Button variant="outline" size="sm" className="h-9 px-4" asChild>
-                <Link href="/login">Log in</Link>
-              </Button>
-              <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
-                <Link href="/signup">Sign up</Link>
-              </Button>
-            </div>
-          )}
+          <div className="flex items-center gap-3">
+            <ThemeToggler />
+            <Button variant="outline" size="sm" className="h-9 px-4" asChild>
+              <Link href="/login">Log in</Link>
+            </Button>
+            <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
+              <Link href="/signup">Sign up</Link>
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Menu Toggle */}

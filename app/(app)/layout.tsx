@@ -1,4 +1,3 @@
-import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Metadata } from "next";
 import { SidebarController } from "@/components/dashboard/SidebarController";
@@ -14,14 +13,20 @@ export const metadata: Metadata = {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
-  const userLoggedIn = await supabase.auth.getUser();
+  const {
+    data: { user: userData },
+    error: userDoesNotExist,
+  } = await supabase.auth.getUser();
+
+  // console.log("Logged In user: ", userData);
 
   // Check if the user is logged in
-  if (userLoggedIn.error) {
+  if (userDoesNotExist) {
     redirect("/login");
   }
 
   return (
+    // <AuthProvider>
     <div className="flex h-screen overflow-hidden bg-background">
       <SidebarController>
         <ScrollArea className="flex-1 overflow-auto">
@@ -29,5 +34,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </ScrollArea>
       </SidebarController>
     </div>
+    // </AuthProvider>
   );
 }
