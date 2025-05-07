@@ -6,11 +6,13 @@ import { LoginSchema, SignupSchema } from "./_lib/definitions";
 import { revalidatePath } from "next/cache";
 import { LoginState } from "./login/LoginForm";
 import { SignupState } from "./signup/SignupForm";
+import { pricingPlans } from "@/content/pricingPlans";
 
 // This function is called when the user submits the signup form
 export async function signupAction(previousState: SignupState, formData: FormData) {
     // Validate the form data submitted by the user
     const validationResult = SignupSchema.safeParse({
+        plan: formData.get("plan") as string,
         firstName: formData.get("firstName") as string,
         lastName: formData.get("lastName") as string,
         email: formData.get("email") as string,
@@ -84,6 +86,25 @@ export async function signupAction(previousState: SignupState, formData: FormDat
 
         console.log("user created: ", profileCreationData);
 
+        const planMonthlyPrice = pricingPlans.find((plan) => plan.slug.toLowerCase() === validationResult.data.plan.toLowerCase())?.price;
+
+        const { data: planCreationData, error: planCreationError } = await supabase
+            .from('plans')
+            .insert(
+                { userId, planName: validationResult.data.plan, planMonthlyPrice, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            )
+            .select();
+
+        if (planCreationError) {
+            console.error("Error creating user plan:", planCreationError);
+            return {
+                errors: {
+                    message: "An error occurred while creating your plan.",
+                },
+            }
+        }
+
+        console.log("user plan created: ", planCreationData);
 
         revalidatePath('/', 'layout');
         redirect('/dashboard');

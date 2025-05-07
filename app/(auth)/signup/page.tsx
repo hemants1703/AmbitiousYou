@@ -2,7 +2,16 @@ import * as Card from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import SignUpForm from "./SignupForm";
 
-export default function Signup() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function Signup({ searchParams }: { searchParams: SearchParams }) {
+  // Extract the plan from the search parameters
+  let { plan } = await searchParams;
+
+  if (!plan) {
+    plan = "free"; // Default to "free" if no plan is provided
+  }
+
   return (
     <div className="w-full flex items-center justify-center pt-12 pb-24">
       <div className="w-full max-w-5xl">
@@ -25,7 +34,7 @@ export default function Signup() {
             {/* Right side (Form components) */}
             <div className="lg:w-1/2 p-8 bg-background">
               <Card.CardContent className="space-y-4">
-                <SignUpForm />
+                <SignUpForm signupPlan={plan} />
                 {/* <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName" className="block text-sm font-medium">

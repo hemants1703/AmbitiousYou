@@ -55,7 +55,7 @@ export default async function Home() {
             For Those Who Dare to Dream Beyond Limits
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Reduce your mental overload and manage all your ambitions at a single place.
+            Reduce your mental overload and manage all your ambitions at a single and private place.
             AmbitiousYou helps you become a Superhuman.
           </p>
           {userLoggedIn.error === null ? (

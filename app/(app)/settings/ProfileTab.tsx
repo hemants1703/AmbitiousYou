@@ -4,7 +4,7 @@ import * as Avatar from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ProfileData } from "@/types";
+import { SupabaseProfileData } from "@/types";
 import { User } from "@supabase/supabase-js";
 import updateProfileAction from "./actions";
 import { toast } from "sonner";
@@ -13,7 +13,7 @@ export default function ProfileTab({
   profilesData,
   userData,
 }: {
-  profilesData: ProfileData[];
+  profilesData: SupabaseProfileData[];
   userData: User;
 }) {
   let { firstName, lastName } = profilesData[0];

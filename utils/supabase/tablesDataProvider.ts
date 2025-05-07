@@ -26,6 +26,27 @@ export async function getProfilesTableData(userId: string | null) {
     return data;
 }
 
+export async function getPlansTableData(userId: string | null) {
+    if (userId === null) {
+        console.error("User ID is null. Cannot fetch plans.");
+        return [];
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("plans")
+        .select()
+        .eq("userId", userId)
+
+    if (error) {
+        console.error("Error fetching plans:", error);
+        return [];
+    }
+
+    return data;
+}
+
 // This function fetches data from the "ambitions" table in Supabase
 export async function getAmbitionsTableData(userId: string | null) {
     if (userId === null) {

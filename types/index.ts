@@ -34,7 +34,7 @@ export interface AmbitionData {
     tags: string;
 }
 
-export interface ProfileData {
+export interface SupabaseProfileData {
     id: string;
     userId: string;
     firstName: string;
@@ -42,6 +42,15 @@ export interface ProfileData {
     created_at: string;
     updated_at: string;
 };
+
+export interface SupabasePlansData {
+    id: string;
+    userId: string;
+    planName: string;
+    planMonthlyPrice: number;
+    createdAt: string;
+    updatedAt: string;
+}
 
 export interface AmbitionsData {
     id: string;

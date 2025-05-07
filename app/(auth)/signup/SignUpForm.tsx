@@ -14,6 +14,7 @@ import { toast } from "sonner";
 export type SignupState =
   | {
       errors?: {
+        plan?: string[] | undefined;
         firstName?: string[] | undefined;
         lastName?: string[] | undefined;
         email?: string[] | string;
@@ -23,7 +24,7 @@ export type SignupState =
     }
   | undefined;
 
-export default function SignupForm() {
+export default function SignupForm({ signupPlan }: { signupPlan: string | string[] }) {
   const [signupErrors, action, isSignupPending] = useActionState<SignupState, FormData>(
     signupAction,
     undefined
@@ -36,10 +37,19 @@ export default function SignupForm() {
         duration: 5000,
       });
     }
+
+    if (signupErrors?.errors?.plan) {
+      toast.error(signupErrors.errors.plan, {
+        description: "Please select a plan.",
+        duration: 5000,
+      });
+    }
   }, [signupErrors?.errors?.message]);
 
   return (
     <form action={action} className="space-y-4">
+      <Input type="hidden" name="plan" value={signupPlan} />
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="firstName" className="block text-sm font-medium">

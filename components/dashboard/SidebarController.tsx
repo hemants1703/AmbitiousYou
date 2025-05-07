@@ -4,15 +4,21 @@ import React, { useState } from "react";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { Header } from "@/components/dashboard/Header";
 import { User } from "@supabase/supabase-js";
-import { ProfileData } from "@/types";
+import { SupabasePlansData, SupabaseProfileData } from "@/types";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
   userData: User;
-  profileData: ProfileData[];
+  profileData: SupabaseProfileData[];
+  plansData: SupabasePlansData[];
 }
 
-export function SidebarController({ children, userData, profileData }: SidebarControllerProps) {
+export function SidebarController({
+  children,
+  userData,
+  profileData,
+  plansData,
+}: SidebarControllerProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const closeMobileSidebar = () => {
@@ -42,6 +48,7 @@ export function SidebarController({ children, userData, profileData }: SidebarCo
           isSidebarOpen={sidebarOpen}
           userData={userData}
           profileData={profileData}
+          plansData={plansData}
         />
         {children}
       </div>

@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { User } from "@supabase/supabase-js";
 import { getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   // const supabase = createClient();
 
   // const { data, error: userDoesNotExist } = await supabase.auth.getUser();
