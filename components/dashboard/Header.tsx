@@ -32,6 +32,7 @@ import { logoutAction } from "@/app/(auth)/actions";
 import { User } from "@supabase/supabase-js";
 import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
 import { pricingPlans } from "@/content/pricingPlans";
+import CynthiaMain from "@/components/cynthia/CynthiaMain";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -59,8 +60,9 @@ export function Header({
   const [ambitions, setAmbitions] = useState(ambitionsData);
   const [tasks, setTasks] = useState(tasksData);
   const [milestones, setMilestones] = useState(milestonesData);
-  const router = useRouter();
+  const [cynthiaOnScreen, setCynthiaOnScreen] = useState(false);
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  const router = useRouter();
 
   const { firstName, lastName } = profileData[0];
   const initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
@@ -117,12 +119,15 @@ export function Header({
       </Button>
 
       <div className="flex-1 flex items-center gap-2">
-        <Button variant="outline" size="sm" className="hidden md:flex gap-2" asChild>
-          <Link href="/dashboard">
-            <RocketIcon className="h-4 w-4 text-primary" />
-            <span className="font-medium">My Journey</span>
-          </Link>
+        <Button variant="outline" size="sm" className="hidden md:flex gap-2 bg-gradient-to-tl from-slate-700 to-slate-950" onClick={() => {
+          setCynthiaOnScreen(true)
+        }}>
+          {/* <Link href="/dashboard"> */}
+          <RocketIcon className="h-4 w-4 text-white" />
+          <span className="font-medium text-white">Cynthia</span>
+          {/* </Link> */}
         </Button>
+        {cynthiaOnScreen && <CynthiaMain cynthiaOnScreen={cynthiaOnScreen} setCynthiaOnScreen={setCynthiaOnScreen} />}
 
         <Button
           variant="outline"
