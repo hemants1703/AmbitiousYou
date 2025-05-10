@@ -44,9 +44,9 @@ export default async function AmbitionsPage() {
     return <div>Error loading milestones</div>;
   }
 
-  console.log("Ambitions", ambitions);
-  console.log("Tasks", tasks);
-  console.log("Milestones", milestones);
+  // console.log("Ambitions", ambitions);
+  // console.log("Tasks", tasks);
+  // console.log("Milestones", milestones);
 
 
   return (

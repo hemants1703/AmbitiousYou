@@ -47,11 +47,13 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     redirect("/login");
   }
 
+  const { ambitionId } = await params;
+
   // Try to fetch from Supabase first
   const { data: ambition, error: ambitionError } = await supabase
     .from("ambitions")
     .select("*")
-    .eq("id", params.ambitionId)
+    .eq("id", ambitionId)
     .single();
 
   // If Supabase fetch fails, fall back to test data
@@ -77,7 +79,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     const { data: tasksData } = await supabase
       .from("tasks")
       .select("*")
-      .eq("ambitionId", params.ambitionId)
+      .eq("ambitionId", ambitionId)
       .order("createdAt", { ascending: true });
 
     if (tasksData) {
@@ -88,7 +90,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     const { data: milestonesData } = await supabase
       .from("milestones")
       .select("*")
-      .eq("ambitionId", params.ambitionId)
+      .eq("ambitionId", ambitionId)
       .order("createdAt", { ascending: true });
 
     if (milestonesData) {
@@ -99,7 +101,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     const { data: timeEntriesData } = await supabase
       .from("time_entries")
       .select("*")
-      .eq("ambitionId", params.ambitionId)
+      .eq("ambitionId", ambitionId)
       .order("date", { ascending: false })
       .limit(5);
 

@@ -182,9 +182,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   });
 
   const [milestones, setMilestones] = useState<Array<{
-    name: string;
-    description: string;
-    completed: boolean;
+    milestone: string;
+    milestoneDescription: string;
+    milestoneCompleted: boolean;
+    milestoneTargetDate: string;
   }>>(() => {
     if (typeof window !== 'undefined') {
       const savedData = localStorage.getItem("ambitionFormData");
@@ -209,9 +210,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
 
   const [activeTab, setActiveTab] = useState("basics");
   const [newMilestone, setNewMilestone] = useState({
-    name: "",
-    description: "",
-    completed: false
+    milestone: "",
+    milestoneDescription: "",
+    milestoneCompleted: false,
+    milestoneTargetDate: format(new Date(), "yyyy-MM-dd")
   });
   const [newTask, setNewTask] = useState({
     task: "",
@@ -288,7 +290,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   };
 
   const addMilestone = () => {
-    if (!newMilestone.name.trim()) {
+    if (!newMilestone.milestone.trim()) {
       toast.error("Empty Milestone", {
         description: "Please enter a milestone name",
       });
@@ -296,9 +298,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     }
     setMilestones([...milestones, newMilestone]);
     setNewMilestone({
-      name: "",
-      description: "",
-      completed: false
+      milestone: "",
+      milestoneDescription: "",
+      milestoneCompleted: false,
+      milestoneTargetDate: format(new Date(), "yyyy-MM-dd")
     });
     toast.success("Milestone Added", {
       description: "Milestone has been added successfully",
@@ -316,21 +319,21 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     setMilestones(prevMilestones =>
       prevMilestones.map((milestone, i) =>
         i === index
-          ? { ...milestone, completed: !milestone.completed }
+          ? { ...milestone, milestoneCompleted: !milestone.milestoneCompleted }
           : milestone
       )
     );
   };
 
   const colorOptions = [
-    { name: "Blue", value: "#3b82f6", class: "bg-blue-500" },
-    { name: "Green", value: "#22c55e", class: "bg-green-500" },
-    { name: "Purple", value: "#a855f7", class: "bg-purple-500" },
-    { name: "Amber", value: "#f59e0b", class: "bg-amber-500" },
-    { name: "Red", value: "#ef4444", class: "bg-red-500" },
-    { name: "Pink", value: "#ec4899", class: "bg-pink-500" },
-    { name: "Indigo", value: "#6366f1", class: "bg-indigo-500" },
-    { name: "Teal", value: "#14b8a6", class: "bg-teal-500" },
+    { name: "Electric Blue", value: "#00BFFF", class: "bg-blue-500" },
+    { name: "Emerald", value: "#50C878", class: "bg-green-500" },
+    { name: "Royal Purple", value: "#7851A9", class: "bg-purple-500" },
+    { name: "Sunset Orange", value: "#FF7F50", class: "bg-amber-500" },
+    { name: "Ruby Red", value: "#E0115F", class: "bg-red-500" },
+    { name: "Hot Pink", value: "#FF69B4", class: "bg-pink-500" },
+    { name: "Electric Violet", value: "#8F00FF", class: "bg-indigo-500" },
+    { name: "Turquoise", value: "#40E0D0", class: "bg-teal-500" },
   ];
 
   const handleTrackingMethodChange = (method: string) => {
@@ -1114,10 +1117,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                             <Input
                               id="milestone-name"
                               placeholder="Enter milestone name..."
-                              value={newMilestone.name}
+                              value={newMilestone.milestone}
                               onChange={(e) => setNewMilestone(prev => ({
                                 ...prev,
-                                name: e.target.value
+                                milestone: e.target.value
                               }))}
                             />
                           </div>
@@ -1127,10 +1130,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                               id="milestone-description"
                               placeholder="Describe what this milestone represents..."
                               className="min-h-[100px]"
-                              value={newMilestone.description}
+                              value={newMilestone.milestoneDescription}
                               onChange={(e) => setNewMilestone(prev => ({
                                 ...prev,
-                                description: e.target.value
+                                milestoneDescription: e.target.value
                               }))}
                             />
                           </div>
@@ -1142,10 +1145,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                               </p>
                             </div>
                             <Checkbox
-                              checked={newMilestone.completed}
+                              checked={newMilestone.milestoneCompleted}
                               onCheckedChange={(checked) => setNewMilestone(prev => ({
                                 ...prev,
-                                completed: checked as boolean
+                                milestoneCompleted: checked as boolean
                               }))}
                             />
                           </div>
@@ -1181,13 +1184,13 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                     key={index}
                                     className="relative pl-10"
                                   >
-                                    <div className={`absolute left-0 h-5 w-5 rounded-full ${milestone.completed ? "bg-primary" : "bg-muted-foreground/25"} flex items-center justify-center`}>
-                                      {milestone.completed && <CheckIcon className="h-3 w-3 text-primary-foreground" />}
+                                    <div className={`absolute left-0 h-5 w-5 rounded-full ${milestone.milestoneCompleted ? "bg-primary" : "bg-muted-foreground/25"} flex items-center justify-center`}>
+                                      {milestone.milestoneCompleted && <CheckIcon className="h-3 w-3 text-primary-foreground" />}
                                     </div>
                                     <div className="flex flex-col">
                                       <div className="flex items-start justify-between">
                                         <h4 className="text-base font-medium">
-                                          {milestone.name}
+                                          {milestone.milestone}
                                         </h4>
                                         <Button
                                           variant="ghost"
@@ -1200,20 +1203,20 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                         </Button>
                                       </div>
                                       <p className="text-sm text-muted-foreground mt-1">
-                                        {milestone.description}
+                                        {milestone.milestoneDescription}
                                       </p>
                                       <div className="flex items-center gap-2 mt-2">
                                         <div className="flex items-center space-x-2">
                                           <Checkbox
                                             id={`milestone-${index}`}
-                                            checked={milestone.completed}
+                                            checked={milestone.milestoneCompleted}
                                             onCheckedChange={() => toggleMilestoneCompletion(index)}
                                           />
                                           <Label
                                             htmlFor={`milestone-${index}`}
                                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                           >
-                                            {milestone.completed ? "Completed" : "Not completed"}
+                                            {milestone.milestoneCompleted ? "Completed" : "Not completed"}
                                           </Label>
                                         </div>
                                       </div>

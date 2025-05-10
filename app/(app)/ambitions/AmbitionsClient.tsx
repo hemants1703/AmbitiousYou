@@ -59,9 +59,6 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
   const completedAmbitions = ambitions.filter((ambition) => ambition.ambitionStatus === "completed");
   const archivedAmbitions = ambitions.filter((ambition) => ambition.ambitionStatus === "archived");
 
-  console.log("Active Ambitions:", activeAmbitions);
-
-
   // Filter states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({
@@ -438,6 +435,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
               <Tabs.TabsTrigger value="archive">Archive</Tabs.TabsTrigger>
             </Tabs.TabsList>
 
+            {/* ALL AMBITIONS TAB */}
             <Tabs.TabsContent value="all">
               <motion.div
                 variants={container}
@@ -536,17 +534,18 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
               </motion.div>
             </Tabs.TabsContent>
 
+            {/* ACTIVE AMBITIONS TAB */}
             <Tabs.TabsContent value="active">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
                   {activeAmbitions.length > 0 ? (
                     activeAmbitions.map((ambition, index) => {
@@ -576,7 +575,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                                 <Card.CardDescription className="line-clamp-2">
                                   {searchQuery && ambition.ambitionDefinition
                                     ? highlightText(ambition.ambitionDefinition, searchQuery)
-                                    : ambition.ambitionDefinition}
+                                    : ambition.ambitionDefinition || "\u00A0"}
                                 </Card.CardDescription>
                               </Card.CardHeader>
                               <Card.CardContent className="pb-2">
@@ -634,6 +633,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
               </motion.div>
             </Tabs.TabsContent>
 
+            {/* COMPLETED AMBITIONS TAB */}
             <Tabs.TabsContent value="completed">
               <motion.div
                 initial={{ opacity: 0 }}
@@ -652,6 +652,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
               </motion.div>
             </Tabs.TabsContent>
 
+            {/* ARCHIVED AMBITIONS TAB */}
             <Tabs.TabsContent value="archive">
               <motion.div
                 initial={{ opacity: 0 }}
