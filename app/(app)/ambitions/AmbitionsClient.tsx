@@ -456,7 +456,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                         transition={{ duration: 0.3, delay: 0.05 * index }}
                       >
                         <Link href={`/ambitions/${ambition.id}`}>
-                          <Card.Card className={`cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
+                          <Card.Card className={`bg-gradient-to-b from-slate-950 to-[${ambition.ambitionColor}] cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
                             <Card.CardHeader className="pb-2">
                               <div className="flex items-center justify-between">
                                 <AmbitionCategoryBadge ambitionCategory={ambition.ambitionCategory} />
@@ -560,7 +560,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                           transition={{ duration: 0.3, delay: 0.05 * index }}
                         >
                           <Link href={`/ambitions/${ambition.id}`}>
-                            <Card.Card className="cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300">
+                            <Card.Card className={`cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
                               <Card.CardHeader className="pb-2">
                                 <div className="flex items-center justify-between">
                                   <AmbitionCategoryBadge ambitionCategory={ambition.ambitionCategory} />
@@ -675,7 +675,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
           <NoAmbitionsFound />
         )}
       </motion.div>
-    </div>
+    </div >
   );
 }
 
