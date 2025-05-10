@@ -30,7 +30,7 @@ import { Menu } from "lucide-react";
 import { toast } from "sonner";
 import { logoutAction } from "@/app/(auth)/actions";
 import { User } from "@supabase/supabase-js";
-import { SupabasePlansData, SupabaseProfileData } from "@/types";
+import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
 import { pricingPlans } from "@/content/pricingPlans";
 
 interface HeaderProps {
@@ -39,6 +39,9 @@ interface HeaderProps {
   userData: User;
   profileData: SupabaseProfileData[];
   plansData: SupabasePlansData[];
+  ambitionsData: Ambition[];
+  tasksData: Task[];
+  milestonesData: Milestone[];
 }
 
 export function Header({
@@ -47,11 +50,15 @@ export function Header({
   userData,
   profileData,
   plansData,
+  ambitionsData,
+  tasksData,
+  milestonesData,
 }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [ambitions, setAmbitions] = useState([]);
-  const [tasks, setTasks] = useState([]);
+  const [ambitions, setAmbitions] = useState(ambitionsData);
+  const [tasks, setTasks] = useState(tasksData);
+  const [milestones, setMilestones] = useState(milestonesData);
   const router = useRouter();
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
@@ -400,10 +407,10 @@ export function Header({
                   }}
                 >
                   <TargetIcon className="mr-2 h-4 w-4" />
-                  <span>{ambition.title}</span>
-                  {ambition.progress > 0 && (
+                  <span>{ambition.ambitionName}</span>
+                  {ambition.ambitionPercentageCompleted > 0 && (
                     <span className="ml-auto text-xs text-muted-foreground">
-                      {ambition.progress}%
+                      {ambition.ambitionPercentageCompleted}%
                     </span>
                   )}
                 </Command.CommandItem>
@@ -433,9 +440,9 @@ export function Header({
                 >
                   <ClockIcon className="mr-2 h-4 w-4" />
                   <div className="flex flex-1 items-center justify-between">
-                    <span>{task.title}</span>
-                    <Badge variant={task.dueDate ? "outline" : "secondary"} className="ml-2">
-                      {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No deadline"}
+                    <span>{task.task}</span>
+                    <Badge variant={task.taskDeadline ? "outline" : "secondary"} className="ml-2">
+                      {task.taskDeadline ? new Date(task.taskDeadline).toLocaleDateString() : "No deadline"}
                     </Badge>
                   </div>
                 </Command.CommandItem>
@@ -446,30 +453,30 @@ export function Header({
           <Command.CommandGroup heading="Quick Actions">
             <Command.CommandItem
               onSelect={() => {
-                router.push("/ambitions/new");
-                setOpen(false);
-              }}
-            >
-              <PlusCircledIcon className="mr-2 h-4 w-4" />
-              <span>Create New Ambition</span>
-            </Command.CommandItem>
-            <Command.CommandItem
-              onSelect={() => {
-                router.push("/analytics");
-                setOpen(false);
-              }}
-            >
-              <BarChartIcon className="mr-2 h-4 w-4" />
-              <span>View Analytics</span>
-            </Command.CommandItem>
-            <Command.CommandItem
-              onSelect={() => {
                 router.push("/dashboard");
                 setOpen(false);
               }}
             >
               <RocketIcon className="mr-2 h-4 w-4" />
               <span>Go to Dashboard</span>
+            </Command.CommandItem>
+            <Command.CommandItem
+              onSelect={() => {
+                router.push("/ambitions");
+                setOpen(false);
+              }}
+            >
+              <TargetIcon className="mr-2 h-4 w-4" />
+              <span>All Ambitions</span>
+            </Command.CommandItem>
+            <Command.CommandItem
+              onSelect={() => {
+                router.push("/ambitions/new");
+                setOpen(false);
+              }}
+            >
+              <PlusCircledIcon className="mr-2 h-4 w-4" />
+              <span>Create New Ambition</span>
             </Command.CommandItem>
           </Command.CommandGroup>
         </Command.CommandList>

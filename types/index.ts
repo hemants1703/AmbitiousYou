@@ -18,20 +18,23 @@
  * @property {string} tags - Labels for categorizing or filtering the ambition
  */
 export interface AmbitionData {
-    title: string;
-    description: string;
-    category: string;
-    priorityLevel: string;
-    deadline: string;
-    color: string;
-    focusedAmbitionOnDashboard: boolean;
-    trackingMethod: string;
-    successMetric: string;
-    isCompleted: boolean;
-    tasks: string;
-    milestones: string;
-    notes: string;
-    tags: string;
+    id: string;
+    userId: string;
+    ambitionName: string;
+    ambitionDefinition: string | null;
+    ambitionTrackingMethod: "task" | "milestone";
+    ambitionSuccessMetric: string;
+    ambitionStartDate: string | null;
+    ambitionEndDate: string | null;
+    ambitionCompletionDate: string | null;
+    ambitionDeadline: string;
+    ambitionStatus: "active" | "completed" | "archived";
+    ambitionPriority: "low" | "medium" | "high";
+    ambitionCategory: string;
+    ambitionPercentageCompleted: number;
+    ambitionColor: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface SupabaseProfileData {
@@ -68,6 +71,55 @@ export interface AmbitionsData {
     ambitionTasks: string[] | null | "";
     ambitionNotes: string[] | null | "";
     ambitionTags: string[] | null | "";
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
+    isFavourited: boolean;
 };
+
+export interface Task {
+    id: string;
+    userId: string;
+    ambitionId: string;
+    task: string;
+    taskDescription: string | null;
+    taskCompleted: boolean;
+    taskDeadline: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface Milestone {
+    id: string;
+    userId: string;
+    ambitionId: string;
+    milestone: string;
+    milestoneDescription: string | null;
+    milestoneCompleted: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    milestoneTargetDate: Date;
+}
+
+export interface TimeEntry {
+    id: string;
+    date: string;
+    duration: string;
+    activity: string;
+}
+
+export interface Ambition {
+    id: string;
+    ambitionName: string;
+    ambitionDefinition: string;
+    ambitionCategory: string;
+    ambitionPercentageCompleted: number;
+    ambitionPriority: string;
+    ambitionStartDate: string;
+    ambitionDeadline: string;
+    ambitionStatus: string;
+    ambitionColor: string;
+    ambitionTrackingMethod: string;
+    tasks: Task[];
+    milestones: Milestone[];
+    timeEntries: TimeEntry[];
+}

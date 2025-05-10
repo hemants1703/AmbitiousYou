@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { Header } from "@/components/dashboard/Header";
 import { User } from "@supabase/supabase-js";
-import { SupabasePlansData, SupabaseProfileData } from "@/types";
+import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
   userData: User;
   profileData: SupabaseProfileData[];
   plansData: SupabasePlansData[];
+  ambitionsData: Ambition[];
+  tasksData: Task[];
+  milestonesData: Milestone[];
 }
 
 export function SidebarController({
@@ -18,6 +21,9 @@ export function SidebarController({
   userData,
   profileData,
   plansData,
+  ambitionsData,
+  tasksData,
+  milestonesData,
 }: SidebarControllerProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -49,6 +55,9 @@ export function SidebarController({
           userData={userData}
           profileData={profileData}
           plansData={plansData}
+          ambitionsData={ambitionsData}
+          tasksData={tasksData}
+          milestonesData={milestonesData}
         />
         {children}
       </div>

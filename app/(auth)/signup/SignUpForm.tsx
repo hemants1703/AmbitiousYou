@@ -24,7 +24,7 @@ export type SignupState =
     }
   | undefined;
 
-export default function SignupForm({ signupPlan }: { signupPlan: string | string[] }) {
+export default function SignUpForm({ signupPlan }: { signupPlan: string | string[] }) {
   const [signupErrors, action, isSignupPending] = useActionState<SignupState, FormData>(
     signupAction,
     undefined

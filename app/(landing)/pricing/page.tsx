@@ -97,7 +97,7 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
               </div>
               
               <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-2">Achiever</h3>
+                <h3 className="text-2xl font-bold mb-2">Superhuman</h3>
                 <p className="text-muted-foreground">For serious goal-setters</p>
               </div>
               
@@ -113,7 +113,7 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
             {/* Enterprise tier */}
             <div className="bg-background border border-slate-200 dark:border-slate-800 shadow-md rounded-xl p-8 h-full flex flex-col">
               <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-2">Superhuman</h3>
+                <h3 className="text-2xl font-bold mb-2">Conquerer</h3>
                 <p className="text-muted-foreground">For teams and businesses</p>
               </div>
               
@@ -243,12 +243,12 @@ export default function PricingPage() {
                   </td>
                   <td className="p-4 text-center bg-primary/5 border-x border-border">
                     <Button size="sm" asChild className="bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black font-bold p-4 shadow-sm transition-all duration-300">
-                      <Link href="/signup?plan=achiever">Choose Achiever</Link>
+                      <Link href="/signup?plan=superhuman">Choose Superhuman</Link>
                     </Button>
                   </td>
                   <td className="p-4 text-center">
                     <Button variant="outline" size="sm" asChild>
-                      <Link href="/signup?plan=superhuman">Choose Superhuman</Link>
+                      <Link href="/signup?plan=conquerer">Choose Conquerer</Link>
                     </Button>
                   </td>
                 </tr>

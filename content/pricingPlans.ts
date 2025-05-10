@@ -10,8 +10,8 @@ export const pricingPlans = [
         ],
     },
     {
-        name: "Achiever",
-        slug: "achiever",
+        name: "Superhuman",
+        slug: "superhuman",
         price: 9.99,
         features: [
             "Access to all features",
@@ -21,8 +21,8 @@ export const pricingPlans = [
         ],
     },
     {
-        name: "Superhuman",
-        slug: "superhuman",
+        name: "Conquerer",
+        slug: "conquerer",
         price: 29.99,
         features: [
             "All Pro features",

@@ -134,11 +134,6 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
                     >
                       <item.icon className="h-4 w-4" />
                       {expanded && <span>{item.title}</span>}
-                      {item.href === "/ambitions/new" && expanded && (
-                        <div className="ml-auto px-2 py-0.5 rounded-full bg-primary/20 text-xs font-medium">
-                          New
-                        </div>
-                      )}
                     </Link>
                   </TooltipTrigger>
                   {!expanded && (

@@ -68,3 +68,45 @@ export async function getAmbitionsTableData(userId: string | null) {
 
     return data;
 }
+
+export async function getTasksTableData(userId: string | null) {
+    if (userId === null) {
+        console.error("User ID is null. Cannot fetch tasks.");
+        return [];
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("tasks")
+        .select()
+        .eq("userId", userId)
+
+    if (error) {
+        console.error("Error fetching tasks:", error);
+        return [];
+    }
+
+    return data;
+}
+
+export async function getMilestonesTableData(userId: string | null) {
+    if (userId === null) {
+        console.error("User ID is null. Cannot fetch milestones.");
+        return [];
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("milestones")
+        .select()
+        .eq("userId", userId)
+
+    if (error) {
+        console.error("Error fetching milestones:", error);
+        return [];
+    }
+
+    return data;
+}

@@ -3,9 +3,9 @@ import { Metadata } from "next";
 import { SidebarController } from "@/components/dashboard/SidebarController";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { getPlansTableData, getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
+import { getAmbitionsTableData, getMilestonesTableData, getPlansTableData, getProfilesTableData, getTasksTableData } from "@/utils/supabase/tablesDataProvider";
 import { User } from "@supabase/supabase-js";
-import { SupabasePlansData, SupabaseProfileData } from "@/types";
+import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
 
 export const metadata: Metadata = {
   title: {
@@ -30,12 +30,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const profileData: SupabaseProfileData[] = await getProfilesTableData(id);
   const plansData: SupabasePlansData[] = await getPlansTableData(id);
+  const ambitionsData: Ambition[] = await getAmbitionsTableData(id);
+  const tasksData: Task[] = await getTasksTableData(id);
+  const milestonesData: Milestone[] = await getMilestonesTableData(id);
 
   return (
     // <AuthProvider>
     <div className="flex h-screen overflow-hidden bg-background">
-      <SidebarController userData={userData} profileData={profileData} plansData={plansData}>
-        <ScrollArea className="flex-1 overflow-auto">
+      <SidebarController userData={userData} profileData={profileData} plansData={plansData} ambitionsData={ambitionsData} tasksData={tasksData} milestonesData={milestonesData}>
+        <ScrollArea className="flex-1 overflow-hidden">
           <main className="flex-1 p-6 md:p-8 pt-6 max-w-7xl mx-auto w-full">{children}</main>
         </ScrollArea>
       </SidebarController>
