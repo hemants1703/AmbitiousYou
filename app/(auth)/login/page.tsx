@@ -25,7 +25,7 @@ export default function Login() {
               <Card.CardFooter className="flex flex-col items-center space-y-4 mt-4">
                 <p className="text-sm text-muted-foreground">
                   Don&apos;t have an account?{" "}
-                  <Link href="/signup" className="underline hover:text-primary">
+                  <Link prefetch={true} href="/signup" className="underline hover:text-primary">
                     Sign Up
                   </Link>
                 </p>

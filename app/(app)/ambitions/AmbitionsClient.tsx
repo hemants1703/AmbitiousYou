@@ -410,7 +410,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
           </DropdownMenu.DropdownMenu>
 
           <Button asChild size="sm">
-            <Link
+            <Link prefetch={true}
               href={`/ambitions/new`}
               className="md:ml-0 flex justify-center items-center gap-1"
             >
@@ -455,7 +455,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                         variants={item}
                         transition={{ duration: 0.3, delay: 0.05 * index }}
                       >
-                        <Link href={`/ambitions/${ambition.id}`}>
+                        <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
                           <Card.Card className={`bg-gradient-to-b dark:from-slate-950 from-slate-200 to-[${ambition.ambitionColor}] cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
                             <Card.CardHeader className="pb-2">
                               <div className="flex items-center justify-between">
@@ -559,7 +559,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                           variants={item}
                           transition={{ duration: 0.3, delay: 0.05 * index }}
                         >
-                          <Link href={`/ambitions/${ambition.id}`}>
+                          <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
                             <Card.Card className={`cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
                               <Card.CardHeader className="pb-2">
                                 <div className="flex items-center justify-between">
@@ -737,7 +737,7 @@ function NoAmbitionsFound() {
           </div>
 
           <Button asChild size="lg" className="mt-6">
-            <Link href="/ambitions/new" className="flex items-center gap-2">
+            <Link prefetch={true} href="/ambitions/new" className="flex items-center gap-2">
               <PlusCircle className="h-5 w-5" />
               Create Your First Ambition
             </Link>

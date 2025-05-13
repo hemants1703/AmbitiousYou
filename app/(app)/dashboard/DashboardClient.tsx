@@ -108,7 +108,7 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
               </motion.p>
             </div>
             <Button asChild variant="outline">
-              <Link href="/ambitions/new" className="gap-2 flex justify-center items-center">
+              <Link prefetch={true} href="/ambitions/new" className="gap-2 flex justify-center items-center">
                 <PlusCircledIcon className="h-4 w-4" />
                 New Ambition
               </Link>

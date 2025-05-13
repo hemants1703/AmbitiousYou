@@ -122,7 +122,7 @@ export function Header({
         <Button variant="outline" size="sm" className="hidden md:flex gap-2 bg-gradient-to-tl from-slate-700 to-slate-950" onClick={() => {
           setCynthiaOnScreen(true)
         }}>
-          {/* <Link href="/dashboard"> */}
+          {/* <Link prefetch={true} href="/dashboard"> */}
           <RocketIcon className="h-4 w-4 text-white" />
           <span className="font-medium text-white">Cynthia</span>
           {/* </Link> */}
@@ -360,12 +360,12 @@ export function Header({
             </Dropdown.DropdownMenuLabel>
             <Dropdown.DropdownMenuSeparator />
             <Dropdown.DropdownMenuItem>
-              <Link href="/settings" className="w-full">
+              <Link prefetch={true} href="/settings" className="w-full">
                 Settings
               </Link>
             </Dropdown.DropdownMenuItem>
             <Dropdown.DropdownMenuItem>
-              <Link href="/billing" className="w-full">
+              <Link prefetch={true} href="/billing" className="w-full">
                 Billing
               </Link>
             </Dropdown.DropdownMenuItem>

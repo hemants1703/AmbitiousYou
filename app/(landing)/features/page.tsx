@@ -51,7 +51,7 @@ export default function Features() {
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <Button asChild variant={"default"} size="lg">
-                <Link href="/signup" className="h-10 px-8">
+                <Link prefetch={true} href="/signup" className="h-10 px-8">
                   Get Started Free
                 </Link>
               </Button>
@@ -204,7 +204,7 @@ export default function Features() {
 
               <div className="flex flex-col gap-2 min-[400px]:flex-row pt-4">
                 <Button asChild variant={"default"}>
-                  <Link href="/signup" className="h-10 px-8">
+                  <Link prefetch={true} href="/signup" className="h-10 px-8">
                     Start Your Journey
                   </Link>
                 </Button>
@@ -466,7 +466,7 @@ export default function Features() {
             <div className="mx-auto w-full max-w-sm space-y-2">
               <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
                 <Button asChild variant={"default"} size="lg" className="px-8">
-                  <Link href="/signup">
+                  <Link prefetch={true} href="/signup">
                     Get Started Free <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </Button>

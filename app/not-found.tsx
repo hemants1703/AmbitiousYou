@@ -17,7 +17,7 @@ export default function NotFound() {
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-muted-foreground">
-            We can&apos;t seem to find this page. Perhaps there was a typo in the URL, 
+            We can&apos;t seem to find this page. Perhaps there was a typo in the URL,
             or maybe we&apos;re both looking in the wrong place?
           </p>
           <p className="text-sm text-muted-foreground">
@@ -26,7 +26,7 @@ export default function NotFound() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-3 pb-6">
           <Button asChild size="lg" className="px-8 w-full sm:w-auto">
-            <Link href="/" className="flex items-center gap-2">
+            <Link prefetch={true} href="/" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" /> Return to Home
             </Link>
           </Button>

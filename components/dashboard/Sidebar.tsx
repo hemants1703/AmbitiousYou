@@ -89,7 +89,7 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
       <div className="flex items-center h-16 border-b border-border px-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link prefetch={true} href="/dashboard" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
             <Image
               src="/favicon.ico"
@@ -119,7 +119,7 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
               <TooltipProvider key={item.href} delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link
+                    <Link prefetch={true}
                       href={item.href}
                       onClick={(e) => {
                         e.preventDefault();
@@ -170,7 +170,7 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
             <TooltipProvider key={item.href} delayDuration={100}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
+                  <Link prefetch={true}
                     href={item.href}
                     onClick={(e) => {
                       e.preventDefault();

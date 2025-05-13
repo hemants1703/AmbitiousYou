@@ -13,15 +13,15 @@ import { toast } from "sonner";
 
 export type SignupState =
   | {
-      errors?: {
-        plan?: string[] | undefined;
-        firstName?: string[] | undefined;
-        lastName?: string[] | undefined;
-        email?: string[] | string;
-        password?: string[] | undefined;
-        message?: string | undefined;
-      };
-    }
+    errors?: {
+      plan?: string[] | undefined;
+      firstName?: string[] | undefined;
+      lastName?: string[] | undefined;
+      email?: string[] | string;
+      password?: string[] | undefined;
+      message?: string | undefined;
+    };
+  }
   | undefined;
 
 export default function SignUpForm({ signupPlan }: { signupPlan: string | string[] }) {
@@ -147,7 +147,7 @@ export default function SignUpForm({ signupPlan }: { signupPlan: string | string
       </Button>
       <p className="text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="underline hover:text-primary">
+        <Link prefetch={true} href="/login" className="underline hover:text-primary">
           Log In
         </Link>
       </p>

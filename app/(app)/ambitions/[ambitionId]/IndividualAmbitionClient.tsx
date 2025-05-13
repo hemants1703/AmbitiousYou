@@ -115,7 +115,7 @@ export function IndividualAmbitionClient({
         >
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" asChild>
-              <Link href="/ambitions">
+              <Link prefetch={true} href="/ambitions">
                 <ArrowLeft className="h-5 w-5" />
               </Link>
             </Button>
@@ -284,7 +284,7 @@ export function IndividualAmbitionClient({
                             <CardDescription>Your most recent tasks for this ambition</CardDescription>
                           </div>
                           <Button variant="outline" size="sm" asChild>
-                            <Link href={`/ambitions/${ambition.id}/tasks`}>
+                            <Link prefetch={true} href={`/ambitions/${ambition.id}/tasks`}>
                               View All
                             </Link>
                           </Button>
@@ -444,7 +444,7 @@ export function IndividualAmbitionClient({
 
                       <div className="text-center">
                         <Button variant="ghost" size="sm" className="w-full" asChild>
-                          <Link href={`/time?ambition=${ambition.id}`}>
+                          <Link prefetch={true} href={`/time?ambition=${ambition.id}`}>
                             View Complete History
                           </Link>
                         </Button>
@@ -481,7 +481,7 @@ export function IndividualAmbitionClient({
 
                       <div className="mt-4">
                         <Button variant="outline" size="sm" className="w-full" asChild>
-                          <Link href={`/analytics?ambition=${ambition.id}`}>
+                          <Link prefetch={true} href={`/analytics?ambition=${ambition.id}`}>
                             View Complete Analytics
                           </Link>
                         </Button>

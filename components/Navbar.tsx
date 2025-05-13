@@ -89,13 +89,12 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "p-4 bg-background/0 backdrop-blur-lg shadow-sm" : "py-4"
-      }`}
+      className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${scrolled ? "p-4 bg-background/0 backdrop-blur-lg shadow-sm" : "py-4"
+        }`}
     >
       <div className="max-w-screen-2xl mx-auto px-4 flex items-center justify-between max-sm:z-50">
         {/* Logo */}
-        <Link
+        <Link prefetch={true}
           href="/"
           onClick={() => {
             if (navbarToggled) toggleNavbar();
@@ -114,12 +113,11 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
                 (link.href !== "/" && pagePathname?.startsWith(link.href));
 
               return (
-                <Link
+                <Link prefetch={true}
                   key={link.href}
                   href={link.href}
-                  className={`relative px-1 py-2 text-sm font-medium transition-colors ${
-                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`relative px-1 py-2 text-sm font-medium transition-colors ${isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    }`}
                 >
                   {link.label}
                   {isActive && (
@@ -134,15 +132,15 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
             <ThemeToggler />
             {userLoggedIn ? (
               <Button variant="default" size="lg" asChild>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link prefetch={true} href="/dashboard">Dashboard</Link>
               </Button>
             ) : (
               <>
                 <Button variant="outline" size="sm" className="h-9 px-4" asChild>
-                  <Link href="/login">Log in</Link>
+                  <Link prefetch={true} href="/login">Log in</Link>
                 </Button>
                 <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
-                  <Link href="/signup">Sign up</Link>
+                  <Link prefetch={true} href="/signup">Sign up</Link>
                 </Button>
               </>
             )}
@@ -160,19 +158,16 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
             <div className="absolute inset-0 rounded-md bg-primary/5 hover:bg-primary/10 transition-colors"></div>
             <div className="flex flex-col justify-center items-center w-6 h-6">
               <span
-                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
-                  navbarToggled ? "rotate-45" : "-translate-y-2"
-                }`}
+                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${navbarToggled ? "rotate-45" : "-translate-y-2"
+                  }`}
               />
               <span
-                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${
-                  navbarToggled ? "opacity-0" : "opacity-100"
-                }`}
+                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${navbarToggled ? "opacity-0" : "opacity-100"
+                  }`}
               />
               <span
-                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${
-                  navbarToggled ? "-rotate-45" : "translate-y-2"
-                }`}
+                className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${navbarToggled ? "-rotate-45" : "translate-y-2"
+                  }`}
               />
             </div>
           </button>
@@ -182,11 +177,10 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
       {/* Mobile Menu */}
       <div
         ref={navbarMenuRef}
-        className={`fixed inset-0 top-0 left-0 w-full h-full bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ${
-          navbarToggled
+        className={`fixed inset-0 top-0 left-0 w-full h-full bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ${navbarToggled
             ? "opacity-100 pointer-events-auto z-40"
             : "opacity-0 pointer-events-none z-0"
-        }`}
+          }`}
       >
         <div className="flex flex-col h-full justify-between px-6 pt-24 pb-10 overflow-auto">
           <div className="space-y-6">
@@ -199,17 +193,15 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
               return (
                 <div
                   key={link.href}
-                  className={`transform transition-transform duration-300 delay-${index * 100} ${
-                    navbarToggled ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
-                  }`}
+                  className={`transform transition-transform duration-300 delay-${index * 100} ${navbarToggled ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
+                    }`}
                   style={{ transitionDelay: `${index * 75}ms` }}
                 >
-                  <Link
+                  <Link prefetch={true}
                     href={link.href}
                     onClick={toggleNavbar}
-                    className={`flex items-center justify-between py-3 border-b border-border ${
-                      isActive ? "text-primary font-medium" : "text-foreground"
-                    }`}
+                    className={`flex items-center justify-between py-3 border-b border-border ${isActive ? "text-primary font-medium" : "text-foreground"
+                      }`}
                   >
                     <span>{link.label}</span>
                     <ChevronRightIcon className="h-5 w-5 opacity-70" />
@@ -221,24 +213,22 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
 
           <div className="space-y-4 mt-auto">
             <div
-              className={`transition-all duration-300 delay-300 ${
-                navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <Button variant="outline" className="w-full" asChild>
-                <Link href="/login" onClick={toggleNavbar}>
+                <Link prefetch={true} href="/login" onClick={toggleNavbar}>
                   Log in
                 </Link>
               </Button>
             </div>
 
             <div
-              className={`transition-all duration-300 delay-400 ${
-                navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`transition-all duration-300 delay-400 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <Button className="w-full" asChild>
-                <Link href="/signup" onClick={toggleNavbar}>
+                <Link prefetch={true} href="/signup" onClick={toggleNavbar}>
                   Sign up
                 </Link>
               </Button>

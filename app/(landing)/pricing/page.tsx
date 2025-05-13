@@ -49,9 +49,9 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
     <>
       {/* Pricing Toggle Section */}
       <section className="py-8 flex justify-center">
-        <Tabs 
-          defaultValue="monthly" 
-          value={billingCycle} 
+        <Tabs
+          defaultValue="monthly"
+          value={billingCycle}
           onValueChange={setBillingCycle}
           className="w-auto"
         >
@@ -78,16 +78,16 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
                 <h3 className="text-2xl font-bold mb-2">Explorer</h3>
                 <p className="text-muted-foreground">For individuals getting started</p>
               </div>
-              
+
               <div className="mb-8">
                 <span className="text-5xl font-bold">$0</span>
                 <span className="text-muted-foreground">/month</span>
                 <p className="text-sm text-muted-foreground mt-2">Free forever</p>
               </div>
-              
+
               {/* Rest of Explorer tier content... */}
             </div>
-            
+
             {/* Pro tier */}
             <div className="bg-background border-2 border-amber-400 shadow-lg rounded-xl p-8 relative flex flex-col -translate-y-4">
               <div className="absolute -top-4 inset-x-0 flex justify-center">
@@ -95,34 +95,34 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
                   Most Popular
                 </div>
               </div>
-              
+
               <div className="mb-8">
                 <h3 className="text-2xl font-bold mb-2">Superhuman</h3>
                 <p className="text-muted-foreground">For serious goal-setters</p>
               </div>
-              
+
               <div className="mb-8">
                 <span className="text-5xl font-bold">{pricing.achiever[billingCycle].price}</span>
                 <span className="text-muted-foreground">{pricing.achiever[billingCycle].billingPeriod}</span>
                 <p className="text-sm text-muted-foreground mt-2">{pricing.achiever[billingCycle].billingInfo}</p>
               </div>
-              
+
               {/* Rest of Achiever tier content... */}
             </div>
-            
+
             {/* Enterprise tier */}
             <div className="bg-background border border-slate-200 dark:border-slate-800 shadow-md rounded-xl p-8 h-full flex flex-col">
               <div className="mb-8">
                 <h3 className="text-2xl font-bold mb-2">Conquerer</h3>
                 <p className="text-muted-foreground">For teams and businesses</p>
               </div>
-              
+
               <div className="mb-8">
                 <span className="text-5xl font-bold">{pricing.superhuman[billingCycle].price}</span>
                 <span className="text-muted-foreground">{pricing.superhuman[billingCycle].billingPeriod}</span>
                 <p className="text-sm text-muted-foreground mt-2">{pricing.superhuman[billingCycle].billingInfo}</p>
               </div>
-              
+
               {/* Rest of Superhuman tier content... */}
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function PricingPage() {
           </span>
           <span className="text-sm font-medium">Limited time offer: Get 20% off annual plans</span>
         </div>
-        
+
         <div className="text-center max-w-4xl mx-auto relative z-10">
           <h1 className={`${playfair.className} text-4xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/90 to-primary/70 leading-tight`}>
             Choose the Perfect Plan for Your Ambitions
@@ -165,11 +165,11 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <PricingSection 
-        billingCycle={billingCycle} 
-        setBillingCycle={setBillingCycle} 
+      <PricingSection
+        billingCycle={billingCycle}
+        setBillingCycle={setBillingCycle}
       />
-      
+
       {/* Feature Comparison Table */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 relative z-10">
@@ -213,20 +213,20 @@ export default function PricingPage() {
                   <tr key={i} className={`border-b border-border ${i % 2 === 0 ? 'bg-muted/20' : ''}`}>
                     <td className="p-4 pl-6">{feature.name}</td>
                     <td className="p-4 text-center">
-                      {feature.explorer === "—" ? 
-                        <CrossCircledIcon className="h-5 w-5 text-muted-foreground mx-auto" /> : 
+                      {feature.explorer === "—" ?
+                        <CrossCircledIcon className="h-5 w-5 text-muted-foreground mx-auto" /> :
                         feature.explorer
                       }
                     </td>
                     <td className="p-4 text-center bg-primary/5 border-x border-border font-medium">
-                      {feature.achiever === "—" ? 
-                        <CrossCircledIcon className="h-5 w-5 text-muted-foreground mx-auto" /> : 
+                      {feature.achiever === "—" ?
+                        <CrossCircledIcon className="h-5 w-5 text-muted-foreground mx-auto" /> :
                         feature.achiever
                       }
                     </td>
                     <td className="p-4 text-center">
-                      {feature.superhuman === "—" ? 
-                        <CrossCircledIcon className="h-5 w-5 text-muted-foreground mx-auto" /> : 
+                      {feature.superhuman === "—" ?
+                        <CrossCircledIcon className="h-5 w-5 text-muted-foreground mx-auto" /> :
                         feature.superhuman
                       }
                     </td>
@@ -238,24 +238,24 @@ export default function PricingPage() {
                   <td className="p-6"></td>
                   <td className="p-4 text-center">
                     <Button variant="outline" size="sm" asChild>
-                      <Link href="/signup">Get Started</Link>
+                      <Link prefetch={true} href="/signup">Get Started</Link>
                     </Button>
                   </td>
                   <td className="p-4 text-center bg-primary/5 border-x border-border">
                     <Button size="sm" asChild className="bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black font-bold p-4 shadow-sm transition-all duration-300">
-                      <Link href="/signup?plan=superhuman">Choose Superhuman</Link>
+                      <Link prefetch={true} href="/signup?plan=superhuman">Choose Superhuman</Link>
                     </Button>
                   </td>
                   <td className="p-4 text-center">
                     <Button variant="outline" size="sm" asChild>
-                      <Link href="/signup?plan=conquerer">Choose Conquerer</Link>
+                      <Link prefetch={true} href="/signup?plan=conquerer">Choose Conquerer</Link>
                     </Button>
                   </td>
                 </tr>
               </tfoot>
             </table>
           </div>
-          
+
           {/* Mobile Comparison - remove backdrop-blur */}
           <div className="lg:hidden space-y-4">
             {["Explorer", "Achiever", "Superhuman"].map((plan) => (
@@ -277,12 +277,12 @@ export default function PricingPage() {
                       </div>
                     ))}
                   </div>
-                  <Button 
-                    className="w-full mt-4" 
+                  <Button
+                    className="w-full mt-4"
                     variant={plan === "Achiever" ? "default" : "outline"}
                     asChild
                   >
-                    <Link href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
+                    <Link prefetch={true} href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
                       {plan === "Explorer" ? "Get Started" : `Choose ${plan}`}
                     </Link>
                   </Button>
@@ -292,7 +292,7 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
-      
+
       {/* Testimonial Section - remove the absolute backdrop overlay */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 relative z-10">
@@ -308,7 +308,7 @@ export default function PricingPage() {
               See how our premium features have transformed the lives of our users
             </p>
           </div>
-          
+
           {/* Main testimonial - remove backdrop-blur */}
           <div className="bg-background rounded-xl p-8 shadow-lg border border-border relative mb-20">
             <div className="md:flex items-start gap-8">
@@ -317,18 +317,18 @@ export default function PricingPage() {
                   <span className="text-4xl font-serif">M</span>
                 </div>
               </div>
-              
+
               <div className="md:w-2/3">
                 <div className="flex mb-4">
                   {[...Array(5)].map((_, i) => (
                     <StarFilledIcon key={i} className="h-5 w-5 text-amber-400" />
                   ))}
                 </div>
-                
+
                 <blockquote className="text-xl md:text-2xl mb-6 italic">
                   "Upgrading to Achiever was the best decision I made for my productivity. The unlimited goals and advanced analytics helped me accomplish twice as much in half the time."
                 </blockquote>
-                
+
                 <div>
                   <p className="font-medium">Michael Jordan</p>
                   <p className="text-sm text-muted-foreground">CEO & Founder, Jumpman Inc.</p>
@@ -340,7 +340,7 @@ export default function PricingPage() {
               </div>
             </div>
           </div>
-          
+
           {/* More testimonials - remove backdrop-blur */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -369,9 +369,9 @@ export default function PricingPage() {
                     <StarFilledIcon key={i} className="h-4 w-4 text-amber-400" />
                   ))}
                 </div>
-                
+
                 <p className="text-lg mb-6 italic">"{testimonial.quote}"</p>
-                
+
                 <div>
                   <p className="font-medium">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.role}</p>
@@ -384,7 +384,7 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
-      
+
       {/* FAQ Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 relative z-10">
@@ -400,7 +400,7 @@ export default function PricingPage() {
               Find answers to common questions about our plans
             </p>
           </div>
-          
+
           <div className="space-y-6">
             {[
               {
@@ -433,20 +433,20 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-          
+
           <div className="mt-12 text-center">
             <p className="text-muted-foreground mb-4">
               Have more questions? We're here to help.
             </p>
             <Button variant="outline" className="mx-auto">
-              <Link href="/contact" className="flex items-center gap-2">
+              <Link prefetch={true} href="/contact" className="flex items-center gap-2">
                 Contact Support <ArrowRightIcon className="h-4 w-4" />
               </Link>
             </Button>
           </div>
         </div>
       </section>
-      
+
       {/* CTA Section */}
       <section className="py-24 overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 relative z-10">
@@ -463,15 +463,15 @@ export default function PricingPage() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="mb-8 shadow-md shadow-primary/20">
-                <Link 
-                  href={`/signup?plan=achiever&billing=${billingCycle}`} 
+                <Link prefetch={true}
+                  href={`/signup?plan=achiever&billing=${billingCycle}`}
                   className="flex justify-center items-center gap-2 w-full"
                 >
                   Choose Achiever <ArrowRightIcon className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
-            
+
             {/* Security badges */}
             <div className="mt-5 flex justify-center gap-6 items-center">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">

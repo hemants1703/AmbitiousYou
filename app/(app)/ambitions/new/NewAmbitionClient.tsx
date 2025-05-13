@@ -592,7 +592,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
             Clear Form
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link
+            <Link prefetch={true}
               href="/ambitions"
               className="gap-1 flex justify-center items-center"
             >
@@ -1303,7 +1303,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                           variant="outline"
                           asChild
                         >
-                          <Link href="/pricing">View Pricing Plans</Link>
+                          <Link prefetch={true} href="/pricing">View Pricing Plans</Link>
                         </Button>
                       </div>
                     ) : (

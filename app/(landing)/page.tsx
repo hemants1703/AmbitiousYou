@@ -60,7 +60,7 @@ export default async function Home() {
           </p>
           {userLoggedIn.error === null ? (
             <Button className="text-xl" size={"lg"} asChild>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link prefetch={true} href="/dashboard">Dashboard</Link>
             </Button>
           ) : (
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -69,7 +69,7 @@ export default async function Home() {
                 size="lg"
                 className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
               >
-                <Link href="/signup" className="flex items-center gap-2">
+                <Link prefetch={true} href="/signup" className="flex items-center gap-2">
                   Get Started <RocketIcon className="h-5 w-5" />
                 </Link>
               </Button>
@@ -79,7 +79,7 @@ export default async function Home() {
                 size="lg"
                 className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
               >
-                <Link href="/features" className="flex items-center gap-2">
+                <Link prefetch={true} href="/features" className="flex items-center gap-2">
                   Explore Features <ArrowRightIcon className="h-5 w-5" />
                 </Link>
               </Button>
@@ -394,7 +394,7 @@ export default async function Home() {
                 <span className="text-muted-foreground">/month</span>
               </div>
               <Button variant="outline" className="mb-8">
-                <Link href="/signup" className="flex justify-center items-center gap-2 w-full">
+                <Link prefetch={true} href="/signup" className="flex justify-center items-center gap-2 w-full">
                   Start Free <ArrowRightIcon className="h-4 w-4" />
                 </Link>
               </Button>
@@ -423,7 +423,7 @@ export default async function Home() {
                 <span className="text-muted-foreground">/month</span>
               </div>
               <Button className="mb-8 shadow-md shadow-primary/20">
-                <Link href="/pricing" className="flex justify-center items-center gap-2 w-full">
+                <Link prefetch={true} href="/pricing" className="flex justify-center items-center gap-2 w-full">
                   Get Started <ArrowRightIcon className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
@@ -454,7 +454,7 @@ export default async function Home() {
                 <span className="text-muted-foreground">/month</span>
               </div>
               <Button variant="outline" className="mb-8">
-                <Link href="/pricing" className="flex justify-center items-center gap-2 w-full">
+                <Link prefetch={true} href="/pricing" className="flex justify-center items-center gap-2 w-full">
                   Contact Sales <ArrowRightIcon className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
@@ -496,12 +496,12 @@ export default async function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20">
-                <Link href="/signup" className="flex items-center gap-2">
+                <Link prefetch={true} href="/signup" className="flex items-center gap-2">
                   Get Started <RocketIcon className="h-5 w-5" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
-                <Link href="/pricing" className="flex items-center gap-2">
+                <Link prefetch={true} href="/pricing" className="flex items-center gap-2">
                   View Pricing <ArrowRightIcon className="h-5 w-5" />
                 </Link>
               </Button>
