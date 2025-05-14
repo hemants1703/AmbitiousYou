@@ -13,7 +13,12 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
+import { Metadata } from "next";
 // import DeleteAccountComponent from "./DeleteAccountComponent";
+
+export const metadata: Metadata = {
+  title: "Settings | AmbitiousYou",
+};
 
 export default async function Settings() {
   const supabase = await createClient();

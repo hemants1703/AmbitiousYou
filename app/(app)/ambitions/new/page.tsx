@@ -4,6 +4,11 @@ import { NewAmbitionClient } from "./NewAmbitionClient";
 import { User } from "@supabase/supabase-js";
 import { getPlansTableData } from "@/utils/supabase/tablesDataProvider";
 import type { SupabasePlansData } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create New Ambition | AmbitiousYou",
+};
 
 export default async function NewAmbitionPage() {
   const supabase = await createClient();
@@ -20,5 +25,5 @@ export default async function NewAmbitionPage() {
 
   const plansData: SupabasePlansData[] = await getPlansTableData(id);
 
-  return <NewAmbitionClient plansData={plansData}  />;
+  return <NewAmbitionClient plansData={plansData} />;
 }

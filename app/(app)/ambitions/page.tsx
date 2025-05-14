@@ -2,6 +2,11 @@ import { createClient } from "@/utils/supabase/server";
 import AmbitionsClient from "./AmbitionsClient";
 import { toast } from "sonner";
 import { AmbitionData, Task, Milestone } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Ambitions | AmbitiousYou",
+};
 
 export default async function AmbitionsPage() {
   const supabase = await createClient();

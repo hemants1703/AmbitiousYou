@@ -10,7 +10,7 @@ import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } fro
 export const metadata: Metadata = {
   title: {
     template: "%s | AmbitiousYou",
-    default: "Dashboard",
+    default: "Dashboard | AmbitiousYou",
   },
 };
 

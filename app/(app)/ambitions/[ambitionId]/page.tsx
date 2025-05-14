@@ -1,4 +1,3 @@
-import { testAmbitions } from "@/app/(app)/ambitions/testData";
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "@/app/(app)/ambitions/[ambitionId]/IndividualAmbitionClient";
 import type { Ambition, Task, Milestone, TimeEntry } from "@/types";
@@ -11,31 +10,22 @@ interface PageProps {
   };
 }
 
-// Helper function to convert test data to match the Ambition interface
-function convertTestDataToAmbition(testData: any): Ambition {
+// Dynamic metadata for the ambition page
+export async function generateMetadata({ params }: PageProps) {
+  const { ambitionId } = params;
+
+  const supabase = await createClient();
+
+  const { data: ambition, error: ambitionError } = await supabase
+    .from("ambitions")
+    .select("ambitionName, ambitionDefinition")
+    .eq("id", ambitionId)
+    .single();
+
   return {
-    ...testData,
-    tasks: testData.tasks?.map((task: any) => ({
-      ...task,
-      userId: "test-user",
-      ambitionId: testData.id,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    })) || [],
-    milestones: testData.milestones?.map((milestone: any) => ({
-      ...milestone,
-      userId: "test-user",
-      ambitionId: testData.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      milestoneTargetDate: new Date(milestone.milestoneTargetDate || milestone.createdAt)
-    })) || [],
-    timeEntries: testData.timeEntries?.map((entry: any) => ({
-      ...entry,
-      userId: "test-user",
-      ambitionId: testData.id
-    })) || []
-  };
+    title: `${ambition?.ambitionName} | Ambition Details | AmbitiousYou`,
+    description: ambition?.ambitionDefinition,
+  }
 }
 
 export default async function IndividualAmbitionPage({ params }: PageProps) {
@@ -47,7 +37,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     redirect("/login");
   }
 
-  const { ambitionId } = await params;
+  const { ambitionId } = params;
 
   // Try to fetch from Supabase first
   const { data: ambition, error: ambitionError } = await supabase
@@ -58,12 +48,6 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
 
   // If Supabase fetch fails, fall back to test data
   let finalAmbition: Ambition | undefined = ambition;
-  if (ambitionError || !ambition) {
-    const testAmbition = testAmbitions.find((a) => a.id === params.ambitionId);
-    if (testAmbition) {
-      finalAmbition = convertTestDataToAmbition(testAmbition);
-    }
-  }
 
   if (!finalAmbition) {
     notFound();

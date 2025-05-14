@@ -144,7 +144,8 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-2">
-        <Dropdown.DropdownMenu>
+        {/* STREAK SYSTEM */}
+        {/* <Dropdown.DropdownMenu>
           <Dropdown.DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative group">
               <div className="relative">
@@ -229,11 +230,12 @@ export function Header({
               </div>
             </div>
           </Dropdown.DropdownMenuContent>
-        </Dropdown.DropdownMenu>
+        </Dropdown.DropdownMenu> */}
 
         <ThemeToggler />
 
-        <Sheet>
+        {/* NOTIFICATIONS */}
+        {/* <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
               <BellIcon className="h-5 w-5" />
@@ -297,7 +299,7 @@ export function Header({
               </Button>
             </div>
           </SheetContent>
-        </Sheet>
+        </Sheet> */}
 
         <Sheet>
           <SheetTrigger asChild>
@@ -319,7 +321,8 @@ export function Header({
                   Watch Tutorial
                 </Button>
               </div>
-              <div className="grid gap-2">
+              {/* DOCUMENTATION */}
+              {/* <div className="grid gap-2">
                 <h3 className="text-sm font-medium">Documentation</h3>
                 <p className="text-sm text-muted-foreground">
                   Explore our comprehensive guides and documentation
@@ -327,14 +330,16 @@ export function Header({
                 <Button size="sm" variant="outline" className="mt-2 w-full">
                   View Docs
                 </Button>
-              </div>
+              </div> */}
               <div className="grid gap-2">
                 <h3 className="text-sm font-medium">Need Help?</h3>
                 <p className="text-sm text-muted-foreground">
                   Our support team is ready to assist you
                 </p>
-                <Button size="sm" variant="outline" className="mt-2 w-full">
-                  Contact Support
+                <Button size="sm" variant="outline" className="mt-2 w-full" asChild>
+                  <Link prefetch={true} href="mailto:support@ambitiousyou.com">
+                    Contact Support
+                  </Link>
                 </Button>
               </div>
             </div>

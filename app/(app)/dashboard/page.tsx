@@ -2,6 +2,11 @@ import { DashboardClient } from "./DashboardClient";
 import { createClient } from "@/utils/supabase/server";
 import { getAmbitionsTableData, getMilestonesTableData, getPlansTableData, getProfilesTableData, getTasksTableData } from "@/utils/supabase/tablesDataProvider";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 export default async function DashboardPage() {
   const supabase = await createClient();
