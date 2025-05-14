@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Tech Stack we are using
+1. Next.js (App Router)
+2. pnpm
+3. TailwindCSS
+4. shadcn/ui
+5. Radix-ui icons (preferrably)
+6. lucide-react (fallback when radix-ui icons not available)
+
+7. Supabase
