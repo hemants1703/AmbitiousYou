@@ -16,17 +16,15 @@ import {
   Search,
   Settings2,
   Target,
+  Check,
+  X,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
-import { Check, X } from "lucide-react";
-import { testAmbitions } from "./testData";
-import { Ambition, AmbitionData, Milestone, Task } from "@/types";
-import { MotivationalQuote, motivationalQuotes } from "@/lib/motivationalQuotes";
-import { Separator } from "@/components/ui/separator";
-import { useMemo } from "react";
+import { AmbitionData, Milestone, Task } from "@/types";
+import { motivationalQuotes } from "@/lib/motivationalQuotes";
 
 // Define types for our data
 type SortableFields =
@@ -56,6 +54,7 @@ interface Filters {
 }
 
 export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMilestones }: { ambitions: AmbitionData[], ambitionTasks: Task[], ambitionMilestones: Milestone[] }) {
+  // await new Promise(resolve => setTimeout(resolve, 1000));
   const activeAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "active")), [ambitions]);
   const completedAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "completed")), [ambitions]);
   const archivedAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "archived")), [ambitions]);

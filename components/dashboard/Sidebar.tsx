@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -22,6 +22,7 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import AmbitiousYouLogo from "../AmbitiousYouLogo";
+import { Loader2 } from "lucide-react";
 
 const mainNavItems = [
   {
@@ -121,19 +122,22 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
                   <TooltipTrigger asChild>
                     <Link prefetch={true}
                       href={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavigation(item.href);
-                      }}
+                      // onClick={(e) => {
+                      //   e.preventDefault();
+                      //   handleNavigation(item.href);
+                      // }}
                       className={cn(
-                        "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                        "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
                         item.href === pathname
                           ? "bg-primary text-primary-foreground"
                           : "hover:bg-muted text-muted-foreground hover:text-foreground"
                       )}
                     >
-                      <item.icon className="h-4 w-4" />
-                      {expanded && <span>{item.title}</span>}
+                      <span className="flex items-center gap-2">
+                        <item.icon className="h-4 w-4" />
+                        {expanded && <span>{item.title}</span>}
+                      </span>
+                      <LinkStatus />
                     </Link>
                   </TooltipTrigger>
                   {!expanded && (
@@ -172,19 +176,22 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
                 <TooltipTrigger asChild>
                   <Link prefetch={true}
                     href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavigation(item.href);
-                    }}
+                    // onClick={(e) => {
+                    //   e.preventDefault();
+                    //   handleNavigation(item.href);
+                    // }}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                      "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
                       item.href === pathname
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    <item.icon className="h-4 w-4" />
-                    {expanded && <span>{item.title}</span>}
+                    <span className="flex items-center gap-2">
+                      <item.icon className="h-4 w-4" />
+                      {expanded && <span>{item.title}</span>}
+                    </span>
+                    <LinkStatus />
                   </Link>
                 </TooltipTrigger>
                 {!expanded && (
@@ -197,4 +204,11 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
       </div>
     </motion.div>
   );
+}
+
+function LinkStatus() {
+  const { pending } = useLinkStatus();
+  return pending ? (<div aria-label="Loading..." className="size-2 animate-ping bg-foreground opacity-75 rounded-full">
+    {/* <Loader2 className="w-4 h-4" /> */}
+  </div>) : null
 }
