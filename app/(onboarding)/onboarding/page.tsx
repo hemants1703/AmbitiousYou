@@ -191,7 +191,7 @@ export default function Onboarding() {
                             </div>
                         </div>
                         <div className="flex justify-center gap-4 mt-8">
-                            <Button size="lg" variant="outline" onClick={handleBack} disabled={step === 1}>
+                            <Button size="lg" variant="outline" onClick={handleBack} disabled={step === 2}>
                                 Back
                             </Button>
                             <Button
