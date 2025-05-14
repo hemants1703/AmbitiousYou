@@ -26,6 +26,7 @@ import { testAmbitions } from "./testData";
 import { Ambition, AmbitionData, Milestone, Task } from "@/types";
 import { MotivationalQuote, motivationalQuotes } from "@/lib/motivationalQuotes";
 import { Separator } from "@/components/ui/separator";
+import { useMemo } from "react";
 
 // Define types for our data
 type SortableFields =
@@ -55,9 +56,9 @@ interface Filters {
 }
 
 export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMilestones }: { ambitions: AmbitionData[], ambitionTasks: Task[], ambitionMilestones: Milestone[] }) {
-  const activeAmbitions = ambitions.filter((ambition) => ambition.ambitionStatus === "active");
-  const completedAmbitions = ambitions.filter((ambition) => ambition.ambitionStatus === "completed");
-  const archivedAmbitions = ambitions.filter((ambition) => ambition.ambitionStatus === "archived");
+  const activeAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "active")), [ambitions]);
+  const completedAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "completed")), [ambitions]);
+  const archivedAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "archived")), [ambitions]);
 
   // Filter states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
