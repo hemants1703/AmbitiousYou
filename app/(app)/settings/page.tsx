@@ -14,7 +14,6 @@ import { redirect } from "next/navigation";
 import { getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
 import { Metadata } from "next";
-// import DeleteAccountComponent from "./DeleteAccountComponent";
 
 export const metadata: Metadata = {
   title: "Settings | AmbitiousYou",
@@ -155,7 +154,7 @@ export default async function Settings() {
             <Card.CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="currentPassword">Current Password</Label>
-                <Input id="currentPassword" type="password" />
+                <Input id="currentPassword" type="password" value={"**************"} disabled />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="newPassword">New Password</Label>
@@ -200,29 +199,6 @@ export default async function Settings() {
                   Manage Codes
                 </Button>
               </div>
-            </Card.CardContent>
-          </Card.Card>
-
-          <Card.Card className="border-destructive border">
-            <Card.CardHeader>
-              <Card.CardTitle className="text-destructive">Danger Zone</Card.CardTitle>
-              <Card.CardDescription>Irreversible and destructive actions</Card.CardDescription>
-            </Card.CardHeader>
-            <Card.CardContent className="space-y-4">
-              {/* <div className="flex items-center justify-between space-x-2">
-                <div>
-                  <p className="font-medium">Delete account</p>
-                  <p className="text-sm text-muted-foreground">
-                    Permanently delete your account and all data
-                  </p>
-                </div>
-                <Button variant="destructive" size="sm">
-                  Delete Account
-                </Button>
-              </div> */}
-
-              {/* TODO: INCOMPLETE DELETE ACCOUNT FEATURE */}
-              {/* <DeleteAccountComponent /> */}
             </Card.CardContent>
           </Card.Card>
         </Tabs.TabsContent>

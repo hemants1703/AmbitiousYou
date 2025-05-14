@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { LoginSchema, SignupSchema } from "./_lib/definitions";
 import { revalidatePath } from "next/cache";
 import { LoginState } from "./login/LoginForm";
-import { SignupState } from "./signup/SignupForm";
+import { SignupState } from "./signup/SignUpForm";
 import { pricingPlans } from "@/content/pricingPlans";
 
 // This function is called when the user submits the signup form

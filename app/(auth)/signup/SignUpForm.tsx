@@ -7,7 +7,7 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LoaderIcon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import { signupAction } from "../actions";
 import { toast } from "sonner";
 
@@ -138,7 +138,7 @@ export default function SignUpForm({ signupPlan }: { signupPlan: string | string
       <Button type="submit" className="w-full" disabled={isSignupPending}>
         {isSignupPending ? (
           <div className="flex justify-center items-center gap-2">
-            <LoaderIcon className="animate-spin size-5" />
+            <Loader2Icon className="animate-spin size-5" />
             Creating Account...
           </div>
         ) : (

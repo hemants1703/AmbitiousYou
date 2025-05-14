@@ -5,7 +5,7 @@ import { loginUserAction } from "../actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { LoaderIcon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 export type LoginState =
@@ -70,7 +70,7 @@ export default function LoginForm() {
       <Button type="submit" className="w-full mt-4" disabled={isLoginPending}>
         {isLoginPending ? (
           <div className="flex justify-center items-center gap-2">
-            <LoaderIcon className="animate-spin size-5" />
+            <Loader2Icon className="animate-spin size-5" />
             Logging you in...
           </div>
         ) : (
