@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
                 ambitionColor: "",
                 createdAt: new Date(),
                 updatedAt: new Date(),
+                isFavourited: false
             },
             tasks: [],
             milestones: []
@@ -122,8 +123,8 @@ export async function POST(request: NextRequest) {
                     updatedAt: new Date(),
                 }
             })
-        } 
-        
+        }
+
         // If tracking method is milestones, map the milestones
         if (cleanedResponse.trackingMethod === "milestone") {
             generatedAmbition.milestones = cleanedResponse.milestones?.map((milestone: {

@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
 import { getAmbitionsTableData, getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
+import { AmbitionData } from "@/types";
 
 export type SupabaseProfileData = {
   id: string;
@@ -39,7 +40,7 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   profileData: SupabaseProfileData[] | null;
-  ambitionsData: AmbitionsData[] | null;
+  ambitionsData: AmbitionData[] | null;
   loading: boolean; // Combined loading state
   profileLoading: boolean; // Specific state for profile fetch
   ambitionsLoading: boolean; // Specific state for ambitions fetch
@@ -59,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profileData, setProfileData] = useState<SupabaseProfileData[] | null>(null);
-  const [ambitionsData, setAmbitionsData] = useState<AmbitionsData[] | null>(null);
+  const [ambitionsData, setAmbitionsData] = useState<AmbitionData[] | null>(null);
   const [initialAuthCheckComplete, setInitialAuthCheckComplete] = useState<boolean>(false);
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
   const [ambitionsLoading, setAmbitionsLoading] = useState<boolean>(false);

@@ -11,7 +11,7 @@ import {
   getTasksTableData,
 } from "@/utils/supabase/tablesDataProvider";
 import { User } from "@supabase/supabase-js";
-import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
+import { AmbitionData, AmbitionMilestone, SupabasePlansData, SupabaseProfileData, AmbitionTask } from "@/types";
 
 export const metadata: Metadata = {
   title: {
@@ -36,7 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const profileData: SupabaseProfileData[] = await getProfilesTableData(id);
   const plansData: SupabasePlansData[] = await getPlansTableData(id);
-  const ambitionsData: Ambition[] = await getAmbitionsTableData(id);
+  const ambitionsData: AmbitionData[] = await getAmbitionsTableData(id);
   const tasksData: AmbitionTask[] = await getTasksTableData(id);
   const milestonesData: AmbitionMilestone[] = await getMilestonesTableData(id);
 

@@ -59,6 +59,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AmbitionCategoryBadge, AmbitionColorBadge, AmbitionPriorityBadge } from "../AmbitionsClient";
 import { favouriteAmbitionAction } from "../actions";
+import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
 // Animation variants
 const container = {
   hidden: { opacity: 0 },
@@ -76,9 +77,9 @@ const item = {
 };
 
 interface IndividualAmbitionClientProps {
-  ambition: any; // Replace with proper type
-  tasks: any[]; // Replace with proper type
-  milestones: any[]; // Replace with proper type
+  ambition: AmbitionData; // Replace with proper type
+  tasks: AmbitionTask[]; // Replace with proper type
+  milestones: AmbitionMilestone[]; // Replace with proper type
   timeEntries: any[]; // Replace with proper type
 }
 
@@ -227,7 +228,7 @@ export function IndividualAmbitionClient({
                           <div>
                             <p className="text-sm text-muted-foreground">Date Range</p>
                             <p className="font-medium">
-                              {format(new Date(ambition.ambitionStartDate), "MMM d, yyyy")} - {format(new Date(ambition.ambitionDeadline), "MMM d, yyyy")}
+                              {format(new Date(ambition.ambitionStartDate ?? ""), "MMM d, yyyy")} - {format(new Date(ambition.ambitionDeadline), "MMM d, yyyy")}
                             </p>
                           </div>
                         </div>

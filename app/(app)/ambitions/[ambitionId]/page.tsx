@@ -3,6 +3,7 @@ import { IndividualAmbitionClient } from "@/app/(app)/ambitions/[ambitionId]/Ind
 import type { AmbitionData, AmbitionTask, AmbitionMilestone, TimeEntry } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 interface PageProps {
   params: {
@@ -21,6 +22,13 @@ export async function generateMetadata({ params }: PageProps) {
     .select("ambitionName, ambitionDefinition")
     .eq("id", ambitionId)
     .single();
+
+  if (ambitionError) {
+    return {
+      title: "Ambition not found",
+      description: "This ambition does not exist.",
+    }
+  }
 
   return {
     title: `${ambition?.ambitionName} | Ambition Details | AmbitiousYou`,
@@ -49,10 +57,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     .eq("id", ambitionId)
     .single();
 
-  // If Supabase fetch fails, fall back to test data
-  let finalAmbition: AmbitionData | undefined = ambition;
-
-  if (!finalAmbition) {
+  if (!ambition) {
     notFound();
   }
 
@@ -97,16 +102,14 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     }
   } catch (error) {
     // If fetching related data fails, use the data from test ambition
-    if (finalAmbition.id === params.ambitionId) {
-      tasks = finalAmbition.tasks;
-      milestones = finalAmbition.milestones;
-      timeEntries = finalAmbition.timeEntries;
-    }
+    toast.error("Error fetching related data", {
+      description: "Seems like this ambition does not exist...",
+    })
   }
 
   return (
     <IndividualAmbitionClient
-      ambition={finalAmbition}
+      ambition={ambition as AmbitionData}
       tasks={tasks}
       milestones={milestones}
       timeEntries={timeEntries}

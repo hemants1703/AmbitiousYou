@@ -35,6 +35,7 @@ export interface AmbitionData {
     ambitionColor: string;
     createdAt: Date;
     updatedAt: Date;
+    isFavourited: boolean;
 }
 
 export interface SupabaseProfileData {
@@ -55,26 +56,26 @@ export interface SupabasePlansData {
     updatedAt: string;
 }
 
-export interface AmbitionsData {
-    id: string;
-    userId: string;
-    ambitionName: string;
-    ambitionDefinition: string | null | "";
-    ambitionType: string;
-    ambitionStartDate: string | null | "";
-    ambitionEndDate: string | null | "";
-    ambitionCompletionDate: string | null | "";
-    ambitionStatus: string;
-    ambitionPriority: string;
-    ambitionCategory: string;
-    ambitionPercentageCompleted: number;
-    ambitionTasks: string[] | null | "";
-    ambitionNotes: string[] | null | "";
-    ambitionTags: string[] | null | "";
-    createdAt: string;
-    updatedAt: string;
-    isFavourited: boolean;
-};
+// export interface AmbitionsData {
+//     id: string;
+//     userId: string;
+//     ambitionName: string;
+//     ambitionDefinition: string | null | "";
+//     ambitionType: string;
+//     ambitionStartDate: string | null | "";
+//     ambitionEndDate: string | null | "";
+//     ambitionCompletionDate: string | null | "";
+//     ambitionStatus: string;
+//     ambitionPriority: string;
+//     ambitionCategory: string;
+//     ambitionPercentageCompleted: number;
+//     ambitionTasks: string[] | null | "";
+//     ambitionNotes: string[] | null | "";
+//     ambitionTags: string[] | null | "";
+//     createdAt: string;
+//     updatedAt: string;
+//     isFavourited: boolean;
+// };
 
 export interface AmbitionTask {
     id: string;
