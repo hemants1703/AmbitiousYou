@@ -10,5 +10,4 @@ Tech Stack we are using
 4. shadcn/ui
 5. Radix-ui icons (preferrably)
 6. lucide-react (fallback when radix-ui icons not available)
-
 7. Supabase

@@ -1,4 +1,4 @@
-import { Playfair_Display } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -20,9 +20,9 @@ import {
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-const playfair = Playfair_Display({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export default async function Home() {
@@ -50,7 +50,7 @@ export default async function Home() {
 
         <div className="text-center max-w-4xl mx-auto relative z-10">
           <h1
-            className={`${playfair.className} text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/90 to-primary/70 leading-tight`}
+            className={`${bricolage.className} tracking-tight text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/90 to-primary/70 leading-tight`}
           >
             For Those Who Dare to Dream Beyond Limits
           </h1>
@@ -204,7 +204,7 @@ export default async function Home() {
               Features
             </div>
             <h2
-              className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6 tracking-tight`}
+              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 tracking-tight`}
             >
               Transform How You Achieve Your Goals
             </h2>
@@ -284,7 +284,7 @@ export default async function Home() {
               Testimonials
             </div>
             <h2
-              className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6 tracking-tight`}
+              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 tracking-tight`}
             >
               What Our Users Say
             </h2>
@@ -376,7 +376,7 @@ export default async function Home() {
               <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
               Simple Pricing
             </div>
-            <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
+            <h2 className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6`}>
               Choose Your Ambition Level
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -485,7 +485,7 @@ export default async function Home() {
           <div className="bg-background/30 border border-primary/20 rounded-2xl p-10 shadow-xl backdrop-blur-sm">
             <div className="text-center mb-10">
               <h2
-                className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6 text-foreground`}
+                className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 text-foreground`}
               >
                 Ready to Achieve Your Dreams?
               </h2>
