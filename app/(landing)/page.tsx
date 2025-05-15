@@ -204,7 +204,7 @@ export default async function Home() {
               Features
             </div>
             <h2
-              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 tracking-tight`}
+              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6`}
             >
               Transform How You Achieve Your Goals
             </h2>
@@ -284,7 +284,7 @@ export default async function Home() {
               Testimonials
             </div>
             <h2
-              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 tracking-tight`}
+              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6`}
             >
               What Our Users Say
             </h2>
