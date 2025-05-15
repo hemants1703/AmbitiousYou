@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "@/app/(app)/ambitions/[ambitionId]/IndividualAmbitionClient";
-import type { Ambition, Task, Milestone, TimeEntry } from "@/types";
+import type { AmbitionData, AmbitionTask, AmbitionMilestone, TimeEntry } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -25,14 +25,17 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: `${ambition?.ambitionName} | Ambition Details | AmbitiousYou`,
     description: ambition?.ambitionDefinition,
-  }
+  };
 }
 
 export default async function IndividualAmbitionPage({ params }: PageProps) {
   const supabase = await createClient();
 
   // Check if user is authenticated
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   if (userError || !user) {
     redirect("/login");
   }
@@ -47,15 +50,15 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     .single();
 
   // If Supabase fetch fails, fall back to test data
-  let finalAmbition: Ambition | undefined = ambition;
+  let finalAmbition: AmbitionData | undefined = ambition;
 
   if (!finalAmbition) {
     notFound();
   }
 
   // Fetch related data from Supabase
-  let tasks: Task[] = [];
-  let milestones: Milestone[] = [];
+  let tasks: AmbitionTask[] = [];
+  let milestones: AmbitionMilestone[] = [];
   let timeEntries: TimeEntry[] = [];
 
   try {
@@ -67,7 +70,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
       .order("createdAt", { ascending: true });
 
     if (tasksData) {
-      tasks = tasksData as Task[];
+      tasks = tasksData as AmbitionTask[];
     }
 
     // Fetch milestones
@@ -78,7 +81,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
       .order("createdAt", { ascending: true });
 
     if (milestonesData) {
-      milestones = milestonesData as Milestone[];
+      milestones = milestonesData as AmbitionMilestone[];
     }
 
     // Fetch time entries

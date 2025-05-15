@@ -1,39 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Bricolage_Grotesque, Playfair_Display } from "next/font/google";
-import { ArrowRight, Check, ChevronRight, Rocket, Star, Target, Timer, Zap } from "lucide-react";
-import Link from "next/link";
+import { Bricolage_Grotesque } from "next/font/google";
 import { OnboardingClient } from "./client";
 
 const bricolage = Bricolage_Grotesque({
     subsets: ["latin"],
     weight: ["400", "500", "600", "700", "800"],
 });
-
-const features = [
-    {
-        icon: <Target className="h-6 w-6 text-primary" />,
-        title: "Goal Hierarchy",
-        description: "Organize your ambitions from big dreams to daily tasks in a structured, manageable system.",
-    },
-    {
-        icon: <Timer className="h-6 w-6 text-primary" />,
-        title: "Progress Tracking",
-        description: "Visualize your journey with beautiful charts and analytics that keep you motivated.",
-    },
-    {
-        icon: <Zap className="h-6 w-6 text-primary" />,
-        title: "AI Assistance",
-        description: "Receive intelligent suggestions to overcome obstacles and optimize your approach.",
-    },
-];
-
-const exampleAmbitions = [
-    "Complete my MBA while working full-time",
-    "Launch my first tech startup within 12 months",
-    "Run a marathon in under 4 hours",
-    "Learn to play the piano and perform at a local venue",
-];
 
 export default function Onboarding({
     searchParams,
@@ -75,13 +46,41 @@ export default function Onboarding({
                     />
                 </div> */}
 
-                <OnboardingClient
-                    step={step}
-                    features={features}
-                    exampleAmbitions={exampleAmbitions}
-                    bricolage={bricolage}
-                />
+                <OnboardingHeader step={step} bricolage={bricolage} />
+
+                <OnboardingClient step={step} />
             </div>
         </div>
     );
 } 
+
+// Header component for all steps
+function OnboardingHeader({ step, bricolage }: { step: number; bricolage: any }) {
+    const titles = {
+        1: {
+            title: "Welcome to AmbitiousYou!",
+            description: "Your personal companion for achieving extraordinary goals. Let's get you started on your journey to greatness."
+        },
+        2: {
+            title: "What's Your Ambition?",
+            description: "Share your goal, and our AI will help you break it down into achievable steps."
+        },
+        3: {
+            title: "Your Personalized Ambition",
+            description: "Here's your AI-powered ambition. You can edit any details before saving!"
+        }
+    };
+
+    const current = titles[step as keyof typeof titles];
+
+    return (
+        <div className="text-center space-y-4">
+            <h1 className={`${bricolage.className} tracking-tight text-4xl md:text-6xl font-bold`}>
+                {current.title}
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                {current.description}
+            </p>
+        </div>
+    );
+}

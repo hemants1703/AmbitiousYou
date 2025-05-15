@@ -12,8 +12,8 @@ interface SidebarControllerProps {
   profileData: SupabaseProfileData[];
   plansData: SupabasePlansData[];
   ambitionsData: Ambition[];
-  tasksData: Task[];
-  milestonesData: Milestone[];
+  tasksData: AmbitionTask[];
+  milestonesData: AmbitionMilestone[];
 }
 
 export function SidebarController({

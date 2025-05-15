@@ -76,7 +76,7 @@ export interface AmbitionsData {
     isFavourited: boolean;
 };
 
-export interface Task {
+export interface AmbitionTask {
     id: string;
     userId: string;
     ambitionId: string;
@@ -88,7 +88,7 @@ export interface Task {
     updatedAt: Date;
 }
 
-export interface Milestone {
+export interface AmbitionMilestone {
     id: string;
     userId: string;
     ambitionId: string;
@@ -107,19 +107,19 @@ export interface TimeEntry {
     activity: string;
 }
 
-export interface Ambition {
-    id: string;
-    ambitionName: string;
-    ambitionDefinition: string;
-    ambitionCategory: string;
-    ambitionPercentageCompleted: number;
-    ambitionPriority: string;
-    ambitionStartDate: string;
-    ambitionDeadline: string;
-    ambitionStatus: string;
-    ambitionColor: string;
-    ambitionTrackingMethod: string;
-    tasks: Task[];
-    milestones: Milestone[];
-    timeEntries: TimeEntry[];
-}
+// export interface Ambition {
+//     id: string;
+//     ambitionName: string;
+//     ambitionDefinition: string;
+//     ambitionCategory: string;
+//     ambitionPercentageCompleted: number;
+//     ambitionPriority: string;
+//     ambitionStartDate: string;
+//     ambitionDeadline: string;
+//     ambitionStatus: string;
+//     ambitionColor: string;
+//     ambitionTrackingMethod: string;
+//     tasks: AmbitionTask[];
+//     milestones: AmbitionMilestone[];
+//     timeEntries: TimeEntry[];
+// }

@@ -12,75 +12,52 @@ import { Input } from "@/components/ui/input";
 import "./exampleAmbitionAnimation.css";
 import "./gradientAnimation.css";
 
-interface OnboardingClientProps {
-    step: number;
-    features: any[];
-    exampleAmbitions: string[];
-    bricolage: any;
-}
-
-// Header component for all steps
-function OnboardingHeader({ step, bricolage }: { step: number; bricolage: any }) {
-    const titles = {
-        1: {
-            title: "Welcome to AmbitiousYou!",
-            description: "Your personal companion for achieving extraordinary goals. Let's get you started on your journey to greatness."
-        },
-        2: {
-            title: "What's Your Ambition?",
-            description: "Share your goal, and our AI will help you break it down into achievable steps."
-        },
-        3: {
-            title: "Your Personalized Ambition",
-            description: "Here's your AI-powered ambition. You can edit any details before saving!"
-        }
-    };
-
-    const current = titles[step as keyof typeof titles];
-
-    return (
-        <div className="text-center space-y-4">
-            <h1 className={`${bricolage.className} tracking-tight text-4xl md:text-6xl font-bold`}>
-                {current.title}
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                {current.description}
-            </p>
-        </div>
-    );
-}
-
 // Footer component for all steps
 function OnboardingFooter({
+    router,
     step,
-    onSkip,
-    onBack,
-    onNext,
     onSubmit,
     isLoading,
     isSubmitDisabled
 }: {
+    router: any;
     step: number;
-    onSkip: () => void;
-    onBack: () => void;
-    onNext: () => void;
     onSubmit: () => void;
     isLoading: boolean;
     isSubmitDisabled: boolean;
 }) {
+    
+    const handleNext = () => {
+        if (step < 3) {
+            router.push(`/onboarding?step=${step + 1}`);
+        }
+    };
+
+    const handleBack = () => {
+        if (step > 1) {
+            router.push(`/onboarding?step=${step - 1}`);
+        }
+    };
+
+    const handleSkip = () => {
+        if (step < 3) {
+            router.push(`/onboarding?step=${step + 1}`);
+        }
+    };
+
     return (
         <div className="flex justify-between items-center mt-8">
-            <Button variant="link" size="sm" className="text-muted-foreground hover:text-foreground opacity-50" onClick={onSkip}>
+            <Button variant="link" size="sm" className="text-muted-foreground hover:text-foreground opacity-50" onClick={handleSkip}>
                 Skip for now
             </Button>
             <div className="flex gap-4 items-center">
                 {step > 1 && (
-                    <Button size="lg" variant="outline" onClick={onBack}>
+                    <Button size="lg" variant="outline" onClick={handleBack}>
                         <ArrowLeftIcon className="h-4 w-4" />
                     </Button>
                 )}
                 {step === 1 && (
-                    <Button size="lg" onClick={onNext}>
+                    <Button size="lg" onClick={handleNext}>
                         Next <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                 )}
@@ -173,30 +150,12 @@ function ExampleAmbitions({ onSelect }: { onSelect: (example: string) => void })
     );
 }
 
-export function OnboardingClient({ step, features, exampleAmbitions, bricolage }: OnboardingClientProps) {
+export function OnboardingClient({ step }: { step: number }) {
     const router = useRouter();
     const [ambition, setAmbition] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [generatedAmbition, setGeneratedAmbition] = useState<any>(null);
     const [editableAmbition, setEditableAmbition] = useState<any>(null);
-
-    const handleNext = () => {
-        if (step < 3) {
-            router.push(`/onboarding?step=${step + 1}`);
-        }
-    };
-
-    const handleBack = () => {
-        if (step > 1) {
-            router.push(`/onboarding?step=${step - 1}`);
-        }
-    };
-
-    const handleSkip = () => {
-        if (step < 3) {
-            router.push(`/onboarding?step=${step + 1}`);
-        }
-    };
 
     const handleSubmit = async () => {
         setIsLoading(true);
@@ -227,24 +186,25 @@ export function OnboardingClient({ step, features, exampleAmbitions, bricolage }
         switch (step) {
             case 1:
                 return (
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {features.map((feature, index) => (
-                            <div
-                                key={index}
-                                className="bg-card/80 backdrop-blur-sm rounded-xl p-6 border border-border hover:border-primary/50 transition-all"
-                            >
-                                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                                    {feature.icon}
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                                <p className="text-muted-foreground">{feature.description}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <></>
+                    // <div className="grid md:grid-cols-3 gap-6 h-full">
+                    //     {features.map((feature, index) => (
+                    //         <div
+                    //             key={index}
+                    //             className="bg-card/80 backdrop-blur-sm rounded-xl p-6 border border-border hover:border-primary/50 transition-all"
+                    //         >
+                    //             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    //                 {feature.icon}
+                    //             </div>
+                    //             <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                    //             <p className="text-muted-foreground">{feature.description}</p>
+                    //         </div>
+                    //     ))}
+                    // </div>
                 );
             case 2:
                 return (
-                    <div className="space-y-6">
+                    <div className="space-y-6 h-full">
                         <div className="flex items-center gap-3 text-foreground">
                             <div className="h-10 w-10 rounded-full bg-[var(--custom-light)]/20 flex items-center justify-center">
                                 <span className="text-xl">👋</span>
@@ -273,24 +233,11 @@ export function OnboardingClient({ step, features, exampleAmbitions, bricolage }
 
                         {/* Priority 2: Example Ambitions */}
                         <ExampleAmbitions onSelect={setAmbition} />
-
-                        {/* Priority 3: Generate Button
-                        <div className="flex justify-center pt-2">
-                            <Button
-                                size="lg"
-                                className="px-8 bg-gradient-to-r from-[var(--custom-light)] to-[var(--custom-dark)] hover:from-[var(--custom-dark)] hover:to-[var(--custom-light)] transition-all duration-500"
-                                onClick={handleSubmit}
-                                disabled={isSubmitDisabled}
-                            >
-                                {isLoading ? "Thinking..." : "Plan out my ambition"}
-                                {!isLoading && <span className="text-xl ml-2">🚀</span>}
-                            </Button>
-                        </div> */}
                     </div>
                 );
             case 3:
                 return editableAmbition ? (
-                    <div className="bg-card/80 backdrop-blur-sm rounded-xl p-6 border border-border space-y-6">
+                    <div className="bg-card/80 backdrop-blur-sm rounded-xl p-6 border border-border space-y-6 h-full">
                         {/* Ambition Details */}
                         <div className="space-y-4">
                             <label className="block font-semibold">Title</label>
@@ -403,15 +350,12 @@ export function OnboardingClient({ step, features, exampleAmbitions, bricolage }
 
     return (
         <div className="max-w-5xl mx-auto space-y-8">
-            <OnboardingHeader step={step} bricolage={bricolage} />
-            <div className="flex-1 justify-center items-center h-[350px]">
+            <div className={`flex-1 justify-center items-center ${step > 1 ? "h-[350px]" : ""}`}>
                 {renderMainContent()}
             </div>
             <OnboardingFooter
+                router={router}
                 step={step}
-                onSkip={handleSkip}
-                onBack={handleBack}
-                onNext={handleNext}
                 onSubmit={handleSubmit}
                 isLoading={isLoading}
                 isSubmitDisabled={isSubmitDisabled}

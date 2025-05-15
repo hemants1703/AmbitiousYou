@@ -29,7 +29,19 @@ import { useEffect, useState } from "react";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
 import ProBadge from "@/components/ProBadge";
 
-export function DashboardClient({ profileData, ambitions, tasks, milestones, isProUser }: { profileData: SupabaseProfileData[], ambitions: Ambition[], tasks: Task[], milestones: Milestone[], isProUser: boolean }) {
+export function DashboardClient({
+  profileData,
+  ambitions,
+  tasks,
+  milestones,
+  isProUser,
+}: {
+  profileData: SupabaseProfileData[];
+  ambitions: Ambition[];
+  tasks: AmbitionTask[];
+  milestones: AmbitionMilestone[];
+  isProUser: boolean;
+}) {
   const { firstName, lastName } = profileData[0];
   const [greeting, setGreeting] = useState(getRandomGreeting());
 
@@ -37,7 +49,9 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
   const completedTasks = tasks.filter((task) => task.taskCompleted === true);
   const incompleteTasks = totalTasks - completedTasks.length;
 
-  const nearCompletionAmbitions = ambitions.filter((ambition) => ambition.ambitionPercentageCompleted >= 80);
+  const nearCompletionAmbitions = ambitions.filter(
+    (ambition) => ambition.ambitionPercentageCompleted >= 80
+  );
 
   const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
   const randomMotivationalQuote = motivationalQuotes[randomIndex];
@@ -108,7 +122,11 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
               </motion.p>
             </div>
             <Button asChild variant="outline">
-              <Link prefetch={true} href="/ambitions/new" className="gap-2 flex justify-center items-center">
+              <Link
+                prefetch={true}
+                href="/ambitions/new"
+                className="gap-2 flex justify-center items-center"
+              >
                 <PlusCircledIcon className="h-4 w-4" />
                 New Ambition
               </Link>
@@ -344,7 +362,9 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
               <blockquote className="border-l-4 border-primary pl-4 italic">
                 &quot;{randomMotivationalQuote.quote}&quot;
               </blockquote>
-              <p className="text-right text-sm text-muted-foreground mt-2">— {randomMotivationalQuote.author}</p>
+              <p className="text-right text-sm text-muted-foreground mt-2">
+                — {randomMotivationalQuote.author}
+              </p>
             </div>
           </Card.CardContent>
         </Card.Card>
@@ -406,8 +426,9 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
                   className="flex items-start gap-4 mb-4"
                 >
                   <div
-                    className={`h-10 w-10 rounded-full ${activity.iconColor === "text-primary" ? "bg-primary/20" : "bg-card"
-                      } border border-border flex items-center justify-center flex-shrink-0`}
+                    className={`h-10 w-10 rounded-full ${
+                      activity.iconColor === "text-primary" ? "bg-primary/20" : "bg-card"
+                    } border border-border flex items-center justify-center flex-shrink-0`}
                   >
                     <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
                   </div>
@@ -437,7 +458,9 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
       >
         <Card.Card>
           <Card.CardHeader>
-            <Card.CardTitle>Learning Recommendations {isProUser ? <ProBadge /> : null}</Card.CardTitle>
+            <Card.CardTitle>
+              Learning Recommendations {isProUser ? <ProBadge /> : null}
+            </Card.CardTitle>
             <Card.CardDescription>Based on your ambitions and interests</Card.CardDescription>
           </Card.CardHeader>
           <Card.CardContent className="pb-0">
@@ -586,4 +609,4 @@ export function DashboardClient({ profileData, ambitions, tasks, milestones, isP
       </motion.div>
     </div>
   );
-} 
+}
