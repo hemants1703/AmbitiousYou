@@ -1,8 +1,7 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+applyTo: "*"
 ---
+
 The core design language color theme of AmbitiousYou is this
 --custom-light: #64ccc5;
 --custom-dark: #176b87;
