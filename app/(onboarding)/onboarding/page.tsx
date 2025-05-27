@@ -1,11 +1,17 @@
 import { Bricolage_Grotesque } from "next/font/google";
 import { OnboardingClient } from "./client";
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
 });
+
+export const metadata: Metadata = {
+  title: "Onboarding",
+  description: "Onboarding",
+}
 
 export default function Onboarding({ searchParams }: { searchParams: { step?: string } }) {
   const currentStep = Number(searchParams.step) || 1;
@@ -15,14 +21,14 @@ export default function Onboarding({ searchParams }: { searchParams: { step?: st
   return (
     <div className="relative min-h-screen flex justify-between items-center">
       {/* Animated Gradient Background */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
+      {/* <div className="fixed inset-0 -z-10 pointer-events-none">
         <div className="absolute w-[150vw] h-[150vh] -top-1/3 -left-1/3 bg-gradient-radial from-blue-500/50 via-purple-500/40 to-transparent rounded-full blur-3xl animate-[spin_30s_linear_infinite]" />
         <div className="absolute w-[120vw] h-[120vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-pink-400/40 via-indigo-400/30 to-transparent rounded-full blur-2xl animate-[pulse_8s_ease-in-out_infinite]" />
         <div className="absolute w-[100vw] h-[100vw] right-0 bottom-0 bg-gradient-radial from-cyan-400/30 via-transparent to-transparent rounded-full blur-2xl animate-[spin_40s_linear_infinite]" />
         <div className="absolute w-[80vw] h-[80vh] top-0 left-1/4 bg-gradient-to-tr from-emerald-400/20 via-transparent to-transparent rounded-full blur-2xl animate-[spin_20s_linear_infinite]" />
         <div className="absolute w-[60vw] h-[60vh] bottom-1/4 right-1/4 bg-gradient-to-bl from-amber-400/20 via-transparent to-transparent rounded-full blur-2xl animate-[pulse_12s_ease-in-out_infinite]" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/10 to-background/20" />
-      </div>
+      </div> */}
 
       <div className="max-w-5xl mx-auto px-4 py-6 relative z-10">
         {/* Stepper */}

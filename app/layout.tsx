@@ -16,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AmbitiousYou - Get ready to become a Superhuman!",
+  title: {
+    template: "%s | AmbitiousYou",
+    default: "AmbitiousYou - Get ready to become a Superhuman!",
+  },
   description:
     "Reduce your mental overload and manage all your ambitions at a single place, AmbitiousYou helps you become a Superhuman!",
   keywords: [

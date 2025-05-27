@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowRight,
-  Rocket,
   CheckCircle2,
   CircleIcon,
   ListIcon,
@@ -212,7 +211,7 @@ function ExampleAmbitions({ onSelect }: { onSelect: (example: string) => void })
 
   return (
     <>
-      <div className="space-y-2 bg-background/80 backdrop-blur-sm rounded-lg p-4 w-full">
+      <div className="space-y-2 bg-background backdrop-blur-sm rounded-lg p-4 w-full">
         <div className="space-y-2">
           {exampleAmbitions.map((category, idx) => (
             <div key={idx} className="space-y-1">

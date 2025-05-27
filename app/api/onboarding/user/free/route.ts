@@ -3,6 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { whatIsAnAmbition, ambitionGenerationPromptForFreeUser } from "@/content/ambitionGenerationPrompt";
 import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
+import { createClient } from "@/utils/supabase/server";
 
 // Input validation schema
 const ambitionSchema = z.object({
@@ -19,6 +20,21 @@ export interface GeneratedAmbitionResponse {
 }
 
 export async function POST(request: NextRequest) {
+    const supabase = await createClient();
+
+    if (!supabase.auth.getUser()) {
+        return NextResponse.json({
+            success: false,
+            error: "Unauthorized"
+        }, {
+            status: 401,
+            headers: {
+                "Cache-Control": "no-store, no-cache, must-revalidate",
+                "Content-Type": "application/json",
+            }
+        })
+    }
+
     try {
         // Parse and validate request body
         const body = await request.json();
