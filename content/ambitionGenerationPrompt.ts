@@ -1,27 +1,16 @@
 export const whatIsAnAmbition = `
-    An ambition is a short or long term goal that consists of smaller tasks and milestones. These tasks and milestones are completed sequentially to achieve the overall ambition, with some having defined timeframes (tasks) and others being more open-ended (milestones).
+    An Ambition in AmbitiousYou is a short or long term goal that consists of smaller tasks and milestones which you wish to acheive with a motivation with a why. These tasks and milestones are completed sequentially to achieve the overall ambition, with some having defined timeframes (tasks) and others being more open-ended (milestones).
     Here are some examples of ambitions:
-    - "I want to lose 10 pounds"
+    - "I want to lose 10 pounds for my wedding"
       -> Ambition: Lose 10 pounds
-      TrackingMethod: "task"
-      Tasks: Exercise 3 times a week, Eat healthier, Drink 8 glasses of water a day
-    - "I want to run a marathon"
-      -> Ambition: Run a marathon
-      TrackingMethod: "milestone"
-      Milestones: Complete a 5K run, Complete a 10K run, Complete a half marathon, Complete a full marathon
-    - "I want to learn to play the guitar"
-      -> Ambition: Learn to play the guitar
-      TrackingMethod: "milestone"
-      Milestones: Learn basic chords, Play a simple song, Learn barre chords, Perform a song for friends
+      -> Why?/Motivation: I want to look good for my wedding
+      -> TrackingMethod: "task"
+      -> Tasks: Exercise 3 times a week, Eat healthier, Drink 8 glasses of water a day
     - "I want to save $1000"
       -> Ambition: Save $1000
-      TrackingMethod: "task"
-      Tasks: Set a budget, Track expenses, Save $100 a month
-    - "I want to learn to code"
-      -> Ambition: Learn to code
-      TrackingMethod: "milestone"
-      Milestones: Complete an introductory course, Build a simple project, Learn a second programming language, Contribute to an open source project
-
+      -> Why?/Motivation: I want to have a financial safety net
+      -> TrackingMethod: "task"
+      -> Tasks: Set a budget, Track expenses, Save $100 a month
 `
 
 export const ambitionGenerationPromptForFreeUser = `

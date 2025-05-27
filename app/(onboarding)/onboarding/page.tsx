@@ -2,6 +2,7 @@ import { Bricolage_Grotesque } from "next/font/google";
 import { OnboardingClient } from "./client";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
+import { StarsBackground } from '@/components/animate-ui/backgrounds/stars';
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -13,8 +14,8 @@ export const metadata: Metadata = {
   description: "Onboarding",
 }
 
-export default function Onboarding({ searchParams }: { searchParams: { step?: string } }) {
-  const currentStep = Number(searchParams.step) || 1;
+export default async function Onboarding({ searchParams }: { searchParams: { step?: string } }) {
+  const currentStep = Number(await searchParams.step) || 1;
   const isValidStep = currentStep >= 1 && currentStep <= 3;
   const step = isValidStep ? currentStep : 1;
 
@@ -29,6 +30,7 @@ export default function Onboarding({ searchParams }: { searchParams: { step?: st
         <div className="absolute w-[60vw] h-[60vh] bottom-1/4 right-1/4 bg-gradient-to-bl from-amber-400/20 via-transparent to-transparent rounded-full blur-2xl animate-[pulse_12s_ease-in-out_infinite]" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/10 to-background/20" />
       </div> */}
+      <StarsBackground className="absolute inset-0 flex items-center justify-center rounded-xl" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 relative z-10">
         {/* Stepper */}

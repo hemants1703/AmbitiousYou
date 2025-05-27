@@ -211,7 +211,7 @@ function ExampleAmbitions({ onSelect }: { onSelect: (example: string) => void })
 
   return (
     <>
-      <div className="space-y-2 bg-background backdrop-blur-sm rounded-lg p-4 w-full">
+      <div className="space-y-2 bg-background backdrop-blur-sm rounded-lg p-4 w-full max-md:hidden">
         <div className="space-y-2">
           {exampleAmbitions.map((category, idx) => (
             <div key={idx} className="space-y-1">
@@ -550,7 +550,7 @@ function OnboardingFooter({
 
   return (
     <div
-      className={`flex ${step === 1 ? "justify-center" : "justify-between"}  items-center mt-8 max-w-full mx-auto`}
+      className={`flex ${step === 1 ? "justify-center" : "justify-between"}  items-center mt-8 max-w-full mx-auto max-md:flex-col-reverse max-md:gap-10`}
     >
       {step > 1 && (
         <Button
