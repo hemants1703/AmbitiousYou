@@ -437,11 +437,21 @@ export default function AmbitionsClient({
               >
                 {sortedAndFilteredAmbitions.length > 0 ? (
                   sortedAndFilteredAmbitions.map((ambition, index) => {
-                    const ambitionTasksList = ambitionTasks.filter(
-                      (t) => t.ambitionId === ambition.id
-                    );
-                    const completedTasks = ambitionTasksList.filter((t) => t.taskCompleted).length;
-                    const totalTasks = ambitionTasksList.length;
+
+                    let completedTasksOrMilestones = 0
+                    let totalTasksOrMilestones = 0;
+
+                    if (ambition.ambitionTrackingMethod === "task") {
+                      const ambitionTasksList = ambitionTasks.filter(
+                        (t) => t.ambitionId === ambition.id
+                      );
+                      completedTasksOrMilestones = ambitionTasksList.filter((t) => t.taskCompleted).length;
+                      totalTasksOrMilestones = ambitionTasksList.length;
+                    } else if (ambition.ambitionTrackingMethod === "milestone") {
+                      const ambitionMilestonesList = ambitionMilestones.filter((m: AmbitionMilestone) => m.ambitionId === ambition.id);
+                      completedTasksOrMilestones = ambitionMilestonesList.filter((m: AmbitionMilestone) => m.milestoneCompleted).length;
+                      totalTasksOrMilestones = ambitionMilestonesList.length;
+                    }
 
                     return (
                       <motion.div
@@ -500,7 +510,7 @@ export default function AmbitionsClient({
                                   <div className="flex items-center gap-1">
                                     <CheckCircleIcon className="h-3.5 w-3.5" />
                                     <span>
-                                      {completedTasks}/{totalTasks} tasks
+                                      {completedTasksOrMilestones}/{totalTasksOrMilestones} {ambition.ambitionTrackingMethod}s
                                     </span>
                                   </div>
                                   <div className="flex items-center gap-1">
@@ -559,13 +569,21 @@ export default function AmbitionsClient({
                 >
                   {activeAmbitions.length > 0 ? (
                     activeAmbitions.map((ambition, index) => {
-                      const ambitionTasksList = ambitionTasks.filter(
-                        (t) => t.ambitionId === ambition.id
-                      );
-                      const completedTasks = ambitionTasksList.filter(
-                        (t) => t.taskCompleted
-                      ).length;
-                      const totalTasks = ambitionTasksList.length;
+
+                      let completedTasksOrMilestones = 0
+                      let totalTasksOrMilestones = 0;
+
+                      if (ambition.ambitionTrackingMethod === "task") {
+                        const ambitionTasksList = ambitionTasks.filter(
+                          (t) => t.ambitionId === ambition.id
+                        );
+                        completedTasksOrMilestones = ambitionTasksList.filter((t: AmbitionTask) => t.taskCompleted).length;
+                        totalTasksOrMilestones = ambitionTasksList.length;
+                      } else if (ambition.ambitionTrackingMethod === "milestone") {
+                        const ambitionMilestonesList = ambitionMilestones.filter((m: AmbitionMilestone) => m.ambitionId === ambition.id);
+                        completedTasksOrMilestones = ambitionMilestonesList.filter((m: AmbitionMilestone) => m.milestoneCompleted).length;
+                        totalTasksOrMilestones = ambitionMilestonesList.length;
+                      }
 
                       return (
                         <motion.div
@@ -624,7 +642,7 @@ export default function AmbitionsClient({
                                     <div className="flex items-center gap-1">
                                       <CheckCircleIcon className="h-3.5 w-3.5" />
                                       <span>
-                                        {completedTasks}/{totalTasks} tasks
+                                        {completedTasksOrMilestones}/{totalTasksOrMilestones} {ambition.ambitionTrackingMethod}s
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-1">
