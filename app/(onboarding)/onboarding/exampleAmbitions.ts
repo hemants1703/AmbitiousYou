@@ -9,6 +9,12 @@ export interface ExampleAmbitionType {
     }[];
 }
 
+// Helper to represent current time as ISO string for consistency
+const nowAsISO = new Date();
+
+// Helper to convert a specific date string to ISO string (midnight UTC)
+const specificDateToISO = (dateString: string) => new Date(dateString);
+
 const exampleAmbitions: ExampleAmbitionType[] = [
     // Personal Development
     {
@@ -28,11 +34,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2024-12-31",
                     ambitionStatus: "active",
                     ambitionPriority: "high",
-                    ambitionCategory: "Personal Growth",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#FF5733",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [{
@@ -42,9 +47,9 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     milestone: "Learn the basics of piano",
                     milestoneDescription: "Complete a beginner's piano course",
                     milestoneCompleted: false,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    milestoneTargetDate: new Date("2024-06-30"),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
+                    milestoneTargetDate: specificDateToISO("2024-06-30"), // Updated from new Date("2024-06-30")
                 }],
             },
             {
@@ -61,11 +66,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "medium",
-                    ambitionCategory: "Personal Growth",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#3498DB",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -84,11 +88,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "medium",
-                    ambitionCategory: "Personal Growth",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#2ECC71",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -113,11 +116,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "high",
-                    ambitionCategory: "Career & Business",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#F1C40F",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -136,11 +138,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "medium",
-                    ambitionCategory: "Career & Business",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#9B59B6",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -159,11 +160,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "medium",
-                    ambitionCategory: "Career & Business",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#E74C3C",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -188,11 +188,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "high",
-                    ambitionCategory: "Health & Fitness",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#1ABC9C",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -211,11 +210,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "medium",
-                    ambitionCategory: "Health & Fitness",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#E67E22",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
@@ -234,11 +232,10 @@ const exampleAmbitions: ExampleAmbitionType[] = [
                     ambitionDeadline: "2026-05-15",
                     ambitionStatus: "active",
                     ambitionPriority: "medium",
-                    ambitionCategory: "Health & Fitness",
                     ambitionPercentageCompleted: 0,
                     ambitionColor: "#FF5733", // Repeating color from palette
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: nowAsISO, // Updated from new Date()
+                    updatedAt: nowAsISO, // Updated from new Date()
                     isFavourited: false,
                 },
                 milestones: [],
