@@ -55,10 +55,10 @@ function AmbitionPreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl md:max-w-4xl max-h-[85vh] overflow-y-auto px-4 py-5 sm:p-6 border-[var(--custom-light-pale)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-bottom-[2%] data-[state=open]:slide-in-from-bottom-[2%]">
+      <DialogContent className="sm:max-w-3xl md:max-w-4xl max-h-[85vh] overflow-y-auto px-4 py-5 sm:p-6 border-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-bottom-[2%] data-[state=open]:slide-in-from-bottom-[2%]">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold flex items-center gap-2">
-            <span className="text-[var(--custom-dark)]">{ambition.ambitionName}</span>
+            <span className="text-foreground">{ambition.ambitionName}</span>
           </DialogTitle>
           <DialogDescription className="text-sm sm:text-base text-foreground/70">
             {ambition.ambitionDefinition}
@@ -72,7 +72,7 @@ function AmbitionPreviewDialog({
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-4 h-4 text-[var(--custom-light)]" />
+                  <CheckCircle2 className="w-4 h-4 text-foreground" />
                   Progress
                 </span>
                 <span className="text-foreground/70">
@@ -88,7 +88,7 @@ function AmbitionPreviewDialog({
             {/* Tasks or Milestones */}
             <div className="space-y-3 bg-muted/40 rounded-lg p-3 sm:p-4">
               <h3 className="font-semibold flex items-center gap-1.5">
-                <ListIcon className="w-4 h-4 text-[var(--custom-light)]" />
+                <ListIcon className="w-4 h-4 text-foreground" />
                 {ambition.ambitionTrackingMethod === "task" ? "Tasks" : "Milestones"}
               </h3>
               <div className="space-y-1.5">
@@ -128,7 +128,7 @@ function AmbitionPreviewDialog({
             {/* Notes */}
             <div className="space-y-2 bg-muted/40 rounded-lg p-3 sm:p-4">
               <h3 className="font-semibold flex items-center gap-1.5">
-                <ScrollText className="w-4 h-4 text-[var(--custom-light)]" />
+                <ScrollText className="w-4 h-4 text-foreground" />
                 Notes
               </h3>
               <p className="text-sm text-muted-foreground italic">No notes added yet</p>
@@ -137,13 +137,10 @@ function AmbitionPreviewDialog({
             {/* Details */}
             <div className="space-y-3 bg-muted/40 rounded-lg p-3 sm:p-4">
               <h3 className="font-semibold flex items-center gap-1.5">
-                <InfoIcon className="w-4 h-4 text-[var(--custom-light)]" />
+                <InfoIcon className="w-4 h-4 text-foreground" />
                 Details
               </h3>
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                <div className="text-muted-foreground">Category:</div>
-                <div>{ambition.ambitionCategory}</div>
-
                 <div className="text-muted-foreground">Priority:</div>
                 <div className="capitalize">{ambition.ambitionPriority}</div>
 
@@ -168,16 +165,17 @@ function AmbitionPreviewDialog({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="w-full sm:w-auto order-1 sm:order-none hover:border-[var(--custom-light-pale)] hover:text-foreground/70"
+            className="w-full sm:w-auto order-1 sm:order-none"
           >
             Cancel
           </Button>
           <Button
+            variant={"default"}
             onClick={onAccept}
-            className="w-full sm:w-auto bg-[var(--custom-dark)] hover:bg-[var(--custom-light)] transition-colors duration-300 group"
+            className="w-full sm:w-auto transition-colors duration-300 group"
           >
             Use This Ambition
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </DialogFooter>
       </DialogContent>

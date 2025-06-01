@@ -502,7 +502,7 @@ export default function AmbitionsClient({
                                   >
                                     <Progress
                                       value={ambition.ambitionPercentageCompleted}
-                                      className="h-2"
+                                      className={`h-2 [&>[data-slot=progress-indicator]]:bg-[(${ambition.ambitionColor})]`}
                                     />
                                   </motion.div>
                                 </div>

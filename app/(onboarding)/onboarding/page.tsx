@@ -1,5 +1,5 @@
 import { Bricolage_Grotesque } from "next/font/google";
-import { OnboardingClient } from "./client";
+import { OnboardingClient } from "./OnboardingClient";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { StarsBackground } from '@/components/animate-ui/backgrounds/stars';
