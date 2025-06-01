@@ -23,11 +23,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { SupabaseProfileData, Ambition, Task, Milestone } from "@/types";
+import { SupabaseProfileData, AmbitionTask, AmbitionMilestone, AmbitionData } from "@/types";
 import { getRandomGreeting, getGreetingByEnergy } from "@/lib/greetings";
 import { useEffect, useState } from "react";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
 import ProBadge from "@/components/ProBadge";
+import { CircleCheckBigIcon } from "lucide-react";
 
 export function DashboardClient({
   profileData,
@@ -37,17 +38,16 @@ export function DashboardClient({
   isProUser,
 }: {
   profileData: SupabaseProfileData[];
-  ambitions: Ambition[];
+  ambitions: AmbitionData[];
   tasks: AmbitionTask[];
   milestones: AmbitionMilestone[];
   isProUser: boolean;
 }) {
-  const { firstName, lastName } = profileData[0];
+  const { firstName } = profileData[0];
   const [greeting, setGreeting] = useState(getRandomGreeting());
 
-  const totalTasks = tasks.length;
-  const completedTasks = tasks.filter((task) => task.taskCompleted === true);
-  const incompleteTasks = totalTasks - completedTasks.length;
+  const totalTasksAndMilestones = tasks.length + milestones.length;
+  const completedTasksAndMilestones = tasks.filter((task) => task.taskCompleted === true).length + milestones.filter((milestone) => milestone.milestoneCompleted === true).length;
 
   const nearCompletionAmbitions = ambitions.filter(
     (ambition) => ambition.ambitionPercentageCompleted >= 80
@@ -121,7 +121,7 @@ export function DashboardClient({
                 {greeting.suffix}
               </motion.p>
             </div>
-            <Button asChild variant="outline">
+            <Button asChild variant="default">
               <Link
                 prefetch={true}
                 href="/ambitions/new"
@@ -163,14 +163,14 @@ export function DashboardClient({
         <Card.Card>
           <Card.CardHeader className="pb-2">
             <Card.CardDescription className="flex items-center">
-              <CheckCircledIcon className="h-4 w-4 mr-1 text-green-500" />
-              Tasks Completed
+              <CircleCheckBigIcon className="h-4 w-4 mr-1 text-lime-500" />
+              Completed Tasks & Milestones
             </Card.CardDescription>
-            <Card.CardTitle className="text-2xl font-bold">{`${completedTasks.length}/${totalTasks}`}</Card.CardTitle>
+            <Card.CardTitle className="text-2xl font-bold">{`${completedTasksAndMilestones}/${totalTasksAndMilestones}`}</Card.CardTitle>
           </Card.CardHeader>
           <Card.CardContent className="pb-2">
-            <Progress value={74} className="h-2" />
-            <p className="text-xs text-muted-foreground mt-2">74% completion rate</p>
+            <Progress value={completedTasksAndMilestones / totalTasksAndMilestones * 100} className="h-2" />
+            <p className="text-xs text-muted-foreground mt-2">{completedTasksAndMilestones / totalTasksAndMilestones * 100}% completion rate</p>
           </Card.CardContent>
         </Card.Card>
 
@@ -426,9 +426,8 @@ export function DashboardClient({
                   className="flex items-start gap-4 mb-4"
                 >
                   <div
-                    className={`h-10 w-10 rounded-full ${
-                      activity.iconColor === "text-primary" ? "bg-primary/20" : "bg-card"
-                    } border border-border flex items-center justify-center flex-shrink-0`}
+                    className={`h-10 w-10 rounded-full ${activity.iconColor === "text-primary" ? "bg-primary/20" : "bg-card"
+                      } border border-border flex items-center justify-center flex-shrink-0`}
                   >
                     <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
                   </div>
