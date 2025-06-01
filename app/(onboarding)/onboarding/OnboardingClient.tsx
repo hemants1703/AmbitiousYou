@@ -541,9 +541,7 @@ function OnboardingFooter({
   };
 
   const handleSkip = () => {
-    if (step < 3) {
-      router.push(`/onboarding?step=${step + 1}`);
-    }
+    router.push(`/dashboard`);
   };
 
   return (
