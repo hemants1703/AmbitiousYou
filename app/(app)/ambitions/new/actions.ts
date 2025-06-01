@@ -9,7 +9,6 @@ import { z } from "zod";
 const ambitionSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().default(""),
-    category: z.string().min(1, "Category is required"),
     priorityLevel: z.enum(["high", "medium", "low"]),
     deadline: z.string().min(1, "Deadline is required"),
     color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex code"),

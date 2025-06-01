@@ -1,46 +1,29 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import {
   CalendarIcon,
   CheckIcon,
   ChevronLeftIcon,
   ListBulletIcon,
-  PlusCircledIcon,
   Cross1Icon,
   InfoCircledIcon,
+  PlusIcon,
+  Cross2Icon,
 } from "@radix-ui/react-icons";
-import { Milestone, Tag as TagIcon } from "lucide-react";
+import { CircleCheckBig, CircleIcon, Milestone, Tag as TagIcon } from "lucide-react";
 import { format, isBefore, startOfToday } from "date-fns";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -48,24 +31,8 @@ import ProBadge from "@/components/ProBadge";
 import type { AmbitionData, SupabasePlansData } from "@/types";
 import { createNewAmbition } from "./actions";
 import { useRouter } from "next/navigation";
-import { pricingPlans } from "@/content/pricingPlans";
 import { toast } from "sonner";
-
-// Animation variants
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const item = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0 }
-};
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[] }) {
   const router = useRouter();
@@ -78,18 +45,20 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
 
   const [filledUpData, setFilledUpData] = useState<Partial<AmbitionData>>(() => {
     // Initialize state from localStorage if available
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
 
         // Check if there's any meaningful data to restore
-        const hasData = Object.values(parsedData.filledUpData).some(value =>
-          value !== "" &&
-          value !== false &&
-          value !== "task" && // default tracking method
-          value !== "[]" // empty arrays
-        ) ||
+        const hasData =
+          Object.values(parsedData.filledUpData).some(
+            (value) =>
+              value !== "" &&
+              value !== false &&
+              value !== "task" && // default tracking method
+              value !== "[]" // empty arrays
+          ) ||
           (parsedData.tasks && parsedData.tasks.length > 0) ||
           (parsedData.milestones && parsedData.milestones.length > 0) ||
           (parsedData.tags && parsedData.tags.length > 0);
@@ -99,30 +68,31 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
           setTimeout(() => {
             localStorage.setItem("welcomeToastShown", "true");
             toast.info("Welcome Back!", {
-              description: "Your previous progress has been restored. All changes are automatically saved.",
+              description:
+                "Your previous progress has been restored. All changes are automatically saved.",
               duration: 3000,
             });
           }, 1000);
         }
 
-        return parsedData.filledUpData || {
-          ambitionName: "",
-          ambitionDefinition: "",
-          ambitionCategory: "",
-          ambitionPriority: "medium" as const,
-          ambitionDeadline: "",
-          ambitionColor: "",
-          ambitionTrackingMethod: "task",
-          ambitionSuccessMetric: "",
-          ambitionStatus: "active",
-          ambitionPercentageCompleted: 0,
-        };
+        return (
+          parsedData.filledUpData || {
+            ambitionName: "",
+            ambitionDefinition: "",
+            ambitionPriority: "medium" as const,
+            ambitionDeadline: "",
+            ambitionColor: "",
+            ambitionTrackingMethod: "task",
+            ambitionSuccessMetric: "",
+            ambitionStatus: "active",
+            ambitionPercentageCompleted: 0,
+          }
+        );
       }
     }
     return {
       ambitionName: "",
       ambitionDefinition: "",
-      ambitionCategory: "",
       ambitionPriority: "medium" as const,
       ambitionDeadline: "",
       ambitionColor: "",
@@ -134,7 +104,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   });
 
   const [date, setDate] = useState<Date | undefined>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
@@ -145,7 +115,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   });
 
   const [selectedColor, setSelectedColor] = useState(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
@@ -156,7 +126,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   });
 
   const [trackingMethod, setTrackingMethod] = useState(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
@@ -166,12 +136,14 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     return "task";
   });
 
-  const [tasks, setTasks] = useState<Array<{
-    task: string;
-    taskDescription: string;
-    taskDeadline: string;
-  }>>(() => {
-    if (typeof window !== 'undefined') {
+  const [tasks, setTasks] = useState<
+    Array<{
+      task: string;
+      taskDescription: string;
+      taskDeadline: string;
+    }>
+  >(() => {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
@@ -181,13 +153,15 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     return [];
   });
 
-  const [milestones, setMilestones] = useState<Array<{
-    milestone: string;
-    milestoneDescription: string;
-    milestoneCompleted: boolean;
-    milestoneTargetDate: string;
-  }>>(() => {
-    if (typeof window !== 'undefined') {
+  const [milestones, setMilestones] = useState<
+    Array<{
+      milestone: string;
+      milestoneDescription: string;
+      milestoneCompleted: boolean;
+      milestoneTargetDate: string;
+    }>
+  >(() => {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
@@ -198,7 +172,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   });
 
   const [tags, setTags] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
@@ -213,12 +187,12 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     milestone: "",
     milestoneDescription: "",
     milestoneCompleted: false,
-    milestoneTargetDate: format(new Date(), "yyyy-MM-dd")
+    milestoneTargetDate: format(new Date(), "yyyy-MM-dd"),
   });
   const [newTask, setNewTask] = useState({
     task: "",
     taskDescription: "",
-    taskDeadline: format(new Date(), "yyyy-MM-dd")
+    taskDeadline: format(new Date(), "yyyy-MM-dd"),
   });
   const [newTag, setNewTag] = useState("");
 
@@ -242,7 +216,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
       trackingMethod,
       tasks,
       milestones,
-      tags
+      tags,
     };
     localStorage.setItem("ambitionFormData", JSON.stringify(formData));
 
@@ -268,7 +242,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     setNewTask({
       task: "",
       taskDescription: "",
-      taskDeadline: format(new Date(), "yyyy-MM-dd")
+      taskDeadline: format(new Date(), "yyyy-MM-dd"),
     });
     toast.success("Task Added", {
       description: "Task has been added successfully",
@@ -301,7 +275,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
       milestone: "",
       milestoneDescription: "",
       milestoneCompleted: false,
-      milestoneTargetDate: format(new Date(), "yyyy-MM-dd")
+      milestoneTargetDate: format(new Date(), "yyyy-MM-dd"),
     });
     toast.success("Milestone Added", {
       description: "Milestone has been added successfully",
@@ -316,7 +290,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   };
 
   const toggleMilestoneCompletion = (index: number) => {
-    setMilestones(prevMilestones =>
+    setMilestones((prevMilestones) =>
       prevMilestones.map((milestone, i) =>
         i === index
           ? { ...milestone, milestoneCompleted: !milestone.milestoneCompleted }
@@ -326,21 +300,23 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   };
 
   const colorOptions = [
-    { name: "Electric Blue", value: "#00BFFF", class: "bg-blue-500" },
-    { name: "Emerald", value: "#50C878", class: "bg-green-500" },
-    { name: "Royal Purple", value: "#7851A9", class: "bg-purple-500" },
-    { name: "Sunset Orange", value: "#FF7F50", class: "bg-amber-500" },
-    { name: "Ruby Red", value: "#E0115F", class: "bg-red-500" },
-    { name: "Hot Pink", value: "#FF69B4", class: "bg-pink-500" },
-    { name: "Electric Violet", value: "#8F00FF", class: "bg-indigo-500" },
-    { name: "Turquoise", value: "#40E0D0", class: "bg-teal-500" },
+    { name: "Radiant Yellow", value: "#FCDA03", class: "bg-yellow-400" }, // Pure happiness, optimism, immediate mood lift
+    { name: "Lively Orange", value: "#FF7733", class: "bg-orange-500" }, // Enthusiasm, warmth, creativity, zest for life
+    { name: "Electric Blue", value: "#00BFFF", class: "bg-blue-400" }, // Invigorating, refreshing, clear, inspires confidence
+    { name: "Lime Green", value: "#32CD32", class: "bg-lime-500" }, // Freshness, vitality, growth, natural energy
+    { name: "Hot Pink", value: "#FF69B4", class: "bg-pink-400" }, // Playful, energetic, charming, universally cheerful
+    { name: "Aqua Blue", value: "#00CED1", class: "bg-cyan-400" }, // Serene yet vibrant, refreshing, calming but uplifting
+    { name: "Amethyst Purple", value: "#9966CC", class: "bg-purple-400" }, // Creative, inspiring, unique, adds a touch of uplifting magic
+    { name: "Scarlet Red", value: "#FF2400", class: "bg-red-500" }, // Powerful, energetic, passionate, stirs positive excitement
+    { name: "Lemon Yellow", value: "#FFF44F", class: "bg-yellow-300" }, // Bright, crisp, pure joy, illuminates the spirit
+    { name: "Coral Red", value: "#FF7F50", class: "bg-red-400" }, // Warm, friendly, inviting, feels joyful and lively
   ];
 
   const handleTrackingMethodChange = (method: string) => {
     setTrackingMethod(method);
-    setFilledUpData(prev => ({
+    setFilledUpData((prev) => ({
       ...prev,
-      trackingMethod: method
+      trackingMethod: method,
     }));
     // Clear the other tracking method's data
     if (method === "task") {
@@ -359,12 +335,6 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
       if (!filledUpData.ambitionName) {
         toast.error("Missing Title", {
           description: "Please provide a title for your ambition",
-        });
-        return;
-      }
-      if (!filledUpData.ambitionCategory) {
-        toast.error("Missing Category", {
-          description: "Please select a category for your ambition",
         });
         return;
       }
@@ -406,7 +376,6 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
       // Add all form fields to FormData
       formData.append("title", filledUpData.ambitionName);
       formData.append("description", filledUpData.ambitionDefinition || "");
-      formData.append("category", filledUpData.ambitionCategory);
       formData.append("priorityLevel", filledUpData.ambitionPriority);
       formData.append("deadline", format(date, "yyyy-MM-dd"));
       formData.append("color", selectedColor);
@@ -456,7 +425,10 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
         router.push("/ambitions");
       } else {
         toast.error("Error", {
-          description: error instanceof Error ? error.message : "An unexpected error occurred while creating your ambition",
+          description:
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred while creating your ambition",
         });
       }
     } finally {
@@ -488,7 +460,6 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     setFilledUpData({
       ambitionName: "",
       ambitionDefinition: "",
-      ambitionCategory: "",
       ambitionPriority: "medium" as const,
       ambitionDeadline: "",
       ambitionColor: "",
@@ -506,9 +477,9 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   };
 
   const handleInputChange = (field: keyof AmbitionData, value: string | boolean) => {
-    setFilledUpData(prev => ({
+    setFilledUpData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -533,16 +504,15 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                 <div className="space-y-2">
                   <h4 className="font-medium">Auto-save Enabled</h4>
                   <p className="text-sm text-muted-foreground">
-                    Your progress is automatically saved as you type. You can safely leave this page and return later to continue where you left off.
+                    Your progress is automatically saved as you type. You can safely leave this page
+                    and return later to continue where you left off.
                   </p>
                 </div>
               </PopoverContent>
             </Popover>
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-muted-foreground">
-              Define your goal and set up tracking parameters
-            </p>
+            <p className="text-muted-foreground">Define your goal and set up tracking parameters</p>
             {showSaveIndicator && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -583,16 +553,12 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
           </div>
         </div>
         <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={clearFormData}
-          >
+          <Button type="button" variant="outline" size="sm" onClick={clearFormData}>
             Clear Form
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link prefetch={true}
+            <Link
+              prefetch={true}
               href="/ambitions"
               className="gap-1 flex justify-center items-center"
             >
@@ -609,13 +575,13 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Tabs defaultValue="basics" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="basics">Basic Details</TabsTrigger>
-            <TabsTrigger value="tracking">Progress Tracking</TabsTrigger>
-            <TabsTrigger value="tasks">Tasks & Milestones</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="basics">1. Basic Details</TabsTrigger>
+            <TabsTrigger value="tasks">2. Tasks & Milestones</TabsTrigger>
           </TabsList>
 
           <TabsContent value="basics" className="space-y-6 mt-6">
+            {/* BASIC DETAILS OF AMBITION */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -624,95 +590,69 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
               <Card>
                 <CardHeader>
                   <CardTitle>Ambition Details</CardTitle>
-                  <CardDescription>
-                    Define what you want to accomplish
-                  </CardDescription>
+                  <CardDescription>Define what you want to accomplish</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="title">Title</Label>
-                    <Input
-                      id="title"
-                      placeholder="E.g. Learn Spanish, Run a Marathon..."
-                      value={filledUpData.ambitionName || ""}
-                      onChange={(e) => handleInputChange("ambitionName", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Definition</Label>
-                    <Textarea
-                      id="description"
-                      placeholder="Define your ambition in detail..."
-                      className="min-h-[120px]"
-                      value={filledUpData.ambitionDefinition || ""}
-                      onChange={(e) => handleInputChange("ambitionDefinition", e.target.value)}
-                    />
-                  </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="category">Category</Label>
-                      <Select
-                        value={filledUpData.ambitionCategory || ""}
-                        onValueChange={(value) => handleInputChange("ambitionCategory", value)}
-                      >
-                        <SelectTrigger id="category">
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="learning">Learning</SelectItem>
-                          <SelectItem value="fitness">Fitness</SelectItem>
-                          <SelectItem value="career">Career</SelectItem>
-                          <SelectItem value="finance">Finance</SelectItem>
-                          <SelectItem value="personal">Personal</SelectItem>
-                          <SelectItem value="health">Health</SelectItem>
-                          <SelectItem value="creative">Creative</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="title">Title</Label>
+                      <Input
+                        id="title"
+                        placeholder="E.g. Learn Spanish, Run a Marathon..."
+                        value={filledUpData.ambitionName || ""}
+                        onChange={(e) => handleInputChange("ambitionName", e.target.value)}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label>Priority Level</Label>
+                        <RadioGroup
+                          defaultValue="medium"
+                          className="flex gap-4"
+                          value={filledUpData.ambitionPriority || "medium"}
+                          onValueChange={(value) =>
+                            handleInputChange(
+                              "ambitionPriority",
+                              value as "low" | "medium" | "high"
+                            )
+                          }
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="high" id="high" />
+                            <Label htmlFor="high" className="text-red-500 font-medium">
+                              High
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="medium" id="medium" />
+                            <Label htmlFor="medium" className="text-amber-500 font-medium">
+                              Medium
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="low" id="low" />
+                            <Label htmlFor="low" className="text-blue-500 font-medium">
+                              Low
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Priority Level</Label>
-                      <RadioGroup
-                        defaultValue="medium"
-                        className="flex gap-4"
-                        value={filledUpData.ambitionPriority || "medium"}
-                        onValueChange={(value) => handleInputChange("ambitionPriority", value as "low" | "medium" | "high")}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="high" id="high" />
-                          <Label
-                            htmlFor="high"
-                            className="text-red-500 font-medium"
-                          >
-                            High
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="medium" id="medium" />
-                          <Label
-                            htmlFor="medium"
-                            className="text-amber-500 font-medium"
-                          >
-                            Medium
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="low" id="low" />
-                          <Label
-                            htmlFor="low"
-                            className="text-blue-500 font-medium"
-                          >
-                            Low
-                          </Label>
-                        </div>
-                      </RadioGroup>
+                      <Label htmlFor="description">
+                        Definition{" "}
+                        <span className="text-xs/tight text-muted-foreground">(optional)</span>
+                      </Label>
+                      <Textarea
+                        id="description"
+                        placeholder="Define your ambition in detail..."
+                        value={filledUpData.ambitionDefinition || ""}
+                        onChange={(e) => handleInputChange("ambitionDefinition", e.target.value)}
+                      />
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label>Deadline</Label>
                       <Popover>
@@ -722,11 +662,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                             className="w-full justify-start text-left font-normal"
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? (
-                              format(date, "PPP")
-                            ) : (
-                              <span>Select a deadline</span>
-                            )}
+                            {date ? format(date, "PPP") : <span>Select a deadline</span>}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
@@ -740,85 +676,53 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                         </PopoverContent>
                       </Popover>
                     </div>
+                  </div>
 
-                    <div className="space-y-2">
-                      <Label>Color</Label>
-                      <div className="grid grid-cols-4 gap-2">
-                        {colorOptions.map((color, index) => (
-                          <motion.div
-                            key={color.value}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{
-                              duration: 0.2,
-                              delay: 0.1 + index * 0.05,
-                            }}
-                            className={cn(
-                              "w-full h-10 rounded-md cursor-pointer flex items-center justify-center",
-                              color.class,
-                              selectedColor === color.value
-                                ? "ring-2 ring-offset-2"
-                                : ""
-                            )}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setSelectedColor(color.value)}
-                          >
-                            {selectedColor === color.value && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ duration: 0.2 }}
-                              >
-                                <CheckIcon className="h-4 w-4 text-white" />
-                              </motion.div>
-                            )}
-                          </motion.div>
-                        ))}
-                      </div>
+                  <div className="space-y-2">
+                    <Label>Color</Label>
+                    <div className="flex items-center justify-between space-x-2">
+                      {colorOptions.map((color, index) => (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <motion.div
+                              key={color.value}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{
+                                duration: 0.2,
+                                delay: 0.1 + index * 0.05,
+                              }}
+                              className={cn(
+                                "w-3/5 h-4 rounded-full cursor-pointer flex items-center justify-center transition-all hover:scale-105 active:scale-95 hover:w-full",
+                                color.class,
+                                selectedColor === color.value ? "ring-2 ring-offset-2" : "",
+                                selectedColor === color.value ? "w-full" : "w-3/5"
+                              )}
+                              onClick={() => setSelectedColor(color.value)}
+                            >
+                              {selectedColor === color.value && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <CheckIcon className="h-4 w-4 text-foreground" />
+                                </motion.div>
+                              )}
+                            </motion.div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{color.name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Additional Settings</CardTitle>
-                  <CardDescription>
-                    Configure additional options for your ambition
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between space-x-2">
-                    <div>
-                      <p className="font-medium">Send regular reminders</p>
-                      <p className="text-sm text-muted-foreground">
-                        Get notifications to keep you on track
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between space-x-2">
-                    <div>
-                      <p className="font-medium">Add to focus dashboard</p>
-                      <p className="text-sm text-muted-foreground">
-                        Display this ambition on your dashboard
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </TabsContent>
-
-          <TabsContent value="tracking" className="space-y-6 mt-6">
+            {/* PROGRESS TRACKING SETTING */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -826,7 +730,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Progress Settings</CardTitle>
+                  <CardTitle>Progress Tracking</CardTitle>
                   <CardDescription>
                     Define how you&apos;ll track progress for this ambition
                   </CardDescription>
@@ -836,49 +740,46 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                     <Label>Tracking Method</Label>
                     <RadioGroup
                       defaultValue="task"
-                      className="space-y-3"
+                      className="flex justify-between mt-5"
                       value={trackingMethod}
-                      onValueChange={handleTrackingMethodChange}
                     >
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3, delay: 0.3 }}
-                        className="flex items-start space-x-3"
+                        className={cn("flex items-start space-x-3 w-full")}
                       >
-                        <RadioGroupItem
-                          value="task"
-                          id="task"
-                          className="mt-1"
-                        />
-                        <div className="flex-1 cursor-pointer" onClick={() => handleTrackingMethodChange("task")}>
+                        <RadioGroupItem value="task" id="task" />
+                        <button
+                          className="cursor-pointer"
+                          onClick={() => handleTrackingMethodChange("task")}
+                        >
                           <Label htmlFor="task" className="font-medium cursor-pointer">
                             Task Based
                           </Label>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-start text-sm text-muted-foreground">
                             Track progress by completing tasks
                           </p>
-                        </div>
+                        </button>
                       </motion.div>
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3, delay: 0.2 }}
-                        className="flex items-start space-x-3"
+                        className={cn("flex items-start space-x-3 w-full")}
                       >
-                        <RadioGroupItem
-                          value="milestone"
-                          id="milestone"
-                          className="mt-1"
-                        />
-                        <div className="flex-1 cursor-pointer" onClick={() => handleTrackingMethodChange("milestone")}>
+                        <RadioGroupItem value="milestone" id="milestone" />
+                        <button
+                          className="cursor-pointer"
+                          onClick={() => handleTrackingMethodChange("milestone")}
+                        >
                           <Label htmlFor="milestone" className="font-medium cursor-pointer">
                             Milestone Based
                           </Label>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-start text-sm text-muted-foreground">
                             Track progress through specific milestones
                           </p>
-                        </div>
+                        </button>
                       </motion.div>
                     </RadioGroup>
                   </div>
@@ -886,48 +787,13 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
               </Card>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Measurement & Analytics</CardTitle>
-                  <CardDescription>
-                    How do you want to measure success?
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="success-metric">Success Metric</Label>
-                    <Input
-                      id="success-metric"
-                      placeholder="E.g. 5 kilometers, Conversational proficiency, etc."
-                      value={filledUpData.ambitionSuccessMetric || ""}
-                      onChange={(e) => handleInputChange("ambitionSuccessMetric", e.target.value)}
-                    />
-                  </div>
 
-                  <div className="flex items-center justify-between space-x-2">
-                    <div>
-                      <p className="font-medium">
-                        Use AI insights <ProBadge />
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Get AI-powered suggestions to improve your progress
-                      </p>
-                    </div>
-                    <Switch disabled />
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-6 mt-6">
             {trackingMethod === "task" ? (
               <>
+                {/* TASKS SECTION */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -936,37 +802,43 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                   <Card>
                     <CardHeader>
                       <CardTitle>Tasks</CardTitle>
-                      <CardDescription>
-                        Create a few tasks to get started
-                      </CardDescription>
+                      <CardDescription>Create a few tasks to get started</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="space-y-4">
+                        <div className="space-y-4 flex flex-col">
                           <div className="space-y-2">
                             <Label htmlFor="task-name">Task Name</Label>
                             <Input
                               id="task-name"
                               placeholder="Enter task name..."
                               value={newTask.task}
-                              onChange={(e) => setNewTask(prev => ({
-                                ...prev,
-                                task: e.target.value
-                              }))}
+                              onChange={(e) =>
+                                setNewTask((prev) => ({
+                                  ...prev,
+                                  task: e.target.value,
+                                }))
+                              }
                               onKeyDown={handleTaskKeyDown}
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="task-description">Task Description (Optional)</Label>
+                            <Label htmlFor="task-description">
+                              Task Description{" "}
+                              <span className="text-xs/tight text-muted-foreground">
+                                (optional)
+                              </span>
+                            </Label>
                             <Textarea
                               id="task-description"
                               placeholder="Describe what needs to be done..."
-                              className="min-h-[100px]"
                               value={newTask.taskDescription}
-                              onChange={(e) => setNewTask(prev => ({
-                                ...prev,
-                                taskDescription: e.target.value
-                              }))}
+                              onChange={(e) =>
+                                setNewTask((prev) => ({
+                                  ...prev,
+                                  taskDescription: e.target.value,
+                                }))
+                              }
                               onKeyDown={handleTaskKeyDown}
                             />
                           </div>
@@ -990,22 +862,21 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                 <Calendar
                                   mode="single"
                                   selected={new Date(newTask.taskDeadline)}
-                                  onSelect={(date) => date && setNewTask(prev => ({
-                                    ...prev,
-                                    taskDeadline: format(date, "yyyy-MM-dd")
-                                  }))}
+                                  onSelect={(date) =>
+                                    date &&
+                                    setNewTask((prev) => ({
+                                      ...prev,
+                                      taskDeadline: format(date, "yyyy-MM-dd"),
+                                    }))
+                                  }
                                   disabled={(date) => isBefore(date, startOfToday())}
                                   initialFocus
                                 />
                               </PopoverContent>
                             </Popover>
                           </div>
-                          <Button
-                            onClick={addTask}
-                            type="button"
-                            className="w-full"
-                          >
-                            <PlusCircledIcon className="h-4 w-4 mr-1" /> Add Task
+                          <Button onClick={addTask} type="button" className="self-end">
+                            <PlusIcon className="h-4 w-4 mr-1" /> Add Task
                           </Button>
                         </div>
 
@@ -1024,9 +895,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                               <ListBulletIcon className="h-16 w-16 mx-auto mb-2 opacity-20" />
                               <div>
                                 <p>No tasks added yet</p>
-                                <p className="text-sm">
-                                  Add some tasks to get started
-                                </p>
+                                <p className="text-sm">Add some tasks to get started</p>
                               </div>
                             </motion.div>
                           </motion.div>
@@ -1056,10 +925,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                     </div>
                                   </div>
                                 </div>
-                                <motion.div
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.9 }}
-                                >
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                                   <Button
                                     variant="ghost"
                                     size="sm"
@@ -1086,17 +952,16 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                     <CardHeader>
                       <CardTitle>Milestones</CardTitle>
                       <CardDescription>
-                        Switch to Milestone Based tracking to add milestones
+                        Switch to Milestone Based tracking from the first tab of this page to add
+                        milestones
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      {/* Milestone content */}
-                    </CardContent>
                   </Card>
                 </motion.div>
               </>
             ) : (
               <>
+                {/* MILESTONES SECTION */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1105,59 +970,61 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                   <Card>
                     <CardHeader>
                       <CardTitle>Milestones</CardTitle>
-                      <CardDescription>
-                        Define key checkpoints for your ambition
-                      </CardDescription>
+                      <CardDescription>Define key checkpoints for your ambition</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="space-y-4">
+                        <div className="space-y-4 flex flex-col">
                           <div className="space-y-2">
                             <Label htmlFor="milestone-name">Milestone Name</Label>
                             <Input
                               id="milestone-name"
                               placeholder="Enter milestone name..."
                               value={newMilestone.milestone}
-                              onChange={(e) => setNewMilestone(prev => ({
-                                ...prev,
-                                milestone: e.target.value
-                              }))}
+                              onChange={(e) =>
+                                setNewMilestone((prev) => ({
+                                  ...prev,
+                                  milestone: e.target.value,
+                                }))
+                              }
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="milestone-description">Description</Label>
+                            <Label htmlFor="milestone-description">
+                              Milestone Description{" "}
+                              <span className="text-xs/tight text-muted-foreground">
+                                (optional)
+                              </span>
+                            </Label>
                             <Textarea
                               id="milestone-description"
                               placeholder="Describe what this milestone represents..."
-                              className="min-h-[100px]"
                               value={newMilestone.milestoneDescription}
-                              onChange={(e) => setNewMilestone(prev => ({
-                                ...prev,
-                                milestoneDescription: e.target.value
-                              }))}
+                              onChange={(e) =>
+                                setNewMilestone((prev) => ({
+                                  ...prev,
+                                  milestoneDescription: e.target.value,
+                                }))
+                              }
                             />
                           </div>
-                          <div className="flex items-center justify-between space-x-2">
-                            <div>
-                              <p className="font-medium">Mark as completed</p>
-                              <p className="text-sm text-muted-foreground">
-                                Set this milestone as completed
-                              </p>
-                            </div>
+                          <div className="flex items-center justify-start space-x-2">
                             <Checkbox
+                              id="add-milestone-completed"
                               checked={newMilestone.milestoneCompleted}
-                              onCheckedChange={(checked) => setNewMilestone(prev => ({
-                                ...prev,
-                                milestoneCompleted: checked as boolean
-                              }))}
+                              onCheckedChange={(checked) =>
+                                setNewMilestone((prev) => ({
+                                  ...prev,
+                                  milestoneCompleted: checked as boolean,
+                                }))
+                              }
                             />
+                            <Label htmlFor="add-milestone-completed" className="font-medium">
+                              Mark as completed
+                            </Label>
                           </div>
-                          <Button
-                            onClick={addMilestone}
-                            type="button"
-                            className="w-full"
-                          >
-                            <PlusCircledIcon className="h-4 w-4 mr-1" /> Add Milestone
+                          <Button onClick={addMilestone} type="button" className="self-end">
+                            <PlusIcon className="h-4 w-4 mr-1" /> Add Milestone
                           </Button>
                         </div>
 
@@ -1172,9 +1039,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                 <Milestone className="h-12 w-12 mx-auto mb-2 opacity-20" />
                                 <div>
                                   <p>No milestones added yet</p>
-                                  <p className="text-sm">
-                                    Add some milestones to get started
-                                  </p>
+                                  <p className="text-sm">Add some milestones to get started</p>
                                 </div>
                               </div>
                             ) : (
@@ -1182,10 +1047,16 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                 {milestones.map((milestone, index) => (
                                   <div
                                     key={index}
-                                    className="relative pl-10"
+                                    className="relative pl-10 hover:bg-muted p-4 rounded-md"
                                   >
-                                    <div className={`absolute left-0 h-5 w-5 rounded-full ${milestone.milestoneCompleted ? "bg-primary" : "bg-muted-foreground/25"} flex items-center justify-center`}>
-                                      {milestone.milestoneCompleted && <CheckIcon className="h-3 w-3 text-primary-foreground" />}
+                                    <div
+                                      className={`absolute left-px h-5 w-5 rounded-full bg-background flex items-center justify-center`}
+                                    >
+                                      {milestone.milestoneCompleted ? (
+                                        <CircleCheckBig className="text-lime-500 rounded-full" />
+                                      ) : (
+                                        <CircleIcon className="text-muted-foreground" />
+                                      )}
                                     </div>
                                     <div className="flex flex-col">
                                       <div className="flex items-start justify-between">
@@ -1193,12 +1064,12 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                           {milestone.milestone}
                                         </h4>
                                         <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                          variant="destructive"
+                                          size="sm"
+                                          className="rounded-full h-6 w-6 p-0"
                                           onClick={() => removeMilestone(index)}
                                         >
-                                          <Cross1Icon className="h-4 w-4" />
+                                          <Cross2Icon />
                                           <span className="sr-only">Remove milestone</span>
                                         </Button>
                                       </div>
@@ -1216,7 +1087,9 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                             htmlFor={`milestone-${index}`}
                                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                           >
-                                            {milestone.milestoneCompleted ? "Completed" : "Not completed"}
+                                            {milestone.milestoneCompleted
+                                              ? "Completed"
+                                              : "Not completed"}
                                           </Label>
                                         </div>
                                       </div>
@@ -1241,104 +1114,13 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                     <CardHeader>
                       <CardTitle>Initial Tasks</CardTitle>
                       <CardDescription>
-                        Switch to Task Based tracking to add tasks
+                        Switch to Task Based tracking from the first tab of this page to add tasks
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      {/* Task content */}
-                    </CardContent>
                   </Card>
                 </motion.div>
               </>
             )}
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    Tags & Labels
-                    {!isProFeature && <ProBadge />}
-                  </CardTitle>
-                  <CardDescription>
-                    {isProFeature
-                      ? "Organize your ambition with tags"
-                      : "Upgrade to a paid plan to use tags and labels"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder={isProFeature ? "Add a tag..." : "Upgrade to add tags"}
-                        value={newTag}
-                        onChange={(e) => setNewTag(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && addTag()}
-                        disabled={!isProFeature}
-                      />
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={addTag}
-                          disabled={!isProFeature}
-                        >
-                          <TagIcon className="h-4 w-4 mr-1" /> Add
-                        </Button>
-                      </motion.div>
-                    </div>
-
-                    {!isProFeature ? (
-                      <div className="text-center py-4">
-                        <p className="text-sm text-muted-foreground mb-2">
-                          Tags and labels are available in our paid plans
-                        </p>
-                        <Button
-                          variant="outline"
-                          asChild
-                        >
-                          <Link prefetch={true} href="/pricing">View Pricing Plans</Link>
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="flex gap-2 flex-wrap">
-                        {tags.length === 0 ? (
-                          <p className="text-sm text-muted-foreground">
-                            No tags added yet. Add some tags to organize your ambition.
-                          </p>
-                        ) : (
-                          tags.map((tag, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.3, delay: 0.1 * index }}
-                            >
-                              <Badge
-                                variant="secondary"
-                                className="flex items-center gap-1 py-1 px-3"
-                              >
-                                {tag}
-                                <Cross1Icon
-                                  className="h-3 w-3 ml-1 cursor-pointer hover:text-destructive"
-                                  onClick={() => removeTag(index)}
-                                />
-                              </Badge>
-                            </motion.div>
-                          ))
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
           </TabsContent>
         </Tabs>
       </motion.div>
@@ -1357,4 +1139,4 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
       </motion.div>
     </form>
   );
-} 
+}

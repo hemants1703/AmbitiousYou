@@ -23,7 +23,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
-import { AmbitionData, Milestone, Task } from "@/types";
+import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/types";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
 
 // Define types for our data
@@ -34,7 +34,6 @@ type SortableFields =
   | "ambitionDeadline"
   | "id"
   | "ambitionDefinition"
-  | "ambitionCategory"
   | "ambitionStartDate"
   | "ambitionStatus"
   | "ambitionColor"
@@ -49,7 +48,6 @@ interface SortConfig {
 }
 
 interface Filters {
-  category: string | null;
   priority: string | null;
 }
 
@@ -79,7 +77,6 @@ export default function AmbitionsClient({
   // Filter states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({
-    category: null,
     priority: null,
   });
 
@@ -108,12 +105,7 @@ export default function AmbitionsClient({
     }
 
     // If no filters are applied, show all ambitions (that match search)
-    if (!filters.category && !filters.priority) return true;
-
-    // Apply category filter
-    if (filters.category && ambition.ambitionCategory !== filters.category) {
-      return false;
-    }
+    if (!filters.priority) return true;
 
     // Apply priority filter
     if (filters.priority && ambition.ambitionPriority !== filters.priority) {
@@ -186,7 +178,6 @@ export default function AmbitionsClient({
       "tasks.completed": "Tasks Completed",
       id: "ID",
       ambitionDefinition: "Definition",
-      ambitionCategory: "Category",
       ambitionStartDate: "Start Date",
       ambitionStatus: "Status",
       ambitionColor: "Color",
@@ -207,7 +198,7 @@ export default function AmbitionsClient({
 
   // Clear all filters
   const clearFilters = () => {
-    setFilters({ category: null, priority: null });
+    setFilters({ priority: null });
     setIsFilterOpen(false);
   };
 
@@ -291,7 +282,7 @@ export default function AmbitionsClient({
               <Button variant="outline" size="sm" className="gap-1">
                 <Filter className="h-4 w-4" />
                 Filter
-                {(filters.category || filters.priority) && (
+                {(filters.priority) && (
                   <Badge variant="secondary" className="ml-1 h-5 px-1">
                     {Object.values(filters).filter(Boolean).length}
                   </Badge>
@@ -300,24 +291,6 @@ export default function AmbitionsClient({
             </DropdownMenu.DropdownMenuTrigger>
             <DropdownMenu.DropdownMenuContent className="w-56">
               <DropdownMenu.DropdownMenuLabel>Filter Ambitions</DropdownMenu.DropdownMenuLabel>
-              <DropdownMenu.DropdownMenuSeparator />
-
-              <DropdownMenu.DropdownMenuGroup>
-                <DropdownMenu.DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-                  By Category
-                </DropdownMenu.DropdownMenuLabel>
-                {categories.map((category) => (
-                  <DropdownMenu.DropdownMenuItem
-                    key={category}
-                    onClick={() => applyFilter("category", category)}
-                    className="flex justify-between"
-                  >
-                    {category}
-                    {filters.category === category && <Check className="h-4 w-4" />}
-                  </DropdownMenu.DropdownMenuItem>
-                ))}
-              </DropdownMenu.DropdownMenuGroup>
-
               <DropdownMenu.DropdownMenuSeparator />
 
               <DropdownMenu.DropdownMenuGroup>
@@ -336,16 +309,19 @@ export default function AmbitionsClient({
                 ))}
               </DropdownMenu.DropdownMenuGroup>
 
-              <DropdownMenu.DropdownMenuSeparator />
 
-              {(filters.category || filters.priority) && (
-                <DropdownMenu.DropdownMenuItem
-                  onClick={clearFilters}
-                  className="text-red-500 flex gap-2"
-                >
-                  <X className="h-4 w-4" />
-                  Clear filters
-                </DropdownMenu.DropdownMenuItem>
+
+              {(filters.priority) && (
+                <>
+                  <DropdownMenu.DropdownMenuSeparator />
+                  <DropdownMenu.DropdownMenuItem
+                    onClick={clearFilters}
+                    className="text-red-500 flex gap-2"
+                  >
+                    <X className="h-4 w-4" />
+                    Clear filters
+                  </DropdownMenu.DropdownMenuItem>
+                </>
               )}
             </DropdownMenu.DropdownMenuContent>
           </DropdownMenu.DropdownMenu>
@@ -479,9 +455,6 @@ export default function AmbitionsClient({
                           >
                             <Card.CardHeader className="pb-2">
                               <div className="flex items-center justify-between">
-                                <AmbitionCategoryBadge
-                                  ambitionCategory={ambition.ambitionCategory}
-                                />
                                 <AmbitionColorBadge
                                   ambitionColor={ambition.ambitionColor}
                                   index={index}
@@ -606,9 +579,6 @@ export default function AmbitionsClient({
                             >
                               <Card.CardHeader className="pb-2">
                                 <div className="flex items-center justify-between">
-                                  <AmbitionCategoryBadge
-                                    ambitionCategory={ambition.ambitionCategory}
-                                  />
                                   <AmbitionColorBadge
                                     ambitionColor={ambition.ambitionColor}
                                     index={index}
@@ -744,15 +714,14 @@ export function AmbitionStatusBadge({ ambitionStatus }: { ambitionStatus: string
     <div className="flex justify-between items-center rounded-full overflow-hidden text-xs text-black font-mono uppercase font-bold">
       <span className="bg-gray-200 px-2">STATUS</span>
       <span
-        className={`px-2 ${
-          ambitionStatus === "active"
-            ? "bg-green-400"
-            : ambitionStatus === "completed"
-              ? "bg-blue-500"
-              : ambitionStatus === "archived"
-                ? "bg-amber-500"
-                : "bg-gray-500"
-        }`}
+        className={`px-2 ${ambitionStatus === "active"
+          ? "bg-green-400"
+          : ambitionStatus === "completed"
+            ? "bg-blue-500"
+            : ambitionStatus === "archived"
+              ? "bg-amber-500"
+              : "bg-gray-500"
+          }`}
       >
         {ambitionStatus.toUpperCase()}
       </span>

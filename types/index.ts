@@ -30,7 +30,7 @@ export interface AmbitionData {
     ambitionDeadline: string;
     ambitionStatus: "active" | "completed" | "archived";
     ambitionPriority: "low" | "medium" | "high";
-    ambitionCategory: string;
+    ambitionCategory?: string;
     ambitionPercentageCompleted: number;
     ambitionColor: string;
     createdAt: Date;
