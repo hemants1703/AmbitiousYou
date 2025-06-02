@@ -25,6 +25,7 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
+<<<<<<< Updated upstream
 export default async function Home() {
   // If user is logged in, redirect to dashboard
   const supabase = await createClient();
@@ -32,6 +33,62 @@ export default async function Home() {
   // if (!userLoggedIn.error) {
   //   redirect("/dashboard");
   // }
+=======
+export default function Home() {
+  const ambitiousYouFeatures = [
+    {
+      icon: <Component1Icon className="h-6 w-6 text-primary" />,
+      title: "Goal Hierarchy",
+      description: "Organize your ambitions from big dreams to daily tasks in a structured, manageable system."
+    },
+    {
+      icon: <MixerHorizontalIcon className="h-6 w-6 text-primary" />,
+      title: "Priority Management",
+      description: "Focus on what matters most with our intuitive priority system that adapts to your changing needs."
+    },
+    {
+      icon: <TimerIcon className="h-6 w-6 text-primary" />,
+      title: "Progress Tracking",
+      description: "Visualize your journey with beautiful charts and analytics that keep you motivated."
+    },
+    {
+      icon: <LockClosedIcon className="h-6 w-6 text-primary" />,
+      title: "Private & Secure",
+      description: "Your ambitions are personal. We use enterprise-grade encryption to keep your data safe."
+    },
+    {
+      icon: <StarIcon className="h-6 w-6 text-primary" />,
+      title: "Smart Notifications",
+      description: "Get personalized reminders at the right time to keep you on track with your goals."
+    },
+    {
+      icon: <RocketIcon className="h-6 w-6 text-primary" />,
+      title: "AI Assistance",
+      description: "Receive intelligent suggestions to overcome obstacles and optimize your approach."
+    }
+  ];
+
+  const ambitiousYouTestimonials = [
+    {
+      quote: "AmbitiousYou has been a game-changer for me. I've been able to achieve more in the past month than I did in the entire last year.",
+      name: "John Doe",
+      title: "Entrepreneur",
+      rating: 5
+    },
+    {
+      quote: "I've always been a dreamer, but AmbitiousYou has helped me turn my dreams into reality. The goal hierarchy system is brilliant!",
+      name: "Jane Smith",
+      title: "Product Designer",
+      rating: 5
+    },
+    {
+      quote: "I've tried many goal-setting apps, but none of them come close to AmbitiousYou. It's simple, yet powerful.",
+      name: "Alex Johnson",
+      title: "Marketing Director",
+      rating: 5
+    }
+  ]
+>>>>>>> Stashed changes
 
   return (
     <div className="flex flex-col w-full">
@@ -216,6 +273,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature cards with hover animations and consistent styling */}
+<<<<<<< Updated upstream
             {[
               {
                 icon: <Component1Icon className="h-6 w-6 text-primary" />,
@@ -266,9 +324,21 @@ export default async function Home() {
                 </h3>
                 <p className="text-muted-foreground">{feature.description}</p>
                 <div className="mt-6 flex items-center text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+=======
+            {ambitiousYouFeatures.map((feature, i) => (
+              <div key={i} className="group bg-card/80 backdrop-blur-sm rounded-xl p-7 shadow-md border border-border hover:border-primary/50 transition-all hover:shadow-xl">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
+                <p className="text-muted-foreground">
+                  {feature.description}
+                </p>
+                {/* <div className="mt-6 flex items-center text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+>>>>>>> Stashed changes
                   <span>Learn more</span>
                   <ChevronRightIcon className="h-4 w-4 ml-1" />
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
@@ -296,6 +366,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Testimonials with profile photos and ratings */}
+<<<<<<< Updated upstream
             {[
               {
                 quote:
@@ -323,6 +394,10 @@ export default async function Home() {
                 key={i}
                 className="bg-background/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-border relative"
               >
+=======
+            {ambitiousYouTestimonials.map((testimonial, i) => (
+              <div key={i} className="bg-background/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-border relative">
+>>>>>>> Stashed changes
                 {/* Quote mark */}
                 <div className="absolute -top-4 -left-4 bg-primary/10 rounded-full w-8 h-8 flex items-center justify-center">
                   <span className="text-primary text-xl font-serif">"</span>
@@ -412,8 +487,8 @@ export default async function Home() {
             </div>
 
             {/* Pro tier (highlighted) */}
-            <div className="bg-card/90 backdrop-blur-sm rounded-xl p-8 border-2 border-primary shadow-lg relative flex flex-col">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground text-sm py-1 px-4 rounded-full font-medium">
+            <div className="bg-card/90 backdrop-blur-sm rounded-xl p-8 border-2 border-amber-400 shadow-lg relative flex flex-col">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black text-sm py-1 px-4 rounded-full font-medium">
                 Most Popular
               </div>
               <h3 className="text-xl font-bold mb-2">Achiever</h3>

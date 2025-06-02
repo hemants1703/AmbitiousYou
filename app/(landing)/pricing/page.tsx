@@ -19,117 +19,118 @@ import {
 const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept props
   // Define pricing data
   const pricing = {
-    achiever: {
-      monthly: {
-        price: "$9.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed monthly"
+    const pricing = {
+      achiever: {
+        monthly: {
+          price: "$9.99",
+          billingPeriod: "/month",
+          billingInfo: "Billed monthly"
+        },
+        annual: {
+          price: "$7.99",
+          billingPeriod: "/month",
+          billingInfo: "Billed annually at $95.90/year (20% off)"
+        }
       },
-      annual: {
-        price: "$7.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed annually at $95.90/year (20% off)"
+      superhuman: {
+        monthly: {
+          price: "$29.99",
+          billingPeriod: "/month",
+          billingInfo: "Billed monthly"
+        },
+        annual: {
+          price: "$23.99",
+          billingPeriod: "/month",
+          billingInfo: "Billed annually at $287.90/year (20% off)"
+        }
       }
-    },
-    superhuman: {
-      monthly: {
-        price: "$29.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed monthly"
-      },
-      annual: {
-        price: "$23.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed annually at $287.90/year (20% off)"
-      }
-    }
-  };
+    };
 
-  return (
+    return(
     <>
-      {/* Pricing Toggle Section */}
-      <section className="py-8 flex justify-center">
-        <Tabs
-          defaultValue="monthly"
-          value={billingCycle}
-          onValueChange={setBillingCycle}
-          className="w-auto"
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="monthly">
-              Monthly
-            </TabsTrigger>
-            <TabsTrigger value="annual">
-              Annually <span className="text-green-500 text-xs ml-1">Save 20%</span>
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="monthly"></TabsContent>
-          <TabsContent value="annual"></TabsContent>
-        </Tabs>
-      </section>
+    {/* Pricing Toggle Section */ }
+    < section className = "py-8 flex justify-center" >
+      <Tabs
+        defaultValue="monthly"
+        value={billingCycle}
+        onValueChange={setBillingCycle}
+        className="w-auto"
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="monthly">
+            Monthly
+          </TabsTrigger>
+          <TabsTrigger value="annual">
+            Annually <span className="text-green-500 text-xs ml-1">Save 20%</span>
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="monthly"></TabsContent>
+        <TabsContent value="annual"></TabsContent>
+      </Tabs>
+      </section >
 
-      {/* Plans Section */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Free tier */}
-            <div className="bg-background border border-slate-200 dark:border-slate-800 shadow-md rounded-xl p-8 h-full flex flex-col">
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-2">Explorer</h3>
-                <p className="text-muted-foreground">For individuals getting started</p>
-              </div>
+  {/* Plans Section */ }
+  < section className = "py-16" >
+    <div className="max-w-6xl mx-auto px-4 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Free tier */}
+        <div className="bg-background border border-slate-200 dark:border-slate-800 shadow-md rounded-xl p-8 h-full flex flex-col">
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold mb-2">Explorer</h3>
+            <p className="text-muted-foreground">For individuals getting started</p>
+          </div>
 
-              <div className="mb-8">
-                <span className="text-5xl font-bold">$0</span>
-                <span className="text-muted-foreground">/month</span>
-                <p className="text-sm text-muted-foreground mt-2">Free forever</p>
-              </div>
+          <div className="mb-8">
+            <span className="text-5xl font-bold">$0</span>
+            <span className="text-muted-foreground">/month</span>
+            <p className="text-sm text-muted-foreground mt-2">Free forever</p>
+          </div>
 
-              {/* Rest of Explorer tier content... */}
-            </div>
+          {/* Rest of Explorer tier content... */}
+        </div>
 
-            {/* Pro tier */}
-            <div className="bg-background border-2 border-amber-400 shadow-lg rounded-xl p-8 relative flex flex-col -translate-y-4">
-              <div className="absolute -top-4 inset-x-0 flex justify-center">
-                <div className="bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black text-sm py-1 px-4 rounded-full font-medium">
-                  Most Popular
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-2">Superhuman</h3>
-                <p className="text-muted-foreground">For serious goal-setters</p>
-              </div>
-
-              <div className="mb-8">
-                <span className="text-5xl font-bold">{pricing.achiever[billingCycle].price}</span>
-                <span className="text-muted-foreground">{pricing.achiever[billingCycle].billingPeriod}</span>
-                <p className="text-sm text-muted-foreground mt-2">{pricing.achiever[billingCycle].billingInfo}</p>
-              </div>
-
-              {/* Rest of Achiever tier content... */}
-            </div>
-
-            {/* Enterprise tier */}
-            <div className="bg-background border border-slate-200 dark:border-slate-800 shadow-md rounded-xl p-8 h-full flex flex-col">
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-2">Conquerer</h3>
-                <p className="text-muted-foreground">For teams and businesses</p>
-              </div>
-
-              <div className="mb-8">
-                <span className="text-5xl font-bold">Coming Soon...</span>
-                {/* <span className="text-muted-foreground">{pricing.superhuman[billingCycle].billingPeriod}</span>
-                <p className="text-sm text-muted-foreground mt-2">{pricing.superhuman[billingCycle].billingInfo}</p> */}
-              </div>
-
-              {/* Rest of Superhuman tier content... */}
+        {/* Pro tier */}
+        <div className="bg-background border-2 border-amber-400 shadow-lg rounded-xl p-8 relative flex flex-col -translate-y-4">
+          <div className="absolute -top-4 inset-x-0 flex justify-center">
+            <div className="bg-gradient-to-br from-amber-400 via-amber-100 to-amber-500 text-black text-sm py-1 px-4 rounded-full font-medium">
+              Most Popular
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Rest of the sections... */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold mb-2">Superhuman</h3>
+            <p className="text-muted-foreground">For serious goal-setters</p>
+          </div>
+
+          <div className="mb-8">
+            <span className="text-5xl font-bold">{pricing.achiever[billingCycle].price}</span>
+            <span className="text-muted-foreground">{pricing.achiever[billingCycle].billingPeriod}</span>
+            <p className="text-sm text-muted-foreground mt-2">{pricing.achiever[billingCycle].billingInfo}</p>
+          </div>
+
+          {/* Rest of Achiever tier content... */}
+        </div>
+
+        {/* Enterprise tier */}
+        <div className="bg-background border border-slate-200 dark:border-slate-800 shadow-md rounded-xl p-8 h-full flex flex-col">
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold mb-2">Conquerer</h3>
+            <p className="text-muted-foreground">For teams and businesses</p>
+          </div>
+
+          <div className="mb-8">
+            <span className="text-5xl font-bold">Coming Soon...</span>
+            {/* <span className="text-muted-foreground">{pricing.superhuman[billingCycle].billingPeriod}</span>
+                <p className="text-sm text-muted-foreground mt-2">{pricing.superhuman[billingCycle].billingInfo}</p> */}
+          </div>
+
+          {/* Rest of Superhuman tier content... */}
+        </div>
+      </div>
+    </div>
+      </section >
+
+  {/* Rest of the sections... */ }
     </>
   );
 };
@@ -248,68 +249,64 @@ export default function PricingPage() {
                   </td>
                   <td className="p-4 text-center">
 <<<<<<< Updated upstream
-                    <Button variant="outline" size="sm" asChild>
-                      <Link prefetch={true} href="/signup?plan=conquerer">Choose Conquerer</Link>
-                    </Button>
+  <Button variant="outline" size="sm" asChild>
+    <Link prefetch={true} href="/signup?plan=conquerer">Choose Conquerer</Link>
+  </Button>
 =======
                     {/* <Button variant="outline" size="sm" asChild>
                       <Link href="/signup?plan=superhuman">Choose Superhuman</Link>
                     </Button> */}
                     Coming Soon...
 >>>>>>> Stashed changes
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                  </td >
+                </tr >
+              </tfoot >
+            </table >
+          </div >
 
-          {/* Mobile Comparison - remove backdrop-blur */}
-          <div className="lg:hidden space-y-4">
-            {["Explorer", "Achiever", "Superhuman"].map((plan) => (
-              <div key={plan} className="bg-background rounded-lg border border-border overflow-hidden">
-                <div className="p-4 flex items-center justify-between font-medium">
-                  <span>{plan}</span>
-                  <ChevronDownIcon className="h-5 w-5" />
+    {/* Mobile Comparison - remove backdrop-blur */ }
+    < div className = "lg:hidden space-y-4" >
+    {
+      ["Explorer", "Achiever", "Superhuman"].map((plan) => (
+        <div key={plan} className="bg-background rounded-lg border border-border overflow-hidden">
+          <div className="p-4 flex items-center justify-between font-medium">
+            <span>{plan}</span>
+            <ChevronDownIcon className="h-5 w-5" />
+          </div>
+          <div className="px-4 pb-4 border-t border-border pt-4">
+            <div className="space-y-3">
+              {[
+                { name: "Number of Goals", value: plan === "Explorer" ? "3 Active" : "Unlimited" },
+                { name: "Goal Hierarchy", value: plan === "Explorer" ? "Basic" : "Advanced" },
+                { name: "Analytics", value: plan === "Explorer" ? "Basic" : (plan === "Achiever" ? "Detailed" : "Advanced & Team") },
+              ].map((feature, index) => (
+                <div key={index} className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">{feature.name}</span>
+                  <span className="text-sm">{feature.value}</span>
                 </div>
-                <div className="px-4 pb-4 border-t border-border pt-4">
-                  <div className="space-y-3">
-                    {[
-                      { name: "Number of Goals", value: plan === "Explorer" ? "3 Active" : "Unlimited" },
-                      { name: "Goal Hierarchy", value: plan === "Explorer" ? "Basic" : "Advanced" },
-                      { name: "Analytics", value: plan === "Explorer" ? "Basic" : (plan === "Achiever" ? "Detailed" : "Advanced & Team") },
-                    ].map((feature, index) => (
-                      <div key={index} className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">{feature.name}</span>
-                        <span className="text-sm">{feature.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button
-                    className="w-full mt-4"
-                    variant={plan === "Achiever" ? "default" : "outline"}
-                    asChild
-                  >
-<<<<<<< Updated upstream
-                    <Link prefetch={true} href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
-                      {plan === "Explorer" ? "Get Started" : `Choose ${plan}`}
-                    </Link>
-=======
-                    {plan !== "Superhuman" ?
-                      (<Link href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
-                        {plan === "Explorer" ? "Get Started" : `Choose ${plan}`}
-                      </Link>)
-                    : (<p>Coming Soon...</p>)}
->>>>>>> Stashed changes
-                  </Button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <Button
+              className="w-full mt-4"
+              variant={plan === "Achiever" ? "default" : "outline"}
+              asChild
+            >
+              {plan !== "Superhuman" ?
+                (<Link href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
+                  {plan === "Explorer" ? "Get Started" : `Choose ${plan}`}
+                </Link>)
+                : (<p>Coming Soon...</p>)}
+            </Button>
           </div>
         </div>
-      </section>
+      ))
+    }
+          </div >
+        </div >
+      </section >
 
-      {/* Testimonial Section - remove the absolute backdrop overlay */}
-      {/* <section className="py-16">
+    {/* Testimonial Section - remove the absolute backdrop overlay */ }
+  {/* <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
@@ -327,198 +324,199 @@ export default function PricingPage() {
 
           {/* Main testimonial - remove backdrop-blur */}
 =======
-          
+
 >>>>>>> Stashed changes
-          <div className="bg-background rounded-xl p-8 shadow-lg border border-border relative mb-20">
-            <div className="md:flex items-start gap-8">
-              <div className="md:w-1/3 mb-6 md:mb-0">
-                <div className="aspect-square w-24 h-24 md:w-32 md:h-32 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto md:mx-0">
-                  <span className="text-4xl font-serif">M</span>
-                </div>
-              </div>
+  <div className="bg-background rounded-xl p-8 shadow-lg border border-border relative mb-20">
+    <div className="md:flex items-start gap-8">
+      <div className="md:w-1/3 mb-6 md:mb-0">
+        <div className="aspect-square w-24 h-24 md:w-32 md:h-32 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto md:mx-0">
+          <span className="text-4xl font-serif">M</span>
+        </div>
+      </div>
 
-              <div className="md:w-2/3">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <StarFilledIcon key={i} className="h-5 w-5 text-amber-400" />
-                  ))}
-                </div>
+      <div className="md:w-2/3">
+        <div className="flex mb-4">
+          {[...Array(5)].map((_, i) => (
+            <StarFilledIcon key={i} className="h-5 w-5 text-amber-400" />
+          ))}
+        </div>
 
-                <blockquote className="text-xl md:text-2xl mb-6 italic">
-                  "Upgrading to Achiever was the best decision I made for my productivity. The unlimited goals and advanced analytics helped me accomplish twice as much in half the time."
-                </blockquote>
+        <blockquote className="text-xl md:text-2xl mb-6 italic">
+          "Upgrading to Achiever was the best decision I made for my productivity. The unlimited goals and advanced analytics helped me accomplish twice as much in half the time."
+        </blockquote>
 
-                <div>
-                  <p className="font-medium">Michael Jordan</p>
-                  <p className="text-sm text-muted-foreground">CEO & Founder, Jumpman Inc.</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-sm bg-primary/10 text-primary px-2 py-0.5 rounded-full">Achiever Plan</span>
-                    <span className="text-sm text-muted-foreground">User for 2 years</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-<<<<<<< Updated upstream
-
-          {/* More testimonials - remove backdrop-blur */}
-=======
-          
->>>>>>> Stashed changes
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                quote: "The team collaboration features in the Superhuman plan revolutionized how our team works together on goals.",
-                name: "Sarah Williams",
-                role: "Product Manager",
-                plan: "Superhuman"
-              },
-              {
-                quote: "The detailed analytics in the Achiever plan helped me identify patterns in my productivity that changed everything.",
-                name: "David Chen",
-                role: "Freelance Designer",
-                plan: "Achiever"
-              },
-              {
-                quote: "Worth every penny! The AI recommendations alone have saved me countless hours of planning.",
-                name: "Jessica Taylor",
-                role: "Marketing Director",
-                plan: "Superhuman"
-              }
-            ].map((testimonial, i) => (
-              <div key={i} className="bg-background rounded-xl p-6 shadow-lg border border-border relative">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <StarFilledIcon key={i} className="size-4 text-amber-400" />
-                  ))}
-                </div>
-
-                <p className="text-lg mb-6 italic">"{testimonial.quote}"</p>
-
-                <div>
-                  <p className="font-medium">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{testimonial.plan} Plan</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div>
+          <p className="font-medium">Michael Jordan</p>
+          <p className="text-sm text-muted-foreground">CEO & Founder, Jumpman Inc.</p>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-sm bg-primary/10 text-primary px-2 py-0.5 rounded-full">Achiever Plan</span>
+            <span className="text-sm text-muted-foreground">User for 2 years</span>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
 <<<<<<< Updated upstream
-      </section>
+
+  {/* More testimonials - remove backdrop-blur */ }
+=======
+
+>>>>>>> Stashed changes
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {[
+      {
+        quote: "The team collaboration features in the Superhuman plan revolutionized how our team works together on goals.",
+        name: "Sarah Williams",
+        role: "Product Manager",
+        plan: "Superhuman"
+      },
+      {
+        quote: "The detailed analytics in the Achiever plan helped me identify patterns in my productivity that changed everything.",
+        name: "David Chen",
+        role: "Freelance Designer",
+        plan: "Achiever"
+      },
+      {
+        quote: "Worth every penny! The AI recommendations alone have saved me countless hours of planning.",
+        name: "Jessica Taylor",
+        role: "Marketing Director",
+        plan: "Superhuman"
+      }
+    ].map((testimonial, i) => (
+      <div key={i} className="bg-background rounded-xl p-6 shadow-lg border border-border relative">
+        <div className="flex mb-4">
+          {[...Array(5)].map((_, i) => (
+            <StarFilledIcon key={i} className="size-4 text-amber-400" />
+          ))}
+        </div>
+
+        <p className="text-lg mb-6 italic">"{testimonial.quote}"</p>
+
+        <div>
+          <p className="font-medium">{testimonial.name}</p>
+          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{testimonial.plan} Plan</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+        </div >
+<<<<<<< Updated upstream
+      </section >
 
 =======
       </section> */}
-      
+
 >>>>>>> Stashed changes
-      {/* FAQ Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
-              <QuestionMarkCircledIcon className="mr-2 size-4" />
-              FAQ
+    {/* FAQ Section */ }
+    < section className = "py-16" >
+      <div className="max-w-4xl mx-auto px-4 relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
+            <QuestionMarkCircledIcon className="mr-2 size-4" />
+            FAQ
+          </div>
+          <h2 className={`${playfair.className} text-3xl md:text-4xl font-bold mb-6`}>
+            Questions?<br />Answered!
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Find answers to common questions about our plans
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          {[
+            {
+              question: "Can I upgrade or downgrade my plan later?",
+              answer: "Yes, you can change your plan at any time. If you upgrade, you'll be charged the prorated difference. If you downgrade, you'll receive credit toward your next billing cycle."
+            },
+            {
+              question: "Is there a free trial for paid plans?",
+              answer: "Yes, we offer a 14-day free trial for both our Achiever and Superhuman plans. You can experience all premium features before you decide to commit."
+            },
+            {
+              question: "What payment methods do you accept?",
+              answer: "We accept all major credit cards, PayPal, and Apple Pay. For annual Superhuman plans, we can also arrange for invoice payment."
+            },
+            {
+              question: "Can I cancel my subscription anytime?",
+              answer: "Absolutely. You can cancel your subscription at any time from your account settings. You'll continue to have access to your paid features until the end of your current billing period."
+            },
+            {
+              question: "What happens to my data if I downgrade?",
+              answer: "Your data will be preserved, but access to premium features will be limited according to your new plan. For example, if you have more than 3 active goals and downgrade to Explorer, you'll need to select which 3 goals to keep active."
+            }
+          ].map((item, i) => (
+            <div key={i} className="bg-background rounded-xl p-6 border border-border">
+              <h3 className="text-lg font-medium mb-3 flex items-start gap-3">
+                <QuestionMarkCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                {item.question}
+              </h3>
+              <p className="text-muted-foreground pl-8">{item.answer}</p>
             </div>
-            <h2 className={`${playfair.className} text-3xl md:text-4xl font-bold mb-6`}>
-              Questions?<br />Answered!
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Find answers to common questions about our plans
-            </p>
-          </div>
+          ))}
+        </div>
 
-          <div className="space-y-6">
-            {[
-              {
-                question: "Can I upgrade or downgrade my plan later?",
-                answer: "Yes, you can change your plan at any time. If you upgrade, you'll be charged the prorated difference. If you downgrade, you'll receive credit toward your next billing cycle."
-              },
-              {
-                question: "Is there a free trial for paid plans?",
-                answer: "Yes, we offer a 14-day free trial for both our Achiever and Superhuman plans. You can experience all premium features before you decide to commit."
-              },
-              {
-                question: "What payment methods do you accept?",
-                answer: "We accept all major credit cards, PayPal, and Apple Pay. For annual Superhuman plans, we can also arrange for invoice payment."
-              },
-              {
-                question: "Can I cancel my subscription anytime?",
-                answer: "Absolutely. You can cancel your subscription at any time from your account settings. You'll continue to have access to your paid features until the end of your current billing period."
-              },
-              {
-                question: "What happens to my data if I downgrade?",
-                answer: "Your data will be preserved, but access to premium features will be limited according to your new plan. For example, if you have more than 3 active goals and downgrade to Explorer, you'll need to select which 3 goals to keep active."
-              }
-            ].map((item, i) => (
-              <div key={i} className="bg-background rounded-xl p-6 border border-border">
-                <h3 className="text-lg font-medium mb-3 flex items-start gap-3">
-                  <QuestionMarkCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                  {item.question}
-                </h3>
-                <p className="text-muted-foreground pl-8">{item.answer}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 text-center">
-            <p className="text-muted-foreground mb-4">
-              Have more questions? We're here to help.
-            </p>
-            <Button variant="outline" className="mx-auto">
+        <div className="mt-12 text-center">
+          <p className="text-muted-foreground mb-4">
+            Have more questions? We're here to help.
+          </p>
+          <Button variant="outline" className="mx-auto">
 <<<<<<< Updated upstream
-              <Link prefetch={true} href="/contact" className="flex items-center gap-2">
-                Contact Support <ArrowRightIcon className="h-4 w-4" />
+  <Link prefetch={true} href="/contact" className="flex items-center gap-2">
+    Contact Support <ArrowRightIcon className="h-4 w-4" />
 =======
               <Link href="/contact" className="flex items-center gap-2">
-                Contact Support <ArrowRightIcon className="size-4" />
+      Contact Support <ArrowRightIcon className="size-4" />
 >>>>>>> Stashed changes
+      Contact Support <ArrowRightIcon className="size-4" />
+    </Link>
+  </Button>
+          </div >
+        </div >
+      </section >
+
+    {/* CTA Section */ }
+    < section className = "py-24 overflow-hidden " >
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        {/* Replace semi-transparent background */}
+        <div className="bg-gradient-to-b from-[#3D7F7A] to-[#176B87] rounded-xl text-white p-10 shadow-xl border border-primary/20">
+          <div className="text-center mb-10">
+            <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
+              Ready to Unlock Your Full Potential?
+            </h2>
+            <p className="text-xl max-w-2xl mx-auto">
+              Choose the plan that's right for you and start achieving your ambitious goals today.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="mb-8 shadow-md shadow-primary/20">
+              <Link prefetch={true}
+                href={`/signup?plan=achiever&billing=${billingCycle}`}
+                className="flex justify-center items-center gap-2 w-full"
+              >
+                Choose Achiever <ArrowRightIcon className="size-4" />
               </Link>
             </Button>
           </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-24 overflow-hidden ">
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
-          {/* Replace semi-transparent background */}
-          <div className="bg-gradient-to-b from-[#3D7F7A] to-[#176B87] rounded-xl text-white p-10 shadow-xl border border-primary/20">
-            <div className="text-center mb-10">
-              <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
-                Ready to Unlock Your Full Potential?
-              </h2>
-              <p className="text-xl max-w-2xl mx-auto">
-                Choose the plan that's right for you and start achieving your ambitious goals today.
-              </p>
+          {/* Security badges */}
+          <div className="mt-5 flex justify-center gap-6 items-center">
+            <div className="flex items-center gap-2 text-sm">
+              <LockClosedIcon className="size-4 text-green-500" />
+              <span>Secure Payment</span>
             </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="mb-8 shadow-md shadow-primary/20">
-                <Link prefetch={true}
-                  href={`/signup?plan=achiever&billing=${billingCycle}`}
-                  className="flex justify-center items-center gap-2 w-full"
-                >
-                  Choose Achiever <ArrowRightIcon className="size-4" />
-                </Link>
-              </Button>
-            </div>
-
-            {/* Security badges */}
-            <div className="mt-5 flex justify-center gap-6 items-center">
-              <div className="flex items-center gap-2 text-sm">
-                <LockClosedIcon className="size-4 text-green-500" />
-                <span>Secure Payment</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <InfoCircledIcon className="size-4" />
-                <span>Cancel Anytime</span>
-              </div>
+            <div className="flex items-center gap-2 text-sm">
+              <InfoCircledIcon className="size-4" />
+              <span>Cancel Anytime</span>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+      </section >
+    </div >
   );
 }
