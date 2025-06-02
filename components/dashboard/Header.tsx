@@ -41,8 +41,8 @@ interface HeaderProps {
   profileData: SupabaseProfileData[];
   plansData: SupabasePlansData[];
   ambitionsData: Ambition[];
-  tasksData: Task[];
-  milestonesData: Milestone[];
+  tasksData: AmbitionTask[];
+  milestonesData: AmbitionMilestone[];
 }
 
 export function Header({
@@ -119,15 +119,22 @@ export function Header({
       </Button>
 
       <div className="flex-1 flex items-center gap-2">
-        <Button variant="outline" size="sm" className="hidden md:flex gap-2 bg-gradient-to-tl from-slate-700 to-slate-950" onClick={() => {
-          setCynthiaOnScreen(true)
-        }}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="hidden md:flex gap-2 bg-gradient-to-tl from-slate-700 to-slate-950"
+          onClick={() => {
+            setCynthiaOnScreen(true);
+          }}
+        >
           {/* <Link prefetch={true} href="/dashboard"> */}
           <RocketIcon className="h-4 w-4 text-white" />
           <span className="font-medium text-white">Cynthia</span>
           {/* </Link> */}
         </Button>
-        {cynthiaOnScreen && <CynthiaMain cynthiaOnScreen={cynthiaOnScreen} setCynthiaOnScreen={setCynthiaOnScreen} />}
+        {cynthiaOnScreen && (
+          <CynthiaMain cynthiaOnScreen={cynthiaOnScreen} setCynthiaOnScreen={setCynthiaOnScreen} />
+        )}
 
         <Button
           variant="outline"
@@ -452,7 +459,9 @@ export function Header({
                   <div className="flex flex-1 items-center justify-between">
                     <span>{task.task}</span>
                     <Badge variant={task.taskDeadline ? "outline" : "secondary"} className="ml-2">
-                      {task.taskDeadline ? new Date(task.taskDeadline).toLocaleDateString() : "No deadline"}
+                      {task.taskDeadline
+                        ? new Date(task.taskDeadline).toLocaleDateString()
+                        : "No deadline"}
                     </Badge>
                   </div>
                 </Command.CommandItem>

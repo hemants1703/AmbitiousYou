@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "@/app/(app)/ambitions/[ambitionId]/IndividualAmbitionClient";
-import type { Ambition, Task, Milestone, TimeEntry } from "@/types";
+import type { AmbitionData, AmbitionTask, AmbitionMilestone, TimeEntry } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 interface PageProps {
   params: {
@@ -22,17 +23,27 @@ export async function generateMetadata({ params }: PageProps) {
     .eq("id", ambitionId)
     .single();
 
+  if (ambitionError) {
+    return {
+      title: "Ambition not found",
+      description: "This ambition does not exist.",
+    }
+  }
+
   return {
     title: `${ambition?.ambitionName} | Ambition Details | AmbitiousYou`,
     description: ambition?.ambitionDefinition,
-  }
+  };
 }
 
 export default async function IndividualAmbitionPage({ params }: PageProps) {
   const supabase = await createClient();
 
   // Check if user is authenticated
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   if (userError || !user) {
     redirect("/login");
   }
@@ -46,16 +57,13 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     .eq("id", ambitionId)
     .single();
 
-  // If Supabase fetch fails, fall back to test data
-  let finalAmbition: Ambition | undefined = ambition;
-
-  if (!finalAmbition) {
+  if (!ambition) {
     notFound();
   }
 
   // Fetch related data from Supabase
-  let tasks: Task[] = [];
-  let milestones: Milestone[] = [];
+  let tasks: AmbitionTask[] = [];
+  let milestones: AmbitionMilestone[] = [];
   let timeEntries: TimeEntry[] = [];
 
   try {
@@ -67,7 +75,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
       .order("createdAt", { ascending: true });
 
     if (tasksData) {
-      tasks = tasksData as Task[];
+      tasks = tasksData as AmbitionTask[];
     }
 
     // Fetch milestones
@@ -78,7 +86,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
       .order("createdAt", { ascending: true });
 
     if (milestonesData) {
-      milestones = milestonesData as Milestone[];
+      milestones = milestonesData as AmbitionMilestone[];
     }
 
     // Fetch time entries
@@ -94,16 +102,14 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     }
   } catch (error) {
     // If fetching related data fails, use the data from test ambition
-    if (finalAmbition.id === params.ambitionId) {
-      tasks = finalAmbition.tasks;
-      milestones = finalAmbition.milestones;
-      timeEntries = finalAmbition.timeEntries;
-    }
+    toast.error("Error fetching related data", {
+      description: "Seems like this ambition does not exist...",
+    })
   }
 
   return (
     <IndividualAmbitionClient
-      ambition={finalAmbition}
+      ambition={ambition as AmbitionData}
       tasks={tasks}
       milestones={milestones}
       timeEntries={timeEntries}

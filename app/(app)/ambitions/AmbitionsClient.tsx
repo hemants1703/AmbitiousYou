@@ -23,7 +23,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
-import { AmbitionData, Milestone, Task } from "@/types";
+import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/types";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
 
 // Define types for our data
@@ -34,7 +34,6 @@ type SortableFields =
   | "ambitionDeadline"
   | "id"
   | "ambitionDefinition"
-  | "ambitionCategory"
   | "ambitionStartDate"
   | "ambitionStatus"
   | "ambitionColor"
@@ -49,20 +48,35 @@ interface SortConfig {
 }
 
 interface Filters {
-  category: string | null;
   priority: string | null;
 }
 
-export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMilestones }: { ambitions: AmbitionData[], ambitionTasks: Task[], ambitionMilestones: Milestone[] }) {
+export default function AmbitionsClient({
+  ambitions,
+  ambitionTasks,
+  ambitionMilestones,
+}: {
+  ambitions: AmbitionData[];
+  ambitionTasks: AmbitionTask[];
+  ambitionMilestones: AmbitionMilestone[];
+}) {
   // await new Promise(resolve => setTimeout(resolve, 1000));
-  const activeAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "active")), [ambitions]);
-  const completedAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "completed")), [ambitions]);
-  const archivedAmbitions = useMemo(() => (ambitions.filter((ambition) => ambition.ambitionStatus === "archived")), [ambitions]);
+  const activeAmbitions = useMemo(
+    () => ambitions.filter((ambition) => ambition.ambitionStatus === "active"),
+    [ambitions]
+  );
+  const completedAmbitions = useMemo(
+    () => ambitions.filter((ambition) => ambition.ambitionStatus === "completed"),
+    [ambitions]
+  );
+  const archivedAmbitions = useMemo(
+    () => ambitions.filter((ambition) => ambition.ambitionStatus === "archived"),
+    [ambitions]
+  );
 
   // Filter states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({
-    category: null,
     priority: null,
   });
 
@@ -91,12 +105,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
     }
 
     // If no filters are applied, show all ambitions (that match search)
-    if (!filters.category && !filters.priority) return true;
-
-    // Apply category filter
-    if (filters.category && ambition.ambitionCategory !== filters.category) {
-      return false;
-    }
+    if (!filters.priority) return true;
 
     // Apply priority filter
     if (filters.priority && ambition.ambitionPriority !== filters.priority) {
@@ -110,10 +119,10 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
   const sortedAndFilteredAmbitions = [...filteredAmbitions].sort((a, b) => {
     // Handle nested properties like tasks.completed
     if (sortConfig.key === "tasks.completed") {
-      const tasksA = ambitionTasks.filter(t => t.ambitionId === a.id);
-      const tasksB = ambitionTasks.filter(t => t.ambitionId === b.id);
-      const valueA = tasksA.filter(t => t.taskCompleted).length;
-      const valueB = tasksB.filter(t => t.taskCompleted).length;
+      const tasksA = ambitionTasks.filter((t) => t.ambitionId === a.id);
+      const tasksB = ambitionTasks.filter((t) => t.ambitionId === b.id);
+      const valueA = tasksA.filter((t) => t.taskCompleted).length;
+      const valueB = tasksB.filter((t) => t.taskCompleted).length;
       return sortConfig.direction === "asc" ? valueA - valueB : valueB - valueA;
     }
 
@@ -130,9 +139,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
     if (sortConfig.key === "ambitionPercentageCompleted") {
       const valueA = a.ambitionPercentageCompleted;
       const valueB = b.ambitionPercentageCompleted;
-      return sortConfig.direction === "asc"
-        ? valueA - valueB
-        : valueB - valueA;
+      return sortConfig.direction === "asc" ? valueA - valueB : valueB - valueA;
     }
 
     // Default string comparison
@@ -171,11 +178,10 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
       "tasks.completed": "Tasks Completed",
       id: "ID",
       ambitionDefinition: "Definition",
-      ambitionCategory: "Category",
       ambitionStartDate: "Start Date",
       ambitionStatus: "Status",
       ambitionColor: "Color",
-      ambitionTrackingMethod: "Tracking Method"
+      ambitionTrackingMethod: "Tracking Method",
     };
 
     return options[sortConfig.key] || "Sort";
@@ -192,7 +198,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
 
   // Clear all filters
   const clearFilters = () => {
-    setFilters({ category: null, priority: null });
+    setFilters({ priority: null });
     setIsFilterOpen(false);
   };
 
@@ -276,7 +282,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
               <Button variant="outline" size="sm" className="gap-1">
                 <Filter className="h-4 w-4" />
                 Filter
-                {(filters.category || filters.priority) && (
+                {(filters.priority) && (
                   <Badge variant="secondary" className="ml-1 h-5 px-1">
                     {Object.values(filters).filter(Boolean).length}
                   </Badge>
@@ -285,24 +291,6 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
             </DropdownMenu.DropdownMenuTrigger>
             <DropdownMenu.DropdownMenuContent className="w-56">
               <DropdownMenu.DropdownMenuLabel>Filter Ambitions</DropdownMenu.DropdownMenuLabel>
-              <DropdownMenu.DropdownMenuSeparator />
-
-              <DropdownMenu.DropdownMenuGroup>
-                <DropdownMenu.DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-                  By Category
-                </DropdownMenu.DropdownMenuLabel>
-                {categories.map((category) => (
-                  <DropdownMenu.DropdownMenuItem
-                    key={category}
-                    onClick={() => applyFilter("category", category)}
-                    className="flex justify-between"
-                  >
-                    {category}
-                    {filters.category === category && <Check className="h-4 w-4" />}
-                  </DropdownMenu.DropdownMenuItem>
-                ))}
-              </DropdownMenu.DropdownMenuGroup>
-
               <DropdownMenu.DropdownMenuSeparator />
 
               <DropdownMenu.DropdownMenuGroup>
@@ -321,16 +309,19 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                 ))}
               </DropdownMenu.DropdownMenuGroup>
 
-              <DropdownMenu.DropdownMenuSeparator />
 
-              {(filters.category || filters.priority) && (
-                <DropdownMenu.DropdownMenuItem
-                  onClick={clearFilters}
-                  className="text-red-500 flex gap-2"
-                >
-                  <X className="h-4 w-4" />
-                  Clear filters
-                </DropdownMenu.DropdownMenuItem>
+
+              {(filters.priority) && (
+                <>
+                  <DropdownMenu.DropdownMenuSeparator />
+                  <DropdownMenu.DropdownMenuItem
+                    onClick={clearFilters}
+                    className="text-red-500 flex gap-2"
+                  >
+                    <X className="h-4 w-4" />
+                    Clear filters
+                  </DropdownMenu.DropdownMenuItem>
+                </>
               )}
             </DropdownMenu.DropdownMenuContent>
           </DropdownMenu.DropdownMenu>
@@ -410,7 +401,8 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
           </DropdownMenu.DropdownMenu>
 
           <Button asChild size="sm">
-            <Link prefetch={true}
+            <Link
+              prefetch={true}
               href={`/ambitions/new`}
               className="md:ml-0 flex justify-center items-center gap-1"
             >
@@ -445,9 +437,21 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
               >
                 {sortedAndFilteredAmbitions.length > 0 ? (
                   sortedAndFilteredAmbitions.map((ambition, index) => {
-                    const ambitionTasksList = ambitionTasks.filter(t => t.ambitionId === ambition.id);
-                    const completedTasks = ambitionTasksList.filter(t => t.taskCompleted).length;
-                    const totalTasks = ambitionTasksList.length;
+
+                    let completedTasksOrMilestones = 0
+                    let totalTasksOrMilestones = 0;
+
+                    if (ambition.ambitionTrackingMethod === "task") {
+                      const ambitionTasksList = ambitionTasks.filter(
+                        (t) => t.ambitionId === ambition.id
+                      );
+                      completedTasksOrMilestones = ambitionTasksList.filter((t) => t.taskCompleted).length;
+                      totalTasksOrMilestones = ambitionTasksList.length;
+                    } else if (ambition.ambitionTrackingMethod === "milestone") {
+                      const ambitionMilestonesList = ambitionMilestones.filter((m: AmbitionMilestone) => m.ambitionId === ambition.id);
+                      completedTasksOrMilestones = ambitionMilestonesList.filter((m: AmbitionMilestone) => m.milestoneCompleted).length;
+                      totalTasksOrMilestones = ambitionMilestonesList.length;
+                    }
 
                     return (
                       <motion.div
@@ -456,12 +460,19 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                         transition={{ duration: 0.3, delay: 0.05 * index }}
                       >
                         <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
-                          <Card.Card className={`bg-gradient-to-b dark:from-slate-950 from-slate-200 to-[${ambition.ambitionColor}] cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
+                          <Card.Card
+                            className={`bg-gradient-to-b dark:from-slate-950 from-slate-200 to-[${ambition.ambitionColor}] cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}
+                          >
                             <Card.CardHeader className="pb-2">
                               <div className="flex items-center justify-between">
-                                <AmbitionCategoryBadge ambitionCategory={ambition.ambitionCategory} />
-                                <AmbitionColorBadge ambitionColor={ambition.ambitionColor} index={index} width={100} />
-                                <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority} />
+                                <AmbitionColorBadge
+                                  ambitionColor={ambition.ambitionColor}
+                                  index={index}
+                                  width={100}
+                                />
+                                <AmbitionPriorityBadge
+                                  ambitionPriority={ambition.ambitionPriority}
+                                />
                               </div>
                               <Card.CardTitle className="mt-2">
                                 {searchQuery
@@ -489,19 +500,28 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                                       delay: 0.3 + 0.1 * index,
                                     }}
                                   >
-                                    <Progress value={ambition.ambitionPercentageCompleted} className="h-2" />
+                                    <Progress
+                                      value={ambition.ambitionPercentageCompleted}
+                                      className={`h-2 [&>[data-slot=progress-indicator]]:bg-[(${ambition.ambitionColor})]`}
+                                    />
                                   </motion.div>
                                 </div>
                                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                                   <div className="flex items-center gap-1">
                                     <CheckCircleIcon className="h-3.5 w-3.5" />
                                     <span>
-                                      {completedTasks}/{totalTasks} tasks
+                                      {completedTasksOrMilestones}/{totalTasksOrMilestones} {ambition.ambitionTrackingMethod}s
                                     </span>
                                   </div>
                                   <div className="flex items-center gap-1">
                                     <CalendarIcon className="h-3.5 w-3.5" />
-                                    <span>Due {new Date(ambition.ambitionDeadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                    <span>
+                                      Due{" "}
+                                      {new Date(ambition.ambitionDeadline).toLocaleDateString(
+                                        "en-US",
+                                        { month: "short", day: "numeric", year: "numeric" }
+                                      )}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -549,9 +569,21 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                 >
                   {activeAmbitions.length > 0 ? (
                     activeAmbitions.map((ambition, index) => {
-                      const ambitionTasksList = ambitionTasks.filter(t => t.ambitionId === ambition.id);
-                      const completedTasks = ambitionTasksList.filter(t => t.taskCompleted).length;
-                      const totalTasks = ambitionTasksList.length;
+
+                      let completedTasksOrMilestones = 0
+                      let totalTasksOrMilestones = 0;
+
+                      if (ambition.ambitionTrackingMethod === "task") {
+                        const ambitionTasksList = ambitionTasks.filter(
+                          (t) => t.ambitionId === ambition.id
+                        );
+                        completedTasksOrMilestones = ambitionTasksList.filter((t: AmbitionTask) => t.taskCompleted).length;
+                        totalTasksOrMilestones = ambitionTasksList.length;
+                      } else if (ambition.ambitionTrackingMethod === "milestone") {
+                        const ambitionMilestonesList = ambitionMilestones.filter((m: AmbitionMilestone) => m.ambitionId === ambition.id);
+                        completedTasksOrMilestones = ambitionMilestonesList.filter((m: AmbitionMilestone) => m.milestoneCompleted).length;
+                        totalTasksOrMilestones = ambitionMilestonesList.length;
+                      }
 
                       return (
                         <motion.div
@@ -560,12 +592,19 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                           transition={{ duration: 0.3, delay: 0.05 * index }}
                         >
                           <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
-                            <Card.Card className={`cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}>
+                            <Card.Card
+                              className={`cursor-pointer hover:shadow-md transition-all hover:translate-y-[-2px] duration-300`}
+                            >
                               <Card.CardHeader className="pb-2">
                                 <div className="flex items-center justify-between">
-                                  <AmbitionCategoryBadge ambitionCategory={ambition.ambitionCategory} />
-                                  <AmbitionColorBadge ambitionColor={ambition.ambitionColor} index={index} width={100} />
-                                  <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority} />
+                                  <AmbitionColorBadge
+                                    ambitionColor={ambition.ambitionColor}
+                                    index={index}
+                                    width={100}
+                                  />
+                                  <AmbitionPriorityBadge
+                                    ambitionPriority={ambition.ambitionPriority}
+                                  />
                                 </div>
                                 <Card.CardTitle className="mt-2">
                                   {searchQuery
@@ -593,19 +632,28 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
                                         delay: 0.3 + 0.1 * index,
                                       }}
                                     >
-                                      <Progress value={ambition.ambitionPercentageCompleted} className="h-2" />
+                                      <Progress
+                                        value={ambition.ambitionPercentageCompleted}
+                                        className="h-2"
+                                      />
                                     </motion.div>
                                   </div>
                                   <div className="flex items-center justify-between text-sm text-muted-foreground">
                                     <div className="flex items-center gap-1">
                                       <CheckCircleIcon className="h-3.5 w-3.5" />
                                       <span>
-                                        {completedTasks}/{totalTasks} tasks
+                                        {completedTasksOrMilestones}/{totalTasksOrMilestones} {ambition.ambitionTrackingMethod}s
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-1">
                                       <CalendarIcon className="h-3.5 w-3.5" />
-                                      <span>Due {new Date(ambition.ambitionDeadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                      <span>
+                                        Due{" "}
+                                        {new Date(ambition.ambitionDeadline).toLocaleDateString(
+                                          "en-US",
+                                          { month: "short", day: "numeric", year: "numeric" }
+                                        )}
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
@@ -675,7 +723,7 @@ export default function AmbitionsClient({ ambitions, ambitionTasks, ambitionMile
           <NoAmbitionsFound />
         )}
       </motion.div>
-    </div >
+    </div>
   );
 }
 
@@ -683,13 +731,31 @@ export function AmbitionStatusBadge({ ambitionStatus }: { ambitionStatus: string
   return (
     <div className="flex justify-between items-center rounded-full overflow-hidden text-xs text-black font-mono uppercase font-bold">
       <span className="bg-gray-200 px-2">STATUS</span>
-      <span className={`px-2 ${ambitionStatus === "active" ? "bg-green-400" : ambitionStatus === "completed" ? "bg-blue-500" : ambitionStatus === "archived" ? "bg-amber-500" : "bg-gray-500"
-        }`}>{ambitionStatus.toUpperCase()}</span>
+      <span
+        className={`px-2 ${ambitionStatus === "active"
+          ? "bg-green-400"
+          : ambitionStatus === "completed"
+            ? "bg-blue-500"
+            : ambitionStatus === "archived"
+              ? "bg-amber-500"
+              : "bg-gray-500"
+          }`}
+      >
+        {ambitionStatus.toUpperCase()}
+      </span>
     </div>
-  )
+  );
 }
 
-export function AmbitionColorBadge({ ambitionColor, index = 1, width = 100 }: { ambitionColor: string, index: number, width: number }) {
+export function AmbitionColorBadge({
+  ambitionColor,
+  index = 1,
+  width = 100,
+}: {
+  ambitionColor: string;
+  index: number;
+  width: number;
+}) {
   return (
     <motion.div
       className={`h-1 w-12 rounded-full`}
@@ -701,7 +767,7 @@ export function AmbitionColorBadge({ ambitionColor, index = 1, width = 100 }: { 
         delay: 0.2 + 0.1 * (index ? index : 1),
       }}
     ></motion.div>
-  )
+  );
 }
 
 export function AmbitionPriorityBadge({ ambitionPriority }: { ambitionPriority: string }) {
@@ -712,13 +778,15 @@ export function AmbitionPriorityBadge({ ambitionPriority }: { ambitionPriority: 
     >
       {ambitionPriority}
     </Badge>
-  )
+  );
 }
 
 export function AmbitionCategoryBadge({ ambitionCategory }: { ambitionCategory: string }) {
   return (
-    <Badge variant="outline" className="text-xs font-mono uppercase font-bold">{ambitionCategory}</Badge>
-  )
+    <Badge variant="outline" className="text-xs font-mono uppercase font-bold">
+      {ambitionCategory}
+    </Badge>
+  );
 }
 
 function NoAmbitionsFound() {
@@ -732,7 +800,8 @@ function NoAmbitionsFound() {
             <Target className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 opacity-20" />
             <h3 className="text-2xl md:text-3xl font-semibold mb-3">Start Your Journey</h3>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              You haven't created any ambitions yet. Ambitions help you track and achieve your most important goals.
+              You haven't created any ambitions yet. Ambitions help you track and achieve your most
+              important goals.
             </p>
           </div>
 
@@ -762,19 +831,28 @@ function NoAmbitionsFound() {
             <ul className="space-y-4 text-muted-foreground">
               <li className="flex gap-3 items-start">
                 <Check className="h-5 w-5 mt-1 text-green-500 flex-shrink-0" />
-                <span className="text-base">Break down big goals into smaller, manageable milestones to maintain clarity and focus</span>
+                <span className="text-base">
+                  Break down big goals into smaller, manageable milestones to maintain clarity and
+                  focus
+                </span>
               </li>
               <li className="flex gap-3 items-start">
                 <Check className="h-5 w-5 mt-1 text-green-500 flex-shrink-0" />
-                <span className="text-base">Set realistic deadlines with buffer time to maintain steady momentum</span>
+                <span className="text-base">
+                  Set realistic deadlines with buffer time to maintain steady momentum
+                </span>
               </li>
               <li className="flex gap-3 items-start">
                 <Check className="h-5 w-5 mt-1 text-green-500 flex-shrink-0" />
-                <span className="text-base">Track your progress regularly and celebrate small wins along the way</span>
+                <span className="text-base">
+                  Track your progress regularly and celebrate small wins along the way
+                </span>
               </li>
               <li className="flex gap-3 items-start">
                 <Check className="h-5 w-5 mt-1 text-green-500 flex-shrink-0" />
-                <span className="text-base">Review and adjust your strategies based on what works best for you</span>
+                <span className="text-base">
+                  Review and adjust your strategies based on what works best for you
+                </span>
               </li>
             </ul>
           </div>

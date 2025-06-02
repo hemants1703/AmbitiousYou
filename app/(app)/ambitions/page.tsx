@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import AmbitionsClient from "./AmbitionsClient";
 import { toast } from "sonner";
-import { AmbitionData, Task, Milestone } from "@/types";
+import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -57,8 +57,8 @@ export default async function AmbitionsPage() {
   return (
     <AmbitionsClient
       ambitions={ambitions as AmbitionData[]}
-      ambitionTasks={tasks as Task[]}
-      ambitionMilestones={milestones as Milestone[]}
+      ambitionTasks={tasks as AmbitionTask[]}
+      ambitionMilestones={milestones as AmbitionMilestone[]}
     />
   );
 }

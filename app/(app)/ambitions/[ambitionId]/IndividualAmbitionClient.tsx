@@ -20,7 +20,6 @@ import {
   MoreHorizontal,
   Plus,
   Share2,
-  Star,
   Target,
   Timer,
   Trash2
@@ -51,14 +50,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { format } from "date-fns";
 import { deleteAmbitionAction } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { AmbitionCategoryBadge, AmbitionColorBadge, AmbitionPriorityBadge } from "../AmbitionsClient";
+import { AmbitionColorBadge, AmbitionPriorityBadge } from "../AmbitionsClient";
 import { favouriteAmbitionAction } from "../actions";
+import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
+import { Switch } from "@/components/ui/switch";
+
 // Animation variants
 const container = {
   hidden: { opacity: 0 },
@@ -76,9 +77,9 @@ const item = {
 };
 
 interface IndividualAmbitionClientProps {
-  ambition: any; // Replace with proper type
-  tasks: any[]; // Replace with proper type
-  milestones: any[]; // Replace with proper type
+  ambition: AmbitionData; // Replace with proper type
+  tasks: AmbitionTask[]; // Replace with proper type
+  milestones: AmbitionMilestone[]; // Replace with proper type
   timeEntries: any[]; // Replace with proper type
 }
 
@@ -121,7 +122,6 @@ export function IndividualAmbitionClient({
             </Button>
             <div>
               <div className="flex items-center gap-2">
-                <AmbitionCategoryBadge ambitionCategory={ambition.ambitionCategory} />
                 <AmbitionColorBadge ambitionColor={ambition.ambitionColor} index={1} width={200} />
                 <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority} />
               </div>
@@ -225,9 +225,9 @@ export function IndividualAmbitionClient({
                             <Calendar className="h-4 w-4 text-blue-600" />
                           </div>
                           <div>
-                            <p className="text-sm text-muted-foreground">Date Range</p>
+                            <p className="text-sm text-muted-foreground">Deadline</p>
                             <p className="font-medium">
-                              {format(new Date(ambition.ambitionStartDate), "MMM d, yyyy")} - {format(new Date(ambition.ambitionDeadline), "MMM d, yyyy")}
+                              {format(new Date(ambition.ambitionDeadline), "MMM d, yyyy")}
                             </p>
                           </div>
                         </div>
@@ -386,6 +386,40 @@ export function IndividualAmbitionClient({
                   </>
                 )
                 }
+
+                {/* ADDITIONAL SETTINGS FOR AMBITION */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Additional Settings</CardTitle>
+                      <CardDescription>Configure additional options for your ambition</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center justify-between space-x-2">
+                        <div>
+                          <p className="font-medium">Send regular reminders</p>
+                          <p className="text-sm text-muted-foreground">
+                            Get notifications to keep you on track
+                          </p>
+                        </div>
+                        <Switch />
+                      </div>
+                      <div className="flex items-center justify-between space-x-2">
+                        <div>
+                          <p className="font-medium">Add to focus dashboard</p>
+                          <p className="text-sm text-muted-foreground">
+                            Display this ambition on your dashboard
+                          </p>
+                        </div>
+                        <Switch />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </motion.div>
 
               <motion.div

@@ -3,9 +3,15 @@ import { Metadata } from "next";
 import { SidebarController } from "@/components/dashboard/SidebarController";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { getAmbitionsTableData, getMilestonesTableData, getPlansTableData, getProfilesTableData, getTasksTableData } from "@/utils/supabase/tablesDataProvider";
+import {
+  getAmbitionsTableData,
+  getMilestonesTableData,
+  getPlansTableData,
+  getProfilesTableData,
+  getTasksTableData,
+} from "@/utils/supabase/tablesDataProvider";
 import { User } from "@supabase/supabase-js";
-import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
+import { AmbitionData, AmbitionMilestone, SupabasePlansData, SupabaseProfileData, AmbitionTask } from "@/types";
 
 export const metadata: Metadata = {
   title: {
@@ -30,14 +36,21 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const profileData: SupabaseProfileData[] = await getProfilesTableData(id);
   const plansData: SupabasePlansData[] = await getPlansTableData(id);
-  const ambitionsData: Ambition[] = await getAmbitionsTableData(id);
-  const tasksData: Task[] = await getTasksTableData(id);
-  const milestonesData: Milestone[] = await getMilestonesTableData(id);
+  const ambitionsData: AmbitionData[] = await getAmbitionsTableData(id);
+  const tasksData: AmbitionTask[] = await getTasksTableData(id);
+  const milestonesData: AmbitionMilestone[] = await getMilestonesTableData(id);
 
   return (
     // <AuthProvider>
     <div className="flex h-screen overflow-hidden bg-background">
-      <SidebarController userData={userData} profileData={profileData} plansData={plansData} ambitionsData={ambitionsData} tasksData={tasksData} milestonesData={milestonesData}>
+      <SidebarController
+        userData={userData}
+        profileData={profileData}
+        plansData={plansData}
+        ambitionsData={ambitionsData}
+        tasksData={tasksData}
+        milestonesData={milestonesData}
+      >
         <ScrollArea className="flex-1 overflow-hidden">
           <main className="flex-1 p-6 md:p-8 pt-6 max-w-7xl mx-auto w-full">{children}</main>
         </ScrollArea>

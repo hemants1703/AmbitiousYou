@@ -107,7 +107,7 @@ export async function signupAction(previousState: SignupState, formData: FormDat
         console.log("user plan created: ", planCreationData);
 
         revalidatePath('/', 'layout');
-        redirect('/dashboard');
+        redirect('/onboarding');
     }
 }
 
