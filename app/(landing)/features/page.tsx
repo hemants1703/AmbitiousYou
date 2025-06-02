@@ -9,9 +9,6 @@ import {
   Filter,
   PlusCircle,
   X,
-  Star,
-  Shield,
-  RefreshCcw,
 } from "lucide-react";
 import {
   Accordion,
@@ -120,7 +117,7 @@ export default function Features() {
       </section>
 
       {/* How It Works Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <div className="space-y-2">
@@ -138,7 +135,7 @@ export default function Features() {
               <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                 <span className="text-2xl font-bold text-primary">1</span>
               </div>
-              <h3 className="text-xl font-bold">Create Your Ambition</h3>
+              <h3 className="text-xl font-bold">Create Your Ambition📒</h3>
               <p className="text-muted-foreground">
                 Define your goal with our guided setup process, setting
                 deadlines, priorities and tracking methods.
@@ -149,7 +146,7 @@ export default function Features() {
               <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                 <span className="text-2xl font-bold text-primary">2</span>
               </div>
-              <h3 className="text-xl font-bold">Track Your Progress</h3>
+              <h3 className="text-xl font-bold">Track Your Progress🔃</h3>
               <p className="text-muted-foreground">
                 Break down your ambition into manageable tasks or milestones and
                 track your progress visually.
@@ -160,7 +157,7 @@ export default function Features() {
               <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                 <span className="text-2xl font-bold text-primary">3</span>
               </div>
-              <h3 className="text-xl font-bold">Achieve & Celebrate</h3>
+              <h3 className="text-xl font-bold">Achieve & Celebrate🎉</h3>
               <p className="text-muted-foreground">
                 Reach your goals faster with data-backed insights and celebrate
                 your accomplishments along the way.
@@ -241,28 +238,28 @@ export default function Features() {
               <h3 className="text-xl font-bold mb-4 text-muted-foreground">
                 Before AmbitiousYou
               </h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-2">
-                  <div className="mt-1 text-destructive">
-                    <X className="h-5 w-5" />
+              <ul className="space-y-7">
+                <li className="flex items-center gap-2">
+                  <div className="text-destructive">
+                    <X className="size-6 bg-red-50 text-red-500 rounded-full p-1" />
                   </div>
                   <p>Goals scattered across multiple apps and notes</p>
                 </li>
-                <li className="flex items-start gap-2">
-                  <div className="mt-1 text-destructive">
-                    <X className="h-5 w-5" />
+                <li className="flex items-center gap-2">
+                  <div className="text-destructive">
+                    <X className="size-6 bg-red-50 text-red-500 rounded-full p-1" />
                   </div>
                   <p>Unclear progress tracking leads to abandoned ambitions</p>
                 </li>
-                <li className="flex items-start gap-2">
-                  <div className="mt-1 text-destructive">
-                    <X className="h-5 w-5" />
+                <li className="flex items-center gap-2">
+                  <div className="text-destructive">
+                    <X className="size-6 bg-red-50 text-red-500 rounded-full p-1" />
                   </div>
                   <p>Overwhelming feeling when managing multiple goals</p>
                 </li>
-                <li className="flex items-start gap-2">
-                  <div className="mt-1 text-destructive">
-                    <X className="h-5 w-5" />
+                <li className="flex items-center gap-2">
+                  <div className="text-destructive">
+                    <X className="size-6 bg-red-50 text-red-500 rounded-full p-1" />
                   </div>
                   <p>No visibility into time investment across goals</p>
                 </li>
@@ -273,28 +270,28 @@ export default function Features() {
               <h3 className="text-xl font-bold mb-4 text-primary">
                 With AmbitiousYou
               </h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-2">
-                  <div className="mt-1 text-primary">
-                    <Check className="h-5 w-5" />
+              <ul className="space-y-7">
+                <li className="flex items-center gap-2">
+                  <div className="text-primary">
+                  <Check className="size-6 p-1 text-white bg-green-500 rounded-full" />
                   </div>
                   <p>All ambitions organized in one unified system</p>
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="mt-1 text-primary">
-                    <Check className="h-5 w-5" />
+                  <div className="text-primary">
+                    <Check className="size-6 p-1 text-white bg-green-500 rounded-full" />
                   </div>
                   <p>Visual progress tracking keeps you motivated daily</p>
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="mt-1 text-primary">
-                    <Check className="h-5 w-5" />
+                  <div className="text-primary">
+                    <Check className="size-6 p-1 text-white bg-green-500 rounded-full" />
                   </div>
                   <p>Prioritization tools ensure focus on what matters most</p>
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="mt-1 text-primary">
-                    <Check className="h-5 w-5" />
+                  <div className="text-primary">
+                    <Check className="size-6 p-1 text-white bg-green-500 rounded-full" />
                   </div>
                   <p>
                     Time analytics show where your efforts are yielding results
@@ -307,7 +304,7 @@ export default function Features() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      {/* <section className="w-full py-12 md:py-24 lg:py-32">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <div className="space-y-2">
@@ -325,7 +322,6 @@ export default function Features() {
             <div className="bg-background p-6 rounded-lg shadow border">
               <div className="flex items-center gap-4 mb-4">
                 <div className="h-12 w-12 rounded-full bg-primary/20">
-                  {/* Add actual user image here */}
                 </div>
                 <div>
                   <h4 className="font-bold">Sarah Johnson</h4>
@@ -384,7 +380,7 @@ export default function Features() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <section className="w-full py-12 md:py-24 lg:py-32">
@@ -392,7 +388,7 @@ export default function Features() {
           <div className="flex flex-col items-center space-y-4 text-center mb-12">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Frequently Asked Questions
+                Questions? Answered!
               </h2>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
                 Everything you need to know about getting started with
@@ -451,7 +447,7 @@ export default function Features() {
       </section>
 
       {/* CTA Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-[#3D7F7A] to-[#176B87] rounded-xl text-white">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
@@ -471,10 +467,10 @@ export default function Features() {
                   </Link>
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
+              {/* <p className="text-xs text-muted-foreground mt-2">
                 Join 50,000+ ambitious professionals already achieving their
                 goals
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -510,8 +506,8 @@ function FeatureCard({
 
 function BenefitItem({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex items-start gap-2">
-      <Check className="h-5 w-5 mt-1 text-primary" />
+    <div className="flex items-center gap-2">
+      <Check className="size-6 p-1 mt-1 text-white bg-green-500 rounded-full" />
       <p className="text-base font-medium leading-none">{children}</p>
     </div>
   );

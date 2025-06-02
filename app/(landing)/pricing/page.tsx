@@ -18,7 +18,7 @@ import {
 
 const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept props
   // Define pricing data
-  const pricing: object = {
+  const pricing = {
     achiever: {
       monthly: {
         price: "$9.99",
@@ -118,9 +118,9 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => { // Accept p
               </div>
 
               <div className="mb-8">
-                <span className="text-5xl font-bold">{pricing.superhuman[billingCycle].price}</span>
-                <span className="text-muted-foreground">{pricing.superhuman[billingCycle].billingPeriod}</span>
-                <p className="text-sm text-muted-foreground mt-2">{pricing.superhuman[billingCycle].billingInfo}</p>
+                <span className="text-5xl font-bold">Coming Soon...</span>
+                {/* <span className="text-muted-foreground">{pricing.superhuman[billingCycle].billingPeriod}</span>
+                <p className="text-sm text-muted-foreground mt-2">{pricing.superhuman[billingCycle].billingInfo}</p> */}
               </div>
 
               {/* Rest of Superhuman tier content... */}
@@ -175,7 +175,7 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
-              <BarChartIcon className="mr-2 h-4 w-4" />
+              <BarChartIcon className="mr-2 size-4" />
               Features
             </div>
             <h2 className={`${playfair.className} text-3xl md:text-4xl font-bold mb-6`}>
@@ -247,9 +247,16 @@ export default function PricingPage() {
                     </Button>
                   </td>
                   <td className="p-4 text-center">
+<<<<<<< Updated upstream
                     <Button variant="outline" size="sm" asChild>
                       <Link prefetch={true} href="/signup?plan=conquerer">Choose Conquerer</Link>
                     </Button>
+=======
+                    {/* <Button variant="outline" size="sm" asChild>
+                      <Link href="/signup?plan=superhuman">Choose Superhuman</Link>
+                    </Button> */}
+                    Coming Soon...
+>>>>>>> Stashed changes
                   </td>
                 </tr>
               </tfoot>
@@ -270,8 +277,8 @@ export default function PricingPage() {
                       { name: "Number of Goals", value: plan === "Explorer" ? "3 Active" : "Unlimited" },
                       { name: "Goal Hierarchy", value: plan === "Explorer" ? "Basic" : "Advanced" },
                       { name: "Analytics", value: plan === "Explorer" ? "Basic" : (plan === "Achiever" ? "Detailed" : "Advanced & Team") },
-                    ].map((feature) => (
-                      <div key={feature.name} className="flex justify-between items-center">
+                    ].map((feature, index) => (
+                      <div key={index} className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">{feature.name}</span>
                         <span className="text-sm">{feature.value}</span>
                       </div>
@@ -282,9 +289,17 @@ export default function PricingPage() {
                     variant={plan === "Achiever" ? "default" : "outline"}
                     asChild
                   >
+<<<<<<< Updated upstream
                     <Link prefetch={true} href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
                       {plan === "Explorer" ? "Get Started" : `Choose ${plan}`}
                     </Link>
+=======
+                    {plan !== "Superhuman" ?
+                      (<Link href={`/signup${plan !== "Explorer" ? `?plan=${plan.toLowerCase()}` : ''}`}>
+                        {plan === "Explorer" ? "Get Started" : `Choose ${plan}`}
+                      </Link>)
+                    : (<p>Coming Soon...</p>)}
+>>>>>>> Stashed changes
                   </Button>
                 </div>
               </div>
@@ -294,11 +309,11 @@ export default function PricingPage() {
       </section>
 
       {/* Testimonial Section - remove the absolute backdrop overlay */}
-      <section className="py-16">
+      {/* <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
-              <StarFilledIcon className="mr-2 h-4 w-4 text-amber-400" />
+              <StarFilledIcon className="mr-2 size-4 text-amber-400" />
               Success Stories
             </div>
             <h2 className={`${playfair.className} text-3xl md:text-4xl font-bold mb-6`}>
@@ -308,8 +323,12 @@ export default function PricingPage() {
               See how our premium features have transformed the lives of our users
             </p>
           </div>
+<<<<<<< Updated upstream
 
           {/* Main testimonial - remove backdrop-blur */}
+=======
+          
+>>>>>>> Stashed changes
           <div className="bg-background rounded-xl p-8 shadow-lg border border-border relative mb-20">
             <div className="md:flex items-start gap-8">
               <div className="md:w-1/3 mb-6 md:mb-0">
@@ -340,8 +359,12 @@ export default function PricingPage() {
               </div>
             </div>
           </div>
+<<<<<<< Updated upstream
 
           {/* More testimonials - remove backdrop-blur */}
+=======
+          
+>>>>>>> Stashed changes
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -366,7 +389,7 @@ export default function PricingPage() {
               <div key={i} className="bg-background rounded-xl p-6 shadow-lg border border-border relative">
                 <div className="flex mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <StarFilledIcon key={i} className="h-4 w-4 text-amber-400" />
+                    <StarFilledIcon key={i} className="size-4 text-amber-400" />
                   ))}
                 </div>
 
@@ -383,18 +406,23 @@ export default function PricingPage() {
             ))}
           </div>
         </div>
+<<<<<<< Updated upstream
       </section>
 
+=======
+      </section> */}
+      
+>>>>>>> Stashed changes
       {/* FAQ Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm">
-              <QuestionMarkCircledIcon className="mr-2 h-4 w-4" />
+              <QuestionMarkCircledIcon className="mr-2 size-4" />
               FAQ
             </div>
             <h2 className={`${playfair.className} text-3xl md:text-4xl font-bold mb-6`}>
-              Frequently Asked Questions
+              Questions?<br />Answered!
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Find answers to common questions about our plans
@@ -439,8 +467,13 @@ export default function PricingPage() {
               Have more questions? We're here to help.
             </p>
             <Button variant="outline" className="mx-auto">
+<<<<<<< Updated upstream
               <Link prefetch={true} href="/contact" className="flex items-center gap-2">
                 Contact Support <ArrowRightIcon className="h-4 w-4" />
+=======
+              <Link href="/contact" className="flex items-center gap-2">
+                Contact Support <ArrowRightIcon className="size-4" />
+>>>>>>> Stashed changes
               </Link>
             </Button>
           </div>
@@ -448,15 +481,15 @@ export default function PricingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 overflow-hidden">
+      <section className="py-24 overflow-hidden ">
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           {/* Replace semi-transparent background */}
-          <div className="bg-background rounded-2xl p-10 shadow-xl border border-primary/20">
+          <div className="bg-gradient-to-b from-[#3D7F7A] to-[#176B87] rounded-xl text-white p-10 shadow-xl border border-primary/20">
             <div className="text-center mb-10">
               <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-6`}>
                 Ready to Unlock Your Full Potential?
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-xl max-w-2xl mx-auto">
                 Choose the plan that's right for you and start achieving your ambitious goals today.
               </p>
             </div>
@@ -467,19 +500,19 @@ export default function PricingPage() {
                   href={`/signup?plan=achiever&billing=${billingCycle}`}
                   className="flex justify-center items-center gap-2 w-full"
                 >
-                  Choose Achiever <ArrowRightIcon className="h-4 w-4" />
+                  Choose Achiever <ArrowRightIcon className="size-4" />
                 </Link>
               </Button>
             </div>
 
             {/* Security badges */}
             <div className="mt-5 flex justify-center gap-6 items-center">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <LockClosedIcon className="h-4 w-4" />
+              <div className="flex items-center gap-2 text-sm">
+                <LockClosedIcon className="size-4 text-green-500" />
                 <span>Secure Payment</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <InfoCircledIcon className="h-4 w-4" />
+              <div className="flex items-center gap-2 text-sm">
+                <InfoCircledIcon className="size-4" />
                 <span>Cancel Anytime</span>
               </div>
             </div>
