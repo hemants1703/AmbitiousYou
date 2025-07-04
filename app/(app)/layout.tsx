@@ -52,7 +52,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         milestonesData={milestonesData}
       >
         <ScrollArea className="flex-1 overflow-hidden">
-          <main className="flex-1 p-6 md:p-8 pt-6 max-w-7xl mx-auto w-full">{children}</main>
+          <main className="flex-1 max-w-7xl mx-auto w-full">{children}</main>
         </ScrollArea>
       </SidebarController>
     </div>

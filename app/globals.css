@@ -46,17 +46,17 @@
 
   /* AmbitiousYou Custom Colors */
   --custom-light: #64ccc5;
-	--custom-dark: #176b87;
-	--custom-light-pale: rgba(100, 204, 197, 0.3);
-	--custom-completed: rgba(16, 185, 129, 0.3);
-	--custom-ongoing: rgba(59, 130, 246, 0.3);
-	--custom-future: rgba(168, 85, 247, 0.3);
-	--custom-incomplete: rgba(255, 99, 71, 0.3);
-	--custom-background-gradient-start: rgba(100, 204, 197, 0.251);
-	--scrollbar-bg-light: #ffffff;
-	--scrollbar-thumb-light: #000000;
-	--scrollbar-bg-dark: #000000;
-	--scrollbar-thumb-dark: #ffffff;
+  --custom-dark: #176b87;
+  --custom-light-pale: rgba(100, 204, 197, 0.3);
+  --custom-completed: rgba(16, 185, 129, 0.3);
+  --custom-ongoing: rgba(59, 130, 246, 0.3);
+  --custom-future: rgba(168, 85, 247, 0.3);
+  --custom-incomplete: rgba(255, 99, 71, 0.3);
+  --custom-background-gradient-start: rgba(100, 204, 197, 0.251);
+  --scrollbar-bg-light: #ffffff;
+  --scrollbar-thumb-light: #000000;
+  --scrollbar-bg-dark: #000000;
+  --scrollbar-thumb-dark: #ffffff;
 }
 
 :root {

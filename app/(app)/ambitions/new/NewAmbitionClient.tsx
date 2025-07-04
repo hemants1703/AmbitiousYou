@@ -484,7 +484,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container max-w-4xl space-y-8">
+    <form onSubmit={handleSubmit} className="container max-w-4xl space-y-8 p-6 md:p-8 pt-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -685,7 +685,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <motion.div
-                              key={color.value}
+                              key={index}
                               initial={{ opacity: 0, scale: 0.8 }}
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{

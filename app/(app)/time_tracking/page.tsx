@@ -44,12 +44,10 @@ import {
 } from "@radix-ui/react-icons";
 // For icons not available in Radix UI
 import { Pause, Play, LineChart, Hourglass, Tag } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function Time() {
-  const router = useRouter();
-
-  return router.push("/dashboard");
+  redirect("/");
 
   const [activeTimer, setActiveTimer] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());

@@ -4,14 +4,14 @@ import React, { useState } from "react";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { Header } from "@/components/dashboard/Header";
 import { User } from "@supabase/supabase-js";
-import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
+import { AmbitionData, AmbitionMilestone, AmbitionTask, SupabasePlansData, SupabaseProfileData } from "@/types";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
   userData: User;
   profileData: SupabaseProfileData[];
   plansData: SupabasePlansData[];
-  ambitionsData: Ambition[];
+  ambitionsData: AmbitionData[];
   tasksData: AmbitionTask[];
   milestonesData: AmbitionMilestone[];
 }

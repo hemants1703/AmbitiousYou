@@ -88,7 +88,7 @@ export function DashboardClient({
   }, []);
 
   return (
-    <div className="flex flex-col gap-8 pb-10 overflow-auto">
+    <div className="flex flex-col gap-8 pb-10 overflow-auto p-6 md:p-8 pt-6">
       {/* Welcome Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

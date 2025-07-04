@@ -1,11 +1,27 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { CheckIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default function Billing() {
+  redirect("/");
   return (
     <div className="container mx-auto space-y-8">
       <div>
@@ -19,7 +35,7 @@ export default function Billing() {
           <TabsTrigger value="payment">Payment</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="overview" className="space-y-6">
           <Card className="border-2 border-primary">
             <CardHeader>
@@ -76,7 +92,9 @@ export default function Billing() {
             <CardFooter>
               <div className="flex flex-col sm:flex-row gap-2 w-full">
                 <Button className="flex-1">Change Plan</Button>
-                <Button variant="outline" className="flex-1">Cancel Subscription</Button>
+                <Button variant="outline" className="flex-1">
+                  Cancel Subscription
+                </Button>
               </div>
             </CardFooter>
           </Card>
@@ -102,7 +120,9 @@ export default function Billing() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full">Downgrade</Button>
+                <Button variant="outline" className="w-full">
+                  Downgrade
+                </Button>
               </CardFooter>
             </Card>
 
@@ -126,7 +146,9 @@ export default function Billing() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button disabled className="w-full">Current Plan</Button>
+                <Button disabled className="w-full">
+                  Current Plan
+                </Button>
               </CardFooter>
             </Card>
 
@@ -166,14 +188,22 @@ export default function Billing() {
               <div className="border rounded-md p-4 flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <div className="bg-muted p-2 rounded-md">
-                    <svg 
-                      width="24" 
-                      height="24" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2" />
+                      <rect
+                        x="2"
+                        y="5"
+                        width="20"
+                        height="14"
+                        rx="2"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
                       <path d="M2 10H22" stroke="currentColor" strokeWidth="2" />
                     </svg>
                   </div>
@@ -203,8 +233,10 @@ export default function Billing() {
               <div>
                 <p className="font-medium">Billing Address</p>
                 <p className="text-muted-foreground">
-                  123 Main St<br />
-                  San Francisco, CA 94105<br />
+                  123 Main St
+                  <br />
+                  San Francisco, CA 94105
+                  <br />
                   United States
                 </p>
               </div>
@@ -238,10 +270,14 @@ export default function Billing() {
                     <TableCell>PRO Plan - Monthly</TableCell>
                     <TableCell>$29.00</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-green-100 text-green-800">Paid</Badge>
+                      <Badge variant="outline" className="bg-green-100 text-green-800">
+                        Paid
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="ghost">Download</Button>
+                      <Button size="sm" variant="ghost">
+                        Download
+                      </Button>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -249,10 +285,14 @@ export default function Billing() {
                     <TableCell>PRO Plan - Monthly</TableCell>
                     <TableCell>$29.00</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-green-100 text-green-800">Paid</Badge>
+                      <Badge variant="outline" className="bg-green-100 text-green-800">
+                        Paid
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="ghost">Download</Button>
+                      <Button size="sm" variant="ghost">
+                        Download
+                      </Button>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -260,10 +300,14 @@ export default function Billing() {
                     <TableCell>PRO Plan - Monthly</TableCell>
                     <TableCell>$29.00</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-green-100 text-green-800">Paid</Badge>
+                      <Badge variant="outline" className="bg-green-100 text-green-800">
+                        Paid
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="ghost">Download</Button>
+                      <Button size="sm" variant="ghost">
+                        Download
+                      </Button>
                     </TableCell>
                   </TableRow>
                 </TableBody>

@@ -30,9 +30,14 @@ import { Menu } from "lucide-react";
 import { toast } from "sonner";
 import { logoutAction } from "@/app/(auth)/actions";
 import { User } from "@supabase/supabase-js";
-import { Ambition, Milestone, SupabasePlansData, SupabaseProfileData, Task } from "@/types";
+import {
+  AmbitionData,
+  AmbitionMilestone,
+  SupabasePlansData,
+  SupabaseProfileData,
+  AmbitionTask,
+} from "@/types";
 import { pricingPlans } from "@/content/pricingPlans";
-import CynthiaMain from "@/components/cynthia/CynthiaMain";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -40,7 +45,7 @@ interface HeaderProps {
   userData: User;
   profileData: SupabaseProfileData[];
   plansData: SupabasePlansData[];
-  ambitionsData: Ambition[];
+  ambitionsData: AmbitionData[];
   tasksData: AmbitionTask[];
   milestonesData: AmbitionMilestone[];
 }
@@ -60,7 +65,6 @@ export function Header({
   const [ambitions, setAmbitions] = useState(ambitionsData);
   const [tasks, setTasks] = useState(tasksData);
   const [milestones, setMilestones] = useState(milestonesData);
-  const [cynthiaOnScreen, setCynthiaOnScreen] = useState(false);
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const router = useRouter();
 
@@ -107,7 +111,7 @@ export function Header({
   }, [debouncedSearchQuery]);
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between md:justify-end gap-4 border-b bg-background px-4 md:px-6">
       <Button
         variant="ghost"
         size="icon"
@@ -118,241 +122,8 @@ export function Header({
         <Menu className="h-5 w-5" />
       </Button>
 
-      <div className="flex-1 flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="hidden md:flex gap-2 bg-gradient-to-tl from-slate-700 to-slate-950"
-          onClick={() => {
-            setCynthiaOnScreen(true);
-          }}
-        >
-          {/* <Link prefetch={true} href="/dashboard"> */}
-          <RocketIcon className="h-4 w-4 text-white" />
-          <span className="font-medium text-white">Cynthia</span>
-          {/* </Link> */}
-        </Button>
-        {cynthiaOnScreen && (
-          <CynthiaMain cynthiaOnScreen={cynthiaOnScreen} setCynthiaOnScreen={setCynthiaOnScreen} />
-        )}
-
-        <Button
-          variant="outline"
-          size="sm"
-          className="md:flex items-center gap-1 hidden text-muted-foreground"
-          onClick={() => setOpen(true)}
-        >
-          <MagnifyingGlassIcon className="h-4 w-4" />
-          <span>Search ambitions...</span>
-          <kbd className="ml-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-            <span className="text-xs">⌘</span>K
-          </kbd>
-        </Button>
-      </div>
-
       <div className="flex items-center gap-2">
-        {/* STREAK SYSTEM */}
-        {/* <Dropdown.DropdownMenu>
-          <Dropdown.DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative group">
-              <div className="relative">
-                <motion.div
-                  initial={{ scale: 1 }}
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    duration: 2,
-                    ease: "easeInOut",
-                    repeatDelay: 5,
-                  }}
-                  className="absolute -inset-1 rounded-full bg-gradient-to-r from-orange-500/50 to-amber-300/50 opacity-75 blur-sm group-hover:opacity-100"
-                />
-                <div className="relative flex items-center justify-center">
-                  <FlameIcon className="h-5 w-5 text-orange-500 group-hover:text-orange-600" />
-                </div>
-              </div>
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] bg-amber-500 hover:bg-amber-600">
-                7
-              </Badge>
-            </Button>
-          </Dropdown.DropdownMenuTrigger>
-          <Dropdown.DropdownMenuContent className="w-80 p-0" align="end">
-            <div className="p-4 space-y-3">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-300 flex items-center justify-center">
-                    <FlameIcon className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold">7 Day Streak!</h4>
-                    <p className="text-xs text-muted-foreground">
-                      Keep going to reach your next milestone
-                    </p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" className="h-7 gap-1">
-                  <CheckIcon className="h-3.5 w-3.5" />
-                  <span className="text-xs">Check In</span>
-                </Button>
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold">Daily check-in</span>
-                  <span className="text-emerald-500 font-medium">Completed today!</span>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span>Next milestone: 10 days</span>
-                    <span>7/10</span>
-                  </div>
-                  <Progress value={70} className="h-2" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-7 gap-1 pt-2">
-                {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <span className="text-xs text-muted-foreground mb-1">{day}</span>
-                    <div
-                      className={`h-6 w-6 rounded-full flex items-center justify-center text-[10px] ${i < 7 ? "bg-orange-500 text-white" : "bg-muted text-muted-foreground"}`}
-                    >
-                      {i < 7 ? <CheckIcon className="h-3 w-3" /> : ""}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-muted/50 p-3 rounded-md mt-2">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-purple-500/20 flex items-center justify-center">
-                    <LightningBoltIcon className="h-4 w-4 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold">Your longest streak: 14 days</p>
-                    <p className="text-xs text-muted-foreground">Can you beat your record?</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Dropdown.DropdownMenuContent>
-        </Dropdown.DropdownMenu> */}
-
         <ThemeToggler />
-
-        {/* NOTIFICATIONS */}
-        {/* <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <BellIcon className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px]">
-                3
-              </Badge>
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Notifications</SheetTitle>
-            </SheetHeader>
-            <div className="grid gap-4 p-4">
-              <div className="border-b pb-3">
-                <div className="flex items-start gap-3">
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <RocketIcon className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">New achievement unlocked!</p>
-                    <p className="text-xs text-muted-foreground">
-                      You&apos;ve completed 5 consecutive days of progress.
-                    </p>
-                    <p className="text-xs text-muted-foreground">2 hours ago</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border-b pb-3">
-                <div className="flex items-start gap-3">
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
-                    <TargetIcon className="h-4 w-4 text-blue-500" />
-                  </div>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">Milestone reached</p>
-                    <p className="text-xs text-muted-foreground">
-                      Your "Learn Piano" ambition is 50% complete!
-                    </p>
-                    <p className="text-xs text-muted-foreground">Yesterday</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pb-3">
-                <div className="flex items-start gap-3">
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-green-500/10">
-                    <ClockIcon className="h-4 w-4 text-green-500" />
-                  </div>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">Task reminder</p>
-                    <p className="text-xs text-muted-foreground">
-                      Don&apos;t forget to practice scales for 30 mins today
-                    </p>
-                    <p className="text-xs text-muted-foreground">2 days ago</p>
-                  </div>
-                </div>
-              </div>
-
-              <Button variant="outline" size="sm" className="mt-2">
-                Mark all as read
-              </Button>
-            </div>
-          </SheetContent>
-        </Sheet> */}
-
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <QuestionMarkCircledIcon className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Help & Resources</SheetTitle>
-            </SheetHeader>
-            <div className="grid gap-4 p-4">
-              <div className="grid gap-2">
-                <h3 className="text-sm font-medium">Getting Started</h3>
-                <p className="text-sm text-muted-foreground">
-                  Learn how to create your first ambition and track your progress effectively
-                </p>
-                <Button size="sm" variant="outline" className="mt-2 w-full">
-                  Watch Tutorial
-                </Button>
-              </div>
-              {/* DOCUMENTATION */}
-              {/* <div className="grid gap-2">
-                <h3 className="text-sm font-medium">Documentation</h3>
-                <p className="text-sm text-muted-foreground">
-                  Explore our comprehensive guides and documentation
-                </p>
-                <Button size="sm" variant="outline" className="mt-2 w-full">
-                  View Docs
-                </Button>
-              </div> */}
-              <div className="grid gap-2">
-                <h3 className="text-sm font-medium">Need Help?</h3>
-                <p className="text-sm text-muted-foreground">
-                  Our support team is ready to assist you
-                </p>
-                <Button size="sm" variant="outline" className="mt-2 w-full" asChild>
-                  <Link prefetch={true} href="mailto:support@ambitiousyou.com">
-                    Contact Support
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
-
         <Dropdown.DropdownMenu>
           <Dropdown.DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
@@ -367,18 +138,13 @@ export function Header({
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">{`${firstName} ${lastName}`}</p>
                 <p className="text-xs leading-none text-muted-foreground">{email}</p>
-                {planName && <Badge className="mt-1 w-fit">{planName} Plan</Badge>}
+                {/* {planName && <Badge className="mt-1 w-fit">{planName} Plan</Badge>} */}
               </div>
             </Dropdown.DropdownMenuLabel>
             <Dropdown.DropdownMenuSeparator />
             <Dropdown.DropdownMenuItem>
               <Link prefetch={true} href="/settings" className="w-full">
                 Settings
-              </Link>
-            </Dropdown.DropdownMenuItem>
-            <Dropdown.DropdownMenuItem>
-              <Link prefetch={true} href="/billing" className="w-full">
-                Billing
               </Link>
             </Dropdown.DropdownMenuItem>
             <Dropdown.DropdownMenuSeparator />
@@ -388,118 +154,6 @@ export function Header({
           </Dropdown.DropdownMenuContent>
         </Dropdown.DropdownMenu>
       </div>
-
-      <Command.CommandDialog open={open} onOpenChange={setOpen}>
-        <Command.CommandInput
-          placeholder="Search across your ambitions, tasks, and more..."
-          value={searchQuery}
-          onValueChange={setSearchQuery}
-        />
-        <Command.CommandList>
-          <Command.CommandEmpty>
-            <div className="flex flex-col items-center justify-center py-6">
-              <Search className="h-10 w-10 text-muted-foreground mb-2 opacity-50" />
-              <p className="text-muted-foreground">No results found for "{searchQuery}"</p>
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => {
-                  setOpen(false);
-                  router.push("/ambitions/new");
-                }}
-              >
-                Create New Ambition
-              </Button>
-            </div>
-          </Command.CommandEmpty>
-
-          {ambitions.length > 0 && (
-            <Command.CommandGroup heading="Ambitions">
-              {ambitions.map((ambition) => (
-                <Command.CommandItem
-                  key={ambition.id}
-                  onSelect={() => {
-                    router.push(`/ambitions/${ambition.id}`);
-                    setOpen(false);
-                  }}
-                >
-                  <TargetIcon className="mr-2 h-4 w-4" />
-                  <span>{ambition.ambitionName}</span>
-                  {ambition.ambitionPercentageCompleted > 0 && (
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {ambition.ambitionPercentageCompleted}%
-                    </span>
-                  )}
-                </Command.CommandItem>
-              ))}
-              <Command.CommandItem
-                onSelect={() => {
-                  router.push(`/ambitions?q=${encodeURIComponent(searchQuery)}`);
-                  setOpen(false);
-                }}
-                className="text-sm text-muted-foreground"
-              >
-                <Search className="mr-2 h-4 w-4" />
-                <span>View all results for "{searchQuery}"</span>
-              </Command.CommandItem>
-            </Command.CommandGroup>
-          )}
-
-          {tasks.length > 0 && (
-            <Command.CommandGroup heading="Tasks">
-              {tasks.map((task) => (
-                <Command.CommandItem
-                  key={task.id}
-                  onSelect={() => {
-                    router.push(`/tasks/${task.id}`);
-                    setOpen(false);
-                  }}
-                >
-                  <ClockIcon className="mr-2 h-4 w-4" />
-                  <div className="flex flex-1 items-center justify-between">
-                    <span>{task.task}</span>
-                    <Badge variant={task.taskDeadline ? "outline" : "secondary"} className="ml-2">
-                      {task.taskDeadline
-                        ? new Date(task.taskDeadline).toLocaleDateString()
-                        : "No deadline"}
-                    </Badge>
-                  </div>
-                </Command.CommandItem>
-              ))}
-            </Command.CommandGroup>
-          )}
-
-          <Command.CommandGroup heading="Quick Actions">
-            <Command.CommandItem
-              onSelect={() => {
-                router.push("/dashboard");
-                setOpen(false);
-              }}
-            >
-              <RocketIcon className="mr-2 h-4 w-4" />
-              <span>Go to Dashboard</span>
-            </Command.CommandItem>
-            <Command.CommandItem
-              onSelect={() => {
-                router.push("/ambitions");
-                setOpen(false);
-              }}
-            >
-              <TargetIcon className="mr-2 h-4 w-4" />
-              <span>All Ambitions</span>
-            </Command.CommandItem>
-            <Command.CommandItem
-              onSelect={() => {
-                router.push("/ambitions/new");
-                setOpen(false);
-              }}
-            >
-              <PlusCircledIcon className="mr-2 h-4 w-4" />
-              <span>Create New Ambition</span>
-            </Command.CommandItem>
-          </Command.CommandGroup>
-        </Command.CommandList>
-      </Command.CommandDialog>
     </header>
   );
 

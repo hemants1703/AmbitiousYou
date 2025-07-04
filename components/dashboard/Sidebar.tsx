@@ -13,16 +13,12 @@ import {
 } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
 import Image from "next/image";
 import AmbitiousYouLogo from "../AmbitiousYouLogo";
-import { Loader2 } from "lucide-react";
+import { Loader2, SparklesIcon } from "lucide-react";
+import "./cynthiaMenuItemAnimation.css";
 
 const mainNavItems = [
   {
@@ -40,6 +36,11 @@ const mainNavItems = [
     href: "/ambitions/new",
     icon: PlusCircledIcon,
   },
+  // {
+  //   title: "Cynthia",
+  //   href: "/cynthia",
+  //   icon: SparklesIcon
+  // }
   // Will be implemented in future versions
   // {
   //   title: "Achievements",
@@ -92,12 +93,7 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
       <div className="flex items-center h-16 border-b border-border px-4">
         <Link prefetch={true} href="/dashboard" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <Image
-              src="/favicon.ico"
-              alt="AmbitiousYou Logo"
-              width={32}
-              height={32}
-            />
+            <Image src="/favicon.ico" alt="AmbitiousYou Logo" width={32} height={32} />
           </div>
           {expanded && (
             <motion.span
@@ -120,7 +116,8 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
               <TooltipProvider key={item.href} delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link prefetch={true}
+                    <Link
+                      prefetch={true}
                       href={item.href}
                       // onClick={(e) => {
                       //   e.preventDefault();
@@ -130,19 +127,21 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
                         "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
                         item.href === pathname
                           ? "bg-primary text-primary-foreground"
-                          : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                          : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                        item.href === "/cynthia" ? "animated-cynthia-menu-item" : "",
+                        item.href === "/cynthia" && pathname === "/cynthia"
+                          ? "active text-white text-shadow-lg"
+                          : ""
                       )}
                     >
                       <span className="flex items-center gap-2">
-                        <item.icon className="h-4 w-4" />
+                        <item.icon className={cn("size-4", item.href === "/cynthia" ? "" : "")} />
                         {expanded && <span>{item.title}</span>}
                       </span>
                       <LinkStatus />
                     </Link>
                   </TooltipTrigger>
-                  {!expanded && (
-                    <TooltipContent side="right">{item.title}</TooltipContent>
-                  )}
+                  {!expanded && <TooltipContent side="right">{item.title}</TooltipContent>}
                 </Tooltip>
               </TooltipProvider>
             ))}
@@ -165,16 +164,15 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
                   {expanded && <span>Toggle Sidebar</span>}
                 </Button>
               </TooltipTrigger>
-              {!expanded && (
-                <TooltipContent side="right">Toggle Sidebar</TooltipContent>
-              )}
+              {!expanded && <TooltipContent side="right">Toggle Sidebar</TooltipContent>}
             </Tooltip>
           </TooltipProvider>
           {bottomNavItems.map((item) => (
             <TooltipProvider key={item.href} delayDuration={100}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link prefetch={true}
+                  <Link
+                    prefetch={true}
                     href={item.href}
                     // onClick={(e) => {
                     //   e.preventDefault();
@@ -194,9 +192,7 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
                     <LinkStatus />
                   </Link>
                 </TooltipTrigger>
-                {!expanded && (
-                  <TooltipContent side="right">{item.title}</TooltipContent>
-                )}
+                {!expanded && <TooltipContent side="right">{item.title}</TooltipContent>}
               </Tooltip>
             </TooltipProvider>
           ))}
@@ -208,7 +204,12 @@ export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
 
 function LinkStatus() {
   const { pending } = useLinkStatus();
-  return pending ? (<div aria-label="Loading..." className="size-2 animate-ping bg-foreground opacity-75 rounded-full">
-    {/* <Loader2 className="w-4 h-4" /> */}
-  </div>) : null
+  return pending ? (
+    <div
+      aria-label="Loading..."
+      className="size-2 animate-ping bg-foreground opacity-75 rounded-full"
+    >
+      {/* <Loader2 className="w-4 h-4" /> */}
+    </div>
+  ) : null;
 }

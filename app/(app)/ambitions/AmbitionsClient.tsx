@@ -236,7 +236,7 @@ export default function AmbitionsClient({
   };
 
   return (
-    <div className="flex flex-col gap-6 max-sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
+    <div className="flex flex-col p-6 md:p-8 pt-6 gap-6 max-sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
