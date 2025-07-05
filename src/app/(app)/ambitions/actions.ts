@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function favouriteAmbitionAction(userId: string, ambitionId: string, favouriteValue: boolean) {
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("ambitions")
         .update({ isFavourited: favouriteValue })
         .eq("id", ambitionId)

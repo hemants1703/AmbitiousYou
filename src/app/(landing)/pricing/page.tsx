@@ -17,36 +17,42 @@ import {
 } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
 
-const PricingSection = ({ billingCycle, setBillingCycle }: any) => {
+const PricingSection = ({
+  billingCycle,
+  setBillingCycle,
+}: {
+  billingCycle: string;
+  setBillingCycle: (cycle: string) => void;
+}) => {
   // Accept props
   redirect("/");
   // Define pricing data
-  const pricing: object = {
-    achiever: {
-      monthly: {
-        price: "$9.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed monthly",
-      },
-      annual: {
-        price: "$7.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed annually at $95.90/year (20% off)",
-      },
-    },
-    superhuman: {
-      monthly: {
-        price: "$29.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed monthly",
-      },
-      annual: {
-        price: "$23.99",
-        billingPeriod: "/month",
-        billingInfo: "Billed annually at $287.90/year (20% off)",
-      },
-    },
-  };
+  // const pricing: object = {
+  //   achiever: {
+  //     monthly: {
+  //       price: "$9.99",
+  //       billingPeriod: "/month",
+  //       billingInfo: "Billed monthly",
+  //     },
+  //     annual: {
+  //       price: "$7.99",
+  //       billingPeriod: "/month",
+  //       billingInfo: "Billed annually at $95.90/year (20% off)",
+  //     },
+  //   },
+  //   superhuman: {
+  //     monthly: {
+  //       price: "$29.99",
+  //       billingPeriod: "/month",
+  //       billingInfo: "Billed monthly",
+  //     },
+  //     annual: {
+  //       price: "$23.99",
+  //       billingPeriod: "/month",
+  //       billingInfo: "Billed annually at $287.90/year (20% off)",
+  //     },
+  //   },
+  // };
 
   return (
     <>
@@ -102,7 +108,7 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => {
                 <p className="text-muted-foreground">For serious goal-setters</p>
               </div>
 
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <span className="text-5xl font-bold">{pricing.achiever[billingCycle].price}</span>
                 <span className="text-muted-foreground">
                   {pricing.achiever[billingCycle].billingPeriod}
@@ -110,7 +116,7 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => {
                 <p className="text-sm text-muted-foreground mt-2">
                   {pricing.achiever[billingCycle].billingInfo}
                 </p>
-              </div>
+              </div> */}
 
               {/* Rest of Achiever tier content... */}
             </div>
@@ -122,7 +128,7 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => {
                 <p className="text-muted-foreground">For teams and businesses</p>
               </div>
 
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <span className="text-5xl font-bold">{pricing.superhuman[billingCycle].price}</span>
                 <span className="text-muted-foreground">
                   {pricing.superhuman[billingCycle].billingPeriod}
@@ -130,7 +136,7 @@ const PricingSection = ({ billingCycle, setBillingCycle }: any) => {
                 <p className="text-sm text-muted-foreground mt-2">
                   {pricing.superhuman[billingCycle].billingInfo}
                 </p>
-              </div>
+              </div> */}
 
               {/* Rest of Superhuman tier content... */}
             </div>
@@ -409,9 +415,9 @@ export default function PricingPage() {
                 </div>
 
                 <blockquote className="text-xl md:text-2xl mb-6 italic">
-                  "Upgrading to Achiever was the best decision I made for my productivity. The
+                  &quot;Upgrading to Achiever was the best decision I made for my productivity. The
                   unlimited goals and advanced analytics helped me accomplish twice as much in half
-                  the time."
+                  the time.&quot;
                 </blockquote>
 
                 <div>
@@ -463,7 +469,7 @@ export default function PricingPage() {
                   ))}
                 </div>
 
-                <p className="text-lg mb-6 italic">"{testimonial.quote}"</p>
+                <p className="text-lg mb-6 italic">&quot;{testimonial.quote}&quot;</p>
 
                 <div>
                   <p className="font-medium">{testimonial.name}</p>
@@ -535,7 +541,9 @@ export default function PricingPage() {
           </div>
 
           <div className="mt-12 text-center">
-            <p className="text-muted-foreground mb-4">Have more questions? We're here to help.</p>
+            <p className="text-muted-foreground mb-4">
+              Have more questions? We&apos;re here to help.
+            </p>
             <Button variant="outline" className="mx-auto">
               <Link prefetch={true} href="/contact" className="flex items-center gap-2">
                 Contact Support <ArrowRightIcon className="h-4 w-4" />
@@ -555,7 +563,8 @@ export default function PricingPage() {
                 Ready to Unlock Your Full Potential?
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Choose the plan that's right for you and start achieving your ambitious goals today.
+                Choose the plan that&apos;s right for you and start achieving your ambitious goals
+                today.
               </p>
             </div>
 

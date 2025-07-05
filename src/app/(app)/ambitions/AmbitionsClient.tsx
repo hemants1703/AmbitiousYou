@@ -65,14 +65,6 @@ export default function AmbitionsClient({
     () => ambitions.filter((ambition) => ambition.ambitionStatus === "active"),
     [ambitions]
   );
-  const completedAmbitions = useMemo(
-    () => ambitions.filter((ambition) => ambition.ambitionStatus === "completed"),
-    [ambitions]
-  );
-  const archivedAmbitions = useMemo(
-    () => ambitions.filter((ambition) => ambition.ambitionStatus === "archived"),
-    [ambitions]
-  );
 
   // Filter states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -89,8 +81,7 @@ export default function AmbitionsClient({
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Extract unique categories and priorities for filter options
-  const categories = [...new Set(ambitions.map((ambition) => ambition.ambitionCategory))];
+  // Extract unique priorities for filter options
   const priorities = [...new Set(ambitions.map((ambition) => ambition.ambitionPriority))];
 
   // Filter ambitions based on selected filters
@@ -811,8 +802,8 @@ function NoAmbitionsFound() {
             <Target className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 opacity-20" />
             <h3 className="text-2xl md:text-3xl font-semibold mb-3">Start Your Journey</h3>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              You haven't created any ambitions yet. Ambitions help you track and achieve your most
-              important goals.
+              You haven&apos;t created any ambitions yet. Ambitions help you track and achieve your
+              most important goals.
             </p>
           </div>
 

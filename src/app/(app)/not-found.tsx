@@ -24,11 +24,11 @@ export default function NotFound() {
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <p className="text-muted-foreground">
-              We couldn't find the page you were looking for.
+              We couldn&apos;t find the page you were looking for.
               <br />
               Maybe you took a wrong turn, or the page moved.
             </p>
-            <p className="text-sm text-muted-foreground">Let's get you back on track!</p>
+            <p className="text-sm text-muted-foreground">Let&apos;s get you back on track!</p>
           </CardContent>
           <CardFooter className="flex flex-col space-y-3 pb-6">
             <Button asChild size="lg" className="px-8 w-full sm:w-auto">

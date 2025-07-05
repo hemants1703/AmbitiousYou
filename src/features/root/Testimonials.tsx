@@ -57,10 +57,12 @@ export default function Testimonials() {
             >
               {/* Quote mark */}
               <div className="absolute -top-4 -left-4 bg-primary/10 rounded-full w-8 h-8 flex items-center justify-center">
-                <span className="text-primary text-xl font-serif">"</span>
+                <span className="text-primary text-xl font-serif">&quot;</span>
               </div>
 
-              <p className="text-lg text-foreground/90 mb-8 italic">"{testimonial.quote}"</p>
+              <p className="text-lg text-foreground/90 mb-8 italic">
+                &quot;{testimonial.quote}&quot;
+              </p>
 
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">

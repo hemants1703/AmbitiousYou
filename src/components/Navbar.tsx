@@ -5,15 +5,8 @@ import { ThemeToggler } from "./ThemeToggler";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Playfair_Display } from "next/font/google";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import AmbitiousYouLogo from "./AmbitiousYouLogo";
-import { User } from "@supabase/supabase-js";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
 
 const navLinks = [
   { href: "/", label: "Home" },

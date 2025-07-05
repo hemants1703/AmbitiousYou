@@ -28,20 +28,19 @@ import {
   PlusIcon,
   Cross2Icon,
 } from "@radix-ui/react-icons";
-import { CircleCheckBig, CircleIcon, Milestone, Tag as TagIcon } from "lucide-react";
+import { CircleCheckBig, CircleIcon, Milestone } from "lucide-react";
 import { format, isBefore, isAfter, startOfToday } from "date-fns";
 import { cn } from "@/src/lib/utils";
 import Link from "next/link";
-import type { AmbitionData, SupabasePlansData } from "@/src/types";
+import type { AmbitionData } from "@/src/types";
 import { createNewAmbition } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/tooltip";
 
-export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[] }) {
+export function NewAmbitionClient() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isProFeature, setIsProFeature] = useState(false);
 
   // Add auto-save indicator state
   const [isSaving, setIsSaving] = useState(false);
@@ -198,16 +197,6 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     taskDescription: "",
     taskDeadline: format(new Date(), "yyyy-MM-dd"),
   });
-  const [newTag, setNewTag] = useState("");
-
-  // Check if user has a paid plan
-  useEffect(() => {
-    if (plansData[0].planMonthlyPrice === 0 && plansData[0].planName.toLowerCase() === "free") {
-      setIsProFeature(false);
-    } else {
-      setIsProFeature(true);
-    }
-  }, [plansData]);
 
   // Save form data whenever it changes
   useEffect(() => {
@@ -438,23 +427,6 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const addTag = () => {
-    if (!isProFeature) {
-      toast.info("Pro Feature", {
-        description: "Upgrade to a paid plan to use tags and labels",
-      });
-      return;
-    }
-    if (newTag.trim()) {
-      setTags([...tags, newTag.trim()]);
-      setNewTag("");
-    }
-  };
-
-  const removeTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
   };
 
   // Add a function to clear form data manually

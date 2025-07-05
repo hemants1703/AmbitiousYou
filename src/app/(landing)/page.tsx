@@ -6,14 +6,11 @@ import {
   LightningBoltIcon,
   CheckCircledIcon,
   ArrowRightIcon,
-  CheckIcon,
   HeartFilledIcon,
 } from "@radix-ui/react-icons";
 import { createClient } from "@/src/utils/supabase/server";
-import Testimonials from "@/src/features/root/Testimonials";
 import Features from "@/src/features/root/Features";
 import CTA from "@/src/features/root/CTA";
-import Pricing from "@/src/features/root/Pricing";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],

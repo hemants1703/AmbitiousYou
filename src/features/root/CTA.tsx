@@ -1,7 +1,6 @@
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import { RocketIcon } from "@radix-ui/react-icons";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Bricolage_Grotesque } from "next/font/google";
 
 const bricolage = Bricolage_Grotesque({

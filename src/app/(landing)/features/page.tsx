@@ -1,16 +1,5 @@
 import Link from "next/link";
-import {
-  Check,
-  ArrowRight,
-  BarChart3,
-  Zap,
-  Clock,
-  Target,
-  Filter,
-  PlusCircle,
-  X,
-  Star,
-} from "lucide-react";
+import { Check, ArrowRight, BarChart3, Target, Filter, PlusCircle, X } from "lucide-react";
 import {
   Accordion,
   AccordionContent,

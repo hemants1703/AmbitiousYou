@@ -1,7 +1,7 @@
 "use client";
 
 import Link, { useLinkStatus } from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { motion } from "framer-motion";
 import {
@@ -21,8 +21,6 @@ import {
 } from "@/src/components/ui/tooltip";
 import { useState } from "react";
 import Image from "next/image";
-import AmbitiousYouLogo from "../AmbitiousYouLogo";
-import { Loader2, SparklesIcon } from "lucide-react";
 import "./cynthiaMenuItemAnimation.css";
 
 const mainNavItems = [
@@ -77,17 +75,9 @@ const bottomNavItems = [
   // },
 ];
 
-export function Sidebar({ onMobileNavigate }: { onMobileNavigate: Function }) {
+export function Sidebar() {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
-  const router = useRouter();
-
-  const handleNavigation = (href: string) => {
-    router.push(href);
-    if (window.innerWidth < 768) {
-      onMobileNavigate?.();
-    }
-  };
 
   return (
     <motion.div

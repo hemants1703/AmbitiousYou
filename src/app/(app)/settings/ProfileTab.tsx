@@ -18,7 +18,7 @@ export default function ProfileTab({
 }) {
   let { firstName, lastName } = profilesData[0];
   const { id: userId, email } = userData;
-  let initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
+  const initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
 
   const handleProfileUpdate = async () => {
     const { success, error, data } = await updateProfileAction(userId, firstName, lastName);

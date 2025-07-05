@@ -20,7 +20,7 @@ export async function deleteAmbitionAction(ambitionId: string, ambitionTrackingM
     }
 
     if (ambitionTrackingMethod === "task") {
-        const { data: deletedTasks, error: tasksError } = await supabase
+        const { error: tasksError } = await supabase
             .from('tasks')
             .delete()
             .eq('ambitionId', ambitionId)
@@ -35,7 +35,7 @@ export async function deleteAmbitionAction(ambitionId: string, ambitionTrackingM
     }
 
     if (ambitionTrackingMethod === "milestone") {
-        const { data: deletedMilestones, error: milestonesError } = await supabase
+        const { error: milestonesError } = await supabase
             .from('milestones')
             .delete()
             .eq('ambitionId', ambitionId)

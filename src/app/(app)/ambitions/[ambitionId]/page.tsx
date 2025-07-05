@@ -1,16 +1,17 @@
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "./IndividualAmbitionClient";
-import type { AmbitionData, AmbitionTask, AmbitionMilestone, TimeEntry } from "@/src/types";
+import type { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     ambitionId: string;
-  };
+  }>;
 }
 
 export default async function IndividualAmbitionPage({ params }: PageProps) {
+  const { ambitionId } = await params;
   const supabase = await createClient();
 
   // Check if user is authenticated
@@ -22,10 +23,8 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     redirect("/login");
   }
 
-  const { ambitionId } = params;
-
   // Try to fetch from Supabase first
-  const { data: ambition, error: ambitionError } = await supabase
+  const { data: ambition } = await supabase
     .from("ambitions")
     .select("*")
     .eq("id", ambitionId)
@@ -38,7 +37,6 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
   // Fetch related data from Supabase
   let tasks: AmbitionTask[] = [];
   let milestones: AmbitionMilestone[] = [];
-  let timeEntries: TimeEntry[] = [];
 
   try {
     // Fetch tasks
@@ -61,18 +59,6 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
 
     if (milestonesData) {
       milestones = milestonesData as AmbitionMilestone[];
-    }
-
-    // Fetch time entries
-    const { data: timeEntriesData } = await supabase
-      .from("time_entries")
-      .select("*")
-      .eq("ambitionId", ambitionId)
-      .order("date", { ascending: false })
-      .limit(5);
-
-    if (timeEntriesData) {
-      timeEntries = timeEntriesData as TimeEntry[];
     }
   } catch (error) {
     // If fetching related data fails, use the data from test ambition

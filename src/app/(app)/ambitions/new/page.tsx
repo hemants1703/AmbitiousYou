@@ -1,9 +1,6 @@
 import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { NewAmbitionClient } from "./NewAmbitionClient";
-import { User } from "@supabase/supabase-js";
-import { getPlansTableData } from "@/src/utils/supabase/tablesDataProvider";
-import type { SupabasePlansData } from "@/src/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,17 +10,12 @@ export const metadata: Metadata = {
 export default async function NewAmbitionPage() {
   const supabase = await createClient();
 
-  const { data, error: userDoesNotExist } = await supabase.auth.getUser();
+  const { error: userDoesNotExist } = await supabase.auth.getUser();
 
   // Check if the user is logged in
   if (userDoesNotExist) {
     redirect("/login");
   }
 
-  const userData: User = data.user;
-  const { id } = userData;
-
-  const plansData: SupabasePlansData[] = await getPlansTableData(id);
-
-  return <NewAmbitionClient plansData={plansData} />;
+  return <NewAmbitionClient />;
 }

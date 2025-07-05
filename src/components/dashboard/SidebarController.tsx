@@ -4,38 +4,16 @@ import React, { useState } from "react";
 import { Sidebar } from "@/src/components/dashboard/Sidebar";
 import { Header } from "@/src/components/dashboard/Header";
 import { User } from "@supabase/supabase-js";
-import {
-  AmbitionData,
-  AmbitionMilestone,
-  AmbitionTask,
-  SupabasePlansData,
-  SupabaseProfileData,
-} from "@/src/types";
+import { SupabaseProfileData } from "@/src/types";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
   userData: User;
   profileData: SupabaseProfileData[];
-  plansData: SupabasePlansData[];
-  ambitionsData: AmbitionData[];
-  tasksData: AmbitionTask[];
-  milestonesData: AmbitionMilestone[];
 }
 
-export function SidebarController({
-  children,
-  userData,
-  profileData,
-  plansData,
-  ambitionsData,
-  tasksData,
-  milestonesData,
-}: SidebarControllerProps) {
+export function SidebarController({ children, userData, profileData }: SidebarControllerProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const closeMobileSidebar = () => {
-    setSidebarOpen(false);
-  };
 
   return (
     <>
@@ -43,7 +21,7 @@ export function SidebarController({
       <div
         className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} bg-black md:translate-x-0 fixed inset-y-0 left-0 z-50 md:relative md:z-0 transition-transform duration-300 ease-in-out`}
       >
-        <Sidebar onMobileNavigate={closeMobileSidebar} />
+        <Sidebar />
       </div>
 
       {/* Overlay to close sidebar when clicked outside */}
@@ -60,10 +38,6 @@ export function SidebarController({
           isSidebarOpen={sidebarOpen}
           userData={userData}
           profileData={profileData}
-          plansData={plansData}
-          ambitionsData={ambitionsData}
-          tasksData={tasksData}
-          milestonesData={milestonesData}
         />
         {children}
       </div>

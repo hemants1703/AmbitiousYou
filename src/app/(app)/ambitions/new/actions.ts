@@ -1,8 +1,6 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 // Validation schema for ambition creation
@@ -48,7 +46,6 @@ export async function createNewAmbition(formData: FormData) {
         const rawData = {
             title: formData.get("title"),
             description: formData.get("description"),
-            category: formData.get("category"),
             priorityLevel: formData.get("priorityLevel"),
             deadline: formData.get("deadline"),
             color: formData.get("color"),
@@ -74,7 +71,7 @@ export async function createNewAmbition(formData: FormData) {
             ambitionDeadline: validatedData.deadline,
             ambitionStatus: "active",
             ambitionPriority: validatedData.priorityLevel,
-            ambitionCategory: validatedData.category,
+            ambitionCategory: null,
             ambitionPercentageCompleted: "0",
             ambitionColor: validatedData.color,
             createdAt: new Date().toISOString(),

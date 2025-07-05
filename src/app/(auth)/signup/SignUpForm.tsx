@@ -49,7 +49,7 @@ export default function SignUpForm({ signupPlan }: { signupPlan: string | string
         duration: 5000,
       });
     }
-  }, [signupErrors?.errors?.message]);
+  }, [signupErrors?.errors?.message, signupErrors?.errors?.plan]);
 
   return (
     <form action={action} className="space-y-4">
