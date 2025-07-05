@@ -22,7 +22,7 @@ import {
 } from "@/src/components/ui/dialog";
 import { Progress } from "@/src/components/ui/progress";
 import exampleAmbitions from "./exampleAmbitions";
-import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
+import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/src/types";
 
 interface AmbitionPreviewDialogProps {
   open: boolean;

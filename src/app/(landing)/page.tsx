@@ -9,7 +9,7 @@ import {
   CheckIcon,
   HeartFilledIcon,
 } from "@radix-ui/react-icons";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 import Testimonials from "@/src/features/root/Testimonials";
 import Features from "@/src/features/root/Features";
 import CTA from "@/src/features/root/CTA";

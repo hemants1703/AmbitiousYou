@@ -10,7 +10,7 @@ import {
   AmbitionTask,
   SupabasePlansData,
   SupabaseProfileData,
-} from "@/types";
+} from "@/src/types";
 
 interface SidebarControllerProps {
   children: React.ReactNode;

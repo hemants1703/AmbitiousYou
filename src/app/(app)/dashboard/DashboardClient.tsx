@@ -23,7 +23,7 @@ import { ScrollArea } from "@/src/components/ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/src/lib/utils";
 import { motion } from "framer-motion";
-import { SupabaseProfileData, AmbitionTask, AmbitionMilestone, AmbitionData } from "@/types";
+import { SupabaseProfileData, AmbitionTask, AmbitionMilestone, AmbitionData } from "@/src/types";
 import { getRandomGreeting, getGreetingByEnergy } from "@/src/lib/greetings";
 import { useEffect, useState } from "react";
 import { motivationalQuotes } from "@/src/lib/motivationalQuotes";

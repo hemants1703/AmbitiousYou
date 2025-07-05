@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { whatIsAnAmbition, ambitionGenerationPromptForFreeUser } from "@/src/lib/content/ambitionGenerationPrompt";
-import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
-import { createClient } from "@/utils/supabase/server";
+import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/src/types";
+import { createClient } from "@/src/utils/supabase/server";
 
 // Input validation schema
 const ambitionSchema = z.object({

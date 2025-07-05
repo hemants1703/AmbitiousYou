@@ -23,7 +23,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import * as DropdownMenu from "@/src/components/ui/dropdown-menu";
-import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/types";
+import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { motivationalQuotes } from "@/src/lib/motivationalQuotes";
 
 // Define types for our data

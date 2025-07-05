@@ -4,7 +4,7 @@ import * as Avatar from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-import { SupabaseProfileData } from "@/types";
+import { SupabaseProfileData } from "@/src/types";
 import { User } from "@supabase/supabase-js";
 import updateProfileAction from "./actions";
 import { toast } from "sonner";

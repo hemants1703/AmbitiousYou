@@ -1,4 +1,4 @@
-import { SupabaseProfileData, AmbitionData } from "@/types";
+import { SupabaseProfileData, AmbitionData } from "@/src/types";
 import { User } from "@supabase/supabase-js";
 import { createContext } from "react";
 

@@ -1,21 +1,8 @@
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "./IndividualAmbitionClient";
-import type { AmbitionData, AmbitionTask, AmbitionMilestone, TimeEntry } from "@/types";
-import { createClient } from "@/utils/supabase/server";
+import type { AmbitionData, AmbitionTask, AmbitionMilestone, TimeEntry } from "@/src/types";
+import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogDescription,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogAction,
-  AlertDialogFooter,
-  AlertDialogCancel,
-} from "@/src/components/ui/alert-dialog";
-import { Button } from "@/src/components/ui/button";
-import { deleteAmbitionAction } from "./actions";
 
 interface PageProps {
   params: {
@@ -89,9 +76,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
     }
   } catch (error) {
     // If fetching related data fails, use the data from test ambition
-    toast.error("Error fetching related data", {
-      description: "Seems like this ambition does not exist...",
-    });
+    console.error("Error fetching related data:", error);
   }
 
   return (
@@ -100,53 +85,5 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
       tasks={tasks}
       milestones={milestones}
     />
-  );
-}
-
-export function DeleteAmbitionDialog({
-  ambitionId,
-  ambitionTrackingMethod,
-  deleteAmbitionDialogOpen,
-  setDeleteAmbitionDialogOpen,
-}: {
-  ambitionId: string;
-  ambitionTrackingMethod: string;
-  deleteAmbitionDialogOpen: boolean;
-  setDeleteAmbitionDialogOpen: (open: boolean) => void;
-}) {
-  return (
-    <AlertDialog open={deleteAmbitionDialogOpen} onOpenChange={setDeleteAmbitionDialogOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete this ambition and remove all
-            associated data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              variant={"destructive"}
-              onClick={async () => {
-                const { success, error } = await deleteAmbitionAction(
-                  ambitionId,
-                  ambitionTrackingMethod
-                );
-                if (success) {
-                  toast.success("Ambition deleted successfully");
-                  redirect("/ambitions");
-                } else if (error) {
-                  toast.error("Error deleting ambition");
-                }
-              }}
-            >
-              Yes, Delete
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 }

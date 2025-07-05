@@ -1,6 +1,12 @@
 import { DashboardClient } from "./DashboardClient";
-import { createClient } from "@/utils/supabase/server";
-import { getAmbitionsTableData, getMilestonesTableData, getPlansTableData, getProfilesTableData, getTasksTableData } from "@/utils/supabase/tablesDataProvider";
+import { createClient } from "@/src/utils/supabase/server";
+import {
+  getAmbitionsTableData,
+  getMilestonesTableData,
+  getPlansTableData,
+  getProfilesTableData,
+  getTasksTableData,
+} from "@/src/utils/supabase/tablesDataProvider";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 
@@ -31,5 +37,13 @@ export default async function DashboardPage() {
 
   const isProUser = plans[0].planMonthlyPrice > 0;
 
-  return <DashboardClient profileData={profileData} ambitions={ambitions} tasks={tasks} milestones={milestones} isProUser={isProUser} />;
+  return (
+    <DashboardClient
+      profileData={profileData}
+      ambitions={ambitions}
+      tasks={tasks}
+      milestones={milestones}
+      isProUser={isProUser}
+    />
+  );
 }

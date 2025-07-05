@@ -1,7 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 import AmbitionsClient from "./AmbitionsClient";
 import { toast } from "sonner";
-import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/types";
+import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 export default async function AmbitionsPage() {
   const supabase = await createClient();
 
-  const { data: ambitions, error } = await supabase
-    .from("ambitions")
-    .select("*");
+  const { data: ambitions, error } = await supabase.from("ambitions").select("*");
 
   if (error) {
     toast.error("Error fetching ambitions", {
@@ -24,9 +22,7 @@ export default async function AmbitionsPage() {
   }
 
   // Fetch all tasks
-  const { data: tasks, error: tasksError } = await supabase
-    .from("tasks")
-    .select("*");
+  const { data: tasks, error: tasksError } = await supabase.from("tasks").select("*");
 
   if (tasksError) {
     toast.error("Error fetching tasks", {
@@ -52,7 +48,6 @@ export default async function AmbitionsPage() {
   // console.log("Ambitions", ambitions);
   // console.log("Tasks", tasks);
   // console.log("Milestones", milestones);
-
 
   return (
     <AmbitionsClient

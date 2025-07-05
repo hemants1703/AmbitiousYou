@@ -35,8 +35,8 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { AmbitionColorBadge, AmbitionPriorityBadge } from "../AmbitionsClient";
 import { favouriteAmbitionAction } from "../actions";
-import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
-import { DeleteAmbitionDialog } from "./page";
+import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/src/types";
+import { DeleteAmbitionDialog } from "./DeleteAmbitionDialog";
 
 // Animation variants
 const container = {

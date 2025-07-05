@@ -1,11 +1,14 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/src/utils/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
-import { getAmbitionsTableData, getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
+import {
+  getAmbitionsTableData,
+  getProfilesTableData,
+} from "@/src/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
-import { AmbitionData } from "@/types";
+import { AmbitionData } from "@/src/types";
 
 export type SupabaseProfileData = {
   id: string;

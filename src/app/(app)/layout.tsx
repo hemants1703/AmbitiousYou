@@ -1,7 +1,7 @@
 import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { Metadata } from "next";
 import { SidebarController } from "@/src/components/dashboard/SidebarController";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 import {
   getAmbitionsTableData,
@@ -9,7 +9,7 @@ import {
   getPlansTableData,
   getProfilesTableData,
   getTasksTableData,
-} from "@/utils/supabase/tablesDataProvider";
+} from "@/src/utils/supabase/tablesDataProvider";
 import { User } from "@supabase/supabase-js";
 import {
   AmbitionData,
@@ -17,7 +17,7 @@ import {
   SupabasePlansData,
   SupabaseProfileData,
   AmbitionTask,
-} from "@/types";
+} from "@/src/types";
 
 export const metadata: Metadata = {
   title: {

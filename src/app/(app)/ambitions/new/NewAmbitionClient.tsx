@@ -29,10 +29,10 @@ import {
   Cross2Icon,
 } from "@radix-ui/react-icons";
 import { CircleCheckBig, CircleIcon, Milestone, Tag as TagIcon } from "lucide-react";
-import { format, isBefore, startOfToday } from "date-fns";
+import { format, isBefore, isAfter, startOfToday } from "date-fns";
 import { cn } from "@/src/lib/utils";
 import Link from "next/link";
-import type { AmbitionData, SupabasePlansData } from "@/types";
+import type { AmbitionData, SupabasePlansData } from "@/src/types";
 import { createNewAmbition } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -578,7 +578,15 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Tabs defaultValue="basics" className="w-full" onValueChange={setActiveTab}>
+        <Tabs
+          key={activeTab}
+          value={activeTab}
+          className="w-full"
+          onValueChange={(value) => {
+            console.log("Tabs onValueChange:", value);
+            setActiveTab(value);
+          }}
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="basics">1. Basic Details</TabsTrigger>
             <TabsTrigger value="tasks">2. Tasks & Milestones</TabsTrigger>
@@ -674,7 +682,12 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                             mode="single"
                             selected={date}
                             onSelect={(newDate) => setDate(newDate)}
-                            disabled={(date) => isBefore(date, startOfToday())}
+                            disabled={(calendarDate) =>
+                              !!(
+                                isBefore(calendarDate, startOfToday()) ||
+                                (date && calendarDate && isAfter(calendarDate, date))
+                              )
+                            }
                             initialFocus
                           />
                         </PopoverContent>
@@ -686,7 +699,7 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                     <Label>Color</Label>
                     <div className="flex items-center justify-between space-x-2">
                       {colorOptions.map((color, index) => (
-                        <Tooltip>
+                        <Tooltip key={index}>
                           <TooltipTrigger asChild>
                             <motion.div
                               key={index}
@@ -871,7 +884,12 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
                                       taskDeadline: format(date, "yyyy-MM-dd"),
                                     }))
                                   }
-                                  disabled={(date) => isBefore(date, startOfToday())}
+                                  disabled={(calendarDate) =>
+                                    !!(
+                                      isBefore(calendarDate, startOfToday()) ||
+                                      (date && calendarDate && isAfter(calendarDate, date))
+                                    )
+                                  }
                                   initialFocus
                                 />
                               </PopoverContent>
@@ -1133,6 +1151,18 @@ export function NewAmbitionClient({ plansData }: { plansData: SupabasePlansData[
         transition={{ duration: 0.5, delay: 0.4 }}
         className="flex justify-end"
       >
+        {activeTab === "basics" && (
+          <Button
+            type="button"
+            onClick={() => {
+              console.log("Current activeTab:", activeTab);
+              setActiveTab("tasks");
+              console.log("Setting activeTab to tasks");
+            }}
+          >
+            Next
+          </Button>
+        )}
         {activeTab === "tasks" && (
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating..." : "Create Ambition"}

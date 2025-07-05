@@ -9,9 +9,9 @@ import * as Select from "@/src/components/ui/select";
 // import * as Avatar from "@/src/components/ui/avatar";
 import { ThemeSelector } from "@/src/components/ThemeSelector";
 import ProfileTab from "./ProfileTab";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { getProfilesTableData } from "@/utils/supabase/tablesDataProvider";
+import { getProfilesTableData } from "@/src/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
 import { Metadata } from "next";
 

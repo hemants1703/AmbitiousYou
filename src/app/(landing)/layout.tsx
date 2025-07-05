@@ -1,6 +1,6 @@
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 
 export default async function LandingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   // If user is logged in, redirect to dashboard

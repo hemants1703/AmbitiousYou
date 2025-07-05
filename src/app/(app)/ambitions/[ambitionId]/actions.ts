@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 
 export async function deleteAmbitionAction(ambitionId: string, ambitionTrackingMethod: string) {
     const supabase = await createClient();

@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/src/utils/supabase/client";
 import chalk from "chalk";
 
 export default async function updateProfileAction(userId: string | undefined, firstName: string | undefined, lastName: string | undefined) {

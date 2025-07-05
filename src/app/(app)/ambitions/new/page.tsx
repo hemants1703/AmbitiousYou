@@ -1,9 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { NewAmbitionClient } from "./NewAmbitionClient";
 import { User } from "@supabase/supabase-js";
-import { getPlansTableData } from "@/utils/supabase/tablesDataProvider";
-import type { SupabasePlansData } from "@/types";
+import { getPlansTableData } from "@/src/utils/supabase/tablesDataProvider";
+import type { SupabasePlansData } from "@/src/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

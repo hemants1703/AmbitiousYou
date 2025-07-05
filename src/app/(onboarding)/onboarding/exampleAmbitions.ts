@@ -1,4 +1,4 @@
-import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/types";
+import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/src/types";
 
 export interface ExampleAmbitionType {
     category: string;

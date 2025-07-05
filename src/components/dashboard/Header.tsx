@@ -42,7 +42,7 @@ import {
   SupabasePlansData,
   SupabaseProfileData,
   AmbitionTask,
-} from "@/types";
+} from "@/src/types";
 import { pricingPlans } from "@/src/lib/content/pricingPlans";
 
 interface HeaderProps {
