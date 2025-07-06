@@ -4,36 +4,55 @@ import * as Avatar from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-import { SupabaseProfileData } from "@/src/types";
+import type { Profile } from "@/src/types";
 import { User } from "@supabase/supabase-js";
 import updateProfileAction from "./actions";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
-export default function ProfileTab({
+export default function ProfileCard({
   profilesData,
   userData,
 }: {
-  profilesData: SupabaseProfileData[];
+  profilesData: Profile[];
   userData: User;
 }) {
-  let { firstName, lastName } = profilesData[0];
   const { id: userId, email } = userData;
-  const initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
+  const [userProfile, setUserProfile] = useState<Profile>({
+    id: profilesData[0].id,
+    userId: profilesData[0].userId,
+    firstName: profilesData[0].firstName,
+    lastName: profilesData[0].lastName,
+    createdAt: profilesData[0].createdAt,
+    updatedAt: profilesData[0].updatedAt,
+  });
+  const [isPending, setIsPending] = useState<boolean>(false);
 
-  const handleProfileUpdate = async () => {
-    const { success, error, data } = await updateProfileAction(userId, firstName, lastName);
+  const initialsOfUsersName = userProfile.firstName.charAt(0) + userProfile.lastName.charAt(0); // Placeholder for initials
+
+  const handleProfileUpdate = async (): Promise<void> => {
+    setIsPending(true);
+
+    const { success, error, data } = await updateProfileAction(
+      userId,
+      userProfile.firstName,
+      userProfile.lastName
+    );
 
     if (!success && error) {
       toast.error("Error updating profile", {
         description: error,
       });
-      // console.error("Error updating profile: ", error);
+      console.error("Error updating profile: ", error);
     }
 
     if (success) {
       toast.success("Profile updated successfully");
       console.log("Profile updated successfully: ", data);
     }
+
+    setIsPending(false);
   };
 
   return (
@@ -43,9 +62,9 @@ export default function ProfileTab({
           <Avatar.AvatarImage src="/avatar-placeholder.jpg" alt="Profile picture" />
           <Avatar.AvatarFallback>{initialsOfUsersName}</Avatar.AvatarFallback>
         </Avatar.Avatar>
-        <Button variant="outline" size="sm">
+        {/* <Button variant="outline" size="sm">
           Change Avatar
-        </Button>
+        </Button> */}
       </div>
 
       <div className="flex-1 space-y-4">
@@ -55,9 +74,12 @@ export default function ProfileTab({
             <Input
               id="firstName"
               placeholder="John"
-              defaultValue={firstName}
+              defaultValue={userProfile.firstName}
               onChange={(e) => {
-                firstName = e.target.value;
+                setUserProfile({
+                  ...userProfile,
+                  firstName: e.target.value,
+                });
               }}
             />
           </div>
@@ -66,9 +88,12 @@ export default function ProfileTab({
             <Input
               id="lastName"
               placeholder="Doe"
-              defaultValue={lastName}
+              defaultValue={userProfile.lastName}
               onChange={(e) => {
-                lastName = e.target.value;
+                setUserProfile({
+                  ...userProfile,
+                  lastName: e.target.value,
+                });
               }}
             />
           </div>
@@ -86,19 +111,17 @@ export default function ProfileTab({
         </div>
 
         <div className="flex justify-end space-x-2 mt-10">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={handleProfileUpdate}>Save Changes</Button>
+          <Button onClick={handleProfileUpdate} disabled={isPending}>
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                <Loader2Icon />
+                Saving...
+              </span>
+            ) : (
+              <span>Save Changes</span>
+            )}
+          </Button>
         </div>
-
-        {/* <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
-                    <Textarea
-                      id="bio"
-                      placeholder="Write a short bio about yourself"
-                      defaultValue="Software developer with 5+ years experience in web technologies."
-                      className="min-h-[120px]"
-                    />
-                  </div> */}
       </div>
     </div>
   );

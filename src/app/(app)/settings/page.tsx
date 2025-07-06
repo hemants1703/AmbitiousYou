@@ -4,40 +4,16 @@ import * as Tabs from "@/src/components/ui/tabs";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Switch } from "@/src/components/ui/switch";
-// import { Textarea } from "@/src/components/ui/textarea";
 import * as Select from "@/src/components/ui/select";
-// import * as Avatar from "@/src/components/ui/avatar";
 import { ThemeSelector } from "@/src/components/ThemeSelector";
-import ProfileTab from "./ProfileTab";
-import { createClient } from "@/src/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { getProfilesTableData } from "@/src/utils/supabase/tablesDataProvider";
-import { toast } from "sonner";
 import { Metadata } from "next";
+import ProfileTab from "@/src/features/app/settings/ProfileTab";
 
 export const metadata: Metadata = {
-  title: "Settings | AmbitiousYou",
+  title: "Settings",
 };
 
 export default async function Settings() {
-  const supabase = await createClient();
-  const {
-    data: { user: userData },
-    error: userDoesNotExist,
-  } = await supabase.auth.getUser();
-
-  if (userDoesNotExist || !userData) {
-    toast.error("User not found.");
-    redirect("/login");
-  }
-
-  const profilesData = await getProfilesTableData(userData.id);
-
-  if (!profilesData || profilesData.length === 0) {
-    toast.error("No profile found.");
-    redirect("/login");
-  }
-
   return (
     <div className="mx-auto space-y-8 p-6 md:p-8 pt-6">
       <div>
@@ -54,92 +30,7 @@ export default async function Settings() {
         </Tabs.TabsList>
 
         <Tabs.TabsContent value="profile" className="space-y-6">
-          <Card.Card>
-            <Card.CardHeader>
-              <Card.CardTitle>Profile Information</Card.CardTitle>
-              <Card.CardDescription>
-                Update your personal information and public profile
-              </Card.CardDescription>
-            </Card.CardHeader>
-            <Card.CardContent className="space-y-6">
-              {/* <div className="flex flex-col gap-8 md:flex-row">
-                <div className="flex flex-col items-center gap-4">
-                  <Avatar.Avatar className="h-24 w-24">
-                    <Avatar.AvatarImage src="/avatar-placeholder.jpg" alt="Profile picture" />
-                    <Avatar.AvatarFallback>JD</Avatar.AvatarFallback>
-                  </Avatar.Avatar>
-                  <Button variant="outline" size="sm">
-                    Change Avatar
-                  </Button>
-                </div>
-
-                <div className="flex-1 space-y-4">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First name</Label>
-                      <Input id="firstName" placeholder="John" defaultValue="John" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last name</Label>
-                      <Input id="lastName" placeholder="Doe" defaultValue="Doe" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="john.doe@example.com"
-                      defaultValue="john.doe@example.com"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
-                    <Textarea
-                      id="bio"
-                      placeholder="Write a short bio about yourself"
-                      defaultValue="Software developer with 5+ years experience in web technologies."
-                      className="min-h-[120px]"
-                    />
-                  </div>
-                </div>
-              </div> */}
-
-              <ProfileTab profilesData={profilesData} userData={userData} />
-            </Card.CardContent>
-            {/* <Card.CardFooter className="flex justify-end space-x-2">
-              <Button variant="outline">Cancel</Button>
-              <Button>Save Changes</Button>
-            </Card.CardFooter> */}
-          </Card.Card>
-
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Public Profile</CardTitle>
-              <CardDescription>Manage your public profile visibility</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between space-x-2">
-                <div>
-                  <p className="font-medium">Make profile visible</p>
-                  <p className="text-sm text-muted-foreground">Allow others to see your profile information</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between space-x-2">
-                <div>
-                  <p className="font-medium">Show activity status</p>
-                  <p className="text-sm text-muted-foreground">Display your online/offline status</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button>Save Preferences</Button>
-            </CardFooter>
-          </Card> */}
+          <ProfileTab />
         </Tabs.TabsContent>
 
         {/* Account settings */}
@@ -329,53 +220,8 @@ export default async function Settings() {
             </Card.CardHeader>
             <Card.CardContent className="space-y-6">
               <ThemeSelector />
-
-              {/* <AccentColorSelector /> */}
             </Card.CardContent>
-            {/* <CardFooter className="flex justify-end">
-              <Button>Save Preferences</Button>
-            </CardFooter> */}
           </Card.Card>
-
-          {/* Layout section, we might not need these feature yet... might be useful in future */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Layout</CardTitle>
-              <CardDescription>Customize the application layout</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between space-x-2">
-                <div>
-                  <p className="font-medium">Compact mode</p>
-                  <p className="text-sm text-muted-foreground">Use a more compact view with reduced spacing</p>
-                </div>
-                <Switch />
-              </div>
-              <div className="flex items-center justify-between space-x-2">
-                <div>
-                  <p className="font-medium">Show sidebar</p>
-                  <p className="text-sm text-muted-foreground">Toggle sidebar visibility</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="fontSize">Font Size</Label>
-                <Select.Select defaultValue="medium">
-                  <Select.SelectTrigger id="fontSize">
-                    <Select.SelectValue placeholder="Select font size" />
-                  </Select.SelectTrigger>
-                  <Select.SelectContent>
-                    <Select.SelectItem value="small">Small</Select.SelectItem>
-                    <Select.SelectItem value="medium">Medium</Select.SelectItem>
-                    <Select.SelectItem value="large">Large</Select.SelectItem>
-                  </Select.SelectContent>
-                </Select.Select>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button>Save Layout</Button>
-            </CardFooter>
-          </Card> */}
         </Tabs.TabsContent>
       </Tabs.Tabs>
     </div>

@@ -16,66 +16,7 @@
  * @property {string} milestones - Key progress points or achievements for the ambition
  * @property {string} notes - Additional information or remarks about the ambition
  * @property {string} tags - Labels for categorizing or filtering the ambition
- */
-export interface AmbitionData {
-    id: string;
-    userId: string;
-    ambitionName: string;
-    ambitionDefinition: string | null;
-    ambitionTrackingMethod: "task" | "milestone";
-    ambitionSuccessMetric: string;
-    ambitionStartDate: string | null;
-    ambitionEndDate: string | null;
-    ambitionCompletionDate: string | null;
-    ambitionDeadline: string;
-    ambitionStatus: "active" | "completed" | "archived";
-    ambitionPriority: "low" | "medium" | "high";
-    ambitionCategory?: string;
-    ambitionPercentageCompleted: number;
-    ambitionColor: string;
-    createdAt: Date;
-    updatedAt: Date;
-    isFavourited: boolean;
-}
-
-export interface SupabaseProfileData {
-    id: string;
-    userId: string;
-    firstName: string;
-    lastName: string;
-    created_at: string;
-    updated_at: string;
-};
-
-export interface SupabasePlansData {
-    id: string;
-    userId: string;
-    planName: string;
-    planMonthlyPrice: number;
-    createdAt: string;
-    updatedAt: string;
-}
-
-// export interface AmbitionsData {
-//     id: string;
-//     userId: string;
-//     ambitionName: string;
-//     ambitionDefinition: string | null | "";
-//     ambitionType: string;
-//     ambitionStartDate: string | null | "";
-//     ambitionEndDate: string | null | "";
-//     ambitionCompletionDate: string | null | "";
-//     ambitionStatus: string;
-//     ambitionPriority: string;
-//     ambitionCategory: string;
-//     ambitionPercentageCompleted: number;
-//     ambitionTasks: string[] | null | "";
-//     ambitionNotes: string[] | null | "";
-//     ambitionTags: string[] | null | "";
-//     createdAt: string;
-//     updatedAt: string;
-//     isFavourited: boolean;
-// };
+*/
 
 export interface AmbitionTask {
     id: string;
@@ -96,31 +37,43 @@ export interface AmbitionMilestone {
     milestone: string;
     milestoneDescription: string | null;
     milestoneCompleted: boolean;
+    milestoneTargetDate: Date;
     createdAt: Date;
     updatedAt: Date;
-    milestoneTargetDate: Date;
 }
 
-export interface TimeEntry {
+export interface Ambition {
     id: string;
-    date: string;
-    duration: string;
-    activity: string;
+    userId: string;
+    ambitionName: string;
+    ambitionDefinition: string | null;
+    ambitionTrackingMethod: "task" | "milestone";
+    ambitionStartDate: string | null;
+    ambitionEndDate: string | null;
+    ambitionCompletionDate: string | null;
+    ambitionStatus: "active" | "completed" | "archived";
+    ambitionPriority: "low" | "medium" | "high";
+    ambitionPercentageCompleted: number;
+    ambitionColor: string;
+    isFavourited: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-// export interface Ambition {
-//     id: string;
-//     ambitionName: string;
-//     ambitionDefinition: string;
-//     ambitionCategory: string;
-//     ambitionPercentageCompleted: number;
-//     ambitionPriority: string;
-//     ambitionStartDate: string;
-//     ambitionDeadline: string;
-//     ambitionStatus: string;
-//     ambitionColor: string;
-//     ambitionTrackingMethod: string;
-//     tasks: AmbitionTask[];
-//     milestones: AmbitionMilestone[];
-//     timeEntries: TimeEntry[];
-// }
+export interface Profile {
+    id: string;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export interface Plan {
+    id: string;
+    userId: string;
+    planName: string;
+    planMonthlyPrice: number;
+    createdAt: string;
+    updatedAt: string;
+}
