@@ -29,10 +29,10 @@ import {
   Cross2Icon,
 } from "@radix-ui/react-icons";
 import { CircleCheckBig, CircleIcon, Milestone } from "lucide-react";
-import { format, isBefore, isAfter, startOfToday } from "date-fns";
+import { format, isBefore, startOfToday } from "date-fns";
 import { cn } from "@/src/lib/utils";
 import Link from "next/link";
-import type { AmbitionData } from "@/src/types";
+import type { Ambition, AmbitionMilestone, AmbitionTask } from "@/src/types";
 import { createNewAmbition } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -40,13 +40,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/too
 
 export function NewAmbitionClient() {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Add auto-save indicator state
-  const [isSaving, setIsSaving] = useState(false);
-  const [showSaveIndicator, setShowSaveIndicator] = useState(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [showSaveIndicator, setShowSaveIndicator] = useState<boolean>(false);
 
-  const [filledUpData, setFilledUpData] = useState<Partial<AmbitionData>>(() => {
+  const [filledUpData, setFilledUpData] = useState<Partial<Ambition>>(() => {
     // Initialize state from localStorage if available
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
@@ -83,10 +83,11 @@ export function NewAmbitionClient() {
             ambitionName: "",
             ambitionDefinition: "",
             ambitionPriority: "medium" as const,
-            ambitionDeadline: "",
+            ambitionStartDate: "",
+            ambitionEndDate: "",
+            ambitionCompletionDate: "",
             ambitionColor: "",
             ambitionTrackingMethod: "task",
-            ambitionSuccessMetric: "",
             ambitionStatus: "active",
             ambitionPercentageCompleted: 0,
           }
@@ -97,24 +98,32 @@ export function NewAmbitionClient() {
       ambitionName: "",
       ambitionDefinition: "",
       ambitionPriority: "medium" as const,
-      ambitionDeadline: "",
+      ambitionStartDate: "",
+      ambitionEndDate: "",
+      ambitionCompletionDate: "",
       ambitionColor: "",
       ambitionTrackingMethod: "task",
-      ambitionSuccessMetric: "",
       ambitionStatus: "active",
       ambitionPercentageCompleted: 0,
     };
   });
 
-  const [date, setDate] = useState<Date | undefined>(() => {
+  // Replace single date with date range
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>(() => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-        return parsedData.date ? new Date(parsedData.date) : undefined;
+        return {
+          from: parsedData.dateRange?.from ? new Date(parsedData.dateRange.from) : undefined,
+          to: parsedData.dateRange?.to ? new Date(parsedData.dateRange.to) : undefined,
+        };
       }
     }
-    return undefined;
+    return { from: undefined, to: undefined };
   });
 
   const [selectedColor, setSelectedColor] = useState(() => {
@@ -139,13 +148,7 @@ export function NewAmbitionClient() {
     return "task";
   });
 
-  const [tasks, setTasks] = useState<
-    Array<{
-      task: string;
-      taskDescription: string;
-      taskDeadline: string;
-    }>
-  >(() => {
+  const [tasks, setTasks] = useState<Array<AmbitionTask>>(() => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
@@ -156,14 +159,7 @@ export function NewAmbitionClient() {
     return [];
   });
 
-  const [milestones, setMilestones] = useState<
-    Array<{
-      milestone: string;
-      milestoneDescription: string;
-      milestoneCompleted: boolean;
-      milestoneTargetDate: string;
-    }>
-  >(() => {
+  const [milestones, setMilestones] = useState<Array<AmbitionMilestone>>(() => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
       if (savedData) {
@@ -174,28 +170,28 @@ export function NewAmbitionClient() {
     return [];
   });
 
-  const [tags, setTags] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem("ambitionFormData");
-      if (savedData) {
-        const parsedData = JSON.parse(savedData);
-        return parsedData.tags || [];
-      }
-    }
-    return [];
-  });
-
-  const [activeTab, setActiveTab] = useState("basics");
-  const [newMilestone, setNewMilestone] = useState({
+  const [activeTab, setActiveTab] = useState<"basics" | "tasks" | "milestones">("basics");
+  const [newMilestone, setNewMilestone] = useState<AmbitionMilestone>({
+    id: "",
+    userId: "",
+    ambitionId: "",
     milestone: "",
     milestoneDescription: "",
     milestoneCompleted: false,
-    milestoneTargetDate: format(new Date(), "yyyy-MM-dd"),
+    milestoneTargetDate: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
-  const [newTask, setNewTask] = useState({
+  const [newTask, setNewTask] = useState<AmbitionTask>({
+    id: "",
+    userId: "",
+    ambitionId: "",
     task: "",
     taskDescription: "",
-    taskDeadline: format(new Date(), "yyyy-MM-dd"),
+    taskDeadline: new Date(),
+    taskCompleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
   // Save form data whenever it changes
@@ -204,12 +200,14 @@ export function NewAmbitionClient() {
     setShowSaveIndicator(true);
     const formData = {
       filledUpData,
-      date: date?.toISOString(),
+      dateRange: {
+        from: dateRange.from?.toISOString(),
+        to: dateRange.to?.toISOString(),
+      },
       selectedColor,
       trackingMethod,
       tasks,
       milestones,
-      tags,
     };
     localStorage.setItem("ambitionFormData", JSON.stringify(formData));
 
@@ -222,7 +220,7 @@ export function NewAmbitionClient() {
       }, 2000);
     }, 1000);
     return () => clearTimeout(timer);
-  }, [filledUpData, date, selectedColor, trackingMethod, tasks, milestones, tags]);
+  }, [filledUpData, dateRange, selectedColor, trackingMethod, tasks, milestones]);
 
   const addTask = () => {
     if (!newTask.task.trim()) {
@@ -233,9 +231,15 @@ export function NewAmbitionClient() {
     }
     setTasks([...tasks, newTask]);
     setNewTask({
+      id: "",
+      userId: "",
+      ambitionId: "",
       task: "",
       taskDescription: "",
-      taskDeadline: format(new Date(), "yyyy-MM-dd"),
+      taskDeadline: new Date(),
+      taskCompleted: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
     toast.success("Task Added", {
       description: "Task has been added successfully",
@@ -265,10 +269,15 @@ export function NewAmbitionClient() {
     }
     setMilestones([...milestones, newMilestone]);
     setNewMilestone({
+      id: "",
+      userId: "",
+      ambitionId: "",
       milestone: "",
       milestoneDescription: "",
       milestoneCompleted: false,
-      milestoneTargetDate: format(new Date(), "yyyy-MM-dd"),
+      milestoneTargetDate: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
     toast.success("Milestone Added", {
       description: "Milestone has been added successfully",
@@ -324,57 +333,18 @@ export function NewAmbitionClient() {
     setIsSubmitting(true);
 
     try {
-      // Validate required fields
-      if (!filledUpData.ambitionName) {
-        toast.error("Missing Title", {
-          description: "Please provide a title for your ambition",
-        });
-        return;
-      }
-      if (!filledUpData.ambitionPriority) {
-        toast.error("Missing Priority", {
-          description: "Please select a priority level for your ambition",
-        });
-        return;
-      }
-      if (!date) {
-        toast.error("Missing Deadline", {
-          description: "Please select a deadline for your ambition",
-        });
-        return;
-      }
-      if (!trackingMethod) {
-        toast.error("Missing Tracking Method", {
-          description: "Please select a tracking method for your ambition",
-        });
-        return;
-      }
-
-      // Validate tasks/milestones based on tracking method
-      if (trackingMethod === "task" && tasks.length === 0) {
-        toast.error("No Tasks Added", {
-          description: "Please add at least one task for task-based tracking",
-        });
-        return;
-      }
-      if (trackingMethod === "milestone" && milestones.length === 0) {
-        toast.error("No Milestones Added", {
-          description: "Please add at least one milestone for milestone-based tracking",
-        });
-        return;
-      }
-
       const formData = new FormData();
 
       // Add all form fields to FormData
-      formData.append("title", filledUpData.ambitionName);
-      formData.append("description", filledUpData.ambitionDefinition || "");
-      formData.append("priorityLevel", filledUpData.ambitionPriority);
-      formData.append("deadline", format(date, "yyyy-MM-dd"));
-      formData.append("color", selectedColor);
-      formData.append("trackingMethod", trackingMethod);
-      formData.append("successMetric", filledUpData.ambitionSuccessMetric || "");
-      formData.append("focusedAmbitionOnDashboard", "true");
+      formData.append("ambitionName", filledUpData.ambitionName || "");
+      formData.append("ambitionDefinition", filledUpData.ambitionDefinition || "");
+      formData.append("ambitionPriority", filledUpData.ambitionPriority || "");
+      formData.append("ambitionStartDate", dateRange.from?.toISOString() || "");
+      formData.append("ambitionEndDate", dateRange.to?.toISOString() || "");
+      formData.append("ambitionCompletionDate", ""); // Will be set when completed
+      formData.append("ambitionColor", selectedColor);
+      formData.append("ambitionTrackingMethod", trackingMethod);
+      formData.append("isFavourited", "false");
 
       // Add tasks or milestones based on tracking method
       if (trackingMethod === "task") {
@@ -437,22 +407,19 @@ export function NewAmbitionClient() {
       ambitionName: "",
       ambitionDefinition: "",
       ambitionPriority: "medium" as const,
-      ambitionDeadline: "",
       ambitionColor: "",
       ambitionTrackingMethod: "task",
-      ambitionSuccessMetric: "",
       ambitionStatus: "active",
       ambitionPercentageCompleted: 0,
     });
-    setDate(undefined);
+    setDateRange({ from: undefined, to: undefined });
     setSelectedColor("#3b82f6");
     setTrackingMethod("task");
     setTasks([]);
     setMilestones([]);
-    setTags([]);
   };
 
-  const handleInputChange = (field: keyof AmbitionData, value: string | boolean) => {
+  const handleInputChange = (field: keyof Ambition, value: string | boolean) => {
     setFilledUpData((prev) => ({
       ...prev,
       [field]: value,
@@ -555,8 +522,7 @@ export function NewAmbitionClient() {
           value={activeTab}
           className="w-full"
           onValueChange={(value) => {
-            console.log("Tabs onValueChange:", value);
-            setActiveTab(value);
+            setActiveTab(value as "basics" | "tasks" | "milestones");
           }}
         >
           <TabsList className="grid w-full grid-cols-2">
@@ -638,7 +604,7 @@ export function NewAmbitionClient() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Deadline</Label>
+                      <Label>Date Range</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -646,20 +612,28 @@ export function NewAmbitionClient() {
                             className="w-full justify-start text-left font-normal"
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? format(date, "PPP") : <span>Select a deadline</span>}
+                            {dateRange.from && dateRange.to ? (
+                              `${format(dateRange.from, "PPP")} - ${format(dateRange.to, "PPP")}`
+                            ) : (
+                              <span>Select start and end dates</span>
+                            )}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                           <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={(newDate) => setDate(newDate)}
-                            disabled={(calendarDate) =>
-                              !!(
-                                isBefore(calendarDate, startOfToday()) ||
-                                (date && calendarDate && isAfter(calendarDate, date))
-                              )
-                            }
+                            mode="range"
+                            selected={dateRange}
+                            onSelect={(newDateRange) => {
+                              if (newDateRange) {
+                                setDateRange({
+                                  from: newDateRange.from,
+                                  to: newDateRange.to,
+                                });
+                              } else {
+                                setDateRange({ from: undefined, to: undefined });
+                              }
+                            }}
+                            disabled={(calendarDate) => isBefore(calendarDate, startOfToday())}
                             initialFocus
                           />
                         </PopoverContent>
@@ -853,14 +827,11 @@ export function NewAmbitionClient() {
                                     date &&
                                     setNewTask((prev) => ({
                                       ...prev,
-                                      taskDeadline: format(date, "yyyy-MM-dd"),
+                                      taskDeadline: date,
                                     }))
                                   }
                                   disabled={(calendarDate) =>
-                                    !!(
-                                      isBefore(calendarDate, startOfToday()) ||
-                                      (date && calendarDate && isAfter(calendarDate, date))
-                                    )
+                                    isBefore(calendarDate, startOfToday())
                                   }
                                   initialFocus
                                 />

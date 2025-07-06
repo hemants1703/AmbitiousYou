@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "./IndividualAmbitionClient";
-import type { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/src/types";
+import type { Ambition, AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -67,7 +67,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
 
   return (
     <IndividualAmbitionClient
-      ambition={ambition as AmbitionData}
+      ambition={ambition as Ambition}
       tasks={tasks}
       milestones={milestones}
     />

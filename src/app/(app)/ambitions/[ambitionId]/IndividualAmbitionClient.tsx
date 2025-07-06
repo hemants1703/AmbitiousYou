@@ -35,7 +35,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { AmbitionColorBadge, AmbitionPriorityBadge } from "../AmbitionsClient";
 import { favouriteAmbitionAction } from "../actions";
-import { AmbitionData, AmbitionMilestone, AmbitionTask } from "@/src/types";
+import { Ambition, AmbitionMilestone, AmbitionTask } from "@/src/types";
 import { DeleteAmbitionDialog } from "./DeleteAmbitionDialog";
 
 // Animation variants
@@ -55,7 +55,7 @@ const item = {
 };
 
 interface IndividualAmbitionClientProps {
-  ambition: AmbitionData; // Replace with proper type
+  ambition: Ambition; // Replace with proper type
   tasks: AmbitionTask[]; // Replace with proper type
   milestones: AmbitionMilestone[]; // Replace with proper type
 }
@@ -190,7 +190,7 @@ export function IndividualAmbitionClient({
                     <div>
                       <p className="text-sm text-muted-foreground">Deadline</p>
                       <p className="font-medium">
-                        {format(new Date(ambition.ambitionDeadline), "MMM d, yyyy")}
+                        {format(new Date(ambition.ambitionEndDate), "MMM d, yyyy")}
                       </p>
                     </div>
                   </div>

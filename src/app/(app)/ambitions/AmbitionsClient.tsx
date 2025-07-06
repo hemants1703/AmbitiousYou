@@ -23,7 +23,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import * as DropdownMenu from "@/src/components/ui/dropdown-menu";
-import { AmbitionData, AmbitionTask, AmbitionMilestone } from "@/src/types";
+import { Ambition, AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { motivationalQuotes } from "@/src/lib/motivationalQuotes";
 
 // Define types for our data
@@ -31,7 +31,7 @@ type SortableFields =
   | "ambitionName"
   | "ambitionPercentageCompleted"
   | "ambitionPriority"
-  | "ambitionDeadline"
+  | "ambitionEndDate"
   | "id"
   | "ambitionDefinition"
   | "ambitionStartDate"
@@ -56,7 +56,7 @@ export default function AmbitionsClient({
   ambitionTasks,
   ambitionMilestones,
 }: {
-  ambitions: AmbitionData[];
+  ambitions: Ambition[];
   ambitionTasks: AmbitionTask[];
   ambitionMilestones: AmbitionMilestone[];
 }) {
@@ -75,7 +75,7 @@ export default function AmbitionsClient({
   // Sort states
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState<SortConfig>({
-    key: "ambitionDeadline", // Default sort by deadline
+    key: "ambitionEndDate", // Default sort by end date
     direction: "desc", // Default direction (newest first)
   });
 
@@ -117,10 +117,10 @@ export default function AmbitionsClient({
       return sortConfig.direction === "asc" ? valueA - valueB : valueB - valueA;
     }
 
-    // Handle date strings for due date
-    if (sortConfig.key === "ambitionDeadline") {
-      const valueA = a.ambitionDeadline;
-      const valueB = b.ambitionDeadline;
+    // Handle date strings for end date
+    if (sortConfig.key === "ambitionEndDate") {
+      const valueA = a.ambitionEndDate;
+      const valueB = b.ambitionEndDate;
       return sortConfig.direction === "asc"
         ? valueA.localeCompare(valueB)
         : valueB.localeCompare(valueA);
@@ -134,8 +134,8 @@ export default function AmbitionsClient({
     }
 
     // Default string comparison
-    const valueA = String(a[sortConfig.key as keyof AmbitionData] ?? "");
-    const valueB = String(b[sortConfig.key as keyof AmbitionData] ?? "");
+    const valueA = String(a[sortConfig.key as keyof Ambition] ?? "");
+    const valueB = String(b[sortConfig.key as keyof Ambition] ?? "");
     return sortConfig.direction === "asc"
       ? valueA.localeCompare(valueB)
       : valueB.localeCompare(valueA);
@@ -165,7 +165,7 @@ export default function AmbitionsClient({
       ambitionName: "Title",
       ambitionPercentageCompleted: "Progress",
       ambitionPriority: "Priority",
-      ambitionDeadline: "Due Date",
+      ambitionEndDate: "Due Date",
       "tasks.completed": "Tasks Completed",
       id: "ID",
       ambitionDefinition: "Definition",
@@ -364,11 +364,11 @@ export default function AmbitionsClient({
               </DropdownMenu.DropdownMenuItem>
 
               <DropdownMenu.DropdownMenuItem
-                onClick={() => handleSort("ambitionDeadline")}
+                onClick={() => handleSort("ambitionEndDate")}
                 className="flex justify-between"
               >
                 By Due Date
-                {sortConfig.key === "ambitionDeadline" && (
+                {sortConfig.key === "ambitionEndDate" && (
                   <Badge variant="secondary" className="ml-1">
                     {sortConfig.direction === "asc" ? "Oldest" : "Newest"}
                   </Badge>
@@ -512,7 +512,7 @@ export default function AmbitionsClient({
                                     <CalendarIcon className="h-3.5 w-3.5" />
                                     <span>
                                       Due{" "}
-                                      {new Date(ambition.ambitionDeadline).toLocaleDateString(
+                                      {new Date(ambition.ambitionEndDate).toLocaleDateString(
                                         "en-US",
                                         { month: "short", day: "numeric", year: "numeric" }
                                       )}
@@ -650,7 +650,7 @@ export default function AmbitionsClient({
                                       <CalendarIcon className="h-3.5 w-3.5" />
                                       <span>
                                         Due{" "}
-                                        {new Date(ambition.ambitionDeadline).toLocaleDateString(
+                                        {new Date(ambition.ambitionEndDate).toLocaleDateString(
                                           "en-US",
                                           { month: "short", day: "numeric", year: "numeric" }
                                         )}

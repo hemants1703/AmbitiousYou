@@ -23,9 +23,9 @@ export interface AmbitionTask {
     userId: string;
     ambitionId: string;
     task: string;
-    taskDescription: string | null;
+    taskDescription?: string;
     taskCompleted: boolean;
-    taskDeadline: string;
+    taskDeadline: Date;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -35,7 +35,7 @@ export interface AmbitionMilestone {
     userId: string;
     ambitionId: string;
     milestone: string;
-    milestoneDescription: string | null;
+    milestoneDescription?: string;
     milestoneCompleted: boolean;
     milestoneTargetDate: Date;
     createdAt: Date;
@@ -46,11 +46,11 @@ export interface Ambition {
     id: string;
     userId: string;
     ambitionName: string;
-    ambitionDefinition: string | null;
+    ambitionDefinition?: string;
     ambitionTrackingMethod: "task" | "milestone";
-    ambitionStartDate: string | null;
-    ambitionEndDate: string | null;
-    ambitionCompletionDate: string | null;
+    ambitionStartDate: string;
+    ambitionEndDate: string;
+    ambitionCompletionDate: string;
     ambitionStatus: "active" | "completed" | "archived";
     ambitionPriority: "low" | "medium" | "high";
     ambitionPercentageCompleted: number;

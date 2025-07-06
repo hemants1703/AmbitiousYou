@@ -2,35 +2,11 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { z } from "zod";
+import ambitionSchema from "@/src/utils/validators/ambitionSchema";
+import taskSchema from "@/src/utils/validators/taskSchema";
+import milestoneSchema from "@/src/utils/validators/milestoneSchema";
 
-// Validation schema for ambition creation
-const ambitionSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().default(""),
-    priorityLevel: z.enum(["high", "medium", "low"]),
-    deadline: z.string().min(1, "Deadline is required"),
-    color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex code"),
-    trackingMethod: z.enum(["task", "milestone"]),
-    successMetric: z.string().default(""),
-    focusedAmbitionOnDashboard: z.boolean(),
-    tasks: z.string().default("[]"),
-    milestones: z.string().default("[]"),
-});
-
-// Schema for task validation
-const taskSchema = z.object({
-    task: z.string().min(1, "Task name is required"),
-    taskDescription: z.string().optional(),
-    taskDeadline: z.string().min(1, "Task deadline is required"),
-});
-
-// Schema for milestone validation
-const milestoneSchema = z.object({
-    milestone: z.string().min(1, "Milestone name is required"),
-    milestoneDescription: z.string().optional(),
-    milestoneCompleted: z.boolean().default(false),
-    milestoneTargetDate: z.string().min(1, "Milestone target date is required"),
-});
+import { revalidatePath } from "next/cache";
 
 export async function createNewAmbition(formData: FormData) {
     try {
@@ -44,16 +20,15 @@ export async function createNewAmbition(formData: FormData) {
 
         // Parse and validate form data
         const rawData = {
-            title: formData.get("title"),
-            description: formData.get("description"),
-            priorityLevel: formData.get("priorityLevel"),
-            deadline: formData.get("deadline"),
-            color: formData.get("color"),
-            trackingMethod: formData.get("trackingMethod"),
-            successMetric: formData.get("successMetric"),
-            focusedAmbitionOnDashboard: formData.get("focusedAmbitionOnDashboard") === "true",
-            tasks: formData.get("tasks"),
-            milestones: formData.get("milestones"),
+            ambitionName: formData.get("ambitionName") as string,
+            ambitionDefinition: formData.get("ambitionDefinition") as string,
+            ambitionPriority: formData.get("ambitionPriority") as "high" | "medium" | "low",
+            ambitionStartDate: formData.get("ambitionStartDate") as string,
+            ambitionEndDate: formData.get("ambitionEndDate") as string,
+            ambitionCompletionDate: formData.get("ambitionCompletionDate") || "",
+            ambitionColor: formData.get("ambitionColor") as string,
+            ambitionTrackingMethod: formData.get("ambitionTrackingMethod") as string,
+            isFavourited: formData.get("isFavourited") === "true",
         };
 
         const validatedData = ambitionSchema.parse(rawData);
@@ -61,22 +36,22 @@ export async function createNewAmbition(formData: FormData) {
         // Prepare data for database insertion
         const ambitionData = {
             userId: user.id,
-            ambitionName: validatedData.title,
-            ambitionDefinition: validatedData.description || "",
-            ambitionTrackingMethod: validatedData.trackingMethod,
-            ambitionSuccessMetric: validatedData.successMetric,
-            ambitionStartDate: new Date().toISOString(),
-            ambitionEndDate: null,
+            ambitionName: validatedData.ambitionName,
+            ambitionDefinition: validatedData.ambitionDefinition || "",
+            ambitionTrackingMethod: validatedData.ambitionTrackingMethod,
+            ambitionStartDate: validatedData.ambitionStartDate,
+            ambitionEndDate: validatedData.ambitionEndDate,
             ambitionCompletionDate: null,
-            ambitionDeadline: validatedData.deadline,
             ambitionStatus: "active",
-            ambitionPriority: validatedData.priorityLevel,
-            ambitionCategory: null,
+            ambitionPriority: validatedData.ambitionPriority,
             ambitionPercentageCompleted: "0",
-            ambitionColor: validatedData.color,
+            ambitionColor: validatedData.ambitionColor,
+            isFavourited: validatedData.isFavourited,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         };
+
+        console.log("ambitionData", ambitionData);
 
         // Insert ambition and get its ID
         const { data: insertedAmbition, error: insertError } = await supabase
@@ -90,8 +65,8 @@ export async function createNewAmbition(formData: FormData) {
         }
 
         // Handle tasks or milestones based on tracking method
-        if (validatedData.trackingMethod === "task") {
-            const tasks = JSON.parse(validatedData.tasks);
+        if (validatedData.ambitionTrackingMethod === "task") {
+            const tasks = JSON.parse(formData.get("tasks") as string);
             if (!Array.isArray(tasks)) {
                 throw new Error("Invalid tasks format");
             }
@@ -121,8 +96,8 @@ export async function createNewAmbition(formData: FormData) {
                 await supabase.from("ambitions").delete().eq("id", insertedAmbition.id);
                 throw new Error(tasksError.message);
             }
-        } else if (validatedData.trackingMethod === "milestone") {
-            const milestones = JSON.parse(validatedData.milestones);
+        } else if (validatedData.ambitionTrackingMethod === "milestone") {
+            const milestones = JSON.parse(formData.get("milestones") as string);
             if (!Array.isArray(milestones)) {
                 throw new Error("Invalid milestones format");
             }
@@ -154,7 +129,7 @@ export async function createNewAmbition(formData: FormData) {
             }
         }
 
-        // Return success response instead of redirecting
+        revalidatePath("/ambitions");
         return { success: true };
     } catch (error) {
         if (error instanceof z.ZodError) {
