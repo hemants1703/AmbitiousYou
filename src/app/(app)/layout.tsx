@@ -5,7 +5,6 @@ import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { getProfilesTableData } from "@/src/utils/supabase/tablesDataProvider";
 import { User } from "@supabase/supabase-js";
-import { SupabaseProfileData } from "@/src/types";
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +27,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const userData: User = data.user;
   const { id } = userData;
 
-  const profileData: SupabaseProfileData[] = await getProfilesTableData(id);
+  const profileData = await getProfilesTableData(id);
 
   return (
     // <AuthProvider>

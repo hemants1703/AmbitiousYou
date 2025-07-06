@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { Sidebar } from "@/src/components/dashboard/Sidebar";
 import { Header } from "@/src/components/dashboard/Header";
 import { User } from "@supabase/supabase-js";
-import { SupabaseProfileData } from "@/src/types";
+import type { Profile } from "@/src/types";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
   userData: User;
-  profileData: SupabaseProfileData[];
+  profileData: Profile[];
 }
 
 export function SidebarController({ children, userData, profileData }: SidebarControllerProps) {

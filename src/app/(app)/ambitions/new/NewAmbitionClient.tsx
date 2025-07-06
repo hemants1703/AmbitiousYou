@@ -29,7 +29,7 @@ import {
   Cross2Icon,
 } from "@radix-ui/react-icons";
 import { CircleCheckBig, CircleIcon, Milestone } from "lucide-react";
-import { format, isBefore, startOfToday } from "date-fns";
+import { format, isBefore, isAfter, startOfToday } from "date-fns";
 import { cn } from "@/src/lib/utils";
 import Link from "next/link";
 import type { Ambition, AmbitionMilestone, AmbitionTask } from "@/src/types";
@@ -229,6 +229,12 @@ export function NewAmbitionClient() {
       });
       return;
     }
+    if (!newTask.taskDeadline) {
+      toast.error("Missing Deadline", {
+        description: "Please select a deadline for the task",
+      });
+      return;
+    }
     setTasks([...tasks, newTask]);
     setNewTask({
       id: "",
@@ -264,6 +270,12 @@ export function NewAmbitionClient() {
     if (!newMilestone.milestone.trim()) {
       toast.error("Empty Milestone", {
         description: "Please enter a milestone name",
+      });
+      return;
+    }
+    if (!newMilestone.milestoneTargetDate) {
+      toast.error("Missing Target Date", {
+        description: "Please select a target date for the milestone",
       });
       return;
     }
@@ -605,6 +617,9 @@ export function NewAmbitionClient() {
 
                     <div className="space-y-2">
                       <Label>Date Range</Label>
+                      <p className="text-xs text-muted-foreground">
+                        Tasks and milestones will be constrained to dates within this range
+                      </p>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -805,6 +820,9 @@ export function NewAmbitionClient() {
                           </div>
                           <div className="space-y-2">
                             <Label>Task Deadline</Label>
+                            <p className="text-xs text-muted-foreground">
+                              Must be within the ambition&apos;s date range
+                            </p>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
@@ -830,9 +848,24 @@ export function NewAmbitionClient() {
                                       taskDeadline: date,
                                     }))
                                   }
-                                  disabled={(calendarDate) =>
-                                    isBefore(calendarDate, startOfToday())
-                                  }
+                                  disabled={(calendarDate) => {
+                                    // Disable dates before today
+                                    if (isBefore(calendarDate, startOfToday())) {
+                                      return true;
+                                    }
+
+                                    // Disable dates before ambition start date
+                                    if (dateRange.from && isBefore(calendarDate, dateRange.from)) {
+                                      return true;
+                                    }
+
+                                    // Disable dates after ambition end date
+                                    if (dateRange.to && isAfter(calendarDate, dateRange.to)) {
+                                      return true;
+                                    }
+
+                                    return false;
+                                  }}
                                   initialFocus
                                 />
                               </PopoverContent>
@@ -971,6 +1004,59 @@ export function NewAmbitionClient() {
                               }
                             />
                           </div>
+                          <div className="space-y-2">
+                            <Label>Target Date</Label>
+                            <p className="text-xs text-muted-foreground">
+                              Must be within the ambition&apos;s date range
+                            </p>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full justify-start text-left font-normal"
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {newMilestone.milestoneTargetDate ? (
+                                    format(newMilestone.milestoneTargetDate, "PPP")
+                                  ) : (
+                                    <span>Select a target date</span>
+                                  )}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0">
+                                <Calendar
+                                  mode="single"
+                                  selected={newMilestone.milestoneTargetDate}
+                                  onSelect={(date) =>
+                                    date &&
+                                    setNewMilestone((prev) => ({
+                                      ...prev,
+                                      milestoneTargetDate: date,
+                                    }))
+                                  }
+                                  disabled={(calendarDate) => {
+                                    // Disable dates before today
+                                    if (isBefore(calendarDate, startOfToday())) {
+                                      return true;
+                                    }
+
+                                    // Disable dates before ambition start date
+                                    if (dateRange.from && isBefore(calendarDate, dateRange.from)) {
+                                      return true;
+                                    }
+
+                                    // Disable dates after ambition end date
+                                    if (dateRange.to && isAfter(calendarDate, dateRange.to)) {
+                                      return true;
+                                    }
+
+                                    return false;
+                                  }}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </div>
                           <div className="flex items-center justify-start space-x-2">
                             <Checkbox
                               id="add-milestone-completed"
@@ -1038,6 +1124,9 @@ export function NewAmbitionClient() {
                                       </div>
                                       <p className="text-sm text-muted-foreground mt-1">
                                         {milestone.milestoneDescription}
+                                      </p>
+                                      <p className="text-sm text-muted-foreground mt-1">
+                                        Target Date: {format(milestone.milestoneTargetDate, "PPP")}
                                       </p>
                                       <div className="flex items-center gap-2 mt-2">
                                         <div className="flex items-center space-x-2">

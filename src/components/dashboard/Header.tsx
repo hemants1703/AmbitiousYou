@@ -9,13 +9,13 @@ import { Menu } from "lucide-react";
 import { toast } from "sonner";
 import { logoutAction } from "@/src/app/(auth)/actions";
 import { User } from "@supabase/supabase-js";
-import { SupabaseProfileData } from "@/src/types";
+import type { Profile } from "@/src/types";
 
 interface HeaderProps {
   onMenuClick: () => void;
   isSidebarOpen: boolean;
   userData: User;
-  profileData: SupabaseProfileData[];
+  profileData: Profile[];
 }
 
 export function Header({ onMenuClick, isSidebarOpen, userData, profileData }: HeaderProps) {
