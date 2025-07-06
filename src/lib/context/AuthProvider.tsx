@@ -8,42 +8,13 @@ import {
   getProfilesTableData,
 } from "@/src/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
-import { AmbitionData } from "@/src/types";
-
-export type SupabaseProfileData = {
-  id: string;
-  userId: string;
-  firstName: string;
-  lastName: string;
-  created_at: string;
-  updated_at: string;
-};
-
-export type AmbitionsData = {
-  id: string;
-  userId: string;
-  ambitionName: string;
-  ambitionDefinition: string | null | "";
-  ambitionType: string;
-  ambitionStartDate: string | null | "";
-  ambitionEndDate: string | null | "";
-  ambitionCompletionDate: string | null | "";
-  ambitionStatus: string;
-  ambitionPriority: string;
-  ambitionCategory: string;
-  ambitionPercentageCompleted: number;
-  ambitionTasks: string[] | null | "";
-  ambitionNotes: string[] | null | "";
-  ambitionTags: string[] | null | "";
-  created_at: string;
-  updated_at: string;
-};
+import { Ambition, Profile } from "@/src/types";
 
 type AuthContextType = {
   user: User | null;
   session: Session | null;
-  profileData: SupabaseProfileData[] | null;
-  ambitionsData: AmbitionData[] | null;
+  profileData: Profile[] | null;
+  ambitionsData: Ambition[] | null;
   loading: boolean; // Combined loading state
   profileLoading: boolean; // Specific state for profile fetch
   ambitionsLoading: boolean; // Specific state for ambitions fetch
@@ -62,8 +33,8 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [profileData, setProfileData] = useState<SupabaseProfileData[] | null>(null);
-  const [ambitionsData, setAmbitionsData] = useState<AmbitionData[] | null>(null);
+  const [profileData, setProfileData] = useState<Profile[] | null>(null);
+  const [ambitionsData, setAmbitionsData] = useState<Ambition[] | null>(null);
   const [initialAuthCheckComplete, setInitialAuthCheckComplete] = useState<boolean>(false);
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
   const [ambitionsLoading, setAmbitionsLoading] = useState<boolean>(false);
