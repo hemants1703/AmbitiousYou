@@ -1,5 +1,5 @@
 import { createClient } from "@/src/utils/supabase/server";
-import AmbitionsClient from "./AmbitionsClient";
+import AmbitionsClient from "../../../features/app/ambitions/AmbitionsClient";
 import { toast } from "sonner";
 import { Ambition, AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { Metadata } from "next";

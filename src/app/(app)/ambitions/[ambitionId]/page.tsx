@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { IndividualAmbitionClient } from "./IndividualAmbitionClient";
+import { IndividualAmbitionClient } from "@/src/features/app/ambitions/view/IndividualAmbitionClient";
 import type { AmbitionTask, AmbitionMilestone } from "@/src/types";
 import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -17,12 +17,29 @@ import { Progress } from "@/src/components/ui/progress";
 import { ArrowLeft, Calendar, CheckIcon, Flag, ListTodo, Plus, Edit } from "lucide-react";
 import Link from "next/link";
 import { StarFilledIcon } from "@radix-ui/react-icons";
-import { AmbitionColorBadge, AmbitionPriorityBadge } from "../AmbitionsClient";
+import {
+  AmbitionColorBadge,
+  AmbitionPriorityBadge,
+} from "@/src/features/app/ambitions/AmbitionsClient";
+import { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{
     ambitionId: string;
   }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const supabase = await createClient();
+  const { data: ambition } = await supabase
+    .from("ambitions")
+    .select("ambitionName, ambitionDefinition")
+    .eq("id", (await params).ambitionId);
+
+  return {
+    title: ambition?.[0]?.ambitionName ?? "Explore Your Ambition",
+    description: ambition?.[0]?.ambitionDefinition ?? "Explore your ambition",
+  };
 }
 
 export default async function IndividualAmbitionPage({ params }: PageProps) {
@@ -236,14 +253,16 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                           <CheckIcon className="h-3 w-3 text-primary-foreground" />
                         )}
                       </div>
-                      <span
-                        className={task.taskCompleted ? "line-through text-muted-foreground" : ""}
-                      >
-                        {task.task}
-                      </span>
-                      <span className="text-sm text-muted-foreground truncate max-w-[100px]">
-                        {task.taskDescription}
-                      </span>
+                      <div className="flex flex-col">
+                        <span
+                          className={task.taskCompleted ? "line-through text-muted-foreground" : ""}
+                        >
+                          {task.task}
+                        </span>
+                        <span className="text-sm text-muted-foreground truncate max-w-[100px]">
+                          {task.taskDescription}
+                        </span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-sm text-muted-foreground">

@@ -1,6 +1,6 @@
 import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { NewAmbitionClient } from "./NewAmbitionClient";
+import { NewAmbitionClient } from "@/src/features/app/ambitions/new/NewAmbitionClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
