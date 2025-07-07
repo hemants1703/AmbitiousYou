@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const SignupSchema = z.object({
-    plan: z.enum(["free", "achiever", "superhuman"]),
+    plan: z.enum(["free", "superhuman", "conquerer"]),
     firstName: z.string().min(1, { message: 'First name is required' }).max(50, { message: 'First name must be less than 50 characters' }),
     lastName: z.string().min(1, { message: 'Last name is required' }).max(50, { message: 'Last name must be less than 50 characters' }),
     email: z.string().email({ message: 'Invalid email address' }),

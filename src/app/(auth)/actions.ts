@@ -86,12 +86,13 @@ export async function signupAction(previousState: SignupState, formData: FormDat
 
         console.log("user created: ", profileCreationData);
 
-        const planMonthlyPrice = pricingPlans.find((plan) => plan.slug.toLowerCase() === validationResult.data.plan.toLowerCase())?.price;
+        const planMonthlyPrice = pricingPlans.find((plan) => plan.slug.toLowerCase() === validationResult.data.plan.toLowerCase())?.planMonthlyPrice;
+        const planYearlyPrice = pricingPlans.find((plan) => plan.slug.toLowerCase() === validationResult.data.plan.toLowerCase())?.planYearlyPrice;
 
         const { data: planCreationData, error: planCreationError } = await supabase
             .from('plans')
             .insert(
-                { userId, planName: validationResult.data.plan, planMonthlyPrice, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+                { userId, planName: validationResult.data.plan, planMonthlyPrice, planYearlyPrice, planPeriod: "none", planStatus: "active", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
             )
             .select();
 
