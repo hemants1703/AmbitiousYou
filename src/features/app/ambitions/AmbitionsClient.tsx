@@ -122,8 +122,8 @@ export default function AmbitionsClient({
       const valueA = a.ambitionEndDate;
       const valueB = b.ambitionEndDate;
       return sortConfig.direction === "asc"
-        ? valueA.localeCompare(valueB)
-        : valueB.localeCompare(valueA);
+        ? valueA.getTime() - valueB.getTime()
+        : valueB.getTime() - valueA.getTime();
     }
 
     // Handle numeric values
