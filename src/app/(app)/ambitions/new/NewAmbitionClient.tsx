@@ -326,11 +326,11 @@ export function NewAmbitionClient() {
     { name: "Coral Red", value: "#FF7F50", class: "bg-red-400" }, // Warm, friendly, inviting, feels joyful and lively
   ];
 
-  const handleTrackingMethodChange = (method: string) => {
+  const handleTrackingMethodChange = (method: "task" | "milestone") => {
     setTrackingMethod(method);
     setFilledUpData((prev) => ({
       ...prev,
-      trackingMethod: method,
+      ambitionTrackingMethod: method,
     }));
     // Clear the other tracking method's data
     if (method === "task") {
@@ -342,6 +342,36 @@ export function NewAmbitionClient() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (!filledUpData.ambitionName?.trim()) {
+      toast.error("Missing Required Field", {
+        description: "Please enter an ambition name",
+      });
+      return;
+    }
+
+    if (!dateRange.from || !dateRange.to) {
+      toast.error("Missing Required Field", {
+        description: "Please select both start and end dates",
+      });
+      return;
+    }
+
+    if (trackingMethod === "task" && tasks.length === 0) {
+      toast.error("Missing Required Field", {
+        description: "Please add at least one task",
+      });
+      return;
+    }
+
+    if (trackingMethod === "milestone" && milestones.length === 0) {
+      toast.error("Missing Required Field", {
+        description: "Please add at least one milestone",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -451,7 +481,7 @@ export function NewAmbitionClient() {
             <h1 className="text-3xl font-bold">Create New Ambition</h1>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button type="button" variant="ghost" size="icon" className="h-8 w-8">
                   <InfoCircledIcon className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
@@ -623,6 +653,7 @@ export function NewAmbitionClient() {
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
+                            type="button"
                             variant="outline"
                             className="w-full justify-start text-left font-normal"
                           >
@@ -720,6 +751,7 @@ export function NewAmbitionClient() {
                       defaultValue="task"
                       className="flex justify-between mt-5"
                       value={trackingMethod}
+                      onValueChange={handleTrackingMethodChange}
                     >
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
@@ -728,17 +760,14 @@ export function NewAmbitionClient() {
                         className={cn("flex items-start space-x-3 w-full")}
                       >
                         <RadioGroupItem value="task" id="task" />
-                        <button
-                          className="cursor-pointer"
-                          onClick={() => handleTrackingMethodChange("task")}
-                        >
+                        <div className="cursor-pointer">
                           <Label htmlFor="task" className="font-medium cursor-pointer">
                             Task Based
                           </Label>
                           <p className="text-start text-sm text-muted-foreground">
                             Track progress by completing tasks
                           </p>
-                        </button>
+                        </div>
                       </motion.div>
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
@@ -747,17 +776,14 @@ export function NewAmbitionClient() {
                         className={cn("flex items-start space-x-3 w-full")}
                       >
                         <RadioGroupItem value="milestone" id="milestone" />
-                        <button
-                          className="cursor-pointer"
-                          onClick={() => handleTrackingMethodChange("milestone")}
-                        >
+                        <div className="cursor-pointer">
                           <Label htmlFor="milestone" className="font-medium cursor-pointer">
                             Milestone Based
                           </Label>
                           <p className="text-start text-sm text-muted-foreground">
                             Track progress through specific milestones
                           </p>
-                        </button>
+                        </div>
                       </motion.div>
                     </RadioGroup>
                   </div>
@@ -826,6 +852,7 @@ export function NewAmbitionClient() {
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
+                                  type="button"
                                   variant="outline"
                                   className="w-full justify-start text-left font-normal"
                                 >
@@ -923,6 +950,7 @@ export function NewAmbitionClient() {
                                 </div>
                                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                                   <Button
+                                    type="button"
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => removeTask(index)}
@@ -1012,6 +1040,7 @@ export function NewAmbitionClient() {
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
+                                  type="button"
                                   variant="outline"
                                   className="w-full justify-start text-left font-normal"
                                 >
@@ -1113,6 +1142,7 @@ export function NewAmbitionClient() {
                                           {milestone.milestone}
                                         </h4>
                                         <Button
+                                          type="button"
                                           variant="destructive"
                                           size="sm"
                                           className="rounded-full h-6 w-6 p-0"

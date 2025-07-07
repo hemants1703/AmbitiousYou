@@ -136,8 +136,20 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                      <Calendar className="h-4 w-4 text-blue-600" />
+                    <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                      <Calendar className="h-4 w-4 text-blue-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Start Date</p>
+                      <p className="font-medium">
+                        {format(new Date(ambition.ambitionStartDate), "MMM d, yyyy")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                      <Calendar className="h-4 w-4 text-blue-500" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Deadline</p>
@@ -148,8 +160,8 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                      <CheckIcon className="h-4 w-4 text-green-600" />
+                    <div className="h-8 w-8 rounded-md bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                      <CheckIcon className="h-4 w-4 text-green-500" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">
@@ -171,14 +183,14 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center flex-shrink-0">
                       <Flag className="h-4 w-4 text-purple-600" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Status</p>
                       <p className="font-medium capitalize flex items-center gap-1">
                         <span
-                          className={`h-2 w-2 rounded-full ${ambition.ambitionStatus === "active" ? "bg-green-500" : "bg-amber-500"}`}
+                          className={`h-2 w-2 rounded-md ${ambition.ambitionStatus === "active" ? "bg-green-500 animate-pulse" : "bg-amber-500"}`}
                         ></span>
                         {ambition.ambitionStatus.replace("_", " ")}
                       </p>
@@ -228,6 +240,9 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                         className={task.taskCompleted ? "line-through text-muted-foreground" : ""}
                       >
                         {task.task}
+                      </span>
+                      <span className="text-sm text-muted-foreground truncate max-w-[100px]">
+                        {task.taskDescription}
                       </span>
                     </div>
                     <div className="flex items-center gap-4">

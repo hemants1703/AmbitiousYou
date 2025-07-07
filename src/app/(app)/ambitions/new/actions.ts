@@ -25,10 +25,10 @@ export async function createNewAmbition(formData: FormData) {
             ambitionPriority: formData.get("ambitionPriority") as "high" | "medium" | "low",
             ambitionStartDate: formData.get("ambitionStartDate") as string,
             ambitionEndDate: formData.get("ambitionEndDate") as string,
-            ambitionCompletionDate: formData.get("ambitionCompletionDate") || "",
+            ambitionCompletionDate: formData.get("ambitionCompletionDate") || "" as string,
             ambitionColor: formData.get("ambitionColor") as string,
             ambitionTrackingMethod: formData.get("ambitionTrackingMethod") as string,
-            isFavourited: formData.get("isFavourited") === "true",
+            isFavourited: formData.get("isFavourited") === "true" as string,
         };
 
         const validatedData = ambitionSchema.parse(rawData);

@@ -72,16 +72,13 @@ export function IndividualAmbitionClient({
             {isFavourited ? (
               <StarFilledIcon className="h-4 w-4 mr-2 text-yellow-500" />
             ) : (
-              <StarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+              <StarIcon className="h-4 w-4 mr-2 text-yellow-500" />
             )}{" "}
             {isFavourited ? "Remove from Favorites" : "Add to Favorites"}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="text-destructive"
-            onClick={() => setDeleteAmbitionDialogOpen(true)}
-          >
-            <Trash2 className="h-4 w-4 mr-2" /> Delete Ambition
+          <DropdownMenuItem onClick={() => setDeleteAmbitionDialogOpen(true)}>
+            <Trash2 className="h-4 w-4 mr-2 text-red-500" /> Delete Ambition
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
