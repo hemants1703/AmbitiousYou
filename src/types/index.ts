@@ -48,9 +48,9 @@ export interface Ambition {
     ambitionName: string;
     ambitionDefinition?: string;
     ambitionTrackingMethod: "task" | "milestone";
-    ambitionStartDate: string;
-    ambitionEndDate: string;
-    ambitionCompletionDate: string;
+    ambitionStartDate: Date;
+    ambitionEndDate: Date;
+    ambitionCompletionDate: Date;
     ambitionStatus: "active" | "completed" | "archived";
     ambitionPriority: "low" | "medium" | "high";
     ambitionPercentageCompleted: number;
@@ -74,6 +74,9 @@ export interface Plan {
     userId: string;
     planName: string;
     planMonthlyPrice: number;
-    createdAt: string;
-    updatedAt: string;
+    planYearlyPrice: number;
+    planPeriod: "monthly" | "yearly";
+    planStatus: "active" | "inactive";
+    createdAt: Date;
+    updatedAt: Date;
 }
