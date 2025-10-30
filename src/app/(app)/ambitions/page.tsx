@@ -1,59 +1,43 @@
-import { createClient } from "@/src/utils/supabase/server";
 import AmbitionsClient from "../../../features/app/ambitions/AmbitionsClient";
-import { toast } from "sonner";
-import { Ambition, AmbitionTask, AmbitionMilestone } from "@/src/types";
+import { Ambition, AmbitionTask, AmbitionMilestone } from "@/types/globals";
 import { Metadata } from "next";
+import { AmbitionsService } from "@/src/services/ambitionsService";
+import { TasksService } from "@/src/services/tasksService";
+import { MilestonesService } from "@/src/services/milestonesService";
 
 export const metadata: Metadata = {
   title: "All Ambitions | AmbitiousYou",
 };
 
 export default async function AmbitionsPage() {
-  const supabase = await createClient();
+  // TODO: Implement proper authentication check with BetterAuth
+  // For now, using placeholder user ID
+  const userId = "placeholder-user-id";
 
-  const { data: ambitions, error } = await supabase.from("ambitions").select("*");
+  try {
+    // Fetch data concurrently using new services
+    const [ambitions, tasks, milestones] = await Promise.all([
+      AmbitionsService.fetchActiveAmbitions(userId),
+      TasksService.fetchUserTasks(userId),
+      MilestonesService.fetchUserMilestones(userId),
+    ]);
 
-  if (error) {
-    toast.error("Error fetching ambitions", {
-      description: error.message,
-    });
-    console.error("Error fetching ambitions:", error);
-    return <div>Error loading ambitions</div>;
+    return (
+      <AmbitionsClient
+        ambitions={ambitions}
+        ambitionTasks={tasks}
+        ambitionMilestones={milestones}
+      />
+    );
+  } catch (error) {
+    console.error("Error loading ambitions data:", error);
+    // Return empty state on error
+    return (
+      <AmbitionsClient
+        ambitions={[]}
+        ambitionTasks={[]}
+        ambitionMilestones={[]}
+      />
+    );
   }
-
-  // Fetch all tasks
-  const { data: tasks, error: tasksError } = await supabase.from("tasks").select("*");
-
-  if (tasksError) {
-    toast.error("Error fetching tasks", {
-      description: tasksError.message,
-    });
-    console.error("Error fetching tasks:", tasksError);
-    return <div>Error loading tasks</div>;
-  }
-
-  // Fetch all milestones
-  const { data: milestones, error: milestonesError } = await supabase
-    .from("milestones")
-    .select("*");
-
-  if (milestonesError) {
-    toast.error("Error fetching milestones", {
-      description: milestonesError.message,
-    });
-    console.error("Error fetching milestones:", milestonesError);
-    return <div>Error loading milestones</div>;
-  }
-
-  // console.log("Ambitions", ambitions);
-  // console.log("Tasks", tasks);
-  // console.log("Milestones", milestones);
-
-  return (
-    <AmbitionsClient
-      ambitions={ambitions as Ambition[]}
-      ambitionTasks={tasks as AmbitionTask[]}
-      ambitionMilestones={milestones as AmbitionMilestone[]}
-    />
-  );
 }

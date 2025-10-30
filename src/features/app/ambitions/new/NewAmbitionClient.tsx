@@ -32,7 +32,7 @@ import { CircleCheckBig, CircleIcon, Milestone } from "lucide-react";
 import { format, isBefore, isAfter, startOfToday } from "date-fns";
 import { cn } from "@/src/lib/utils";
 import Link from "next/link";
-import type { Ambition, AmbitionMilestone, AmbitionTask } from "@/src/types";
+import type { Ambition, AmbitionMilestone, AmbitionTask } from "@/types/globals";
 import { createNewAmbition } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

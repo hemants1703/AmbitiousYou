@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { Sidebar } from "@/src/components/dashboard/Sidebar";
 import { Header } from "@/src/components/dashboard/Header";
-import { User } from "@supabase/supabase-js";
-import type { Profile } from "@/src/types";
+import type { Profile, User } from "@/types/globals";
 
 interface SidebarControllerProps {
   children: React.ReactNode;

@@ -8,8 +8,7 @@ import { ThemeToggler } from "@/src/components/ThemeToggler";
 import { Menu } from "lucide-react";
 import { toast } from "sonner";
 import { logoutAction } from "@/src/app/(auth)/actions";
-import { User } from "@supabase/supabase-js";
-import type { Profile } from "@/src/types";
+import type { Profile, User } from "@/types/globals";
 
 interface HeaderProps {
   onMenuClick: () => void;

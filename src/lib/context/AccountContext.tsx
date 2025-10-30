@@ -1,5 +1,4 @@
-import { Profile, Ambition } from "@/src/types";
-import { User } from "@supabase/supabase-js";
+import { Profile, Ambition, User } from "@/types/globals";
 import { createContext } from "react";
 
 export type AccountDataContextType = {

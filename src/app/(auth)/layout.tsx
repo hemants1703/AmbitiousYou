@@ -1,16 +1,10 @@
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
-import { createClient } from "@/src/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 export default async function LandingLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const userLoggedIn = await supabase.auth.getUser();
-
-  // Check if the user is logged in
-  if (!userLoggedIn.error) {
-    redirect("/dashboard");
-  }
+  // TODO: Implement authentication check with BetterAuth
+  // For now, allowing access to auth pages
 
   return (
     <>

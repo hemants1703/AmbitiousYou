@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { IndividualAmbitionClient } from "@/src/features/app/ambitions/view/IndividualAmbitionClient";
-import type { AmbitionTask, AmbitionMilestone } from "@/src/types";
-import { createClient } from "@/src/utils/supabase/server";
+import type { AmbitionTask, AmbitionMilestone } from "@/types/globals";
 import { redirect } from "next/navigation";
+import { AmbitionsService } from "@/src/services/ambitionsService";
+import { TasksService } from "@/src/services/tasksService";
+import { MilestonesService } from "@/src/services/milestonesService";
 import { format } from "date-fns";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -44,56 +46,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function IndividualAmbitionPage({ params }: PageProps) {
   const { ambitionId } = await params;
-  const supabase = await createClient();
 
-  // Check if user is authenticated
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError || !user) {
-    redirect("/login");
-  }
+  // TODO: Implement proper authentication check with BetterAuth
+  // For now, using placeholder user ID
+  const userId = "placeholder-user-id";
 
-  // Try to fetch from Supabase first
-  const { data: ambition } = await supabase
-    .from("ambitions")
-    .select("*")
-    .eq("id", ambitionId)
-    .single();
+  // Try to fetch ambition
+  const ambition = await AmbitionsService.fetchAmbitionById(ambitionId, userId);
 
   if (!ambition) {
     notFound();
   }
 
-  // Fetch related data from Supabase
+  // Fetch related data using new services
   let tasks: AmbitionTask[] = [];
   let milestones: AmbitionMilestone[] = [];
 
   try {
-    // Fetch tasks
-    const { data: tasksData } = await supabase
-      .from("tasks")
-      .select("*")
-      .eq("ambitionId", ambitionId)
-      .order("createdAt", { ascending: true });
-
-    if (tasksData) {
-      tasks = tasksData as AmbitionTask[];
-    }
-
-    // Fetch milestones
-    const { data: milestonesData } = await supabase
-      .from("milestones")
-      .select("*")
-      .eq("ambitionId", ambitionId)
-      .order("createdAt", { ascending: true });
-
-    if (milestonesData) {
-      milestones = milestonesData as AmbitionMilestone[];
-    }
+    // Fetch tasks and milestones concurrently
+    [tasks, milestones] = await Promise.all([
+      TasksService.fetchAmbitionTasks(ambitionId, userId),
+      MilestonesService.fetchAmbitionMilestones(ambitionId, userId),
+    ]);
   } catch (error) {
-    // If fetching related data fails, use the data from test ambition
+    // If fetching related data fails, use empty arrays
     console.error("Error fetching related data:", error);
   }
 

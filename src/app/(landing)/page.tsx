@@ -8,7 +8,6 @@ import {
   ArrowRightIcon,
   HeartFilledIcon,
 } from "@radix-ui/react-icons";
-import { createClient } from "@/src/utils/supabase/server";
 import Features from "@/src/features/root/Features";
 import CTA from "@/src/features/root/CTA";
 
@@ -18,12 +17,8 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export default async function Home() {
-  // If user is logged in, redirect to dashboard
-  const supabase = await createClient();
-  const userLoggedIn = await supabase.auth.getUser();
-  // if (!userLoggedIn.error) {
-  //   redirect("/dashboard");
-  // }
+  // TODO: Implement authentication check with BetterAuth
+  // For now, allowing access to landing page
 
   return (
     <div className="flex flex-col w-full">

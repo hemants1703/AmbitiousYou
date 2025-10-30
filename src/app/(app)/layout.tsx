@@ -1,10 +1,6 @@
 import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { Metadata } from "next";
 import { SidebarController } from "@/src/components/dashboard/SidebarController";
-import { createClient } from "@/src/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { getProfilesTableData } from "@/src/utils/supabase/tablesDataProvider";
-import { User } from "@supabase/supabase-js";
 
 export const metadata: Metadata = {
   title: {
@@ -14,23 +10,12 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data, error: userDoesNotExist } = await supabase.auth.getUser();
-
-  // console.log("Logged In user: ", userData);
-
-  // Check if the user is logged in
-  if (userDoesNotExist) {
-    redirect("/login");
-  }
-
-  const userData: User = data.user;
-  const { id } = userData;
-
-  const profileData = await getProfilesTableData(id);
+  // TODO: Get user data from AuthProvider context
+  // For now, using placeholder data
+  const userData = { id: "placeholder-user-id", email: "user@example.com" };
+  const profileData = [{ firstName: "User", lastName: "" }];
 
   return (
-    // <AuthProvider>
     <div className="flex h-screen overflow-hidden bg-background">
       <SidebarController userData={userData} profileData={profileData}>
         <ScrollArea className="flex-1 overflow-hidden">
@@ -38,6 +23,5 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </ScrollArea>
       </SidebarController>
     </div>
-    // </AuthProvider>
   );
 }
