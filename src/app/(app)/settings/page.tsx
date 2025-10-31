@@ -1,13 +1,13 @@
-import { Button } from "@/src/components/ui/button";
-import * as Card from "@/src/components/ui/card";
-import * as Tabs from "@/src/components/ui/tabs";
-import { Input } from "@/src/components/ui/input";
-import { Label } from "@/src/components/ui/label";
-import { Switch } from "@/src/components/ui/switch";
-import * as Select from "@/src/components/ui/select";
-import { ThemeSelector } from "@/src/components/ThemeSelector";
+import { Button } from "@/components/ui/button";
+import * as Card from "@/components/ui/card";
+import * as Tabs from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import * as Select from "@/components/ui/select";
+import { ThemeSelector } from "@/components/ThemeSelector";
 import { Metadata } from "next";
-import ProfileTab from "@/src/features/app/settings/ProfileTab";
+import ProfileTab from "@/features/settings/ProfileTab";
 
 export const metadata: Metadata = {
   title: "Settings",

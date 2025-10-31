@@ -1,44 +1,29 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import * as Dropdown from "@/src/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
-import Link from "next/link";
-import { ThemeToggler } from "@/src/components/ThemeToggler";
+import { ThemeToggler } from "@/components/ThemeToggler";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import * as Dropdown from "@/components/ui/dropdown-menu";
+import { logoutAction } from "@/features/(auth)/actions";
+import { User } from "better-auth";
 import { Menu } from "lucide-react";
-import { toast } from "sonner";
-import { logoutAction } from "@/src/app/(auth)/actions";
-import { User } from "@supabase/supabase-js";
-import type { Profile } from "@/src/types";
+import Link from "next/link";
 
 interface HeaderProps {
   onMenuClick: () => void;
   isSidebarOpen: boolean;
   userData: User;
-  profileData: Profile[];
 }
 
-export function Header({ onMenuClick, isSidebarOpen, userData, profileData }: HeaderProps) {
-  const { firstName, lastName } = profileData[0];
-  const initialsOfUsersName = firstName.charAt(0) + lastName.charAt(0); // Placeholder for initials
-  const { email } = userData;
-
-  const handleUserLogout = async () => {
-    const logoutUser = await logoutAction();
-
-    if (!logoutUser.success) {
-      toast.error("Failed to log out. Please try again.");
-    }
-  };
-
+export function Header(props: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between md:justify-end gap-4 border-b bg-background px-4 md:px-6">
       <Button
         variant="ghost"
         size="icon"
-        onClick={onMenuClick}
+        onClick={props.onMenuClick}
         className="md:hidden"
-        aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+        aria-label={props.isSidebarOpen ? "Close sidebar" : "Open sidebar"}
       >
         <Menu className="h-5 w-5" />
       </Button>
@@ -50,15 +35,17 @@ export function Header({ onMenuClick, isSidebarOpen, userData, profileData }: He
             <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatar.jpg" alt="User" />
-                <AvatarFallback>{initialsOfUsersName}</AvatarFallback>
+                <AvatarFallback>
+                  {props.userData.name.charAt(0) + props.userData.name.charAt(1)}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </Dropdown.DropdownMenuTrigger>
           <Dropdown.DropdownMenuContent align="end" className="w-56">
             <Dropdown.DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{`${firstName} ${lastName}`}</p>
-                <p className="text-xs leading-none text-muted-foreground">{email}</p>
+                <p className="text-sm font-medium leading-none">{`${props.userData.name}`}</p>
+                <p className="text-xs leading-none text-muted-foreground">{props.userData.email}</p>
                 {/* {planName && <Badge className="mt-1 w-fit">{planName} Plan</Badge>} */}
               </div>
             </Dropdown.DropdownMenuLabel>
@@ -70,7 +57,7 @@ export function Header({ onMenuClick, isSidebarOpen, userData, profileData }: He
             </Dropdown.DropdownMenuItem>
             <Dropdown.DropdownMenuSeparator />
             <Dropdown.DropdownMenuItem>
-              <button onClick={handleUserLogout}>Log Out</button>
+              <button onClick={logoutAction}>Log Out</button>
             </Dropdown.DropdownMenuItem>
           </Dropdown.DropdownMenuContent>
         </Dropdown.DropdownMenu>

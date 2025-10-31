@@ -1,5 +1,5 @@
 import { Bricolage_Grotesque } from "next/font/google";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   RocketIcon,
@@ -8,9 +8,8 @@ import {
   ArrowRightIcon,
   HeartFilledIcon,
 } from "@radix-ui/react-icons";
-import { createClient } from "@/src/utils/supabase/server";
-import Features from "@/src/features/root/Features";
-import CTA from "@/src/features/root/CTA";
+import Features from "@/features/root/Features";
+import CTA from "@/features/root/CTA";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -18,13 +17,6 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export default async function Home() {
-  // If user is logged in, redirect to dashboard
-  const supabase = await createClient();
-  const userLoggedIn = await supabase.auth.getUser();
-  // if (!userLoggedIn.error) {
-  //   redirect("/dashboard");
-  // }
-
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -42,7 +34,7 @@ export default async function Home() {
 
         <div className="text-center max-w-4xl mx-auto relative z-10">
           <h1
-            className={`${bricolage.className} tracking-tight text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/90 to-primary/70 leading-tight`}
+            className={`${bricolage.className} tracking-tight text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-linear-to-r from-primary via-primary/90 to-primary/70 leading-tight`}
           >
             For Those Who Dare to Dream Beyond Limits
           </h1>
@@ -50,35 +42,27 @@ export default async function Home() {
             Reduce your mental overload and manage all your ambitions at a single and private place.
             AmbitiousYou helps you become a Superhuman.
           </p>
-          {userLoggedIn.error === null ? (
-            <Button className="text-xl" size={"lg"} asChild>
-              <Link prefetch={true} href="/dashboard">
-                Dashboard
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              asChild
+              size="lg"
+              className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+            >
+              <Link prefetch={true} href="/signup" className="flex items-center gap-2">
+                Get Started <RocketIcon className="h-5 w-5" />
               </Link>
             </Button>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                asChild
-                size="lg"
-                className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
-              >
-                <Link prefetch={true} href="/signup" className="flex items-center gap-2">
-                  Get Started <RocketIcon className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
-              >
-                <Link prefetch={true} href="/features" className="flex items-center gap-2">
-                  Explore Features <ArrowRightIcon className="h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-          )}
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
+            >
+              <Link prefetch={true} href="/features" className="flex items-center gap-2">
+                Explore Features <ArrowRightIcon className="h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
 
           {/* Social proof */}
           <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-muted-foreground">
@@ -99,7 +83,7 @@ export default async function Home() {
 
         {/* App Preview with interactive elements */}
         <div className="mt-16 w-full max-w-5xl mx-auto relative z-10">
-          <div className="bg-gradient-to-tr from-primary/20 to-secondary/10 rounded-xl p-1 shadow-xl">
+          <div className="bg-linear-to-tr from-primary/20 to-secondary/10 rounded-xl p-1 shadow-xl">
             <div className="bg-card/90 backdrop-blur-sm rounded-lg shadow-2xl border border-primary/10 overflow-hidden">
               {/* Browser-like mockup header */}
               <div className="bg-muted/60 border-b border-border flex items-center p-3">

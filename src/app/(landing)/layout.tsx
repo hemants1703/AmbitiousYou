@@ -1,20 +1,12 @@
-import Footer from "@/src/components/Footer";
-import Navbar from "@/src/components/Navbar";
-import { createClient } from "@/src/utils/supabase/server";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 export default async function LandingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  // If user is logged in, redirect to dashboard
-  const supabase = await createClient();
-  const userLoggedIn = await supabase.auth.getUser();
-  // if (!userLoggedIn.error) {
-  //   redirect("/dashboard");
-  // }
-
   return (
     <>
       {/* GPU INTENSIVE BACKGROUND - Fixed background with gradient effects - these will stay in place during scroll */}
       <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/15 dark:from-primary/20 dark:to-primary/25"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-primary/15 dark:from-primary/20 dark:to-primary/25"></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 dark:bg-primary/20 rounded-full filter blur-3xl animate-pulse"></div>
         <div
           className="absolute bottom-10 right-10 w-80 h-80 bg-secondary/10 dark:bg-secondary/20 rounded-full filter blur-3xl animate-pulse"
@@ -28,7 +20,7 @@ export default async function LandingLayout({ children }: Readonly<{ children: R
 
       {/* Main content container */}
       <main className="relative max-w-screen-2xl min-h-svh flex flex-col justify-between items-center mx-auto z-10 overflow-x-hidden">
-        <Navbar userLoggedIn={userLoggedIn.error === null ? true : false} />
+        <Navbar userLoggedIn={false} />
         <div className="mt-16">{children}</div>
         <Footer />
       </main>

@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sidebar } from "@/src/components/dashboard/Sidebar";
-import { Header } from "@/src/components/dashboard/Header";
-import { User } from "@supabase/supabase-js";
-import type { Profile } from "@/src/types";
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { Header } from "@/components/dashboard/Header";
+import { User } from "better-auth";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
   userData: User;
-  profileData: Profile[];
 }
 
-export function SidebarController({ children, userData, profileData }: SidebarControllerProps) {
+export function SidebarController(props: SidebarControllerProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -36,10 +34,9 @@ export function SidebarController({ children, userData, profileData }: SidebarCo
         <Header
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
           isSidebarOpen={sidebarOpen}
-          userData={userData}
-          profileData={profileData}
+          userData={props.userData}
         />
-        {children}
+        {props.children}
       </div>
     </>
   );

@@ -1,14 +1,14 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { createClient } from "@/src/utils/supabase/client";
+import { createClient } from "@/lib/utils/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
 import {
   getAmbitionsTableData,
   getProfilesTableData,
-} from "@/src/utils/supabase/tablesDataProvider";
+} from "@/lib/utils/supabase/tablesDataProvider";
 import { toast } from "sonner";
-import { Ambition, Profile } from "@/src/types";
+import { Ambition, Profile } from "@/types/globals";
 
 type AuthContextType = {
   user: User | null;

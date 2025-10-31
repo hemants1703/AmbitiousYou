@@ -1,6 +1,6 @@
 import { CheckIcon } from "lucide-react";
 import { Bricolage_Grotesque } from "next/font/google";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRightIcon, CheckCircledIcon } from "@radix-ui/react-icons";
 

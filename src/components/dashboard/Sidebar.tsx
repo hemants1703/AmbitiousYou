@@ -2,7 +2,7 @@
 
 import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/src/lib/utils";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
   DashboardIcon,
@@ -11,17 +11,12 @@ import {
   GearIcon,
   MixerVerticalIcon,
 } from "@radix-ui/react-icons";
-import { Button } from "@/src/components/ui/button";
-import { ScrollArea } from "@/src/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/src/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
 import Image from "next/image";
-import "./cynthiaMenuItemAnimation.css";
+import "../../styles/cynthiaMenuItemAnimation.css";
 
 const mainNavItems = [
   {

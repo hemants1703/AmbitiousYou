@@ -1,26 +1,18 @@
 import { notFound } from "next/navigation";
-import { IndividualAmbitionClient } from "@/src/features/app/ambitions/view/IndividualAmbitionClient";
-import type { AmbitionTask, AmbitionMilestone } from "@/src/types";
-import { createClient } from "@/src/utils/supabase/server";
+import { IndividualAmbitionClient } from "@/features/ambitions/view/IndividualAmbitionClient";
+import type { AmbitionTask, AmbitionMilestone } from "@/types/globals";
+import { createClient } from "@/lib/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
-import { Button } from "@/src/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
-import { Badge } from "@/src/components/ui/badge";
-import { Progress } from "@/src/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Calendar, CheckIcon, Flag, ListTodo, Plus, Edit } from "lucide-react";
 import Link from "next/link";
 import { StarFilledIcon } from "@radix-ui/react-icons";
-import {
-  AmbitionColorBadge,
-  AmbitionPriorityBadge,
-} from "@/src/features/app/ambitions/AmbitionsClient";
+import { AmbitionColorBadge } from "@/features/ambitions/AmbitionsClient";
+import { AmbitionPriorityBadge } from "@/features/ambitions/AmbitionBadges";
 import { Metadata } from "next";
 
 interface PageProps {

@@ -1,15 +1,15 @@
-import * as Card from "@/src/components/ui/card";
-import { Separator } from "@/src/components/ui/separator";
-import SignUpForm from "./SignUpForm";
+import * as Card from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import SignUpForm from "@/features/(auth)/signup/SignUpForm";
+import confirmSession from "@/lib/auth/confirmSession";
+import Link from "next/link";
+import { redirect, RedirectType } from "next/navigation";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+export default async function Signup() {
+  const session = await confirmSession();
 
-export default async function Signup({ searchParams }: { searchParams: SearchParams }) {
-  // Extract the plan from the search parameters
-  let { plan } = await searchParams;
-
-  if (!plan) {
-    plan = "free"; // Default to "free" if no plan is provided
+  if (session) {
+    redirect("/dashboard", RedirectType.replace);
   }
 
   return (
@@ -18,11 +18,12 @@ export default async function Signup({ searchParams }: { searchParams: SearchPar
         <Card.Card className="shadow-2xl">
           <div className="flex flex-col lg:flex-row">
             {/* Left side (Header content) */}
-            <div className="lg:w-1/2 p-8 flex flex-col justify-center bg-background">
+            <div className="w-fit p-8 flex flex-col justify-center bg-background">
               <Card.CardHeader className="text-center lg:text-left">
                 <Card.CardTitle className="text-5xl lg:text-6xl font-bold">
                   Join <br />
-                  <span className="font-light">Ambitious</span>You
+                  <span className="font-light">Ambitious</span>
+                  <span>You</span>
                 </Card.CardTitle>
                 <p className="text-lg text-muted-foreground mt-2">
                   Create an account to get started
@@ -34,8 +35,16 @@ export default async function Signup({ searchParams }: { searchParams: SearchPar
             {/* Right side (Form components) */}
             <div className="lg:w-1/2 p-8 bg-background">
               <Card.CardContent className="space-y-4">
-                <SignUpForm signupPlan={plan} />
+                <SignUpForm />
               </Card.CardContent>
+              <Card.CardFooter className="flex flex-col items-center space-y-4 mt-4">
+                <p className="text-sm text-muted-foreground">
+                  Already have an account?{" "}
+                  <Link prefetch={true} href="/login" className="underline hover:text-primary">
+                    Log In
+                  </Link>
+                </p>
+              </Card.CardFooter>
             </div>
           </div>
         </Card.Card>

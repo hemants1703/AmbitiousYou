@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import * as Card from "@/src/components/ui/card";
-import * as Tabs from "@/src/components/ui/tabs";
-import { Input } from "@/src/components/ui/input";
-import { Badge } from "@/src/components/ui/badge";
-import { Progress } from "@/src/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import * as Card from "@/components/ui/card";
+import * as Tabs from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   CalendarIcon,
   CheckCircleIcon,
@@ -22,9 +22,9 @@ import {
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import * as DropdownMenu from "@/src/components/ui/dropdown-menu";
-import { Ambition, AmbitionTask, AmbitionMilestone } from "@/src/types";
-import { motivationalQuotes } from "@/src/lib/motivationalQuotes";
+import * as DropdownMenu from "@/components/ui/dropdown-menu";
+import { Ambition, AmbitionTask, AmbitionMilestone } from "@/types/globals";
+import { motivationalQuotes } from "@/lib/motivationalQuotes";
 
 // Define types for our data
 type SortableFields =

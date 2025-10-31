@@ -2,22 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/src/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
-import { Input } from "@/src/components/ui/input";
-import { Textarea } from "@/src/components/ui/textarea";
-import { Label } from "@/src/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
-import { Calendar } from "@/src/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { Checkbox } from "@/src/components/ui/checkbox";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CalendarIcon,
   CheckIcon,
@@ -30,13 +24,13 @@ import {
 } from "@radix-ui/react-icons";
 import { CircleCheckBig, CircleIcon, Milestone } from "lucide-react";
 import { format, isBefore, isAfter, startOfToday } from "date-fns";
-import { cn } from "@/src/lib/utils";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import type { Ambition, AmbitionMilestone, AmbitionTask } from "@/src/types";
+import type { Ambition, AmbitionMilestone, AmbitionTask } from "@/types/globals";
 import { createNewAmbition } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function NewAmbitionClient() {
   const router = useRouter();

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import "./globals.css";
-import { Analytics } from "@vercel/analytics/react";
+import "../styles/globals.css";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -66,7 +65,6 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
-        <Analytics />
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}
           <Toaster richColors />

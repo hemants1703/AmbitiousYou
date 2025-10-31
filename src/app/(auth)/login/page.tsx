@@ -1,9 +1,17 @@
-import * as Card from "@/src/components/ui/card";
-import { Separator } from "@/src/components/ui/separator";
+import * as Card from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import LoginForm from "./LoginForm";
+import LoginForm from "@/features/(auth)/login/LoginForm";
+import confirmSession from "@/lib/auth/confirmSession";
+import { redirect, RedirectType } from "next/navigation";
 
-export default function Login() {
+export default async function Login() {
+  const session = await confirmSession();
+
+  if (session) {
+    redirect("/dashboard", RedirectType.replace);
+  }
+
   return (
     <div className="w-full flex items-center justify-center py-12 pb-24">
       <div className="w-full max-w-5xl">

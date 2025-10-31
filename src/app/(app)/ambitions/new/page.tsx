@@ -1,6 +1,6 @@
-import { createClient } from "@/src/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { NewAmbitionClient } from "@/src/features/app/ambitions/new/NewAmbitionClient";
+import { NewAmbitionClient } from "@/features/ambitions/new/NewAmbitionClient";
+import confirmSession from "@/lib/auth/confirmSession";
+import { User } from "better-auth";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,14 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default async function NewAmbitionPage() {
-  const supabase = await createClient();
+  const session = await confirmSession();
 
-  const { error: userDoesNotExist } = await supabase.auth.getUser();
-
-  // Check if the user is logged in
-  if (userDoesNotExist) {
-    redirect("/login");
-  }
+  const userData = session.user as User;
 
   return <NewAmbitionClient />;
 }

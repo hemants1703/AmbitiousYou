@@ -1,4 +1,4 @@
-import { Profile, Ambition } from "@/src/types";
+import { Profile, Ambition } from "@/types/globals";
 import { User } from "@supabase/supabase-js";
 import { createContext } from "react";
 

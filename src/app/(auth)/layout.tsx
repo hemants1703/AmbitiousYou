@@ -1,22 +1,12 @@
-import Footer from "@/src/components/Footer";
-import Navbar from "@/src/components/Navbar";
-import { createClient } from "@/src/utils/supabase/server";
-import { redirect } from "next/navigation";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
-export default async function LandingLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const userLoggedIn = await supabase.auth.getUser();
-
-  // Check if the user is logged in
-  if (!userLoggedIn.error) {
-    redirect("/dashboard");
-  }
-
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* GPU INTENSIVE BACKGROUND - Fixed background with gradient effects - these will stay in place during scroll */}
       <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/15 dark:from-primary/20 dark:to-primary/25"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-primary/15 dark:from-primary/20 dark:to-primary/25"></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 dark:bg-primary/20 rounded-full filter blur-3xl animate-pulse"></div>
         <div
           className="absolute bottom-10 right-10 w-80 h-80 bg-secondary/10 dark:bg-secondary/20 rounded-full filter blur-3xl animate-pulse"
