@@ -19,14 +19,12 @@ interface IndividualAmbitionClientProps {
   ambitionId: string;
   userId: string;
   isFavourited: boolean;
-  ambitionTrackingMethod: "task" | "milestone";
 }
 
 export function IndividualAmbitionClient({
   ambitionId,
   userId,
   isFavourited,
-  ambitionTrackingMethod,
 }: IndividualAmbitionClientProps) {
   const [deleteAmbitionDialogOpen, setDeleteAmbitionDialogOpen] = useState(false);
 
@@ -35,7 +33,6 @@ export function IndividualAmbitionClient({
       {/* DELETE AMBITION DIALOG */}
       <DeleteAmbitionDialog
         ambitionId={ambitionId}
-        ambitionTrackingMethod={ambitionTrackingMethod}
         deleteAmbitionDialogOpen={deleteAmbitionDialogOpen}
         setDeleteAmbitionDialogOpen={setDeleteAmbitionDialogOpen}
       />
@@ -54,7 +51,6 @@ export function IndividualAmbitionClient({
           <DropdownMenuItem
             onClick={async () => {
               const { success, message, description, error } = await favouriteAmbitionAction(
-                userId,
                 ambitionId,
                 !isFavourited
               );

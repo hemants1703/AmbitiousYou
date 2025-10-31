@@ -1,33 +1,60 @@
 "use server";
 
-import { createClient } from "@/lib/utils/supabase/server";
+import { db } from "@/db";
+import { ambitions } from "@/db/schema";
+import confirmSession from "@/lib/auth/confirmSession";
 import { revalidatePath } from "next/cache";
+import { and, eq } from "drizzle-orm";
 
 export async function favouriteAmbitionAction(
-  userId: string,
   ambitionId: string,
   favouriteValue: boolean
-) {
-  const supabase = await createClient();
+): Promise<{
+  success: boolean;
+  error?: string;
+  message?: string;
+  description?: string;
+}> {
+  try {
+    // Get current authenticated user
+    const { user } = await confirmSession();
 
-  const { error } = await supabase
-    .from("ambitions")
-    .update({ isFavourited: favouriteValue })
-    .eq("id", ambitionId)
-    .eq("userId", userId)
-    .select();
+    if (!user) {
+      return {
+        success: false,
+        error: "Unauthorized",
+      };
+    }
 
-  if (error) {
+    // Update ambition's favourite status
+    const [updatedAmbition] = await db
+      .update(ambitions)
+      .set({ isFavourited: favouriteValue })
+      .where(and(eq(ambitions.id, ambitionId), eq(ambitions.userId, user.id)))
+      .returning();
+
+    if (!updatedAmbition) {
+      return {
+        success: false,
+        error: "Ambition not found or you don't have permission to update it",
+      };
+    }
+
+    revalidatePath("/ambitions");
+
+    const message = favouriteValue
+      ? "Ambition added to favorites"
+      : "Ambition removed from favorites";
+    const description = favouriteValue
+      ? "You can now find this ambition in your favourites tab"
+      : "";
+
+    return { success: true, message, description };
+  } catch (error) {
     console.error("Error updating ambition:", error);
-    return { success: false, error: error.message };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to update ambition",
+    };
   }
-
-  revalidatePath("/ambitions");
-
-  const message = favouriteValue
-    ? "Ambition added to favorites"
-    : "Ambition removed from favorites";
-  const description = favouriteValue ? "You can now find this ambition in your favourites tab" : "";
-
-  return { success: true, message, description };
 }

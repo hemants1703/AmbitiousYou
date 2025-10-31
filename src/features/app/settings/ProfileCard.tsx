@@ -4,29 +4,21 @@ import * as Avatar from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Profile } from "@/types/globals";
-import { User } from "@supabase/supabase-js";
-import updateProfileAction from "./actions";
+import { Profile, User } from "@/db/schema";
+import updateProfileAction from "@/features/settings/actions";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 
 export default function ProfileCard({
-  profilesData,
+  profileData,
   userData,
 }: {
-  profilesData: Profile[];
+  profileData: Profile;
   userData: User;
 }) {
   const { id: userId, email } = userData;
-  const [userProfile, setUserProfile] = useState<Profile>({
-    id: profilesData[0].id,
-    userId: profilesData[0].userId,
-    firstName: profilesData[0].firstName,
-    lastName: profilesData[0].lastName,
-    createdAt: profilesData[0].createdAt,
-    updatedAt: profilesData[0].updatedAt,
-  });
+  const [userProfile, setUserProfile] = useState<Profile>(profileData);
   const [isPending, setIsPending] = useState<boolean>(false);
 
   const initialsOfUsersName = userProfile.firstName.charAt(0) + userProfile.lastName.charAt(0); // Placeholder for initials
@@ -35,7 +27,6 @@ export default function ProfileCard({
     setIsPending(true);
 
     const { success, error, data } = await updateProfileAction(
-      userId,
       userProfile.firstName,
       userProfile.lastName
     );

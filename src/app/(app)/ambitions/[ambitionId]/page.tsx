@@ -1,95 +1,63 @@
-import { notFound } from "next/navigation";
-import { IndividualAmbitionClient } from "@/features/ambitions/view/IndividualAmbitionClient";
-import type { AmbitionTask, AmbitionMilestone } from "@/types/globals";
-import { createClient } from "@/lib/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Calendar, CheckIcon, Flag, ListTodo, Plus, Edit } from "lucide-react";
-import Link from "next/link";
+import { Ambition, Milestone, Task } from "@/db/schema";
+import { AmbitionColorBadge } from "@/features/ambitions/components/AmbitionColorBadge";
+import { AmbitionPriorityBadge } from "@/features/ambitions/components/AmbitionPriorityBadge";
+import { IndividualAmbitionClient } from "@/features/ambitions/view/IndividualAmbitionClient";
+import confirmSession from "@/lib/auth/confirmSession";
+import { AmbitionsService } from "@/services/ambitionsService";
 import { StarFilledIcon } from "@radix-ui/react-icons";
-import { AmbitionColorBadge, AmbitionPriorityBadge } from "@/features/ambitions/AmbitionsClient";
+import { format } from "date-fns";
+import { ArrowLeft, Calendar, CheckIcon, Edit, Flag, ListTodo, Plus } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
+import { cache } from "react";
 
-interface PageProps {
-  params: Promise<{
-    ambitionId: string;
-  }>;
+interface AmbitionDetailsPageProps {
+  params: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const supabase = await createClient();
-  const { data: ambition } = await supabase
-    .from("ambitions")
-    .select("ambitionName, ambitionDefinition")
-    .eq("id", (await params).ambitionId);
+const getAmbitionData = cache(async (ambitionId: string): Promise<Ambition | Error> => {
+  const session = await confirmSession(); // check for session if not found, redirect to login
+  return await AmbitionsService.fetchAmbitionById(ambitionId, session.user.id);
+});
+
+export async function generateMetadata(props: AmbitionDetailsPageProps): Promise<Metadata> {
+  const { ambitionId } = await props.params;
+  const ambition: Ambition | Error = await getAmbitionData(ambitionId as string);
+  if (ambition instanceof Error) throw ambition;
 
   return {
-    title: ambition?.[0]?.ambitionName ?? "Explore Your Ambition",
-    description: ambition?.[0]?.ambitionDefinition ?? "Explore your ambition",
+    title: ambition.ambitionName,
   };
 }
 
-export default async function IndividualAmbitionPage({ params }: PageProps) {
-  const { ambitionId } = await params;
-  const supabase = await createClient();
+export default async function IndividualAmbitionPage(props: AmbitionDetailsPageProps) {
+  const session = await confirmSession();
 
-  // Check if user is authenticated
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError || !user) {
-    redirect("/login");
+  const { ambitionId } = await props.params;
+  const ambition: Ambition | Error = await getAmbitionData(ambitionId as string);
+  if (ambition instanceof Error) throw ambition;
+
+  let tasks: Task[] | Error = [];
+  let completedTasks: number = 0;
+
+  let milestones: Milestone[] | Error = [];
+  let completedMilestones: number = 0;
+
+  if (ambition.ambitionTrackingMethod === "task") {
+    tasks = await AmbitionsService.fetchAmbitionTasks(ambition.id, session.user.id);
+    if (tasks instanceof Error) throw tasks;
+
+    completedTasks = tasks.filter((t) => t.taskCompleted).length;
+  } else if (ambition.ambitionTrackingMethod === "milestone") {
+    milestones = await AmbitionsService.fetchAmbitionMilestones(ambition.id, session.user.id);
+    if (milestones instanceof Error) throw milestones;
+
+    completedMilestones = milestones.filter((m) => m.milestoneCompleted).length;
   }
-
-  // Try to fetch from Supabase first
-  const { data: ambition } = await supabase
-    .from("ambitions")
-    .select("*")
-    .eq("id", ambitionId)
-    .single();
-
-  if (!ambition) {
-    notFound();
-  }
-
-  // Fetch related data from Supabase
-  let tasks: AmbitionTask[] = [];
-  let milestones: AmbitionMilestone[] = [];
-
-  try {
-    // Fetch tasks
-    const { data: tasksData } = await supabase
-      .from("tasks")
-      .select("*")
-      .eq("ambitionId", ambitionId)
-      .order("createdAt", { ascending: true });
-
-    if (tasksData) {
-      tasks = tasksData as AmbitionTask[];
-    }
-
-    // Fetch milestones
-    const { data: milestonesData } = await supabase
-      .from("milestones")
-      .select("*")
-      .eq("ambitionId", ambitionId)
-      .order("createdAt", { ascending: true });
-
-    if (milestonesData) {
-      milestones = milestonesData as AmbitionMilestone[];
-    }
-  } catch (error) {
-    // If fetching related data fails, use the data from test ambition
-    console.error("Error fetching related data:", error);
-  }
-
-  const completedTasks = tasks.filter((t) => t.taskCompleted).length;
-  const completedMilestones = milestones.filter((m) => m.milestoneCompleted).length;
 
   return (
     <section className="p-6 md:p-8 pt-6">
@@ -104,8 +72,8 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
             </Button>
             <div>
               <div className="flex items-center gap-2">
-                <AmbitionColorBadge ambitionColor={ambition.ambitionColor} index={1} width={200} />
-                <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority} />
+                <AmbitionColorBadge ambitionColor={ambition.ambitionColor!} index={1} width={200} />
+                <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority!} />
               </div>
               <h1 className="text-3xl font-bold mt-1 flex items-center gap-1">
                 {ambition.ambitionName}{" "}
@@ -118,8 +86,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
           <IndividualAmbitionClient
             ambitionId={ambition.id}
             userId={ambition.userId}
-            isFavourited={ambition.isFavourited}
-            ambitionTrackingMethod={ambition.ambitionTrackingMethod}
+            isFavourited={ambition.isFavourited ?? false}
           />
         </div>
 
@@ -144,7 +111,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center shrink-0">
                       <Calendar className="h-4 w-4 text-blue-500" />
                     </div>
                     <div>
@@ -156,7 +123,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center shrink-0">
                       <Calendar className="h-4 w-4 text-blue-500" />
                     </div>
                     <div>
@@ -168,7 +135,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-md bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-md bg-green-500/20 flex items-center justify-center shrink-0">
                       <CheckIcon className="h-4 w-4 text-green-500" />
                     </div>
                     <div>
@@ -191,7 +158,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center shrink-0">
                       <Flag className="h-4 w-4 text-purple-600" />
                     </div>
                     <div>
@@ -200,7 +167,7 @@ export default async function IndividualAmbitionPage({ params }: PageProps) {
                         <span
                           className={`h-2 w-2 rounded-md ${ambition.ambitionStatus === "active" ? "bg-green-500 animate-pulse" : "bg-amber-500"}`}
                         ></span>
-                        {ambition.ambitionStatus.replace("_", " ")}
+                        {ambition.ambitionStatus}
                       </p>
                     </div>
                   </div>

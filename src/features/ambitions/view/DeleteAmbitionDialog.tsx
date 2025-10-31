@@ -15,12 +15,10 @@ import { deleteAmbitionAction } from "./actions";
 
 export function DeleteAmbitionDialog({
   ambitionId,
-  ambitionTrackingMethod,
   deleteAmbitionDialogOpen,
   setDeleteAmbitionDialogOpen,
 }: {
   ambitionId: string;
-  ambitionTrackingMethod: string;
   deleteAmbitionDialogOpen: boolean;
   setDeleteAmbitionDialogOpen: (open: boolean) => void;
 }) {
@@ -40,10 +38,7 @@ export function DeleteAmbitionDialog({
             <Button
               variant={"destructive"}
               onClick={async () => {
-                const { success, error } = await deleteAmbitionAction(
-                  ambitionId,
-                  ambitionTrackingMethod
-                );
+                const { success, error } = await deleteAmbitionAction(ambitionId);
                 if (success) {
                   toast.success("Ambition deleted successfully");
                   redirect("/ambitions");

@@ -56,6 +56,19 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Profiles table: Extended user profile information
+export const profiles = pgTable("profiles", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: varchar("user_id", { length: 255 })
+    .references(() => user.id, { onDelete: "cascade" })
+    .notNull()
+    .unique(),
+  firstName: varchar("first_name", { length: 255 }).notNull(),
+  lastName: varchar("last_name", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Ambitions table
 export const ambitions = pgTable("ambitions", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -75,7 +88,7 @@ export const ambitions = pgTable("ambitions", {
     .$type<"low" | "medium" | "high">()
     .default("medium"),
   ambitionPercentageCompleted: integer("ambition_percentage_completed").default(0),
-  ambitionColor: text("ambition_color").default("#64ccc5"),
+  ambitionColor: varchar("ambition_color", { length: 255 }).default("#64ccc5"),
   isFavourited: boolean("is_favourited").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -118,6 +131,8 @@ export const milestones = pgTable("milestones", {
 // Export types
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
+export type Profile = typeof profiles.$inferSelect;
+export type NewProfile = typeof profiles.$inferInsert;
 export type Ambition = typeof ambitions.$inferSelect;
 export type NewAmbition = typeof ambitions.$inferInsert;
 export type Task = typeof tasks.$inferSelect;
