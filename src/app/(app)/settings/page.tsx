@@ -8,12 +8,15 @@ import * as Select from "@/components/ui/select";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { Metadata } from "next";
 import ProfileTab from "@/features/settings/ProfileTab";
+import confirmSession from "@/lib/auth/confirmSession";
 
 export const metadata: Metadata = {
   title: "Settings",
 };
 
 export default async function Settings() {
+  const session = await confirmSession();
+
   return (
     <div className="mx-auto space-y-8 p-6 md:p-8 pt-6">
       <div>

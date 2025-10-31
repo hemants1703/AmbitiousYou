@@ -2,27 +2,14 @@ import * as Card from "@/components/ui/card";
 import ProfileCard from "./ProfileCard";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
-import { getProfilesTableData } from "@/lib/utils/supabase/tablesDataProvider";
-import { createClient } from "@/lib/utils/supabase/server";
+import confirmSession from "@/lib/auth/confirmSession";
+import { UserService } from "@/services/userService";
 
 export default async function ProfileTab() {
-  const supabase = await createClient();
-  const {
-    data: { user: userData },
-    error: userDoesNotExist,
-  } = await supabase.auth.getUser();
+  const session = await confirmSession();
 
-  if (userDoesNotExist || !userData) {
-    toast.error("User not found.");
-    redirect("/login");
-  }
-
-  const profilesData = await getProfilesTableData(userData.id);
-
-  if (!profilesData || profilesData.length === 0) {
-    toast.error("No profile found.");
-    redirect("/login");
-  }
+  const userData = await UserService.fetchUserById(session.user.id);
+  if (userData instanceof Error) throw userData;
 
   return (
     <Card.Card>
@@ -33,7 +20,7 @@ export default async function ProfileTab() {
         </Card.CardDescription>
       </Card.CardHeader>
       <Card.CardContent className="space-y-6">
-        <ProfileCard profilesData={profilesData} userData={userData} />
+        <ProfileCard userData={userData} />
       </Card.CardContent>
     </Card.Card>
   );

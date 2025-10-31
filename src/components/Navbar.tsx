@@ -13,13 +13,17 @@ const navLinks = [
   { href: "/features", label: "Features" },
 ];
 
-export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
+interface NavbarProps {
+  userLoggedIn: boolean;
+}
+
+export default function Navbar(props: NavbarProps) {
   const [navbarToggled, setNavbarToggled] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
 
-  console.log("Logged In user: ", userLoggedIn);
+  console.log("Logged In user: ", props.userLoggedIn);
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -126,7 +130,7 @@ export default function Navbar({ userLoggedIn }: { userLoggedIn?: boolean }) {
 
           <div className="flex items-center gap-3">
             <ThemeToggler />
-            {userLoggedIn ? (
+            {props.userLoggedIn ? (
               <Button variant="default" size="lg" asChild>
                 <Link prefetch={true} href="/dashboard">
                   Dashboard

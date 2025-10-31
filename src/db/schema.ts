@@ -71,7 +71,9 @@ export const ambitions = pgTable("ambitions", {
   ambitionStatus: text("ambition_status")
     .$type<"active" | "completed" | "archived">()
     .default("active"),
-  ambitionPriority: text("ambition_priority").$type<"low" | "medium" | "high">().default("medium"),
+  ambitionPriority: varchar("ambition_priority", { length: 255 })
+    .$type<"low" | "medium" | "high">()
+    .default("medium"),
   ambitionPercentageCompleted: integer("ambition_percentage_completed").default(0),
   ambitionColor: text("ambition_color").default("#64ccc5"),
   isFavourited: boolean("is_favourited").default(false),

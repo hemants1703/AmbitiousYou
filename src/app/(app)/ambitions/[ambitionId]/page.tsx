@@ -11,8 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Calendar, CheckIcon, Flag, ListTodo, Plus, Edit } from "lucide-react";
 import Link from "next/link";
 import { StarFilledIcon } from "@radix-ui/react-icons";
-import { AmbitionColorBadge } from "@/features/ambitions/AmbitionsClient";
-import { AmbitionPriorityBadge } from "@/features/ambitions/AmbitionBadges";
+import { AmbitionColorBadge, AmbitionPriorityBadge } from "@/features/ambitions/AmbitionsClient";
 import { Metadata } from "next";
 
 interface PageProps {

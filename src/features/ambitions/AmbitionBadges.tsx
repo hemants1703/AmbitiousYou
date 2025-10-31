@@ -40,4 +40,3 @@ export function AmbitionCategoryBadge(props: { ambitionCategory: string }) {
     </Badge>
   );
 }
-

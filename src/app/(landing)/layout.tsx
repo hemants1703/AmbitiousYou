@@ -1,7 +1,10 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import confirmSession from "@/lib/auth/confirmSession";
 
 export default async function LandingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const session = await confirmSession();
+
   return (
     <>
       {/* GPU INTENSIVE BACKGROUND - Fixed background with gradient effects - these will stay in place during scroll */}
@@ -20,7 +23,7 @@ export default async function LandingLayout({ children }: Readonly<{ children: R
 
       {/* Main content container */}
       <main className="relative max-w-screen-2xl min-h-svh flex flex-col justify-between items-center mx-auto z-10 overflow-x-hidden">
-        <Navbar userLoggedIn={false} />
+        <Navbar userLoggedIn={session.user ? true : false} />
         <div className="mt-16">{children}</div>
         <Footer />
       </main>

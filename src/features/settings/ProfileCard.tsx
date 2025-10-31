@@ -4,56 +4,20 @@ import * as Avatar from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Profile } from "@/types/globals";
-import { User } from "@supabase/supabase-js";
-import updateProfileAction from "./actions";
-import { toast } from "sonner";
-import { useState } from "react";
+import { User } from "@/db/schema";
 import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
 
-export default function ProfileCard({
-  profilesData,
-  userData,
-}: {
-  profilesData: Profile[];
+interface ProfileCardProps {
   userData: User;
-}) {
-  const { id: userId, email } = userData;
-  const [userProfile, setUserProfile] = useState<Profile>({
-    id: profilesData[0].id,
-    userId: profilesData[0].userId,
-    firstName: profilesData[0].firstName,
-    lastName: profilesData[0].lastName,
-    createdAt: profilesData[0].createdAt,
-    updatedAt: profilesData[0].updatedAt,
-  });
+}
+
+export default function ProfileCard(props: ProfileCardProps) {
+  const { userData } = props;
+  const [userProfile, setUserProfile] = useState<User>(userData);
   const [isPending, setIsPending] = useState<boolean>(false);
 
-  const initialsOfUsersName = userProfile.firstName.charAt(0) + userProfile.lastName.charAt(0); // Placeholder for initials
-
-  const handleProfileUpdate = async (): Promise<void> => {
-    setIsPending(true);
-
-    const { success, error, data } = await updateProfileAction(
-      userId,
-      userProfile.firstName,
-      userProfile.lastName
-    );
-
-    if (!success && error) {
-      toast.error("Error updating profile", {
-        description: error,
-      });
-      console.error("Error updating profile: ", error);
-    }
-
-    if (success) {
-      toast.success("Profile updated successfully");
-      console.log("Profile updated successfully: ", data);
-    }
-
-    setIsPending(false);
-  };
+  const initialsOfUsersName = userProfile.name.charAt(0) + userProfile.name.charAt(0); // Placeholder for initials
 
   return (
     <div className="flex flex-col gap-8 md:flex-row">
@@ -74,25 +38,11 @@ export default function ProfileCard({
             <Input
               id="firstName"
               placeholder="John"
-              defaultValue={userProfile.firstName}
+              defaultValue={userProfile.name}
               onChange={(e) => {
                 setUserProfile({
                   ...userProfile,
-                  firstName: e.target.value,
-                });
-              }}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="lastName">Last name</Label>
-            <Input
-              id="lastName"
-              placeholder="Doe"
-              defaultValue={userProfile.lastName}
-              onChange={(e) => {
-                setUserProfile({
-                  ...userProfile,
-                  lastName: e.target.value,
+                  name: e.target.value,
                 });
               }}
             />
@@ -105,13 +55,13 @@ export default function ProfileCard({
             id="email"
             type="email"
             placeholder="john.doe@example.com"
-            defaultValue={email}
+            defaultValue={props.userData.email}
             disabled
           />
         </div>
 
         <div className="flex justify-end space-x-2 mt-10">
-          <Button onClick={handleProfileUpdate} disabled={isPending}>
+          <Button onClick={() => {}} disabled={isPending}>
             {isPending ? (
               <span className="flex items-center gap-2">
                 <Loader2Icon />

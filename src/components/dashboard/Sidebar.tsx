@@ -82,9 +82,9 @@ export function Sidebar() {
     >
       <div className="flex items-center h-16 border-b border-border px-4">
         <Link prefetch={true} href="/dashboard" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <Image src="/favicon.ico" alt="AmbitiousYou Logo" width={32} height={32} />
-          </div>
+          {/* <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center"> */}
+          <Image src="/svg_logos/favicon_32px.svg" alt="AmbitiousYou Logo" width={32} height={32} />
+          {/* </div> */}
           {expanded && (
             <motion.span
               initial={{ opacity: 0 }}

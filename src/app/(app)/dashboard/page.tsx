@@ -8,8 +8,9 @@ import Link from "next/link";
 import { PlusCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ProfilesService } from "@/services/userService";
+import { UserService } from "@/services/userService";
 import { AmbitionsService } from "@/services/ambitionsService";
+import { MotionWrapper } from "@/components/MotionWrapper";
 
 interface AmbitionSummary {
   id: string;
@@ -38,7 +39,7 @@ export default async function DashboardPage() {
   const userData = session.user;
 
   // Initialize services// Fetch data using services
-  const profileResult = await ProfilesService.fetchUserById(userData.id);
+  const profileResult = await UserService.fetchUserById(userData.id);
   const ambitionsResult = await AmbitionsService.fetchUserAmbitions(userData.id);
   const tasksResult = await AmbitionsService.fetchUserTasks(userData.id);
   const milestonesResult = await AmbitionsService.fetchUserMilestones(userData.id);
@@ -100,7 +101,12 @@ export default async function DashboardPage() {
     <TooltipProvider>
       <div className="flex flex-col gap-10 pb-12 overflow-auto p-6 md:p-10 pt-8 bg-background min-h-screen">
         {/* Welcome Banner */}
-        <div className="rounded-2xl border bg-card/90 p-8 shadow-sm relative overflow-hidden mb-2">
+        <MotionWrapper
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="rounded-2xl border bg-card/90 p-8 shadow-sm relative overflow-hidden mb-2"
+        >
           <div className="relative z-10 flex items-center justify-between gap-4 flex-wrap">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
@@ -121,10 +127,15 @@ export default async function DashboardPage() {
               </Link>
             </Button>
           </div>
-        </div>
+        </MotionWrapper>
 
         {/* Key Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <MotionWrapper
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+        >
           {/* Active Ambitions */}
           <div className="rounded-2xl border bg-card/80 p-6 flex flex-col items-center shadow-sm">
             <span className="text-muted-foreground text-base mb-1 font-medium">
@@ -210,10 +221,15 @@ export default async function DashboardPage() {
               — {randomMotivationalQuote.author}
             </span>
           </div>
-        </div>
+        </MotionWrapper>
 
         {/* Ambitions List */}
-        <div className="rounded-2xl border bg-card/90 p-8 shadow-sm">
+        <MotionWrapper
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="rounded-2xl border bg-card/90 p-8 shadow-sm"
+        >
           <h2 className="text-2xl font-extrabold mb-6 tracking-tight">Your Active Ambitions</h2>
           {ambitionsSummary.length === 0 ? (
             <div className="text-muted-foreground text-lg">
@@ -253,7 +269,7 @@ export default async function DashboardPage() {
               </div>
             </ScrollArea>
           )}
-        </div>
+        </MotionWrapper>
       </div>
     </TooltipProvider>
   );

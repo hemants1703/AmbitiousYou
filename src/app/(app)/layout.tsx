@@ -15,7 +15,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const session = await confirmSession();
 
   return (
-    // <AuthProvider>
     <div className="flex h-screen overflow-hidden bg-background">
       <SidebarController userData={session.user as User}>
         <ScrollArea className="flex-1 overflow-hidden">
@@ -23,6 +22,5 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </ScrollArea>
       </SidebarController>
     </div>
-    // </AuthProvider>
   );
 }

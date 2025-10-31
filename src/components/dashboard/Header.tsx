@@ -35,9 +35,7 @@ export function Header(props: HeaderProps) {
             <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatar.jpg" alt="User" />
-                <AvatarFallback>
-                  {props.userData.name.charAt(0) + props.userData.name.charAt(1)}
-                </AvatarFallback>
+                <AvatarFallback>{props.userData.name.charAt(0)}</AvatarFallback>
               </Avatar>
             </Button>
           </Dropdown.DropdownMenuTrigger>

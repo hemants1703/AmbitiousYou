@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { NewUser, user, type User } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export class ProfilesService {
+export class UserService {
   /**
    * Fetch user for userId
    */
