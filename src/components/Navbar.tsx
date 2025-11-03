@@ -131,7 +131,7 @@ export default function Navbar(props: NavbarProps) {
           <div className="flex items-center gap-3">
             <ThemeToggler />
             {props.userLoggedIn ? (
-              <Button variant="default" size="lg" asChild>
+              <Button variant="ay" asChild>
                 <Link prefetch={true} href="/dashboard">
                   Dashboard
                 </Link>

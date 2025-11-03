@@ -1,16 +1,19 @@
 import z from "zod";
 
 // Validation schema for ambition creation
-const ambitionSchema = z.object({
-  ambitionName: z.string().min(1, "Ambition name is required"),
-  ambitionDefinition: z.string().default(""),
-  ambitionPriority: z.enum(["high", "medium", "low"]),
-  ambitionStartDate: z.string().min(1, "Ambition Start date is required"),
-  ambitionEndDate: z.string().min(1, "Ambition End date is required"),
-  ambitionCompletionDate: z.string().default(""),
-  ambitionColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Ambition Color must be a valid hex code"),
-  ambitionTrackingMethod: z.enum(["task", "milestone"]),
+export const ambitionValidationSchema = z.object({
+  ambitionName: z.string().min(1, { message: "Ambition name is required" }),
+  ambitionDefinition: z.string().optional(),
+  ambitionPriority: z.enum(["high", "medium", "low"], { message: "Ambition priority is required" }),
+  ambitionStartDate: z.date({ message: "Ambition start date is required" }),
+  ambitionEndDate: z.date({ message: "Ambition end date is required" }),
+  ambitionColor: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/, { message: "Ambition color must be a valid hex code" }),
+  ambitionTrackingMethod: z.enum(["task", "milestone"], {
+    message: "Ambition tracking method is required",
+  }),
   isFavourited: z.boolean().default(false),
 });
 
-export default ambitionSchema;
+export type AmbitionValidationSchema = z.infer<typeof ambitionValidationSchema>;

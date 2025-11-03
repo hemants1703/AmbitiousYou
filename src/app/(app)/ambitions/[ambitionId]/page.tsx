@@ -3,20 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Ambition, Milestone, Task } from "@/db/schema";
-import { AmbitionColorBadge } from "@/features/ambitions/components/AmbitionColorBadge";
+import { ambitionColorOptions } from "@/features/ambitions/ambitionColorOptions";
 import { AmbitionPriorityBadge } from "@/features/ambitions/components/AmbitionPriorityBadge";
-import { IndividualAmbitionClient } from "@/features/ambitions/view/IndividualAmbitionClient";
+import { AmbitionOptionsDropdown } from "@/features/ambitions/view/AmbitionOptionsDropdown";
 import confirmSession from "@/lib/auth/confirmSession";
 import { AmbitionsService } from "@/services/ambitionsService";
 import { StarFilledIcon } from "@radix-ui/react-icons";
+import { IconCircleArrowLeft } from "@tabler/icons-react";
 import { format } from "date-fns";
-import { ArrowLeft, Calendar, CheckIcon, Edit, Flag, ListTodo, Plus } from "lucide-react";
+import { Calendar, CheckIcon, Edit, Flag, ListTodo, Plus } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cache } from "react";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+// Utility function to get Tailwind gradient background class from hex color
+function getAmbitionBackgroundClass(colorHex: string): string {
+  const colorOption = ambitionColorOptions.find((option) => option.value === colorHex);
+  const tailwindClass = colorOption ? colorOption.class : "cyan-400"; // fallback to cyan-400
+  return `absolute inset-0 bg-linear-to-b from-${tailwindClass} to-transparent`;
 }
 
 const getAmbitionData = cache(async (ambitionId: string): Promise<Ambition | Error> => {
@@ -60,30 +68,35 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   }
 
   return (
-    <section className="p-6 md:p-8 pt-6">
-      <div className="space-y-6">
+    <section
+      className={`p-6 md:p-8 pt-6 min-h-screen ${getAmbitionBackgroundClass(ambition.ambitionColor!)}`}
+    >
+      <div className="space-y-6 max-w-7xl mx-auto w-full">
         {/* HEADER - Static content */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" asChild>
-              <Link prefetch={true} href="/ambitions">
-                <ArrowLeft className="h-5 w-5" />
-              </Link>
-            </Button>
+            {/* <Button variant="outline" size="icon" asChild className="bg-transparent rounded-full"> */}
+            <Link
+              prefetch={true}
+              href="/ambitions"
+              className="text-background hover:text-background/80 text-shadow-lg"
+            >
+              <IconCircleArrowLeft className="size-8" />
+            </Link>
+            {/* </Button> */}
             <div>
-              <div className="flex items-center gap-2">
-                <AmbitionColorBadge ambitionColor={ambition.ambitionColor!} index={1} width={200} />
-                <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority!} />
-              </div>
-              <h1 className="text-3xl font-bold mt-1 flex items-center gap-1">
+              <h1 className="text-3xl font-bold mt-1 flex items-center gap-1 text-shadow-lg text-background">
                 {ambition.ambitionName}{" "}
                 {ambition.isFavourited && <StarFilledIcon className="size-6 text-yellow-500" />}
               </h1>
+              <div className="flex items-center gap-2">
+                <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority!} />
+              </div>
             </div>
           </div>
 
           {/* Interactive actions - Client component */}
-          <IndividualAmbitionClient
+          <AmbitionOptionsDropdown
             ambitionId={ambition.id}
             userId={ambition.userId}
             isFavourited={ambition.isFavourited ?? false}

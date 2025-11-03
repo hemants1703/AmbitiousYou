@@ -1,73 +1,52 @@
 "use client";
 
-import Link, { useLinkStatus } from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import {
-  DashboardIcon,
-  TargetIcon,
-  PlusCircledIcon,
-  GearIcon,
-  MixerVerticalIcon,
-} from "@radix-ui/react-icons";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
+import {
+  IconCircleDashedPlus,
+  IconDashboard,
+  IconSettings,
+  IconSparkles,
+  IconSquareToggle,
+  IconTarget,
+} from "@tabler/icons-react";
+import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import "../../styles/cynthiaMenuItemAnimation.css";
 
 const mainNavItems = [
   {
     title: "Dashboard",
     href: "/dashboard",
-    icon: DashboardIcon,
+    icon: IconDashboard,
   },
   {
     title: "All Ambitions",
     href: "/ambitions",
-    icon: TargetIcon,
+    icon: IconTarget,
   },
   {
     title: "Create Ambition",
     href: "/ambitions/new",
-    icon: PlusCircledIcon,
+    icon: IconCircleDashedPlus,
   },
-  // {
-  //   title: "Cynthia",
-  //   href: "/cynthia",
-  //   icon: SparklesIcon
-  // }
-  // Will be implemented in future versions
-  // {
-  //   title: "Achievements",
-  //   href: "/achievements",
-  //   icon: RocketIcon,
-  // },
-  // {
-  //   title: "Time Tracking",
-  //   href: "/time_tracking",
-  //   icon: ClockIcon,
-  // },
-  // {
-  //   title: "Analytics",
-  //   href: "/analytics",
-  //   icon: BarChartIcon,
-  // },
+  {
+    title: "Cynthia",
+    href: "/cynthia",
+    icon: IconSparkles,
+  },
 ];
 
 const bottomNavItems = [
   {
     title: "Settings",
     href: "/settings",
-    icon: GearIcon,
+    icon: IconSettings,
   },
-  // {
-  //   title: "Profile",
-  //   href: "/profile",
-  //   icon: PersonIcon,
-  // },
 ];
 
 export function Sidebar() {
@@ -80,6 +59,7 @@ export function Sidebar() {
       animate={{ width: expanded ? 240 : 60 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
+      {/* AMBITIOUSYOU LOGO */}
       <div className="flex items-center h-16 border-b border-border px-4">
         <Link prefetch={true} href="/dashboard" className="flex items-center gap-2">
           {/* <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center"> */}
@@ -99,6 +79,7 @@ export function Sidebar() {
         </Link>
       </div>
 
+      {/* MAIN NAVIGATION */}
       <ScrollArea className="flex-1 py-4">
         <div className="space-y-4 px-2">
           <nav className="space-y-1">
@@ -109,10 +90,6 @@ export function Sidebar() {
                     <Link
                       prefetch={true}
                       href={item.href}
-                      // onClick={(e) => {
-                      //   e.preventDefault();
-                      //   handleNavigation(item.href);
-                      // }}
                       className={cn(
                         "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
                         item.href === pathname
@@ -128,7 +105,6 @@ export function Sidebar() {
                         <item.icon className={cn("size-4", item.href === "/cynthia" ? "" : "")} />
                         {expanded && <span>{item.title}</span>}
                       </span>
-                      <LinkStatus />
                     </Link>
                   </TooltipTrigger>
                   {!expanded && <TooltipContent side="right">{item.title}</TooltipContent>}
@@ -139,20 +115,19 @@ export function Sidebar() {
         </div>
       </ScrollArea>
 
+      {/* BOTTOM NAVIGATION */}
       <div className="border-t border-border mt-auto py-2 px-2">
         <nav className="space-y-1">
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
+                <button
                   onClick={() => setExpanded(!expanded)}
                   className="max-sm:hidden flex justify-start items-center w-full gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
                 >
-                  <MixerVerticalIcon className="h-4 w-4 rotate-90" />
+                  <IconSquareToggle className="h-4 w-4" />
                   {expanded && <span>Toggle Sidebar</span>}
-                </Button>
+                </button>
               </TooltipTrigger>
               {!expanded && <TooltipContent side="right">Toggle Sidebar</TooltipContent>}
             </Tooltip>
@@ -164,12 +139,8 @@ export function Sidebar() {
                   <Link
                     prefetch={true}
                     href={item.href}
-                    // onClick={(e) => {
-                    //   e.preventDefault();
-                    //   handleNavigation(item.href);
-                    // }}
                     className={cn(
-                      "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
+                      "flex items-center justify-between rounded-md px-3 py-2 text-sm",
                       item.href === pathname
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted text-muted-foreground hover:text-foreground"
@@ -179,7 +150,6 @@ export function Sidebar() {
                       <item.icon className="h-4 w-4" />
                       {expanded && <span>{item.title}</span>}
                     </span>
-                    <LinkStatus />
                   </Link>
                 </TooltipTrigger>
                 {!expanded && <TooltipContent side="right">{item.title}</TooltipContent>}
@@ -190,16 +160,4 @@ export function Sidebar() {
       </div>
     </motion.div>
   );
-}
-
-function LinkStatus() {
-  const { pending } = useLinkStatus();
-  return pending ? (
-    <div
-      aria-label="Loading..."
-      className="size-2 animate-ping bg-foreground opacity-75 rounded-full"
-    >
-      {/* <Loader2 className="w-4 h-4" /> */}
-    </div>
-  ) : null;
 }

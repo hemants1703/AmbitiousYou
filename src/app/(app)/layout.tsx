@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const session = await confirmSession();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="relative flex h-screen overflow-hidden bg-background">
       <SidebarController userData={session.user as User}>
         <ScrollArea className="flex-1 overflow-hidden">
           <main className="flex-1 max-w-7xl mx-auto w-full">{children}</main>

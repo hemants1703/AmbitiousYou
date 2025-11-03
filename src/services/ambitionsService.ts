@@ -2,11 +2,10 @@ import { db } from "@/db";
 import { ambitions, tasks, milestones } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { Ambition, NewAmbition, Task, NewTask, Milestone, NewMilestone } from "@/db/schema";
+import { AmbitionFiltersState } from "@/features/ambitions/components/AmbitionFilters";
 
 export class AmbitionsService {
-  /**
-   * Fetch all ambitions for a user
-   */
+  // Fetch all ambitions for a user
   static async fetchUserAmbitions(userId: string): Promise<Ambition[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(ambitions).where(eq(ambitions.userId, userId));
@@ -21,9 +20,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Fetch a single ambition by ID
-   */
+  // Fetch a single ambition by ID
   static async fetchAmbitionById(ambitionId: string, userId: string): Promise<Ambition | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
@@ -40,9 +37,38 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Create a new ambition
-   */
+  // Fetch ambitions by filters
+  static async fetchAmbitionsByFilters(
+    filters: AmbitionFiltersState,
+    userId: string
+  ): Promise<Ambition[] | Error> {
+    return new Promise(async (resolve, reject) => {
+      let allAmbitionsForUser = await db
+        .select()
+        .from(ambitions)
+        .where(eq(ambitions.userId, userId));
+
+      if (!allAmbitionsForUser) {
+        reject(new Error("Ambitions not found"));
+      }
+
+      if (filters.status) {
+        allAmbitionsForUser = allAmbitionsForUser.filter(
+          (ambition) => ambition.ambitionStatus === filters.status
+        );
+      }
+
+      if (filters.priority) {
+        allAmbitionsForUser = allAmbitionsForUser.filter(
+          (ambition) => ambition.ambitionPriority === filters.priority
+        );
+      }
+
+      resolve(allAmbitionsForUser);
+    });
+  }
+
+  // Create a new ambition
   static async createAmbition(ambitionData: NewAmbition): Promise<Ambition | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(ambitions).values(ambitionData).returning();
@@ -55,9 +81,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Update an ambition
-   */
+  // Update an ambition
   static async updateAmbition(
     ambitionId: string,
     userId: string,
@@ -78,9 +102,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Delete an ambition
-   */
+  // Delete an ambition
   static async deleteAmbition(ambitionId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
@@ -96,9 +118,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Fetch tasks for an ambition
-   */
+  // Fetch tasks for an ambition
   static async fetchAmbitionTasks(ambitionId: string, userId: string): Promise<Task[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
@@ -114,9 +134,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Create a new task
-   */
+  // Create a new task
   static async createTask(taskData: NewTask): Promise<Task | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(tasks).values(taskData).returning();
@@ -129,9 +147,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Update a task
-   */
+  // Update a task
   static async updateTask(
     taskId: string,
     userId: string,
@@ -152,9 +168,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Delete a task
-   */
+  // Delete a task
   static async deleteTask(taskId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
@@ -170,9 +184,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Fetch all tasks for a user
-   */
+  // Fetch all tasks for a user
   static async fetchUserTasks(userId: string): Promise<Task[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(tasks).where(eq(tasks.userId, userId));
@@ -185,9 +197,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Fetch all milestones for a user
-   */
+  // Fetch all milestones for a user
   static async fetchUserMilestones(userId: string): Promise<Milestone[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(milestones).where(eq(milestones.userId, userId));
@@ -200,9 +210,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Fetch milestones for an ambition
-   */
+  // Fetch milestones for an ambition
   static async fetchAmbitionMilestones(
     ambitionId: string,
     userId: string
@@ -221,9 +229,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Create a new milestone
-   */
+  // Create a new milestone
   static async createMilestone(milestoneData: NewMilestone): Promise<Milestone | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(milestones).values(milestoneData).returning();
@@ -236,9 +242,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Update a milestone
-   */
+  // Update a milestone
   static async updateMilestone(
     milestoneId: string,
     userId: string,
@@ -259,9 +263,7 @@ export class AmbitionsService {
     });
   }
 
-  /**
-   * Delete a milestone
-   */
+  // Delete a milestone
   static async deleteMilestone(milestoneId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db

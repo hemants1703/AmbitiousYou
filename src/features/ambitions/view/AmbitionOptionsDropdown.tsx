@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,23 +8,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, MoreHorizontal, Trash2 } from "lucide-react";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
+import { IconMenu } from "@tabler/icons-react";
+import { Edit, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { favouriteAmbitionAction } from "../actions";
 import { DeleteAmbitionDialog } from "./DeleteAmbitionDialog";
 
-interface IndividualAmbitionClientProps {
+interface AmbitionOptionsDropdownProps {
   ambitionId: string;
   userId: string;
   isFavourited: boolean;
 }
 
-export function IndividualAmbitionClient({
+export function AmbitionOptionsDropdown({
   ambitionId,
   userId,
   isFavourited,
-}: IndividualAmbitionClientProps) {
+}: AmbitionOptionsDropdownProps) {
   const [deleteAmbitionDialogOpen, setDeleteAmbitionDialogOpen] = useState(false);
 
   return (
@@ -40,9 +41,7 @@ export function IndividualAmbitionClient({
       {/* Interactive Actions Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
+          <IconMenu className="size-8 text-background text-shadow-lg" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
