@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Profile, User } from "@/db/schema";
-import updateProfileAction from "@/features/settings/actions";
+import updateProfileAction from "@/features/(app)/settings/actions";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";

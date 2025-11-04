@@ -1,5 +1,5 @@
 import * as Card from "@/components/ui/card";
-import ProfileCard from "./ProfileCard";
+import ProfileCard from "../../settings/ProfileCard";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import confirmSession from "@/lib/auth/confirmSession";

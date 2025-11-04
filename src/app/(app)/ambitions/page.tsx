@@ -1,10 +1,10 @@
 import { MotionWrapper } from "@/components/MotionWrapper";
 import { Button } from "@/components/ui/button";
 import { Ambition, Milestone } from "@/db/schema";
-import AmbitionCard from "@/features/ambitions/components/AmbitionCard";
+import AmbitionCard from "@/features/(app)/ambitions/components/AmbitionCard";
 import AmbitionFilters, {
   AmbitionFiltersState,
-} from "@/features/ambitions/components/AmbitionFilters";
+} from "@/features/(app)/ambitions/components/AmbitionFilters";
 import confirmSession from "@/lib/auth/confirmSession";
 import { AmbitionsService } from "@/services/ambitionsService";
 import { IconCirclePlus2, IconFilter } from "@tabler/icons-react";

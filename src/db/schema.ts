@@ -88,7 +88,7 @@ export const ambitions = pgTable("ambitions", {
     .$type<"low" | "medium" | "high">()
     .default("medium"),
   ambitionPercentageCompleted: integer("ambition_percentage_completed").default(0),
-  ambitionColor: varchar("ambition_color", { length: 255 }).default("#64ccc5"),
+  ambitionColor: varchar("ambition_color", { length: 255 }).default("#64ccc5").notNull(),
   isFavourited: boolean("is_favourited").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

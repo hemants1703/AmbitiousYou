@@ -1,30 +1,29 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Ambition, Milestone, Task } from "@/db/schema";
-import { ambitionColorOptions } from "@/features/ambitions/ambitionColorOptions";
-import { AmbitionPriorityBadge } from "@/features/ambitions/components/AmbitionPriorityBadge";
-import { AmbitionOptionsDropdown } from "@/features/ambitions/view/AmbitionOptionsDropdown";
+import { AmbitionPriorityBadge } from "@/features/(app)/ambitions/components/AmbitionPriorityBadge";
+import { AmbitionOptionsDropdown } from "@/features/(app)/ambitions/view/AmbitionOptionsDropdown";
 import confirmSession from "@/lib/auth/confirmSession";
 import { AmbitionsService } from "@/services/ambitionsService";
 import { StarFilledIcon } from "@radix-ui/react-icons";
-import { IconCircleArrowLeft } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconCheck,
+  IconChevronLeft,
+  IconEdit,
+  IconFlag,
+  IconList,
+  IconPlus,
+} from "@tabler/icons-react";
 import { format } from "date-fns";
-import { Calendar, CheckIcon, Edit, Flag, ListTodo, Plus } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cache } from "react";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-// Utility function to get Tailwind gradient background class from hex color
-function getAmbitionBackgroundClass(colorHex: string): string {
-  const colorOption = ambitionColorOptions.find((option) => option.value === colorHex);
-  const tailwindClass = colorOption ? colorOption.class : "cyan-400"; // fallback to cyan-400
-  return `absolute inset-0 bg-linear-to-b from-${tailwindClass} to-transparent`;
 }
 
 const getAmbitionData = cache(async (ambitionId: string): Promise<Ambition | Error> => {
@@ -68,24 +67,18 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   }
 
   return (
-    <section
-      className={`p-6 md:p-8 pt-6 min-h-screen ${getAmbitionBackgroundClass(ambition.ambitionColor!)}`}
-    >
+    <section className={`p-6 md:p-8 pt-6 min-h-screen`}>
       <div className="space-y-6 max-w-7xl mx-auto w-full">
         {/* HEADER - Static content */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-3">
             {/* <Button variant="outline" size="icon" asChild className="bg-transparent rounded-full"> */}
-            <Link
-              prefetch={true}
-              href="/ambitions"
-              className="text-background hover:text-background/80 text-shadow-lg"
-            >
-              <IconCircleArrowLeft className="size-8" />
+            <Link prefetch={true} href="/ambitions">
+              <IconChevronLeft className="size-8" />
             </Link>
             {/* </Button> */}
             <div>
-              <h1 className="text-3xl font-bold mt-1 flex items-center gap-1 text-shadow-lg text-background">
+              <h1 className="text-3xl font-bold mt-1 flex items-center gap-1">
                 {ambition.ambitionName}{" "}
                 {ambition.isFavourited && <StarFilledIcon className="size-6 text-yellow-500" />}
               </h1>
@@ -106,12 +99,12 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
         {/* Ambition Overview Card - Static content */}
         <div className="w-full flex flex-col md:flex-row gap-5">
           <div className="flex-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>Ambition Overview</CardTitle>
-                <CardDescription>{ambition.ambitionDefinition}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+            <Card.Card>
+              <Card.CardHeader>
+                <Card.CardTitle>Ambition Overview</Card.CardTitle>
+                <Card.CardDescription>{ambition.ambitionDefinition}</Card.CardDescription>
+              </Card.CardHeader>
+              <Card.CardContent className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Overall Progress</span>
@@ -125,7 +118,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
                     <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center shrink-0">
-                      <Calendar className="h-4 w-4 text-blue-500" />
+                      <IconCalendar className="h-4 w-4 text-blue-500" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Start Date</p>
@@ -137,7 +130,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
 
                   <div className="flex items-start gap-3">
                     <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center shrink-0">
-                      <Calendar className="h-4 w-4 text-blue-500" />
+                      <IconCalendar className="h-4 w-4 text-blue-500" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Deadline</p>
@@ -149,7 +142,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
 
                   <div className="flex items-start gap-3">
                     <div className="h-8 w-8 rounded-md bg-green-500/20 flex items-center justify-center shrink-0">
-                      <CheckIcon className="h-4 w-4 text-green-500" />
+                      <IconCheck className="h-4 w-4 text-green-500" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">
@@ -172,7 +165,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
 
                   <div className="flex items-start gap-3">
                     <div className="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center shrink-0">
-                      <Flag className="h-4 w-4 text-purple-600" />
+                      <IconFlag className="h-4 w-4 text-purple-600" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Status</p>
@@ -185,31 +178,31 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </Card.CardContent>
+            </Card.Card>
           </div>
         </div>
 
         {/* Tasks or Milestones - Static content with interactive elements */}
         {ambition.ambitionTrackingMethod === "task" ? (
-          <Card>
-            <CardHeader>
+          <Card.Card>
+            <Card.CardHeader>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <CardTitle>All Tasks</CardTitle>
-                  <CardDescription>Manage tasks for this ambition</CardDescription>
+                  <Card.CardTitle>All Tasks</Card.CardTitle>
+                  <Card.CardDescription>Manage tasks for this ambition</Card.CardDescription>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm">
-                    <ListTodo className="h-4 w-4 mr-2" /> Filter
+                    <IconList className="h-4 w-4 mr-2" /> Filter
                   </Button>
                   <Button size="sm">
-                    <Plus className="h-4 w-4 mr-2" /> New Task
+                    <IconPlus className="h-4 w-4 mr-2" /> New Task
                   </Button>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
+            </Card.CardHeader>
+            <Card.CardContent>
               <div className="space-y-3">
                 {tasks.map((task) => (
                   <div
@@ -221,7 +214,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
                         className={`h-5 w-5 rounded-full border flex items-center justify-center ${task.taskCompleted ? "bg-primary border-primary" : "border-input"}`}
                       >
                         {task.taskCompleted && (
-                          <CheckIcon className="h-3 w-3 text-primary-foreground" />
+                          <IconCheck className="h-3 w-3 text-primary-foreground" />
                         )}
                       </div>
                       <div className="flex flex-col">
@@ -237,32 +230,32 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-sm text-muted-foreground">
-                        <Calendar className="h-3.5 w-3.5 inline mr-1" />
+                        <IconCalendar className="h-3.5 w-3.5 inline mr-1" />
                         <span>Due {format(new Date(task.taskDeadline), "MMM d")}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                        <Edit className="h-4 w-4" />
+                        <IconEdit className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </Card.CardContent>
+          </Card.Card>
         ) : (
-          <Card>
-            <CardHeader>
+          <Card.Card>
+            <Card.CardHeader>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <CardTitle>Milestones Journey</CardTitle>
-                  <CardDescription>Progress through key checkpoints</CardDescription>
+                  <Card.CardTitle>Milestones Journey</Card.CardTitle>
+                  <Card.CardDescription>Progress through key checkpoints</Card.CardDescription>
                 </div>
                 <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" /> Add Milestone
+                  <IconPlus className="h-4 w-4 mr-2" /> Add Milestone
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent>
+            </Card.CardHeader>
+            <Card.CardContent>
               <div className="relative mt-6">
                 {/* Timeline line */}
                 <div className="absolute left-2.5 top-0 bottom-0 w-0.5 bg-border"></div>
@@ -275,7 +268,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
                         className={`absolute left-0 h-5 w-5 rounded-full ${milestone.milestoneCompleted ? "bg-primary" : "bg-muted-foreground/25"} flex items-center justify-center`}
                       >
                         {milestone.milestoneCompleted && (
-                          <CheckIcon className="h-3 w-3 text-primary-foreground" />
+                          <IconCheck className="h-3 w-3 text-primary-foreground" />
                         )}
                       </div>
                       <div className="flex flex-col">
@@ -302,8 +295,8 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
                   ))}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </Card.CardContent>
+          </Card.Card>
         )}
       </div>
     </section>

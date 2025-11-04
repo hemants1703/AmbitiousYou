@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { ambitions, tasks, milestones } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { Ambition, NewAmbition, Task, NewTask, Milestone, NewMilestone } from "@/db/schema";
-import { AmbitionFiltersState } from "@/features/ambitions/components/AmbitionFilters";
+import { AmbitionFiltersState } from "@/features/(app)/ambitions/components/AmbitionFilters";
 
 export class AmbitionsService {
   // Fetch all ambitions for a user

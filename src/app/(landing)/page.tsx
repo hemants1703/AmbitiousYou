@@ -8,8 +8,8 @@ import {
   ArrowRightIcon,
   HeartFilledIcon,
 } from "@radix-ui/react-icons";
-import Features from "@/features/root/Features";
-import CTA from "@/features/root/CTA";
+import Features from "@/components/Features";
+import CTA from "@/components/CTA";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],

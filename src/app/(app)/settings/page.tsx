@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import * as Select from "@/components/ui/select";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { Metadata } from "next";
-import ProfileTab from "@/features/settings/ProfileTab";
+import ProfileTab from "@/features/(app)/settings/ProfileTab";
 import confirmSession from "@/lib/auth/confirmSession";
 
 export const metadata: Metadata = {

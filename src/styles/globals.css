@@ -22,6 +22,18 @@ html {
   --color-scrollbar-thumb-light: rgba(0, 0, 0, 1);
   --color-scrollbar-bg-dark: rgba(0, 0, 0, 1);
   --color-scrollbar-thumb-dark: rgba(255, 255, 255, 1);
+
+  /* Ambition Custom Colors - to be used with Tailwind's bg-[color], text-[color] etc */
+  --color-ambition-yellow-400: #fcda03;
+  --color-ambition-orange-500: #ff7733;
+  --color-ambition-blue-400: #00bfff;
+  --color-ambition-lime-500: #32cd32;
+  --color-ambition-pink-400: #ff69b4;
+  --color-ambition-cyan-400: #00ced1;
+  --color-ambition-purple-400: #9966cc;
+  --color-ambition-red-500: #ff2400;
+  --color-ambition-yellow-300: #fff44f;
+  --color-ambition-red-400: #ff7f50;
 }
 
 @theme inline {

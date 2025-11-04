@@ -1,0 +1,36 @@
+.ambition-card {
+  position: relative;
+  border-radius: 0.75rem;
+  transition: all 0.1s ease-in-out;
+}
+
+.ambition-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 90%,
+    var(--ambition-color) 100%
+  );
+  opacity: 0.15;
+  transition: all 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+  pointer-events: none;
+}
+
+.ambition-card:hover::before {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    var(--ambition-color) 100%
+  );
+  opacity: 0.3;
+}
+
+.ambition-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+}
