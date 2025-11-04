@@ -3,30 +3,23 @@
 import { MotionWrapper } from "@/components/MotionWrapper";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import * as Card from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import * as Popover from "@/components/ui/popover";
+import * as RadioGroup from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import * as Tooltip from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import {
-  IconCalendar,
-  IconCheck,
-  IconChevronLeft,
-  IconChevronRight,
-  IconInfoCircle,
-} from "@tabler/icons-react";
+import { IconCalendar, IconCheck, IconChevronLeft, IconInfoCircle } from "@tabler/icons-react";
 import { format, isBefore, startOfToday } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { createNewAmbition, CreateNewAmbitionFormActionState } from "./actions";
 import MilestoneAdditionFormSection from "./MilestoneAdditionFormSection";
 import TasksAdditionFormSection from "./TasksAdditionFormSection";
-import { toast } from "sonner";
 
 const ambitionColorOptions = [
   { name: "Radiant Yellow", value: "#FCDA03", class: "yellow-400" }, // Pure happiness, optimism, immediate mood lift
@@ -126,8 +119,6 @@ export default function CreateNewAmbitionForm() {
     return { from: undefined, to: undefined };
   });
 
-  const [activeTab, setActiveTab] = useState<"basics" | "tasks" | "milestones">("basics");
-
   // Save form data whenever it changes
   useEffect(() => {
     setIsSaving(true);
@@ -180,7 +171,7 @@ export default function CreateNewAmbitionForm() {
 
   return (
     <form action={formAction} className="container max-w-4xl space-y-8 p-6 md:p-8 pt-6">
-      {/* Hidden inputs ONLY for fields without proper form inputs */}
+      {/* Hidden inputs for date fields */}
       <input
         type="hidden"
         name="ambitionStartDate"
@@ -246,13 +237,13 @@ export default function CreateNewAmbitionForm() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-3xl font-bold">Create New Ambition</h1>
-            <Popover>
-              <PopoverTrigger asChild>
+            <Popover.Popover>
+              <Popover.PopoverTrigger asChild>
                 <Button type="button" variant="ghost" size="icon" className="h-8 w-8">
                   <IconInfoCircle className="h-4 w-4" />
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
+              </Popover.PopoverTrigger>
+              <Popover.PopoverContent className="w-80">
                 <div className="space-y-2">
                   <h4 className="font-medium">Auto-save Enabled</h4>
                   <p className="text-sm text-muted-foreground">
@@ -260,8 +251,8 @@ export default function CreateNewAmbitionForm() {
                     and return later to continue where you left off.
                   </p>
                 </div>
-              </PopoverContent>
-            </Popover>
+              </Popover.PopoverContent>
+            </Popover.Popover>
           </div>
           <div className="flex items-center gap-2">
             <p className="text-muted-foreground">Define your goal and set up tracking parameters</p>
@@ -321,299 +312,271 @@ export default function CreateNewAmbitionForm() {
         </div>
       </MotionWrapper>
 
+      {/* BASIC DETAILS OF AMBITION */}
       <MotionWrapper
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <Card.Card>
+          <Card.CardHeader>
+            <Card.CardTitle>Ambition Details</Card.CardTitle>
+            <Card.CardDescription>Define what you want to accomplish</Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="ambitionName">Name</Label>
+                <Input
+                  id="ambitionName"
+                  name="ambitionName"
+                  type="text"
+                  required
+                  placeholder="E.g. Learn Spanish, Run a Marathon..."
+                  value={formState.ambitionName}
+                  onChange={(e) => setFormState({ ...formState, ambitionName: e.target.value })}
+                />
+                {formErrors?.errors?.ambitionName && (
+                  <p className="text-sm text-red-500">{getFieldError("ambitionName")}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>Priority Level</Label>
+                  <RadioGroup.RadioGroup
+                    defaultValue="medium"
+                    className="flex gap-4"
+                    name="ambitionPriority"
+                    value={formState.ambitionPriority}
+                    onValueChange={(value) =>
+                      setFormState({
+                        ...formState,
+                        ambitionPriority: value as "low" | "medium" | "high",
+                      })
+                    }
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroup.RadioGroupItem value="high" id="high" />
+                      <Label htmlFor="high" className="text-red-500 font-medium">
+                        High
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroup.RadioGroupItem value="medium" id="medium" />
+                      <Label htmlFor="medium" className="text-amber-500 font-medium">
+                        Medium
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroup.RadioGroupItem value="low" id="low" />
+                      <Label htmlFor="low" className="text-blue-500 font-medium">
+                        Low
+                      </Label>
+                    </div>
+                  </RadioGroup.RadioGroup>
+                  {formErrors?.errors?.ambitionPriority && (
+                    <p className="text-sm text-red-500">{getFieldError("ambitionPriority")}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="ambitionDefinition">
+                  Definition <span className="text-xs/tight text-muted-foreground">(optional)</span>
+                </Label>
+                <Textarea
+                  id="ambitionDefinition"
+                  name="ambitionDefinition"
+                  placeholder="Define your ambition in detail..."
+                  value={formState.ambitionDefinition}
+                  onChange={(e) =>
+                    setFormState({ ...formState, ambitionDefinition: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Date Range</Label>
+                <p className="text-xs text-muted-foreground">
+                  Tasks and milestones will be constrained to dates within this range
+                </p>
+                <Popover.Popover>
+                  <Popover.PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal"
+                    >
+                      <IconCalendar className="mr-2 h-4 w-4" />
+                      {dateRange.from && dateRange.to ? (
+                        `${format(dateRange.from, "PPP")} - ${format(dateRange.to, "PPP")}`
+                      ) : (
+                        <span>Select start and end dates</span>
+                      )}
+                    </Button>
+                  </Popover.PopoverTrigger>
+                  <Popover.PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="range"
+                      selected={dateRange}
+                      onSelect={(newDateRange) => {
+                        if (newDateRange) {
+                          setDateRange({
+                            from: newDateRange.from,
+                            to: newDateRange.to,
+                          });
+                          setFormState({
+                            ...formState,
+                            ambitionStartDate: newDateRange.from?.toISOString() || "",
+                            ambitionEndDate: newDateRange.to?.toISOString() || "",
+                          });
+                        } else {
+                          setDateRange({ from: undefined, to: undefined });
+                          setFormState({
+                            ...formState,
+                            ambitionStartDate: "",
+                            ambitionEndDate: "",
+                          });
+                        }
+                      }}
+                      disabled={(calendarDate) => isBefore(calendarDate, startOfToday())}
+                      initialFocus
+                    />
+                  </Popover.PopoverContent>
+                </Popover.Popover>
+                {formErrors?.errors?.ambitionStartDate && (
+                  <p className="text-sm text-red-500">{getFieldError("ambitionStartDate")}</p>
+                )}
+                {formErrors?.errors?.ambitionEndDate && (
+                  <p className="text-sm text-red-500">{getFieldError("ambitionEndDate")}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Color</Label>
+              <div className="flex items-center justify-between space-x-2">
+                {ambitionColorOptions.map((color, index) => (
+                  <Tooltip.Tooltip key={index}>
+                    <Tooltip.TooltipTrigger asChild>
+                      <MotionWrapper
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                          duration: 0.2,
+                          delay: 0.1 + index * 0.05,
+                        }}
+                        className={cn(
+                          "h-4 rounded-full cursor-pointer flex items-center justify-center transition-all hover:scale-105 active:scale-95 hover:w-full",
+                          formState.ambitionColor === color.value ? "ring-2 ring-offset-2" : "",
+                          formState.ambitionColor === color.value ? "w-full" : "w-3/5"
+                        )}
+                        style={{ backgroundColor: color.value }}
+                        onClick={() => setFormState({ ...formState, ambitionColor: color.value })}
+                      >
+                        {formState.ambitionColor === color.value && (
+                          <MotionWrapper
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <IconCheck className="h-4 w-4 text-white" />
+                          </MotionWrapper>
+                        )}
+                      </MotionWrapper>
+                    </Tooltip.TooltipTrigger>
+                    <Tooltip.TooltipContent>
+                      <p>{color.name}</p>
+                    </Tooltip.TooltipContent>
+                  </Tooltip.Tooltip>
+                ))}
+              </div>
+              {formErrors?.errors?.ambitionColor && (
+                <p className="text-sm text-red-500">{getFieldError("ambitionColor")}</p>
+              )}
+            </div>
+          </Card.CardContent>
+        </Card.Card>
+      </MotionWrapper>
+
+      {/* PROGRESS TRACKING SETTING */}
+      <MotionWrapper
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Tabs
-          key={activeTab}
-          value={activeTab}
-          className="w-full"
-          onValueChange={(value) => {
-            setActiveTab(value as "basics" | "tasks" | "milestones");
-          }}
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="basics">1. Basic Details</TabsTrigger>
-            <TabsTrigger value="tasks">2. Tasks & Milestones</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="basics" className="space-y-6 mt-6">
-            {/* BASIC DETAILS OF AMBITION */}
-            <MotionWrapper
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Ambition Details</CardTitle>
-                  <CardDescription>Define what you want to accomplish</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="ambitionName">Name</Label>
-                      <Input
-                        id="ambitionName"
-                        name="ambitionName"
-                        type="text"
-                        required
-                        placeholder="E.g. Learn Spanish, Run a Marathon..."
-                        value={formState.ambitionName}
-                        onChange={(e) =>
-                          setFormState({ ...formState, ambitionName: e.target.value })
-                        }
-                      />
-                      {formErrors?.errors?.ambitionName && (
-                        <p className="text-sm text-red-500">{getFieldError("ambitionName")}</p>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label>Priority Level</Label>
-                        <RadioGroup
-                          defaultValue="medium"
-                          className="flex gap-4"
-                          name="ambitionPriority"
-                          value={formState.ambitionPriority}
-                          onValueChange={(value) =>
-                            setFormState({
-                              ...formState,
-                              ambitionPriority: value as "low" | "medium" | "high",
-                            })
-                          }
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="high" id="high" />
-                            <Label htmlFor="high" className="text-red-500 font-medium">
-                              High
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="medium" id="medium" />
-                            <Label htmlFor="medium" className="text-amber-500 font-medium">
-                              Medium
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="low" id="low" />
-                            <Label htmlFor="low" className="text-blue-500 font-medium">
-                              Low
-                            </Label>
-                          </div>
-                        </RadioGroup>
-                        {formErrors?.errors?.ambitionPriority && (
-                          <p className="text-sm text-red-500">
-                            {getFieldError("ambitionPriority")}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="ambitionDefinition">
-                        Definition{" "}
-                        <span className="text-xs/tight text-muted-foreground">(optional)</span>
-                      </Label>
-                      <Textarea
-                        id="ambitionDefinition"
-                        name="ambitionDefinition"
-                        placeholder="Define your ambition in detail..."
-                        value={formState.ambitionDefinition}
-                        onChange={(e) =>
-                          setFormState({ ...formState, ambitionDefinition: e.target.value })
-                        }
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Date Range</Label>
-                      <p className="text-xs text-muted-foreground">
-                        Tasks and milestones will be constrained to dates within this range
-                      </p>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="w-full justify-start text-left font-normal"
-                          >
-                            <IconCalendar className="mr-2 h-4 w-4" />
-                            {dateRange.from && dateRange.to ? (
-                              `${format(dateRange.from, "PPP")} - ${format(dateRange.to, "PPP")}`
-                            ) : (
-                              <span>Select start and end dates</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="range"
-                            selected={dateRange}
-                            onSelect={(newDateRange) => {
-                              if (newDateRange) {
-                                setDateRange({
-                                  from: newDateRange.from,
-                                  to: newDateRange.to,
-                                });
-                                setFormState({
-                                  ...formState,
-                                  ambitionStartDate: newDateRange.from?.toISOString() || "",
-                                  ambitionEndDate: newDateRange.to?.toISOString() || "",
-                                });
-                              } else {
-                                setDateRange({ from: undefined, to: undefined });
-                                setFormState({
-                                  ...formState,
-                                  ambitionStartDate: "",
-                                  ambitionEndDate: "",
-                                });
-                              }
-                            }}
-                            disabled={(calendarDate) => isBefore(calendarDate, startOfToday())}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      {formErrors?.errors?.ambitionStartDate && (
-                        <p className="text-sm text-red-500">{getFieldError("ambitionStartDate")}</p>
-                      )}
-                      {formErrors?.errors?.ambitionEndDate && (
-                        <p className="text-sm text-red-500">{getFieldError("ambitionEndDate")}</p>
-                      )}
-                    </div>
+        <Card.Card>
+          <Card.CardHeader>
+            <Card.CardTitle>Progress Tracking</Card.CardTitle>
+            <Card.CardDescription>
+              Define how you&apos;ll track progress for this ambition
+            </Card.CardDescription>
+          </Card.CardHeader>
+          <Card.CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label>Tracking Method</Label>
+              <RadioGroup.RadioGroup
+                name="ambitionTrackingMethod"
+                defaultValue="task"
+                className="flex justify-between mt-5"
+                value={formState.ambitionTrackingMethod}
+                onValueChange={(value) =>
+                  setFormState({
+                    ...formState,
+                    ambitionTrackingMethod: value as "task" | "milestone",
+                  })
+                }
+              >
+                <MotionWrapper
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
+                  className={cn("flex items-start space-x-3 w-full")}
+                >
+                  <RadioGroup.RadioGroupItem value="task" id="task" />
+                  <div className="cursor-pointer">
+                    <Label htmlFor="task" className="font-medium cursor-pointer">
+                      Task Based
+                    </Label>
+                    <p className="text-start text-sm text-muted-foreground">
+                      Track progress by completing tasks
+                    </p>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label>Color</Label>
-                    <div className="flex items-center justify-between space-x-2">
-                      {ambitionColorOptions.map((color, index) => (
-                        <Tooltip key={index}>
-                          <TooltipTrigger asChild>
-                            <MotionWrapper
-                              key={index}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{
-                                duration: 0.2,
-                                delay: 0.1 + index * 0.05,
-                              }}
-                              className={cn(
-                                "w-3/5 h-4 rounded-full cursor-pointer flex items-center justify-center transition-all hover:scale-105 active:scale-95 hover:w-full",
-                                `bg-${color.class}`,
-                                formState.ambitionColor === color.value
-                                  ? "ring-2 ring-offset-2"
-                                  : "",
-                                formState.ambitionColor === color.value ? "w-full" : "w-3/5"
-                              )}
-                              onClick={() =>
-                                setFormState({ ...formState, ambitionColor: color.value })
-                              }
-                            >
-                              {formState.ambitionColor === color.value && (
-                                <MotionWrapper
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  transition={{ duration: 0.2 }}
-                                >
-                                  <IconCheck className="h-4 w-4 text-white" />
-                                </MotionWrapper>
-                              )}
-                            </MotionWrapper>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{color.name}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      ))}
-                    </div>
-                    {formErrors?.errors?.ambitionColor && (
-                      <p className="text-sm text-red-500">{getFieldError("ambitionColor")}</p>
-                    )}
+                </MotionWrapper>
+                <MotionWrapper
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className={cn("flex items-start space-x-3 w-full")}
+                >
+                  <RadioGroup.RadioGroupItem value="milestone" id="milestone" />
+                  <div className="cursor-pointer">
+                    <Label htmlFor="milestone" className="font-medium cursor-pointer">
+                      Milestone Based
+                    </Label>
+                    <p className="text-start text-sm text-muted-foreground">
+                      Track progress through specific milestones
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            </MotionWrapper>
-
-            {/* PROGRESS TRACKING SETTING */}
-            <MotionWrapper
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Progress Tracking</CardTitle>
-                  <CardDescription>
-                    Define how you&apos;ll track progress for this ambition
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label>Tracking Method</Label>
-                    <RadioGroup
-                      name="ambitionTrackingMethod"
-                      defaultValue="task"
-                      className="flex justify-between mt-5"
-                      value={formState.ambitionTrackingMethod}
-                      onValueChange={(value) =>
-                        setFormState({
-                          ...formState,
-                          ambitionTrackingMethod: value as "task" | "milestone",
-                        })
-                      }
-                    >
-                      <MotionWrapper
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.3 }}
-                        className={cn("flex items-start space-x-3 w-full")}
-                      >
-                        <RadioGroupItem value="task" id="task" />
-                        <div className="cursor-pointer">
-                          <Label htmlFor="task" className="font-medium cursor-pointer">
-                            Task Based
-                          </Label>
-                          <p className="text-start text-sm text-muted-foreground">
-                            Track progress by completing tasks
-                          </p>
-                        </div>
-                      </MotionWrapper>
-                      <MotionWrapper
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.2 }}
-                        className={cn("flex items-start space-x-3 w-full")}
-                      >
-                        <RadioGroupItem value="milestone" id="milestone" />
-                        <div className="cursor-pointer">
-                          <Label htmlFor="milestone" className="font-medium cursor-pointer">
-                            Milestone Based
-                          </Label>
-                          <p className="text-start text-sm text-muted-foreground">
-                            Track progress through specific milestones
-                          </p>
-                        </div>
-                      </MotionWrapper>
-                    </RadioGroup>
-                  </div>
-                </CardContent>
-              </Card>
-            </MotionWrapper>
-          </TabsContent>
-
-          <TabsContent value="tasks" className="space-y-6 mt-6">
-            {formState.ambitionTrackingMethod === "task" ? (
-              <TasksAdditionFormSection formState={formState} setFormState={setFormState} />
-            ) : (
-              <MilestoneAdditionFormSection formState={formState} setFormState={setFormState} />
-            )}
-          </TabsContent>
-        </Tabs>
+                </MotionWrapper>
+              </RadioGroup.RadioGroup>
+            </div>
+          </Card.CardContent>
+        </Card.Card>
       </MotionWrapper>
+
+      {/* TASKS OR MILESTONES SECTION */}
+      {formState.ambitionTrackingMethod === "task" ? (
+        <TasksAdditionFormSection key="tasks" formState={formState} setFormState={setFormState} />
+      ) : (
+        <MilestoneAdditionFormSection
+          key="milestones"
+          formState={formState}
+          setFormState={setFormState}
+        />
+      )}
 
       {/* Footer Section */}
       <MotionWrapper
@@ -622,25 +585,9 @@ export default function CreateNewAmbitionForm() {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="flex justify-end"
       >
-        {activeTab === "basics" && (
-          <Button
-            variant="ay"
-            type="button"
-            onClick={() => {
-              console.log("Current activeTab:", activeTab);
-              setActiveTab("tasks");
-              console.log("Setting activeTab to tasks");
-            }}
-          >
-            Next
-            <IconChevronRight className="h-4 w-4" />
-          </Button>
-        )}
-        {activeTab === "tasks" && (
-          <Button type="submit" disabled={isCreationPending} variant="ay">
-            {isCreationPending ? "Creating..." : "Create Ambition"}
-          </Button>
-        )}
+        <Button type="submit" disabled={isCreationPending} variant="ay">
+          {isCreationPending ? "Creating..." : "Create Ambition"}
+        </Button>
       </MotionWrapper>
     </form>
   );

@@ -22,7 +22,7 @@ export default function AmbitionCard(props: AmbitionCardProps) {
           "--ambition-color": props.ambition.ambitionColor,
         } as React.CSSProperties
       }
-      className="ambition-card"
+      className="ambition-card active:scale-[0.99] active:translate-y-px active:brightness-80"
     >
       <Card.Card className="bg-transparent cursor-pointer">
         <Card.CardHeader>

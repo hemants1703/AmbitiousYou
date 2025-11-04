@@ -45,12 +45,6 @@ export async function createNewAmbition(
 ): Promise<CreateNewAmbitionFormActionState> {
   const session = await confirmSession();
 
-  // Debug: Log all form entries
-  console.log("=== Form Data Entries ===");
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value);
-  }
-
   const submittedFormData = {
     ambitionName: formData.get("ambitionName") as string,
     ambitionDefinition: (formData.get("ambitionDefinition") as string) || "",
@@ -64,8 +58,6 @@ export async function createNewAmbition(
     milestones: [],
   };
 
-  console.log("=== Parsed Form Data ===", submittedFormData);
-
   if (submittedFormData.ambitionTrackingMethod === "task") {
     submittedFormData.tasks = JSON.parse(formData.get("tasks") as string);
   } else {
@@ -75,7 +67,6 @@ export async function createNewAmbition(
   const validatedData = ambitionValidationSchema.safeParse(submittedFormData);
 
   if (!validatedData.success) {
-    console.log("Validation failed: ", z.flattenError(validatedData.error));
     return {
       errors: z.flattenError(validatedData.error).fieldErrors,
       ...submittedFormData,

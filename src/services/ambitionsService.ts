@@ -10,8 +10,6 @@ export class AmbitionsService {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(ambitions).where(eq(ambitions.userId, userId));
 
-      console.log("fetchUserAmbitions result", result);
-
       if (!result) {
         reject(new Error("Ambitions not found"));
       }

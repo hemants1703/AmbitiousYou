@@ -74,7 +74,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
           <div className="flex items-center gap-3">
             {/* <Button variant="outline" size="icon" asChild className="bg-transparent rounded-full"> */}
             <Link prefetch={true} href="/ambitions">
-              <IconChevronLeft className="size-8" />
+              <IconChevronLeft className="size-8 bg-foreground/10 rounded-full p-2" />
             </Link>
             {/* </Button> */}
             <div>

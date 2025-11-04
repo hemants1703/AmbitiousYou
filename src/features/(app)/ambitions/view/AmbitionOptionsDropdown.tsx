@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
-import { IconMenu } from "@tabler/icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -41,7 +40,7 @@ export function AmbitionOptionsDropdown({
       {/* Interactive Actions Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <IconMenu className="size-8 text-background text-shadow-lg" />
+          <IconDotsVertical className="size-8 text-shadow-lg bg-foreground/10 rounded-full p-2" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>

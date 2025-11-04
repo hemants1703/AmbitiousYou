@@ -165,7 +165,7 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
                     </Popover.PopoverContent>
                   </Popover.Popover>
                 </div>
-                <Button onClick={addTask} type="button" className="self-end">
+                <Button onClick={addTask} type="button" size="tiny" className="self-end">
                   <IconPlus className="h-4 w-4 mr-1" /> Add Task
                 </Button>
               </div>
@@ -231,21 +231,6 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
               )}
             </div>
           </Card.CardContent>
-        </Card.Card>
-      </MotionWrapper>
-
-      <MotionWrapper
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card.Card className="opacity-50 pointer-events-none">
-          <Card.CardHeader>
-            <Card.CardTitle>Milestones</Card.CardTitle>
-            <Card.CardDescription>
-              Switch to Milestone Based tracking from the first tab of this page to add milestones
-            </Card.CardDescription>
-          </Card.CardHeader>
         </Card.Card>
       </MotionWrapper>
     </>

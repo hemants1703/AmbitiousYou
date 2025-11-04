@@ -192,7 +192,7 @@ export default function MilestoneAdditionFormSection(props: MilestoneAdditionFor
                     Mark as completed
                   </Label>
                 </div>
-                <Button onClick={addMilestone} type="button" className="self-end">
+                <Button onClick={addMilestone} type="button" size="tiny" className="self-end">
                   <IconPlus className="h-4 w-4 mr-1" /> Add Milestone
                 </Button>
               </div>
@@ -268,21 +268,6 @@ export default function MilestoneAdditionFormSection(props: MilestoneAdditionFor
               </div>
             </div>
           </Card.CardContent>
-        </Card.Card>
-      </MotionWrapper>
-
-      <MotionWrapper
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <Card.Card className="opacity-50 pointer-events-none">
-          <Card.CardHeader>
-            <Card.CardTitle>Initial Tasks</Card.CardTitle>
-            <Card.CardDescription>
-              Switch to Task Based tracking from the first tab of this page to add tasks
-            </Card.CardDescription>
-          </Card.CardHeader>
         </Card.Card>
       </MotionWrapper>
     </>
