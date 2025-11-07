@@ -1,12 +1,12 @@
 import * as Card from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import SignUpForm from "@/features/(auth)/signup/SignUpForm";
-import confirmSession from "@/lib/auth/confirmSession";
+import getOptionalSession from "@/lib/auth/getOptionalSession";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
 
 export default async function Signup() {
-  const session = await confirmSession();
+  const session = await getOptionalSession();
 
   if (session) {
     redirect("/dashboard", RedirectType.replace);

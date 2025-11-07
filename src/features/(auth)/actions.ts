@@ -97,10 +97,6 @@ export async function loginUserAction(_: LoginState, formData: FormData) {
     });
 
     console.log("userSigninResponse", userSigninResponse);
-
-    return {
-      ...submittedFormData,
-    };
   } catch (error) {
     console.error("Error signing in:", error);
     return {
@@ -110,6 +106,8 @@ export async function loginUserAction(_: LoginState, formData: FormData) {
       ...submittedFormData,
     };
   }
+
+  redirect("/dashboard", RedirectType.replace);
 }
 
 // This function is called when the user submits the logout form

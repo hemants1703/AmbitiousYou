@@ -2,11 +2,11 @@ import * as Card from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import LoginForm from "@/features/(auth)/login/LoginForm";
-import confirmSession from "@/lib/auth/confirmSession";
+import getOptionalSession from "@/lib/auth/getOptionalSession";
 import { redirect, RedirectType } from "next/navigation";
 
 export default async function Login() {
-  const session = await confirmSession();
+  const session = await getOptionalSession();
 
   if (session) {
     redirect("/dashboard", RedirectType.replace);
