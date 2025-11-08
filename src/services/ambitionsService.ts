@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { ambitions, tasks, milestones } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { Ambition, NewAmbition, Task, NewTask, Milestone, NewMilestone } from "@/db/schema";
 import { AmbitionFiltersState } from "@/features/(app)/ambitions/components/AmbitionFilters";
 
@@ -44,7 +44,8 @@ export class AmbitionsService {
       let allAmbitionsForUser = await db
         .select()
         .from(ambitions)
-        .where(eq(ambitions.userId, userId));
+        .where(eq(ambitions.userId, userId))
+        .orderBy(desc(ambitions.createdAt));
 
       if (!allAmbitionsForUser) {
         reject(new Error("Ambitions not found"));

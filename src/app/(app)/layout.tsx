@@ -3,6 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import confirmSession from "@/lib/auth/confirmSession";
 import { User } from "better-auth";
 import { Metadata } from "next";
+import { redirect, RedirectType } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await confirmSession();
+
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-background">

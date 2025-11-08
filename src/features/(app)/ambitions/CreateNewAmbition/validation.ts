@@ -13,7 +13,6 @@ export const ambitionValidationSchema = z.object({
   ambitionTrackingMethod: z.enum(["task", "milestone"], {
     message: "Ambition tracking method is required",
   }),
-  isFavourited: z.boolean().default(false),
 });
 
 export type AmbitionValidationSchema = z.infer<typeof ambitionValidationSchema>;

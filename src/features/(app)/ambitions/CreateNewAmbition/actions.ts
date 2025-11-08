@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { db } from "@/db";
 import { ambitions, tasks as tasksTable, milestones as milestonesTable } from "@/db/schema";
-import { ambitionValidationSchema } from "@/utils/validators/ambitionSchema";
+import { ambitionValidationSchema } from "@/features/(app)/ambitions/CreateNewAmbition/validation";
 import taskSchema from "@/utils/validators/taskSchema";
 import milestoneSchema from "@/utils/validators/milestoneSchema";
 import confirmSession from "@/lib/auth/confirmSession";
@@ -34,7 +34,6 @@ export interface CreateNewAmbitionFormActionState {
   ambitionEndDate: string | Date;
   ambitionColor: string;
   ambitionTrackingMethod: "task" | "milestone";
-  isFavourited: boolean;
   tasks: FormTask[];
   milestones: FormMilestone[];
 }
@@ -53,7 +52,6 @@ export async function createNewAmbition(
     ambitionEndDate: new Date(formData.get("ambitionEndDate") as string),
     ambitionColor: formData.get("ambitionColor") as string,
     ambitionTrackingMethod: formData.get("ambitionTrackingMethod") as "task" | "milestone",
-    isFavourited: formData.get("isFavourited") === "true",
     tasks: [],
     milestones: [],
   };
@@ -151,7 +149,6 @@ export async function createNewAmbition(
       ambitionEndDate: "",
       ambitionColor: "",
       ambitionTrackingMethod: "task",
-      isFavourited: false,
       tasks: [],
       milestones: [],
     };

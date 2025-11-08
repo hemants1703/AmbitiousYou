@@ -1,9 +1,14 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import confirmSession from "@/lib/auth/confirmSession";
+import { redirect, RedirectType } from "next/navigation";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const session = await confirmSession();
+
+  if (session) {
+    redirect("/dashboard", RedirectType.replace);
+  }
 
   return (
     <>
@@ -23,7 +28,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
 
       {/* Main content container */}
       <main className="relative max-w-screen-2xl min-h-svh flex flex-col justify-between items-center mx-auto z-10 overflow-x-hidden">
-        <Navbar userLoggedIn={session.user ? true : false} />
+        <Navbar userLoggedIn={false} />
         <div className="mt-16">{children}</div>
         <Footer />
       </main>

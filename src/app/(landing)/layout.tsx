@@ -23,7 +23,7 @@ export default async function LandingLayout({ children }: Readonly<{ children: R
 
       {/* Main content container */}
       <main className="relative max-w-screen-2xl min-h-svh flex flex-col justify-between items-center mx-auto z-10 overflow-x-hidden">
-        <Navbar userLoggedIn={session.user ? true : false} />
+        <Navbar userLoggedIn={session ? true : false} />
         <div className="mt-16">{children}</div>
         <Footer />
       </main>

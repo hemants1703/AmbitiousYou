@@ -1,3 +1,5 @@
+"use client";
+
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import {
@@ -12,18 +14,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteAmbitionAction } from "./actions";
+import Link from "next/link";
 
-export function DeleteAmbitionDialog({
-  ambitionId,
-  deleteAmbitionDialogOpen,
-  setDeleteAmbitionDialogOpen,
-}: {
+interface DeleteAmbitionDialogProps {
   ambitionId: string;
-  deleteAmbitionDialogOpen: boolean;
-  setDeleteAmbitionDialogOpen: (open: boolean) => void;
-}) {
+}
+
+export function DeleteAmbitionDialog(props: DeleteAmbitionDialogProps) {
   return (
-    <AlertDialog open={deleteAmbitionDialogOpen} onOpenChange={setDeleteAmbitionDialogOpen}>
+    <AlertDialog open={true}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -33,12 +32,16 @@ export function DeleteAmbitionDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel asChild>
+            <Link href={`/ambitions/${props.ambitionId}`} prefetch={true}>
+              Cancel
+            </Link>
+          </AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button
               variant={"destructive"}
               onClick={async () => {
-                const { success, error } = await deleteAmbitionAction(ambitionId);
+                const { success, error } = await deleteAmbitionAction(props.ambitionId);
                 if (success) {
                   toast.success("Ambition deleted successfully");
                   redirect("/ambitions");

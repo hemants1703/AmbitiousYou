@@ -51,7 +51,6 @@ export default function CreateNewAmbitionForm() {
             ambitionColor: parsedData.selectedColor || parsedData.ambitionColor || "",
             ambitionTrackingMethod:
               parsedData.trackingMethod || parsedData.ambitionTrackingMethod || "task",
-            isFavourited: parsedData.isFavourited || false,
             tasks: parsedData.tasks || [],
             milestones: parsedData.milestones || [],
           };
@@ -68,7 +67,6 @@ export default function CreateNewAmbitionForm() {
       ambitionEndDate: "",
       ambitionColor: "",
       ambitionTrackingMethod: "task",
-      isFavourited: false,
       tasks: [],
       milestones: [],
     };
@@ -161,7 +159,6 @@ export default function CreateNewAmbitionForm() {
       ambitionEndDate: "",
       tasks: [],
       milestones: [],
-      isFavourited: false,
     });
   };
 
@@ -191,7 +188,6 @@ export default function CreateNewAmbitionForm() {
         }
       />
       <input type="hidden" name="ambitionColor" value={formState.ambitionColor} />
-      <input type="hidden" name="isFavourited" value={formState.isFavourited.toString()} />
       <input
         type="hidden"
         name="tasks"

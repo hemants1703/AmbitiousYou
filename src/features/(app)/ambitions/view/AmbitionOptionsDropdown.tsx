@@ -1,19 +1,16 @@
 "use client";
 
+import * as DropdownMenu from "@/components/ui/dropdown-menu";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
-import { IconDotsVertical } from "@tabler/icons-react";
-import { Edit, Trash2 } from "lucide-react";
-import { useState } from "react";
+  IconDotsVertical,
+  IconEdit,
+  IconStar,
+  IconStarFilled,
+  IconTrash,
+} from "@tabler/icons-react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { favouriteAmbitionAction } from "../actions";
-import { DeleteAmbitionDialog } from "./DeleteAmbitionDialog";
 
 interface AmbitionOptionsDropdownProps {
   ambitionId: string;
@@ -21,61 +18,44 @@ interface AmbitionOptionsDropdownProps {
   isFavourited: boolean;
 }
 
-export function AmbitionOptionsDropdown({
-  ambitionId,
-  userId,
-  isFavourited,
-}: AmbitionOptionsDropdownProps) {
-  const [deleteAmbitionDialogOpen, setDeleteAmbitionDialogOpen] = useState(false);
+export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownProps) {
+  const handleFavouriteToggle = async () => {
+    toast.promise(favouriteAmbitionAction(props.ambitionId, !props.isFavourited), {
+      loading: "Adding ambition to favorites...",
+      success: "Ambition added to favorites",
+      error: "Error adding ambition to favorites",
+    });
+  };
 
   return (
     <>
-      {/* DELETE AMBITION DIALOG */}
-      <DeleteAmbitionDialog
-        ambitionId={ambitionId}
-        deleteAmbitionDialogOpen={deleteAmbitionDialogOpen}
-        setDeleteAmbitionDialogOpen={setDeleteAmbitionDialogOpen}
-      />
-
       {/* Interactive Actions Dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <DropdownMenu.DropdownMenu>
+        <DropdownMenu.DropdownMenuTrigger asChild>
           <IconDotsVertical className="size-8 text-shadow-lg bg-foreground/10 rounded-full p-2" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>
-            <Edit className="h-4 w-4 mr-2" /> Edit Ambition
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={async () => {
-              const { success, message, description, error } = await favouriteAmbitionAction(
-                ambitionId,
-                !isFavourited
-              );
-              if (success) {
-                toast.success(message, {
-                  description: description,
-                });
-              } else if (error) {
-                toast.error("Error adding ambition to favorites", {
-                  description: "Please try again",
-                });
-              }
-            }}
-          >
-            {isFavourited ? (
-              <StarFilledIcon className="h-4 w-4 mr-2 text-yellow-500" />
+        </DropdownMenu.DropdownMenuTrigger>
+        <DropdownMenu.DropdownMenuContent align="end">
+          <DropdownMenu.DropdownMenuItem asChild>
+            <Link href={`/ambitions/${props.ambitionId}/edit`} prefetch={true}>
+              <IconEdit className="size-4 mr-2" /> Edit Ambition
+            </Link>
+          </DropdownMenu.DropdownMenuItem>
+          <DropdownMenu.DropdownMenuItem onClick={handleFavouriteToggle}>
+            {props.isFavourited ? (
+              <IconStarFilled className="size-4 mr-2 text-yellow-500" />
             ) : (
-              <StarIcon className="h-4 w-4 mr-2 text-yellow-500" />
+              <IconStar className="size-4 mr-2 text-yellow-500" />
             )}{" "}
-            {isFavourited ? "Remove from Favorites" : "Add to Favorites"}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setDeleteAmbitionDialogOpen(true)}>
-            <Trash2 className="h-4 w-4 mr-2 text-red-500" /> Delete Ambition
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            {props.isFavourited ? "Remove from Favorites" : "Add to Favorites"}
+          </DropdownMenu.DropdownMenuItem>
+          <DropdownMenu.DropdownMenuSeparator />
+          <DropdownMenu.DropdownMenuItem asChild>
+            <Link href={`/ambitions/${props.ambitionId}?delete_ambition=true`} prefetch={true}>
+              <IconTrash className="size-4 mr-2 text-red-500" /> Delete Ambition
+            </Link>
+          </DropdownMenu.DropdownMenuItem>
+        </DropdownMenu.DropdownMenuContent>
+      </DropdownMenu.DropdownMenu>
     </>
   );
 }

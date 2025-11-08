@@ -5,14 +5,10 @@ import { Session, User } from "better-auth";
 
 // This auth helper function checks if the user is authenticated and returns the session and user
 // If the user is not authenticated, it redirects to the login page
-export default async function confirmSession(): Promise<{ session: Session; user: User }> {
+export default async function confirmSession(): Promise<{ session: Session; user: User } | null> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
-  if (!session) {
-    redirect("/login", RedirectType.replace);
-  }
 
   return session;
 }

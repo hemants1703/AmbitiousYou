@@ -99,7 +99,7 @@ export default async function DashboardPage() {
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col gap-10 pb-12 overflow-auto p-6 md:p-10 pt-8 bg-background min-h-screen">
+      <div className="flex flex-col gap-10 pb-12 p-6 md:p-10 pt-8 bg-background">
         {/* Welcome Banner */}
         <MotionWrapper
           initial={{ opacity: 0, y: -20 }}
