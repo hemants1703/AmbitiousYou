@@ -165,7 +165,9 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
                     </Popover.PopoverContent>
                   </Popover.Popover>
                 </div>
-                <Button onClick={addTask} type="button" size="tiny" className="self-end">
+                <Button onClick={addTask} type="button" size="tiny" className="self-end text-shadow-md" style={{
+                  backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
+                }}>
                   <IconPlus className="h-4 w-4 mr-1" /> Add Task
                 </Button>
               </div>
@@ -218,11 +220,12 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
                       <MotionWrapper whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                         <Button
                           type="button"
-                          variant="ghost"
-                          size="sm"
+                          variant="destructive"
+                          size="tiny"
+                          className="rounded-full size-5 p-0"
                           onClick={() => removeTask(index)}
                         >
-                          <IconX className="h-4 w-4" />
+                          <IconX className="text-white size-4" strokeWidth={3} />
                         </Button>
                       </MotionWrapper>
                     </MotionWrapper>

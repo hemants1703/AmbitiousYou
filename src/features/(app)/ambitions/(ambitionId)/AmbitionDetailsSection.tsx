@@ -15,6 +15,18 @@ interface AmbitionDetailsSectionProps {
 }
 
 export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProps) {
+  let ambitionTrackingMethod = props.ambition.ambitionTrackingMethod;
+  let completedTasks = 0;
+  let completedMilestones = 0;
+
+  if (ambitionTrackingMethod === "task") {
+    completedTasks = props.tasks.filter(t => t.taskCompleted).length;
+  } else if (ambitionTrackingMethod === "milestone") {
+    completedMilestones = props.milestones.filter(m => m.milestoneCompleted).length;
+  }
+
+  const progressPercentage = (completedTasks + completedMilestones) / (props.tasks.length + props.milestones.length) * 100
+
   return (
     <>
       {/* Ambition Overview Card - Static content */}
@@ -30,10 +42,10 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Overall Progress</span>
                   <span className="text-sm font-medium">
-                    {props.ambition.ambitionPercentageCompleted}%
+                    {progressPercentage.toFixed(0)}%
                   </span>
                 </div>
-                <Progress value={props.ambition.ambitionPercentageCompleted} className="h-2" />
+                <Progress value={progressPercentage} className="h-2" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -73,13 +85,11 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                     <p className="font-medium">
                       {props.ambition.ambitionTrackingMethod === "task" ? (
                         <>
-                          {props.tasks.filter((t) => t.taskCompleted).length}/{props.tasks.length}{" "}
-                          tasks completed
+                          {completedTasks}/{props.tasks.length} tasks completed
                         </>
                       ) : (
                         <>
-                          {props.milestones.filter((m) => m.milestoneCompleted).length}/
-                          {props.milestones.length} milestones completed
+                          {completedMilestones}/{props.milestones.length} milestones completed
                         </>
                       )}
                     </p>
@@ -108,9 +118,9 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
 
       {/* Tasks or Milestones - Static content with interactive elements */}
       {props.ambition.ambitionTrackingMethod === "task" ? (
-        <AmbitionTasksContainer tasks={props.tasks} />
+        <AmbitionTasksContainer ambition={props.ambition} tasks={props.tasks} />
       ) : (
-        <AmbitionMilestonesContainer milestones={props.milestones} />
+        <AmbitionMilestonesContainer ambition={props.ambition} milestones={props.milestones} />
       )}
     </>
   );

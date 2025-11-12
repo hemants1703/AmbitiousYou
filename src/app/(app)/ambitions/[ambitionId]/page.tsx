@@ -11,6 +11,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { cache } from "react";
 import { redirect, RedirectType } from "next/navigation";
+import MarkMilestoneAsCompletedDialog from "@/features/(app)/ambitions/(ambitionId)/MarkMilestoneAsCompletedDialog";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -50,6 +51,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   const { ambitionId } = await props.params;
   const searchParams: {
     delete_ambition?: string | undefined;
+    mark_milestone_as_completed?: string | undefined;
   } = await props.searchParams;
   const ambition: Ambition | Error = await getAmbitionData(ambitionId as string, session.user.id);
   if (ambition instanceof Error) throw ambition;
@@ -96,6 +98,10 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
           {/* DELETE AMBITION DIALOG */}
           {searchParams.delete_ambition === "true" && (
             <DeleteAmbitionDialog ambitionId={ambition.id} />
+          )}
+
+          {searchParams.mark_milestone_as_completed && (
+            <MarkMilestoneAsCompletedDialog milestone={milestones.find(milestone => milestone.id === searchParams.mark_milestone_as_completed) as Milestone} ambitionId={ambition.id} />
           )}
         </div>
 

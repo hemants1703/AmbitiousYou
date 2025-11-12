@@ -1,10 +1,12 @@
-import * as Card from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { IconCalendar, IconCheck, IconEdit, IconList, IconPlus } from "@tabler/icons-react";
+import * as Card from "@/components/ui/card";
+import { Ambition, Task } from "@/db/schema";
+import { IconCalendar, IconCheck, IconEdit, IconPlus } from "@tabler/icons-react";
 import { format } from "date-fns";
-import { Task } from "@/db/schema";
+import Link from "next/link";
 
 interface AmbitionTasksContainerProps {
+  ambition: Ambition;
   tasks: Task[];
 }
 
@@ -18,11 +20,10 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
             <Card.CardDescription>Manage tasks for this ambition</Card.CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="tiny">
-              <IconList className="h-4 w-4 mr-2" /> Filter
-            </Button>
-            <Button size="tiny">
-              <IconPlus className="h-4 w-4 mr-2" /> New Task
+            <Button size="tiny" className="text-shadow-md" style={{
+              backgroundColor: props.ambition.ambitionColor,
+            }}>
+              <IconPlus /> New Task
             </Button>
           </div>
         </div>
@@ -51,9 +52,13 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
                   <IconCalendar className="h-3.5 w-3.5 inline mr-1" />
                   <span>Due {format(new Date(task.taskDeadline), "MMM d")}</span>
                 </div>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <IconEdit className="h-4 w-4" />
-                </Button>
+                {!task.taskCompleted &&
+                  <Button variant="outline" size="icon" className="rounded-full size-8 p-0">
+                    <Link href={`/ambitions/${props.ambition.id}?edit_task=${task.id}`} prefetch={true}>
+                      <IconEdit />
+                    </Link>
+                  </Button>
+                }
               </div>
             </div>
           ))}

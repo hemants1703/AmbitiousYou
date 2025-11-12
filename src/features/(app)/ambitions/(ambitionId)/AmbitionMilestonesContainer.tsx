@@ -1,11 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
-import { Milestone } from "@/db/schema";
+import { Ambition, Milestone } from "@/db/schema";
 import { IconCheck, IconPlus } from "@tabler/icons-react";
 import { format } from "date-fns";
+import Link from "next/link";
 
 interface AmbitionMilestonesContainerProps {
+  ambition: Ambition;
   milestones: Milestone[];
 }
 
@@ -18,8 +20,10 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
             <Card.CardTitle>Milestones Journey</Card.CardTitle>
             <Card.CardDescription>Progress through key checkpoints</Card.CardDescription>
           </div>
-          <Button size="tiny">
-            <IconPlus className="h-4 w-4 mr-2" /> Add Milestone
+          <Button size="tiny" className="text-shadow-md" style={{
+            backgroundColor: props.ambition.ambitionColor,
+          }}>
+            <IconPlus /> Add Milestone
           </Button>
         </div>
       </Card.CardHeader>
@@ -53,8 +57,11 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
                       Completed
                     </Badge>
                   ) : (
-                    <Button variant="outline" size="sm" className="w-fit mt-2">
-                      Mark as Complete
+                    <Button variant="outline" size="tiny" className="w-fit mt-2 text-xs" asChild>
+                      <Link href={`/ambitions/${props.ambition.id}?mark_milestone_as_completed=${milestone.id}`} prefetch={true}>
+                        <IconCheck className="text-green-500" />
+                        Mark as Complete
+                      </Link>
                     </Button>
                   )}
                 </div>
