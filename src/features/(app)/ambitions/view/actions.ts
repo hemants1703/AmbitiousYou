@@ -11,9 +11,9 @@ export async function deleteAmbitionAction(ambitionId: string): Promise<{
 }> {
   try {
     // Get current authenticated user
-    const { user } = await confirmSession();
+    const session = await confirmSession();
 
-    if (!user) {
+    if (!session) {
       return {
         success: false,
         error: "Unauthorized",
@@ -23,7 +23,7 @@ export async function deleteAmbitionAction(ambitionId: string): Promise<{
     // Delete ambition (cascade will automatically delete associated tasks/milestones)
     const [deletedAmbition] = await db
       .delete(ambitions)
-      .where(and(eq(ambitions.id, ambitionId), eq(ambitions.userId, user.id)))
+      .where(and(eq(ambitions.id, ambitionId), eq(ambitions.userId, session.user.id)))
       .returning();
 
     if (!deletedAmbition) {

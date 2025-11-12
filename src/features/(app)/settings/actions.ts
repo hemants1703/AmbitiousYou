@@ -16,9 +16,9 @@ export default async function updateProfileAction(
 }> {
   try {
     // Get current authenticated user
-    const { user } = await confirmSession();
+    const session = await confirmSession();
 
-    if (!user) {
+    if (!session) {
       return {
         success: false,
         error: "User ID is required",
@@ -48,7 +48,7 @@ export default async function updateProfileAction(
         lastName,
         updatedAt: new Date(),
       })
-      .where(eq(profiles.userId, user.id))
+      .where(eq(profiles.userId, session.user.id))
       .returning();
 
     if (!updatedProfile) {
@@ -58,7 +58,7 @@ export default async function updateProfileAction(
       };
     }
 
-    console.log("[SERVER ACTIONS] Profile updated successfully for user:", user.id);
+    console.log("[SERVER ACTIONS] Profile updated successfully for user:", session.user.id);
 
     revalidatePath("/settings", "page");
     return {

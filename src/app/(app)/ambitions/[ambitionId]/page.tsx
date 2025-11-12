@@ -10,21 +10,29 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cache } from "react";
+import { redirect, RedirectType } from "next/navigation";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ [key: string]: string | string[] | undefined }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const getAmbitionData = cache(async (ambitionId: string): Promise<Ambition | Error> => {
-  const session = await confirmSession(); // check for session if not found, redirect to login
-  return await AmbitionsService.fetchAmbitionById(ambitionId, session.user.id);
-});
+const getAmbitionData = cache(
+  async (ambitionId: string, userId: string): Promise<Ambition | Error> => {
+    return await AmbitionsService.fetchAmbitionById(ambitionId, userId);
+  }
+);
 
 export async function generateMetadata(props: AmbitionDetailsPageProps): Promise<Metadata> {
+  const session = await confirmSession();
+
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
+
   const { ambitionId } = await props.params;
 
-  const ambition: Ambition | Error = await getAmbitionData(ambitionId as string);
+  const ambition: Ambition | Error = await getAmbitionData(ambitionId as string, session.user.id);
   if (ambition instanceof Error) throw ambition;
 
   return {
@@ -35,11 +43,15 @@ export async function generateMetadata(props: AmbitionDetailsPageProps): Promise
 export default async function IndividualAmbitionPage(props: AmbitionDetailsPageProps) {
   const session = await confirmSession();
 
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
+
   const { ambitionId } = await props.params;
   const searchParams: {
     delete_ambition?: string | undefined;
   } = await props.searchParams;
-  const ambition: Ambition | Error = await getAmbitionData(ambitionId as string);
+  const ambition: Ambition | Error = await getAmbitionData(ambitionId as string, session.user.id);
   if (ambition instanceof Error) throw ambition;
 
   let tasks: Task[] | Error = [];

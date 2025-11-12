@@ -11,6 +11,7 @@ import { IconCirclePlus2, IconFilter } from "@tabler/icons-react";
 import { User } from "better-auth";
 import { Metadata } from "next";
 import Link from "next/link";
+import { redirect, RedirectType } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "All Ambitions | AmbitiousYou",
@@ -22,6 +23,10 @@ interface AmbitionsPageProps {
 
 export default async function AmbitionsPage(props: AmbitionsPageProps) {
   const session = await confirmSession();
+
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
 
   const userData = session.user as User;
 

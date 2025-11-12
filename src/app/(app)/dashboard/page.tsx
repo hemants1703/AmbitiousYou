@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { UserService } from "@/services/userService";
 import { AmbitionsService } from "@/services/ambitionsService";
 import { MotionWrapper } from "@/components/MotionWrapper";
+import { redirect, RedirectType } from "next/navigation";
 
 interface AmbitionSummary {
   id: string;
@@ -35,6 +36,10 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   // Session check helper, redirects to login if not authenticated
   const session = await confirmSession();
+
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
 
   const userData = session.user;
 

@@ -1,12 +1,15 @@
 import * as Card from "@/components/ui/card";
-import ProfileCard from "../../settings/ProfileCard";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
 import confirmSession from "@/lib/auth/confirmSession";
 import { UserService } from "@/services/userService";
+import { redirect, RedirectType } from "next/navigation";
+import ProfileCard from "../../settings/ProfileCard";
 
 export default async function ProfileTab() {
   const session = await confirmSession();
+
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
 
   const userData = await UserService.fetchUserById(session.user.id);
   if (userData instanceof Error) throw userData;

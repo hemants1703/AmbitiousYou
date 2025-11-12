@@ -56,6 +56,13 @@ export async function createNewAmbition(
     milestones: [],
   };
 
+  if (!session) {
+    return {
+      errors: { general: ["Unauthorized"] },
+      ...submittedFormData,
+    };
+  }
+
   if (submittedFormData.ambitionTrackingMethod === "task") {
     submittedFormData.tasks = JSON.parse(formData.get("tasks") as string);
   } else {

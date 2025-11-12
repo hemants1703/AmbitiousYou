@@ -15,9 +15,9 @@ export async function favouriteAmbitionAction(
 }> {
   try {
     // Get current authenticated user
-    const { user } = await confirmSession();
+    const session = await confirmSession();
 
-    if (!user) {
+    if (!session) {
       return {
         success: false,
         error: "Unauthorized",
@@ -28,7 +28,7 @@ export async function favouriteAmbitionAction(
     const [updatedAmbition] = await db
       .update(ambitions)
       .set({ isFavourited: favouriteValue })
-      .where(and(eq(ambitions.id, ambitionId), eq(ambitions.userId, user.id)))
+      .where(and(eq(ambitions.id, ambitionId), eq(ambitions.userId, session.user.id)))
       .returning();
 
     if (!updatedAmbition) {

@@ -9,6 +9,7 @@ import { ThemeSelector } from "@/components/ThemeSelector";
 import { Metadata } from "next";
 import ProfileTab from "@/features/(app)/settings/ProfileTab";
 import confirmSession from "@/lib/auth/confirmSession";
+import { redirect, RedirectType } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
 
 export default async function Settings() {
   const session = await confirmSession();
+
+  if (!session) {
+    redirect("/login", RedirectType.replace);
+  }
 
   return (
     <div className="mx-auto space-y-8 p-6 md:p-8 pt-6">
