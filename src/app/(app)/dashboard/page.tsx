@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AmbitionPriorityBadge } from "@/features/(app)/ambitions/components/AmbitionPriorityBadge";
 import confirmSession from "@/lib/auth/confirmSession";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
 import { AmbitionsService } from "@/services/ambitionsService";
@@ -69,7 +70,7 @@ export default async function DashboardPage() {
       id: ambition.id,
       name: ambition.ambitionName,
       color: ambition.ambitionColor,
-      percentage: ambition.ambitionPercentageCompleted,
+      percentage: ((completedTasksAndMilestones / totalTasksAndMilestones) * 100).toFixed(0),
       trackingMethod: ambition.ambitionTrackingMethod,
       completed,
       total,
@@ -222,22 +223,24 @@ export default async function DashboardPage() {
                   href={`/ambitions/${ambition.id}`}
                   prefetch={true}
                   key={ambition.id}
-                  className="border rounded-2xl p-5 flex flex-col gap-2 bg-background/80 shadow-sm hover:shadow-md transition-colors cursor-pointer"
+                  className="ambition-card active:scale-[0.99] active:translate-y-px active:brightness-80 border rounded-2xl p-5 flex flex-col gap-2 bg-background/80 shadow-sm hover:shadow-md transition-colors cursor-pointer"
+                  style={
+                    {
+                      "--ambition-color": ambition.color ?? "#64ccc5",
+                    } as React.CSSProperties
+                  }
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span
-                      className="block size-3 aspect-square rounded-full"
-                      style={{ background: ambition.color ?? "#64ccc5" }}
-                    />
-                    <span className="font-semibold text-lg tracking-tight line-clamp-1">
-                      {ambition.name}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-2">
+                      <span
+                        className="block size-3 aspect-square rounded-full"
+                        style={{ background: ambition.color ?? "#64ccc5" }}
+                      />
+                      <span className="font-semibold text-lg tracking-tight line-clamp-1">
+                        {ambition.name}
+                      </span>
                     </span>
-                    <Badge
-                      variant="default"
-                      className="ml-auto text-xs capitalize px-2 py-0.5 rounded-lg"
-                    >
-                      {ambition.priority}
-                    </Badge>
+                    <AmbitionPriorityBadge ambitionPriority={ambition.priority!} />
                   </div>
                   {/* <Progress value={ambition.percentage} className="h-2" /> */}
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">

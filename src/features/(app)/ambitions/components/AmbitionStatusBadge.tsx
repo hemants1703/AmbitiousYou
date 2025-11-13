@@ -12,9 +12,9 @@ export function AmbitionStatusBadge(props: AmbitionStatusBadgeProps) {
             ? "bg-green-400"
             : props.ambitionStatus === "completed"
               ? "bg-blue-500"
-              : props.ambitionStatus === "archived"
+              : props.ambitionStatus === "missed"
                 ? "bg-amber-500"
-                : "bg-gray-500"
+                : "bg-gray-200"
         }`}
       >
         {props.ambitionStatus.toUpperCase()}

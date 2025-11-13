@@ -8,6 +8,13 @@
       "when": 1761839839452,
       "tag": "0000_new_namorita",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1763053907635,
+      "tag": "0001_lonely_menace",
+      "breakpoints": true
     }
   ]
 }

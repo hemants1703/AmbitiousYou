@@ -60,12 +60,19 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
+      <div
+        className="space-y-2"
+        style={
+          {
+            "--ambition-color": props.ambition.ambitionColor,
+          } as React.CSSProperties
+        }
+      >
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium">Overall Progress</span>
           <span className="text-sm font-medium">{progressPercentage.toFixed(0)}%</span>
         </div>
-        <Progress value={progressPercentage} className="h-2" />
+        <Progress value={progressPercentage} className="h-1 *:bg-(--ambition-color)" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

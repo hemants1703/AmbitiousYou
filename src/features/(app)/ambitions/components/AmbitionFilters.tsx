@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export interface AmbitionFiltersState {
-  status?: "active" | "completed" | "archive";
+  status?: "active" | "completed" | "missed";
   priority?: "low" | "medium" | "high";
   search?: string;
 }
@@ -69,7 +69,7 @@ export default function AmbitionFilters() {
         <Select.SelectContent>
           <Select.SelectItem value="active">Active</Select.SelectItem>
           <Select.SelectItem value="completed">Completed</Select.SelectItem>
-          <Select.SelectItem value="archive">Archive</Select.SelectItem>
+          <Select.SelectItem value="missed">Missed</Select.SelectItem>
         </Select.SelectContent>
       </Select.Select>
 

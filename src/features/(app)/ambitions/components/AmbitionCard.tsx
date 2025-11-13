@@ -15,7 +15,8 @@ interface AmbitionCardProps {
 }
 
 export default function AmbitionCard(props: AmbitionCardProps) {
-  const progressPercentage = (props.completedTasksOrMilestones / props.totalTasksOrMilestones) * 100;
+  const progressPercentage =
+    (props.completedTasksOrMilestones / props.totalTasksOrMilestones) * 100;
 
   return (
     <div
@@ -53,10 +54,7 @@ export default function AmbitionCard(props: AmbitionCardProps) {
                   delay: 0.3 + 0.1 * props.index,
                 }}
               >
-                <Progress
-                  value={progressPercentage}
-                  className={`h-2 [&>[data-slot=progress-indicator]]:bg-[(${props.ambition.ambitionColor})]`}
-                />
+                <Progress value={progressPercentage} className="h-1 *:bg-(--ambition-color)" />
               </MotionWrapper>
             </div>
             <div className="flex items-center justify-between text-sm text-muted-foreground">

@@ -23,12 +23,12 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
           <div className="flex gap-2">
             <Button
               size="tiny"
-              className="text-shadow-md"
+              className="text-shadow-md dark:text-white"
               style={{
                 backgroundColor: props.ambition.ambitionColor,
               }}
             >
-              <IconPlus /> New Task
+              <IconPlus /> Add Task
             </Button>
           </div>
         </div>

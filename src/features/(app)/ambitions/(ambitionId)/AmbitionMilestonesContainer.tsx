@@ -20,9 +20,13 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
             <Card.CardTitle>Milestones Journey</Card.CardTitle>
             <Card.CardDescription>Progress through key checkpoints</Card.CardDescription>
           </div>
-          <Button size="tiny" className="text-shadow-md" style={{
-            backgroundColor: props.ambition.ambitionColor,
-          }}>
+          <Button
+            size="tiny"
+            className="text-shadow-md dark:text-white"
+            style={{
+              backgroundColor: props.ambition.ambitionColor,
+            }}
+          >
             <IconPlus /> Add Milestone
           </Button>
         </div>
@@ -58,7 +62,10 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
                     </Badge>
                   ) : (
                     <Button variant="outline" size="tiny" className="w-fit mt-2 text-xs" asChild>
-                      <Link href={`/ambitions/${props.ambition.id}?mark_milestone_as_completed=${milestone.id}`} prefetch={true}>
+                      <Link
+                        href={`/ambitions/${props.ambition.id}?mark_milestone_as_completed=${milestone.id}`}
+                        prefetch={true}
+                      >
                         <IconCheck className="text-green-500" />
                         Mark as Complete
                       </Link>

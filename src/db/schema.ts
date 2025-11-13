@@ -82,7 +82,7 @@ export const ambitions = pgTable("ambitions", {
   ambitionEndDate: timestamp("ambition_end_date").notNull(),
   ambitionCompletionDate: timestamp("ambition_completion_date"),
   ambitionStatus: text("ambition_status")
-    .$type<"active" | "completed" | "archived">()
+    .$type<"active" | "completed" | "missed">()
     .default("active"),
   ambitionPriority: varchar("ambition_priority", { length: 255 })
     .$type<"low" | "medium" | "high">()

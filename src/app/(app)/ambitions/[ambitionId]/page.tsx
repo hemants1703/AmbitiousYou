@@ -101,7 +101,14 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
           )}
 
           {searchParams.mark_milestone_as_completed && (
-            <MarkMilestoneAsCompletedDialog milestone={milestones.find(milestone => milestone.id === searchParams.mark_milestone_as_completed) as Milestone} ambitionId={ambition.id} />
+            <MarkMilestoneAsCompletedDialog
+              milestone={
+                milestones.find(
+                  (milestone) => milestone.id === searchParams.mark_milestone_as_completed
+                ) as Milestone
+              }
+              ambitionId={ambition.id}
+            />
           )}
         </div>
 

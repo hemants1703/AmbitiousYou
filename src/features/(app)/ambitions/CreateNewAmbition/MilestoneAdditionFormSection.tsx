@@ -196,7 +196,7 @@ export default function MilestoneAdditionFormSection(props: MilestoneAdditionFor
                   onClick={addMilestone}
                   type="button"
                   size="tiny"
-                  className="self-end text-shadow-md"
+                  className="self-end text-shadow-md dark:text-white"
                   style={{
                     backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
                   }}
