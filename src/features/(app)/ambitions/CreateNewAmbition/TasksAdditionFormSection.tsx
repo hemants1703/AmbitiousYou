@@ -165,9 +165,15 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
                     </Popover.PopoverContent>
                   </Popover.Popover>
                 </div>
-                <Button onClick={addTask} type="button" size="tiny" className="self-end text-shadow-md" style={{
-                  backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
-                }}>
+                <Button
+                  onClick={addTask}
+                  type="button"
+                  size="tiny"
+                  className="self-end text-shadow-md"
+                  style={{
+                    backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
+                  }}
+                >
                   <IconPlus className="h-4 w-4 mr-1" /> Add Task
                 </Button>
               </div>

@@ -16,7 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import "../../styles/cynthiaMenuItemAnimation.css";
+import "@/styles/cynthiaMenuItemAnimation.css";
 
 const mainNavItems = [
   {
@@ -34,11 +34,11 @@ const mainNavItems = [
     href: "/ambitions/new",
     icon: IconCircleDashedPlus,
   },
-  {
-    title: "Cynthia",
-    href: "/cynthia",
-    icon: IconSparkles,
-  },
+  // {
+  //   title: "Cynthia",
+  //   href: "/cynthia",
+  //   icon: IconSparkles,
+  // },
 ];
 
 const bottomNavItems = [

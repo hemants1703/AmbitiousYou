@@ -1,36 +1,19 @@
-import confirmSession from "@/lib/auth/confirmSession";
-import { motivationalQuotes } from "@/lib/motivationalQuotes";
-import { Metadata } from "next";
+import { MotionWrapper } from "@/components/MotionWrapper";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
-import { PlusCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { UserService } from "@/services/userService";
+import confirmSession from "@/lib/auth/confirmSession";
+import { motivationalQuotes } from "@/lib/motivationalQuotes";
 import { AmbitionsService } from "@/services/ambitionsService";
-import { MotionWrapper } from "@/components/MotionWrapper";
+import { InfoCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Metadata } from "next";
+import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
-
-interface AmbitionSummary {
-  id: string;
-  name: string;
-  color: string;
-  percentage: number;
-  trackingMethod: "task" | "milestone";
-  completed: number;
-  total: number;
-  priority: string;
-}
-
-interface MotivationalQuote {
-  quote: string;
-  author: string;
-}
 
 export const metadata: Metadata = {
   title: "Dashboard",
+  description: "Dashboard for your ambitions and progress",
 };
 
 export default async function DashboardPage() {
@@ -43,24 +26,16 @@ export default async function DashboardPage() {
 
   const userData = session.user;
 
-  // Initialize services// Fetch data using services
-  const profileResult = await UserService.fetchUserById(userData.id);
-  const ambitionsResult = await AmbitionsService.fetchUserAmbitions(userData.id);
-  const tasksResult = await AmbitionsService.fetchUserTasks(userData.id);
-  const milestonesResult = await AmbitionsService.fetchUserMilestones(userData.id);
+  // Fetch data using services
+  const ambitions = await AmbitionsService.fetchUserAmbitions(userData.id);
+  const tasks = await AmbitionsService.fetchUserTasks(userData.id);
+  const milestones = await AmbitionsService.fetchUserMilestones(userData.id);
 
   // Handle errors - throw to trigger error page
-  if (profileResult instanceof Error) throw profileResult;
-  if (ambitionsResult instanceof Error) throw ambitionsResult;
-  if (tasksResult instanceof Error) throw tasksResult;
-  if (milestonesResult instanceof Error) throw milestonesResult;
+  if (ambitions instanceof Error) throw ambitions;
+  if (tasks instanceof Error) throw tasks;
+  if (milestones instanceof Error) throw milestones;
 
-  const ambitions = ambitionsResult;
-  const tasks = tasksResult;
-  const milestones = milestonesResult;
-
-  const fullName = userData.name;
-  const firstName = fullName.split(" ")[0];
   const totalTasksAndMilestones = tasks.length + milestones.length;
   const completedTasksAndMilestones =
     tasks.filter((task) => task.taskCompleted === true).length +
@@ -115,7 +90,7 @@ export default async function DashboardPage() {
           <div className="relative z-10 flex items-center justify-between gap-4 flex-wrap">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
-                {greeting} <span className="text-primary">{firstName}</span>,
+                {greeting} <span className="text-primary">{userData.name.split(" ")[0]}</span>,
               </h1>
               <p className="text-lg text-muted-foreground font-medium">
                 Here&apos;s your progress at a glance.
@@ -241,38 +216,40 @@ export default async function DashboardPage() {
               No active ambitions yet. Start by creating one!
             </div>
           ) : (
-            <ScrollArea className="max-h-[350px] pr-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {ambitionsSummary.map((ambition) => (
-                  <div
-                    key={ambition.id}
-                    className="border rounded-2xl p-5 flex flex-col gap-2 bg-background/80 shadow-sm"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span
-                        className="block w-3 h-3 rounded-full"
-                        style={{ background: ambition.color ?? "#64ccc5" }}
-                      />
-                      <span className="font-semibold text-lg tracking-tight">{ambition.name}</span>
-                      <Badge
-                        variant="outline"
-                        className="ml-auto text-xs capitalize px-2 py-0.5 rounded-lg"
-                      >
-                        {ambition.priority}
-                      </Badge>
-                    </div>
-                    <Progress value={ambition.percentage} className="h-2" />
-                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                      <span>
-                        {ambition.completed}/{ambition.total}{" "}
-                        {ambition.trackingMethod === "task" ? "tasks" : "milestones"} completed
-                      </span>
-                      <span>{ambition.percentage}%</span>
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {ambitionsSummary.map((ambition) => (
+                <Link
+                  href={`/ambitions/${ambition.id}`}
+                  prefetch={true}
+                  key={ambition.id}
+                  className="border rounded-2xl p-5 flex flex-col gap-2 bg-background/80 shadow-sm hover:shadow-md transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span
+                      className="block size-3 aspect-square rounded-full"
+                      style={{ background: ambition.color ?? "#64ccc5" }}
+                    />
+                    <span className="font-semibold text-lg tracking-tight line-clamp-1">
+                      {ambition.name}
+                    </span>
+                    <Badge
+                      variant="default"
+                      className="ml-auto text-xs capitalize px-2 py-0.5 rounded-lg"
+                    >
+                      {ambition.priority}
+                    </Badge>
                   </div>
-                ))}
-              </div>
-            </ScrollArea>
+                  {/* <Progress value={ambition.percentage} className="h-2" /> */}
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>
+                      {ambition.completed}/{ambition.total}{" "}
+                      {ambition.trackingMethod === "task" ? "tasks" : "milestones"} completed
+                    </span>
+                    <span>{ambition.percentage}%</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           )}
         </MotionWrapper>
       </div>

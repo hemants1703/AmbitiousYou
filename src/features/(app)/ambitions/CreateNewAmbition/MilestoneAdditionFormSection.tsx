@@ -192,7 +192,15 @@ export default function MilestoneAdditionFormSection(props: MilestoneAdditionFor
                     Mark as completed
                   </Label>
                 </div>
-                <Button onClick={addMilestone} type="button" size="tiny" className="self-end">
+                <Button
+                  onClick={addMilestone}
+                  type="button"
+                  size="tiny"
+                  className="self-end text-shadow-md"
+                  style={{
+                    backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
+                  }}
+                >
                   <IconPlus className="h-4 w-4 mr-1" /> Add Milestone
                 </Button>
               </div>

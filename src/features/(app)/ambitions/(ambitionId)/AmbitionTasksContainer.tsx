@@ -4,6 +4,7 @@ import { Ambition, Task } from "@/db/schema";
 import { IconCalendar, IconCheck, IconEdit, IconPlus } from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
+import TaskToggler from "./TaskToggler";
 
 interface AmbitionTasksContainerProps {
   ambition: Ambition;
@@ -20,9 +21,13 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
             <Card.CardDescription>Manage tasks for this ambition</Card.CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button size="tiny" className="text-shadow-md" style={{
-              backgroundColor: props.ambition.ambitionColor,
-            }}>
+            <Button
+              size="tiny"
+              className="text-shadow-md"
+              style={{
+                backgroundColor: props.ambition.ambitionColor,
+              }}
+            >
               <IconPlus /> New Task
             </Button>
           </div>
@@ -33,11 +38,7 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
           {props.tasks.map((task) => (
             <div key={task.id} className="flex items-center justify-between p-3 border rounded-md">
               <div className="flex items-center gap-3">
-                <div
-                  className={`h-5 w-5 rounded-full border flex items-center justify-center ${task.taskCompleted ? "bg-primary border-primary" : "border-input"}`}
-                >
-                  {task.taskCompleted && <IconCheck className="h-3 w-3 text-primary-foreground" />}
-                </div>
+                <TaskToggler task={task} ambitionId={props.ambition.id} />
                 <div className="flex flex-col">
                   <span className={task.taskCompleted ? "line-through text-muted-foreground" : ""}>
                     {task.task}
@@ -52,13 +53,16 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
                   <IconCalendar className="h-3.5 w-3.5 inline mr-1" />
                   <span>Due {format(new Date(task.taskDeadline), "MMM d")}</span>
                 </div>
-                {!task.taskCompleted &&
+                {!task.taskCompleted && (
                   <Button variant="outline" size="icon" className="rounded-full size-8 p-0">
-                    <Link href={`/ambitions/${props.ambition.id}?edit_task=${task.id}`} prefetch={true}>
+                    <Link
+                      href={`/ambitions/${props.ambition.id}?edit_task=${task.id}`}
+                      prefetch={true}
+                    >
                       <IconEdit />
                     </Link>
                   </Button>
-                }
+                )}
               </div>
             </div>
           ))}

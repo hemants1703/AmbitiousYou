@@ -65,8 +65,22 @@ export async function createNewAmbition(
 
   if (submittedFormData.ambitionTrackingMethod === "task") {
     submittedFormData.tasks = JSON.parse(formData.get("tasks") as string);
+
+    if (submittedFormData.tasks.length === 0) {
+      return {
+        errors: { tasks: ["Tasks are required, Please add at least one task"] },
+        ...submittedFormData,
+      };
+    }
   } else {
     submittedFormData.milestones = JSON.parse(formData.get("milestones") as string);
+
+    if (submittedFormData.milestones.length === 0) {
+      return {
+        errors: { milestones: ["Milestones are required, Please add at least one milestone"] },
+        ...submittedFormData,
+      };
+    }
   }
 
   const validatedData = ambitionValidationSchema.safeParse(submittedFormData);

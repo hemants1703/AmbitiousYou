@@ -1,4 +1,4 @@
-import { SidebarController } from "@/components/dashboard/SidebarController";
+import { SidebarController } from "@/features/(app)/dashboard/SidebarController";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import confirmSession from "@/lib/auth/confirmSession";
 import { User } from "better-auth";

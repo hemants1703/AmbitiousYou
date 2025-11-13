@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Header } from "@/components/dashboard/Header";
+import { Sidebar } from "@/features/(app)/dashboard/Sidebar";
+import { Header } from "@/features/(app)/dashboard/Header";
 import { User } from "better-auth";
 
 interface SidebarControllerProps {

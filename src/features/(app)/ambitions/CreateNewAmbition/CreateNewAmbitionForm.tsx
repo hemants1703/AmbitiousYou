@@ -79,9 +79,19 @@ export default function CreateNewAmbitionForm() {
   // Handle form errors
   useEffect(() => {
     if (formErrors?.errors) {
+      let formError = "";
+      if (formErrors.errors.tasks) {
+        formError = formErrors.errors.tasks.join(", ");
+      } else if (formErrors.errors.milestones) {
+        formError = formErrors.errors.milestones.join(", ");
+      }
+
       toast.error("Error", {
         description:
-          "There was an error with your submission. Please check the form and try again.",
+          formError.length > 0
+            ? formError
+            : "There was an error with your submission. Please check the form and try again.",
+        closeButton: true,
       });
     }
   }, [formErrors?.errors]);
