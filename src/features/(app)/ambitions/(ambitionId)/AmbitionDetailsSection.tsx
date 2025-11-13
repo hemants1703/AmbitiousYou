@@ -130,7 +130,7 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
             <p className="text-sm text-muted-foreground">Status</p>
             <p className="font-medium capitalize flex items-center gap-1">
               <span
-                className={`h-2 w-2 rounded-md ${props.ambition.ambitionStatus === "active" ? "bg-green-500 animate-pulse" : "bg-amber-500"}`}
+                className={`h-2 w-2 rounded-md ${props.ambition.ambitionStatus === "active" ? "bg-green-400 animate-pulse" : props.ambition.ambitionStatus === "completed" ? "bg-blue-500" : props.ambition.ambitionStatus === "missed" ? "bg-amber-500" : "bg-gray-200"}`}
               ></span>
               {props.ambition.ambitionStatus}
             </p>

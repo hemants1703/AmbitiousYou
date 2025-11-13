@@ -5,6 +5,7 @@ import { IconCalendar, IconCheck, IconEdit, IconPlus } from "@tabler/icons-react
 import { format } from "date-fns";
 import Link from "next/link";
 import TaskToggler from "./TaskToggler";
+import { cn } from "@/lib/utils";
 
 interface AmbitionTasksContainerProps {
   ambition: Ambition;
@@ -34,11 +35,32 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
         </div>
       </Card.CardHeader>
       <Card.CardContent>
-        <div className="space-y-3">
+        <div className="space-y-2">
           {props.tasks.map((task) => (
-            <div key={task.id} className="flex items-center justify-between p-3 border rounded-md">
+            <div
+              key={task.id}
+              className={cn(
+                "flex items-center justify-between p-3 border rounded-md",
+
+                // Background color based on task completion status
+                task.taskCompleted
+                  ? "bg-green-500/10"
+                  : props.ambition.ambitionStatus === "missed"
+                    ? "bg-amber-500/10"
+                    : "",
+
+                // Border color based on task completion status
+                task.taskCompleted
+                  ? "border-green-500"
+                  : props.ambition.ambitionStatus === "missed"
+                    ? "border-amber-500"
+                    : ""
+              )}
+            >
               <div className="flex items-center gap-3">
-                <TaskToggler task={task} ambitionId={props.ambition.id} />
+                {props.ambition.ambitionStatus !== "missed" && (
+                  <TaskToggler task={task} ambitionId={props.ambition.id} />
+                )}
                 <div className="flex flex-col">
                   <span className={task.taskCompleted ? "line-through text-muted-foreground" : ""}>
                     {task.task}

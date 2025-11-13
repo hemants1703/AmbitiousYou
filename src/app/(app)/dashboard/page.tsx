@@ -102,7 +102,7 @@ export default async function DashboardPage() {
               variant="outline"
               className="gap-2 flex justify-center items-center px-6 py-3 text-lg font-semibold rounded-xl border border-primary/30 bg-background hover:bg-primary/10 transition-colors"
             >
-              <Link prefetch={true} href="/ambitions/new">
+              <Link prefetch={true} href="/ambitions/new?ref=dashboard">
                 <PlusCircledIcon className="h-5 w-5" />
                 New Ambition
               </Link>
@@ -220,7 +220,7 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {ambitionsSummary.map((ambition) => (
                 <Link
-                  href={`/ambitions/${ambition.id}`}
+                  href={`/ambitions/${ambition.id}?ref=dashboard`}
                   prefetch={true}
                   key={ambition.id}
                   className="ambition-card active:scale-[0.99] active:translate-y-px active:brightness-80 border rounded-2xl p-5 flex flex-col gap-2 bg-background/80 shadow-sm hover:shadow-md transition-colors cursor-pointer"

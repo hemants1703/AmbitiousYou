@@ -52,6 +52,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   const searchParams: {
     delete_ambition?: string | undefined;
     mark_milestone_as_completed?: string | undefined;
+    ref?: string | undefined;
   } = await props.searchParams;
   const ambition: Ambition | Error = await getAmbitionData(ambitionId as string, session.user.id);
   if (ambition instanceof Error) throw ambition;
@@ -74,7 +75,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
         {/* HEADER - Static content */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-3">
-            <Link prefetch={true} href="/ambitions">
+            <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
               <IconChevronLeft className="size-8 bg-foreground/10 rounded-full p-2" />
             </Link>
             <div>

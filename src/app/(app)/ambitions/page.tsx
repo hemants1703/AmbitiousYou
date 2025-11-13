@@ -62,7 +62,7 @@ export default async function AmbitionsPage(props: AmbitionsPageProps) {
         <Button asChild size="sm" variant="ay">
           <Link
             prefetch={true}
-            href={`/ambitions/new`}
+            href={`/ambitions/new?ref=ambitions`}
             className="md:ml-0 flex justify-center items-center gap-1"
           >
             <IconCirclePlus2 className="h-4 w-4" />

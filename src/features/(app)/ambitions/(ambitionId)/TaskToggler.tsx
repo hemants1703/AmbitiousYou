@@ -2,9 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Task } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { IconCheck } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { toggleTask } from "../actions";
+import { useState } from "react";
 
 interface TaskTogglerProps {
   task: Task;
@@ -12,7 +14,10 @@ interface TaskTogglerProps {
 }
 
 export default function TaskToggler(props: TaskTogglerProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleToggleTask = async () => {
+    setIsLoading(true);
     toast.promise(toggleTask(props.task.id), {
       loading: "Toggling task...",
       success: (data) => {
@@ -20,6 +25,7 @@ export default function TaskToggler(props: TaskTogglerProps) {
       },
       error: (error) => error,
     });
+    setIsLoading(false);
   };
 
   return (
@@ -32,8 +38,17 @@ export default function TaskToggler(props: TaskTogglerProps) {
         borderColor: props.task.taskCompleted ? "var(--color-primary)" : "var(--color-input)",
       }}
       onClick={handleToggleTask}
+      disabled={isLoading}
     >
-      {props.task.taskCompleted && <IconCheck className="h-3 w-3 text-primary-foreground" />}
+      {props.task.taskCompleted && (
+        <IconCheck
+          className={cn(
+            "h-3 w-3 text-primary-foreground",
+            props.task.taskCompleted ? "text-green-500" : "text-gray-200"
+          )}
+          strokeWidth={4}
+        />
+      )}
     </Button>
   );
 }

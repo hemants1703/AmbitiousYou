@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { IconCalendar, IconCheck, IconChevronLeft, IconInfoCircle } from "@tabler/icons-react";
 import { format, isBefore, startOfToday } from "date-fns";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { createNewAmbition, CreateNewAmbitionFormActionState } from "./actions";
@@ -36,6 +36,7 @@ const ambitionColorOptions = [
 
 export default function CreateNewAmbitionForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formState, setFormState] = useState<CreateNewAmbitionFormActionState>(() => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem("ambitionFormData");
@@ -308,11 +309,16 @@ export default function CreateNewAmbitionForm() {
           <Button asChild variant="ghost" size="tiny">
             <Link
               prefetch={true}
-              href="/ambitions"
+              href={`/${searchParams.get("ref")}`}
               className="gap-1 flex justify-center items-center"
             >
               <IconChevronLeft className="h-4 w-4" />
-              Back to Ambitions
+              Back to{" "}
+              {searchParams.get("ref") === "dashboard"
+                ? "Dashboard"
+                : searchParams.get("ref") === "ambitions"
+                  ? "Ambitions"
+                  : "Ambitions"}
             </Link>
           </Button>
         </div>
