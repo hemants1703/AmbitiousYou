@@ -93,7 +93,7 @@ export default async function Home() {
                   <div className="w-3 h-3 rounded-full bg-green-400"></div>
                 </div>
                 <div className="flex-1 bg-background/70 rounded-full h-6 px-3 text-xs flex items-center justify-center text-muted-foreground">
-                  app.ambitiousyou.pro
+                  ambitiousyou.pro/dashboard
                 </div>
               </div>
 

@@ -11,6 +11,7 @@ import { InfoCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
+import "@/styles/AmbitionCard.css";
 
 export const metadata: Metadata = {
   title: "Dashboard",

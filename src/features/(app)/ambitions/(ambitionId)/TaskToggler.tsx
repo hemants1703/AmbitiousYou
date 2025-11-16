@@ -31,11 +31,11 @@ export default function TaskToggler(props: TaskTogglerProps) {
   return (
     <Button
       size="icon"
-      variant="outline"
-      className={`h-5 w-5 cursor-pointer rounded-full border flex items-center justify-center ${props.task.taskCompleted ? "bg-primary border-primary" : "border-input"}`}
+      variant="ghost"
+      className="h-5 w-5 cursor-pointer rounded-full border flex items-center justify-center"
       style={{
-        backgroundColor: props.task.taskCompleted ? "var(--color-primary)" : "var(--color-input)",
-        borderColor: props.task.taskCompleted ? "var(--color-primary)" : "var(--color-input)",
+        backgroundColor: props.task.taskCompleted ? "" : "var(--color-input)",
+        borderColor: props.task.taskCompleted ? "" : "var(--color-input)",
       }}
       onClick={handleToggleTask}
       disabled={isLoading}

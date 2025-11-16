@@ -1,5 +1,6 @@
-import { Ambition, Milestone, Task } from "@/db/schema";
+import { Ambition, Milestone, Note, Task } from "@/db/schema";
 import AmbitionDetailsSection from "@/features/(app)/ambitions/(ambitionId)/AmbitionDetailsSection";
+import MarkMilestoneAsCompletedDialog from "@/features/(app)/ambitions/(ambitionId)/MarkMilestoneAsCompletedDialog";
 import { AmbitionPriorityBadge } from "@/features/(app)/ambitions/components/AmbitionPriorityBadge";
 import AmbitionOptionsDropdown from "@/features/(app)/ambitions/view/AmbitionOptionsDropdown";
 import { DeleteAmbitionDialog } from "@/features/(app)/ambitions/view/DeleteAmbitionDialog";
@@ -9,9 +10,8 @@ import { StarFilledIcon } from "@radix-ui/react-icons";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { cache } from "react";
 import { redirect, RedirectType } from "next/navigation";
-import MarkMilestoneAsCompletedDialog from "@/features/(app)/ambitions/(ambitionId)/MarkMilestoneAsCompletedDialog";
+import { cache } from "react";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -58,7 +58,6 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   if (ambition instanceof Error) throw ambition;
 
   let tasks: Task[] | Error = [];
-
   let milestones: Milestone[] | Error = [];
 
   if (ambition.ambitionTrackingMethod === "task") {
@@ -68,6 +67,12 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
     milestones = await AmbitionsService.fetchAmbitionMilestones(ambition.id, session.user.id);
     if (milestones instanceof Error) throw milestones;
   }
+
+  const notes: Note[] | Error = await AmbitionsService.fetchAmbitionNotes(
+    ambitionId as string,
+    session.user.id
+  );
+  if (notes instanceof Error) throw notes;
 
   return (
     <section className={`p-6 md:p-8 pt-6 min-h-screen`}>
@@ -118,6 +123,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
           ambition={ambition}
           tasks={tasks}
           milestones={milestones}
+          notes={notes}
         />
       </div>
     </section>

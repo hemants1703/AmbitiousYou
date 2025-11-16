@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import Link from "next/link";
 import TaskToggler from "./TaskToggler";
 import { cn } from "@/lib/utils";
+import React from "react";
+import CreateNewTaskDialog from "./CreateNewTask/CreateNewTaskDialog";
 
 interface AmbitionTasksContainerProps {
   ambition: Ambition;
@@ -22,15 +24,12 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
             <Card.CardDescription>Manage tasks for this ambition</Card.CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button
-              size="tiny"
-              className="text-shadow-md dark:text-white"
-              style={{
-                backgroundColor: props.ambition.ambitionColor,
-              }}
-            >
-              <IconPlus /> Add Task
-            </Button>
+            <CreateNewTaskDialog
+              ambitionId={props.ambition.id}
+              ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
+              ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
+              ambitionColor={props.ambition.ambitionColor}
+            />
           </div>
         </div>
       </Card.CardHeader>
@@ -39,8 +38,13 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
           {props.tasks.map((task) => (
             <div
               key={task.id}
+              style={
+                {
+                  "--ambition-color": props.ambition.ambitionColor,
+                } as React.CSSProperties
+              }
               className={cn(
-                "flex items-center justify-between p-3 border rounded-md",
+                `flex items-center justify-between p-3 border rounded-md border-(--ambition-color) bg-(--ambition-color)/10 hover:bg-(--ambition-color)/20  transition-colors duration-75 ease-in-out`,
 
                 // Background color based on task completion status
                 task.taskCompleted
@@ -65,8 +69,22 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
                   <span className={task.taskCompleted ? "line-through text-muted-foreground" : ""}>
                     {task.task}
                   </span>
-                  <span className="text-sm text-muted-foreground truncate max-w-[100px]">
-                    {task.taskDescription}
+                  <span
+                    className={cn(
+                      "text-sm text-muted-foreground truncate max-w-96",
+                      task.taskCompleted ? "line-through" : ""
+                    )}
+                  >
+                    {task.taskDescription && (
+                      <span
+                        className={cn(
+                          "text-sm text-muted-foreground truncate max-w-full",
+                          task.taskCompleted ? "line-through" : ""
+                        )}
+                      >
+                        {task.taskDescription}
+                      </span>
+                    )}
                   </span>
                 </div>
               </div>

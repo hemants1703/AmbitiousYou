@@ -128,6 +128,19 @@ export const milestones = pgTable("milestones", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const notes = pgTable("notes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: varchar("user_id", { length: 255 })
+    .references(() => user.id, { onDelete: "cascade" })
+    .notNull(),
+  ambitionId: uuid("ambition_id")
+    .references(() => ambitions.id, { onDelete: "cascade" })
+    .notNull(),
+  note: text("note").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Export types
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
@@ -139,3 +152,5 @@ export type Task = typeof tasks.$inferSelect;
 export type NewTask = typeof tasks.$inferInsert;
 export type Milestone = typeof milestones.$inferSelect;
 export type NewMilestone = typeof milestones.$inferInsert;
+export type Note = typeof notes.$inferSelect;
+export type NewNote = typeof notes.$inferInsert;

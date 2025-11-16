@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { ambitions, tasks, milestones } from "@/db/schema";
+import { ambitions, tasks, milestones, Note, notes, NewNote } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { Ambition, NewAmbition, Task, NewTask, Milestone, NewMilestone } from "@/db/schema";
 import { AmbitionFiltersState } from "@/features/(app)/ambitions/components/AmbitionFilters";
@@ -272,6 +272,72 @@ export class AmbitionsService {
 
       if (!result) {
         reject(new Error("Milestone not found"));
+      }
+
+      resolve(true);
+    });
+  }
+
+  // Fetch notes
+  static async fetchAmbitionNotes(ambitionId: string, userId: string): Promise<Note[] | Error> {
+    return new Promise(async (resolve, reject) => {
+      const result = await db
+        .select()
+        .from(notes)
+        .where(and(eq(notes.ambitionId, ambitionId), eq(notes.userId, userId)));
+
+      if (!result) {
+        reject(new Error("No notes found for this ambition"));
+      }
+
+      resolve(result);
+    });
+  }
+
+  // Create a new note
+  static async createNote(noteData: Note): Promise<Note | Error> {
+    return new Promise(async (resolve, reject) => {
+      const result = await db.insert(notes).values(noteData).returning();
+
+      if (!result) {
+        reject(new Error("Note not created"));
+      }
+
+      resolve(result[0]);
+    });
+  }
+
+  // Update a note
+  static async updateNote(
+    noteId: string,
+    userId: string,
+    updates: Partial<NewNote>
+  ): Promise<Note | Error> {
+    return new Promise(async (resolve, reject) => {
+      const result = await db
+        .update(notes)
+        .set({ ...updates, updatedAt: new Date() })
+        .where(and(eq(notes.id, noteId), eq(notes.userId, userId)))
+        .returning();
+
+      if (!result) {
+        reject(new Error("Note not found"));
+      }
+
+      resolve(result[0]);
+    });
+  }
+
+  // Delete a note
+  static async deleteNote(noteId: string, userId: string): Promise<boolean | Error> {
+    return new Promise(async (resolve, reject) => {
+      const result = await db
+        .delete(notes)
+        .where(and(eq(notes.id, noteId), eq(notes.userId, userId)))
+        .returning({ id: notes.id });
+
+      if (!result) {
+        reject(new Error("Note not found"));
       }
 
       resolve(true);

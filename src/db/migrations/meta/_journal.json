@@ -15,6 +15,13 @@
       "when": 1763053907635,
       "tag": "0001_lonely_menace",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763130918899,
+      "tag": "0002_boring_human_cannonball",
+      "breakpoints": true
     }
   ]
 }
