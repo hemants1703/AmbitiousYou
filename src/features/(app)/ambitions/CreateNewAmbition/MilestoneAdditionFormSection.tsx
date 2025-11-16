@@ -12,7 +12,7 @@ import {
   IconCalendar,
   IconCircle,
   IconCircleCheck,
-  IconPlus,
+  IconCirclePlusFilled,
   IconX,
 } from "@tabler/icons-react";
 import { format, isAfter, isBefore, startOfToday } from "date-fns";
@@ -201,7 +201,7 @@ export default function MilestoneAdditionFormSection(props: MilestoneAdditionFor
                     backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
                   }}
                 >
-                  <IconPlus className="h-4 w-4 mr-1" /> Add Milestone
+                  <IconCirclePlusFilled className="h-4 w-4 mr-1" /> Create Milestone
                 </Button>
               </div>
 

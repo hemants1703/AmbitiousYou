@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { IconLoader2, IconPlus } from "@tabler/icons-react";
+import { IconLoader2, IconCirclePlusFilled } from "@tabler/icons-react";
 import { useActionState, useEffect, useState } from "react";
 import { createNewNote, CreateNewNoteFormActionState } from "./actions";
 import { toast } from "sonner";
@@ -62,7 +62,7 @@ export default function CreateNewNoteForm(props: CreateNewNoteFormProps) {
           </span>
         ) : (
           <span className="flex items-center gap-2">
-            <IconPlus />
+            <IconCirclePlusFilled />
             Create Note
           </span>
         )}

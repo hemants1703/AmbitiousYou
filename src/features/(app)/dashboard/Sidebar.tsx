@@ -3,11 +3,11 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import "@/styles/cynthiaMenuItemAnimation.css";
 import {
-  IconCircleDashedPlus,
+  IconCirclePlusFilled,
   IconDashboard,
   IconSettings,
-  IconSparkles,
   IconSquareToggle,
   IconTarget,
 } from "@tabler/icons-react";
@@ -16,7 +16,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import "@/styles/cynthiaMenuItemAnimation.css";
 
 const mainNavItems = [
   {
@@ -32,7 +31,7 @@ const mainNavItems = [
   {
     title: "Create Ambition",
     href: "/ambitions/new",
-    icon: IconCircleDashedPlus,
+    icon: IconCirclePlusFilled,
   },
   // {
   //   title: "Cynthia",

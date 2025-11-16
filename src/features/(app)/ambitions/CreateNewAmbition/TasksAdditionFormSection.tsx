@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import * as Popover from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { IconCalendar, IconList, IconPlus, IconX } from "@tabler/icons-react";
+import { IconCalendar, IconList, IconCirclePlusFilled, IconX } from "@tabler/icons-react";
 import { format, isAfter, isBefore, startOfToday } from "date-fns";
 import { useState } from "react";
 import { CreateNewAmbitionFormActionState } from "./actions";
@@ -174,7 +174,7 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
                     backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
                   }}
                 >
-                  <IconPlus className="h-4 w-4 mr-1" /> Add Task
+                  <IconCirclePlusFilled className="h-4 w-4 mr-1" /> Create Task
                 </Button>
               </div>
 

@@ -306,21 +306,23 @@ export default function CreateNewAmbitionForm() {
           <Button type="button" variant="outline" size="tiny" onClick={clearFormData}>
             Clear Form
           </Button>
-          <Button asChild variant="ghost" size="tiny">
-            <Link
-              prefetch={true}
-              href={`/${searchParams.get("ref")}`}
-              className="gap-1 flex justify-center items-center"
-            >
-              <IconChevronLeft className="h-4 w-4" />
-              Back to{" "}
-              {searchParams.get("ref") === "dashboard"
-                ? "Dashboard"
-                : searchParams.get("ref") === "ambitions"
-                  ? "Ambitions"
-                  : "Ambitions"}
-            </Link>
-          </Button>
+          {searchParams.get("ref") && (
+            <Button asChild variant="ghost" size="tiny">
+              <Link
+                prefetch={true}
+                href={`/${searchParams.get("ref")}`}
+                className="gap-1 flex justify-center items-center"
+              >
+                <IconChevronLeft className="h-4 w-4" />
+                Back to{" "}
+                {searchParams.get("ref") === "dashboard"
+                  ? "Dashboard"
+                  : searchParams.get("ref") === "ambitions"
+                    ? "Ambitions"
+                    : "Ambitions"}
+              </Link>
+            </Button>
+          )}
         </div>
       </MotionWrapper>
 

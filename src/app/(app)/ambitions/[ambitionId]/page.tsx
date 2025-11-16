@@ -79,10 +79,20 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
       <div className="space-y-6 max-w-7xl mx-auto w-full">
         {/* HEADER - Static content */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="flex items-center gap-3">
-            <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
-              <IconChevronLeft className="size-8 bg-foreground/10 rounded-full p-2" />
-            </Link>
+          <div className="flex sm:flex-row flex-col justify-start sm:justify-start items-start sm:items-center gap-3 max-sm:w-full">
+            <div className="flex items-center justify-between gap-3 max-sm:w-full">
+              <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
+                <IconChevronLeft className="size-8 bg-foreground/10 rounded-full p-2" />
+              </Link>
+
+              <div className="block sm:hidden">
+                <AmbitionOptionsDropdown
+                  ambitionId={ambition.id}
+                  userId={session.user.id}
+                  isFavourited={ambition.isFavourited ?? false}
+                />
+              </div>
+            </div>
             <div>
               <h1 className="text-3xl font-bold mt-1 flex items-center gap-1">
                 {ambition.ambitionName}{" "}
@@ -95,11 +105,13 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
           </div>
 
           {/* Interactive actions - Client component */}
-          <AmbitionOptionsDropdown
-            ambitionId={ambition.id}
-            userId={ambition.userId}
-            isFavourited={ambition.isFavourited ?? false}
-          />
+          <div className="hidden sm:block">
+            <AmbitionOptionsDropdown
+              ambitionId={ambition.id}
+              userId={session.user.id}
+              isFavourited={ambition.isFavourited ?? false}
+            />
+          </div>
 
           {/* DELETE AMBITION DIALOG */}
           {searchParams.delete_ambition === "true" && (

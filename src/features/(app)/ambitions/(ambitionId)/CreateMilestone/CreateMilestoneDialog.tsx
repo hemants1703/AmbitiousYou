@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import * as Dialog from "@/components/ui/dialog";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { useState } from "react";
-import CreateNewTaskForm from "./CreateNewTaskForm";
+import CreateMilestoneForm from "./CreateMilestoneForm";
 
-interface CreateNewTaskDialogProps {
+interface CreateMilestoneDialogProps {
   ambitionId: string;
   ambitionStartDate: string;
   ambitionEndDate: string;
   ambitionColor: string;
 }
 
-export default function CreateNewTaskDialog(props: CreateNewTaskDialogProps) {
+export default function CreateMilestoneDialog(props: CreateMilestoneDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -21,24 +21,26 @@ export default function CreateNewTaskDialog(props: CreateNewTaskDialogProps) {
       <Dialog.DialogTrigger asChild>
         <Button
           size="tiny"
-          className="text-shadow-md dark:text-white hover:brightness-110"
+          className="text-shadow-md dark:text-white"
           style={{
             backgroundColor: props.ambitionColor,
           }}
         >
-          <IconCirclePlusFilled /> Create Task
+          <IconCirclePlusFilled /> Create Milestone
         </Button>
       </Dialog.DialogTrigger>
       <Dialog.DialogContent>
         <Dialog.DialogHeader>
-          <Dialog.DialogTitle>Create New Task</Dialog.DialogTitle>
-          <Dialog.DialogDescription>Create a new task for this ambition.</Dialog.DialogDescription>
+          <Dialog.DialogTitle>Create New Milestone</Dialog.DialogTitle>
+          <Dialog.DialogDescription>
+            Create a new milestone for this ambition.
+          </Dialog.DialogDescription>
         </Dialog.DialogHeader>
-        <CreateNewTaskForm
+        <CreateMilestoneForm
           ambitionId={props.ambitionId}
+          ambitionColor={props.ambitionColor}
           ambitionStartDate={props.ambitionStartDate}
           ambitionEndDate={props.ambitionEndDate}
-          ambitionColor={props.ambitionColor}
           onSuccess={() => setIsOpen(false)}
         />
       </Dialog.DialogContent>

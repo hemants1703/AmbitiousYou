@@ -7,7 +7,7 @@ import AmbitionFilters, {
 } from "@/features/(app)/ambitions/components/AmbitionFilters";
 import confirmSession from "@/lib/auth/confirmSession";
 import { AmbitionsService } from "@/services/ambitionsService";
-import { IconCirclePlus2, IconFilter } from "@tabler/icons-react";
+import { IconCirclePlusFilled, IconFilter } from "@tabler/icons-react";
 import { User } from "better-auth";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -65,7 +65,7 @@ export default async function AmbitionsPage(props: AmbitionsPageProps) {
             href={`/ambitions/new?ref=ambitions`}
             className="md:ml-0 flex justify-center items-center gap-1"
           >
-            <IconCirclePlus2 className="h-4 w-4" />
+            <IconCirclePlusFilled className="h-4 w-4" />
             Create New Ambition
           </Link>
         </Button>

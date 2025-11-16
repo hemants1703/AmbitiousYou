@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
 import { Ambition, Task } from "@/db/schema";
-import { IconCalendar, IconCheck, IconEdit, IconPlus } from "@tabler/icons-react";
+import { IconCalendar, IconCheck, IconEdit, IconCirclePlusFilled } from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import TaskToggler from "./TaskToggler";
@@ -71,14 +71,14 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
                   </span>
                   <span
                     className={cn(
-                      "text-sm text-muted-foreground truncate max-w-96",
+                      "text-sm text-muted-foreground truncate max-w-24 sm:max-w-96",
                       task.taskCompleted ? "line-through" : ""
                     )}
                   >
                     {task.taskDescription && (
                       <span
                         className={cn(
-                          "text-sm text-muted-foreground truncate max-w-full",
+                          "text-sm text-muted-foreground truncate max-w-full sm:max-w-full",
                           task.taskCompleted ? "line-through" : ""
                         )}
                       >

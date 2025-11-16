@@ -1,68 +1,78 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { CreateNewTaskFormActionState } from "./actions";
-import { createNewTask } from "./actions";
 import { toast } from "sonner";
+import { createNewMilestone, CreateNewMilestoneActionState } from "./actions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { startOfDay, isBefore, isAfter, format } from "date-fns";
-import { IconCalendar, IconLoader2, IconCirclePlusFilled } from "@tabler/icons-react";
+import { IconCalendar, IconCirclePlusFilled, IconLoader2 } from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
 import * as Popover from "@/components/ui/popover";
+import { format, isAfter, isBefore, startOfDay } from "date-fns";
 
-interface CreateNewTaskFormProps {
+interface CreateMilestoneFormProps {
   ambitionId: string;
+  ambitionColor: string;
   ambitionStartDate: string;
   ambitionEndDate: string;
-  ambitionColor: string;
   onSuccess: () => void;
 }
 
-export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
-  const [formState, setFormState] = useState<CreateNewTaskFormActionState>({
+export default function CreateMilestoneForm(props: CreateMilestoneFormProps) {
+  const [formState, setFormState] = useState<CreateNewMilestoneActionState>({
+    errors: undefined,
+    success: undefined,
     ambitionId: props.ambitionId as string,
-    task: "",
-    taskDescription: "",
-    taskDeadline: new Date(),
+    milestone: "",
+    milestoneDescription: "",
+    milestoneTargetDate: startOfDay(new Date(props.ambitionStartDate)),
   });
+
+  useEffect(() => {
+    setFormState({
+      ...formState,
+      milestoneTargetDate: startOfDay(new Date(props.ambitionStartDate)),
+    });
+  }, [props.ambitionStartDate, props.ambitionEndDate]);
+
   const [formErrors, formAction, isPending] = useActionState<
-    CreateNewTaskFormActionState,
+    CreateNewMilestoneActionState,
     FormData
-  >(createNewTask, formState);
+  >(createNewMilestone, formState);
 
   useEffect(() => {
     if (formErrors?.errors) {
       toast.error("Error", {
-        description: formErrors.errors.general.join(", "),
+        description: "Failed to create milestone",
         closeButton: true,
       });
     } else if (formErrors?.success) {
       toast.success("Success", {
-        description: "Task created successfully",
+        description: "Milestone created successfully",
         closeButton: true,
       });
       props.onSuccess();
     }
   }, [formErrors]);
+
   return (
     <form action={formAction} className="flex flex-col items-end gap-4">
       <input type="hidden" name="ambitionId" value={props.ambitionId} />
 
       <Input
-        name="task"
-        placeholder="Enter your task here..."
-        value={formState.task}
-        onChange={(e) => setFormState({ ...formState, task: e.target.value })}
+        type="text"
+        name="milestone"
+        placeholder="Milestone name"
+        value={formState.milestone}
+        onChange={(e) => setFormState({ ...formState, milestone: e.target.value })}
       />
-
       <Textarea
-        name="taskDescription"
-        placeholder="Enter your task description here..."
-        value={formState.taskDescription}
-        className="max-h-36"
-        onChange={(e) => setFormState({ ...formState, taskDescription: e.target.value })}
+        name="milestoneDescription"
+        placeholder="Milestone description"
+        value={formState.milestoneDescription}
+        className="max-h-36 overflow-y-auto"
+        onChange={(e) => setFormState({ ...formState, milestoneDescription: e.target.value })}
       />
 
       <Popover.Popover>
@@ -73,18 +83,18 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
             className="w-full justify-start text-left font-normal"
           >
             <IconCalendar className="mr-2 h-4 w-4" />
-            {formState.taskDeadline ? (
-              format(formState.taskDeadline, "PPP")
+            {formState.milestoneTargetDate ? (
+              format(formState.milestoneTargetDate, "PPP")
             ) : (
-              <span>Select a deadline</span>
+              <span>Select a target date</span>
             )}
           </Button>
         </Popover.PopoverTrigger>
         <Popover.PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
-            selected={formState.taskDeadline || undefined}
-            onSelect={(date) => date && setFormState({ ...formState, taskDeadline: date })}
+            selected={formState.milestoneTargetDate || undefined}
+            onSelect={(date) => date && setFormState({ ...formState, milestoneTargetDate: date })}
             disabled={(calendarDate) => {
               const today = startOfDay(new Date(props.ambitionStartDate));
               const startDate = startOfDay(new Date(props.ambitionStartDate));
@@ -108,6 +118,7 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
 
               return false;
             }}
+            initialFocus
             className="w-full"
           />
         </Popover.PopoverContent>
@@ -116,21 +127,19 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
       <Button
         type="submit"
         disabled={isPending}
-        style={{
-          backgroundColor: props.ambitionColor,
-        }}
         size="tiny"
         className="text-shadow-md dark:text-white hover:brightness-110"
+        style={{ backgroundColor: props.ambitionColor }}
       >
         {isPending ? (
           <span className="flex items-center gap-2">
             <IconLoader2 />
-            Creating task...
+            Creating Milestone...
           </span>
         ) : (
           <span className="flex items-center gap-2">
             <IconCirclePlusFilled />
-            Create task
+            Create Milestone
           </span>
         )}
       </Button>

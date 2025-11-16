@@ -2,9 +2,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
 import { Ambition, Milestone } from "@/db/schema";
-import { IconCheck, IconPlus } from "@tabler/icons-react";
+import { IconCheck, IconCirclePlusFilled } from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
+import CreateMilestoneDialog from "./CreateMilestone/CreateMilestoneDialog";
 
 interface AmbitionMilestonesContainerProps {
   ambition: Ambition;
@@ -20,15 +21,12 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
             <Card.CardTitle>Milestones Journey</Card.CardTitle>
             <Card.CardDescription>Progress through key checkpoints</Card.CardDescription>
           </div>
-          <Button
-            size="tiny"
-            className="text-shadow-md dark:text-white"
-            style={{
-              backgroundColor: props.ambition.ambitionColor,
-            }}
-          >
-            <IconPlus /> Add Milestone
-          </Button>
+          <CreateMilestoneDialog
+            ambitionId={props.ambition.id}
+            ambitionColor={props.ambition.ambitionColor}
+            ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
+            ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
+          />
         </div>
       </Card.CardHeader>
       <Card.CardContent>
