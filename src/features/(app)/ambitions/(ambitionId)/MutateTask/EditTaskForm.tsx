@@ -1,70 +1,75 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { CreateNewTaskFormActionState } from "./actions";
-import { createNewTask } from "./actions";
-import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { startOfDay, isBefore, isAfter, format } from "date-fns";
-import { IconCalendar, IconLoader2, IconCirclePlusFilled } from "@tabler/icons-react";
+import { Input } from "@/components/ui/input";
 import * as Popover from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
+import { Task } from "@/db/schema";
+import { IconCalendar, IconFilePencilFilled, IconLoader2 } from "@tabler/icons-react";
+import { format, isAfter, isBefore, startOfDay } from "date-fns";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { editTask, EditTaskFormActionState } from "./actions";
 
-interface CreateNewTaskFormProps {
-  ambitionId: string;
+interface EditTaskFormProps {
+  task: Task;
   ambitionStartDate: string;
   ambitionEndDate: string;
-  ambitionColor: string;
-  onSuccess: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
-  const [formState, setFormState] = useState<CreateNewTaskFormActionState>({
-    ambitionId: props.ambitionId as string,
-    task: "",
-    taskDescription: "",
-    taskDeadline: new Date(),
+export default function EditTaskForm(props: EditTaskFormProps) {
+  const [formState, setFormState] = useState<EditTaskFormActionState>({
+    id: props.task.id,
+    ambitionId: props.task.ambitionId,
+    task: props.task.task ?? "",
+    taskDescription: props.task.taskDescription ?? null,
+    taskDeadline: props.task.taskDeadline ? new Date(props.task.taskDeadline) : undefined,
   });
-  const [formErrors, formAction, isPending] = useActionState<
-    CreateNewTaskFormActionState,
-    FormData
-  >(createNewTask, formState);
+  const [formErrors, formAction, isPending] = useActionState<EditTaskFormActionState, FormData>(
+    editTask,
+    formState
+  );
 
   useEffect(() => {
     if (formErrors?.errors) {
       toast.error("Error", {
-        description: formErrors.errors.general.join(", "),
+        description: Object.values(formErrors.errors).flat().join(", "),
         closeButton: true,
       });
     } else if (formErrors?.success) {
       toast.success("Success", {
-        description: "Task created successfully",
+        description: "Task updated successfully",
         closeButton: true,
       });
-      props.onSuccess();
+      props.setIsOpen(false);
     }
   }, [formErrors]);
+
   return (
     <form action={formAction} className="flex flex-col items-end gap-4">
-      <input type="hidden" name="ambitionId" value={props.ambitionId} />
+      <input type="hidden" name="id" value={formState.id} />
+      <input type="hidden" name="ambitionId" value={formState.ambitionId} />
+      <input
+        type="hidden"
+        name="taskDeadline"
+        value={formState.taskDeadline ? formState.taskDeadline.toISOString() : ""}
+      />
 
       <Input
+        type="text"
         name="task"
         placeholder="Enter your task here..."
         value={formState.task}
         onChange={(e) => setFormState({ ...formState, task: e.target.value })}
       />
-
       <Textarea
         name="taskDescription"
         placeholder="Enter your task description here..."
         value={formState.taskDescription ?? ""}
-        className="max-h-36"
         onChange={(e) => setFormState({ ...formState, taskDescription: e.target.value })}
       />
-
       <Popover.Popover>
         <Popover.PopoverTrigger asChild>
           <Button
@@ -83,7 +88,7 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
         <Popover.PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
-            selected={formState.taskDeadline || undefined}
+            selected={formState.taskDeadline}
             onSelect={(date) => date && setFormState({ ...formState, taskDeadline: date })}
             disabled={(calendarDate) => {
               const today = startOfDay(new Date(props.ambitionStartDate));
@@ -113,24 +118,16 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
         </Popover.PopoverContent>
       </Popover.Popover>
 
-      <Button
-        type="submit"
-        disabled={isPending}
-        style={{
-          backgroundColor: props.ambitionColor,
-        }}
-        size="tiny"
-        className="text-shadow-md dark:text-white hover:brightness-110"
-      >
+      <Button type="submit" size="tiny" disabled={isPending}>
         {isPending ? (
           <span className="flex items-center gap-2">
-            <IconLoader2 />
-            Creating task...
+            <IconLoader2 className="animate-spin" />
+            Updating Task...
           </span>
         ) : (
           <span className="flex items-center gap-2">
-            <IconCirclePlusFilled />
-            Create task
+            <IconFilePencilFilled className="size-4" />
+            Update Task
           </span>
         )}
       </Button>

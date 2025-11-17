@@ -14,6 +14,10 @@ export default function AmbitionNoteCard(props: AmbitionNoteCardProps) {
     return null;
   }
 
+  const notesSortedByUpdatedAt = props.notes.sort(
+    (a, b) => (b.updatedAt?.getTime() ?? 0) - (a.updatedAt?.getTime() ?? 0)
+  );
+
   return (
     <Card.Card>
       <Card.CardHeader>
@@ -28,7 +32,7 @@ export default function AmbitionNoteCard(props: AmbitionNoteCardProps) {
       <Card.CardContent>
         <ScrollArea className="h-52">
           <div className="flex flex-col gap-2">
-            {props.notes.map((note) => (
+            {notesSortedByUpdatedAt.map((note) => (
               <IndividualNoteCard key={note.id} note={note}>
                 <div className="group flex items-start justify-between gap-2 bg-yellow-200/50 dark:bg-yellow-900/50 border border-yellow-500 dark:border-yellow-700 hover:bg-yellow-200/80 hover:border-yellow-500/80 dark:hover:bg-yellow-900/80 p-2 rounded-lg">
                   <p className="text-sm max-w-full wrap-break-word line-clamp-2">{note.note}</p>

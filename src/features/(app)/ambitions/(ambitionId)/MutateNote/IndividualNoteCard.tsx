@@ -9,8 +9,9 @@ import { IconFilePencilFilled, IconTrashFilled } from "@tabler/icons-react";
 import EditNoteDialog from "./EditNoteDialog";
 
 interface IndividualNoteCardProps {
-  note: Note;
   children: React.ReactNode;
+
+  note: Note;
 }
 
 export default function IndividualNoteCard(props: IndividualNoteCardProps) {
@@ -31,7 +32,7 @@ export default function IndividualNoteCard(props: IndividualNoteCardProps) {
   if (isEditNoteDialogOpen) {
     return (
       <EditNoteDialog
-        noteId={props.note.id}
+        id={props.note.id}
         ambitionId={props.note.ambitionId}
         note={props.note.note}
         open={isEditNoteDialogOpen}

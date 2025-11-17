@@ -1,20 +1,15 @@
 "use server";
 
 import { db } from "@/db";
-import { milestones } from "@/db/schema";
+import { milestones, NewMilestone } from "@/db/schema";
 import confirmSession from "@/lib/auth/confirmSession";
-import { createMilestoneValidationSchema } from "./validations";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { createMilestoneValidationSchema } from "./validations";
 
-export interface CreateNewMilestoneActionState {
+export interface CreateNewMilestoneActionState extends Partial<NewMilestone> {
   errors?: Record<string, string[]>;
   success?: boolean;
-
-  ambitionId: string;
-  milestone: string;
-  milestoneDescription: string;
-  milestoneTargetDate: Date;
 }
 
 export async function createNewMilestone(

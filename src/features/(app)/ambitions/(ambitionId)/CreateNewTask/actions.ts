@@ -1,20 +1,15 @@
 "use server";
 
-import confirmSession from "@/lib/auth/confirmSession";
-import { createNewTaskValidationSchema } from "./validation";
-import { z } from "zod";
 import { db } from "@/db";
-import { tasks } from "@/db/schema";
+import { NewTask, tasks } from "@/db/schema";
+import confirmSession from "@/lib/auth/confirmSession";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { createNewTaskValidationSchema } from "./validation";
 
-export interface CreateNewTaskFormActionState {
+export interface CreateNewTaskFormActionState extends Partial<NewTask> {
   errors?: Record<string, string[]>;
   success?: boolean;
-
-  ambitionId: string;
-  task: string;
-  taskDescription: string;
-  taskDeadline: Date;
 }
 
 export async function createNewTask(

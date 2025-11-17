@@ -5,20 +5,18 @@ import { IconLoader2, IconFilePencilFilled, IconX } from "@tabler/icons-react";
 import { useActionState, useEffect, useState } from "react";
 import { editNoteAction, EditNoteFormActionState } from "./actions";
 import { toast } from "sonner";
+import { Note } from "@/db/schema";
 
-interface EditNoteDialogProps {
-  noteId: string;
-  ambitionId: string;
-  note: string;
+interface EditNoteDialogProps extends Partial<Note> {
   open: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
 export default function EditNoteDialog(props: EditNoteDialogProps) {
   const [formState, setFormState] = useState<EditNoteFormActionState>({
-    noteId: props.noteId,
+    id: props.id,
     ambitionId: props.ambitionId,
-    note: props.note,
+    note: props.note ?? "",
   });
   const [formErrors, formAction, isPending] = useActionState<EditNoteFormActionState, FormData>(
     editNoteAction,
@@ -48,8 +46,8 @@ export default function EditNoteDialog(props: EditNoteDialogProps) {
           <Dialog.DialogDescription>Edit your note for this ambition.</Dialog.DialogDescription>
         </Dialog.DialogHeader>
         <form action={formAction} className="flex flex-col items-end gap-4">
-          <input type="hidden" name="noteId" value={props.noteId} />
-          <input type="hidden" name="ambitionId" value={props.ambitionId} />
+          <input type="hidden" name="id" value={formState.id} />
+          <input type="hidden" name="ambitionId" value={formState.ambitionId} />
 
           <Textarea
             name="note"

@@ -6,5 +6,3 @@ export const createNewTaskValidationSchema = z.object({
   taskDescription: z.string().optional(),
   taskDeadline: z.date({ message: "Task deadline is required" }),
 });
-
-export type CreateNewTaskValidationSchema = z.infer<typeof createNewTaskValidationSchema>;

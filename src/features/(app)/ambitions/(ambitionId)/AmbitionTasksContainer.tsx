@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
 import { Ambition, Task } from "@/db/schema";
-import { IconCalendar, IconCheck, IconEdit, IconCirclePlusFilled } from "@tabler/icons-react";
-import { format } from "date-fns";
-import Link from "next/link";
-import TaskToggler from "./TaskToggler";
 import { cn } from "@/lib/utils";
+import { IconCalendar, IconFilePencilFilled } from "@tabler/icons-react";
+import { format } from "date-fns";
 import React from "react";
 import CreateNewTaskDialog from "./CreateNewTask/CreateNewTaskDialog";
+import EditTaskCard from "./MutateTask/EditTaskCard";
+import TaskToggler from "./TaskToggler";
 
 interface AmbitionTasksContainerProps {
   ambition: Ambition;
@@ -15,6 +15,10 @@ interface AmbitionTasksContainerProps {
 }
 
 export default async function AmbitionTasksContainer(props: AmbitionTasksContainerProps) {
+  const tasksSortedByDeadline = props.tasks.sort(
+    (a, b) => (a.taskDeadline?.getTime() ?? 0) - (b.taskDeadline?.getTime() ?? 0)
+  );
+
   return (
     <Card.Card>
       <Card.CardHeader>
@@ -35,7 +39,7 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
       </Card.CardHeader>
       <Card.CardContent>
         <div className="space-y-2">
-          {props.tasks.map((task) => (
+          {tasksSortedByDeadline.map((task) => (
             <div
               key={task.id}
               style={
@@ -44,7 +48,7 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
                 } as React.CSSProperties
               }
               className={cn(
-                `flex items-center justify-between p-3 border rounded-md border-(--ambition-color) bg-(--ambition-color)/10 hover:bg-(--ambition-color)/20  transition-colors duration-75 ease-in-out`,
+                `flex flex-col items-start  p-2 border rounded-md border-(--ambition-color) bg-(--ambition-color)/10 hover:bg-(--ambition-color)/20  transition-colors duration-75 ease-in-out`,
 
                 // Background color based on task completion status
                 task.taskCompleted
@@ -61,47 +65,48 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
                     : ""
               )}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3 flex-1">
                 {props.ambition.ambitionStatus !== "missed" && (
                   <TaskToggler task={task} ambitionId={props.ambition.id} />
                 )}
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full">
                   <span className={task.taskCompleted ? "line-through text-muted-foreground" : ""}>
                     {task.task}
                   </span>
-                  <span
-                    className={cn(
-                      "text-sm text-muted-foreground truncate max-w-24 sm:max-w-96",
-                      task.taskCompleted ? "line-through" : ""
-                    )}
-                  >
-                    {task.taskDescription && (
+                  {task.taskDescription && (
+                    <span
+                      className={cn(
+                        "text-sm text-muted-foreground whitespace-pre-wrap",
+                        task.taskCompleted ? "line-through" : ""
+                      )}
+                    >
                       <span
                         className={cn(
-                          "text-sm text-muted-foreground truncate max-w-full sm:max-w-full",
+                          "text-sm text-muted-foreground whitespace-pre-wrap",
                           task.taskCompleted ? "line-through" : ""
                         )}
                       >
                         {task.taskDescription}
                       </span>
-                    )}
-                  </span>
+                    </span>
+                  )}
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center self-end gap-4">
                 <div className="text-sm text-muted-foreground">
-                  <IconCalendar className="h-3.5 w-3.5 inline mr-1" />
+                  <IconCalendar className="size-4 inline mr-1" />
                   <span>Due {format(new Date(task.taskDeadline), "MMM d")}</span>
                 </div>
                 {!task.taskCompleted && (
-                  <Button variant="outline" size="icon" className="rounded-full size-8 p-0">
-                    <Link
-                      href={`/ambitions/${props.ambition.id}?edit_task=${task.id}`}
-                      prefetch={true}
-                    >
-                      <IconEdit />
-                    </Link>
-                  </Button>
+                  <EditTaskCard
+                    task={task}
+                    ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
+                    ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
+                  >
+                    <Button variant="outline" size="icon" className=" size-7 p-0">
+                      <IconFilePencilFilled />
+                    </Button>
+                  </EditTaskCard>
                 )}
               </div>
             </div>

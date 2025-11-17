@@ -1,13 +1,13 @@
 "use server";
 
 import { db } from "@/db";
-import { notes } from "@/db/schema";
+import { Note, notes } from "@/db/schema";
 import confirmSession from "@/lib/auth/confirmSession";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { editNoteValidationSchema } from "./validation";
 import z from "zod";
+import { editNoteValidationSchema } from "./validation";
 
 export async function deleteNoteAction(
   noteId: string,
@@ -49,13 +49,9 @@ export async function deleteNoteAction(
   redirect(`/ambitions/${ambitionId}`);
 }
 
-export interface EditNoteFormActionState {
+export interface EditNoteFormActionState extends Partial<Note> {
   success?: boolean;
   errors?: Record<string, string[]>;
-
-  noteId: string;
-  ambitionId: string;
-  note: string;
 }
 
 export async function editNoteAction(
@@ -97,7 +93,7 @@ export async function editNoteAction(
     .where(
       and(
         eq(notes.userId, session.user.id),
-        eq(notes.id, validatedData.data.noteId),
+        eq(notes.id, validatedData.data.id),
         eq(notes.ambitionId, validatedData.data.ambitionId)
       )
     );

@@ -24,6 +24,7 @@ export default function TaskToggler(props: TaskTogglerProps) {
         return `Task "${props.task.task.length > 10 ? props.task.task.substring(0, 10) + "..." : props.task.task}" toggled successfully`;
       },
       error: (error) => error,
+      closeButton: true,
     });
     setIsLoading(false);
   };
