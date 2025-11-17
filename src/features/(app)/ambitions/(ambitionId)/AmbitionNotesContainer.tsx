@@ -1,7 +1,7 @@
 import * as Card from "@/components/ui/card";
 import { Note } from "@/db/schema";
 import { IconNote } from "@tabler/icons-react";
-import AmbitionNoteCard from "../components/AmbitionNoteCard";
+import AmbitionNoteCard from "./AmbitionNoteCard";
 import CreateNewNoteDialog from "./CreateNewNote/CreateNewNoteDialog";
 
 interface AmbitionNotesContainerProps {

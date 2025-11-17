@@ -44,7 +44,7 @@ export default function CreateNewNoteForm(props: CreateNewNoteFormProps) {
       <Textarea
         name="note"
         placeholder="Enter your note here..."
-        className="max-h-96 bg-yellow-200/50 dark:bg-yellow-900/50 border border-yellow-500 dark:border-yellow-700 hover:bg-yellow-200/80 hover:border-yellow-500/80 dark:hover:bg-yellow-900/80  dark:selection:text-white"
+        noteTextarea={true}
         value={formState.note}
         onChange={(e) => setFormState({ ...formState, note: e.target.value })}
       />
