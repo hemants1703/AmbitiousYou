@@ -51,13 +51,6 @@ export default async function DashboardPage() {
   const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
   const randomMotivationalQuote = motivationalQuotes[randomIndex];
 
-  // Calculate greeting server-side
-  const hour = new Date().getHours();
-  let greeting = "Welcome";
-  if (hour >= 5 && hour < 12) greeting = "Good morning";
-  else if (hour >= 12 && hour < 18) greeting = "Good afternoon";
-  else greeting = "Good evening";
-
   // Prepare ambitions summary for dashboard (active ambitions only)
   const activeAmbitions = ambitions.filter((a) => a.ambitionStatus === "active");
   const ambitionsSummary = activeAmbitions.map((ambition) => {
@@ -85,7 +78,7 @@ export default async function DashboardPage() {
     <TooltipProvider>
       <div className="flex flex-col gap-10 pb-12 p-6 md:p-10 pt-8 bg-background">
         {/* Welcome Banner */}
-        <WelcomeBanner greeting={greeting} name={userData.name} />
+        <WelcomeBanner name={userData.name} />
 
         {/* Key Stats */}
         <MotionWrapper
