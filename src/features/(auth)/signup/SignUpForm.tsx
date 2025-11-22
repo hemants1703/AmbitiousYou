@@ -17,7 +17,7 @@ export default function SignUpForm() {
     email: "",
     password: "",
   });
-  const [formErrors, action, isSignupPending] = useActionState<SignupActionState, FormData>(
+  const [formErrors, formAction, isSignupPending] = useActionState<SignupActionState, FormData>(
     signupAction,
     formState
   );
@@ -39,7 +39,7 @@ export default function SignUpForm() {
   }, [formErrors?.errors]);
 
   return (
-    <form action={action} className="space-y-4 lg:min-w-96">
+    <form action={formAction} className="space-y-4 lg:min-w-96">
       {/* Full Name Input */}
       <div className="grid grid-cols-1 gap-4">
         <div>

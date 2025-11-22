@@ -13,7 +13,7 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
-  const [formErrors, loginAction, isLoginPending] = useActionState<LoginState, FormData>(
+  const [formErrors, formAction, isLoginPending] = useActionState<LoginState, FormData>(
     loginUserAction,
     formState
   );
@@ -29,7 +29,7 @@ export default function LoginForm() {
   }, [formErrors?.errors]);
 
   return (
-    <form action={loginAction} className="space-y-4">
+    <form action={formAction} className="space-y-4">
       {/* Email Input */}
       <div>
         <Label htmlFor="email" className="block text-sm font-medium">

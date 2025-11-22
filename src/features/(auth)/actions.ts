@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect, RedirectType } from "next/navigation";
 import z from "zod";
 import { LoginSchema, SignupSchema } from "./validation";
+import { headers } from "next/headers";
 
 export interface SignupActionState {
   errors?: Record<string, string[]>;
@@ -96,20 +97,40 @@ export async function loginUserAction(_: LoginState, formData: FormData) {
       asResponse: true,
     });
 
+    if (userSigninResponse.status === 401) {
+      throw new Error("Invalid credentials");
+    }
+
     console.log("userSigninResponse", userSigninResponse);
   } catch (error) {
     console.error("Error signing in:", error);
     return {
       errors: {
-        message: ["An error occurred while signing in. Please try again."],
+        message: [
+          error instanceof Error
+            ? error.message
+            : "An error occurred while signing in. Please try again.",
+        ],
       },
       ...submittedFormData,
     };
   }
 
-  revalidatePath("/dashboard", "layout");
+  revalidatePath("/dashboard");
   redirect("/dashboard", RedirectType.replace);
 }
 
 // This function is called when the user submits the logout form
-export async function logoutAction() {}
+export async function logoutAction(): Promise<{ error?: string }> {
+  const logoutResponse = await auth.api.signOut({
+    headers: await headers(),
+  });
+
+  if (!logoutResponse.success) {
+    return {
+      error: "An error occurred while logging out. Please try again.",
+    };
+  }
+
+  redirect("/login", RedirectType.replace);
+}
