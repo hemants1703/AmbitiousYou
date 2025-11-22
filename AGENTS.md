@@ -23,22 +23,22 @@ AmbitiousYou is a goal-tracking application. It's not another todo application r
 ### Project Structure
 
 under the root directory
-- /public - for any static content
+- `/public` - for any static content
 - `AGENTS.md` - this file, the single source for the entire project's context
 
-under the /src directory.
-- /app - Next.js App Router
-- /app/api - Next.js Route Handlers (uses services to implement most tasks)
-- /components - All the common UI Components are present here
-- /features - All the routes/page specific UI Components and forms and Server Actions are present here. _e.g.: `ambitions/actions.ts`; `ambitions/components/AmbitionCreateForm.tsx`;_
-- /hooks - Single source to all the custom React Hooks
-- /db - for Drizzle and db specific work
-- /lib - contains all the useful utils, services and 
-- /lib/auth.ts - BetterAuth auth config
-- /services - contains the class based services for API Route Handlers _(e.g.: `ambitionsService.ts`)_
-- /styles - Single source for all stylesheets
-- /types - Single source of all the types of the project for TypeScript (`globals.ts`), the types that are pretty common and would be used in numerous places will only be placed here _(e.g.: `interface Ambition` in `/types/globals.ts` since it will be required in a lot of places)_ rest others would be defined only where required _(e.g.: `interface AmbitionPageProps` in `/ambitions` `page.tsx` only)_
-- /tests - Playwright tests
+under the `/src` directory.
+- `/app` - Next.js App Router
+- `/app/api` - Next.js Route Handlers (uses services to implement most tasks)
+- `/components` - All the common UI Components are present here
+- `/features` - All the routes/page specific UI Components and forms and Server Actions are present here. _e.g.: `ambitions/actions.ts`; `ambitions/components/AmbitionCreateForm.tsx`;_
+- `/hooks` - Single source to all the custom React Hooks
+- `/db` - for Drizzle and db specific work
+- `/lib` - contains all the useful utils, services and 
+- `/lib/auth.ts` - BetterAuth auth config
+- `/services` - contains the class based services for API Route Handlers _(e.g.: `ambitionsService.ts`)_
+- `/styles` - Single source for all stylesheets
+- `/types` - Single source of all the types of the project for TypeScript (`globals.ts`), the types that are pretty common and would be used in numerous places will only be placed here _(e.g.: `interface Ambition` in `/types/globals.ts` since it will be required in a lot of places)_ rest others would be defined only where required _(e.g.: `interface AmbitionPageProps` in `/ambitions` `page.tsx` only)_
+- `/tests` - Playwright tests
 
 ### Development Conventions
 - Services as class based like `AmbitionsService.ts` has everything to do with `Ambitions`. Each method in the class should return `Promise<<whatever)might_be_required_based_on_service> | Error>`.
