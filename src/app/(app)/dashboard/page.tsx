@@ -1,18 +1,17 @@
 import { MotionWrapper } from "@/components/MotionWrapper";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AmbitionPriorityBadge } from "@/features/(app)/ambitions/components/AmbitionPriorityBadge";
+import WelcomeBanner from "@/features/(app)/dashboard/WelcomeBanner";
 import confirmSession from "@/lib/auth/confirmSession";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
 import { AmbitionsService } from "@/services/ambitionsService";
-import { InfoCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import "@/styles/AmbitionCard.css";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
-import "@/styles/AmbitionCard.css";
-import { IconCirclePlus } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -86,39 +85,7 @@ export default async function DashboardPage() {
     <TooltipProvider>
       <div className="flex flex-col gap-10 pb-12 p-6 md:p-10 pt-8 bg-background">
         {/* Welcome Banner */}
-        <MotionWrapper
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="rounded-2xl border bg-card/90 p-8 shadow-sm relative overflow-hidden mb-2"
-        >
-          <div className="relative z-10 flex items-center justify-between gap-4 flex-wrap">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
-                {greeting} <span className="text-primary">{userData.name.split(" ")[0]}</span>,
-              </h1>
-              <p className="text-lg text-muted-foreground font-medium">
-                Here&apos;s your progress at a glance.
-              </p>
-            </div>
-            {/* <Button
-              asChild
-              variant="outline"
-              className="gap-2 flex justify-center items-center px-6 py-3 text-lg font-semibold rounded-xl border border-primary/30 bg-background hover:bg-primary/10 transition-colors"
-            >
-              <Link prefetch={true} href="/ambitions/new?ref=dashboard">
-                <PlusCircledIcon className="h-5 w-5" />
-                New Ambition
-              </Link>
-            </Button> */}
-            <Button asChild variant="ay" size="lg">
-              <Link prefetch={true} href="/ambitions/new?ref=dashboard">
-                <IconCirclePlus className="h-5 w-5" />
-                New Ambition
-              </Link>
-            </Button>
-          </div>
-        </MotionWrapper>
+        <WelcomeBanner greeting={greeting} name={userData.name} />
 
         {/* Key Stats */}
         <MotionWrapper

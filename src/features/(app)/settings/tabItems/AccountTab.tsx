@@ -10,7 +10,7 @@ export default function AccountTab() {
     <>
       <PasswordCard />
 
-      <Card.Card>
+      {/* <Card.Card>
         <Card.CardHeader>
           <Card.CardTitle>Two-Factor Authentication</Card.CardTitle>
           <Card.CardDescription>
@@ -37,7 +37,7 @@ export default function AccountTab() {
             </Button>
           </div>
         </Card.CardContent>
-      </Card.Card>
+      </Card.Card> */}
     </>
   );
 }

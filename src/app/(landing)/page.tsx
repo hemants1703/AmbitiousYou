@@ -1,17 +1,16 @@
-import { Bricolage_Grotesque } from "next/font/google";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import {
-  RocketIcon,
-  LightningBoltIcon,
-  CheckCircledIcon,
-  ArrowRightIcon,
-  HeartFilledIcon,
-} from "@radix-ui/react-icons";
-import Features from "@/components/Features";
 import CTA from "@/components/CTA";
+import Features from "@/components/Features";
+import { Button } from "@/components/ui/button";
 import confirmSession from "@/lib/auth/confirmSession";
+import {
+  ArrowRightIcon,
+  CheckCircledIcon,
+  HeartFilledIcon,
+  LightningBoltIcon,
+} from "@radix-ui/react-icons";
 import { IconArrowRight, IconRocket } from "@tabler/icons-react";
+import { Bricolage_Grotesque } from "next/font/google";
+import Link from "next/link";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
