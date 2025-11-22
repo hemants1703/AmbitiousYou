@@ -43,7 +43,7 @@ const mainNavItems = [
 const bottomNavItems = [
   {
     title: "Settings",
-    href: "/settings",
+    href: "/settings?tab=profile",
     icon: IconSettings,
   },
 ];

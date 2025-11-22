@@ -1,18 +1,17 @@
 "use server";
 
 import { db } from "@/db";
-import { profiles } from "@/db/schema";
+import { user } from "@/db/schema";
 import confirmSession from "@/lib/auth/confirmSession";
-import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { updateProfileValidator } from "./validators";
 
-export default async function updateProfileAction(
-  firstName: string,
-  lastName: string
-): Promise<{
+export default async function updateUserAction(name: string): Promise<{
   success: boolean;
   error?: string;
-  data?: { firstName: string; lastName: string };
+  data?: { name: string };
 }> {
   try {
     // Get current authenticated user
@@ -25,30 +24,23 @@ export default async function updateProfileAction(
       };
     }
 
-    // Validate inputs
-    if (!firstName || !lastName) {
-      return {
-        success: false,
-        error: "Both first name and last name are required to update profile",
-      };
-    }
+    const validatedData = updateProfileValidator.safeParse({ name });
 
-    if (firstName.length < 2 || lastName.length < 2) {
+    if (!validatedData.success) {
       return {
         success: false,
-        error: "First name and last name must be at least 2 characters long",
+        error: z.flattenError(validatedData.error).fieldErrors.name?.[0] ?? "Invalid name",
       };
     }
 
     // Update profile in database
     const [updatedProfile] = await db
-      .update(profiles)
+      .update(user)
       .set({
-        firstName,
-        lastName,
+        name: validatedData.data.name,
         updatedAt: new Date(),
       })
-      .where(eq(profiles.userId, session.user.id))
+      .where(eq(user.id, session.user.id))
       .returning();
 
     if (!updatedProfile) {
@@ -64,8 +56,7 @@ export default async function updateProfileAction(
     return {
       success: true,
       data: {
-        firstName: updatedProfile.firstName,
-        lastName: updatedProfile.lastName,
+        name: updatedProfile.name,
       },
     };
   } catch (error) {

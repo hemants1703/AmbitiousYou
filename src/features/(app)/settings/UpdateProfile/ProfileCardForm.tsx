@@ -5,19 +5,42 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/db/schema";
-import { Loader2Icon } from "lucide-react";
+import { IconLoader2 } from "@tabler/icons-react";
 import { useState } from "react";
+import updateUserAction from "./actions";
+import { toast } from "sonner";
 
-interface ProfileCardProps {
+interface ProfileCardFormProps {
   userData: User;
 }
 
-export default function ProfileCard(props: ProfileCardProps) {
-  const { userData } = props;
-  const [userProfile, setUserProfile] = useState<User>(userData);
+export default function ProfileCardForm(props: ProfileCardFormProps) {
+  const [userData, setUserData] = useState<User>(props.userData);
   const [isPending, setIsPending] = useState<boolean>(false);
 
-  const initialsOfUsersName = userProfile.name.charAt(0) + userProfile.name.charAt(0); // Placeholder for initials
+  const initialsOfUsersName = userData.name.charAt(0);
+
+  const handleProfileUpdate = async () => {
+    setIsPending(true);
+
+    toast.promise(updateUserAction(userData.name), {
+      loading: "Updating profile...",
+      success: (data) => {
+        setUserData({
+          ...userData,
+          name: data.data?.name ?? userData.name,
+        });
+
+        setIsPending(false);
+
+        return "Profile updated successfully";
+      },
+      error: (error) => {
+        setIsPending(false);
+        return error.error;
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col gap-8 md:flex-row">
@@ -34,17 +57,12 @@ export default function ProfileCard(props: ProfileCardProps) {
       <div className="flex-1 space-y-4">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="firstName">First name</Label>
+            <Label htmlFor="name">Name</Label>
             <Input
-              id="firstName"
+              id="name"
               placeholder="John"
-              defaultValue={userProfile.name}
-              onChange={(e) => {
-                setUserProfile({
-                  ...userProfile,
-                  name: e.target.value,
-                });
-              }}
+              value={userData.name}
+              onChange={(e) => setUserData({ ...userData, name: e.target.value })}
             />
           </div>
         </div>
@@ -55,16 +73,16 @@ export default function ProfileCard(props: ProfileCardProps) {
             id="email"
             type="email"
             placeholder="john.doe@example.com"
-            defaultValue={props.userData.email}
+            value={props.userData.email}
             disabled
           />
         </div>
 
         <div className="flex justify-end space-x-2 mt-10">
-          <Button onClick={() => {}} disabled={isPending}>
+          <Button size="tiny" onClick={handleProfileUpdate} disabled={isPending}>
             {isPending ? (
               <span className="flex items-center gap-2">
-                <Loader2Icon />
+                <IconLoader2 className="animate-spin" />
                 Saving...
               </span>
             ) : (

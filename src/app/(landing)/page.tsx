@@ -11,7 +11,7 @@ import {
 import Features from "@/components/Features";
 import CTA from "@/components/CTA";
 import confirmSession from "@/lib/auth/confirmSession";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconRocket } from "@tabler/icons-react";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -70,7 +70,7 @@ export default async function Home() {
                   className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
                 >
                   <Link prefetch={true} href="/signup" className="flex items-center gap-2">
-                    Get Started <RocketIcon className="h-5 w-5" />
+                    Get Started <IconRocket className="size-6" />
                   </Link>
                 </Button>
                 <Button

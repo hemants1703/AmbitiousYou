@@ -49,7 +49,7 @@ export function Header(props: HeaderProps) {
             </Dropdown.DropdownMenuLabel>
             <Dropdown.DropdownMenuSeparator />
             <Dropdown.DropdownMenuItem>
-              <Link prefetch={true} href="/settings" className="w-full">
+              <Link prefetch={true} href="/settings?tab=profile" className="w-full">
                 Settings
               </Link>
             </Dropdown.DropdownMenuItem>
