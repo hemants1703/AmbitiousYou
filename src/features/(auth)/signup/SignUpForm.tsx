@@ -8,7 +8,6 @@ import { signupAction, SignupActionState } from "@/features/(auth)/actions";
 import { cn } from "@/lib/utils";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Loader2Icon } from "lucide-react";
-import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,26 +17,26 @@ export default function SignUpForm() {
     email: "",
     password: "",
   });
-  const [signUpFormState, action, isSignupPending] = useActionState<SignupActionState, FormData>(
+  const [formErrors, action, isSignupPending] = useActionState<SignupActionState, FormData>(
     signupAction,
     formState
   );
 
   useEffect(() => {
-    if (signUpFormState?.errors?.message) {
+    if (formErrors?.errors?.message) {
       toast.error("Err!", {
         description: "There was an error creating your account. Please try again.",
         duration: 5000,
       });
     }
 
-    if (signUpFormState?.errors?.password) {
+    if (formErrors?.errors?.password) {
       toast.error("Err!", {
         description: "Please enter a valid password",
         duration: 5000,
       });
     }
-  }, [signUpFormState?.errors]);
+  }, [formErrors?.errors]);
 
   return (
     <form action={action} className="space-y-4 lg:min-w-96">
@@ -52,15 +51,13 @@ export default function SignUpForm() {
             name="fullName"
             type="text"
             placeholder="Full name"
-            className={cn("mt-1", signUpFormState?.errors?.fullName ? "border-red-500" : "")}
+            className={cn("mt-1", formErrors?.errors?.fullName ? "border-red-500" : "")}
             required
             value={formState.fullName}
             onChange={(e) => setFormState({ ...formState, fullName: e.target.value })}
           />
-          {signUpFormState?.errors?.fullName && (
-            <p className="text-red-500 text-sm mt-1">
-              {signUpFormState.errors.fullName.join(", ")}
-            </p>
+          {formErrors?.errors?.fullName && (
+            <p className="text-red-500 text-sm mt-1">{formErrors.errors.fullName.join(", ")}</p>
           )}
         </div>
       </div>
@@ -75,13 +72,13 @@ export default function SignUpForm() {
           name="email"
           type="email"
           placeholder="Enter your email"
-          className={cn("mt-1", signUpFormState?.errors?.email ? "border-red-500" : "")}
+          className={cn("mt-1", formErrors?.errors?.email ? "border-red-500" : "")}
           required
           value={formState.email}
           onChange={(e) => setFormState({ ...formState, email: e.target.value })}
         />
-        {signUpFormState?.errors?.email && (
-          <p className="text-red-500 text-sm mt-1">{signUpFormState.errors.email.join(", ")}</p>
+        {formErrors?.errors?.email && (
+          <p className="text-red-500 text-sm mt-1">{formErrors.errors.email.join(", ")}</p>
         )}
       </div>
 
@@ -114,7 +111,7 @@ export default function SignUpForm() {
           name="password"
           type="password"
           placeholder="Create a password"
-          className={cn("mt-1", signUpFormState?.errors?.password ? "border-red-500" : "")}
+          className={cn("mt-1", formErrors?.errors?.password ? "border-red-500" : "")}
           required
           value={formState.password}
           onChange={(e) =>

@@ -1,31 +1,32 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { LoginState, loginUserAction } from "../actions";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2Icon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { IconLoader2 } from "@tabler/icons-react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { LoginState, loginUserAction } from "../actions";
 
 export default function LoginForm() {
   const [formState, setFormState] = useState<LoginState>({
     email: "",
     password: "",
   });
-  const [loginFormState, loginAction, isLoginPending] = useActionState<LoginState, FormData>(
+  const [formErrors, loginAction, isLoginPending] = useActionState<LoginState, FormData>(
     loginUserAction,
     formState
   );
 
   useEffect(() => {
-    if (loginFormState?.errors?.message) {
+    if (formErrors?.errors?.message) {
       toast.error("Err!", {
-        description: "There was an error logging you in. Please try again.",
+        description:
+          formErrors.errors.message?.[0] ?? "There was an error logging you in. Please try again.",
         duration: 5000,
       });
     }
-  }, [loginFormState?.errors]);
+  }, [formErrors?.errors]);
 
   return (
     <form action={loginAction} className="space-y-4">
@@ -44,8 +45,8 @@ export default function LoginForm() {
           value={formState.email}
           onChange={(e) => setFormState({ ...formState, email: e.target.value })}
         />
-        {loginFormState?.errors?.email && (
-          <p className="text-red-500 text-sm mt-1">{loginFormState.errors.email}</p>
+        {formErrors?.errors?.email && (
+          <p className="text-red-500 text-sm mt-1">{formErrors.errors.email}</p>
         )}
       </div>
 
@@ -64,8 +65,8 @@ export default function LoginForm() {
           value={formState.password}
           onChange={(e) => setFormState({ ...formState, password: e.target.value })}
         />
-        {loginFormState?.errors?.password && (
-          <p className="text-red-500 text-sm mt-1">{loginFormState.errors.password}</p>
+        {formErrors?.errors?.password && (
+          <p className="text-red-500 text-sm mt-1">{formErrors.errors.password}</p>
         )}
       </div>
 
@@ -73,7 +74,7 @@ export default function LoginForm() {
       <Button type="submit" className="w-full mt-4" disabled={isLoginPending}>
         {isLoginPending ? (
           <div className="flex justify-center items-center gap-2">
-            <Loader2Icon className="animate-spin size-5" />
+            <IconLoader2 className="animate-spin size-5" />
             Logging you in...
           </div>
         ) : (
