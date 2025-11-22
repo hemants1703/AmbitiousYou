@@ -21,10 +21,13 @@ export default function CreateMilestoneDialog(props: CreateMilestoneDialogProps)
       <Dialog.DialogTrigger asChild>
         <Button
           size="tiny"
-          className="text-shadow-md dark:text-white"
-          style={{
-            backgroundColor: props.ambitionColor,
-          }}
+          variant="ay"
+          className="text-shadow-md dark:text-black bg-(--ambition-color)"
+          style={
+            {
+              backgroundColor: props.ambitionColor,
+            } as React.CSSProperties
+          }
         >
           <IconCirclePlus /> Create Milestone
         </Button>

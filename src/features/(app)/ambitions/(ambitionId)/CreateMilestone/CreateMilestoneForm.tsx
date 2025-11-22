@@ -128,8 +128,13 @@ export default function CreateMilestoneForm(props: CreateMilestoneFormProps) {
         type="submit"
         disabled={isPending}
         size="tiny"
-        className="text-shadow-md dark:text-white hover:brightness-110"
-        style={{ backgroundColor: props.ambitionColor }}
+        variant="ay"
+        className="text-shadow-md dark:text-white hover:brightness-110 bg-(--ambition-color)"
+        style={
+          {
+            backgroundColor: props.ambitionColor,
+          } as React.CSSProperties
+        }
       >
         {isPending ? (
           <span className="flex items-center gap-2">

@@ -16,7 +16,11 @@ export default function CreateNewNoteDialog(props: CreateNewNoteDialogProps) {
   return (
     <Dialog.Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.DialogTrigger asChild>
-        <Button size="tiny" className="bg-yellow-500 text-white text-shadow-md">
+        <Button
+          size="tiny"
+          variant="ay"
+          className="text-shadow-md dark:text-black bg-yellow-500! hover:brightness-110"
+        >
           <IconCirclePlus />
           Create Note
         </Button>

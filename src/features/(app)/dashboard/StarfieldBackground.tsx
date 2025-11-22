@@ -3,35 +3,6 @@
 import { useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 
-/**
- * StarfieldBackground Component
- * 
- * A high-performance, production-grade animated canvas background featuring:
- * - Theme-aware starfield with twinkling stars
- * - Animated shooting stars
- * - Pulsing nebula clouds
- * - Dynamic gradient backgrounds
- * 
- * Performance Features:
- * - Canvas rendering with hardware acceleration
- * - RequestAnimationFrame for smooth 60fps animations
- * - Page Visibility API for pausing when tab is hidden
- * - Proper cleanup and memory management
- * - Device pixel ratio handling for crisp rendering
- * 
- * Accessibility Features:
- * - Respects prefers-reduced-motion
- * - Proper ARIA attributes
- * - Semantic HTML
- * 
- * @author AmbitiousYou Team
- * @version 1.0.0
- */
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-
 interface BrandColors {
   cyan: string;
   blue: string;
@@ -72,10 +43,6 @@ interface ShootingStarConfig {
   spawnProbability: number;
   opacity: number;
 }
-
-// ============================================================================
-// CONSTANTS
-// ============================================================================
 
 const LIGHT_MODE_CONFIG = {
   star: {
@@ -139,10 +106,6 @@ const DARK_MODE_CONFIG = {
   canvasOpacity: 0.7,
 };
 
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
 const getBrandColors = (isLight: boolean): BrandColors => ({
   cyan: isLight ? "rgba(3, 255, 255, 0.8)" : "rgba(3, 255, 255, 0.6)",
   blue: isLight ? "rgba(0, 144, 255, 0.8)" : "rgba(0, 144, 255, 0.6)",
@@ -157,10 +120,6 @@ const getBrandColors = (isLight: boolean): BrandColors => ({
 const random = (min: number, max: number): number => Math.random() * (max - min) + min;
 
 const extractColorBase = (color: string): string => color.replace(/[\d.]+\)$/, "");
-
-// ============================================================================
-// ANIMATION CLASSES
-// ============================================================================
 
 class Star {
   x: number;
@@ -213,14 +172,7 @@ class Star {
     // Draw glow effect
     if (this.hasGlow && this.size > 1.5) {
       const glowSize = this.size * 4;
-      const gradient = ctx.createRadialGradient(
-        this.x,
-        this.y,
-        0,
-        this.x,
-        this.y,
-        glowSize
-      );
+      const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
       gradient.addColorStop(0, `${this.color}${finalOpacity * 0.6})`);
       gradient.addColorStop(0.5, `${this.color}${finalOpacity * 0.3})`);
       gradient.addColorStop(1, `${this.color}0)`);
@@ -323,19 +275,9 @@ class Nebula {
 
   draw(ctx: CanvasRenderingContext2D): void {
     const pulse = Math.sin(this.phase) * 0.3 + 0.7;
-    const gradient = ctx.createRadialGradient(
-      this.x,
-      this.y,
-      0,
-      this.x,
-      this.y,
-      this.size * pulse
-    );
+    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * pulse);
     gradient.addColorStop(0, this.color.replace(/[\d.]+\)$/, `${this.opacity * pulse})`));
-    gradient.addColorStop(
-      0.5,
-      this.color.replace(/[\d.]+\)$/, `${this.opacity * 0.5 * pulse})`)
-    );
+    gradient.addColorStop(0.5, this.color.replace(/[\d.]+\)$/, `${this.opacity * 0.5 * pulse})`));
     gradient.addColorStop(1, this.color.replace(/[\d.]+\)$/, "0)"));
 
     ctx.fillStyle = gradient;
@@ -344,10 +286,6 @@ class Nebula {
     ctx.fill();
   }
 }
-
-// ============================================================================
-// MAIN COMPONENT
-// ============================================================================
 
 export default function StarfieldBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

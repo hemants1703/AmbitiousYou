@@ -169,10 +169,13 @@ export default function TasksAdditionFormSection(props: TasksAdditionFormSection
                   onClick={addTask}
                   type="button"
                   size="tiny"
-                  className="self-end text-shadow-md dark:text-white"
-                  style={{
-                    backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
-                  }}
+                  variant="ay"
+                  className="self-end text-shadow-md dark:text-white bg-(--ambition-color)"
+                  style={
+                    {
+                      backgroundColor: props.formState.ambitionColor ?? "var(--color-primary)",
+                    } as React.CSSProperties
+                  }
                 >
                   <IconCirclePlus className="h-4 w-4 mr-1" /> Create Task
                 </Button>

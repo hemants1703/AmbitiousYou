@@ -74,7 +74,7 @@ function MilestoneItem(props: { ambitionId: string; milestone: Milestone }) {
           {props.milestone.milestone}
         </h4>
         <p className="text-sm text-muted-foreground mt-1">{props.milestone.milestoneDescription}</p>
-        <div className="flex justify-start items-center gap-5 mt-4">
+        <div className="flex flex-col md:flex-row justify-start items-center gap-5 mt-4">
           {props.milestone.milestoneCompleted ? (
             <Badge className="w-fit mt-2 bg-green-500/10 text-green-600 border-green-500/20">
               Completed
