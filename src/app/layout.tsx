@@ -64,6 +64,9 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <meta name="apple-mobile-web-app-title" content="AmbitiousYou" />
+      </head>
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}
