@@ -6,7 +6,7 @@ export class UserService {
   /**
    * Fetch user for userId
    */
-  static async fetchUserById(userId: string): Promise<User | Error> {
+  async fetchUserById(userId: string): Promise<User | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
@@ -21,7 +21,7 @@ export class UserService {
   /**
    * Create a new profile
    */
-  static async createUser(userData: NewUser): Promise<User | Error> {
+  async createUser(userData: NewUser): Promise<User | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(user).values(userData).returning();
 
@@ -36,7 +36,7 @@ export class UserService {
   /**
    * Update a profile
    */
-  static async updateProfile(userId: string, updates: Partial<NewUser>): Promise<User | Error> {
+  async updateProfile(userId: string, updates: Partial<NewUser>): Promise<User | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .update(user)
@@ -55,7 +55,7 @@ export class UserService {
   /**
    * Delete a profile
    */
-  static async deleteUser(userId: string): Promise<User | Error> {
+  async deleteUser(userId: string): Promise<User | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.delete(user).where(eq(user.id, userId)).returning();
 

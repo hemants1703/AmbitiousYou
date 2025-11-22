@@ -28,10 +28,12 @@ export default async function DashboardPage() {
 
   const userData = session.user;
 
+  const ambitionsService = new AmbitionsService();
+
   // Fetch data using services
-  const ambitions = await AmbitionsService.fetchUserAmbitions(userData.id);
-  const tasks = await AmbitionsService.fetchUserTasks(userData.id);
-  const milestones = await AmbitionsService.fetchUserMilestones(userData.id);
+  const ambitions = await ambitionsService.fetchUserAmbitions(userData.id);
+  const tasks = await ambitionsService.fetchUserTasks(userData.id);
+  const milestones = await ambitionsService.fetchUserMilestones(userData.id);
 
   // Handle errors - throw to trigger error page
   if (ambitions instanceof Error) throw ambitions;
@@ -116,7 +118,7 @@ export default async function DashboardPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6"
         >
           {/* Active Ambitions */}
           <div className="rounded-2xl border bg-card/80 p-6 flex flex-col items-center shadow-sm">
@@ -210,7 +212,6 @@ export default async function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="rounded-2xl border bg-card/90 p-8 shadow-sm"
         >
           <h2 className="text-2xl font-extrabold mb-6 tracking-tight">Your Active Ambitions</h2>
           {ambitionsSummary.length === 0 ? (
@@ -218,7 +219,7 @@ export default async function DashboardPage() {
               No active ambitions yet. Start by creating one!
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {ambitionsSummary.map((ambition) => (
                 <Link
                   href={`/ambitions/${ambition.id}?ref=dashboard`}

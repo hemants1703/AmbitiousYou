@@ -6,7 +6,13 @@ import confirmSession from "@/lib/auth/confirmSession";
 import { redirect, RedirectType } from "next/navigation";
 
 export default async function Login() {
-  const session = await confirmSession();
+  let session;
+  try {
+    session = await confirmSession();
+  } catch (error) {
+    console.log(error);
+    session = null;
+  }
 
   if (session) {
     redirect("/dashboard", RedirectType.replace);

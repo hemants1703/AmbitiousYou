@@ -6,7 +6,7 @@ import { AmbitionFiltersState } from "@/features/(app)/ambitions/components/Ambi
 
 export class AmbitionsService {
   // Fetch all ambitions for a user
-  static async fetchUserAmbitions(userId: string): Promise<Ambition[] | Error> {
+  async fetchUserAmbitions(userId: string): Promise<Ambition[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(ambitions).where(eq(ambitions.userId, userId));
 
@@ -19,7 +19,7 @@ export class AmbitionsService {
   }
 
   // Fetch a single ambition by ID
-  static async fetchAmbitionById(ambitionId: string, userId: string): Promise<Ambition | Error> {
+  async fetchAmbitionById(ambitionId: string, userId: string): Promise<Ambition | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .select()
@@ -36,7 +36,7 @@ export class AmbitionsService {
   }
 
   // Fetch ambitions by filters
-  static async fetchAmbitionsByFilters(
+  async fetchAmbitionsByFilters(
     filters: AmbitionFiltersState,
     userId: string
   ): Promise<Ambition[] | Error> {
@@ -68,7 +68,7 @@ export class AmbitionsService {
   }
 
   // Create a new ambition
-  static async createAmbition(ambitionData: NewAmbition): Promise<Ambition | Error> {
+  async createAmbition(ambitionData: NewAmbition): Promise<Ambition | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(ambitions).values(ambitionData).returning();
 
@@ -81,7 +81,7 @@ export class AmbitionsService {
   }
 
   // Update an ambition
-  static async updateAmbition(
+  async updateAmbition(
     ambitionId: string,
     userId: string,
     updates: Partial<NewAmbition>
@@ -102,7 +102,7 @@ export class AmbitionsService {
   }
 
   // Delete an ambition
-  static async deleteAmbition(ambitionId: string, userId: string): Promise<boolean | Error> {
+  async deleteAmbition(ambitionId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .delete(ambitions)
@@ -118,7 +118,7 @@ export class AmbitionsService {
   }
 
   // Fetch tasks for an ambition
-  static async fetchAmbitionTasks(ambitionId: string, userId: string): Promise<Task[] | Error> {
+  async fetchAmbitionTasks(ambitionId: string, userId: string): Promise<Task[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .select()
@@ -134,7 +134,7 @@ export class AmbitionsService {
   }
 
   // Create a new task
-  static async createTask(taskData: NewTask): Promise<Task | Error> {
+  async createTask(taskData: NewTask): Promise<Task | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(tasks).values(taskData).returning();
 
@@ -147,7 +147,7 @@ export class AmbitionsService {
   }
 
   // Update a task
-  static async updateTask(
+  async updateTask(
     taskId: string,
     userId: string,
     updates: Partial<NewTask>
@@ -168,7 +168,7 @@ export class AmbitionsService {
   }
 
   // Delete a task
-  static async deleteTask(taskId: string, userId: string): Promise<boolean | Error> {
+  async deleteTask(taskId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .delete(tasks)
@@ -184,7 +184,7 @@ export class AmbitionsService {
   }
 
   // Fetch all tasks for a user
-  static async fetchUserTasks(userId: string): Promise<Task[] | Error> {
+  async fetchUserTasks(userId: string): Promise<Task[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(tasks).where(eq(tasks.userId, userId));
 
@@ -197,7 +197,7 @@ export class AmbitionsService {
   }
 
   // Fetch all milestones for a user
-  static async fetchUserMilestones(userId: string): Promise<Milestone[] | Error> {
+  async fetchUserMilestones(userId: string): Promise<Milestone[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.select().from(milestones).where(eq(milestones.userId, userId));
 
@@ -210,10 +210,7 @@ export class AmbitionsService {
   }
 
   // Fetch milestones for an ambition
-  static async fetchAmbitionMilestones(
-    ambitionId: string,
-    userId: string
-  ): Promise<Milestone[] | Error> {
+  async fetchAmbitionMilestones(ambitionId: string, userId: string): Promise<Milestone[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .select()
@@ -229,7 +226,7 @@ export class AmbitionsService {
   }
 
   // Create a new milestone
-  static async createMilestone(milestoneData: NewMilestone): Promise<Milestone | Error> {
+  async createMilestone(milestoneData: NewMilestone): Promise<Milestone | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(milestones).values(milestoneData).returning();
 
@@ -242,7 +239,7 @@ export class AmbitionsService {
   }
 
   // Update a milestone
-  static async updateMilestone(
+  async updateMilestone(
     milestoneId: string,
     userId: string,
     updates: Partial<NewMilestone>
@@ -263,7 +260,7 @@ export class AmbitionsService {
   }
 
   // Delete a milestone
-  static async deleteMilestone(milestoneId: string, userId: string): Promise<boolean | Error> {
+  async deleteMilestone(milestoneId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .delete(milestones)
@@ -279,7 +276,7 @@ export class AmbitionsService {
   }
 
   // Fetch notes
-  static async fetchAmbitionNotes(ambitionId: string, userId: string): Promise<Note[] | Error> {
+  async fetchAmbitionNotes(ambitionId: string, userId: string): Promise<Note[] | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .select()
@@ -295,7 +292,7 @@ export class AmbitionsService {
   }
 
   // Create a new note
-  static async createNote(noteData: Note): Promise<Note | Error> {
+  async createNote(noteData: Note): Promise<Note | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db.insert(notes).values(noteData).returning();
 
@@ -308,7 +305,7 @@ export class AmbitionsService {
   }
 
   // Update a note
-  static async updateNote(
+  async updateNote(
     noteId: string,
     userId: string,
     updates: Partial<NewNote>
@@ -329,7 +326,7 @@ export class AmbitionsService {
   }
 
   // Delete a note
-  static async deleteNote(noteId: string, userId: string): Promise<boolean | Error> {
+  async deleteNote(noteId: string, userId: string): Promise<boolean | Error> {
     return new Promise(async (resolve, reject) => {
       const result = await db
         .delete(notes)

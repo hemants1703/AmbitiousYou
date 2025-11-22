@@ -20,7 +20,8 @@ interface AmbitionDetailsPageProps {
 
 const getAmbitionData = cache(
   async (ambitionId: string, userId: string): Promise<Ambition | Error> => {
-    return await AmbitionsService.fetchAmbitionById(ambitionId, userId);
+    const ambitionsService = new AmbitionsService();
+    return await ambitionsService.fetchAmbitionById(ambitionId, userId);
   }
 );
 
@@ -60,15 +61,17 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   let tasks: Task[] | Error = [];
   let milestones: Milestone[] | Error = [];
 
+  const ambitionsService = new AmbitionsService();
+
   if (ambition.ambitionTrackingMethod === "task") {
-    tasks = await AmbitionsService.fetchAmbitionTasks(ambition.id, session.user.id);
+    tasks = await ambitionsService.fetchAmbitionTasks(ambition.id, session.user.id);
     if (tasks instanceof Error) throw tasks;
   } else if (ambition.ambitionTrackingMethod === "milestone") {
-    milestones = await AmbitionsService.fetchAmbitionMilestones(ambition.id, session.user.id);
+    milestones = await ambitionsService.fetchAmbitionMilestones(ambition.id, session.user.id);
     if (milestones instanceof Error) throw milestones;
   }
 
-  const notes: Note[] | Error = await AmbitionsService.fetchAmbitionNotes(
+  const notes: Note[] | Error = await ambitionsService.fetchAmbitionNotes(
     ambitionId as string,
     session.user.id
   );

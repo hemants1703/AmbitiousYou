@@ -32,19 +32,22 @@ export default async function AmbitionsPage(props: AmbitionsPageProps) {
 
   const searchParams = await props.searchParams;
 
+  // Initialize AmbitionsService class instance
+  const ambitionsService = new AmbitionsService();
+
   // Fetch active ambitions
-  const activeAmbitions = await AmbitionsService.fetchAmbitionsByFilters(
+  const activeAmbitions = await ambitionsService.fetchAmbitionsByFilters(
     searchParams as AmbitionFiltersState,
     userData.id
   );
   if (activeAmbitions instanceof Error) throw activeAmbitions;
 
   // Fetch tasks for ambition
-  const tasks = await AmbitionsService.fetchUserTasks(userData.id);
+  const tasks = await ambitionsService.fetchUserTasks(userData.id);
   if (tasks instanceof Error) throw tasks;
 
   // Fetch milestones for ambition
-  const milestones = await AmbitionsService.fetchUserMilestones(userData.id);
+  const milestones = await ambitionsService.fetchUserMilestones(userData.id);
   if (milestones instanceof Error) throw milestones;
 
   return (
@@ -53,13 +56,13 @@ export default async function AmbitionsPage(props: AmbitionsPageProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex gap-2 justify-between items-center"
+        className="flex flex-col md:flex-row gap-2 justify-between items-center"
       >
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Your Ambitions</h1>
           <p className="text-muted-foreground">View and manage all your ambitions in one place</p>
         </div>
-        <Button asChild size="sm" variant="ay">
+        <Button asChild size="sm" variant="ay" className="w-full md:w-auto">
           <Link
             prefetch={true}
             href={`/ambitions/new?ref=ambitions`}

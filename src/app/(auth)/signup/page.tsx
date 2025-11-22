@@ -6,7 +6,13 @@ import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
 
 export default async function Signup() {
-  const session = await confirmSession();
+  let session;
+  try {
+    session = await confirmSession();
+  } catch (error) {
+    console.log(error);
+    session = null;
+  }
 
   if (session) {
     redirect("/dashboard", RedirectType.replace);
