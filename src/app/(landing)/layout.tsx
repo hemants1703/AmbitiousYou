@@ -3,7 +3,14 @@ import Navbar from "@/components/Navbar";
 import confirmSession from "@/lib/auth/confirmSession";
 
 export default async function LandingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const session = await confirmSession();
+  let session;
+  try {
+    session = await confirmSession();
+  } catch (error) {
+    console.log(error);
+
+    session = null;
+  }
 
   return (
     <>
@@ -27,6 +34,9 @@ export default async function LandingLayout({ children }: Readonly<{ children: R
         <div className="mt-16">{children}</div>
         <Footer />
       </main>
+      <h1 className="relative bottom-0 left-0 right-0 translate-y-1/2 font-bold text-5xl md:text-8xl lg:text-[10rem] p-0 m-0 text-center w-full bg-clip-text text-transparent bg-linear-to-b from-primary via-primary/50 to-transparent">
+        AmbitiousYou
+      </h1>
     </>
   );
 }

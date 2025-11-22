@@ -1,15 +1,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import confirmSession from "@/lib/auth/confirmSession";
-import { redirect, RedirectType } from "next/navigation";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-  const session = await confirmSession();
-
-  if (session) {
-    redirect("/dashboard", RedirectType.replace);
-  }
-
   return (
     <>
       {/* GPU INTENSIVE BACKGROUND - Fixed background with gradient effects - these will stay in place during scroll */}
