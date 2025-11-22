@@ -102,7 +102,7 @@ export default function ProfileCard({
         </div>
 
         <div className="flex justify-end space-x-2 mt-10">
-          <Button onClick={handleProfileUpdate} disabled={isPending}>
+          <Button size="tiny" onClick={handleProfileUpdate} disabled={isPending}>
             {isPending ? (
               <span className="flex items-center gap-2">
                 <Loader2Icon />

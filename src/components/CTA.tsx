@@ -11,7 +11,7 @@ const bricolage = Bricolage_Grotesque({
 export default function CTA() {
   return (
     <section className="py-24 overflow-hidden">
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
+      <div className="mx-auto px-6 relative z-10">
         <div className="bg-background/30 border border-primary/20 rounded-2xl p-10 shadow-xl backdrop-blur-sm">
           <div className="text-center mb-10">
             <h2

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import * as Dialog from "@/components/ui/dialog";
-import { IconCirclePlusFilled } from "@tabler/icons-react";
+import { IconCirclePlus } from "@tabler/icons-react";
 import CreateNewNoteForm from "./CreateNewNoteForm";
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ export default function CreateNewNoteDialog(props: CreateNewNoteDialogProps) {
     <Dialog.Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.DialogTrigger asChild>
         <Button size="tiny" className="bg-yellow-500 text-white text-shadow-md">
-          <IconCirclePlusFilled />
+          <IconCirclePlus />
           Create Note
         </Button>
       </Dialog.DialogTrigger>

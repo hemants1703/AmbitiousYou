@@ -4,13 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-  IconCirclePlusFilled,
-  IconFilter,
-  IconSearch,
-  IconSettings2,
-  IconX,
-} from "@tabler/icons-react";
+import { IconCirclePlus, IconFilter, IconSearch, IconSettings2, IconX } from "@tabler/icons-react";
 import { Check, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -253,7 +247,7 @@ export function AmbitionsControlsClient({
             href={`/ambitions/new`}
             className="md:ml-0 flex justify-center items-center gap-1"
           >
-            <IconCirclePlusFilled className="h-4 w-4" />
+            <IconCirclePlus className="h-4 w-4" />
             New Ambition
           </Link>
         </Button>

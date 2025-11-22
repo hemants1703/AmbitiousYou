@@ -239,7 +239,7 @@ export default function CreateNewAmbitionForm() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex items-center justify-between"
+        className="flex flex-col md:flex-row items-center justify-between"
       >
         <div>
           <div className="flex items-center gap-2">
@@ -302,7 +302,7 @@ export default function CreateNewAmbitionForm() {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-5 md:gap-2 max-md:pt-5">
           <Button type="button" variant="outline" size="tiny" onClick={clearFormData}>
             Clear Form
           </Button>

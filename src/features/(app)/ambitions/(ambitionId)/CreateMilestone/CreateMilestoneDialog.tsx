@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import * as Dialog from "@/components/ui/dialog";
-import { IconCirclePlusFilled } from "@tabler/icons-react";
+import { IconCirclePlus } from "@tabler/icons-react";
 import { useState } from "react";
 import CreateMilestoneForm from "./CreateMilestoneForm";
 
@@ -26,7 +26,7 @@ export default function CreateMilestoneDialog(props: CreateMilestoneDialogProps)
             backgroundColor: props.ambitionColor,
           }}
         >
-          <IconCirclePlusFilled /> Create Milestone
+          <IconCirclePlus /> Create Milestone
         </Button>
       </Dialog.DialogTrigger>
       <Dialog.DialogContent>

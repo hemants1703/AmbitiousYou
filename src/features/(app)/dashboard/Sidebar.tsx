@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils";
 import "@/styles/cynthiaMenuItemAnimation.css";
 import {
-  IconCirclePlusFilled,
+  IconCirclePlus,
   IconDashboard,
   IconSettings,
   IconSquareToggle,
@@ -31,7 +31,7 @@ const mainNavItems = [
   {
     title: "Create Ambition",
     href: "/ambitions/new",
-    icon: IconCirclePlusFilled,
+    icon: IconCirclePlus,
   },
   // {
   //   title: "Cynthia",

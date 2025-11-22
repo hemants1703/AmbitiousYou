@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motivationalQuotes } from "@/lib/motivationalQuotes";
-import { IconCheck, IconCirclePlusFilled, IconSettings2, IconTarget } from "@tabler/icons-react";
+import { IconCheck, IconCirclePlus, IconSettings2, IconTarget } from "@tabler/icons-react";
 import Link from "next/link";
 
 export default function NoAmbitionsFound() {
@@ -22,7 +22,7 @@ export default function NoAmbitionsFound() {
 
           <Button asChild size="lg" className="mt-6">
             <Link prefetch={true} href="/ambitions/new" className="flex items-center gap-2">
-              <IconCirclePlusFilled className="h-5 w-5" />
+              <IconCirclePlus className="h-5 w-5" />
               Create Your First Ambition
             </Link>
           </Button>

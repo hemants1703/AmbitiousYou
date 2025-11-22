@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import * as Dialog from "@/components/ui/dialog";
-import { IconCirclePlusFilled } from "@tabler/icons-react";
+import { IconCirclePlus } from "@tabler/icons-react";
 import { useState } from "react";
 import CreateNewTaskForm from "./CreateNewTaskForm";
 
@@ -26,7 +26,7 @@ export default function CreateNewTaskDialog(props: CreateNewTaskDialogProps) {
             backgroundColor: props.ambitionColor,
           }}
         >
-          <IconCirclePlusFilled /> Create Task
+          <IconCirclePlus /> Create Task
         </Button>
       </Dialog.DialogTrigger>
       <Dialog.DialogContent>

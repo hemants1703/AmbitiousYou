@@ -6,7 +6,7 @@ import { createNewMilestone, CreateNewMilestoneActionState } from "./actions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
-import { IconCalendar, IconCirclePlusFilled, IconLoader2 } from "@tabler/icons-react";
+import { IconCalendar, IconCirclePlus, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import * as Popover from "@/components/ui/popover";
 import { format, isAfter, isBefore, startOfDay } from "date-fns";
@@ -70,7 +70,7 @@ export default function CreateMilestoneForm(props: CreateMilestoneFormProps) {
       <Textarea
         name="milestoneDescription"
         placeholder="Milestone description"
-        value={formState.milestoneDescription}
+        value={formState.milestoneDescription ?? ""}
         className="max-h-36 overflow-y-auto"
         onChange={(e) => setFormState({ ...formState, milestoneDescription: e.target.value })}
       />
@@ -138,7 +138,7 @@ export default function CreateMilestoneForm(props: CreateMilestoneFormProps) {
           </span>
         ) : (
           <span className="flex items-center gap-2">
-            <IconCirclePlusFilled />
+            <IconCirclePlus />
             Create Milestone
           </span>
         )}

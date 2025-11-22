@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { startOfDay, isBefore, isAfter, format } from "date-fns";
-import { IconCalendar, IconLoader2, IconCirclePlusFilled } from "@tabler/icons-react";
+import { IconCalendar, IconLoader2, IconCirclePlus } from "@tabler/icons-react";
 import * as Popover from "@/components/ui/popover";
 
 interface CreateNewTaskFormProps {
@@ -129,7 +129,7 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
           </span>
         ) : (
           <span className="flex items-center gap-2">
-            <IconCirclePlusFilled />
+            <IconCirclePlus />
             Create task
           </span>
         )}

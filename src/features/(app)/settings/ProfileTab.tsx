@@ -11,7 +11,9 @@ export default async function ProfileTab() {
     redirect("/login", RedirectType.replace);
   }
 
-  const userData = await UserService.fetchUserById(session.user.id);
+  const userService = new UserService();
+
+  const userData = await userService.fetchUserById(session.user.id);
   if (userData instanceof Error) throw userData;
 
   return (

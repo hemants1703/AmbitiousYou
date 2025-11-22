@@ -37,12 +37,12 @@ export default function Features() {
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button asChild variant={"default"} size="lg">
+              <Button asChild variant="ay" size="lg">
                 <Link prefetch={true} href="/signup" className="h-10 px-8">
                   Get Started Free
                 </Link>
               </Button>
-              <Button asChild variant={"outline"}>
+              <Button asChild variant="ay-secondary" size="lg">
                 <a href="#how-it-works" className="h-10 px-8">
                   See How It Works
                 </a>

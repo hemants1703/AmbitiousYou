@@ -10,6 +10,8 @@ import {
 } from "@radix-ui/react-icons";
 import Features from "@/components/Features";
 import CTA from "@/components/CTA";
+import confirmSession from "@/lib/auth/confirmSession";
+import { IconArrowRight } from "@tabler/icons-react";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -17,6 +19,15 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export default async function Home() {
+  let session;
+  try {
+    session = await confirmSession();
+  } catch (error) {
+    console.log(error);
+
+    session = null;
+  }
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -43,25 +54,37 @@ export default async function Home() {
             AmbitiousYou helps you become a Superhuman.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              asChild
-              size="lg"
-              className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
-            >
-              <Link prefetch={true} href="/signup" className="flex items-center gap-2">
-                Get Started <RocketIcon className="h-5 w-5" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
-            >
-              <Link prefetch={true} href="/features" className="flex items-center gap-2">
-                Explore Features <ArrowRightIcon className="h-5 w-5" />
-              </Link>
-            </Button>
+            {session ? (
+              <Button variant="ay" size="lg" className="text-lg group h-12" asChild>
+                <Link prefetch={true} href="/dashboard">
+                  Go to Dashboard
+                  <IconArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="ay"
+                  className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+                >
+                  <Link prefetch={true} href="/signup" className="flex items-center gap-2">
+                    Get Started <RocketIcon className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="ay-secondary"
+                  size="lg"
+                  className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
+                >
+                  <Link prefetch={true} href="/features" className="flex items-center gap-2">
+                    Explore Features <ArrowRightIcon className="h-5 w-5" />
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Social proof */}

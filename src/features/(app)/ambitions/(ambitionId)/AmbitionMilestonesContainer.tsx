@@ -2,8 +2,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
 import { Ambition, Milestone } from "@/db/schema";
-import { IconCheck, IconCirclePlusFilled } from "@tabler/icons-react";
-import { format } from "date-fns";
+import {
+  IconCheck,
+  IconCircleFilled,
+  IconCirclePlus,
+  IconSquareRotatedFilled,
+} from "@tabler/icons-react";
+import { format, isAfter } from "date-fns";
 import Link from "next/link";
 import CreateMilestoneDialog from "./CreateMilestone/CreateMilestoneDialog";
 
@@ -37,44 +42,73 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
           {/* Milestones */}
           <div className="space-y-10">
             {props.milestones.map((milestone) => (
-              <div key={milestone.id} className="relative pl-10">
-                <div
-                  className={`absolute left-0 h-5 w-5 rounded-full ${milestone.milestoneCompleted ? "bg-primary" : "bg-muted-foreground/25"} flex items-center justify-center`}
-                >
-                  {milestone.milestoneCompleted && (
-                    <IconCheck className="h-3 w-3 text-primary-foreground" />
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <h4
-                    className={`text-base font-medium ${milestone.milestoneCompleted ? "text-primary" : ""}`}
-                  >
-                    {milestone.milestone}
-                  </h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Target date: {format(new Date(milestone.milestoneTargetDate), "MMMM d, yyyy")}
-                  </p>
-                  {milestone.milestoneCompleted ? (
-                    <Badge className="w-fit mt-2 bg-green-500/10 text-green-600 border-green-500/20">
-                      Completed
-                    </Badge>
-                  ) : (
-                    <Button variant="outline" size="tiny" className="w-fit mt-2 text-xs" asChild>
-                      <Link
-                        href={`/ambitions/${props.ambition.id}?mark_milestone_as_completed=${milestone.id}`}
-                        prefetch={true}
-                      >
-                        <IconCheck className="text-green-500" />
-                        Mark as Complete
-                      </Link>
-                    </Button>
-                  )}
-                </div>
-              </div>
+              <MilestoneItem
+                key={milestone.id}
+                ambitionId={props.ambition.id}
+                milestone={milestone}
+              />
             ))}
           </div>
         </div>
       </Card.CardContent>
     </Card.Card>
+  );
+}
+
+function MilestoneItem(props: { ambitionId: string; milestone: Milestone }) {
+  const deadlinePassed = isAfter(new Date(), new Date(props.milestone.milestoneTargetDate));
+
+  return (
+    <div className="relative pl-10">
+      <div
+        className={`absolute left-0 h-5 w-5 rounded-full ${props.milestone.milestoneCompleted ? "bg-primary" : "bg-muted-foreground/25"} flex items-center justify-center`}
+      >
+        {props.milestone.milestoneCompleted && (
+          <IconCheck className="h-3 w-3 text-primary-foreground" />
+        )}
+      </div>
+      <div className="flex flex-col border-y border-border py-4">
+        <h4
+          className={`text-base font-medium ${props.milestone.milestoneCompleted ? "text-primary" : ""}`}
+        >
+          {props.milestone.milestone}
+        </h4>
+        <p className="text-sm text-muted-foreground mt-1">{props.milestone.milestoneDescription}</p>
+        <div className="flex justify-start items-center gap-5 mt-4">
+          {props.milestone.milestoneCompleted ? (
+            <Badge className="w-fit mt-2 bg-green-500/10 text-green-600 border-green-500/20">
+              Completed
+            </Badge>
+          ) : (
+            <Button
+              variant={deadlinePassed ? "outline" : "outline"}
+              size="tiny"
+              className="w-fit text-xs"
+              asChild
+            >
+              {deadlinePassed ? (
+                <p className="text-xs text-destructive!">Deadline passed</p>
+              ) : (
+                <Link
+                  href={`/ambitions/${props.ambitionId}?mark_milestone_as_completed=${props.milestone.id}`}
+                  prefetch={true}
+                >
+                  <IconCheck className="text-green-500" />
+                  Mark as Complete
+                </Link>
+              )}
+            </Button>
+          )}
+          <IconSquareRotatedFilled className="size-2 text-muted-foreground" />
+          <p className="flex gap-2 items-center text-sm text-muted-foreground border rounded-full px-2 shadow-xs">
+            <span className="font-mono text-xs">TARGET DATE</span>
+            <IconCircleFilled className="size-1 text-muted-foreground" />
+            <span className="font-bold uppercase text-xs">
+              {format(new Date(props.milestone.milestoneTargetDate), "MMMM d, yyyy")}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

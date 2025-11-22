@@ -12,6 +12,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
 import "@/styles/AmbitionCard.css";
+import { IconCirclePlus } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -100,13 +101,19 @@ export default async function DashboardPage() {
                 Here&apos;s your progress at a glance.
               </p>
             </div>
-            <Button
+            {/* <Button
               asChild
               variant="outline"
               className="gap-2 flex justify-center items-center px-6 py-3 text-lg font-semibold rounded-xl border border-primary/30 bg-background hover:bg-primary/10 transition-colors"
             >
               <Link prefetch={true} href="/ambitions/new?ref=dashboard">
                 <PlusCircledIcon className="h-5 w-5" />
+                New Ambition
+              </Link>
+            </Button> */}
+            <Button asChild variant="ay" size="lg">
+              <Link prefetch={true} href="/ambitions/new?ref=dashboard">
+                <IconCirclePlus className="h-5 w-5" />
                 New Ambition
               </Link>
             </Button>
