@@ -3,36 +3,12 @@ import * as Card from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import PasswordCard from "./UpdatePassword/PasswordCard";
 
 export default function AccountTab() {
   return (
     <>
-      <Card.Card>
-        <Card.CardHeader>
-          <Card.CardTitle>Account Security</Card.CardTitle>
-          <Card.CardDescription>Manage your password and security settings</Card.CardDescription>
-        </Card.CardHeader>
-        <Card.CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="currentPassword">Current Password</Label>
-            <Input id="currentPassword" type="password" value={"**************"} disabled />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
-            <Input id="newPassword" type="password" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
-            <Input id="confirmPassword" type="password" />
-          </div>
-        </Card.CardContent>
-        <Card.CardFooter className="flex justify-end space-x-2">
-          <Button variant="outline" size="tiny">
-            Cancel
-          </Button>
-          <Button size="tiny">Update Password</Button>
-        </Card.CardFooter>
-      </Card.Card>
+      <PasswordCard />
 
       <Card.Card>
         <Card.CardHeader>
