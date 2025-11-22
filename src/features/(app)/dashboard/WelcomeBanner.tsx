@@ -77,7 +77,7 @@ function WelcomeBanner({ name }: WelcomeBannerProps) {
       />
 
       {/* Content Container */}
-      <div className="relative z-10 flex items-center justify-between gap-4 flex-wrap">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 flex-wrap">
         {/* Greeting Section */}
         <header className="flex-1 min-w-0">
           <h1
@@ -155,9 +155,5 @@ function WelcomeBanner({ name }: WelcomeBannerProps) {
     </MotionWrapper>
   );
 }
-
-// ============================================================================
-// MEMOIZED EXPORT
-// ============================================================================
 
 export default memo(WelcomeBanner);

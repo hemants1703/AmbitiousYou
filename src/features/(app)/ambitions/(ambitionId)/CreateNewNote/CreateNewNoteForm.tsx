@@ -53,7 +53,8 @@ export default function CreateNewNoteForm(props: CreateNewNoteFormProps) {
         size="tiny"
         type="submit"
         disabled={isPending}
-        className="bg-yellow-500 text-shadow-md hover:brightness-110"
+        variant="ay"
+        className="text-shadow-md dark:text-black bg-yellow-500! hover:brightness-110"
       >
         {isPending ? (
           <span className="flex items-center gap-2">

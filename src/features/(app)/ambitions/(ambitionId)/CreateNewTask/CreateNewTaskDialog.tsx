@@ -22,7 +22,7 @@ export default function CreateNewTaskDialog(props: CreateNewTaskDialogProps) {
         <Button
           size="tiny"
           variant="ay"
-          className="text-shadow-md dark:text-black hover:brightness-110 bg-(--ambition-color)"
+          className="w-full text-shadow-md dark:text-black hover:brightness-110 bg-(--ambition-color)"
           style={{
             backgroundColor: props.ambitionColor,
           }}
