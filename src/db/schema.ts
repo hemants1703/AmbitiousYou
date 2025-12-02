@@ -47,24 +47,9 @@ export const account = pgTable("account", {
 // [Better Auth] Verification table: For Email Verification
 export const verification = pgTable("verification", {
   id: varchar("id", { length: 255 }).primaryKey(),
-  identifier: varchar("identifier", { length: 255 })
-    .references(() => user.id, { onDelete: "cascade" })
-    .notNull(),
+  identifier: varchar("identifier", { length: 255 }).notNull(),
   value: varchar("value", { length: 255 }).notNull(),
   expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Profiles table: Extended user profile information
-export const profiles = pgTable("profiles", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: varchar("user_id", { length: 255 })
-    .references(() => user.id, { onDelete: "cascade" })
-    .notNull()
-    .unique(),
-  firstName: varchar("first_name", { length: 255 }).notNull(),
-  lastName: varchar("last_name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -144,8 +129,6 @@ export const notes = pgTable("notes", {
 // Export types
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
-export type Profile = typeof profiles.$inferSelect;
-export type NewProfile = typeof profiles.$inferInsert;
 export type Ambition = typeof ambitions.$inferSelect;
 export type NewAmbition = typeof ambitions.$inferInsert;
 export type Task = typeof tasks.$inferSelect;

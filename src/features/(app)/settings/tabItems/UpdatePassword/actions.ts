@@ -71,6 +71,28 @@ export async function updatePasswordAction(
     };
   }
 
+  try {
+    const sendPasswordUpdateEmailResult = await fetch(
+      `${process.env.MAIL_SERVICE_BASE_URL}/send-password-update-confirmation`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: session?.user.email,
+          username: session?.user.name.split(" ")[0],
+        }),
+      }
+    );
+
+    if (!sendPasswordUpdateEmailResult.ok) {
+      throw new Error(await sendPasswordUpdateEmailResult.json());
+    }
+  } catch (error) {
+    console.error("[SERVER ACTIONS] Error sending password update email:", error);
+  }
+
   return {
     success: true,
     ...submittedFormData,

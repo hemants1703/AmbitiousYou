@@ -22,6 +22,20 @@
       "when": 1763130918899,
       "tag": "0002_boring_human_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1764687004526,
+      "tag": "0003_gigantic_fallen_one",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1764694376911,
+      "tag": "0004_purple_leopardon",
+      "breakpoints": true
     }
   ]
 }

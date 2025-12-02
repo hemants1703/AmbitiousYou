@@ -1,11 +1,10 @@
 import * as Card from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import LoginForm from "@/features/(auth)/login/LoginForm";
+import ForgotPasswordForm from "@/features/(auth)/forgot-password/ForgotPasswordForm";
 import confirmSession from "@/lib/auth/confirmSession";
 import { redirect, RedirectType } from "next/navigation";
 
-export default async function Login() {
+export default async function ForgotPassword() {
   let session;
   try {
     session = await confirmSession();
@@ -26,33 +25,18 @@ export default async function Login() {
             <div className="lg:w-1/2 p-8 flex flex-col justify-center bg-background">
               <Card.CardHeader className="text-center lg:text-left">
                 <Card.CardTitle className="text-3xl lg:text-5xl font-bold">
-                  Welcome Back
+                  Forgot Password
                 </Card.CardTitle>
-                <p className="text-sm text-muted-foreground mt-2">Log in to your account</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Enter your email to reset your password
+                </p>
               </Card.CardHeader>
             </div>
             <Separator orientation="vertical" className="hidden lg:block" />
             <div className="lg:w-1/2 p-8 bg-background">
               <Card.CardContent className="space-y-4">
-                <LoginForm />
+                <ForgotPasswordForm />
               </Card.CardContent>
-              <Card.CardFooter className="flex flex-col items-start mt-4">
-                <p className="text-sm text-muted-foreground">
-                  Don&apos;t have an account?{" "}
-                  <Link prefetch={true} href="/signup" className="underline hover:text-primary">
-                    Sign Up
-                  </Link>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <Link
-                    prefetch={true}
-                    href="/forgot-password"
-                    className="underline hover:text-primary"
-                  >
-                    Forgot Password?
-                  </Link>
-                </p>
-              </Card.CardFooter>
             </div>
           </div>
         </Card.Card>

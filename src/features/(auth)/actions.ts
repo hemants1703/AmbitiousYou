@@ -2,10 +2,13 @@
 
 import { auth } from "@/lib/auth/auth";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect, RedirectType } from "next/navigation";
 import z from "zod";
-import { LoginSchema, SignupSchema } from "./validation";
-import { headers } from "next/headers";
+import { ForgotPasswordSchema, LoginSchema, ResetPasswordSchema, SignupSchema } from "./validation";
+import { db } from "@/db";
+import { user } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export interface SignupActionState {
   errors?: Record<string, string[]>;
@@ -133,4 +136,125 @@ export async function logoutAction(): Promise<{ error?: string }> {
   }
 
   redirect("/login", RedirectType.replace);
+}
+
+export interface ForgotPasswordState {
+  success?: boolean;
+  errors?: Record<string, string[]>;
+
+  email: string;
+}
+
+// This function is called when the user submits the reset password form
+export async function forgotPasswordAction(_: ForgotPasswordState, formData: FormData) {
+  const submittedFormData = {
+    email: formData.get("email") as string,
+  };
+  const validatedData = ForgotPasswordSchema.safeParse(submittedFormData);
+
+  if (!validatedData.success) {
+    console.log("validationResult", z.flattenError(validatedData.error).fieldErrors);
+    return {
+      errors: z.flattenError(validatedData.error).fieldErrors,
+      ...submittedFormData,
+    };
+  }
+
+  const userExists = await db.select().from(user).where(eq(user.email, validatedData.data.email));
+
+  if (userExists.length === 0) {
+    return {
+      errors: {
+        message: ["The provided email address is not associated with any account."],
+      },
+      ...submittedFormData,
+    };
+  }
+
+  try {
+    const resetPasswordResponse = await auth.api.requestPasswordReset({
+      body: {
+        email: validatedData.data.email,
+        redirectTo:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/reset-password"
+            : `${process.env.APP_BASE_URL}/reset-password`,
+      },
+    });
+
+    console.log("resetPasswordResponse", resetPasswordResponse);
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return {
+      errors: {
+        message: ["An error occurred while requesting a password reset. Please try again."],
+      },
+      ...submittedFormData,
+    };
+  }
+
+  return {
+    success: true,
+    ...submittedFormData,
+  };
+}
+
+export interface ResetPasswordState {
+  token: string;
+  success?: boolean;
+  errors?: Record<string, string[]>;
+  password: string;
+  confirmPassword: string;
+}
+
+export async function resetPasswordAction(
+  _: ResetPasswordState,
+  formData: FormData
+): Promise<ResetPasswordState> {
+  const submittedFormData = {
+    token: formData.get("token") as string,
+    password: formData.get("password") as string,
+    confirmPassword: formData.get("confirmPassword") as string,
+  };
+
+  const validatedData = ResetPasswordSchema.safeParse(submittedFormData);
+
+  if (!validatedData.success) {
+    return {
+      errors: z.flattenError(validatedData.error).fieldErrors,
+      ...submittedFormData,
+    };
+  }
+
+  if (validatedData.data.password !== validatedData.data.confirmPassword) {
+    return {
+      errors: {
+        confirmPassword: ["Passwords do not match"],
+      },
+      ...submittedFormData,
+    };
+  }
+
+  try {
+    const resetResponse = await auth.api.resetPassword({
+      body: {
+        newPassword: validatedData.data.password,
+        token: validatedData.data.token,
+      },
+    });
+
+    if (!resetResponse) {
+      throw new Error("Failed to reset password");
+    }
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return {
+      errors: {
+        message: ["An error occurred while resetting your password. Please try again."],
+      },
+      ...submittedFormData,
+    };
+  }
+
+  redirect("/login?reset=success", RedirectType.replace);
 }
