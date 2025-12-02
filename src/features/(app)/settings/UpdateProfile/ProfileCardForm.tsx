@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/db/schema";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconLoader2, IconMail } from "@tabler/icons-react";
 import { useState } from "react";
 import updateUserAction from "./actions";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { authClient } from "@/lib/auth/auth-client";
 
 interface ProfileCardFormProps {
   userData: User;
@@ -42,6 +44,16 @@ export default function ProfileCardForm(props: ProfileCardFormProps) {
     });
   };
 
+  const handleEmailVerification = async () => {
+    await authClient.sendVerificationEmail({
+      email: props.userData.email,
+      callbackURL:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/dashboard"
+          : process.env.APP_BASE_URL + "/dashboard",
+    });
+  };
+
   return (
     <div className="flex flex-col gap-8 md:flex-row">
       <div className="flex flex-col items-center gap-4">
@@ -68,7 +80,25 @@ export default function ProfileCardForm(props: ProfileCardFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="email">Email</Label>
+            {!props.userData.emailVerified ? (
+              <div className="flex items-center gap-2">
+                <Badge className="bg-amber-500 text-white text-xs">Email not verified</Badge>
+                <Button
+                  size="tiny"
+                  onClick={handleEmailVerification}
+                  type="button"
+                  variant="outline"
+                >
+                  <IconMail className="size-4" />
+                  Send verification email
+                </Button>
+              </div>
+            ) : (
+              <Badge className="bg-green-500 text-white text-xs">Email verified</Badge>
+            )}
+          </div>
           <Input
             id="email"
             type="email"
