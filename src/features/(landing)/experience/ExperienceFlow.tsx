@@ -208,8 +208,8 @@ export default function ExperienceFlow() {
       )}
 
       {/* Final CTA Section */}
-      <section className="w-full py-16 md:py-24 bg-linear-to-t from-muted/50 to-transparent">
-        <div className="container px-4 md:px-6 max-w-3xl mx-auto text-center">
+      <section className="w-full py-16 md:py-24">
+        <div className="container px-4 md:px-6 max-w-3xl mx-auto text-center bg-background/30 border border-primary/20 rounded-xl p-10 shadow-xl backdrop-blur-sm">
           <MotionWrapper
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

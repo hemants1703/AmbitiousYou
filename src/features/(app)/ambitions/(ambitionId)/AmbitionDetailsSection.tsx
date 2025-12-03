@@ -54,7 +54,7 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
     ((completedTasks + completedMilestones) / (props.tasks.length + props.milestones.length)) * 100;
 
   return (
-    <Card.Card>
+    <Card.Card className="bg-linear-to-tl from-(--ambition-color)/10 to-transparent">
       <Card.CardHeader>
         <Card.CardTitle>Ambition Overview</Card.CardTitle>
         <Card.CardDescription>{props.ambition.ambitionDefinition}</Card.CardDescription>

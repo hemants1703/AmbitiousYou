@@ -138,14 +138,14 @@ export default function PersonaSelector({
 
                   <Card.CardFooter className="pt-2">
                     <Button
-                      variant={isSelected ? "ay" : "ghost"}
+                      variant={isSelected ? "outline" : "ghost"}
                       size="sm"
                       className={cn(
                         "w-full group/btn transition-all",
                         !isSelected && "hover:bg-primary/5"
                       )}
                     >
-                      {isSelected ? "Exploring this path" : "This is me"}
+                      {isSelected ? "Scroll down to see how it works" : "This is me"}
                       <IconChevronRight
                         className={cn(
                           "ml-1 h-4 w-4 transition-transform",

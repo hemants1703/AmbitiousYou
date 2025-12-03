@@ -4,6 +4,19 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Target the selection pseudo-element anywhere within the app */
+/* It will look up the DOM tree for the nearest definition of --ambition-color */
+::selection {
+  background-color: var(--ambition-color, #0090ff); /* Use the variable, fallback to gray */
+  color: white; /* Keep the text white for contrast */
+}
+
+::-moz-selection {
+  /* Firefox compatibility */
+  background-color: var(--ambition-color, #0090ff);
+  color: white;
+}
+
 html {
   scroll-behavior: smooth;
 }
