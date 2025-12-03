@@ -10,6 +10,7 @@ import AmbitiousYouLogo from "./AmbitiousYouLogo";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/experience", label: "Experience" },
   { href: "/features", label: "Features" },
 ];
 
