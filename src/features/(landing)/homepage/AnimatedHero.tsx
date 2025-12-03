@@ -12,6 +12,7 @@ import {
 import { IconArrowRight, IconRocket, IconSparkles, IconTarget } from "@tabler/icons-react";
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
+import DashboardMockup from "./DashboardMockup";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -153,7 +154,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
               { label: "Organized Life", delay: 0 },
               { label: "Clutter-free Goals", delay: 0.1 },
               { label: "Cumulative Progress", delay: 0.2 },
-            ].map((item, index) => (
+            ].map((item) => (
               <MotionWrapper
                 key={item.label}
                 initial={{ opacity: 0, x: -10 }}
@@ -170,7 +171,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
         </MotionWrapper>
       </div>
 
-      {/* Animated App Preview */}
+      {/* Animated App Preview - Using the real dashboard mockup */}
       <MotionWrapper
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -178,128 +179,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
         className="mt-16 w-full max-w-5xl mx-auto relative z-10"
       >
         <div className="bg-linear-to-tr from-primary/20 to-secondary/10 rounded-xl p-1 shadow-xl">
-          <div className="bg-card/90 backdrop-blur-sm rounded-lg shadow-2xl border border-primary/10 overflow-hidden">
-            {/* Browser-like mockup header */}
-            <div className="bg-muted/60 border-b border-border flex items-center p-3">
-              <div className="flex gap-1.5 mr-4">
-                <MotionWrapper
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0 }}
-                >
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                </MotionWrapper>
-                <MotionWrapper
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-                >
-                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                </MotionWrapper>
-                <MotionWrapper
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
-                >
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                </MotionWrapper>
-              </div>
-              <div className="flex-1 bg-background/70 rounded-full h-6 px-3 text-xs flex items-center justify-center text-muted-foreground">
-                ambitiousyou.pro/dashboard
-              </div>
-            </div>
-
-            {/* App interface mockup */}
-            <div className="w-full h-[500px] bg-background/80 backdrop-blur-sm flex">
-              {/* Sidebar navigation mockup */}
-              <div className="w-48 border-r border-border p-3 hidden md:block">
-                <div className="flex items-center gap-2 mb-5">
-                  <MotionWrapper
-                    animate={{ rotate: [0, 5, 0] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-primary/20"></div>
-                  </MotionWrapper>
-                  <div className="h-4 bg-muted w-24 rounded-md"></div>
-                </div>
-
-                <div className="space-y-3">
-                  {["Dashboard", "Goals", "Tasks", "Analytics", "Settings"].map((item, index) => (
-                    <MotionWrapper
-                      key={item}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 1.2 + index * 0.1 }}
-                    >
-                      <div
-                        className={cn(
-                          "h-7 rounded-md px-2 flex items-center text-xs transition-all",
-                          item === "Goals"
-                            ? "bg-primary/10 text-primary font-medium"
-                            : "hover:bg-muted/50 text-muted-foreground"
-                        )}
-                      >
-                        {item}
-                      </div>
-                    </MotionWrapper>
-                  ))}
-                </div>
-              </div>
-
-              {/* Main content mockup */}
-              <div className="flex-1 p-4">
-                <MotionWrapper
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                >
-                  <div className="mb-4">
-                    <div className="h-8 w-60 bg-primary/5 rounded-md mb-2"></div>
-                    <div className="h-4 w-96 bg-muted/50 rounded-md"></div>
-                  </div>
-                </MotionWrapper>
-
-                {/* Animated Goal cards */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-                  {[
-                    { progress: 70, delay: 1.3 },
-                    { progress: 30, delay: 1.4 },
-                    { progress: 100, delay: 1.5 },
-                    { progress: 50, delay: 1.6 },
-                  ].map((card, i) => (
-                    <MotionWrapper
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: card.delay }}
-                      whileHover={{ scale: 1.02, y: -2 }}
-                    >
-                      <div className="border border-border rounded-lg p-4 bg-card/90 backdrop-blur-sm hover:border-primary/30 transition-all hover:shadow-md cursor-pointer">
-                        <div className="flex justify-between mb-2">
-                          <div className="h-6 w-36 bg-muted/40 rounded-md"></div>
-                          <div
-                            className={cn(
-                              "h-6 w-20 rounded-full",
-                              i === 1 ? "bg-primary/20 border border-primary/30" : "bg-muted/40"
-                            )}
-                          ></div>
-                        </div>
-                        <div className="h-3 w-full bg-muted/30 rounded-full mb-3 overflow-hidden">
-                          <MotionWrapper
-                            initial={{ width: 0 }}
-                            animate={{ width: `${card.progress}%` }}
-                            transition={{ delay: card.delay + 0.3, duration: 0.8 }}
-                            className="h-3 rounded-full bg-primary/60"
-                          />
-                        </div>
-                        <div className="space-y-2 mt-4">
-                          <div className="h-3 w-full bg-muted/30 rounded-md"></div>
-                          <div className="h-3 w-3/4 bg-muted/30 rounded-md"></div>
-                        </div>
-                      </div>
-                    </MotionWrapper>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <DashboardMockup />
         </div>
 
         {/* Animated floating badges */}
