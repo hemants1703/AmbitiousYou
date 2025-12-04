@@ -20,6 +20,7 @@ export const SignupSchema = z.object({
           "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
       }
     ),
+  userTimezone: z.string().min(1, { message: "Timezone is required" }),
 });
 
 export const LoginSchema = z.object({

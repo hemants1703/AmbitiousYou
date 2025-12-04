@@ -7,7 +7,7 @@ import { redirect, RedirectType } from "next/navigation";
 import z from "zod";
 import { ForgotPasswordSchema, LoginSchema, ResetPasswordSchema, SignupSchema } from "./validation";
 import { db } from "@/db";
-import { user } from "@/db/schema";
+import { settings, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export interface SignupActionState {
@@ -16,6 +16,7 @@ export interface SignupActionState {
   fullName: string;
   email: string;
   password: string;
+  userTimezone: string;
 }
 
 // This function is called when the user submits the signup form
@@ -23,10 +24,11 @@ export async function signupAction(
   _: SignupActionState,
   formData: FormData
 ): Promise<SignupActionState> {
-  const submittedFormData = {
+  const submittedFormData: SignupActionState = {
     fullName: formData.get("fullName") as string,
     email: formData.get("email") as string,
     password: formData.get("password") as string,
+    userTimezone: formData.get("userTimezone") as string,
   };
   const validatedData = SignupSchema.safeParse(submittedFormData);
 
@@ -54,6 +56,13 @@ export async function signupAction(
     });
 
     console.log("userCreationResponse", userCreationResponse);
+
+    const userSettingsCreationResponse = await db.insert(settings).values({
+      userId: userCreationResponse.user.id,
+      userTimezone: validatedData.data.userTimezone,
+    });
+
+    console.log("userSettingsCreationResponse", userSettingsCreationResponse);
   } catch (error) {
     console.error("Error creating user:", error);
     return {

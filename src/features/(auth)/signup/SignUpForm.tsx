@@ -16,6 +16,7 @@ export default function SignUpForm() {
     fullName: "",
     email: "",
     password: "",
+    userTimezone: "",
   });
   const [formErrors, formAction, isSignupPending] = useActionState<SignupActionState, FormData>(
     signupAction,
@@ -37,6 +38,11 @@ export default function SignUpForm() {
       });
     }
   }, [formErrors?.errors]);
+
+  useEffect(() => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setFormState({ ...formState, userTimezone: timezone });
+  }, []);
 
   return (
     <form action={formAction} className="space-y-4 lg:min-w-96">
@@ -119,6 +125,8 @@ export default function SignUpForm() {
           }
         />
       </div>
+
+      <input type="hidden" name="userTimezone" value={formState.userTimezone} />
 
       {/* Submit Button */}
       <Button type="submit" className="w-full" disabled={isSignupPending}>

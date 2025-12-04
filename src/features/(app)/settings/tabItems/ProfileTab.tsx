@@ -2,7 +2,7 @@ import * as Card from "@/components/ui/card";
 import confirmSession from "@/lib/auth/confirmSession";
 import { UserService } from "@/services/userService";
 import { redirect, RedirectType } from "next/navigation";
-import ProfileCardForm from "@/features/(app)/settings/UpdateProfile/ProfileCardForm";
+import ProfileCardForm from "@/features/(app)/settings/tabItems/UpdateProfile/ProfileCardForm";
 
 export default async function ProfileTab() {
   const session = await confirmSession();

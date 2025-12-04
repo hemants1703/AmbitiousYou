@@ -39,6 +39,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
+    "countries-and-timezones": "^3.8.0",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.36.4",
     "drizzle-zod": "^0.8.3",
