@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { account, session, User, user, verification } from "@/db/schema";
-import { EmailServices } from "@/services/emailServices";
+import { EmailService } from "@/services/emailService";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -13,7 +13,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true, // Send Email Verification Link on Sign Up (i.e. new account creation)
     sendVerificationEmail: async ({ user, url }) => {
-      new EmailServices().sendEmailVerificationLink({
+      new EmailService().sendEmailVerificationLink({
         to: user.email as string,
         username: user.name.split(" ")[0] as string,
         link: url as string,
@@ -23,14 +23,14 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
-      new EmailServices().sendResetPasswordLink({
+      new EmailService().sendResetPasswordLink({
         to: user.email,
         username: user.name.split(" ")[0],
         link: url,
       });
     },
     onPasswordReset: async ({ user }) => {
-      new EmailServices().sendPasswordResetConfirmation({
+      new EmailService().sendPasswordResetConfirmation({
         to: user.email,
         username: user.name.split(" ")[0],
       });

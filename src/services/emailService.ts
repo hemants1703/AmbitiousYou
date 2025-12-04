@@ -4,7 +4,7 @@ interface SendEmailProps {
   link: string;
 }
 
-export class EmailServices {
+export class EmailService {
   async sendEmailVerificationLink({ to, username, link }: SendEmailProps) {
     console.log("[AUTH] sendEmailVerification");
     console.log("[AUTH] url", link);
