@@ -3,6 +3,9 @@ AmbitiousYou is a goal-tracking application. It's not another todo application r
 
 ### Key Features
 - **Ambitions**: Users can add/update/delete ambitions like achieving something in life, to achieve it, they can break down the steps/smaller tasks into todos and milestones and such things. So an Ambition is an accumulation of all those tasks. _e.g.: An Ambition to achieve 9+ GPA this semester - break down steps to achieve it!_
+  - **Tracking Methods**:
+    - `task`: Time-bound, recurring actions (e.g., "Exercise 3x/week", "Save $100/month")
+    - `milestone`: Sequential achievements (e.g., "5K → 10K → Half Marathon → Marathon")
 - **Notes**: Users can add/edit/delete notes to Ambitions.
 - **Ambition Stats**: Stats about the Ambition and it's current state.
 - **Ambition Details**: About the ambition, start date, end date, priority, percentage completed stuff etc.
@@ -40,7 +43,27 @@ under the `/src` directory.
 - `/types` - Single source of all the types of the project for TypeScript (`globals.ts`), the types that are pretty common and would be used in numerous places will only be placed here _(e.g.: `interface Ambition` in `/types/globals.ts` since it will be required in a lot of places)_ rest others would be defined only where required _(e.g.: `interface AmbitionPageProps` in `/ambitions` `page.tsx` only)_
 - `/tests` - Playwright tests
 
+### Design System
+**Principle**: Heavily B&W with accent colors for key elements only. Do not overuse these colors.
+
+```css
+--custom-light: #64ccc5;
+--custom-dark: #176b87;
+--custom-light-pale: rgba(100, 204, 197, 0.3);
+--custom-completed: rgba(16, 185, 129, 0.3);
+--custom-ongoing: rgba(59, 130, 246, 0.3);
+--custom-future: rgba(168, 85, 247, 0.3);
+--custom-incomplete: rgba(255, 99, 71, 0.3);
+--custom-background-gradient-start: rgba(100, 204, 197, 0.251);
+--scrollbar-bg-light: #ffffff;
+--scrollbar-thumb-light: #000000;
+--scrollbar-bg-dark: #000000;
+--scrollbar-thumb-dark: #ffffff;
+```
+
 ### Development Conventions
+**Code Quality**: Production-grade, efficient, bug-free, cost-effective code always.
+
 - Services as class based like `AmbitionsService.ts` has everything to do with `Ambitions`. Each method in the class should return `Promise<<whatever)might_be_required_based_on_service> | Error>`.
 - Server Components are strictly preferred, Client Components should be the last option unless we need browser APIs or something of that sort, else we strictly stick to Server Components. If some Server Component requires client or browser APIs/interactivity, we create it's specific Client Component in the dedicated `/features` dir _(e.g.: `/features/<route_group(only if any)>/<route_name>/components/EditAmbitionForm.tsx`, `/features/<route_group(only if any)>/<route_name>/actions.ts`)_.
 - Since we have services (`AmbitionsService.fetchActiveAmbition()`) we use these services to fetch data from the DB into Server Components.
@@ -49,3 +72,4 @@ under the `/src` directory.
 - If required, we can also use the `loading.tsx` file in the App Router
 - When working with Forms, we make the forms, super tightly integrated by using the useActionState<>() fully typed and using Server Actions.
 - When building individual components, we still prefer Server Components and if any client interactivity is required, only the part where it is required we extract away into a separate Client Component and build it. Server Components are the first preference always.
+- Do not make any changes until you have 95% confidence that you know what to build ask me follow up questions until you have that confidence.
