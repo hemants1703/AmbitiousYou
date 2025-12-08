@@ -61,7 +61,7 @@ export async function editNoteAction(
   const session = await confirmSession();
 
   const submittedFormData = {
-    noteId: formData.get("noteId") as string,
+    id: formData.get("id") as string,
     ambitionId: formData.get("ambitionId") as string,
     note: formData.get("note") as string,
   };

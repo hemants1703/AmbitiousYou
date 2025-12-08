@@ -26,7 +26,7 @@ export default function EditNoteDialog(props: EditNoteDialogProps) {
   useEffect(() => {
     if (formErrors?.errors) {
       toast.error("Error", {
-        description: formErrors.errors.general.join(", "),
+        description: "There was an error updating your note. Please try again.",
         closeButton: true,
       });
     } else if (formErrors?.success) {
