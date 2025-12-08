@@ -67,27 +67,50 @@ AmbitiousYou is not just another todo app—it's a **goal tracking system on ste
 
 AmbitiousYou follows a **microservices architecture** with two main services communicating via REST APIs:
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              AMBITIOUSYOU SYSTEM                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌─────────────────┐         ┌─────────────────┐         ┌───────────────┐  │
-│  │                 │         │                 │         │               │  │
-│  │     Client      │◄───────►│   Main App      │◄───────►│  PostgreSQL   │  │
-│  │    (Browser)    │  HTTP   │  (Next.js 16)   │  SQL    │   Database    │  │
-│  │                 │         │                 │         │               │  │
-│  └─────────────────┘         └────────┬────────┘         └───────────────┘  │
-│                                       │                                     │
-│                                       │ REST API                            │
-│                                       ▼                                     │
-│                              ┌─────────────────┐         ┌───────────────┐  │
-│                              │  Notifications  │         │    Email      │  │
-│                              │    Service      │────────►│   Provider    │  │
-│                              │  (Express.js)   │  SMTP   │ (Nodemailer)  │  │
-│                              └─────────────────┘         └───────────────┘  │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Client["🌐 Client Layer"]
+        Browser["Browser<br/>(React 19)"]
+    end
+
+    subgraph MainApp["📦 Main Application"]
+        NextJS["Next.js 16<br/>App Router"]
+        ServerComponents["Server Components"]
+        ServerActions["Server Actions"]
+        BetterAuth["BetterAuth"]
+        Services["Service Layer<br/>(Business Logic)"]
+    end
+
+    subgraph NotificationsService["📧 Notifications Microservice"]
+        Express["Express.js 5"]
+        MailController["Mail Controller"]
+        MailService["Mail Service<br/>(Nodemailer)"]
+        Templates["HTML Templates"]
+    end
+
+    subgraph DataLayer["🗄️ Data Layer"]
+        PostgreSQL[("PostgreSQL<br/>Database")]
+        Drizzle["Drizzle ORM"]
+    end
+
+    subgraph External["☁️ External Services"]
+        EmailProvider["Email Provider<br/>(SMTP)"]
+    end
+
+    Browser <-->|"HTTP/SSR"| NextJS
+    NextJS --> ServerComponents
+    NextJS --> ServerActions
+    ServerComponents --> Services
+    ServerActions --> Services
+    NextJS --> BetterAuth
+    Services --> Drizzle
+    Drizzle --> PostgreSQL
+    BetterAuth -->|"REST API"| Express
+    Services -->|"REST API"| Express
+    Express --> MailController
+    MailController --> MailService
+    MailController --> Templates
+    MailService -->|"SMTP"| EmailProvider
 ```
 
 ### Service Breakdown
@@ -104,56 +127,115 @@ AmbitiousYou follows a **microservices architecture** with two main services com
 
 ### Authentication Flow
 
-```
-┌──────────┐    ┌──────────────┐    ┌─────────────┐    ┌──────────────────┐
-│  User    │───►│  Login/      │───►│ BetterAuth  │───►│   PostgreSQL     │
-│ Browser  │    │  Signup Form │    │  Verify     │    │  users/sessions  │
-└──────────┘    └──────────────┘    └──────┬──────┘    └──────────────────┘
-                                           │
-                                           ▼
-                                   ┌───────────────┐
-                                   │ Notifications │───► Email Verification
-                                   │   Service     │───► Password Reset
-                                   └───────────────┘───► Welcome Email
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User as 👤 User
+    participant Form as 📝 Auth Form
+    participant Auth as 🔐 BetterAuth
+    participant DB as 🗄️ PostgreSQL
+    participant Notif as 📧 Notifications
+
+    User->>Form: Enter credentials
+    Form->>Auth: Submit login/signup
+    Auth->>DB: Verify/Create user
+    DB-->>Auth: User data
+    
+    alt Signup Flow
+        Auth->>Notif: Send verification email
+        Notif-->>User: 📬 Email verification link
+        User->>Auth: Click verification link
+        Auth->>DB: Mark email verified
+    end
+    
+    alt Password Reset
+        Auth->>Notif: Send reset link
+        Notif-->>User: 📬 Password reset email
+        User->>Auth: Submit new password
+        Auth->>DB: Update password
+        Auth->>Notif: Send confirmation
+        Notif-->>User: 📬 Password updated
+    end
+    
+    Auth-->>Form: Session token
+    Form-->>User: ✅ Authenticated
 ```
 
 ### Ambition CRUD Flow
 
-```
-┌──────────┐    ┌──────────────┐    ┌─────────────────┐    ┌──────────────┐
-│  Client  │───►│ Server       │───►│ AmbitionsService│───►│  PostgreSQL  │
-│Component │    │ Action/Route │    │ (Business Logic)│    │   ambitions  │
-└──────────┘    └──────────────┘    └─────────────────┘    │   tasks      │
-     ▲                                                     │   milestones │
-     │                                                     │   notes      │
-     └─────────────────────────────────────────────────────┴──────────────┘
-                              Revalidation & UI Update
+```mermaid
+flowchart LR
+    subgraph Client["Client Component"]
+        UI["React UI"]
+        Form["Form with<br/>useActionState"]
+    end
+
+    subgraph Server["Server Layer"]
+        SA["Server Action"]
+        Zod["Zod Validation"]
+        Service["AmbitionsService"]
+    end
+
+    subgraph Database["Database"]
+        PG[("PostgreSQL")]
+    end
+
+    UI --> Form
+    Form -->|"FormData"| SA
+    SA --> Zod
+    Zod -->|"Validated Data"| Service
+    Service -->|"Drizzle Query"| PG
+    PG -->|"Result"| Service
+    Service -->|"Typed Response"| SA
+    SA -->|"Revalidate Path"| UI
 ```
 
 ### Form Submission Pipeline
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        TYPE-SAFE FORM PIPELINE                          │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  1. CLIENT                2. VALIDATION           3. SERVER ACTION      │
-│  ┌─────────────┐         ┌─────────────┐         ┌─────────────────┐   │
-│  │ React Form  │────────►│ Zod Schema  │────────►│ Server Action   │   │
-│  │ useAction   │         │ Validation  │         │ with Types      │   │
-│  │ State<T>()  │         │             │         │                 │   │
-│  └─────────────┘         └─────────────┘         └────────┬────────┘   │
-│        ▲                                                  │            │
-│        │                                                  ▼            │
-│        │                                         ┌─────────────────┐   │
-│        │                                         │ Service Layer   │   │
-│        │                                         │ (DB Operations) │   │
-│        │                                         └────────┬────────┘   │
-│        │                                                  │            │
-│        └──────────────────────────────────────────────────┘            │
-│                          Response with Typed State                      │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Step1["1️⃣ Client Side"]
+        ReactForm["React Form Component"]
+        UseActionState["useActionState&lt;T&gt;()"]
+        FormData["FormData Object"]
+    end
+
+    subgraph Step2["2️⃣ Validation Layer"]
+        ZodSchema["Zod Schema"]
+        TypeInference["Type Inference"]
+        ValidationResult{"Valid?"}
+    end
+
+    subgraph Step3["3️⃣ Server Action"]
+        ServerAction["Server Action<br/>(Fully Typed)"]
+        BusinessLogic["Business Logic"]
+    end
+
+    subgraph Step4["4️⃣ Service Layer"]
+        ServiceClass["Service Class<br/>(e.g., AmbitionsService)"]
+        DrizzleORM["Drizzle ORM"]
+        DBQuery["Database Query"]
+    end
+
+    subgraph Step5["5️⃣ Response"]
+        TypedState["Typed State Response"]
+        UIUpdate["UI Revalidation"]
+    end
+
+    ReactForm --> UseActionState
+    UseActionState --> FormData
+    FormData --> ZodSchema
+    ZodSchema --> TypeInference
+    TypeInference --> ValidationResult
+    ValidationResult -->|"✅ Yes"| ServerAction
+    ValidationResult -->|"❌ No"| ReactForm
+    ServerAction --> BusinessLogic
+    BusinessLogic --> ServiceClass
+    ServiceClass --> DrizzleORM
+    DrizzleORM --> DBQuery
+    DBQuery --> TypedState
+    TypedState --> UIUpdate
+    UIUpdate --> ReactForm
 ```
 
 ---
@@ -235,69 +317,115 @@ ambitiousyou/
 
 ## 🗃️ Database Schema
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              DATABASE SCHEMA                                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌─────────────┐       ┌─────────────┐       ┌─────────────────────────┐   │
-│  │    user     │       │   session   │       │     verification        │   │
-│  ├─────────────┤       ├─────────────┤       ├─────────────────────────┤   │
-│  │ id (PK)     │◄──────│ userId (FK) │       │ id (PK)                 │   │
-│  │ name        │       │ token       │       │ identifier              │   │
-│  │ email       │       │ expiresAt   │       │ value                   │   │
-│  │ emailVerified│      │ ipAddress   │       │ expiresAt               │   │
-│  │ image       │       │ userAgent   │       └─────────────────────────┘   │
-│  │ createdAt   │       └─────────────┘                                     │
-│  │ updatedAt   │                                                           │
-│  └──────┬──────┘                                                           │
-│         │                                                                   │
-│         │ 1:N                                                               │
-│         ▼                                                                   │
-│  ┌─────────────────┐                                                       │
-│  │    ambitions    │                                                       │
-│  ├─────────────────┤                                                       │
-│  │ id (PK, UUID)   │                                                       │
-│  │ userId (FK)     │                                                       │
-│  │ ambitionName    │                                                       │
-│  │ ambitionDefinition                                                      │
-│  │ ambitionTrackingMethod (task | milestone)                               │
-│  │ ambitionStartDate                                                       │
-│  │ ambitionEndDate │                                                       │
-│  │ ambitionStatus (active | completed | missed)                            │
-│  │ ambitionPriority (low | medium | high)                                  │
-│  │ ambitionPercentageCompleted                                             │
-│  │ ambitionColor   │                                                       │
-│  │ isFavourited    │                                                       │
-│  └────────┬────────┘                                                       │
-│           │                                                                 │
-│     ┌─────┴─────┬─────────────┐                                            │
-│     │           │             │                                            │
-│     ▼           ▼             ▼                                            │
-│  ┌────────┐ ┌──────────┐ ┌─────────┐                                       │
-│  │ tasks  │ │milestones│ │  notes  │                                       │
-│  ├────────┤ ├──────────┤ ├─────────┤                                       │
-│  │id (PK) │ │id (PK)   │ │id (PK)  │                                       │
-│  │userId  │ │userId    │ │userId   │                                       │
-│  │ambition│ │ambitionId│ │ambition │                                       │
-│  │Id (FK) │ │(FK)      │ │Id (FK)  │                                       │
-│  │task    │ │milestone │ │note     │                                       │
-│  │taskDesc│ │milestone │ │createdAt│                                       │
-│  │Completed│ │Desc     │ │updatedAt│                                       │
-│  │deadline│ │completed │ └─────────┘                                       │
-│  └────────┘ │targetDate│                                                   │
-│             └──────────┘                                                   │
-│                                                                             │
-│  ┌─────────────┐      ┌─────────────┐                                      │
-│  │  settings   │      │   account   │  (OAuth providers - future)          │
-│  ├─────────────┤      ├─────────────┤                                      │
-│  │ id (PK)     │      │ id (PK)     │                                      │
-│  │ userId (FK) │      │ userId (FK) │                                      │
-│  │ userTimezone│      │ providerId  │                                      │
-│  └─────────────┘      │ accountId   │                                      │
-│                       └─────────────┘                                      │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+erDiagram
+    USER {
+        varchar id PK
+        varchar name
+        varchar email UK
+        boolean emailVerified
+        varchar image
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    SESSION {
+        varchar id PK
+        varchar userId FK
+        varchar token
+        timestamp expiresAt
+        varchar ipAddress
+        varchar userAgent
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    ACCOUNT {
+        varchar id PK
+        varchar userId FK
+        varchar accountId
+        varchar providerId
+        varchar accessToken
+        varchar refreshToken
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    VERIFICATION {
+        varchar id PK
+        varchar identifier
+        varchar value
+        timestamp expiresAt
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    AMBITIONS {
+        uuid id PK
+        varchar userId FK
+        text ambitionName
+        text ambitionDefinition
+        text ambitionTrackingMethod "task | milestone"
+        timestamp ambitionStartDate
+        timestamp ambitionEndDate
+        timestamp ambitionCompletionDate
+        text ambitionStatus "active | completed | missed"
+        varchar ambitionPriority "low | medium | high"
+        integer ambitionPercentageCompleted
+        varchar ambitionColor
+        boolean isFavourited
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    TASKS {
+        uuid id PK
+        varchar userId FK
+        uuid ambitionId FK
+        text task
+        text taskDescription
+        boolean taskCompleted
+        timestamp taskDeadline
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    MILESTONES {
+        uuid id PK
+        varchar userId FK
+        uuid ambitionId FK
+        text milestone
+        text milestoneDescription
+        boolean milestoneCompleted
+        timestamp milestoneTargetDate
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    NOTES {
+        uuid id PK
+        varchar userId FK
+        uuid ambitionId FK
+        text note
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    SETTINGS {
+        uuid id PK
+        varchar userId FK
+        varchar userTimezone
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    USER ||--o{ SESSION : "has"
+    USER ||--o{ ACCOUNT : "has"
+    USER ||--o{ AMBITIONS : "creates"
+    USER ||--o{ SETTINGS : "has"
+    AMBITIONS ||--o{ TASKS : "contains"
+    AMBITIONS ||--o{ MILESTONES : "contains"
+    AMBITIONS ||--o{ NOTES : "has"
 ```
 
 ---
@@ -372,7 +500,7 @@ ambitiousyou/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ambitiousyou.git
+git clone https://github.com/hemants1703/ambitiousyou.git
 cd ambitiousyou
 
 # Install dependencies
