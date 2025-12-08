@@ -15,7 +15,11 @@
 [![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
 
-[Live Demo](#) · [Features](#-features) · [System Architecture](#-system-architecture) · [Getting Started](#-getting-started)
+[Features](#-features) · [System Architecture](#-system-architecture) · [Getting Started](#-getting-started)
+
+https://github.com/user-attachments/assets/e4a95969-a3e4-4978-a371-8217d56a7568
+
+https://github.com/user-attachments/assets/fa6f9be8-9d5c-4303-a107-3ddfbce86982
 
 </div>
 
