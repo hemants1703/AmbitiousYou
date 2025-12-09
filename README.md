@@ -17,7 +17,11 @@
 
 [Features](#-features) · [System Architecture](#-system-architecture) · [Getting Started](#-getting-started)
 
+**AmbitiousYou Homepage**
+
 https://github.com/user-attachments/assets/e4a95969-a3e4-4978-a371-8217d56a7568
+
+**Dashboard Overview**
 
 https://github.com/user-attachments/assets/fa6f9be8-9d5c-4303-a107-3ddfbce86982
 
