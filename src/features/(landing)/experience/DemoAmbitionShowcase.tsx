@@ -61,10 +61,7 @@ export default function DemoAmbitionShowcase({
   }).length;
 
   return (
-    <section
-      ref={containerRef}
-      className="w-full py-16 md:py-24 bg-linear-to-b from-transparent via-muted/30 to-transparent"
-    >
+    <section ref={containerRef} className="w-full py-16 md:py-24">
       <div className="container px-4 md:px-6 max-w-5xl mx-auto">
         {/* Section Header */}
         <MotionWrapper
