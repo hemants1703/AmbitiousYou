@@ -29,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ toLower(github.repository) }}
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,format=short
@@ -51,11 +51,15 @@ jobs:
     steps:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          REPO_NAME: ${{ github.repository }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          envs: REPO_NAME
           script: |
             export GHCR_TOKEN="${{ secrets.GHCR_TOKEN }}"
             export GHCR_USER="${{ github.actor }}"
-            ~/app/deploy.sh ambitiousyou ghcr.io/${{ toLower(github.repository) }}:latest 3001
+            REPO_LOWER=$(echo "$REPO_NAME" | tr '[:upper:]' '[:lower:]')
+            ~/app/deploy.sh ambitiousyou ghcr.io/${REPO_LOWER}:latest 3001
