@@ -62,4 +62,4 @@ jobs:
             export GHCR_TOKEN="${{ secrets.GHCR_TOKEN }}"
             export GHCR_USER="${{ github.actor }}"
             REPO_LOWER=$(echo "$REPO_NAME" | tr '[:upper:]' '[:lower:]')
-            ~/app/deploy.sh ambitiousyou ghcr.io/${REPO_LOWER}:latest 3001
+            ~/app/deploy.sh ambitiousyou ghcr.io/${REPO_LOWER}:latest 3000
