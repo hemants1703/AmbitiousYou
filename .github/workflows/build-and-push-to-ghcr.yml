@@ -58,4 +58,4 @@ jobs:
           script: |
             export GHCR_TOKEN="${{ secrets.GHCR_TOKEN }}"
             export GHCR_USER="${{ github.actor }}"
-            /app/deploy.sh ambitiousyou ghcr.io/${{ github.repository }}:latest 3001
+            ~/app/deploy.sh ambitiousyou ghcr.io/${{ github.repository }}:latest 3001
