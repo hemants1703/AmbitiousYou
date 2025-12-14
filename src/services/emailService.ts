@@ -9,17 +9,20 @@ export class EmailService {
     console.log("[AUTH] sendEmailVerification");
     console.log("[AUTH] url", link);
 
-    const result = await fetch(`${process.env.MAIL_SERVICE_BASE_URL}/send-email-verification`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to,
-        username,
-        verificationLink: link,
-      }),
-    });
+    const result = await fetch(
+      `${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-email-verification`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to,
+          username,
+          verificationLink: link,
+        }),
+      }
+    );
 
     if (!result.ok) {
       console.error("Failed to send email verification link", await result.json());
@@ -31,7 +34,7 @@ export class EmailService {
     console.log("[AUTH] url", link);
 
     const sendPasswordResetEmailResult = await fetch(
-      `${process.env.MAIL_SERVICE_BASE_URL}/send-password-reset-link`,
+      `${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-password-reset-link`,
       {
         method: "POST",
         headers: {
@@ -57,7 +60,7 @@ export class EmailService {
     console.log(`Password for user ${to} has been reset.`);
 
     const sendPasswordResetConfirmationEmailResult = await fetch(
-      `${process.env.MAIL_SERVICE_BASE_URL}/send-password-reset-confirmation`,
+      `${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-password-reset-confirmation`,
       {
         method: "POST",
         headers: {

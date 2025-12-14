@@ -73,7 +73,7 @@ export async function updatePasswordAction(
 
   try {
     const sendPasswordUpdateEmailResult = await fetch(
-      `${process.env.MAIL_SERVICE_BASE_URL}/send-password-update-confirmation`,
+      `${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-password-update-confirmation`,
       {
         method: "POST",
         headers: {
