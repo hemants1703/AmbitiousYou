@@ -6,6 +6,10 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
+  trustedOrigins: [
+    process.env.NOTIFICATIONS_SERVICE_BASE_URL as string,
+    "https://ambitiousyou.pro",
+  ],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: { user, session, account, verification },
