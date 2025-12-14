@@ -50,7 +50,7 @@ export default function ProfileCardForm(props: ProfileCardFormProps) {
       callbackURL:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/dashboard"
-          : process.env.APP_BASE_URL + "/dashboard",
+          : process.env.NEXT_PUBLIC_APP_BASE_URL + "/dashboard",
     });
   };
 
