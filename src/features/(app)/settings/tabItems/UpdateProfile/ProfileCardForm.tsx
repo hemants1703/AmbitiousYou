@@ -1,16 +1,15 @@
 "use client";
 
 import * as Avatar from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/db/schema";
 import { IconLoader2, IconMail } from "@tabler/icons-react";
 import { useState } from "react";
-import updateUserAction from "./actions";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { authClient } from "@/lib/auth/auth-client";
+import { updateUserAction, sendVerificationEmailAction } from "./actions";
 
 interface ProfileCardFormProps {
   userData: User;
@@ -45,13 +44,12 @@ export default function ProfileCardForm(props: ProfileCardFormProps) {
   };
 
   const handleEmailVerification = async () => {
-    await authClient.sendVerificationEmail({
-      email: props.userData.email,
-      callbackURL:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/dashboard"
-          : process.env.NEXT_PUBLIC_APP_BASE_URL + "/dashboard",
-    });
+    const result = await sendVerificationEmailAction(props.userData.email);
+    if (!result.success) {
+      toast.error(result.error ?? "Failed to send verification email");
+    } else {
+      toast.success("Verification email sent!");
+    }
   };
 
   return (

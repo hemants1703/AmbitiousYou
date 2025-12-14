@@ -7,8 +7,9 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { updateProfileValidator } from "./validators";
+import { auth } from "@/lib/auth/auth";
 
-export default async function updateUserAction(name: string): Promise<{
+export async function updateUserAction(name: string): Promise<{
   success: boolean;
   error?: string;
   data?: { name: string };
@@ -66,4 +67,23 @@ export default async function updateUserAction(name: string): Promise<{
       error: error instanceof Error ? error.message : "Failed to update profile",
     };
   }
+}
+
+export async function sendVerificationEmailAction(
+  email: string
+): Promise<{ success?: boolean; error?: string }> {
+  const baseUrl = process.env.APP_BASE_URL;
+
+  if (!baseUrl) {
+    return { success: false, error: "APP_BASE_URL not configured" };
+  }
+
+  await auth.api.sendVerificationEmail({
+    body: {
+      email,
+      callbackURL: `${baseUrl}/dashboard`,
+    },
+  });
+
+  return { success: true, error: undefined };
 }

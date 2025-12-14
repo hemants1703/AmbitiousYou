@@ -37,7 +37,7 @@ export default function Footer() {
             <div className="flex items-center gap-4 pt-4">
               <Link
                 prefetch={true}
-                href="https://github.com/hemants1703/AmbitiousYou-frontend"
+                href="https://github.com/hemants1703/AmbitiousYou"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -55,7 +55,7 @@ export default function Footer() {
               </Link>
               <Link
                 prefetch={true}
-                href="https://twitter.com/hemants1703"
+                href="https://x.com/AmbitiousYouHQ"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
