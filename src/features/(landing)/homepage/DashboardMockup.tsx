@@ -101,6 +101,7 @@ export default function DashboardMockup() {
                 alt="AmbitiousYou"
                 width={28}
                 height={28}
+                className="size-7!"
                 style={{ width: "auto", height: "auto" }}
               />
               <span className="text-lg">
