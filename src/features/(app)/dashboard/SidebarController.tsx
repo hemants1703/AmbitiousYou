@@ -19,7 +19,7 @@ export function SidebarController(props: SidebarControllerProps) {
       <div
         className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} bg-black md:translate-x-0 fixed inset-y-0 left-0 z-50 md:relative md:z-0 transition-transform duration-300 ease-in-out`}
       >
-        <Sidebar />
+        <Sidebar isSidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       </div>
 
       {/* Overlay to close sidebar when clicked outside */}

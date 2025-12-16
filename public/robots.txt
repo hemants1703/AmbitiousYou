@@ -1,0 +1,22 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Private/authenticated pages
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /ambitions
+Disallow: /ambitions/
+Disallow: /billing
+Disallow: /billing/
+Disallow: /settings
+Disallow: /settings/
+Disallow: /onboarding
+Disallow: /onboarding/
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# Sitemap
+Sitemap: https://ambitiousyou.pro/sitemap.xml
+

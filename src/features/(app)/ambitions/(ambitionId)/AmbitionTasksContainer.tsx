@@ -49,7 +49,8 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
 }
 
 function TaskItem(props: { ambition: Ambition; task: Task }) {
-  const deadlinePassed = isAfter(new Date(), new Date(props.task.taskDeadline));
+  const deadlinePassed =
+    isAfter(new Date(), new Date(props.task.taskDeadline)) && !props.task.taskCompleted;
 
   return (
     <div

@@ -60,6 +60,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
 
   let tasks: Task[] | Error = [];
   let milestones: Milestone[] | Error = [];
+  let isMilestoneCompletedToMarkAsCompleted: boolean = false;
 
   const ambitionsService = new AmbitionsService();
 
@@ -69,6 +70,10 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
   } else if (ambition.ambitionTrackingMethod === "milestone") {
     milestones = await ambitionsService.fetchAmbitionMilestones(ambition.id, session.user.id);
     if (milestones instanceof Error) throw milestones;
+
+    isMilestoneCompletedToMarkAsCompleted =
+      milestones.find((milestone) => milestone.id === searchParams.mark_milestone_as_completed)
+        ?.milestoneCompleted ?? true;
   }
 
   const notes: Note[] | Error = await ambitionsService.fetchAmbitionNotes(
@@ -128,7 +133,7 @@ export default async function IndividualAmbitionPage(props: AmbitionDetailsPageP
             <DeleteAmbitionDialog ambitionId={ambition.id} />
           )}
 
-          {searchParams.mark_milestone_as_completed && (
+          {searchParams.mark_milestone_as_completed && !isMilestoneCompletedToMarkAsCompleted && (
             <MarkMilestoneAsCompletedDialog
               milestone={
                 milestones.find(

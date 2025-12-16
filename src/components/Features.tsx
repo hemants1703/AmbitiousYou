@@ -32,7 +32,7 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="perspective-normal transform-3d grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Feature cards with hover animations and consistent styling */}
           {[
             {
@@ -69,28 +69,38 @@ export default function Features() {
               icon: <RocketIcon className="h-6 w-6 text-primary" />,
               title: "AI Assistance",
               description:
-                "Receive intelligent suggestions to overcome obstacles and optimize your approach.",
+                "Receive intelligent suggestions to overcome obstacles and optimize your approach. Coming soon!",
             },
           ].map((feature, i) => (
-            <div
+            <FeatureCard
               key={i}
-              className="group bg-card/80 backdrop-blur-sm rounded-xl p-7 shadow-md border border-border hover:border-primary/50 transition-all hover:shadow-xl"
-            >
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
-                {feature.title}
-              </h3>
-              <p className="text-muted-foreground">{feature.description}</p>
-              <div className="mt-6 flex items-center text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                <span>Learn more</span>
-                <ChevronRightIcon className="h-4 w-4 ml-1" />
-              </div>
-            </div>
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+            />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="group bg-card/80 backdrop-blur-sm rounded-xl p-7 shadow-md border border-border hover:border-primary/50 hover:shadow-xl hover:scale-105 hover:rotate-1 transition-all ease-in-out">
+      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
+    </div>
   );
 }

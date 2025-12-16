@@ -16,8 +16,8 @@ export default function Footer() {
   ];
 
   const legalLinks = [
-    { title: "Privacy Policy", href: "/privacy_policy" },
-    { title: "Terms of Service", href: "/terms_and_conditions" },
+    { title: "Privacy Policy", href: "/privacy-policy" },
+    { title: "Terms & Conditions", href: "/terms-and-conditions" },
     // Add more links as needed
   ];
 
@@ -155,7 +155,6 @@ export default function Footer() {
                   <Link
                     prefetch={true}
                     href={href}
-                    target="_blank"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {title}

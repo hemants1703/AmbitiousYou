@@ -48,14 +48,18 @@ const bottomNavItems = [
   },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isSidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+}
+
+export function Sidebar(props: SidebarProps) {
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState(true);
 
   return (
     <motion.div
       className="relative flex flex-col border-r border-border h-full bg-background"
-      animate={{ width: expanded ? 240 : 60 }}
+      animate={{ width: props.isSidebarOpen ? 240 : 60 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
       {/* AMBITIOUSYOU LOGO */}
@@ -64,7 +68,7 @@ export function Sidebar() {
           {/* <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center"> */}
           <Image src="/svg_logos/favicon_32px.svg" alt="AmbitiousYou Logo" width={32} height={32} />
           {/* </div> */}
-          {expanded && (
+          {props.isSidebarOpen && (
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -102,11 +106,13 @@ export function Sidebar() {
                     >
                       <span className="flex items-center gap-2">
                         <item.icon className={cn("size-4", item.href === "/cynthia" ? "" : "")} />
-                        {expanded && <span>{item.title}</span>}
+                        {props.isSidebarOpen && <span>{item.title}</span>}
                       </span>
                     </Link>
                   </TooltipTrigger>
-                  {!expanded && <TooltipContent side="right">{item.title}</TooltipContent>}
+                  {!props.isSidebarOpen && (
+                    <TooltipContent side="right">{item.title}</TooltipContent>
+                  )}
                 </Tooltip>
               </TooltipProvider>
             ))}
@@ -121,14 +127,14 @@ export function Sidebar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  onClick={() => setExpanded(!expanded)}
+                  onClick={() => props.setSidebarOpen(!props.isSidebarOpen)}
                   className="max-sm:hidden flex justify-start items-center w-full gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
                 >
                   <IconSquareToggle className="h-4 w-4" />
-                  {expanded && <span>Toggle Sidebar</span>}
+                  {props.isSidebarOpen && <span>Toggle Sidebar</span>}
                 </button>
               </TooltipTrigger>
-              {!expanded && <TooltipContent side="right">Toggle Sidebar</TooltipContent>}
+              {!props.isSidebarOpen && <TooltipContent side="right">Toggle Sidebar</TooltipContent>}
             </Tooltip>
           </TooltipProvider>
           {bottomNavItems.map((item) => (
@@ -147,11 +153,11 @@ export function Sidebar() {
                   >
                     <span className="flex items-center gap-2">
                       <item.icon className="h-4 w-4" />
-                      {expanded && <span>{item.title}</span>}
+                      {props.isSidebarOpen && <span>{item.title}</span>}
                     </span>
                   </Link>
                 </TooltipTrigger>
-                {!expanded && <TooltipContent side="right">{item.title}</TooltipContent>}
+                {!props.isSidebarOpen && <TooltipContent side="right">{item.title}</TooltipContent>}
               </Tooltip>
             </TooltipProvider>
           ))}
