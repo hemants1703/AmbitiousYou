@@ -18,10 +18,10 @@ const siteConfig = {
   name: "AmbitiousYou",
   title: "AmbitiousYou — Where ambitious goals become inevitable outcomes",
   description:
-    "AI-powered goal breakdown, priority management, and progress tracking that motivates. Structure your dreams, track your progress, become unstoppable.",
+    "Priority management and progress tracking that motivates. Structure your dreams, track your progress, become unstoppable.",
   url: "https://ambitiousyou.pro", // Update with your actual domain
   ogImage: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png",
-  creator: "@ambitiousyou", // Update with your Twitter handle
+  creator: "@AmbitiousYouHQ", // Update with your Twitter handle
   keywords: [
     "goal tracking",
     "ambition management",
@@ -152,6 +152,24 @@ export default async function RootLayout({
         <meta name="application-name" content="AmbitiousYou" />
         <meta name="theme-color" content="#64ccc5" />
         <meta name="msapplication-TileColor" content="#64ccc5" />
+
+        {/* LinkedIn & legacy crawler compatibility */}
+        <meta name="author" content="AmbitiousYou" />
+        <meta
+          name="image"
+          property="og:image"
+          content="https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png"
+        />
+        <meta
+          property="og:image:secure_url"
+          content="https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png"
+        />
+        <meta property="og:logo" content="https://ambitiousyou.pro/png_logos/logo_250px.png" />
+
+        {/* WhatsApp specific - prefers these formats */}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="675" />
+        <meta property="og:updated_time" content="2025-01-01T00:00:00+00:00" />
 
         {/* Preconnect to external resources for performance */}
         <link rel="preconnect" href="https://res.cloudinary.com" />
