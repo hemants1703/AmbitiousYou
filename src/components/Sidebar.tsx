@@ -1,21 +1,16 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import * as Tooltip from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import "@/styles/cynthiaMenuItemAnimation.css";
-import {
-  IconCirclePlus,
-  IconDashboard,
-  IconSettings,
-  IconSquareToggle,
-  IconTarget,
-} from "@tabler/icons-react";
+import { IconCirclePlus, IconDashboard, IconSquareToggle, IconTarget } from "@tabler/icons-react";
+import { User } from "better-auth";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { NavUser } from "./NavUser";
 
 const mainNavItems = [
   {
@@ -40,17 +35,10 @@ const mainNavItems = [
   // },
 ];
 
-const bottomNavItems = [
-  {
-    title: "Settings",
-    href: "/settings?tab=profile",
-    icon: IconSettings,
-  },
-];
-
 interface SidebarProps {
   isSidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  userData: User;
 }
 
 export function Sidebar(props: SidebarProps) {
@@ -59,7 +47,7 @@ export function Sidebar(props: SidebarProps) {
   return (
     <motion.div
       className="relative flex flex-col border-r border-border h-full bg-background"
-      animate={{ width: props.isSidebarOpen ? 240 : 60 }}
+      animate={{ width: props.isSidebarOpen ? 240 : 64 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
       {/* AMBITIOUSYOU LOGO */}
@@ -87,14 +75,14 @@ export function Sidebar(props: SidebarProps) {
         <div className="space-y-4 px-2">
           <nav className="space-y-1">
             {mainNavItems.map((item) => (
-              <TooltipProvider key={item.href} delayDuration={100}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
+              <Tooltip.TooltipProvider key={item.href} delayDuration={100}>
+                <Tooltip.Tooltip>
+                  <Tooltip.TooltipTrigger asChild>
                     <Link
                       prefetch={true}
                       href={item.href}
                       className={cn(
-                        "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
+                        "flex items-center justify-between rounded-md px-4 py-2 text-sm transition-colors",
                         item.href === pathname
                           ? "bg-primary text-primary-foreground"
                           : "hover:bg-muted text-muted-foreground hover:text-foreground",
@@ -109,12 +97,12 @@ export function Sidebar(props: SidebarProps) {
                         {props.isSidebarOpen && <span>{item.title}</span>}
                       </span>
                     </Link>
-                  </TooltipTrigger>
+                  </Tooltip.TooltipTrigger>
                   {!props.isSidebarOpen && (
-                    <TooltipContent side="right">{item.title}</TooltipContent>
+                    <Tooltip.TooltipContent side="right">{item.title}</Tooltip.TooltipContent>
                   )}
-                </Tooltip>
-              </TooltipProvider>
+                </Tooltip.Tooltip>
+              </Tooltip.TooltipProvider>
             ))}
           </nav>
         </div>
@@ -123,44 +111,24 @@ export function Sidebar(props: SidebarProps) {
       {/* BOTTOM NAVIGATION */}
       <div className="border-t border-border mt-auto py-2 px-2">
         <nav className="space-y-1">
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger asChild>
+          <Tooltip.TooltipProvider delayDuration={100}>
+            <Tooltip.Tooltip>
+              <Tooltip.TooltipTrigger asChild>
                 <button
                   onClick={() => props.setSidebarOpen(!props.isSidebarOpen)}
-                  className="max-sm:hidden flex justify-start items-center w-full gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
+                  className="max-sm:hidden flex justify-start items-center w-full gap-3 rounded-md px-4 py-2 text-sm transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
                 >
-                  <IconSquareToggle className="h-4 w-4" />
+                  <IconSquareToggle className="size-4" />
                   {props.isSidebarOpen && <span>Toggle Sidebar</span>}
                 </button>
-              </TooltipTrigger>
-              {!props.isSidebarOpen && <TooltipContent side="right">Toggle Sidebar</TooltipContent>}
-            </Tooltip>
-          </TooltipProvider>
-          {bottomNavItems.map((item) => (
-            <TooltipProvider key={item.href} delayDuration={100}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    prefetch={true}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center justify-between rounded-md px-3 py-2 text-sm",
-                      item.href === pathname
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    <span className="flex items-center gap-2">
-                      <item.icon className="h-4 w-4" />
-                      {props.isSidebarOpen && <span>{item.title}</span>}
-                    </span>
-                  </Link>
-                </TooltipTrigger>
-                {!props.isSidebarOpen && <TooltipContent side="right">{item.title}</TooltipContent>}
-              </Tooltip>
-            </TooltipProvider>
-          ))}
+              </Tooltip.TooltipTrigger>
+              {!props.isSidebarOpen && (
+                <Tooltip.TooltipContent side="right">Toggle Sidebar</Tooltip.TooltipContent>
+              )}
+            </Tooltip.Tooltip>
+          </Tooltip.TooltipProvider>
+
+          <NavUser user={props.userData} />
         </nav>
       </div>
     </motion.div>

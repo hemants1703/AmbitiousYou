@@ -1,4 +1,13 @@
-import { boolean, integer, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 // [Better Auth] Users table: For User Management
 export const user = pgTable("user", {
@@ -131,6 +140,23 @@ export const settings = pgTable("settings", {
   userId: varchar("user_id", { length: 255 })
     .references(() => user.id, { onDelete: "cascade" })
     .notNull(),
+  userNotificationSettings: jsonb("user_notification_settings")
+    .$type<{
+      emailNotifications: {
+        accountActivity: boolean;
+      };
+      pushNotifications: {
+        ambitionReminders: boolean;
+      };
+    }>()
+    .default({
+      emailNotifications: {
+        accountActivity: true,
+      },
+      pushNotifications: {
+        ambitionReminders: true,
+      },
+    }),
   userTimezone: varchar("user_timezone", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -149,3 +175,11 @@ export type Note = typeof notes.$inferSelect;
 export type NewNote = typeof notes.$inferInsert;
 export type Settings = typeof settings.$inferSelect;
 export type NewSettings = typeof settings.$inferInsert;
+export type UserNotificationSettings = {
+  emailNotifications: {
+    accountActivity: boolean;
+  };
+  pushNotifications: {
+    ambitionReminders: boolean;
+  };
+};

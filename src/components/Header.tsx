@@ -8,6 +8,7 @@ import { logoutAction } from "@/features/(auth)/actions";
 import { cn } from "@/lib/utils";
 import { User } from "better-auth";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 interface HeaderProps {
@@ -18,7 +19,7 @@ interface HeaderProps {
 
 export function Header(props: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between md:justify-end gap-4 border-b bg-background px-4 md:px-6">
+    <header className="md:hidden sticky top-0 z-30 flex h-16 items-center justify-between md:justify-end gap-4 border-b bg-background px-4 md:px-6">
       <Button
         variant="ghost"
         size="icon"
@@ -38,9 +39,17 @@ export function Header(props: HeaderProps) {
         {props.isSidebarOpen === false && (
           <>
             {/* AMBITIOUSYOU LOGO */}
-            <Link prefetch={true} href="/dashboard" className="flex items-center text-3xl">
-              <span className="font-regular">Ambitious</span>
-              <span className="font-bold">You</span>
+            <Link prefetch={true} href="/dashboard" className="flex items-center text-2xl gap-2">
+              <Image
+                src="/svg_logos/favicon_32px.svg"
+                alt="AmbitiousYou Logo"
+                width={15}
+                height={15}
+              />
+              <span>
+                <span className="font-regular">Ambitious</span>
+                <span className="font-bold">You</span>
+              </span>
             </Link>
           </>
         )}

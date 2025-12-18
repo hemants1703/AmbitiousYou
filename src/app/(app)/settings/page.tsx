@@ -1,4 +1,5 @@
 import * as Tabs from "@/components/ui/tabs";
+import { UserNotificationSettings } from "@/db/schema";
 import AccountTab from "@/features/(app)/settings/tabItems/AccountTab";
 import AppearanceTab from "@/features/(app)/settings/tabItems/AppearanceTab";
 import NotificationsTab from "@/features/(app)/settings/tabItems/NotificationsTab";
@@ -9,14 +10,10 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Settings",
-};
+export const metadata: Metadata = { title: "Settings" };
 
 interface SettingsPageProps {
-  searchParams: Promise<{
-    tab?: string;
-  }>;
+  searchParams: Promise<{ tab?: string }>;
 }
 
 export default async function SettingsPage(props: SettingsPageProps) {
@@ -53,7 +50,12 @@ export default async function SettingsPage(props: SettingsPageProps) {
       label: "Notifications",
       value: "notifications",
       href: "/settings?tab=notifications",
-      component: <NotificationsTab />,
+      component: (
+        <NotificationsTab
+          userId={session.user.id}
+          userNotificationSettings={settings.userNotificationSettings as UserNotificationSettings}
+        />
+      ),
     },
     {
       label: "Appearance",
@@ -70,7 +72,7 @@ export default async function SettingsPage(props: SettingsPageProps) {
         <p className="text-muted-foreground">Manage your account settings and preferences</p>
       </div>
 
-      <Tabs.Tabs defaultValue={searchParams.tab} className="w-full">
+      <Tabs.Tabs key={searchParams.tab} defaultValue={searchParams.tab} className="w-full">
         <Tabs.TabsList className="grid w-full md:w-[600px] grid-cols-4">
           {tabs.map((tab) => (
             <Tabs.TabsTrigger key={tab.value} value={tab.value} asChild>

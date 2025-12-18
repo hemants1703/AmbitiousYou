@@ -11,7 +11,7 @@ export function AmbitionStatusBadge(props: AmbitionStatusBadgeProps) {
           props.ambitionStatus === "active"
             ? "bg-green-400"
             : props.ambitionStatus === "completed"
-              ? "bg-blue-500"
+              ? "bg-blue-500 text-white"
               : props.ambitionStatus === "missed"
                 ? "bg-amber-500"
                 : "bg-gray-200"

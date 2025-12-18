@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { settings, Settings } from "@/db/schema";
+import { settings, Settings, UserNotificationSettings } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export class SettingsService {
