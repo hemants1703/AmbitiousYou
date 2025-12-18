@@ -1,14 +1,13 @@
 import * as Card from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { UserNotificationSettings } from "@/db/schema";
 import {
-  AccountActivitySwitch,
-  AmbitionRemindersSwitch,
+  EmailAccountActivitySwitch,
+  PushAmbitionRemindersSwitch,
 } from "./UpdateNotificationSettings/NotificationSwitches";
 
 interface NotificationsTabProps {
-  userId: string;
-  userNotificationSettings: UserNotificationSettings;
+  emailAccountActivity: boolean;
+  pushAmbitionReminders: boolean;
 }
 
 export default function NotificationsTab(props: NotificationsTabProps) {
@@ -24,14 +23,9 @@ export default function NotificationsTab(props: NotificationsTabProps) {
           <div className="flex items-center justify-between space-x-2">
             <div>
               <p className="font-medium">Account activity</p>
-              <p className="text-sm text-muted-foreground">
-                Receive security alerts and account notifications
-              </p>
+              <p className="text-sm text-muted-foreground">Receive security alerts and account notifications</p>
             </div>
-            <AccountActivitySwitch
-              userId={props.userId}
-              userNotificationSettings={props.userNotificationSettings}
-            />
+            <EmailAccountActivitySwitch emailAccountActivity={props.emailAccountActivity} />
           </div>
         </div>
 
@@ -46,10 +40,7 @@ export default function NotificationsTab(props: NotificationsTabProps) {
                 Get notified when your ambitions or its tasks/milestones are due
               </p>
             </div>
-            <AmbitionRemindersSwitch
-              userId={props.userId}
-              userNotificationSettings={props.userNotificationSettings}
-            />
+            <PushAmbitionRemindersSwitch pushAmbitionReminders={props.pushAmbitionReminders} />
           </div>
         </div>
       </Card.CardContent>

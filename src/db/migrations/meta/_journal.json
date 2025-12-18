@@ -50,6 +50,20 @@
       "when": 1766063241311,
       "tag": "0006_mute_warpath",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1766079320471,
+      "tag": "0007_material_white_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1766079619230,
+      "tag": "0008_sweet_pride",
+      "breakpoints": true
     }
   ]
 }

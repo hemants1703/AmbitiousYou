@@ -1,67 +1,45 @@
 "use client";
 
 import { Switch } from "@/components/ui/switch";
-import { updateNotificationSettings } from "./actions";
-import { UserNotificationSettings } from "@/db/schema";
 import { toast } from "sonner";
+import { updateNotificationSettings } from "./actions";
 
 interface NotificationSwitchesProps {
-  userId: string;
-  userNotificationSettings: UserNotificationSettings;
+  emailAccountActivity: boolean;
+  pushAmbitionReminders: boolean;
 }
 
-export function AccountActivitySwitch(props: NotificationSwitchesProps) {
-  const handleCheckedChange = async () => {
-    props.userNotificationSettings.emailNotifications.accountActivity =
-      !props.userNotificationSettings.emailNotifications.accountActivity;
-    const toggleResponse = await updateNotificationSettings(
-      props.userId,
-      props.userNotificationSettings
-    );
+// Switch handler for updating notification settings
+const handleCheckedChange = async (setting: keyof NotificationSwitchesProps, value: boolean) => {
+  const toggleResponse = await updateNotificationSettings({
+    [setting]: value,
+  });
 
-    if (toggleResponse.success) {
-      toast.success("Email Notification settings updated", {
-        description: `You will now ${props.userNotificationSettings.emailNotifications.accountActivity ? "receive" : "no longer receive"} email notifications for Account activity`,
-      });
-    } else {
-      toast.error("Failed to update email notification settings", {
-        description: toggleResponse.error ?? "Please try again later",
-      });
-    }
-  };
+  if (toggleResponse.success) {
+    toast.success("Notification settings updated", {
+      description: `You will now ${value ? "receive" : "no longer receive"} notifications for your settings`,
+    });
+  } else {
+    toast.error("Failed to update your notification settings", {
+      description: toggleResponse.error ?? "Please try again later",
+    });
+  }
+};
 
+export function EmailAccountActivitySwitch(props: Pick<NotificationSwitchesProps, "emailAccountActivity">) {
   return (
     <Switch
-      checked={props.userNotificationSettings.emailNotifications.accountActivity}
-      onCheckedChange={handleCheckedChange}
+      checked={props.emailAccountActivity}
+      onCheckedChange={() => handleCheckedChange("emailAccountActivity", !props.emailAccountActivity)}
     />
   );
 }
 
-export function AmbitionRemindersSwitch(props: NotificationSwitchesProps) {
-  const handleCheckedChange = async () => {
-    props.userNotificationSettings.pushNotifications.ambitionReminders =
-      !props.userNotificationSettings.pushNotifications.ambitionReminders;
-    const toggleResponse = await updateNotificationSettings(
-      props.userId,
-      props.userNotificationSettings
-    );
-
-    if (toggleResponse.success) {
-      toast.success("Push Notification settings updated", {
-        description: `You will now ${props.userNotificationSettings.pushNotifications.ambitionReminders ? "receive" : "no longer receive"} push notifications for Ambition Reminders`,
-      });
-    } else {
-      toast.error("Failed to update push notification settings", {
-        description: toggleResponse.error ?? "Please try again later",
-      });
-    }
-  };
-
+export function PushAmbitionRemindersSwitch(props: Pick<NotificationSwitchesProps, "pushAmbitionReminders">) {
   return (
     <Switch
-      checked={props.userNotificationSettings.pushNotifications.ambitionReminders}
-      onCheckedChange={handleCheckedChange}
+      checked={props.pushAmbitionReminders}
+      onCheckedChange={() => handleCheckedChange("pushAmbitionReminders", !props.pushAmbitionReminders)}
     />
   );
 }

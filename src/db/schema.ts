@@ -1,13 +1,4 @@
-import {
-  boolean,
-  integer,
-  jsonb,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { boolean, integer, jsonb, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 // [Better Auth] Users table: For User Management
 export const user = pgTable("user", {
@@ -75,12 +66,8 @@ export const ambitions = pgTable("ambitions", {
   ambitionStartDate: timestamp("ambition_start_date").notNull(),
   ambitionEndDate: timestamp("ambition_end_date").notNull(),
   ambitionCompletionDate: timestamp("ambition_completion_date"),
-  ambitionStatus: text("ambition_status")
-    .$type<"active" | "completed" | "missed">()
-    .default("active"),
-  ambitionPriority: varchar("ambition_priority", { length: 255 })
-    .$type<"low" | "medium" | "high">()
-    .default("medium"),
+  ambitionStatus: text("ambition_status").$type<"active" | "completed" | "missed">().default("active"),
+  ambitionPriority: varchar("ambition_priority", { length: 255 }).$type<"low" | "medium" | "high">().default("medium"),
   ambitionPercentageCompleted: integer("ambition_percentage_completed").default(0),
   ambitionColor: varchar("ambition_color", { length: 255 }).default("#64ccc5").notNull(),
   isFavourited: boolean("is_favourited").default(false),
@@ -139,7 +126,8 @@ export const settings = pgTable("settings", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: varchar("user_id", { length: 255 })
     .references(() => user.id, { onDelete: "cascade" })
-    .notNull(),
+    .notNull()
+    .unique(),
   userNotificationSettings: jsonb("user_notification_settings")
     .$type<{
       emailNotifications: {
@@ -158,6 +146,13 @@ export const settings = pgTable("settings", {
       },
     }),
   userTimezone: varchar("user_timezone", { length: 255 }).notNull(),
+
+  // Email Notification Preferences
+  emailAccountActivity: boolean("email_account_activity").default(true).notNull(),
+
+  // Push Notification Preferences
+  pushAmbitionReminders: boolean("push_ambition_reminders").default(true).notNull(),
+
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
