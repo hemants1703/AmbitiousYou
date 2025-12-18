@@ -64,6 +64,13 @@
       "when": 1766079619230,
       "tag": "0008_sweet_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1766083361862,
+      "tag": "0009_mysterious_captain_flint",
+      "breakpoints": true
     }
   ]
 }
