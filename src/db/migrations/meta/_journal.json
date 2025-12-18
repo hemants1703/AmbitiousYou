@@ -43,6 +43,13 @@
       "when": 1764858489218,
       "tag": "0005_far_pestilence",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1766063241311,
+      "tag": "0006_mute_warpath",
+      "breakpoints": true
     }
   ]
 }

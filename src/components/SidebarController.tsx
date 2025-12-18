@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sidebar } from "@/features/(app)/dashboard/Sidebar";
-import { Header } from "@/features/(app)/dashboard/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { Header } from "@/components/Header";
 import { User } from "better-auth";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
@@ -14,12 +15,16 @@ export function SidebarController(props: SidebarControllerProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <>
+    <SidebarProvider>
       {/* Sidebar for desktop */}
       <div
         className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} bg-black md:translate-x-0 fixed inset-y-0 left-0 z-50 md:relative md:z-0 transition-transform duration-300 ease-in-out`}
       >
-        <Sidebar isSidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <Sidebar
+          isSidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          userData={props.userData}
+        />
       </div>
 
       {/* Overlay to close sidebar when clicked outside */}
@@ -38,6 +43,6 @@ export function SidebarController(props: SidebarControllerProps) {
         />
         {props.children}
       </div>
-    </>
+    </SidebarProvider>
   );
 }

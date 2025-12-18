@@ -1,4 +1,4 @@
-import { SidebarController } from "@/features/(app)/dashboard/SidebarController";
+import { SidebarController } from "@/components/SidebarController";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import confirmSession from "@/lib/auth/confirmSession";
 import { User } from "better-auth";
@@ -8,7 +8,7 @@ import { redirect, RedirectType } from "next/navigation";
 export const metadata: Metadata = {
   title: {
     template: "%s | AmbitiousYou",
-    default: "Dashboard | AmbitiousYou",
+    default: "AmbitiousYou",
   },
 };
 

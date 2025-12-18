@@ -53,32 +53,30 @@ export default function ProfileCardForm(props: ProfileCardFormProps) {
   };
 
   return (
-    <div className="flex flex-col gap-8 md:flex-row">
-      <div className="flex flex-col items-center gap-4">
-        <Avatar.Avatar className="h-24 w-24">
-          <Avatar.AvatarImage src="/avatar-placeholder.jpg" alt="Profile picture" />
-          <Avatar.AvatarFallback>{initialsOfUsersName}</Avatar.AvatarFallback>
-        </Avatar.Avatar>
-        {/* <Button variant="outline" size="sm">
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col sm:flex-row justify-between gap-8 items-center">
+        <div className="flex flex-col items-center gap-4">
+          <Avatar.Avatar className="h-24 w-24">
+            <Avatar.AvatarImage src="/avatar-placeholder.jpg" alt="Profile picture" />
+            <Avatar.AvatarFallback>{initialsOfUsersName}</Avatar.AvatarFallback>
+          </Avatar.Avatar>
+          {/* <Button variant="outline" size="sm">
           Change Avatar
         </Button> */}
-      </div>
-
-      <div className="flex-1 space-y-4">
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              placeholder="John"
-              value={userData.name}
-              onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-            />
-          </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
+        <div className="w-full space-y-4">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            placeholder="John"
+            value={userData.name}
+            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+          />
+        </div>
+
+        <div className="w-full space-y-2">
+          <div className="flex items-center gap-2 ">
             <Label htmlFor="email">Email</Label>
             {!props.userData.emailVerified ? (
               <div className="flex items-center gap-2">
@@ -105,20 +103,18 @@ export default function ProfileCardForm(props: ProfileCardFormProps) {
             disabled
           />
         </div>
-
-        <div className="flex justify-end space-x-2 mt-10">
-          <Button size="tiny" onClick={handleProfileUpdate} disabled={isPending}>
-            {isPending ? (
-              <span className="flex items-center gap-2">
-                <IconLoader2 className="animate-spin" />
-                Saving...
-              </span>
-            ) : (
-              <span>Save Changes</span>
-            )}
-          </Button>
-        </div>
       </div>
+
+      <Button size="tiny" onClick={handleProfileUpdate} disabled={isPending} className="self-end">
+        {isPending ? (
+          <span className="flex items-center gap-2">
+            <IconLoader2 className="animate-spin" />
+            Saving...
+          </span>
+        ) : (
+          <span>Save Changes</span>
+        )}
+      </Button>
     </div>
   );
 }
