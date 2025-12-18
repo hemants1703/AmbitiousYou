@@ -1,15 +1,13 @@
 "use server";
 
 import { db } from "@/db";
-import { settings, UserNotificationSettings } from "@/db/schema";
+import { settings } from "@/db/schema";
 import confirmSession from "@/lib/auth/confirmSession";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { notificationSettingsSchema, UpdateNotificationSettingsInput } from "./validators";
 
-export async function updateNotificationSettings(
-  userId: string,
-  userNotificationSettings: UserNotificationSettings
-) {
+export async function updateNotificationSettings(notificationSettings: UpdateNotificationSettingsInput) {
   const session = await confirmSession();
 
   if (!session) {
@@ -19,13 +17,14 @@ export async function updateNotificationSettings(
     };
   }
 
+  // Only parse the notification settings that are provided stripping out the ones that are not provided
+  const parsedNotificationSettings = notificationSettingsSchema.parse(notificationSettings);
+
   try {
     const updateNotificationSettingsResult = await db
       .update(settings)
-      .set({
-        userNotificationSettings: userNotificationSettings,
-      })
-      .where(eq(settings.userId, userId))
+      .set(parsedNotificationSettings)
+      .where(eq(settings.userId, session.user.id))
       .returning();
 
     if (!updateNotificationSettingsResult) {

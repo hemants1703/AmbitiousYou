@@ -141,11 +141,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         {/* Additional meta tags not covered by Next.js Metadata API */}
         <meta name="apple-mobile-web-app-title" content="AmbitiousYou" />
@@ -177,7 +173,7 @@ export default async function RootLayout({
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}
-          <Toaster richColors />
+          <Toaster richColors theme="system" />
         </ThemeProvider>
       </body>
     </html>

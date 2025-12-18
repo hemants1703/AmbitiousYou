@@ -1,5 +1,4 @@
 import * as Tabs from "@/components/ui/tabs";
-import { UserNotificationSettings } from "@/db/schema";
 import AccountTab from "@/features/(app)/settings/tabItems/AccountTab";
 import AppearanceTab from "@/features/(app)/settings/tabItems/AppearanceTab";
 import NotificationsTab from "@/features/(app)/settings/tabItems/NotificationsTab";
@@ -52,8 +51,8 @@ export default async function SettingsPage(props: SettingsPageProps) {
       href: "/settings?tab=notifications",
       component: (
         <NotificationsTab
-          userId={session.user.id}
-          userNotificationSettings={settings.userNotificationSettings as UserNotificationSettings}
+          emailAccountActivity={settings.emailAccountActivity}
+          pushAmbitionReminders={settings.pushAmbitionReminders}
         />
       ),
     },
