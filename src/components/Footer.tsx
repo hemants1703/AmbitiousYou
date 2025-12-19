@@ -1,31 +1,24 @@
 import Link from "next/link";
-import { ThemeToggler } from "./ThemeToggler";
 import AmbitiousYouLogo from "./AmbitiousYouLogo";
 
 export default function Footer() {
   const exploreLinks = [
     { title: "Home", href: "/" },
-    { title: "About", href: "/about" },
-    // Add more links as needed
-  ];
-
-  const contactLinks = [
-    { title: "Contact Us", href: "/contact" },
-    { title: "Support", href: "/support" },
-    // Add more links as needed
+    { title: "Experience", href: "/experience" },
+    { title: "Features", href: "/features" },
+    { title: "Contact Us", href: "mailto:support@ambitiousyou.pro" },
   ];
 
   const legalLinks = [
     { title: "Privacy Policy", href: "/privacy-policy" },
     { title: "Terms & Conditions", href: "/terms-and-conditions" },
-    // Add more links as needed
   ];
 
   return (
     <footer className="w-full text-foreground pb-8 pt-16 z-10">
       <div className="container mx-auto px-4">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 mb-12">
           {/* Brand Section */}
           <div className="space-y-4">
             <Link prefetch={true} href="/" className="flex items-center gap-2 mb-4">
@@ -97,12 +90,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-5"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                   <path d="M12 11.3884C11.0942 9.62673 8.62833 6.34423 6.335 4.7259C4.13833 3.17506 3.30083 3.4434 2.75167 3.69256C2.11583 3.9784 2 4.95506 2 5.52839C2 6.10339 2.315 10.2367 2.52 10.9276C3.19917 13.2076 5.61417 13.9776 7.83917 13.7309C4.57917 14.2142 1.68333 15.4017 5.48083 19.6292C9.65833 23.9542 11.2058 18.7017 12 16.0392C12.7942 18.7017 13.7083 23.7651 18.4442 19.6292C22 16.0392 19.4208 14.2142 16.1608 13.7309C18.3858 13.9784 20.8008 13.2076 21.48 10.9276C21.685 10.2376 22 6.10256 22 5.52923C22 4.95423 21.8842 3.97839 21.2483 3.6909C20.6992 3.44256 19.8617 3.17423 17.665 4.72423C15.3717 6.34506 12.9058 9.62756 12 11.3884Z"></path>
                 </svg>
               </Link>
@@ -118,25 +106,6 @@ export default function Footer() {
                   <Link
                     prefetch={true}
                     href={href}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Contact</h4>
-            <ul className="space-y-2">
-              {contactLinks.map(({ title, href }) => (
-                <li key={href}>
-                  <Link
-                    prefetch={true}
-                    href={href}
-                    target="_blank"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {title}

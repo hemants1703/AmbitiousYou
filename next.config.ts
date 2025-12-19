@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   output: "standalone",
   images: {
     qualities: [100],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

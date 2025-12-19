@@ -2,12 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { logoutAction } from "@/features/(auth)/actions";
 import { IconBell, IconLogout, IconSettings } from "@tabler/icons-react";
 import { User } from "better-auth";

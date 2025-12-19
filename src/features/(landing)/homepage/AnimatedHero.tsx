@@ -4,12 +4,14 @@ import { MotionWrapper } from "@/components/MotionWrapper";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  ArrowRightIcon,
-  CheckCircledIcon,
-  HeartFilledIcon,
-  LightningBoltIcon,
-} from "@radix-ui/react-icons";
-import { IconArrowRight, IconRocket, IconSparkles, IconTarget } from "@tabler/icons-react";
+  IconArrowRight,
+  IconBoltFilled,
+  IconCircleCheckFilled,
+  IconHeartFilled,
+  IconRocket,
+  IconSparkles,
+  IconTarget,
+} from "@tabler/icons-react";
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
 import DashboardMockup from "./DashboardMockup";
@@ -34,7 +36,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
           transition={{ duration: 6, repeat: Infinity, repeatType: "reverse" }}
           className="absolute top-24 left-[10%]"
         >
-          <IconTarget className="h-16 w-16 text-primary" />
+          <IconTarget className="size-16 text-red-500" />
         </MotionWrapper>
         <MotionWrapper
           initial={{ opacity: 0, scale: 0.8 }}
@@ -42,15 +44,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
           transition={{ duration: 7, delay: 1, repeat: Infinity, repeatType: "reverse" }}
           className="absolute top-40 right-[15%]"
         >
-          <IconSparkles className="h-12 w-12 text-primary" />
-        </MotionWrapper>
-        <MotionWrapper
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.12, scale: 1, rotate: [0, 10, 0] }}
-          transition={{ duration: 8, delay: 2, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute bottom-40 left-[20%]"
-        >
-          <IconRocket className="h-14 w-14 text-primary" />
+          <IconSparkles className="size-16 text-cyan-500" />
         </MotionWrapper>
       </div>
 
@@ -66,9 +60,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-sm font-medium">
-            New: AI-powered goal recommendations now available
-          </span>
+          <span className="text-sm font-medium">New: AI-powered goal recommendations now available</span>
         </div>
       </MotionWrapper>
 
@@ -97,8 +89,8 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
           transition={{ duration: 0.6, delay: 0.5 }}
         >
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Reduce your mental overload and manage all your ambitions at a single and private place.
-            AmbitiousYou helps you become a Superhuman.
+            Reduce your mental overload and manage all your ambitions at a single and private place. AmbitiousYou helps
+            you become a Superhuman.
           </p>
         </MotionWrapper>
 
@@ -135,7 +127,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
                   className="text-lg h-12 px-8 hover:bg-primary/5 transition-all"
                 >
                   <Link prefetch={true} href="/experience" className="flex items-center gap-2">
-                    Try It Now <ArrowRightIcon className="h-5 w-5" />
+                    Try It Now <IconArrowRight className="size-5" />
                   </Link>
                 </Button>
               </>
@@ -144,11 +136,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
         </MotionWrapper>
 
         {/* Animated Social proof */}
-        <MotionWrapper
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-        >
+        <MotionWrapper initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.9 }}>
           <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-muted-foreground">
             {[
               { label: "Organized Life", delay: 0 },
@@ -162,7 +150,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
                 transition={{ duration: 0.4, delay: 1 + item.delay }}
               >
                 <div className="flex items-center gap-2">
-                  <CheckCircledIcon className="h-5 w-5 text-green-500" />
+                  <IconCircleCheckFilled className="size-6 text-green-500" />
                   <span>{item.label}</span>
                 </div>
               </MotionWrapper>
@@ -192,7 +180,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
         >
           <div className="bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg cursor-pointer">
             <div className="flex items-center gap-2">
-              <LightningBoltIcon className="h-4 w-4 text-yellow-400" />
+              <IconBoltFilled className="size-6 text-yellow-400" />
               <span className="font-medium">Increase productivity by 47%</span>
             </div>
           </div>
@@ -207,7 +195,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
         >
           <div className="bg-background/80 backdrop-blur-sm text-foreground px-4 py-2 rounded-full shadow-lg border border-primary/20 cursor-pointer">
             <div className="flex items-center gap-2">
-              <HeartFilledIcon className="h-4 w-4 text-pink-500" />
+              <IconHeartFilled className="size-6 text-pink-500" />
               <span className="font-medium">Loved by 98% of users</span>
             </div>
           </div>

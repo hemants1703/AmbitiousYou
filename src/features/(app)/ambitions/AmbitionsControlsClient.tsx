@@ -4,8 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { IconCirclePlus, IconFilter, IconSearch, IconSettings2, IconX } from "@tabler/icons-react";
-import { Check, X } from "lucide-react";
+import { IconCheck, IconCirclePlus, IconFilter, IconSearch, IconSettings2, IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -17,11 +16,7 @@ type SortKey =
   | "ambitionEndDate"
   | "tasks.completed";
 
-export function AmbitionsControlsClient({
-  priorities,
-}: {
-  priorities: ("low" | "medium" | "high")[];
-}) {
+export function AmbitionsControlsClient({ priorities }: { priorities: ("low" | "medium" | "high")[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -146,7 +141,7 @@ export function AmbitionsControlsClient({
                   className="flex justify-between"
                 >
                   {priority.charAt(0).toUpperCase() + priority.slice(1)}
-                  {currentPriority === priority && <Check className="h-4 w-4" />}
+                  {currentPriority === priority && <IconCheck className="h-4 w-4" />}
                 </DropdownMenu.DropdownMenuItem>
               ))}
             </DropdownMenu.DropdownMenuGroup>
@@ -154,11 +149,8 @@ export function AmbitionsControlsClient({
             {currentPriority && (
               <>
                 <DropdownMenu.DropdownMenuSeparator />
-                <DropdownMenu.DropdownMenuItem
-                  onClick={clearFilters}
-                  className="text-red-500 flex gap-2"
-                >
-                  <X className="h-4 w-4" />
+                <DropdownMenu.DropdownMenuItem onClick={clearFilters} className="text-red-500 flex gap-2">
+                  <IconX className="h-4 w-4" />
                   Clear filters
                 </DropdownMenu.DropdownMenuItem>
               </>
@@ -179,10 +171,7 @@ export function AmbitionsControlsClient({
             <DropdownMenu.DropdownMenuLabel>Sort Ambitions</DropdownMenu.DropdownMenuLabel>
             <DropdownMenu.DropdownMenuSeparator />
 
-            <DropdownMenu.DropdownMenuItem
-              onClick={() => handleSort("ambitionName")}
-              className="flex justify-between"
-            >
+            <DropdownMenu.DropdownMenuItem onClick={() => handleSort("ambitionName")} className="flex justify-between">
               By Title
               {currentSort === "ambitionName" && (
                 <Badge variant="secondary" className="ml-1">
@@ -242,11 +231,7 @@ export function AmbitionsControlsClient({
         </DropdownMenu.DropdownMenu>
 
         <Button asChild size="sm">
-          <Link
-            prefetch={true}
-            href={`/ambitions/new`}
-            className="md:ml-0 flex justify-center items-center gap-1"
-          >
+          <Link prefetch={true} href={`/ambitions/new`} className="md:ml-0 flex justify-center items-center gap-1">
             <IconCirclePlus className="h-4 w-4" />
             New Ambition
           </Link>

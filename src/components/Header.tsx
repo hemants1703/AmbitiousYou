@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import * as Dropdown from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/features/(auth)/actions";
 import { cn } from "@/lib/utils";
+import { IconMenu } from "@tabler/icons-react";
 import { User } from "better-auth";
-import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,25 +27,15 @@ export function Header(props: HeaderProps) {
         className="md:hidden"
         aria-label={props.isSidebarOpen ? "Close sidebar" : "Open sidebar"}
       >
-        <Menu className="h-5 w-5" />
+        <IconMenu className="h-5 w-5" />
       </Button>
 
-      <div
-        className={cn(
-          "flex items-center justify-between gap-2",
-          props.isSidebarOpen ? "" : "w-full"
-        )}
-      >
+      <div className={cn("flex items-center justify-between gap-2", props.isSidebarOpen ? "" : "w-full")}>
         {props.isSidebarOpen === false && (
           <>
             {/* AMBITIOUSYOU LOGO */}
             <Link prefetch={true} href="/dashboard" className="flex items-center text-2xl gap-2">
-              <Image
-                src="/svg_logos/favicon_32px.svg"
-                alt="AmbitiousYou Logo"
-                width={15}
-                height={15}
-              />
+              <Image src="/svg_logos/favicon_32px.svg" alt="AmbitiousYou Logo" width={15} height={15} />
               <span>
                 <span className="font-regular">Ambitious</span>
                 <span className="font-bold">You</span>
@@ -69,9 +59,7 @@ export function Header(props: HeaderProps) {
               <Dropdown.DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{`${props.userData.name}`}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {props.userData.email}
-                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">{props.userData.email}</p>
                   {/* {planName && <Badge className="mt-1 w-fit">{planName} Plan</Badge>} */}
                 </div>
               </Dropdown.DropdownMenuLabel>

@@ -1,8 +1,8 @@
-import { CheckIcon } from "lucide-react";
-import { Bricolage_Grotesque } from "next/font/google";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { ArrowRightIcon, CheckCircledIcon } from "@radix-ui/react-icons";
+import { IconCheck } from "@tabler/icons-react";
+import { Bricolage_Grotesque } from "next/font/google";
+import Link from "next/link";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -15,12 +15,10 @@ export default function Pricing() {
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 backdrop-blur-sm text-primary font-medium text-sm">
-            <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
+            <IconCheck className="mr-2 h-4 w-4 text-green-500" />
             Simple Pricing
           </div>
-          <h2
-            className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6`}
-          >
+          <h2 className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6`}>
             Choose Your Ambition Level
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -38,24 +36,18 @@ export default function Pricing() {
               <span className="text-muted-foreground">/month</span>
             </div>
             <Button variant="outline" className="mb-8">
-              <Link
-                prefetch={true}
-                href="/signup"
-                className="flex justify-center items-center gap-2 w-full"
-              >
+              <Link prefetch={true} href="/signup" className="flex justify-center items-center gap-2 w-full">
                 Start Free <ArrowRightIcon className="h-4 w-4" />
               </Link>
             </Button>
 
             <div className="space-y-3 mt-auto">
-              {["3 Active Goals", "Basic Task Management", "Core Analytics", "7-Day History"].map(
-                (feature) => (
-                  <div key={feature} className="flex items-start gap-3">
-                    <CheckCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                    <span>{feature}</span>
-                  </div>
-                )
-              )}
+              {["3 Active Goals", "Basic Task Management", "Core Analytics", "7-Day History"].map((feature) => (
+                <div key={feature} className="flex items-start gap-3">
+                  <CheckCircledIcon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                  <span>{feature}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -71,11 +63,7 @@ export default function Pricing() {
               <span className="text-muted-foreground">/month</span>
             </div>
             <Button className="mb-8 shadow-md shadow-primary/20">
-              <Link
-                prefetch={true}
-                href="/pricing"
-                className="flex justify-center items-center gap-2 w-full"
-              >
+              <Link prefetch={true} href="/pricing" className="flex justify-center items-center gap-2 w-full">
                 Get Started <ArrowRightIcon className="h-4 w-4 ml-2" />
               </Link>
             </Button>
@@ -106,11 +94,7 @@ export default function Pricing() {
               <span className="text-muted-foreground">/month</span>
             </div>
             <Button variant="outline" className="mb-8">
-              <Link
-                prefetch={true}
-                href="/pricing"
-                className="flex justify-center items-center gap-2 w-full"
-              >
+              <Link prefetch={true} href="/pricing" className="flex justify-center items-center gap-2 w-full">
                 Contact Sales <ArrowRightIcon className="h-4 w-4 ml-2" />
               </Link>
             </Button>

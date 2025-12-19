@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { RocketIcon } from "@radix-ui/react-icons";
 import { Bricolage_Grotesque } from "next/font/google";
+import { IconRocket } from "@tabler/icons-react";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -14,9 +15,7 @@ export default function CTA() {
       <div className="mx-auto px-6 relative z-10">
         <div className="bg-background/30 border border-primary/20 rounded-2xl p-10 shadow-xl backdrop-blur-sm">
           <div className="text-center mb-10">
-            <h2
-              className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 text-foreground`}
-            >
+            <h2 className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6 text-foreground`}>
               Ready to Achieve Your Dreams?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -27,7 +26,7 @@ export default function CTA() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20">
               <Link prefetch={true} href="/signup" className="flex items-center gap-2">
-                Get Started <RocketIcon className="h-5 w-5" />
+                Get Started <IconRocket className="size-5" />
               </Link>
             </Button>
             {/* <Button variant="outline" size="lg" className="text-lg h-12 px-8 hover:bg-primary/5">
@@ -39,9 +38,7 @@ export default function CTA() {
 
           {/* Final social proof */}
           {/* <div className="mt-10 text-center">
-            <p className="text-sm text-muted-foreground mb-4">
-              Join thousands of users already achieving their dreams
-            </p>
+            <p className="text-sm text-muted-foreground mb-4">Join thousands of users already achieving their dreams</p>
             <div className="flex justify-center">
               <div className="flex -space-x-3">
                 {[...Array(5)].map((_, i) => (

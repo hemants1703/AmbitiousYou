@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { signupAction, SignupActionState } from "@/features/(auth)/actions";
 import { cn } from "@/lib/utils";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { Loader2Icon } from "lucide-react";
+import { IconLoader2 } from "@tabler/icons-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -83,9 +83,7 @@ export default function SignUpForm() {
           value={formState.email}
           onChange={(e) => setFormState({ ...formState, email: e.target.value })}
         />
-        {formErrors?.errors?.email && (
-          <p className="text-red-500 text-sm mt-1">{formErrors.errors.email.join(", ")}</p>
-        )}
+        {formErrors?.errors?.email && <p className="text-red-500 text-sm mt-1">{formErrors.errors.email.join(", ")}</p>}
       </div>
 
       {/* Password Input */}
@@ -120,9 +118,7 @@ export default function SignUpForm() {
           className={cn("mt-1", formErrors?.errors?.password ? "border-red-500" : "")}
           required
           value={formState.password}
-          onChange={(e) =>
-            setFormState({ ...formState, password: e.target.value, errors: undefined })
-          }
+          onChange={(e) => setFormState({ ...formState, password: e.target.value, errors: undefined })}
         />
       </div>
 
@@ -132,7 +128,7 @@ export default function SignUpForm() {
       <Button type="submit" className="w-full" disabled={isSignupPending}>
         {isSignupPending ? (
           <div className="flex justify-center items-center gap-2">
-            <Loader2Icon className="animate-spin size-5" />
+            <IconLoader2 className="animate-spin size-5" />
             Creating Account...
           </div>
         ) : (
