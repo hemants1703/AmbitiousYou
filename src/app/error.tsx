@@ -50,8 +50,7 @@ export default function Error({ error, reset }: ErrorProps) {
             <div className="text-center space-y-2">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Oops! A Small Bump</h1>
               <p className="text-base md:text-lg text-muted-foreground font-light leading-relaxed max-w-md mx-auto">
-                Something unexpected happened, but don&apos;t worry—it&apos;s just a temporary
-                setback.
+                Something unexpected happened, but don&apos;t worry—it&apos;s just a temporary setback.
               </p>
             </div>
           </CardHeader>
@@ -62,13 +61,8 @@ export default function Error({ error, reset }: ErrorProps) {
               <div className="absolute inset-0 bg-linear-to-r from-[#64ccc5]/5 via-[#64ccc5]/10 to-[#64ccc5]/5 rounded-xl blur-xl" />
               <div className="relative bg-card/80 border border-[#64ccc5]/30 rounded-xl p-5 backdrop-blur-sm">
                 <div className="flex items-start gap-3">
-                  <IconSparkles
-                    className="h-5 w-5 text-[#64ccc5] shrink-0 mt-0.5"
-                    strokeWidth={2}
-                  />
-                  <p className="text-sm md:text-base italic text-foreground/90 leading-relaxed">
-                    {message}
-                  </p>
+                  <IconSparkles className="h-5 w-5 text-[#64ccc5] shrink-0 mt-0.5" strokeWidth={2} />
+                  <p className="text-sm md:text-base italic text-foreground/90 leading-relaxed">{message}</p>
                 </div>
               </div>
             </div>
