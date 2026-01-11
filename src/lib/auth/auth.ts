@@ -6,10 +6,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
-  trustedOrigins: [
-    process.env.NOTIFICATIONS_SERVICE_BASE_URL as string,
-    "https://ambitiousyou.pro",
-  ],
+  trustedOrigins: [process.env.NOTIFICATIONS_SERVICE_BASE_URL as string, "https://ambitiousyou.pro"],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: { user, session, account, verification },
@@ -18,7 +15,7 @@ export const auth = betterAuth({
     sendOnSignUp: true, // Send Email Verification Link on Sign Up (i.e. new account creation)
     sendVerificationEmail: async ({ user, url }) => {
       new EmailService().sendEmailVerificationLink({
-        to: user.email as string,
+        address: user.email as string,
         username: user.name.split(" ")[0] as string,
         link: url as string,
       });
@@ -28,14 +25,14 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       new EmailService().sendResetPasswordLink({
-        to: user.email,
+        address: user.email,
         username: user.name.split(" ")[0],
         link: url,
       });
     },
     onPasswordReset: async ({ user }) => {
       new EmailService().sendPasswordResetConfirmation({
-        to: user.email,
+        address: user.email,
         username: user.name.split(" ")[0],
       });
     },

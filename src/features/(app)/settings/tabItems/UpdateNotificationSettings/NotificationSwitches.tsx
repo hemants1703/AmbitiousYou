@@ -29,6 +29,7 @@ const handleCheckedChange = async (setting: keyof NotificationSwitchesProps, val
 export function EmailAccountActivitySwitch(props: Pick<NotificationSwitchesProps, "emailAccountActivity">) {
   return (
     <Switch
+      disabled
       checked={props.emailAccountActivity}
       onCheckedChange={() => handleCheckedChange("emailAccountActivity", !props.emailAccountActivity)}
     />

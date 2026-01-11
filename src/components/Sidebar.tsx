@@ -28,11 +28,6 @@ const mainNavItems = [
     href: "/ambitions/new",
     icon: IconCirclePlus,
   },
-  // {
-  //   title: "Cynthia",
-  //   href: "/cynthia",
-  //   icon: IconSparkles,
-  // },
 ];
 
 interface SidebarProps {
@@ -57,12 +52,7 @@ export function Sidebar(props: SidebarProps) {
           <Image src="/svg_logos/favicon_32px.svg" alt="AmbitiousYou Logo" width={32} height={32} />
           {/* </div> */}
           {props.isSidebarOpen && (
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-2xl"
-            >
+            <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-2xl">
               <span className="font-regular">Ambitious</span>
               <span className="font-bold">You</span>
             </motion.span>
@@ -72,40 +62,40 @@ export function Sidebar(props: SidebarProps) {
 
       {/* MAIN NAVIGATION */}
       <ScrollArea className="flex-1 py-4">
-        <div className="space-y-4 px-2">
-          <nav className="space-y-1">
-            {mainNavItems.map((item) => (
-              <Tooltip.TooltipProvider key={item.href} delayDuration={100}>
-                <Tooltip.Tooltip>
-                  <Tooltip.TooltipTrigger asChild>
-                    <Link
-                      prefetch={true}
-                      href={item.href}
+        <nav>
+          {mainNavItems.map((item) => (
+            <Tooltip.TooltipProvider key={item.href} delayDuration={100}>
+              <Tooltip.Tooltip>
+                <Tooltip.TooltipTrigger asChild>
+                  <Link
+                    prefetch={true}
+                    href={item.href}
+                    className={cn(
+                      "group/sidebar-menu-item flex items-center justify-between px-4 py-2 text-sm transition-colors",
+                      item.href === pathname
+                        ? "bg-linear-to-t from-primary to-primary/70 active:from-primary/70 active:to-primary text-primary-foreground"
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                      item.href === "/cynthia" ? "animated-cynthia-menu-item" : "",
+                      item.href === "/cynthia" && pathname === "/cynthia" ? "active text-white text-shadow-lg" : ""
+                    )}
+                  >
+                    <span
                       className={cn(
-                        "flex items-center justify-between rounded-md px-4 py-2 text-sm transition-colors",
-                        item.href === pathname
-                          ? "bg-primary text-primary-foreground"
-                          : "hover:bg-muted text-muted-foreground hover:text-foreground",
-                        item.href === "/cynthia" ? "animated-cynthia-menu-item" : "",
-                        item.href === "/cynthia" && pathname === "/cynthia"
-                          ? "active text-white text-shadow-lg"
-                          : ""
+                        "flex items-center gap-2 group-active/sidebar-menu-item:scale-95 transition-all ease-in-out",
+                        props.isSidebarOpen &&
+                          "group-hover/sidebar-menu-item:translate-x-1.5 group-active/sidebar-menu-item:translate-x-0"
                       )}
                     >
-                      <span className="flex items-center gap-2">
-                        <item.icon className={cn("size-4", item.href === "/cynthia" ? "" : "")} />
-                        {props.isSidebarOpen && <span>{item.title}</span>}
-                      </span>
-                    </Link>
-                  </Tooltip.TooltipTrigger>
-                  {!props.isSidebarOpen && (
-                    <Tooltip.TooltipContent side="right">{item.title}</Tooltip.TooltipContent>
-                  )}
-                </Tooltip.Tooltip>
-              </Tooltip.TooltipProvider>
-            ))}
-          </nav>
-        </div>
+                      <item.icon className={cn("size-4", !props.isSidebarOpen && "translate-x-1.5")} />
+                      {props.isSidebarOpen && <span>{item.title}</span>}
+                    </span>
+                  </Link>
+                </Tooltip.TooltipTrigger>
+                {!props.isSidebarOpen && <Tooltip.TooltipContent side="right">{item.title}</Tooltip.TooltipContent>}
+              </Tooltip.Tooltip>
+            </Tooltip.TooltipProvider>
+          ))}
+        </nav>
       </ScrollArea>
 
       {/* BOTTOM NAVIGATION */}
@@ -122,9 +112,7 @@ export function Sidebar(props: SidebarProps) {
                   {props.isSidebarOpen && <span>Toggle Sidebar</span>}
                 </button>
               </Tooltip.TooltipTrigger>
-              {!props.isSidebarOpen && (
-                <Tooltip.TooltipContent side="right">Toggle Sidebar</Tooltip.TooltipContent>
-              )}
+              {!props.isSidebarOpen && <Tooltip.TooltipContent side="right">Toggle Sidebar</Tooltip.TooltipContent>}
             </Tooltip.Tooltip>
           </Tooltip.TooltipProvider>
 

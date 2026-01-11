@@ -20,10 +20,7 @@ export interface SignupActionState {
 }
 
 // This function is called when the user submits the signup form
-export async function signupAction(
-  _: SignupActionState,
-  formData: FormData
-): Promise<SignupActionState> {
+export async function signupAction(_: SignupActionState, formData: FormData): Promise<SignupActionState> {
   const submittedFormData: SignupActionState = {
     fullName: formData.get("fullName") as string,
     email: formData.get("email") as string,
@@ -48,10 +45,7 @@ export async function signupAction(
         name: validatedData.data.fullName,
         email: validatedData.data.email,
         password: validatedData.data.password,
-        callbackURL:
-          process.env.NODE_ENV === "development"
-            ? "http://localhost:3000"
-            : process.env.APP_BASE_URL,
+        callbackURL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.APP_BASE_URL,
       },
     });
 
@@ -118,11 +112,7 @@ export async function loginUserAction(_: LoginState, formData: FormData) {
     console.error("Error signing in:", error);
     return {
       errors: {
-        message: [
-          error instanceof Error
-            ? error.message
-            : "An error occurred while signing in. Please try again.",
-        ],
+        message: [error instanceof Error ? error.message : "An error occurred while signing in. Please try again."],
       },
       ...submittedFormData,
     };
@@ -216,10 +206,7 @@ export interface ResetPasswordState {
   confirmPassword: string;
 }
 
-export async function resetPasswordAction(
-  _: ResetPasswordState,
-  formData: FormData
-): Promise<ResetPasswordState> {
+export async function resetPasswordAction(_: ResetPasswordState, formData: FormData): Promise<ResetPasswordState> {
   const submittedFormData = {
     token: formData.get("token") as string,
     password: formData.get("password") as string,
