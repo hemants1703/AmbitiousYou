@@ -5,6 +5,20 @@ interface SendEmailProps {
 }
 
 export class EmailService {
+  async sendWelcomeEmail({ address, username }: Partial<SendEmailProps>) {
+    console.log("[AUTH] sendWelcomeEmail");
+
+    const result = await fetch(`${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-welcome`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address, username }),
+    });
+
+    if (!result.ok) {
+      console.error("Failed to send welcome email", await result.json());
+    }
+  }
+
   async sendEmailVerificationLink({ address, username, link }: SendEmailProps) {
     console.log("[AUTH] sendEmailVerification");
     console.log("[AUTH] url", link);
