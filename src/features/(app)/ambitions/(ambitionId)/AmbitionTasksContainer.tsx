@@ -3,7 +3,7 @@ import * as Card from "@/components/ui/card";
 import { Ambition, Task } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { IconAlertCircle, IconCalendar, IconFilePencilFilled } from "@tabler/icons-react";
-import { format, isAfter } from "date-fns";
+import { endOfDay, format, isAfter } from "date-fns";
 import React from "react";
 import CreateNewTaskDialog from "./CreateNewTask/CreateNewTaskDialog";
 import EditTaskCard from "./MutateTask/EditTaskCard";
@@ -49,8 +49,7 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
 }
 
 function TaskItem(props: { ambition: Ambition; task: Task }) {
-  const deadlinePassed =
-    isAfter(new Date(), new Date(props.task.taskDeadline)) && !props.task.taskCompleted;
+  const deadlinePassed = isAfter(new Date(), endOfDay(new Date(props.task.taskDeadline))) && !props.task.taskCompleted;
 
   return (
     <div
@@ -107,17 +106,24 @@ function TaskItem(props: { ambition: Ambition; task: Task }) {
         </div>
       </div>
       <div className="flex items-center self-end gap-4">
-        {deadlinePassed ? (
+        {/* {deadlinePassed ? (
           <div className="text-sm text-destructive">
             <IconAlertCircle className="size-4 inline mr-1" />
             <span>Deadline passed</span>
           </div>
-        ) : (
-          <div className="text-sm text-muted-foreground">
-            <IconCalendar className="size-4 inline mr-1" />
-            <span>Due {format(new Date(props.task.taskDeadline), "MMM d")}</span>
-          </div>
-        )}
+        ) : ( */}
+        <div className="text-sm text-muted-foreground">
+          <IconCalendar className="size-4 inline mr-1" />
+          <span>Due {format(new Date(props.task.taskDeadline), "MMM d")}</span>
+
+          {deadlinePassed && (
+            <span className="text-sm text-destructive ml-3">
+              <IconAlertCircle className="size-4 inline mr-1" />
+              <span>Deadline passed</span>
+            </span>
+          )}
+        </div>
+        {/* )} */}
         {!props.task.taskCompleted && !deadlinePassed && (
           <EditTaskCard
             task={props.task}

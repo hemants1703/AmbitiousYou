@@ -60,13 +60,12 @@ export default async function DashboardPage() {
       ambition.ambitionTrackingMethod === "task"
         ? ambitionTasks.filter((t) => t.taskCompleted).length
         : ambitionMilestones.filter((m) => m.milestoneCompleted).length;
-    const total =
-      ambition.ambitionTrackingMethod === "task" ? ambitionTasks.length : ambitionMilestones.length;
+    const total = ambition.ambitionTrackingMethod === "task" ? ambitionTasks.length : ambitionMilestones.length;
     return {
       id: ambition.id,
       name: ambition.ambitionName,
       color: ambition.ambitionColor,
-      percentage: ((completedTasksAndMilestones / totalTasksAndMilestones) * 100).toFixed(0),
+      percentage: ((completed / total) * 100).toFixed(0),
       trackingMethod: ambition.ambitionTrackingMethod,
       completed,
       total,
@@ -89,12 +88,8 @@ export default async function DashboardPage() {
         >
           {/* Active Ambitions */}
           <div className="rounded-2xl border bg-card/80 p-6 flex flex-col items-center shadow-sm">
-            <span className="text-muted-foreground text-base mb-1 font-medium">
-              Active Ambitions
-            </span>
-            <span className="text-3xl font-extrabold tracking-tight">
-              {ambitionsSummary.length}
-            </span>
+            <span className="text-muted-foreground text-base mb-1 font-medium">Active Ambitions</span>
+            <span className="text-3xl font-extrabold tracking-tight">{ambitionsSummary.length}</span>
             <Badge
               variant="outline"
               className="mt-2 bg-primary/10 text-primary border-primary/20 text-xs px-2 py-1 rounded-lg"
@@ -104,25 +99,17 @@ export default async function DashboardPage() {
           </div>
           {/* Completed Tasks & Milestones */}
           <div className="rounded-2xl border bg-card/80 p-6 flex flex-col items-center shadow-sm">
-            <span className="text-muted-foreground text-base mb-1 font-medium">
-              Completed Tasks & Milestones
-            </span>
+            <span className="text-muted-foreground text-base mb-1 font-medium">Completed Tasks & Milestones</span>
             <span className="text-3xl font-extrabold tracking-tight">{`${completedTasksAndMilestones}/${totalTasksAndMilestones}`}</span>
             <Progress
-              value={
-                totalTasksAndMilestones > 0
-                  ? (completedTasksAndMilestones / totalTasksAndMilestones) * 100
-                  : 0
-              }
+              value={totalTasksAndMilestones > 0 ? (completedTasksAndMilestones / totalTasksAndMilestones) * 100 : 0}
               className="h-2 mt-2 w-full"
             />
           </div>
           {/* Productivity Score */}
           <div className="rounded-2xl border bg-card/80 p-6 flex flex-col items-center shadow-sm">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-muted-foreground text-base font-medium">
-                Productivity Score
-              </span>
+              <span className="text-muted-foreground text-base font-medium">Productivity Score</span>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="cursor-pointer">
@@ -130,8 +117,8 @@ export default async function DashboardPage() {
                   </span>
                 </TooltipTrigger>
                 <TooltipContent className="text-xs max-w-xs">
-                  Productivity Score is the percentage of completed tasks and milestones out of your
-                  total. (Completed / Total) × 100
+                  Productivity Score is the percentage of completed tasks and milestones out of your total. (Completed /
+                  Total) × 100
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -146,12 +133,7 @@ export default async function DashboardPage() {
                   <span className="text-3xl font-extrabold tracking-tight">{score}%</span>
                   <div className="flex gap-1 mt-2">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <span
-                        key={i}
-                        className={
-                          i < stars ? "text-yellow-400 text-xl" : "text-muted-foreground text-xl"
-                        }
-                      >
+                      <span key={i} className={i < stars ? "text-yellow-400 text-xl" : "text-muted-foreground text-xl"}>
                         ★
                       </span>
                     ))}
@@ -162,15 +144,11 @@ export default async function DashboardPage() {
           </div>
           {/* Motivational Quote */}
           <div className="rounded-2xl border bg-card/80 p-6 flex flex-col items-center shadow-sm">
-            <span className="text-muted-foreground text-base mb-1 font-medium">
-              Motivational Quote
-            </span>
+            <span className="text-muted-foreground text-base mb-1 font-medium">Motivational Quote</span>
             <blockquote className="border-l-4 border-primary pl-4 italic mt-2 text-center text-base">
               &quot;{randomMotivationalQuote.quote}&quot;
             </blockquote>
-            <span className="text-right text-xs text-muted-foreground mt-2">
-              — {randomMotivationalQuote.author}
-            </span>
+            <span className="text-right text-xs text-muted-foreground mt-2">— {randomMotivationalQuote.author}</span>
           </div>
         </MotionWrapper>
 
@@ -182,9 +160,7 @@ export default async function DashboardPage() {
         >
           <h2 className="text-2xl font-extrabold mb-6 tracking-tight">Your Active Ambitions</h2>
           {ambitionsSummary.length === 0 ? (
-            <div className="text-muted-foreground text-lg">
-              No active ambitions yet. Start by creating one!
-            </div>
+            <div className="text-muted-foreground text-lg">No active ambitions yet. Start by creating one!</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {ambitionsSummary.map((ambition) => (
@@ -205,9 +181,7 @@ export default async function DashboardPage() {
                         className="block size-3 aspect-square rounded-full"
                         style={{ background: ambition.color ?? "#64ccc5" }}
                       />
-                      <span className="font-semibold text-lg tracking-tight line-clamp-1">
-                        {ambition.name}
-                      </span>
+                      <span className="font-semibold text-lg tracking-tight line-clamp-1">{ambition.name}</span>
                     </span>
                     <AmbitionPriorityBadge ambitionPriority={ambition.priority!} />
                   </div>

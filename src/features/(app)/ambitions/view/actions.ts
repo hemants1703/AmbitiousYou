@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { ambitions } from "@/db/schema";
 import confirmSession from "@/lib/auth/confirmSession";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function deleteAmbitionAction(ambitionId: string): Promise<{
   success: boolean;
@@ -35,6 +36,7 @@ export async function deleteAmbitionAction(ambitionId: string): Promise<{
 
     console.log("[SERVER ACTION] Ambition deleted successfully:", ambitionId);
 
+    revalidatePath("/ambitions");
     return { success: true };
   } catch (error) {
     console.error("Error deleting ambition:", error);
