@@ -23,7 +23,7 @@ import { redirect } from "next/navigation";
 export default function Billing() {
   redirect("/");
   return (
-    <div className="container mx-auto space-y-8">
+    <div className=" mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Billing</h1>
         <p className="text-muted-foreground">Manage your subscription and billing information</p>

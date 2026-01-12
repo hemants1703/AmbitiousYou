@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <footer className="w-full text-foreground pb-8 pt-16 z-10">
-      <div className="container mx-auto px-4">
+      <div className=" mx-auto px-4">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 mb-12">
           {/* Brand Section */}

@@ -62,7 +62,7 @@ export default function DemoAmbitionShowcase({
 
   return (
     <section ref={containerRef} className="w-full py-16 md:py-24">
-      <div className="container px-4 md:px-6 max-w-5xl mx-auto">
+      <div className=" px-4 md:px-6 max-w-5xl mx-auto">
         {/* Section Header */}
         <MotionWrapper
           initial={{ opacity: 0, y: 20 }}
@@ -258,7 +258,7 @@ export default function DemoAmbitionShowcase({
                             className={cn(
                               "mt-0.5 transition-all",
                               isCompleted &&
-                                "data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
+                              "data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
                             )}
                           />
                           <div className="flex-1 min-w-0">

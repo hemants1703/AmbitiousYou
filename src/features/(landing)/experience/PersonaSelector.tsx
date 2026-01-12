@@ -37,7 +37,7 @@ export default function PersonaSelector({
 }: PersonaSelectorProps) {
   return (
     <section className="w-full py-16 md:py-24">
-      <div className="container px-4 md:px-6 max-w-6xl mx-auto">
+      <div className=" px-4 md:px-6 max-w-6xl mx-auto">
         {/* Section Header */}
         <MotionWrapper
           initial={{ opacity: 0, y: 20 }}

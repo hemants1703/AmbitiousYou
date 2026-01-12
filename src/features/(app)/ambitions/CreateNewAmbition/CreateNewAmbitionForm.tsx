@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import * as Tooltip from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { IconCalendar, IconCheck, IconChevronLeft, IconInfoCircle } from "@tabler/icons-react";
-import { format, isBefore, startOfToday } from "date-fns";
+import { format, isBefore, setDate, startOfToday } from "date-fns";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
@@ -128,6 +128,9 @@ export default function CreateNewAmbitionForm() {
     return { from: undefined, to: undefined };
   });
 
+  console.log(dateRange);
+
+
   // Save form data whenever it changes
   useEffect(() => {
     setIsSaving(true);
@@ -171,6 +174,7 @@ export default function CreateNewAmbitionForm() {
       tasks: [],
       milestones: [],
     });
+    setDateRange({ from: undefined, to: undefined });
   };
 
   const getFieldError = (field: string) => {
@@ -178,7 +182,7 @@ export default function CreateNewAmbitionForm() {
   };
 
   return (
-    <form action={formAction} className="container max-w-4xl space-y-8 p-6 md:p-8 pt-6">
+    <form action={formAction} className="mx-auto max-w-4xl space-y-8 p-6 md:p-8 pt-6">
       {/* Hidden inputs for date fields */}
       <input
         type="hidden"
@@ -516,93 +520,99 @@ export default function CreateNewAmbitionForm() {
       </MotionWrapper>
 
       {/* PROGRESS TRACKING SETTING */}
-      <MotionWrapper
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <Card.Card>
-          <Card.CardHeader>
-            <Card.CardTitle>Progress Tracking</Card.CardTitle>
-            <Card.CardDescription>
-              Define how you&apos;ll track progress for this ambition
-            </Card.CardDescription>
-          </Card.CardHeader>
-          <Card.CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label>Tracking Method</Label>
-              <RadioGroup.RadioGroup
-                name="ambitionTrackingMethod"
-                defaultValue="task"
-                className="flex justify-between mt-5"
-                value={formState.ambitionTrackingMethod}
-                onValueChange={(value) =>
-                  setFormState({
-                    ...formState,
-                    ambitionTrackingMethod: value as "task" | "milestone",
-                  })
-                }
-              >
-                <MotionWrapper
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                  className={cn("flex items-start space-x-3 w-full")}
+      {dateRange.from && dateRange.to && (
+        <MotionWrapper
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <Card.Card>
+            <Card.CardHeader>
+              <Card.CardTitle>Progress Tracking</Card.CardTitle>
+              <Card.CardDescription>
+                Define how you&apos;ll track progress for this ambition
+              </Card.CardDescription>
+            </Card.CardHeader>
+            <Card.CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label>Tracking Method</Label>
+                <RadioGroup.RadioGroup
+                  name="ambitionTrackingMethod"
+                  defaultValue="task"
+                  className="flex justify-between mt-5"
+                  value={formState.ambitionTrackingMethod}
+                  onValueChange={(value) =>
+                    setFormState({
+                      ...formState,
+                      ambitionTrackingMethod: value as "task" | "milestone",
+                    })
+                  }
                 >
-                  <RadioGroup.RadioGroupItem value="task" id="task" />
-                  <div className="cursor-pointer">
-                    <Label htmlFor="task" className="font-medium cursor-pointer">
-                      Task Based
-                    </Label>
-                    <p className="text-start text-sm text-muted-foreground">
-                      Track progress by completing tasks
-                    </p>
-                  </div>
-                </MotionWrapper>
-                <MotionWrapper
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className={cn("flex items-start space-x-3 w-full")}
-                >
-                  <RadioGroup.RadioGroupItem value="milestone" id="milestone" />
-                  <div className="cursor-pointer">
-                    <Label htmlFor="milestone" className="font-medium cursor-pointer">
-                      Milestone Based
-                    </Label>
-                    <p className="text-start text-sm text-muted-foreground">
-                      Track progress through specific milestones
-                    </p>
-                  </div>
-                </MotionWrapper>
-              </RadioGroup.RadioGroup>
-            </div>
-          </Card.CardContent>
-        </Card.Card>
-      </MotionWrapper>
+                  <MotionWrapper
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.3 }}
+                    className={cn("flex items-start space-x-3 w-full")}
+                  >
+                    <RadioGroup.RadioGroupItem value="task" id="task" />
+                    <div className="cursor-pointer">
+                      <Label htmlFor="task" className="font-medium cursor-pointer">
+                        Task Based
+                      </Label>
+                      <p className="text-start text-sm text-muted-foreground">
+                        Track progress by completing tasks
+                      </p>
+                    </div>
+                  </MotionWrapper>
+                  <MotionWrapper
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className={cn("flex items-start space-x-3 w-full")}
+                  >
+                    <RadioGroup.RadioGroupItem value="milestone" id="milestone" />
+                    <div className="cursor-pointer">
+                      <Label htmlFor="milestone" className="font-medium cursor-pointer">
+                        Milestone Based
+                      </Label>
+                      <p className="text-start text-sm text-muted-foreground">
+                        Track progress through specific milestones
+                      </p>
+                    </div>
+                  </MotionWrapper>
+                </RadioGroup.RadioGroup>
+              </div>
+            </Card.CardContent>
+          </Card.Card>
+        </MotionWrapper>
+      )}
 
       {/* TASKS OR MILESTONES SECTION */}
+
       {formState.ambitionTrackingMethod === "task" ? (
-        <TasksAdditionFormSection key="tasks" formState={formState} setFormState={setFormState} />
+        dateRange.from && dateRange.to && <TasksAdditionFormSection key="tasks" formState={formState} setFormState={setFormState} />
       ) : (
-        <MilestoneAdditionFormSection
+        dateRange.from && dateRange.to && <MilestoneAdditionFormSection
           key="milestones"
           formState={formState}
           setFormState={setFormState}
         />
       )}
 
-      {/* Footer Section */}
-      <MotionWrapper
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="flex justify-end"
-      >
-        <Button type="submit" disabled={isCreationPending} variant="ay">
-          {isCreationPending ? "Creating..." : "Create Ambition"}
-        </Button>
-      </MotionWrapper>
+
+      {/* FOOTER SECTION */}
+      {dateRange.from && dateRange.to && (
+        <MotionWrapper
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex justify-end"
+        >
+          <Button type="submit" disabled={isCreationPending} variant="ay">
+            {isCreationPending ? "Creating..." : "Create Ambition"}
+          </Button>
+        </MotionWrapper>
+      )}
     </form>
   );
 }

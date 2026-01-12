@@ -1,6 +1,6 @@
 export default function TermsAndConditions() {
   return (
-    <div className="container mx-auto px-6 py-20">
+    <div className=" mx-auto px-6 py-20">
       <h1 className="text-3xl font-bold mb-4">Terms & Conditions</h1>
       <p className="mb-4 text-muted-foreground">
         Welcome to AmbitiousYou! These terms and conditions outline the rules and regulations for

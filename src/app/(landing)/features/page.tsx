@@ -25,7 +25,7 @@ export default function Features() {
     <div className="flex flex-col items-center w-full">
       {/* Animated Hero Section */}
       <section className="w-full pt-20">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
             <MotionWrapper
               initial={{ opacity: 0, y: -20 }}
@@ -81,7 +81,7 @@ export default function Features() {
 
       {/* Animated Core Features Section */}
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <MotionWrapper
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -140,7 +140,7 @@ export default function Features() {
 
       {/* Animated How It Works Section */}
       <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <MotionWrapper
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -200,7 +200,7 @@ export default function Features() {
 
       {/* Animated Benefits Section */}
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-12 items-center">
             <MotionWrapper
               initial={{ opacity: 0, x: -30 }}
@@ -280,7 +280,7 @@ export default function Features() {
 
       {/* Animated Before/After Comparison Section */}
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <MotionWrapper
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -370,7 +370,7 @@ export default function Features() {
 
       {/* Animated FAQ Section */}
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <MotionWrapper
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -430,7 +430,7 @@ export default function Features() {
 
       {/* Animated CTA Section */}
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className=" px-4 md:px-6">
           <MotionWrapper
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
