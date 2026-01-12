@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import * as DropdownMenu from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { logoutAction } from "@/features/(auth)/actions";
-import { IconBell, IconLogout, IconSettings } from "@tabler/icons-react";
+import { IconBell, IconLogout, IconSettings, IconSunMoon } from "@tabler/icons-react";
 import { User } from "better-auth";
 import { ChevronsUpDown } from "lucide-react";
 import Link from "next/link";
@@ -54,9 +54,9 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenu.DropdownMenuGroup></DropdownMenu.DropdownMenuGroup>
             <DropdownMenu.DropdownMenuGroup>
               <DropdownMenu.DropdownMenuItem asChild>
-                <Link prefetch={true} href="/settings?tab=notifications">
-                  <IconBell />
-                  Notifications
+                <Link prefetch={true} href="/settings?tab=appearance">
+                  <IconSunMoon />
+                  Appearance
                 </Link>
               </DropdownMenu.DropdownMenuItem>
               <DropdownMenu.DropdownMenuItem asChild>

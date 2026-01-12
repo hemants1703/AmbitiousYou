@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
-import { User } from "better-auth";
+import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { User } from "better-auth";
+import React, { useState } from "react";
 
 interface SidebarControllerProps {
   children: React.ReactNode;
