@@ -49,7 +49,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
       </div>
 
       {/* Announcement banner */}
-      <MotionWrapper
+      {/* <MotionWrapper
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
@@ -62,7 +62,7 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
           </span>
           <span className="text-sm font-medium">New: AI-powered goal recommendations now available</span>
         </div>
-      </MotionWrapper>
+      </MotionWrapper> */}
 
       <div className="text-center max-w-4xl mx-auto relative z-10">
         {/* Animated Headline */}
@@ -158,6 +158,24 @@ export default function AnimatedHero({ isLoggedIn }: AnimatedHeroProps) {
           </div>
         </MotionWrapper>
       </div>
+
+      <MotionWrapper
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        className="mt-16 w-full max-w-5xl mx-auto relative z-10 flex justify-center items-center text-center"
+      >
+        <a href="https://peerlist.io/hemants1703/project/ambitiousyou" target="_blank" rel="noreferrer">
+          <img
+            src="https://peerlist.io/api/v1/projects/embed/PRJHMQ6R6ERP8ADAR2DRGOM6RQ9RP6?showUpvote=true&theme=dark"
+            alt="AmbitiousYou"
+            style={{
+              width: "auto",
+              height: "72px",
+            }}
+          />
+        </a>
+      </MotionWrapper>
 
       {/* Animated App Preview - Using the real dashboard mockup */}
       <MotionWrapper

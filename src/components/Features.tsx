@@ -69,7 +69,7 @@ export default function Features() {
             {
               icon: <IconNotification className="size-6 text-blue-500" />,
               title: "Smart Notifications",
-              description: "Get personalized reminders at the right time to keep you on track with your goals.",
+              description: "Get personalized reminders at the right time to keep you on track with your goals. Coming soon!",
             },
             {
               icon: <IconSparkles className="size-6 text-cyan-500" />,
