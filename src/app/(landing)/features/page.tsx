@@ -27,7 +27,7 @@ export default function Features() {
       <section className="w-full pt-20">
         <div className=" px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
-            <MotionWrapper
+            {/* <MotionWrapper
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -35,7 +35,7 @@ export default function Features() {
               <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary font-medium mb-2">
                 Trusted by 50,000+ ambitious professionals
               </div>
-            </MotionWrapper>
+            </MotionWrapper> */}
             <div className="space-y-2">
               <MotionWrapper
                 initial={{ opacity: 0, y: 20 }}
@@ -223,7 +223,7 @@ export default function Features() {
                     "Increase productivity by up to 37% within the first month",
                     "Reduce time spent on administrative tasks by 64%",
                     "Achieve goals 2.5x faster with our structured approach",
-                    "Join a community of 50,000+ high-achievers",
+                    // "Join a community of 50,000+ high-achievers",
                   ].map((benefit, index) => (
                     <MotionWrapper
                       key={benefit}
