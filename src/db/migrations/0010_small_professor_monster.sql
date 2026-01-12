@@ -1,0 +1,1 @@
+ALTER TABLE "settings" ALTER COLUMN "push_ambition_reminders" SET DEFAULT false;

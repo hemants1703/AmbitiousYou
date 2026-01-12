@@ -10,7 +10,7 @@ export default function AccountTab(props: AccountTabProps) {
   return (
     <>
       <PasswordCard />
-      <TimezoneCard userTimezone={props.userTimezone} />
+      {/* <TimezoneCard userTimezone={props.userTimezone} /> */}
     </>
   );
 }

@@ -135,7 +135,7 @@ export const settings = pgTable("settings", {
   emailAccountActivity: boolean("email_account_activity").default(true).notNull(),
 
   // Push Notification Preferences
-  pushAmbitionReminders: boolean("push_ambition_reminders").default(true).notNull(),
+  pushAmbitionReminders: boolean("push_ambition_reminders").default(false).notNull(),
 
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

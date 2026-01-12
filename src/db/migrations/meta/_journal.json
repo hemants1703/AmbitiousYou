@@ -71,6 +71,13 @@
       "when": 1766083361862,
       "tag": "0009_mysterious_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1768192956071,
+      "tag": "0010_small_professor_monster",
+      "breakpoints": true
     }
   ]
 }

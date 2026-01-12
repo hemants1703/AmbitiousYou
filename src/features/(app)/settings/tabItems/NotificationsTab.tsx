@@ -1,8 +1,6 @@
 import * as Card from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import {
-  EmailAccountActivitySwitch,
-  PushAmbitionRemindersSwitch,
+  EmailAccountActivitySwitch
 } from "./UpdateNotificationSettings/NotificationSwitches";
 
 interface NotificationsTabProps {
@@ -29,9 +27,9 @@ export default function NotificationsTab(props: NotificationsTabProps) {
           </div>
         </div>
 
-        <Separator />
+        {/* <Separator /> */}
 
-        <div>
+        {/* <div>
           <h3 className="font-bold mb-4 uppercase tracking-widest text-xs">Push Notifications</h3>
           <div className="flex items-center justify-between space-x-2">
             <div>
@@ -42,7 +40,7 @@ export default function NotificationsTab(props: NotificationsTabProps) {
             </div>
             <PushAmbitionRemindersSwitch pushAmbitionReminders={props.pushAmbitionReminders} />
           </div>
-        </div>
+        </div> */}
       </Card.CardContent>
     </Card.Card>
   );
