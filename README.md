@@ -6,7 +6,7 @@
 
 ### A Production-Grade Goal Tracking Application
 
-*Transform overwhelming life goals into achievable milestones with a beautifully designed, microservices-based full-stack web application.*
+_Transform overwhelming life goals into achievable milestones with a beautifully designed, microservices-based full-stack web application._
 
 [![Next.js](https://img.shields.io/badge/Next.js_16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
@@ -48,30 +48,30 @@ AmbitiousYou is not just another todo app—it's a **goal tracking system on ste
 
 ### Core Functionality
 
-| Feature | Description |
-|---------|-------------|
-| 🎯 **Ambitions** | Life goals with flexible tracking via Tasks or Milestones |
-| ✅ **Tasks** | Recurring, time-bound actions (e.g., "Exercise 3x/week", "Save $100/month") |
-| 🏆 **Milestones** | Sequential achievements (e.g., "5K → 10K → Half Marathon → Marathon") |
-| 📝 **Notes** | Attach context, reflections, and learnings to any ambition |
-| 📊 **Progress Tracking** | Visual completion percentages, priority levels, status filtering |
-| ⭐ **Favorites** | Quick access to your most important goals |
+| Feature                  | Description                                                                 |
+| ------------------------ | --------------------------------------------------------------------------- |
+| 🎯 **Ambitions**         | Life goals with flexible tracking via Tasks or Milestones                   |
+| ✅ **Tasks**             | Recurring, time-bound actions (e.g., "Exercise 3x/week", "Save $100/month") |
+| 🏆 **Milestones**        | Sequential achievements (e.g., "5K → 10K → Half Marathon → Marathon")       |
+| 📝 **Notes**             | Attach context, reflections, and learnings to any ambition                  |
+| 📊 **Progress Tracking** | Visual completion percentages, priority levels, status filtering            |
+| ⭐ **Favorites**         | Quick access to your most important goals                                   |
 
 ### Technical Features
 
-| Feature | Description |
-|---------|-------------|
-| 🔐 **Authentication** | Email/password with verification & password reset flows |
-| 📧 **Email Notifications** | Transactional emails via dedicated microservice |
-| 🌓 **Theme System** | Light/dark mode with smooth transitions |
-| 📱 **Responsive Design** | Mobile-first, works beautifully on all devices |
-| ⚡ **Performance** | Server Components, Turbopack, optimized loading states |
-| 🧪 **E2E Testing** | Playwright tests with GitHub Actions CI/CD |
-| 🐳 **Docker Ready** | Multi-stage production builds |
+| Feature                    | Description                                             |
+| -------------------------- | ------------------------------------------------------- |
+| 🔐 **Authentication**      | Email/password with verification & password reset flows |
+| 📧 **Email Notifications** | Transactional emails via dedicated microservice         |
+| 🌓 **Theme System**        | Light/dark mode with smooth transitions                 |
+| 📱 **Responsive Design**   | Mobile-first, works beautifully on all devices          |
+| ⚡ **Performance**         | Server Components, Turbopack, optimized loading states  |
+| 🧪 **E2E Testing**         | Playwright tests with GitHub Actions CI/CD              |
+| 🐳 **Docker Ready**        | Multi-stage production builds                           |
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 AmbitiousYou follows a **microservices architecture** with two main services communicating via REST APIs:
 
@@ -92,7 +92,7 @@ graph TB
     subgraph NotificationsService["📧 Notifications Microservice"]
         Express["Express.js 5"]
         MailController["Mail Controller"]
-        MailService["Mail Service<br/>(Nodemailer)"]
+        MailService["Mail Service<br/>(Microsoft Azure Email Communication Service)"]
         Templates["HTML Templates"]
     end
 
@@ -123,11 +123,11 @@ graph TB
 
 ### Service Breakdown
 
-| Service | Technology | Responsibility |
-|---------|------------|----------------|
-| **Main Application** | Next.js 16, React 19 | UI, Business Logic, API Routes, Auth |
-| **Notifications Service** | Express.js 5, Node.js | Email delivery, HTML templates, Future: PWA Push |
-| **Database** | PostgreSQL + Drizzle ORM | Persistent data storage with migrations |
+| Service                   | Technology               | Responsibility                                   |
+| ------------------------- | ------------------------ | ------------------------------------------------ |
+| **Main Application**      | Next.js 16, React 19     | UI, Business Logic, API Routes, Auth             |
+| **Notifications Service** | Express.js 5, Node.js    | Email delivery, HTML templates, Future: PWA Push |
+| **Database**              | PostgreSQL + Drizzle ORM | Persistent data storage with migrations          |
 
 ---
 
@@ -148,14 +148,14 @@ sequenceDiagram
     Form->>Auth: Submit login/signup
     Auth->>DB: Verify/Create user
     DB-->>Auth: User data
-    
+
     alt Signup Flow
         Auth->>Notif: Send verification email
         Notif-->>User: 📬 Email verification link
         User->>Auth: Click verification link
         Auth->>DB: Mark email verified
     end
-    
+
     alt Password Reset
         Auth->>Notif: Send reset link
         Notif-->>User: 📬 Password reset email
@@ -164,7 +164,7 @@ sequenceDiagram
         Auth->>Notif: Send confirmation
         Notif-->>User: 📬 Password updated
     end
-    
+
     Auth-->>Form: Session token
     Form-->>User: ✅ Authenticated
 ```
@@ -442,57 +442,57 @@ erDiagram
 
 ### Frontend
 
-| Technology | Purpose |
-|------------|---------|
-| **Next.js 16** | App Router, Turbopack, Server Components |
-| **React 19** | Latest concurrent features, `useActionState` |
-| **TypeScript** | Strict mode, full type coverage |
-| **Tailwind CSS v4** | Utility-first styling |
-| **shadcn/ui + Radix** | Accessible, customizable components |
-| **Framer Motion** | Smooth animations & transitions |
-| **next-themes** | Dark/light mode support |
+| Technology            | Purpose                                      |
+| --------------------- | -------------------------------------------- |
+| **Next.js 16**        | App Router, Turbopack, Server Components     |
+| **React 19**          | Latest concurrent features, `useActionState` |
+| **TypeScript**        | Strict mode, full type coverage              |
+| **Tailwind CSS v4**   | Utility-first styling                        |
+| **shadcn/ui + Radix** | Accessible, customizable components          |
+| **Framer Motion**     | Smooth animations & transitions              |
+| **next-themes**       | Dark/light mode support                      |
 
 ### Backend
 
-| Technology | Purpose |
-|------------|---------|
-| **Next.js API Routes** | Server Actions & Route Handlers |
-| **PostgreSQL** | Relational database |
-| **Drizzle ORM** | Type-safe database queries & migrations |
-| **BetterAuth** | Modern authentication library |
-| **Zod** | Runtime schema validation |
+| Technology             | Purpose                                 |
+| ---------------------- | --------------------------------------- |
+| **Next.js API Routes** | Server Actions & Route Handlers         |
+| **PostgreSQL**         | Relational database                     |
+| **Drizzle ORM**        | Type-safe database queries & migrations |
+| **BetterAuth**         | Modern authentication library           |
+| **Zod**                | Runtime schema validation               |
 
 ### Notifications Microservice
 
-| Technology | Purpose |
-|------------|---------|
-| **Express.js 5** | REST API server |
-| **Nodemailer** | Email delivery |
-| **Zod** | Request validation |
-| **HTML Templates** | Beautiful transactional emails |
+| Technology                                      | Purpose                        |
+| ----------------------------------------------- | ------------------------------ |
+| **Express.js 5**                                | REST API server                |
+| **Microsoft Azure Email Communication Service** | Email delivery                 |
+| **Zod**                                         | Request validation             |
+| **HTML Templates**                              | Beautiful transactional emails |
 
 ### DevOps & Testing
 
-| Technology | Purpose |
-|------------|---------|
-| **Docker** | Multi-stage production builds |
-| **GitHub Actions** | CI/CD pipeline |
-| **Playwright** | End-to-end testing |
-| **pnpm** | Fast, disk-efficient package manager |
+| Technology         | Purpose                              |
+| ------------------ | ------------------------------------ |
+| **Docker**         | Multi-stage production builds        |
+| **GitHub Actions** | CI/CD pipeline                       |
+| **Playwright**     | End-to-end testing                   |
+| **pnpm**           | Fast, disk-efficient package manager |
 
 ---
 
 ## 🎯 Key Architectural Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| **Server Components First** | Maximize performance, minimize client JavaScript bundle |
-| **Microservices for Notifications** | Separation of concerns, independent scaling, future PWA push support |
-| **Service Layer Pattern** | Encapsulate business logic, testable, reusable across routes |
-| **Feature-Based Structure** | Colocation of related code (components + actions + validations) |
-| **Server Actions + `useActionState`** | Type-safe forms with progressive enhancement |
-| **Drizzle over Prisma** | Lightweight, SQL-like syntax, excellent TypeScript DX |
-| **BetterAuth over NextAuth** | Modern API, better TypeScript support, simpler configuration |
+| Decision                              | Rationale                                                            |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| **Server Components First**           | Maximize performance, minimize client JavaScript bundle              |
+| **Microservices for Notifications**   | Separation of concerns, independent scaling, future PWA push support |
+| **Service Layer Pattern**             | Encapsulate business logic, testable, reusable across routes         |
+| **Feature-Based Structure**           | Colocation of related code (components + actions + validations)      |
+| **Server Actions + `useActionState`** | Type-safe forms with progressive enhancement                         |
+| **Drizzle over Prisma**               | Lightweight, SQL-like syntax, excellent TypeScript DX                |
+| **BetterAuth over NextAuth**          | Modern API, better TypeScript support, simpler configuration         |
 
 ---
 
@@ -580,6 +580,7 @@ docker-compose up -d
 ```
 
 The Dockerfile uses a **multi-stage build** for optimized production images:
+
 1. **deps** — Install dependencies
 2. **builder** — Build the Next.js application
 3. **runner** — Minimal production image with standalone output
@@ -590,21 +591,21 @@ The Dockerfile uses a **multi-stage build** for optimized production images:
 
 Building AmbitiousYou deepened my understanding of:
 
-| Area | Learnings |
-|------|-----------|
+| Area                        | Learnings                                                                  |
+| --------------------------- | -------------------------------------------------------------------------- |
 | **React Server Components** | When to use Server vs Client components, data fetching patterns, streaming |
-| **Type-Safe Full-Stack** | End-to-end TypeScript with Zod validation, `useActionState` typing |
-| **Modern Authentication** | Implementing secure email verification, password reset, session management |
-| **Microservices** | Service separation, API design, inter-service communication |
-| **Database Design** | Relational modeling, migrations, type-safe ORMs |
-| **Testing Strategy** | E2E testing with Playwright, CI/CD integration |
-| **Production Deployment** | Docker multi-stage builds, environment management |
+| **Type-Safe Full-Stack**    | End-to-end TypeScript with Zod validation, `useActionState` typing         |
+| **Modern Authentication**   | Implementing secure email verification, password reset, session management |
+| **Microservices**           | Service separation, API design, inter-service communication                |
+| **Database Design**         | Relational modeling, migrations, type-safe ORMs                            |
+| **Testing Strategy**        | E2E testing with Playwright, CI/CD integration                             |
+| **Production Deployment**   | Docker multi-stage builds, environment management                          |
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] GitHub Actions > GHCR > Droplets Deployments
+- [x] GitHub Actions > GHCR > Droplets Deployments
 - [ ] PWA push notifications (service worker integration)
 - [ ] AI-powered goal suggestions
 - [ ] Analytics dashboard with progress insights
@@ -614,8 +615,8 @@ Building AmbitiousYou deepened my understanding of:
 
 ## 🤝 Related Repositories
 
-| Repository | Description |
-|------------|-------------|
+| Repository                                                                                              | Description                            |
+| ------------------------------------------------------------------------------------------------------- | -------------------------------------- |
 | [ambitiousyou-notifications-service](https://github.com/hemants1703/ambitiousyou-notifications-service) | Email & push notification microservice |
 
 ---
@@ -630,7 +631,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 **Built with ❤️ and countless cups of ☕ by [Hemant Sharma](https://hemantsharma.tech)**
 
-[LinkedIn](https://linkedin.com/in/hemants1703) · [Twitter](https://x.com/hemants1703) · [Portfolio](https://hemantsharma.tech)
+[LinkedIn](https://hemantsharma.tech/linkedin) · [Twitter](https://hemantsharma.tech/x) · [Portfolio](https://hemantsharma.tech)
 
 ⭐ Star this repo if you find it useful!
 
