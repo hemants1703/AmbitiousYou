@@ -18,6 +18,7 @@ import {
 import { format, isAfter, isBefore, startOfToday } from "date-fns";
 import { useState } from "react";
 import { CreateNewAmbitionFormActionState } from "./actions";
+import Link from "next/link";
 
 interface MilestoneAdditionFormSectionProps {
   formState: CreateNewAmbitionFormActionState;
@@ -81,7 +82,7 @@ export default function MilestoneAdditionFormSection(props: MilestoneAdditionFor
         <Card.Card>
           <Card.CardHeader>
             <Card.CardTitle>Milestones</Card.CardTitle>
-            <Card.CardDescription>Define key checkpoints for your ambition</Card.CardDescription>
+            <Card.CardDescription>Define key checkpoints for your ambition. <br /><span className="text-yellow-600 dark:text-yellow-500">Milestones once created through this form for this Ambition, it cannot be edited, deleted, or reordered at all. This helps enforce accountability and commitment to your subconscious brain because losing any Milestone will eventually degrade your <Link href="/dashboard" className="font-bold">Productivity Score</Link> to never ever be 100%! So be very mindful when creating Milestones...</span></Card.CardDescription>
           </Card.CardHeader>
           <Card.CardContent>
             <div className="space-y-4">

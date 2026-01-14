@@ -116,7 +116,7 @@ export default async function DashboardPage() {
                     <InfoCircledIcon className="h-4 w-4 text-muted-foreground" />
                   </span>
                 </TooltipTrigger>
-                <TooltipContent className="text-xs max-w-xs">
+                <TooltipContent className="text-xs">
                   Productivity Score is the percentage of completed tasks and milestones out of your total. (Completed /
                   Total) × 100
                 </TooltipContent>

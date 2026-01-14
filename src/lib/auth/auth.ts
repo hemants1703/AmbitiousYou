@@ -18,6 +18,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true, // Send Email Verification Link on Sign Up (i.e. new account creation)
     sendVerificationEmail: async ({ user, url }) => {
+      // Send email verification link
       new EmailService().sendEmailVerificationLink({
         address: user.email as string,
         username: user.name.split(" ")[0] as string,
