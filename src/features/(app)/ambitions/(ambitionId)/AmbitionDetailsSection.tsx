@@ -1,7 +1,7 @@
 import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Ambition, Milestone, Note, Task } from "@/db/schema";
-import { IconCalendar, IconCheck, IconFlag } from "@tabler/icons-react";
+import { IconCalendar, IconCheck, IconFlag, IconInfoCircleFilled } from "@tabler/icons-react";
 import { format } from "date-fns";
 import AmbitionTasksContainer from "./AmbitionTasksContainer";
 import AmbitionMilestonesContainer from "./AmbitionMilestonesContainer";
@@ -54,21 +54,16 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
     ((completedTasks + completedMilestones) / (props.tasks.length + props.milestones.length)) * 100;
 
   return (
-    <Card.Card className="bg-linear-to-tl from-(--ambition-color)/10 to-transparent">
+    <Card.Card className="bg-linear-to-tl from-(--ambition-color)/10 to-transparent" style={
+      { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
+    }>
       <Card.CardHeader>
-        <Card.CardTitle>Ambition Overview</Card.CardTitle>
+        <Card.CardTitle className="flex gap-1 justify-start items-center"><IconInfoCircleFilled className="text-(--ambition-color)" size="18" /> Ambition Overview</Card.CardTitle>
         <Card.CardDescription>{props.ambition.ambitionDefinition}</Card.CardDescription>
       </Card.CardHeader>
       <Card.CardContent>
         <div className="space-y-6">
-          <div
-            className="space-y-2"
-            style={
-              {
-                "--ambition-color": props.ambition.ambitionColor,
-              } as React.CSSProperties
-            }
-          >
+          <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">Overall Progress</span>
               <span className="text-sm font-medium">{progressPercentage.toFixed(0)}%</span>
