@@ -18,11 +18,13 @@ interface AmbitionMilestonesContainerProps {
 
 export default async function AmbitionMilestonesContainer(props: AmbitionMilestonesContainerProps) {
   return (
-    <Card.Card>
+    <Card.Card className="bg-linear-to-b from-(--ambition-color)/10 to-transparent" style={
+      { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
+    }>
       <Card.CardHeader>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <Card.CardTitle>Milestones Journey</Card.CardTitle>
+            <Card.CardTitle className="font-black tracking-wider text-sm text-primary/85">MILESTONES JOURNEY</Card.CardTitle>
             <Card.CardDescription>Progress through key checkpoints</Card.CardDescription>
           </div>
           <CreateMilestoneDialog

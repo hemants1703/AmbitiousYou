@@ -20,11 +20,13 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
   );
 
   return (
-    <Card.Card>
+    <Card.Card className="bg-linear-to-b from-(--ambition-color)/10 to-transparent" style={
+      { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
+    }>
       <Card.CardHeader>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <Card.CardTitle>All Tasks</Card.CardTitle>
+            <Card.CardTitle className="font-black tracking-wider text-sm text-primary/85">ALL TASKS</Card.CardTitle>
             <Card.CardDescription>Manage tasks for this ambition</Card.CardDescription>
           </div>
           <div className="flex gap-2">
@@ -49,7 +51,7 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
 }
 
 function TaskItem(props: { ambition: Ambition; task: Task }) {
-  const deadlinePassed = isAfter(new Date(), endOfDay(new Date(props.task.taskDeadline))) && !props.task.taskCompleted;
+  const deadlinePassed = isAfter((new Date()).toLocaleDateString(), endOfDay((new Date(props.task.taskDeadline)).toLocaleDateString())) && !props.task.taskCompleted;
 
   return (
     <div
@@ -114,7 +116,7 @@ function TaskItem(props: { ambition: Ambition; task: Task }) {
         ) : ( */}
         <div className="text-sm text-muted-foreground">
           <IconCalendar className="size-4 inline mr-1" />
-          <span>Due {format(new Date(props.task.taskDeadline), "MMM d")}</span>
+          <span>Due {format((new Date(props.task.taskDeadline)).toLocaleDateString(), "MMM d")}</span>
 
           {deadlinePassed && (
             <span className="text-sm text-destructive ml-3">

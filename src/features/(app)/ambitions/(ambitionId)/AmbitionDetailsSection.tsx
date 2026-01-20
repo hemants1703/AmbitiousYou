@@ -58,7 +58,10 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
       { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
     }>
       <Card.CardHeader>
-        <Card.CardTitle className="flex gap-1 justify-start items-center"><IconInfoCircle className="text-(--ambition-color)" size="18" /> Ambition Overview</Card.CardTitle>
+        <Card.CardTitle className="flex gap-1 justify-start items-center">
+          <IconInfoCircle className="text-(--ambition-color)" size="18" />
+          <span className="font-black tracking-wider text-sm text-primary/85">AMBITION OVERVIEW</span>
+        </Card.CardTitle>
         <Card.CardDescription>{props.ambition.ambitionDefinition}</Card.CardDescription>
       </Card.CardHeader>
       <Card.CardContent>
