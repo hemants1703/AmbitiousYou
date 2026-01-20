@@ -43,7 +43,7 @@ export default function IndividualNoteCard(props: IndividualNoteCardProps) {
 
   return (
     <Dialog.Dialog>
-      <Dialog.DialogTrigger asChild>{props.children}</Dialog.DialogTrigger>
+      <Dialog.DialogTrigger asChild className="cursor-pointer">{props.children}</Dialog.DialogTrigger>
       <Dialog.DialogContent>
         <Dialog.DialogHeader>
           <Dialog.DialogTitle>Your Note</Dialog.DialogTitle>

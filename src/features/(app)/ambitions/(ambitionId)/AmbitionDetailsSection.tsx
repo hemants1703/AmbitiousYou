@@ -1,12 +1,12 @@
 import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Ambition, Milestone, Note, Task } from "@/db/schema";
-import { IconCalendar, IconCheck, IconFlag, IconInfoCircleFilled } from "@tabler/icons-react";
+import { IconCalendar, IconCheck, IconFlag, IconInfoCircle } from "@tabler/icons-react";
+import { User } from "better-auth";
 import { format } from "date-fns";
-import AmbitionTasksContainer from "./AmbitionTasksContainer";
 import AmbitionMilestonesContainer from "./AmbitionMilestonesContainer";
 import AmbitionNotesContainer from "./AmbitionNotesContainer";
-import { User } from "better-auth";
+import AmbitionTasksContainer from "./AmbitionTasksContainer";
 
 interface AmbitionDetailsSectionProps {
   user: User;
@@ -58,7 +58,7 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
       { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
     }>
       <Card.CardHeader>
-        <Card.CardTitle className="flex gap-1 justify-start items-center"><IconInfoCircleFilled className="text-(--ambition-color)" size="18" /> Ambition Overview</Card.CardTitle>
+        <Card.CardTitle className="flex gap-1 justify-start items-center"><IconInfoCircle className="text-(--ambition-color)" size="18" /> Ambition Overview</Card.CardTitle>
         <Card.CardDescription>{props.ambition.ambitionDefinition}</Card.CardDescription>
       </Card.CardHeader>
       <Card.CardContent>
@@ -72,8 +72,8 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-start gap-3">
-              <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-sm bg-blue-500/20 flex items-center justify-center shrink-0">
                 <IconCalendar className="h-4 w-4 text-blue-500" />
               </div>
               <div>
@@ -84,8 +84,8 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-sm bg-blue-500/20 flex items-center justify-center shrink-0">
                 <IconCalendar className="h-4 w-4 text-blue-500" />
               </div>
               <div>
@@ -96,8 +96,8 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="h-8 w-8 rounded-md bg-green-500/20 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-sm bg-green-500/20 flex items-center justify-center shrink-0">
                 <IconCheck className="h-4 w-4 text-green-500" />
               </div>
               <div>
@@ -119,8 +119,8 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-sm bg-purple-500/20 flex items-center justify-center shrink-0">
                 <IconFlag className="h-4 w-4 text-purple-600" />
               </div>
               <div>
