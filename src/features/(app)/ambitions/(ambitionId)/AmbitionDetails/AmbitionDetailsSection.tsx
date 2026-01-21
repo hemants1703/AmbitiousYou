@@ -82,7 +82,7 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
               <div>
                 <p className="text-sm text-muted-foreground">Start Date</p>
                 <p className="font-medium">
-                  {format(new Date(props.ambition.ambitionStartDate), "MMM d, yyyy")}
+                  {format(new Date(props.ambition.ambitionStartDate).toLocaleDateString(), "MMM d, yyyy")}
                 </p>
               </div>
             </div>
@@ -94,7 +94,7 @@ function AmbitionDetailsSectionContent(props: AmbitionDetailsSectionProps) {
               <div>
                 <p className="text-sm text-muted-foreground">Deadline</p>
                 <p className="font-medium">
-                  {format(new Date(props.ambition.ambitionEndDate), "MMM d, yyyy")}
+                  {format(new Date(props.ambition.ambitionEndDate).toLocaleDateString(), "MMM d, yyyy")}
                 </p>
               </div>
             </div>
