@@ -80,15 +80,16 @@ export default function CreateNewTaskForm(props: CreateNewTaskFormProps) {
             )}
           </Button>
         </Popover.PopoverTrigger>
+        <input type="hidden" name="taskDeadline" value={formState.taskDeadline?.toISOString() ?? ""} />
         <Popover.PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
             selected={formState.taskDeadline || undefined}
             onSelect={(date) => date && setFormState({ ...formState, taskDeadline: date })}
             disabled={(calendarDate) => {
-              const today = startOfDay(new Date(props.ambitionStartDate));
-              const startDate = startOfDay(new Date(props.ambitionStartDate));
-              const endDate = startOfDay(new Date(props.ambitionEndDate));
+              const today = startOfDay(new Date().toLocaleDateString());
+              const startDate = startOfDay(new Date(props.ambitionStartDate).toLocaleDateString());
+              const endDate = startOfDay(new Date(props.ambitionEndDate).toLocaleDateString());
               const checkDate = startOfDay(calendarDate);
 
               // Disable dates before today

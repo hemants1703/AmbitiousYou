@@ -138,3 +138,31 @@ export async function toggleTask(taskId: string): Promise<Partial<EditTaskFormAc
     success: true,
   };
 }
+
+export async function deleteTaskAction(taskId: string): Promise<Partial<EditTaskFormActionState>> {
+  const session = await confirmSession();
+
+  if (!session) {
+    return {
+      success: false,
+      error: "Unauthorized",
+    };
+  }
+
+  const taskToDelete = await db
+    .delete(tasks)
+    .where(and(eq(tasks.id, taskId), eq(tasks.userId, session.user.id)))
+    .returning();
+
+  if (taskToDelete.length === 0) {
+    return {
+      success: false,
+      error: "Task not found or you don't have permission to delete it",
+    };
+  }
+
+  revalidatePath(`/ambitions/${taskToDelete[0].ambitionId}`);
+  return {
+    success: true,
+  };
+}

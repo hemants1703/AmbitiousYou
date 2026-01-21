@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
 import { Ambition, Task } from "@/db/schema";
 import { cn } from "@/lib/utils";
-import { IconAlertCircle, IconCalendar, IconFilePencilFilled } from "@tabler/icons-react";
+import { IconAlertCircle, IconCalendar, IconFilePencilFilled, IconSquareRotatedFilled, IconTrashFilled } from "@tabler/icons-react";
 import { endOfDay, format, isAfter } from "date-fns";
 import React from "react";
 import CreateNewTaskDialog from "./CreateNewTask/CreateNewTaskDialog";
 import EditTaskCard from "./MutateTask/EditTaskCard";
 import TaskToggler from "./MutateTask/TaskToggler";
+import DeleteTaskDialog from "./MutateTask/DeleteTaskDialog";
 
 interface AmbitionTasksContainerProps {
   ambition: Ambition;
@@ -59,27 +60,15 @@ function TaskItem(props: { ambition: Ambition; task: Task }) {
 
   return (
     <div
-      style={
-        {
-          "--ambition-color": props.ambition.ambitionColor,
-        } as React.CSSProperties
-      }
+      style={{ "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties}
       className={cn(
-        `flex flex-col items-start  p-2 border rounded-md border-(--ambition-color) bg-(--ambition-color)/10 hover:bg-(--ambition-color)/20  transition-colors duration-75 ease-in-out`,
+        "flex flex-col items-start  p-2 border rounded-md border-(--ambition-color) bg-(--ambition-color)/10 hover:bg-(--ambition-color)/20  transition-colors duration-75 ease-in-out",
 
         // Background color based on task completion status
-        props.task.taskCompleted
-          ? "bg-green-500/10"
-          : props.ambition.ambitionStatus === "missed"
-            ? "bg-amber-500/10"
-            : "",
+        props.task.taskCompleted ? "bg-green-500/10" : props.ambition.ambitionStatus === "missed" ? "bg-amber-500/10" : "",
 
         // Border color based on task completion status
-        props.task.taskCompleted
-          ? "border-green-500"
-          : props.ambition.ambitionStatus === "missed"
-            ? "border-amber-500"
-            : "",
+        props.task.taskCompleted ? "border-green-500" : props.ambition.ambitionStatus === "missed" ? "border-amber-500" : "",
 
         deadlinePassed ? "bg-destructive/10 border-destructive/20 hover:bg-destructive/20" : ""
       )}
@@ -93,18 +82,8 @@ function TaskItem(props: { ambition: Ambition; task: Task }) {
             {props.task.task}
           </span>
           {props.task.taskDescription && (
-            <span
-              className={cn(
-                "text-sm text-muted-foreground whitespace-pre-wrap",
-                props.task.taskCompleted ? "line-through" : ""
-              )}
-            >
-              <span
-                className={cn(
-                  "text-sm text-muted-foreground whitespace-pre-wrap",
-                  props.task.taskCompleted ? "line-through" : ""
-                )}
-              >
+            <span className={cn("text-sm text-muted-foreground whitespace-pre-wrap", props.task.taskCompleted ? "line-through" : "")}>
+              <span className={cn("text-sm text-muted-foreground whitespace-pre-wrap", props.task.taskCompleted ? "line-through" : "")}>
                 {props.task.taskDescription}
               </span>
             </span>
@@ -112,12 +91,6 @@ function TaskItem(props: { ambition: Ambition; task: Task }) {
         </div>
       </div>
       <div className="flex items-center self-end gap-4">
-        {/* {deadlinePassed ? (
-          <div className="text-sm text-destructive">
-            <IconAlertCircle className="size-4 inline mr-1" />
-            <span>Deadline passed</span>
-          </div>
-        ) : ( */}
         <div className="text-sm text-muted-foreground">
           <IconCalendar className="size-4 inline mr-1" />
           <span>Due {format((new Date(props.task.taskDeadline)).toLocaleDateString(), "MMM d")}</span>
@@ -129,17 +102,30 @@ function TaskItem(props: { ambition: Ambition; task: Task }) {
             </span>
           )}
         </div>
-        {/* )} */}
         {!props.task.taskCompleted && !deadlinePassed && (
-          <EditTaskCard
-            task={props.task}
-            ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
-            ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
-          >
-            <Button variant="outline" size="icon" className=" size-7 p-0">
-              <IconFilePencilFilled />
-            </Button>
-          </EditTaskCard>
+          <>
+            <IconSquareRotatedFilled className="size-2 text-muted-foreground" />
+            <EditTaskCard
+              task={props.task}
+              ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
+              ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
+            >
+              <Button variant="outline" size="tiny">
+                <IconFilePencilFilled />
+                Edit Task
+              </Button>
+            </EditTaskCard>
+          </>
+        )}
+        {!props.task.taskCompleted && !deadlinePassed && (
+          <>
+            <IconSquareRotatedFilled className="size-2 text-muted-foreground" />
+            <DeleteTaskDialog taskId={props.task.id}>
+              <Button variant="destructive" size="icon" className="size-6" >
+                <IconTrashFilled />
+              </Button>
+            </DeleteTaskDialog>
+          </>
         )}
       </div>
     </div>

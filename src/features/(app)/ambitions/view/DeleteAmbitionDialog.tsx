@@ -2,16 +2,7 @@
 
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
-import {
-  AlertDialog,
-  AlertDialogDescription,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogAction,
-  AlertDialogFooter,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
+import * as AlertDialog from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteAmbitionAction } from "./actions";
 import Link from "next/link";
@@ -22,22 +13,22 @@ interface DeleteAmbitionDialogProps {
 
 export function DeleteAmbitionDialog(props: DeleteAmbitionDialogProps) {
   return (
-    <AlertDialog open={true}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+    <AlertDialog.AlertDialog open={true}>
+      <AlertDialog.AlertDialogContent>
+        <AlertDialog.AlertDialogHeader>
+          <AlertDialog.AlertDialogTitle>Are you absolutely sure?</AlertDialog.AlertDialogTitle>
+          <AlertDialog.AlertDialogDescription>
             This action cannot be undone. This will permanently delete this ambition and remove all
             associated data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
+          </AlertDialog.AlertDialogDescription>
+        </AlertDialog.AlertDialogHeader>
+        <AlertDialog.AlertDialogFooter>
+          <AlertDialog.AlertDialogCancel asChild>
             <Link href={`/ambitions/${props.ambitionId}`} prefetch={true}>
               Cancel
             </Link>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
+          </AlertDialog.AlertDialogCancel>
+          <AlertDialog.AlertDialogAction asChild>
             <Button
               variant={"destructive"}
               onClick={async () => {
@@ -52,9 +43,9 @@ export function DeleteAmbitionDialog(props: DeleteAmbitionDialogProps) {
             >
               Yes, Delete
             </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </AlertDialog.AlertDialogAction>
+        </AlertDialog.AlertDialogFooter>
+      </AlertDialog.AlertDialogContent>
+    </AlertDialog.AlertDialog>
   );
 }

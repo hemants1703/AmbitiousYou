@@ -12,10 +12,7 @@ export interface CreateNewTaskFormActionState extends Partial<NewTask> {
   success?: boolean;
 }
 
-export async function createNewTask(
-  _: CreateNewTaskFormActionState,
-  formData: FormData
-): Promise<CreateNewTaskFormActionState> {
+export async function createNewTask(_: CreateNewTaskFormActionState, formData: FormData): Promise<CreateNewTaskFormActionState> {
   const session = await confirmSession();
 
   const submittedFormData = {
