@@ -1,9 +1,9 @@
 import * as Card from "@/components/ui/card";
 import { Note } from "@/db/schema";
 import { IconNote } from "@tabler/icons-react";
-import CreateNewNoteDialog from "./CreateNewNote/CreateNewNoteDialog";
+import CreateNewNoteDialog from "./Notes/CreateNewNote/CreateNewNoteDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import IndividualNoteCard from "./MutateNote/IndividualNoteCard";
+import IndividualNoteCard from "./Notes/MutateNote/IndividualNoteCard";
 
 interface AmbitionNotesContainerProps {
   notes: Note[];

@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { IconAlertCircle, IconCalendar, IconFilePencilFilled } from "@tabler/icons-react";
 import { endOfDay, format, isAfter } from "date-fns";
 import React from "react";
-import CreateNewTaskDialog from "./CreateNewTask/CreateNewTaskDialog";
-import EditTaskCard from "./MutateTask/EditTaskCard";
+import CreateNewTaskDialog from "./Tasks/CreateNewTask/CreateNewTaskDialog";
+import EditTaskCard from "./Tasks/MutateTask/EditTaskCard";
 import TaskToggler from "./TaskToggler";
 
 interface AmbitionTasksContainerProps {
@@ -19,6 +19,8 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
     (a, b) => (a.taskDeadline?.getTime() ?? 0) - (b.taskDeadline?.getTime() ?? 0)
   );
 
+  const ambitionDeadlineCrossed = isAfter(new Date().toLocaleDateString(), endOfDay(props.ambition.ambitionEndDate.toLocaleDateString()));
+
   return (
     <Card.Card className="bg-linear-to-b from-(--ambition-color)/10 to-transparent" style={
       { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
@@ -30,12 +32,14 @@ export default async function AmbitionTasksContainer(props: AmbitionTasksContain
             <Card.CardDescription>Manage tasks for this ambition</Card.CardDescription>
           </div>
           <div className="flex gap-2">
-            <CreateNewTaskDialog
-              ambitionId={props.ambition.id}
-              ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
-              ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
-              ambitionColor={props.ambition.ambitionColor}
-            />
+            {!ambitionDeadlineCrossed && (
+              <CreateNewTaskDialog
+                ambitionId={props.ambition.id}
+                ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
+                ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
+                ambitionColor={props.ambition.ambitionColor}
+              />
+            )}
           </div>
         </div>
       </Card.CardHeader>

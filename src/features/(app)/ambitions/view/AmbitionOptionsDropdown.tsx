@@ -50,7 +50,7 @@ export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownPr
           </DropdownMenu.DropdownMenuItem>
           <DropdownMenu.DropdownMenuSeparator />
           <DropdownMenu.DropdownMenuItem asChild>
-            <Link href={`/ambitions/${props.ambitionId}?delete_ambition=true`} prefetch={true}>
+            <Link href={`/ambitions/${props.ambitionId}?delete_ambition=${props.ambitionId}`} prefetch={true}>
               <IconTrash className="size-4 mr-2 text-red-500" /> Delete Ambition
             </Link>
           </DropdownMenu.DropdownMenuItem>
