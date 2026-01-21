@@ -7,7 +7,7 @@ import {
   IconCircleFilled,
   IconSquareRotatedFilled
 } from "@tabler/icons-react";
-import { format, isAfter } from "date-fns";
+import { endOfDay, format, isAfter } from "date-fns";
 import Link from "next/link";
 import CreateMilestoneDialog from "./CreateMilestone/CreateMilestoneDialog";
 
@@ -17,6 +17,8 @@ interface AmbitionMilestonesContainerProps {
 }
 
 export default async function AmbitionMilestonesContainer(props: AmbitionMilestonesContainerProps) {
+  const ambitionDeadlineCrossed = isAfter(new Date().toLocaleDateString(), endOfDay(props.ambition.ambitionEndDate.toLocaleDateString()));
+
   return (
     <Card.Card className="bg-linear-to-b from-(--ambition-color)/10 to-transparent" style={
       { "--ambition-color": props.ambition.ambitionColor } as React.CSSProperties
@@ -27,12 +29,14 @@ export default async function AmbitionMilestonesContainer(props: AmbitionMilesto
             <Card.CardTitle className="font-black tracking-wider text-sm text-primary/85">MILESTONES JOURNEY</Card.CardTitle>
             <Card.CardDescription>Progress through key checkpoints</Card.CardDescription>
           </div>
-          <CreateMilestoneDialog
-            ambitionId={props.ambition.id}
-            ambitionColor={props.ambition.ambitionColor}
-            ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
-            ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
-          />
+          {!ambitionDeadlineCrossed && (
+            <CreateMilestoneDialog
+              ambitionId={props.ambition.id}
+              ambitionColor={props.ambition.ambitionColor}
+              ambitionStartDate={props.ambition.ambitionStartDate.toISOString()}
+              ambitionEndDate={props.ambition.ambitionEndDate.toISOString()}
+            />
+          )}
         </div>
       </Card.CardHeader>
       <Card.CardContent>

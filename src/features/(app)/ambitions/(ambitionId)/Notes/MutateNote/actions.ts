@@ -54,10 +54,7 @@ export interface EditNoteFormActionState extends Partial<Note> {
   errors?: Record<string, string[]>;
 }
 
-export async function editNoteAction(
-  _: EditNoteFormActionState,
-  formData: FormData
-): Promise<EditNoteFormActionState> {
+export async function editNoteAction(_: EditNoteFormActionState, formData: FormData): Promise<EditNoteFormActionState> {
   const session = await confirmSession();
 
   const submittedFormData = {

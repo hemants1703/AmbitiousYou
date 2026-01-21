@@ -38,10 +38,7 @@ export interface CreateNewAmbitionFormActionState {
   milestones: FormMilestone[];
 }
 
-export async function createNewAmbition(
-  _: CreateNewAmbitionFormActionState,
-  formData: FormData
-): Promise<CreateNewAmbitionFormActionState> {
+export async function createNewAmbition(_: CreateNewAmbitionFormActionState, formData: FormData): Promise<CreateNewAmbitionFormActionState> {
   const session = await confirmSession();
 
   const submittedFormData = {

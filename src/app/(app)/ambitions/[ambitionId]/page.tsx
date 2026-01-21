@@ -1,7 +1,8 @@
 import { Ambition, Milestone, Note, Task } from "@/db/schema";
-import AmbitionDetailsSection from "@/features/(app)/ambitions/(ambitionId)/AmbitionDetailsSection";
-import EditAmbitionDialog from "@/features/(app)/ambitions/(ambitionId)/EditAmbitionDialog";
-import MarkMilestoneAsCompletedDialog from "@/features/(app)/ambitions/(ambitionId)/MarkMilestoneAsCompletedDialog";
+import AmbitionDetailsSection from "@/features/(app)/ambitions/(ambitionId)/AmbitionDetails/AmbitionDetailsSection";
+import EditAmbitionDialog from "@/features/(app)/ambitions/(ambitionId)/AmbitionDetails/EditAmbitionDialog";
+import MarkMilestoneAsCompletedDialog from "@/features/(app)/ambitions/(ambitionId)/Milestones/MarkMilestoneAsCompletedDialog";
+
 import { AmbitionPriorityBadge } from "@/features/(app)/ambitions/components/AmbitionPriorityBadge";
 import AmbitionOptionsDropdown from "@/features/(app)/ambitions/view/AmbitionOptionsDropdown";
 import { DeleteAmbitionDialog } from "@/features/(app)/ambitions/view/DeleteAmbitionDialog";
@@ -73,10 +74,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
     if (milestones instanceof Error) throw milestones;
   }
 
-  const notes: Note[] | Error = await ambitionsService.fetchAmbitionNotes(
-    ambitionId as string,
-    session.user.id
-  );
+  const notes: Note[] | Error = await ambitionsService.fetchAmbitionNotes(ambitionId as string, session.user.id);
   if (notes instanceof Error) throw notes;
 
   return (
@@ -150,21 +148,23 @@ async function AmbitionDialogs(props: AmbitionDetailsPageProps & { milestones: M
   const { edit_ambition, delete_ambition, mark_milestone_as_completed } = await props.searchParams;
 
   // EDIT AMBITION DIALOG
+  if (edit_ambition === ambitionId) {
+    return <EditAmbitionDialog ambition={props.ambition} />;
+  }
 
   // DELETE AMBITION DIALOG
-  if (delete_ambition === ambitionId) return <DeleteAmbitionDialog ambitionId={ambitionId} />;
+  if (delete_ambition === ambitionId) {
+    return <DeleteAmbitionDialog ambitionId={ambitionId} />;
+  }
 
   // MARK MILESTONE AS COMPLETED DIALOG
-  const concernedMilestone = props.milestones.find((milestone) => milestone.id === mark_milestone_as_completed);
+  const concernedMilestone = props.milestones.find((milestone: Milestone) => milestone.id === mark_milestone_as_completed);
   if (!concernedMilestone) return null;
 
   const isMilestoneNotWithinTargetDateRangeFromToday = new Date(concernedMilestone.milestoneTargetDate).toLocaleDateString() >= new Date().toLocaleDateString();
   if (isMilestoneNotWithinTargetDateRangeFromToday) return null;
 
   if (mark_milestone_as_completed && !concernedMilestone.milestoneCompleted) {
-    return <MarkMilestoneAsCompletedDialog
-      milestone={concernedMilestone}
-      ambitionId={ambitionId}
-    />
+    return <MarkMilestoneAsCompletedDialog milestone={concernedMilestone} ambitionId={ambitionId} />
   }
 }

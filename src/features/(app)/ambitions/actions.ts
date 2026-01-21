@@ -1,18 +1,17 @@
 "use server";
 
 import { db } from "@/db";
-import { ambitions, milestones, tasks, user } from "@/db/schema";
+import { ambitions, milestones } from "@/db/schema";
 import confirmSession from "@/lib/auth/confirmSession";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { and, eq, not } from "drizzle-orm";
 
-export async function favouriteAmbitionAction(
-  ambitionId: string,
-  favouriteValue: boolean
-): Promise<{
+interface AmbitionActionsResponse {
   success: boolean;
   error?: string;
-}> {
+}
+
+export async function favouriteAmbitionAction(ambitionId: string, favouriteValue: boolean): Promise<AmbitionActionsResponse> {
   try {
     // Get current authenticated user
     const session = await confirmSession();
@@ -47,10 +46,7 @@ export async function favouriteAmbitionAction(
   }
 }
 
-export async function markMilestoneAsCompletedAction(milestoneId: string): Promise<{
-  success: boolean;
-  error?: string;
-}> {
+export async function markMilestoneAsCompletedAction(milestoneId: string): Promise<AmbitionActionsResponse> {
   const session = await confirmSession();
 
   if (!session) {
@@ -119,71 +115,4 @@ export async function markMilestoneAsCompletedAction(milestoneId: string): Promi
   };
 }
 
-export async function toggleTask(taskId: string): Promise<{
-  success: boolean;
-  error?: string;
-}> {
-  const session = await confirmSession();
 
-  if (!session) {
-    return {
-      success: false,
-      error: "Unauthorized",
-    };
-  }
-
-  const updateTaskResponse = await db
-    .update(tasks)
-    .set({ taskCompleted: not(tasks.taskCompleted) })
-    .where(and(eq(tasks.id, taskId), eq(tasks.userId, session.user.id)))
-    .returning();
-
-  if (!updateTaskResponse) {
-    return {
-      success: false,
-      error: "Task not found or you don't have permission to update it",
-    };
-  }
-
-  const tasksForAmbition = await db
-    .select()
-    .from(tasks)
-    .where(
-      and(eq(tasks.userId, session.user.id), eq(tasks.ambitionId, updateTaskResponse[0].ambitionId))
-    );
-
-  const incompleteTasksForAmbition = tasksForAmbition.filter((task) => !task.taskCompleted);
-
-  if (incompleteTasksForAmbition.length === 0) {
-    await db
-      .update(ambitions)
-      .set({
-        ambitionStatus: "completed",
-      })
-      .where(
-        and(
-          eq(ambitions.userId, session.user.id),
-          eq(ambitions.id, updateTaskResponse[0].ambitionId)
-        )
-      );
-  } else {
-    await db
-      .update(ambitions)
-      .set({
-        ambitionStatus: "active",
-      })
-      .where(
-        and(
-          eq(ambitions.userId, session.user.id),
-          eq(ambitions.id, updateTaskResponse[0].ambitionId)
-        )
-      );
-  }
-
-  // if (updateTaskResponse[0].task)
-
-  revalidatePath(`/ambitions/${updateTaskResponse[0].ambitionId}`);
-  return {
-    success: true,
-  };
-}

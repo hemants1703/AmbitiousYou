@@ -4,9 +4,9 @@ import { Ambition, Milestone, Note, Task } from "@/db/schema";
 import { IconCalendar, IconCheck, IconFlag, IconInfoCircle } from "@tabler/icons-react";
 import { User } from "better-auth";
 import { format } from "date-fns";
-import AmbitionMilestonesContainer from "./AmbitionMilestonesContainer";
-import AmbitionNotesContainer from "./AmbitionNotesContainer";
-import AmbitionTasksContainer from "./AmbitionTasksContainer";
+import AmbitionMilestonesContainer from "../Milestones/AmbitionMilestonesContainer";
+import AmbitionNotesContainer from "../Notes/AmbitionNotesContainer";
+import AmbitionTasksContainer from "../Tasks/AmbitionTasksContainer";
 
 interface AmbitionDetailsSectionProps {
   user: User;

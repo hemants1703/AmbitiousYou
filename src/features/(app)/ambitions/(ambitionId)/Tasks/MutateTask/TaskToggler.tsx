@@ -5,7 +5,7 @@ import { Task } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { IconCheck } from "@tabler/icons-react";
 import { toast } from "sonner";
-import { toggleTask } from "../actions";
+import { toggleTask } from "./actions";
 import { useState } from "react";
 
 interface TaskTogglerProps {

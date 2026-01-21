@@ -6,9 +6,9 @@ import { Milestone } from "@/db/schema";
 import { format } from "date-fns";
 import Link from "next/link";
 import { toast } from "sonner";
-import { markMilestoneAsCompletedAction } from "../actions";
-import { useRouter } from "next/navigation";
 import { IconCheck } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { markMilestoneAsCompletedAction } from "../../actions";
 
 interface MarkMilestoneAsCompletedDialogProps {
     milestone: Milestone;

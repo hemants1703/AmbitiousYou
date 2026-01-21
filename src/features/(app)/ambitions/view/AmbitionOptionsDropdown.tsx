@@ -35,11 +35,11 @@ export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownPr
           <IconDotsVertical className="size-8 text-shadow-lg bg-foreground/10 rounded-full p-2" />
         </DropdownMenu.DropdownMenuTrigger>
         <DropdownMenu.DropdownMenuContent align="end">
-          {/* <DropdownMenu.DropdownMenuItem asChild>
-            <Link href={`/ambitions/${props.ambitionId}/edit`} prefetch={true}>
+          <DropdownMenu.DropdownMenuItem asChild>
+            <Link href={`/ambitions/${props.ambitionId}?edit_ambition=${props.ambitionId}`} prefetch={true}>
               <IconEdit className="size-4 mr-2" /> Edit Ambition
             </Link>
-          </DropdownMenu.DropdownMenuItem> */}
+          </DropdownMenu.DropdownMenuItem>
           <DropdownMenu.DropdownMenuItem onClick={handleFavouriteToggle}>
             {props.isFavourited ? (
               <IconStarFilled className="size-4 mr-2 text-yellow-500" />

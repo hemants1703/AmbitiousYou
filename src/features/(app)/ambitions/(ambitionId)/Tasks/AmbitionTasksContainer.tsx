@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 import { IconAlertCircle, IconCalendar, IconFilePencilFilled } from "@tabler/icons-react";
 import { endOfDay, format, isAfter } from "date-fns";
 import React from "react";
-import CreateNewTaskDialog from "./Tasks/CreateNewTask/CreateNewTaskDialog";
-import EditTaskCard from "./Tasks/MutateTask/EditTaskCard";
-import TaskToggler from "./TaskToggler";
+import CreateNewTaskDialog from "./CreateNewTask/CreateNewTaskDialog";
+import EditTaskCard from "./MutateTask/EditTaskCard";
+import TaskToggler from "./MutateTask/TaskToggler";
 
 interface AmbitionTasksContainerProps {
   ambition: Ambition;
