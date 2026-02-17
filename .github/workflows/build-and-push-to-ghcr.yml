@@ -44,6 +44,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+          build-args: |
+            NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=${{ secrets.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
+            NEXT_SERVER_ACTIONS_ENCRYPTION_KEY_BUILD_TIME=${{ secrets.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY_BUILD_TIME }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push
