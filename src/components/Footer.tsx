@@ -6,6 +6,8 @@ export default function Footer() {
     { title: "Home", href: "/" },
     { title: "Experience", href: "/experience" },
     { title: "Features", href: "/features" },
+    { title: "Login", href: "/login" },
+    { title: "Sign Up", href: "/signup" },
     { title: "Contact Us", href: "mailto:support@ambitiousyou.pro" },
   ];
 
