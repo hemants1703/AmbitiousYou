@@ -12,6 +12,7 @@ AmbitiousYou is a goal-tracking app on steroids — focus on life goals in a pri
 - Next.js (App Router, Route Handlers) · TypeScript · PostgreSQL (Drizzle) · Docker
 - BetterAuth (Email signup) · pnpm · Playwright (E2E) · Tabler Icons · shadcn · `cn` utility
 - Zod for strict input validation in Route Handlers and Server Actions
+- Notifications microservice integration via `NOTIFICATIONS_SERVICE_BASE_URL` (used by `src/services/emailService.ts` and `src/app/api/health/route.ts`)
 
 ### Project Structure
 **Root**: `/public` (static content), `AGENTS.md` (single source of project context)
@@ -19,14 +20,15 @@ AmbitiousYou is a goal-tracking app on steroids — focus on life goals in a pri
 **`/src`**:
 - `/app` — App Router; `/app/api` — Route Handlers (use services)
 - `/components` — Common UI components
-- `/features` — Route-specific components, forms, Server Actions _(e.g., `ambitions/actions.ts`, `ambitions/components/AmbitionCreateForm.tsx`)_
+- `/features` — Route-specific components, forms, Server Actions _(e.g., `ambitions/CreateNewAmbition/actions.ts`, `ambitions/components/AmbitionCard.tsx`)_
 - `/hooks` — Custom React Hooks
 - `/db` — Drizzle & DB work
-- `/lib` — Utils, services; `/lib/auth.ts` — BetterAuth config
+- `/lib` — Utilities and auth helpers; `/lib/auth/auth.ts` — BetterAuth config; `/lib/auth/confirmSession.ts` — session guard for Server Components/Actions
 - `/services` — Class-based services for Route Handlers _(e.g., `ambitionsService.ts`)_
 - `/styles` — Stylesheets
 - `/types` — TypeScript types; `globals.ts` for shared types _(e.g., `interface Ambition`)_, local types defined where needed _(e.g., `AmbitionPageProps` in page.tsx)_
 - `/tests` — Playwright tests
+- `/utils/validators` — Shared Zod validators for nested payloads in Server Actions _(e.g., `taskSchema.ts`, `milestoneSchema.ts`)_
 
 ### Design System
 **Principle**: Heavily B&W; accent colors for key elements only — don't overuse.
@@ -48,4 +50,6 @@ AmbitiousYou is a goal-tracking app on steroids — focus on life goals in a pri
 - **Server Components first**: Client Components only for browser APIs/interactivity. Extract client-specific parts to `/features/<route>/components/` and `/features/<route>/actions.ts`.
 - **Error Handling**: Services throw → Server Components catch → `error.tsx` renders. Use `loading.tsx` when needed.
 - **Forms**: Tightly integrated with `useActionState<>()` (fully typed) + Server Actions.
+- **Auth wiring**: BetterAuth handler lives at `src/app/api/auth/[...all]/route.ts` and uses `src/lib/auth/auth.ts`; protect app pages/actions with `confirmSession`.
+- **Commands**: Use pnpm scripts from `package.json` (`pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm db:migrate`, `pnpm db:studio`); run E2E with `pnpm exec playwright test`.
 - **95% confidence rule**: Ask clarifying questions before implementing.
