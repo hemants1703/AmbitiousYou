@@ -8,7 +8,7 @@ export class EmailService {
   async sendWelcomeEmail({ address, username }: Partial<SendEmailProps>) {
     console.log("[AUTH] sendWelcomeEmail");
 
-    const result = await fetch(`${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-welcome`, {
+    const result = await fetch(`${process.env.APP_BASE_URL}/api/notifications/email/send-welcome`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ address, username }),
@@ -23,7 +23,7 @@ export class EmailService {
     console.log("[AUTH] sendEmailVerification");
     console.log("[AUTH] url", link);
 
-    const result = await fetch(`${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-email-verification`, {
+    const result = await fetch(`${process.env.APP_BASE_URL}/api/notifications/email/send-email-verification`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export class EmailService {
     console.log("[AUTH] url", link);
 
     const sendPasswordResetEmailResult = await fetch(
-      `${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-password-reset-link`,
+      `${process.env.APP_BASE_URL}/api/notifications/email/send-password-reset-link`,
       {
         method: "POST",
         headers: {
@@ -68,7 +68,7 @@ export class EmailService {
     console.log(`Password for user ${address} has been reset.`);
 
     const sendPasswordResetConfirmationEmailResult = await fetch(
-      `${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-password-reset-confirmation`,
+      `${process.env.APP_BASE_URL}/api/notifications/email/send-password-reset-confirmation`,
       {
         method: "POST",
         headers: {
