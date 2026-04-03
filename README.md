@@ -66,7 +66,7 @@ AmbitiousYou is not just another todo app—it's a **goal tracking system on ste
 | 🌓 **Theme System**        | Light/dark mode with smooth transitions                 |
 | 📱 **Responsive Design**   | Mobile-first, works beautifully on all devices          |
 | ⚡ **Performance**         | Server Components, Turbopack, optimized loading states  |
-| 🧪 **E2E Testing**         | Playwright tests with GitHub Actions CI/CD              |
+| 🧪 **E2E Testing**         | Playwright tests, deployed via Vercel (pipeline-based)  |
 | 🐳 **Docker Ready**        | Multi-stage production builds                           |
 
 ---
@@ -123,11 +123,11 @@ graph TB
 
 ### Service Breakdown
 
-| Service                   | Technology               | Responsibility                                   |
-| ------------------------- | ------------------------ | ------------------------------------------------ |
-| **Main Application**      | Next.js 16, React 19     | UI, Business Logic, API Routes, Auth             |
-| **Notifications Service** | Express.js 5, Node.js    | Email delivery, HTML templates, Future: PWA Push |
-| **Database**              | PostgreSQL + Drizzle ORM | Persistent data storage with migrations          |
+| Service                   | Technology                          | Responsibility                                               |
+| ------------------------- | ----------------------------------- | ------------------------------------------------------------ |
+| **Main Application**      | Next.js 16, React 19                | UI, Business Logic, API Routes, Auth                         |
+| **Notifications Service** | Express.js 5, Node.js               | Email delivery, HTML templates, Future: PWA Push             |
+| **Database**              | Supabase (PostgreSQL) + Drizzle ORM | Persistent data storage with Supabase and Drizzle migrations |
 
 ---
 
@@ -454,13 +454,13 @@ erDiagram
 
 ### Backend
 
-| Technology             | Purpose                                 |
-| ---------------------- | --------------------------------------- |
-| **Next.js API Routes** | Server Actions & Route Handlers         |
-| **PostgreSQL**         | Relational database                     |
-| **Drizzle ORM**        | Type-safe database queries & migrations |
-| **BetterAuth**         | Modern authentication library           |
-| **Zod**                | Runtime schema validation               |
+| Technology                | Purpose                                 |
+| ------------------------- | --------------------------------------- |
+| **Next.js API Routes**    | Server Actions & Route Handlers         |
+| **Supabase (PostgreSQL)** | Cloud-managed relational database       |
+| **Drizzle ORM**           | Type-safe database queries & migrations |
+| **BetterAuth**            | Modern authentication library           |
+| **Zod**                   | Runtime schema validation               |
 
 ### Notifications Microservice
 
@@ -473,12 +473,12 @@ erDiagram
 
 ### DevOps & Testing
 
-| Technology         | Purpose                              |
-| ------------------ | ------------------------------------ |
-| **Docker**         | Multi-stage production builds        |
-| **GitHub Actions** | CI/CD pipeline                       |
-| **Playwright**     | End-to-end testing                   |
-| **pnpm**           | Fast, disk-efficient package manager |
+| Technology     | Purpose                              |
+| -------------- | ------------------------------------ |
+| **Docker**     | Multi-stage production builds        |
+| **Vercel**     | Production deployment platform       |
+| **Playwright** | End-to-end testing                   |
+| **pnpm**       | Fast, disk-efficient package manager |
 
 ---
 
@@ -502,7 +502,7 @@ erDiagram
 
 - Node.js 20+
 - pnpm (`npm install -g pnpm`)
-- PostgreSQL (or Docker)
+- Supabase (or Docker for local development)
 
 ### Quick Start
 
