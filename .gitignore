@@ -52,3 +52,9 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# files from previous deployment structure
+Dockerfile
+docker-compose.yml
+.dockerignore
+/.github/workflows/build-and-push-to-ghcr.yml
