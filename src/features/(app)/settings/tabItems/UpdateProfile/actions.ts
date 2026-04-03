@@ -2,12 +2,12 @@
 
 import { db } from "@/db";
 import { user } from "@/db/schema";
+import { auth } from "@/lib/auth/auth";
 import confirmSession from "@/lib/auth/confirmSession";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { updateProfileValidator } from "./validators";
-import { auth } from "@/lib/auth/auth";
 
 export async function updateUserAction(name: string): Promise<{
   success: boolean;

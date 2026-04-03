@@ -1,14 +1,14 @@
 "use server";
 
+import { db } from "@/db";
+import { settings, user } from "@/db/schema";
 import { auth } from "@/lib/auth/auth";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect, RedirectType } from "next/navigation";
 import z from "zod";
 import { ForgotPasswordSchema, LoginSchema, ResetPasswordSchema, SignupSchema } from "./validation";
-import { db } from "@/db";
-import { settings, user } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 export interface SignupActionState {
   errors?: Record<string, string[]>;

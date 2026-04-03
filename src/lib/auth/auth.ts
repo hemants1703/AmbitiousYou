@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { account, session, User, user, verification } from "@/db/schema";
+import { account, session, user, verification } from "@/db/schema";
 import { EmailService } from "@/services/emailService";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
