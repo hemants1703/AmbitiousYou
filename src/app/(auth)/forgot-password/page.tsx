@@ -4,6 +4,11 @@ import ForgotPasswordForm from "@/features/(auth)/forgot-password/ForgotPassword
 import confirmSession from "@/lib/auth/confirmSession";
 import { redirect, RedirectType } from "next/navigation";
 
+export const metadata = {
+  title: "Forgot Password",
+  description: "Reset your password by entering your email address",
+};
+
 export default async function ForgotPassword() {
   let session;
   try {
@@ -24,12 +29,8 @@ export default async function ForgotPassword() {
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 p-8 flex flex-col justify-center bg-background">
               <Card.CardHeader className="text-center lg:text-left">
-                <Card.CardTitle className="text-3xl lg:text-5xl font-bold">
-                  Forgot Password
-                </Card.CardTitle>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Enter your email to reset your password
-                </p>
+                <Card.CardTitle className="text-3xl lg:text-5xl font-bold">Forgot Password</Card.CardTitle>
+                <p className="text-sm text-muted-foreground mt-2">Enter your email to reset your password</p>
               </Card.CardHeader>
             </div>
             <Separator orientation="vertical" className="hidden lg:block" />
