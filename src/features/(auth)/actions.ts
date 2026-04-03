@@ -175,9 +175,9 @@ export async function forgotPasswordAction(_: ForgotPasswordState, formData: For
       body: {
         email: validatedData.data.email,
         redirectTo:
-          process.env.NODE_ENV === "development"
-            ? "http://localhost:3000/reset-password"
-            : `${process.env.APP_BASE_URL}/reset-password`,
+          process.env.VERCEL_ENV === "production"
+            ? `${process.env.APP_BASE_URL}/reset-password`
+            : "http://localhost:3000/reset-password",
       },
     });
 
