@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "../styles/globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -172,6 +173,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
       <Analytics />
+      <SpeedInsights />
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}
