@@ -13,7 +13,6 @@ _Transform overwhelming life goals into achievable milestones with a beautifully
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
 
 [Features](#-features) · [System Architecture](#-system-architecture) · [Getting Started](#-getting-started)
 
@@ -67,7 +66,6 @@ AmbitiousYou is not just another todo app—it's a **goal tracking system on ste
 | 📱 **Responsive Design**   | Mobile-first, works beautifully on all devices          |
 | ⚡ **Performance**         | Server Components, Turbopack, optimized loading states  |
 | 🧪 **E2E Testing**         | Playwright tests, deployed via Vercel (pipeline-based)  |
-| 🐳 **Docker Ready**        | Multi-stage production builds                           |
 
 ---
 
@@ -315,9 +313,6 @@ ambitiousyou/
 │   └── tests/                        # Playwright E2E tests
 │
 ├── public/                           # Static assets
-├── .github/workflows/                # CI/CD pipelines
-├── Dockerfile                        # Multi-stage production build
-├── docker-compose.yml                # Local development setup
 └── drizzle.config.ts                 # Database migration config
 ```
 
@@ -475,7 +470,6 @@ erDiagram
 
 | Technology     | Purpose                              |
 | -------------- | ------------------------------------ |
-| **Docker**     | Multi-stage production builds        |
 | **Vercel**     | Production deployment platform       |
 | **Playwright** | End-to-end testing                   |
 | **pnpm**       | Fast, disk-efficient package manager |
@@ -516,9 +510,6 @@ pnpm install
 
 # Set up environment variables
 cp .env.example .env.local
-
-# Start PostgreSQL (via Docker)
-docker-compose up -d db
 
 # Run database migrations
 pnpm db:migrate
@@ -567,26 +558,6 @@ pnpm exec playwright test --ui
 pnpm exec playwright show-report
 ```
 
----
-
-## 🐳 Docker Deployment
-
-```bash
-# Build production image
-docker build -t ambitiousyou .
-
-# Run with docker-compose
-docker-compose up -d
-```
-
-The Dockerfile uses a **multi-stage build** for optimized production images:
-
-1. **deps** — Install dependencies
-2. **builder** — Build the Next.js application
-3. **runner** — Minimal production image with standalone output
-
----
-
 ## 📈 What I Learned
 
 Building AmbitiousYou deepened my understanding of:
@@ -599,7 +570,6 @@ Building AmbitiousYou deepened my understanding of:
 | **Microservices**           | Service separation, API design, inter-service communication                |
 | **Database Design**         | Relational modeling, migrations, type-safe ORMs                            |
 | **Testing Strategy**        | E2E testing with Playwright, CI/CD integration                             |
-| **Production Deployment**   | Docker multi-stage builds, environment management                          |
 
 ---
 
