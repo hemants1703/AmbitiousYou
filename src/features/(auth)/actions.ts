@@ -174,7 +174,7 @@ export async function forgotPasswordAction(_: ForgotPasswordState, formData: For
     const resetPasswordResponse = await auth.api.requestPasswordReset({
       body: {
         email: validatedData.data.email,
-        redirectTo: `${process.env.APP_BASE_URL}/reset-password`,
+        redirectTo: process.env.NODE_ENV === "development" ? "http://localhost:3000/api/notifications/email/send-password-reset-link" : `${process.env.APP_BASE_URL}/reset-password`,
       },
     });
 
