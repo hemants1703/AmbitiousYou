@@ -174,10 +174,7 @@ export async function forgotPasswordAction(_: ForgotPasswordState, formData: For
     const resetPasswordResponse = await auth.api.requestPasswordReset({
       body: {
         email: validatedData.data.email,
-        redirectTo:
-          process.env.VERCEL_ENV === "production"
-            ? `${process.env.APP_BASE_URL}/reset-password`
-            : "http://localhost:3000/reset-password",
+        redirectTo: `${process.env.APP_BASE_URL}/reset-password`,
       },
     });
 
