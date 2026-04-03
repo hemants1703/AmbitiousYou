@@ -41,7 +41,7 @@ export class EmailService {
   }
 
   async sendResetPasswordLink({ address, username, link }: SendEmailProps) {
-    console.log("[AUTH] sendResetPassword");
+    console.log("[AUTH] sendResetPassword to", address, username);
     console.log("[AUTH] url", link);
 
     const sendPasswordResetEmailResult = await fetch(
