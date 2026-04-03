@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "../styles/globals.css";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -170,6 +171,7 @@ export default async function RootLayout({
         {/* Preconnect to external resources for performance */}
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
+      <Analytics />
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}

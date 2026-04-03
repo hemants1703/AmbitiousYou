@@ -40,11 +40,7 @@ export default function Navbar(props: NavbarProps) {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as HTMLElement;
-      if (
-        navbarMenuRef.current &&
-        !navbarMenuRef.current.contains(target) &&
-        !target.closest("button")
-      ) {
+      if (navbarMenuRef.current && !navbarMenuRef.current.contains(target) && !target.closest("button")) {
         setNavbarToggled(false);
       }
     }
@@ -107,9 +103,7 @@ export default function Navbar(props: NavbarProps) {
         <div className="hidden md:flex items-center gap-8">
           <div className="flex items-center gap-6">
             {navLinks.map((link) => {
-              const isActive =
-                pagePathname === link.href ||
-                (link.href !== "/" && pagePathname?.startsWith(link.href));
+              const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
 
               return (
                 <Link
@@ -188,18 +182,14 @@ export default function Navbar(props: NavbarProps) {
       <div
         ref={navbarMenuRef}
         className={`fixed inset-0 top-0 left-0 w-full h-full bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ${
-          navbarToggled
-            ? "opacity-100 pointer-events-auto z-40"
-            : "opacity-0 pointer-events-none z-0"
+          navbarToggled ? "opacity-100 pointer-events-auto z-40" : "opacity-0 pointer-events-none z-0"
         }`}
       >
         <div className="flex flex-col h-full justify-between px-6 pt-24 pb-10 overflow-auto">
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground">NAVIGATION</p>
             {navLinks.map((link, index) => {
-              const isActive =
-                pagePathname === link.href ||
-                (link.href !== "/" && pagePathname?.startsWith(link.href));
+              const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
 
               return (
                 <div
