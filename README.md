@@ -528,9 +528,6 @@ DATABASE_URL=postgresql://user:password@localhost:5432/ambitiousyou
 BETTER_AUTH_SECRET=your-secret-key-min-32-chars
 BETTER_AUTH_URL=http://localhost:3000
 
-# Notifications Service
-NOTIFICATIONS_SERVICE_BASE_URL=http://localhost:8000
-
 # See .env.example for complete list
 ```
 

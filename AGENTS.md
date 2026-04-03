@@ -15,7 +15,6 @@ AmbitiousYou is a goal-tracking app on steroids — focus on life goals in a pri
 - Next.js (App Router, Route Handlers) · TypeScript · Supabase (PostgreSQL, Drizzle) · Vercel
 - BetterAuth (Email signup) · pnpm · Playwright (E2E) · Tabler Icons · shadcn · `cn` utility
 - Zod for strict input validation in Route Handlers and Server Actions
-- Notifications microservice integration via `NOTIFICATIONS_SERVICE_BASE_URL` (used by `src/services/emailService.ts` and `src/app/api/health/route.ts`)
 
 ### Project Structure
 

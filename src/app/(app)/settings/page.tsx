@@ -49,12 +49,7 @@ export default async function SettingsPage(props: SettingsPageProps) {
       label: "Notifications",
       value: "notifications",
       href: "/settings?tab=notifications",
-      component: (
-        <NotificationsTab
-          emailAccountActivity={settings.emailAccountActivity}
-          pushAmbitionReminders={settings.pushAmbitionReminders}
-        />
-      ),
+      component: <NotificationsTab emailAccountActivity={settings.emailAccountActivity} pushAmbitionReminders={settings.pushAmbitionReminders} />,
     },
     {
       label: "Appearance",
@@ -72,7 +67,7 @@ export default async function SettingsPage(props: SettingsPageProps) {
       </div>
 
       <Tabs.Tabs key={searchParams.tab} defaultValue={searchParams.tab} className="w-full">
-        <Tabs.TabsList className="grid w-full md:w-[600px] grid-cols-4">
+        <Tabs.TabsList className="grid w-full md:w-150 grid-cols-4">
           {tabs.map((tab) => (
             <Tabs.TabsTrigger key={tab.value} value={tab.value} asChild>
               <Link prefetch={true} href={tab.href}>

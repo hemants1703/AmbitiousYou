@@ -8,7 +8,7 @@ import { nextCookies } from "better-auth/next-js";
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL?.replace(/^["']|["']$/g, ""),
   trustedOrigins: [
-    (process.env.NOTIFICATIONS_SERVICE_BASE_URL as string)?.replace(/^["']|["']$/g, ""),
+    (process.env.APP_BASE_URL as string)?.replace(/^["']|["']$/g, ""),
     "https://ambitiousyou.pro",
   ],
   database: drizzleAdapter(db, {
@@ -20,9 +20,9 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       // Send email verification link
       new EmailService().sendEmailVerificationLink({
-        address: user.email as string,
-        username: user.name.split(" ")[0] as string,
-        link: url as string,
+        address: user.email,
+        username: user.name.split(" ")[0],
+        link: url,
       });
     },
   },
