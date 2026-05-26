@@ -1,1 +1,0 @@
-ALTER TABLE "settings" DROP COLUMN IF EXISTS "user_notification_settings";

@@ -1,1 +1,0 @@
-ALTER TABLE "settings" ADD COLUMN "user_notification_settings" jsonb DEFAULT '{"emailNotifications":{"accountActivity":true},"pushNotifications":{"ambitionReminders":true}}'::jsonb;
