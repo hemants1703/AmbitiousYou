@@ -154,7 +154,8 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - **"use client" policy:** Only use when ABSOLUTELY necessary (state, interactivity) and separate out the client component into a new component by keeping the core page SSR/ISG/SSG
 - **Server Components:** All page routes, layouts, metadata generation
 - **File Structure:** When creating new components, use PascalCase for the components function (UserProfile(props) {}) themselves and kebab-case for file naming (user-profile.tsx) and camelCase for any variables, uppercase for constants etc.
-- **Props Handling:** Each props should not be destructuring things manually, create a TS interface for that file and name it *Props and infer the type. Eg - UserProfile(props: UserProfileProps) {}. Of course only when props are present otherwise not.
+- **Props Handling:** Each props should not be destructuring things manually, create a TS interface for that file and name it *Props and infer the type. Eg - UserProfile(props: UserProfileProps) {}. Of course only when props are present otherwise not and use as props.key only.
+- **Using Lucide:** When importing icons from 'lucide-react', make sure to import the icons in *Icon pattern, so it is distinguishable of being an icon, lucide already exports those such as SunIcon not Sun as SunIcon.
 
 ## Performance Targets
 - **TypeScript/JavaScript bloat:** Minimal, server-first

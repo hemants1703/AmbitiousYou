@@ -1,3 +1,14 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - AmbitiousYou",
+  description: "Read the privacy policy for AmbitiousYou, your go-to platform for personal growth and development.",
+  openGraph: {
+    title: "Privacy Policy - AmbitiousYou",
+    description: "Read the privacy policy for AmbitiousYou, your go-to platform for personal growth and development.",
+  },
+};
+
 export default function PrivacyPolicy() {
   return (
     <div className=" mx-auto px-6 py-20">

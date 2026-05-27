@@ -17,11 +17,7 @@ export const metadata: Metadata = {
   description: "Manage your ambitions and achieve your dreams with AmbitiousYou. A private space to track your goals, break them into tasks, and monitor your progress.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>

@@ -1,3 +1,14 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions - AmbitiousYou",
+  description: "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.",
+  openGraph: {
+    title: "Terms & Conditions - AmbitiousYou",
+    description: "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.",
+  },
+};
+
 export default function TermsAndConditions() {
   return (
     <div className=" mx-auto px-6 py-20">
