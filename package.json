@@ -1,0 +1,21 @@
+{
+  "name": "ambitiousyou",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:web": "pnpm --filter web dev",
+    "start:backend": "pnpm --filter backend start:dev"
+  },
+  "keywords": [],
+  "author": "Hemant Sharma",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.1.2",
+      "onFail": "download"
+    }
+  },
+  "type": "module"
+}

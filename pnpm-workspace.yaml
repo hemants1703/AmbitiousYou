@@ -1,0 +1,9 @@
+# pnpm-workspace.yaml
+packages:
+  - 'apps/*'
+  - 'packages/*'
+allowBuilds:
+  '@nestjs/core': true
+  msw: true
+  sharp: true
+  unrs-resolver: true
