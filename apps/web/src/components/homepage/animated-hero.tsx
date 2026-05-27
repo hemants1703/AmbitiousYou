@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ArrowRightIcon, CheckCircleIcon, HeartIcon, RocketIcon, StarIcon, TargetIcon, ZapIcon } from "lucide-react";
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
-import DashboardMockup from "./DashboardMockup";
+import DashboardMockup from "./dashboard-mockup";
 import Image from "next/image";
 
 const bricolage = Bricolage_Grotesque({

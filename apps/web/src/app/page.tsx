@@ -1,6 +1,6 @@
-import AnimatedHero from "@/components/homepage/AnimatedHero";
-import CTA from "@/components/homepage/CTA";
-import Features from "@/components/homepage/Features";
+import AnimatedHero from "@/components/homepage/animated-hero";
+import CTA from "@/components/homepage/cta";
+import Features from "@/components/homepage/features";
 
 export default function Home() {
   return (
