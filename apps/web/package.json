@@ -9,10 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@hugeicons/core-free-icons": "^4.1.4",
-    "@hugeicons/react": "^1.1.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",

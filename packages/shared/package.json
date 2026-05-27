@@ -1,0 +1,12 @@
+{
+  "name": "@ambitious-you/shared",
+  "version": "1.0.0",
+  "description": "Shared types and utilities for AmbitiousYou",
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./types": "./types/index.ts"
+  },
+  "private": true
+}
