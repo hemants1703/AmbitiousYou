@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
-import { AmbitionsService } from './ambitions.service';
-import { CreateAmbitionDto } from './dto/create-ambition.dto';
-import { UpdateAmbitionDto } from './dto/update-ambition.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { SessionGuard } from 'src/auth/guards/session.guard';
+import { AmbitionsService } from './ambitions.service';
+import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
+import { UpdateAmbitionDto } from './dto/update-ambition.dto';
 import { AmbitionEntity } from './entities/ambition.entity';
 
 @Controller('ambitions')
@@ -11,14 +11,14 @@ export class AmbitionsController {
 
   @UseGuards(SessionGuard)
   @Post()
-  createAmbition(@Body() createAmbitionDto: CreateAmbitionDto) {
-    return this.ambitionsService.createAmbition(createAmbitionDto);
+  async createAmbition(@Body() createAmbitionDto: CreateAmbitionWithItemsDto): Promise<AmbitionEntity> {
+    return await this.ambitionsService.createAmbition(createAmbitionDto);
   }
 
   @UseGuards(SessionGuard)
   @Get()
-  findAllAmbitionsByUserId(@Query('userId') userId: string) {
-    return this.ambitionsService.findAllAmbitionsForUserId(userId);
+  async findAllAmbitionsByUserId(@Query('userId') userId: string): Promise<AmbitionEntity[] | null> {
+    return await this.ambitionsService.findAllAmbitionsForUserId(userId);
   }
 
   @UseGuards(SessionGuard)

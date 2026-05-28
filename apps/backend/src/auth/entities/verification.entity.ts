@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity('verifications')
 export class VerificationEntity implements Verification {
   @PrimaryGeneratedColumn('uuid')
-  id: string = '';
+  id!: string;
 
   @Column({ nullable: false, name: 'user_id' })
   userId: string = '';

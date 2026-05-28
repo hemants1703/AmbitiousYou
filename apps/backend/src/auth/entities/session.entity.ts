@@ -6,7 +6,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity('sessions')
 export class SessionEntity implements Session {
   @PrimaryGeneratedColumn('uuid')
-  id: string = '';
+  id!: string;
 
   @Column({ nullable: false, name: 'user_id' })
   userId: string = '';

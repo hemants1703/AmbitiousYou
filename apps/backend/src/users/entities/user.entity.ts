@@ -6,7 +6,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity('users')
 export class UserEntity implements User {
   @PrimaryGeneratedColumn('uuid')
-  id: string = '';
+  id!: string;
 
   @Column({ nullable: false, name: 'name' })
   name: string = '';

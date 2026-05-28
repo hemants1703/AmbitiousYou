@@ -5,7 +5,7 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Up
 @Entity('notes')
 export class NoteEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string = '';
+  id!: string;
 
   @Column({ type: 'uuid', name: 'user_id' })
   @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })

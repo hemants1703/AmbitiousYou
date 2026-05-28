@@ -3,33 +3,34 @@ import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator
 
 export class CreateAmbitionDto implements NewAmbition {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'userId must be a non-empty string' })
   userId: string = '';
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'ambitionName must be a non-empty string' })
   ambitionName: string = '';
 
   @IsString()
   ambitionDefinition: string = '';
 
-  @IsEnum(['task', 'milestone'])
-  ambitionTrackingMethod: 'task' | 'milestone' = 'task';
+  @IsEnum(['task', 'milestone'], { message: 'ambitionTrackingMethod must be either task or milestone' })
+  @IsNotEmpty({ message: 'ambitionTrackingMethod must be a valid tracking method' })
+  ambitionTrackingMethod!: 'task' | 'milestone';
 
   @IsDate()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'ambitionStartDate must be a valid date' })
   ambitionStartDate: Date = new Date();
 
   @IsDate()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'ambitionEndDate must be a valid date' })
   ambitionEndDate: Date = new Date();
 
-  @IsEnum(['low', 'medium', 'high'])
-  @IsNotEmpty()
+  @IsEnum(['low', 'medium', 'high'], { message: 'ambitionPriority must be either low, medium, or high' })
+  @IsNotEmpty({ message: 'ambitionPriority must be a valid priority' })
   ambitionPriority: 'low' | 'medium' | 'high' = 'medium';
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'ambitionColor must be a non-empty string' })
   ambitionColor: string = '#000000';
 
   @IsBoolean()
