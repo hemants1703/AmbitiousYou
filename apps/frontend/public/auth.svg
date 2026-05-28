@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Monochrome decorative background">
+  <defs>
+    <!-- Grayscale metallic gradient -->
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="40%" stop-color="#dddddd" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#222222" stop-opacity="0.9" />
+    </linearGradient>
+
+    <!-- Thin luminous line gradient -->
+    <linearGradient id="lineGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="50%" stop-color="#cccccc" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.75" />
+    </linearGradient>
+
+    <!-- Large soft blur for volumes -->
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="88" />
+    </filter>
+
+    <!-- Fine grain texture -->
+    <filter id="grain">
+      <feTurbulence baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" result="t" />
+      <feColorMatrix in="t" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono">
+        <feFuncA type="table" tableValues="0 0.06" />
+      </feComponentTransfer>
+      <feBlend in2="SourceGraphic" mode="overlay" />
+    </filter>
+
+    <!-- Micro-line pattern for luxe texture -->
+    <pattern id="microLines" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
+      <rect width="28" height="28" fill="transparent" />
+      <path d="M0 0 L0 1" stroke="#ffffff" stroke-opacity="0.02" stroke-width="1" />
+    </pattern>
+
+    <!-- Fine grid of diagonal lines -->
+    <pattern id="diagGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="transparent" />
+      <path d="M0 40 L40 0" stroke="#ffffff" stroke-opacity="0.025" stroke-width="1" />
+      <path d="M-10 20 L20 -10" stroke="#ffffff" stroke-opacity="0.02" stroke-width="1" />
+    </pattern>
+
+    <!-- Narrow line mask for crisp intersections -->
+    <mask id="lineMask">
+      <rect width="100%" height="100%" fill="#fff" />
+      <g stroke="#000" stroke-width="12" stroke-linecap="round">
+        <path d="M120 200 C420 120, 760 100, 1220 220" />
+        <path d="M160 700 C420 760, 980 820, 1420 700" />
+      </g>
+    </mask>
+  </defs>
+
+  <!-- Pure black base for high contrast -->
+  <rect width="100%" height="100%" fill="#000000" />
+
+  <!-- Soft luminous volumes (white blobs blurred) -->
+  <g filter="url(#soft)" opacity="0.95">
+    <ellipse cx="420" cy="260" rx="560" ry="320" fill="#ffffff" fill-opacity="0.07" />
+    <ellipse cx="1180" cy="580" rx="740" ry="420" fill="#ffffff" fill-opacity="0.05" />
+  </g>
+
+  <!-- Crisp intersecting couture lines (primary visual) -->
+  <g stroke="url(#lineGlow)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 220 C420 140, 760 120, 1220 260" stroke-width="2.4" opacity="0.92" />
+    <path d="M160 680 C420 740, 980 820, 1380 700" stroke-width="2.2" opacity="0.8" />
+    <path d="M80 480 C340 440, 620 420, 980 500" stroke-width="1.6" opacity="0.72" />
+    <path d="M200 160 L1400 160" stroke-width="0.9" opacity="0.38" />
+  </g>
+
+  <!-- Fine accent strokes (very thin, shimmering) -->
+  <g stroke="#ffffff" stroke-opacity="0.18" stroke-linecap="round">
+    <path d="M140 240 C380 200, 820 180, 1240 260" stroke-width="0.9" />
+    <path d="M180 660 C420 720, 960 780, 1360 670" stroke-width="0.8" />
+  </g>
+
+  <!-- Metallic micro-grid overlay for premium texture -->
+  <rect width="100%" height="100%" fill="url(#diagGrid)" opacity="0.12" style="mix-blend-mode:overlay" />
+
+  <!-- Subtle micro lines for depth -->
+  <rect width="100%" height="100%" fill="url(#microLines)" opacity="0.14" style="mix-blend-mode:screen" />
+
+  <!-- Masked bold strokes clipped to create crisp negative space -->
+  <g mask="url(#lineMask)">
+    <rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.06" />
+  </g>
+
+  <!-- Subtle grain for tactile feel -->
+  <rect width="100%" height="100%" fill="#000" opacity="0.02" filter="url(#grain)" />
+
+  <!-- Minimal star highlights -->
+  <g fill="#ffffff" opacity="0.95">
+    <rect x="540" y="200" width="2" height="2" rx="1" ry="1" />
+    <rect x="1180" y="480" width="1.6" height="1.6" rx="0.8" ry="0.8" />
+  </g>
+
+  <!-- Vignette to focus center -->
+  <radialGradient id="vign" cx="50%" cy="50%" r="60%">
+    <stop offset="60%" stop-color="#000" stop-opacity="0" />
+    <stop offset="100%" stop-color="#000" stop-opacity="0.36" />
+  </radialGradient>
+  <rect width="100%" height="100%" fill="url(#vign)" />
+
+  <title>Monochrome decorative background</title>
+</svg>

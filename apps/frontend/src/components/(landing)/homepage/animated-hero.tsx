@@ -31,14 +31,14 @@ export default function AnimatedHero() {
 
         {/* Animated CTA buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+          <Button asChild size="lg" variant="outline">
             <Link prefetch={true} href="/signup" className="flex items-center gap-2">
               Get Started <RocketIcon className="h-6 w-6" />
             </Link>
           </Button>
-          <Button asChild size="lg" className="text-lg h-12 px-8 hover:bg-primary/5 transition-all">
+          <Button asChild size="lg">
             <Link prefetch={true} href="/experience" className="flex items-center gap-2">
-              Try It Now <ArrowRightIcon className="h-5 w-5" />
+              Experience For Free <ArrowRightIcon className="h-5 w-5" />
             </Link>
           </Button>
         </div>
@@ -58,11 +58,11 @@ export default function AnimatedHero() {
         </div>
       </div>
 
-      <div className="mt-16 w-full max-w-5xl mx-auto relative z-10 flex justify-center items-center text-center">
+      {/* <div className="mt-16 w-full max-w-5xl mx-auto relative z-10 flex justify-center items-center text-center">
         <a href="https://peerlist.io/hemants1703/project/ambitiousyou" target="_blank" rel="noreferrer">
           <Image src="https://peerlist.io/api/v1/projects/embed/PRJHMQ6R6ERP8ADAR2DRGOM6RQ9RP6?showUpvote=true&theme=dark" alt="AmbitiousYou" width={100} height="72" />
         </a>
-      </div>
+      </div> */}
 
       {/* Animated App Preview - Using the real dashboard mockup */}
       <div className="mt-16 w-full max-w-5xl mx-auto relative z-10">
