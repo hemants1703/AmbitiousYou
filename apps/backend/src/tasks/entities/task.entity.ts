@@ -11,7 +11,7 @@ export class TaskEntity {
   @Column({ type: 'varchar', length: 255, name: 'task', nullable: false })
   task: string = '';
 
-  @Column({ type: 'varchar', length: 255, name: 'task_description', nullable: true })
+  @Column({ type: 'text', name: 'task_description', nullable: true })
   taskDescription?: string;
 
   @Column({ type: 'boolean', name: 'task_completed', default: false })
