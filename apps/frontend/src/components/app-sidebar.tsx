@@ -11,8 +11,8 @@ import AmbitiousYouLogo from "./(landing)/ambitiousyou-logo";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Hemant Sharma",
+    email: "hemant@hemantsharma.tech",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
