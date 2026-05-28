@@ -6,7 +6,7 @@ import { SessionGuard } from 'src/auth/guards/session.guard';
 
 describe('UsersController', () => {
   let usersController: UsersController;
-  let mockUsersService: jest.Mocked<Pick<UsersService, 'create' | 'findOneById'>>;
+  let mockUsersService: jest.Mocked<Pick<UsersService, 'findOneById'>>;
 
   const buildUser = (overrides: Partial<UserEntity> = {}): UserEntity => ({
     id: 'user-id',
@@ -22,7 +22,6 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     mockUsersService = {
-      create: jest.fn(),
       findOneById: jest.fn(),
     };
 
@@ -44,64 +43,6 @@ describe('UsersController', () => {
 
   it('should be defined', () => {
     expect(usersController).toBeDefined();
-  });
-
-  describe('create', () => {
-    it('should call usersService.create with correct parameters', async () => {
-      const createUserDto = {
-        name: 'John Doe',
-        email: 'john@example.com',
-        password: 'password123',
-      };
-
-      const createdUser = buildUser({
-        id: '1',
-        name: createUserDto.name,
-        email: createUserDto.email,
-      });
-
-      mockUsersService.create.mockResolvedValue(createdUser);
-
-      const result = await usersController.create(createUserDto);
-
-      expect(mockUsersService.create).toHaveBeenCalledWith(createUserDto);
-      expect(result).toEqual(createdUser);
-    });
-
-    it('should return the created user from usersService', async () => {
-      const createUserDto = {
-        name: 'Jane Doe',
-        email: 'jane@example.com',
-        password: 'password456',
-      };
-
-      const createdUser = buildUser({
-        id: '2',
-        name: createUserDto.name,
-        email: createUserDto.email,
-      });
-
-      mockUsersService.create.mockResolvedValue(createdUser);
-
-      const result = await usersController.create(createUserDto);
-
-      expect(result).toEqual(createdUser);
-      expect(result.id).toBe('2');
-      expect(result.email).toBe('jane@example.com');
-    });
-
-    it('should handle errors from usersService', async () => {
-      const createUserDto = {
-        name: 'Error User',
-        email: 'error@example.com',
-        password: 'password789',
-      };
-
-      const error = new Error('Database error');
-      mockUsersService.create.mockRejectedValue(error);
-
-      await expect(usersController.create(createUserDto)).rejects.toThrow('Database error');
-    });
   });
 
   describe('findOneById', () => {

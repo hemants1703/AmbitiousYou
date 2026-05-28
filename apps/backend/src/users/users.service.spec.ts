@@ -49,7 +49,7 @@ describe('UsersService', () => {
     expect(userService).toBeDefined();
   });
 
-  describe('create', () => {
+  describe('createUser', () => {
     it('should create a new user', async () => {
       const createUserDto = { name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech', password: 'password123' };
 
@@ -69,7 +69,7 @@ describe('UsersService', () => {
       usersRepository.create.mockReturnValue(createdUser);
       usersRepository.save.mockResolvedValue(createdUser);
 
-      const result = await userService.create(createUserDto);
+      const result = await userService.createUser(createUserDto);
 
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
       expect(usersRepository.create).toHaveBeenCalledWith({
