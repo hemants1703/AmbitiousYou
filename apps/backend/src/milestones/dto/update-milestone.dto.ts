@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
+import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { CreateMilestoneDto } from './create-milestone.dto';
-import { IsBoolean, IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateMilestoneDto extends PartialType(CreateMilestoneDto) {
   @IsString()
@@ -22,7 +22,7 @@ export class UpdateMilestoneDto extends PartialType(CreateMilestoneDto) {
   @IsNotEmpty()
   milestoneCompleted: boolean = false;
 
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
   milestoneTargetDate: Date = new Date();
 }
