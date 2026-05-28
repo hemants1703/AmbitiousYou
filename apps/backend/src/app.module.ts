@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { NotesModule } from './notes/notes.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { NotesModule } from './notes/notes.module';
     UsersModule,
     AuthModule,
     NotesModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -63,7 +63,7 @@ export type NewAmbition = Pick<Ambition, "userId" | "ambitionName" | "ambitionTr
 export type Task = {
   id: string;
   userId: User["id"];
-  ambitionId: string;
+  ambitionId: Ambition["id"];
   task: string;
   taskDescription: string | null;
   taskCompleted: boolean;
@@ -78,7 +78,7 @@ export type NewTask = Pick<Task, "userId" | "ambitionId" | "task" | "taskDeadlin
 export type Milestone = {
   id: string;
   userId: User["id"];
-  ambitionId: string;
+  ambitionId: Ambition["id"];
   milestone: string;
   milestoneDescription: string | null;
   milestoneCompleted: boolean;
@@ -93,7 +93,7 @@ export type NewMilestone = Pick<Milestone, "userId" | "ambitionId" | "milestone"
 export type Note = {
   id: string;
   userId: User["id"];
-  ambitionId: string;
+  ambitionId: Ambition["id"];
   note: string;
   createdAt: Date | null;
   updatedAt: Date | null;
