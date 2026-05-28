@@ -25,6 +25,7 @@
     "paths": {
       "@ambitiousyou/shared": ["../../packages/shared/*"],
       "@ambitiousyou/shared/*": ["../../packages/shared/*"]
-    }
+    },
+    "types": ["jest"]
   }
 }

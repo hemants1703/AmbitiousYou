@@ -14,7 +14,7 @@ export type NewUser = Pick<User, "name" | "email">;
 // Session types
 export type Session = {
   id: string;
-  userId: string;
+  userId: User["id"];
   token: string;
   expiresAt: Date;
   ipAddress: string | null;
@@ -25,41 +25,22 @@ export type Session = {
 
 export type NewSession = Pick<Session, "userId" | "token" | "expiresAt">;
 
-// Account types
-export type Account = {
-  id: string;
-  userId: string;
-  accountId: string;
-  providerId: string;
-  accessToken: string | null;
-  refreshToken: string | null;
-  accessTokenExpiresAt: Date | null;
-  refreshTokenExpiresAt: Date | null;
-  scope: string | null;
-  idToken: string | null;
-  password: string | null;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-};
-
-export type NewAccount = Pick<Account, "userId" | "accountId" | "providerId"> & Partial<Pick<Account, "accessToken" | "refreshToken" | "accessTokenExpiresAt" | "refreshTokenExpiresAt" | "scope" | "idToken" | "password">>;
-
 // Verification types
 export type Verification = {
   id: string;
-  identifier: string;
+  userId: User["id"];
   value: string;
   expiresAt: Date;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
 
-export type NewVerification = Pick<Verification, "identifier" | "value" | "expiresAt">;
+export type NewVerification = Pick<Verification, "userId" | "value" | "expiresAt">;
 
 // Ambition types
 export type Ambition = {
   id: string;
-  userId: string;
+  userId: User["id"];
   ambitionName: string;
   ambitionDefinition: string | null;
   ambitionTrackingMethod: "task" | "milestone";
@@ -81,7 +62,7 @@ export type NewAmbition = Pick<Ambition, "userId" | "ambitionName" | "ambitionTr
 // Task types
 export type Task = {
   id: string;
-  userId: string;
+  userId: User["id"];
   ambitionId: string;
   task: string;
   taskDescription: string | null;
@@ -96,7 +77,7 @@ export type NewTask = Pick<Task, "userId" | "ambitionId" | "task" | "taskDeadlin
 // Milestone types
 export type Milestone = {
   id: string;
-  userId: string;
+  userId: User["id"];
   ambitionId: string;
   milestone: string;
   milestoneDescription: string | null;
@@ -111,7 +92,7 @@ export type NewMilestone = Pick<Milestone, "userId" | "ambitionId" | "milestone"
 // Note types
 export type Note = {
   id: string;
-  userId: string;
+  userId: User["id"];
   ambitionId: string;
   note: string;
   createdAt: Date | null;
@@ -123,7 +104,7 @@ export type NewNote = Pick<Note, "userId" | "ambitionId" | "note">;
 // Settings types
 export type Settings = {
   id: string;
-  userId: string;
+  userId: User["id"];
   userTimezone: string;
   emailAccountActivity: boolean;
   pushAmbitionReminders: boolean;

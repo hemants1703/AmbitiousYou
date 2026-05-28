@@ -4,6 +4,7 @@ packages:
   - 'packages/*'
 allowBuilds:
   '@nestjs/core': true
+  bcrypt: true
   msw: true
   sharp: true
   unrs-resolver: true

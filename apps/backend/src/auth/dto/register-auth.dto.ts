@@ -1,7 +1,7 @@
 import { NewUser } from '@ambitiousyou/shared/types';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class RegisterAuthDto implements NewUser {
+export class RegisterUserDto implements NewUser {
   @IsString()
   @IsNotEmpty()
   name: string = '';
