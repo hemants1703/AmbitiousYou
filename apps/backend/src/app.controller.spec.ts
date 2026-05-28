@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Backend is running!"', () => {
+      expect(appController.getBackendStatus()).toBe('Backend is running!');
     });
   });
 });

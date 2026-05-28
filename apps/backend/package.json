@@ -76,6 +76,11 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "^@ambitiousyou/shared/types$": "<rootDir>/../../packages/shared/types",
+      "^@ambitiousyou/shared/(.*)$": "<rootDir>/../../packages/shared/$1"
+    }
   }
 }
