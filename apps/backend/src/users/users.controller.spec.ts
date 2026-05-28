@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { SessionGuard } from 'src/auth/guards/session.guard';
 
 describe('UsersController', () => {
   let usersController: UsersController;
@@ -20,7 +21,10 @@ describe('UsersController', () => {
           useValue: mockUsersService,
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(SessionGuard)
+      .useValue({ canActivate: jest.fn().mockReturnValue(true) })
+      .compile();
 
     usersController = testingModule.get<UsersController>(UsersController);
   });
