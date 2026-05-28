@@ -10,15 +10,10 @@ export class NotesService {
   constructor(@InjectRepository(NoteEntity) private readonly notesRepository: Repository<NoteEntity>) {}
 
   async createNote(createNoteDto: CreateNoteDto) {
-    try {
-      return await this.notesRepository.save({
-        id: crypto.randomUUID(),
-        ...createNoteDto,
-      });
-    } catch (error) {
-      console.error('Error creating note:', error);
-      throw new HttpException('Failed to create note', 500);
-    }
+    return await this.notesRepository.save({
+      id: crypto.randomUUID(),
+      ...createNoteDto,
+    });
   }
 
   // TODO: Implement all the notes for an ambition endpoint
