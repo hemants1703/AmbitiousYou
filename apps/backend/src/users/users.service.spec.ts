@@ -64,7 +64,8 @@ describe('UsersService', () => {
         updatedAt: new Date('2026-01-01T00:00:00.000Z'),
       } as UserEntity;
 
-      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
+      const hashSpy = jest.spyOn(bcrypt, 'hash') as unknown as jest.SpyInstance<Promise<string>, [string | Buffer, string | number]>;
+      hashSpy.mockResolvedValue('hashed-password');
       usersRepository.create.mockReturnValue(createdUser);
       usersRepository.save.mockResolvedValue(createdUser);
 

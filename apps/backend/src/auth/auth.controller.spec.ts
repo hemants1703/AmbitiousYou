@@ -94,17 +94,7 @@ describe('AuthController', () => {
 
     it('should call authService.loginUser with correct parameters', async () => {
       const expectedResult = {
-        token: 'session-token-123',
-        user: {
-          id: 'uuid-1',
-          name: 'John Doe',
-          email: 'john@example.com',
-          emailVerified: true,
-          passwordHash: 'hashedPassword',
-          image: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+        sessionToken: 'session-token-123',
       };
 
       mockAuthService.loginUser.mockResolvedValue(expectedResult);
@@ -115,21 +105,9 @@ describe('AuthController', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('should return token and user from authService.loginUser', async () => {
-      const mockUser = {
-        id: 'uuid-1',
-        name: 'John Doe',
-        email: 'john@example.com',
-        emailVerified: true,
-        passwordHash: 'hashedPassword',
-        image: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
+    it('should return sessionToken from authService.loginUser', async () => {
       const expectedResult = {
-        token: 'session-token-123',
-        user: mockUser,
+        sessionToken: 'session-token-123',
       };
 
       mockAuthService.loginUser.mockResolvedValue(expectedResult);
@@ -137,8 +115,7 @@ describe('AuthController', () => {
       const result = await authController.loginUser(loginUserDto);
 
       expect(result).toEqual(expectedResult);
-      expect(result.token).toBe('session-token-123');
-      expect(result.user).toEqual(mockUser);
+      expect(result.sessionToken).toBe('session-token-123');
     });
 
     it('should propagate UnauthorizedException from authService', async () => {

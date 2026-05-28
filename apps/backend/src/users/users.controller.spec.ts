@@ -1,11 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import type { UserEntity } from './entities/user.entity';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 
 describe('UsersController', () => {
   let usersController: UsersController;
-  let mockUsersService: any;
+  let mockUsersService: jest.Mocked<Pick<UsersService, 'create' | 'findOneById'>>;
+
+  const buildUser = (overrides: Partial<UserEntity> = {}): UserEntity => ({
+    id: 'user-id',
+    name: 'Test User',
+    email: 'test@example.com',
+    emailVerified: false,
+    passwordHash: 'hashed-password',
+    image: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    ...overrides,
+  });
 
   beforeEach(async () => {
     mockUsersService = {
@@ -41,14 +54,11 @@ describe('UsersController', () => {
         password: 'password123',
       };
 
-      const createdUser = {
+      const createdUser = buildUser({
         id: '1',
-        ...createUserDto,
-        emailVerified: false,
-        image: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+        name: createUserDto.name,
+        email: createUserDto.email,
+      });
 
       mockUsersService.create.mockResolvedValue(createdUser);
 
@@ -65,14 +75,11 @@ describe('UsersController', () => {
         password: 'password456',
       };
 
-      const createdUser = {
+      const createdUser = buildUser({
         id: '2',
-        ...createUserDto,
-        emailVerified: false,
-        image: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+        name: createUserDto.name,
+        email: createUserDto.email,
+      });
 
       mockUsersService.create.mockResolvedValue(createdUser);
 
@@ -100,12 +107,12 @@ describe('UsersController', () => {
   describe('findOneById', () => {
     it('should call usersService.findOneById with correct id', async () => {
       const userId = '1';
-      const user = {
+      const user = buildUser({
         id: userId,
         name: 'John Doe',
         email: 'john@example.com',
         emailVerified: true,
-      };
+      });
 
       mockUsersService.findOneById.mockResolvedValue(user);
 
@@ -117,18 +124,21 @@ describe('UsersController', () => {
 
     it('should return a single user by id', async () => {
       const userId = '2';
-      const user = {
+      const user = buildUser({
         id: userId,
         name: 'Jane Doe',
         email: 'jane@example.com',
         emailVerified: false,
-      };
+      });
 
       mockUsersService.findOneById.mockResolvedValue(user);
 
       const result = await usersController.findOneById(userId);
 
       expect(result).toEqual(user);
+      if (!result) {
+        throw new Error('Expected user to be defined');
+      }
       expect(result.id).toBe(userId);
       expect(result.name).toBe('Jane Doe');
     });
