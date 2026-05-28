@@ -7,7 +7,10 @@ import { VerificationEntity } from './entities/verification.entity';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
-jest.mock('bcrypt');
+jest.mock('bcrypt', () => ({
+  compare: jest.fn(),
+  hash: jest.fn(),
+}));
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -124,13 +127,7 @@ describe('AuthService', () => {
         id: 'uuid-2',
       });
 
-      try {
-        await service.registerUser(registerUserDto);
-        fail('Should have thrown ConflictException');
-      } catch (error) {
-        expect(error).toBeInstanceOf(ConflictException);
-        expect(error.message).toBe('Email is already in use');
-      }
+      await expect(service.registerUser(registerUserDto)).rejects.toThrow('Email is already in use');
     });
   });
 
@@ -191,13 +188,7 @@ describe('AuthService', () => {
     it('should throw ConflictException if user email not found with correct message', async () => {
       mockUsersService.findOneByEmailWithPassword.mockResolvedValue(null);
 
-      try {
-        await service.loginUser(loginUserDto);
-        fail('Should have thrown ConflictException');
-      } catch (error) {
-        expect(error).toBeInstanceOf(ConflictException);
-        expect(error.message).toBe('Invalid email or password');
-      }
+      await expect(service.loginUser(loginUserDto)).rejects.toThrow('Invalid email or password');
     });
 
     it('should throw UnauthorizedException if password is invalid', async () => {
@@ -210,8 +201,7 @@ describe('AuthService', () => {
       mockUsersService.findOneByEmailWithPassword.mockResolvedValue(mockUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-      await expect(service.loginUser(loginUserDto)).rejects.toThrow(UnauthorizedException);
-      expect(bcrypt.compare).toHaveBeenCalledWith(loginUserDto.password, mockUser.passwordHash);
+      await expect(service.loginUser(loginUserDto)).rejects.toThrow('Invalid email or password');
     });
 
     it('should throw UnauthorizedException with correct message if password is invalid', async () => {

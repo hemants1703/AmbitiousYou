@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class LoginUserDto {
   @IsEmail()
@@ -10,8 +10,10 @@ export class LoginUserDto {
   password: string = '';
 
   @IsString()
-  ipAddress: string | null = null;
+  @IsOptional()
+  ipAddress: string = '';
 
   @IsString()
-  userAgent: string | null = null;
+  @IsOptional()
+  userAgent: string = '';
 }

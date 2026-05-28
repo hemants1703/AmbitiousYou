@@ -22,7 +22,7 @@ export class AuthService {
       throw new ConflictException('Email is already in use');
     }
 
-    const user = await this.usersService.create(createUserDto);
+    const user = await this.usersService.createUser(createUserDto);
 
     const session = this.sessionRepository.create({
       id: crypto.randomUUID(),
@@ -55,8 +55,8 @@ export class AuthService {
       userId: user.id,
       token: crypto.randomUUID(),
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
-      ipAddress: loginUserDto.ipAddress,
-      userAgent: loginUserDto.userAgent,
+      ipAddress: loginUserDto.ipAddress ?? null,
+      userAgent: loginUserDto.userAgent ?? null,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
