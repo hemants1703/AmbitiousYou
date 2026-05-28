@@ -9,8 +9,8 @@ import { TaskEntity } from './entities/task.entity';
 export class TasksService {
   constructor(@InjectRepository(TaskEntity) private readonly tasksRepository: Repository<TaskEntity>) {}
 
-  createTask(createTaskDto: CreateTaskDto): TaskEntity {
-    return this.tasksRepository.create({
+  async createTask(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+    return await this.tasksRepository.save({
       id: crypto.randomUUID(),
       ...createTaskDto,
       createdAt: new Date(),

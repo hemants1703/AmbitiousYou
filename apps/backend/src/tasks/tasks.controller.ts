@@ -11,31 +11,31 @@ export class TasksController {
 
   @UseGuards(SessionGuard)
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.createTask(createTaskDto);
+  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+    return await this.tasksService.createTask(createTaskDto);
   }
 
   @UseGuards(SessionGuard)
   @Get()
-  findAllTasksForAmbitionId(@Query('ambitionId') ambitionId: string) {
-    return this.tasksService.findAllTasksForAmbitionId(ambitionId);
+  async findAllTasksForAmbitionId(@Query('ambitionId') ambitionId: string): Promise<TaskEntity[] | null> {
+    return await this.tasksService.findAllTasksForAmbitionId(ambitionId);
   }
 
   @UseGuards(SessionGuard)
   @Get(':taskId')
-  findOneTask(@Param('taskId') taskId: string): Promise<TaskEntity | null> {
-    return this.tasksService.findOneTaskById(taskId);
+  async findOneTask(@Param('taskId') taskId: string): Promise<TaskEntity | null> {
+    return await this.tasksService.findOneTaskById(taskId);
   }
 
   @UseGuards(SessionGuard)
   @Patch(':taskId')
-  updateTask(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
-    return this.tasksService.updateTaskById(taskId, updateTaskDto);
+  async updateTask(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
+    return await this.tasksService.updateTaskById(taskId, updateTaskDto);
   }
 
   @UseGuards(SessionGuard)
   @Delete(':taskId')
-  removeTask(@Param('taskId') taskId: string): Promise<TaskEntity> {
-    return this.tasksService.removeTaskById(taskId);
+  async removeTask(@Param('taskId') taskId: string): Promise<TaskEntity> {
+    return await this.tasksService.removeTaskById(taskId);
   }
 }
