@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { CalendarIcon, ChevronRightIcon, CheckCircleIcon } from "lucide-react";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
-import "@/styles/AmbitionCard.css";
+import "@/styles/ambition-card.css";
 import { Ambition } from "@ambitiousyou/shared/types";
 
 interface AmbitionCardProps {

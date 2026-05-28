@@ -8,51 +8,51 @@ importers:
     packageManagerDependencies:
       '@pnpm/exe':
         specifier: ^11.1.2
-        version: 11.3.0
+        version: 11.4.0
       pnpm:
         specifier: ^11.1.2
-        version: 11.3.0
+        version: 11.4.0
 
 packages:
 
-  '@pnpm/exe@11.3.0':
-    resolution: {integrity: sha512-1ItrG3GdA8HC7IUMy79SmYqynjjfwXtIMlbpx9MzrU3ZXMYMfw3yuwjIXW7Aw2z0rRxxa2KtTYcLxqjIaVjUmg==}
+  '@pnpm/exe@11.4.0':
+    resolution: {integrity: sha512-tJYeYaMvAVagc/tnm/MgiHjsCk0xcPHiyEpxaaVqWdd5dk7JzvkEMbM/mwI774Qx4hAs9ISLP+4Nd+mKDUhpfA==}
     hasBin: true
 
-  '@pnpm/linux-arm64@11.3.0':
-    resolution: {integrity: sha512-+VwGD4/l+TrGKwKeGhSkqzO6eJxK7CkYAoh18ORvBMeYXOlWYF66423VyRbrSK67dtvZ2O0nZ82sA5pxVUUWvQ==}
+  '@pnpm/linux-arm64@11.4.0':
+    resolution: {integrity: sha512-LSftAzbg7tyk/5xVyURe4IrojLznKO+rIJ/RDwtEAdkbTxAtyxZEhzl0asvS9XFITSvh7tifDLEw/8e+1opXNQ==}
     cpu: [arm64]
     os: [linux]
 
-  '@pnpm/linux-x64@11.3.0':
-    resolution: {integrity: sha512-/Csxm8VN18Hcs7vSA83rSk/TTytIVZjgx4K61uLeREClxC7DjAlAc+3jmH9BM615vbUZws821otlWytHRTdVkQ==}
+  '@pnpm/linux-x64@11.4.0':
+    resolution: {integrity: sha512-4y3QOjG/QBg1xCh1RPCtU0jtqj6A9ndldPVffnGrMU2VE2tRlzXVASc1ELwfLBR8M6XOLk/QYMTxTHHMhAECuw==}
     cpu: [x64]
     os: [linux]
 
-  '@pnpm/linuxstatic-arm64@11.3.0':
-    resolution: {integrity: sha512-A+wiDUs+8pitTZw0FjWqdqVk4xXvvM3TwVagh6il54EtPr+JS/BkCc5S1lBYJp+ei2H27TBsfXX7Ff/qFfIC2g==}
+  '@pnpm/linuxstatic-arm64@11.4.0':
+    resolution: {integrity: sha512-nPEGdbOB04o3FSXHFaXvFnBVrQH+dAqjFr4j4O0PVyc8XtC+Yet8hrz/DSOFc0x6UtGcglWZ9UepwnPhzUjAYA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@pnpm/linuxstatic-x64@11.3.0':
-    resolution: {integrity: sha512-6TuJt6AlUMZbdC3IQfBVKPgUnX9IDEra5DCS2jMHmu26bJZnzEgee8YLuC3j1/xTPrRVbF9Oo5nMbmxUVOCYew==}
+  '@pnpm/linuxstatic-x64@11.4.0':
+    resolution: {integrity: sha512-J8OF0s+y8094UMlqnr9P3BwuEmZ+LDX98s4FZgkliDoMoix3Oo8NajsMZJRoZxXsGEkLhsv30EbbD60rzsv1GA==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@pnpm/macos-arm64@11.3.0':
-    resolution: {integrity: sha512-MXY3ml1zmFn6m710krku0lrTdapuyD44ipKxwaMVylmIJV/U2Co8tielk2p5KEY2pyHBgR8tBTXnvoTnQZ+tvA==}
+  '@pnpm/macos-arm64@11.4.0':
+    resolution: {integrity: sha512-oYOcqy8vu/VJ7iQHYXt1hfZjhUzCyGznCuP0iBp3GHp5oz/EhM5pk6he47RIyMv7iVSH6ZLKfTC03FMQAMtdAQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@pnpm/win-arm64@11.3.0':
-    resolution: {integrity: sha512-lGjVPngNxeWwlugcO5cAdqWYpnVQ9JMo3gnvUICWsiXRaVi9QYf9aQNNDE8h3E5J+wFQn8zCTv9X3x1eDauFBw==}
+  '@pnpm/win-arm64@11.4.0':
+    resolution: {integrity: sha512-OTXl9Jv6qZi42wctVaopchLlJwVPTKHQNs1cnN1M/a/QuKRvvWvtGhbSA45C37QczTP5Tou8+Gg2AR3TCdA8gg==}
     cpu: [arm64]
     os: [win32]
 
-  '@pnpm/win-x64@11.3.0':
-    resolution: {integrity: sha512-mq5PnEYv4sCAbIWG2vuicN4qlnxf+epXVpuoBEWR+BhwUS8Bb6GgCcRfhaj9AZW8cAxIz2XXkgb4OvJRAer/4A==}
+  '@pnpm/win-x64@11.4.0':
+    resolution: {integrity: sha512-jBo9FCwV6E0/EaZy3rf3ZXTDBJsmk+GybawgHyaX/D/TiH/M5iJvr1AWkp8cS/Edob7xxZEetei1FfczGNMSNw==}
     cpu: [x64]
     os: [win32]
 
@@ -116,45 +116,45 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  pnpm@11.3.0:
-    resolution: {integrity: sha512-LEA9ZZRScodnKx9wVjQ6H3w2NANqZ/+r/MKz11ldhDdo+HhxSNG1fPeVbJBga70ZKFfDY68Z6W0tDsnsV0HSFQ==}
+  pnpm@11.4.0:
+    resolution: {integrity: sha512-8P68fjdVKrSFSUqRQkGzOOCzWAuT1UzjHwCTMBWICGMSkDihtK5OQUoO5jrDW/IRl+mQFyxKaCVkULVjYxCWjw==}
     engines: {node: '>=22.13'}
     hasBin: true
 
 snapshots:
 
-  '@pnpm/exe@11.3.0':
+  '@pnpm/exe@11.4.0':
     dependencies:
       '@reflink/reflink': 0.1.19
       detect-libc: 2.1.2
     optionalDependencies:
-      '@pnpm/linux-arm64': 11.3.0
-      '@pnpm/linux-x64': 11.3.0
-      '@pnpm/linuxstatic-arm64': 11.3.0
-      '@pnpm/linuxstatic-x64': 11.3.0
-      '@pnpm/macos-arm64': 11.3.0
-      '@pnpm/win-arm64': 11.3.0
-      '@pnpm/win-x64': 11.3.0
+      '@pnpm/linux-arm64': 11.4.0
+      '@pnpm/linux-x64': 11.4.0
+      '@pnpm/linuxstatic-arm64': 11.4.0
+      '@pnpm/linuxstatic-x64': 11.4.0
+      '@pnpm/macos-arm64': 11.4.0
+      '@pnpm/win-arm64': 11.4.0
+      '@pnpm/win-x64': 11.4.0
 
-  '@pnpm/linux-arm64@11.3.0':
+  '@pnpm/linux-arm64@11.4.0':
     optional: true
 
-  '@pnpm/linux-x64@11.3.0':
+  '@pnpm/linux-x64@11.4.0':
     optional: true
 
-  '@pnpm/linuxstatic-arm64@11.3.0':
+  '@pnpm/linuxstatic-arm64@11.4.0':
     optional: true
 
-  '@pnpm/linuxstatic-x64@11.3.0':
+  '@pnpm/linuxstatic-x64@11.4.0':
     optional: true
 
-  '@pnpm/macos-arm64@11.3.0':
+  '@pnpm/macos-arm64@11.4.0':
     optional: true
 
-  '@pnpm/win-arm64@11.3.0':
+  '@pnpm/win-arm64@11.4.0':
     optional: true
 
-  '@pnpm/win-x64@11.3.0':
+  '@pnpm/win-x64@11.4.0':
     optional: true
 
   '@reflink/reflink-darwin-arm64@0.1.19':
@@ -194,7 +194,7 @@ snapshots:
 
   detect-libc@2.1.2: {}
 
-  pnpm@11.3.0: {}
+  pnpm@11.4.0: {}
 
 ---
 lockfileVersion: '9.0'
@@ -323,7 +323,7 @@ importers:
         specifier: ^8.20.0
         version: 8.59.4(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
 
-  apps/web:
+  apps/frontend:
     dependencies:
       '@dnd-kit/core':
         specifier: ^6.3.1
@@ -6874,7 +6874,7 @@ snapshots:
   '@jest/console@30.4.1':
     dependencies:
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       chalk: 4.1.2
       jest-message-util: 30.4.1
       jest-util: 30.4.1
@@ -6888,7 +6888,7 @@ snapshots:
       '@jest/test-result': 30.4.1
       '@jest/transform': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       ci-info: 4.4.0
@@ -6896,7 +6896,7 @@ snapshots:
       fast-json-stable-stringify: 2.1.0
       graceful-fs: 4.2.11
       jest-changed-files: 30.4.1
-      jest-config: 30.4.2(@types/node@20.19.41)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3))
+      jest-config: 30.4.2(@types/node@24.12.4)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3))
       jest-haste-map: 30.4.1
       jest-message-util: 30.4.1
       jest-regex-util: 30.4.0
@@ -6922,7 +6922,7 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       jest-mock: 30.4.1
 
   '@jest/expect-utils@30.4.1':
@@ -6940,7 +6940,7 @@ snapshots:
     dependencies:
       '@jest/types': 30.4.1
       '@sinonjs/fake-timers': 15.4.0
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       jest-message-util: 30.4.1
       jest-mock: 30.4.1
       jest-util: 30.4.1
@@ -6958,7 +6958,7 @@ snapshots:
 
   '@jest/pattern@30.4.0':
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       jest-regex-util: 30.4.0
 
   '@jest/reporters@30.4.1':
@@ -6969,7 +6969,7 @@ snapshots:
       '@jest/transform': 30.4.1
       '@jest/types': 30.4.1
       '@jridgewell/trace-mapping': 0.3.31
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       chalk: 4.1.2
       collect-v8-coverage: 1.0.3
       exit-x: 0.2.2
@@ -7045,7 +7045,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       '@types/yargs': 17.0.35
       chalk: 4.1.2
 
@@ -8230,11 +8230,11 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
 
   '@types/cookiejar@2.1.5': {}
 
@@ -8276,7 +8276,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.1.1':
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
@@ -8332,16 +8332,16 @@ snapshots:
 
   '@types/send@1.2.1':
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
 
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
 
   '@types/stack-utils@2.0.3': {}
 
@@ -8351,7 +8351,7 @@ snapshots:
     dependencies:
       '@types/cookiejar': 2.1.5
       '@types/methods': 1.1.4
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       form-data: 4.0.5
 
   '@types/supertest@7.2.0':
@@ -10360,7 +10360,7 @@ snapshots:
       '@jest/expect': 30.4.1
       '@jest/test-result': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       chalk: 4.1.2
       co: 4.6.0
       dedent: 1.7.2
@@ -10398,38 +10398,6 @@ snapshots:
       - esbuild-register
       - supports-color
       - ts-node
-
-  jest-config@30.4.2(@types/node@20.19.41)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3)):
-    dependencies:
-      '@babel/core': 7.29.0
-      '@jest/get-type': 30.1.0
-      '@jest/pattern': 30.4.0
-      '@jest/test-sequencer': 30.4.1
-      '@jest/types': 30.4.1
-      babel-jest: 30.4.1(@babel/core@7.29.0)
-      chalk: 4.1.2
-      ci-info: 4.4.0
-      deepmerge: 4.3.1
-      glob: 10.5.0
-      graceful-fs: 4.2.11
-      jest-circus: 30.4.2
-      jest-docblock: 30.4.0
-      jest-environment-node: 30.4.1
-      jest-regex-util: 30.4.0
-      jest-resolve: 30.4.1
-      jest-runner: 30.4.2
-      jest-util: 30.4.1
-      jest-validate: 30.4.1
-      parse-json: 5.2.0
-      pretty-format: 30.4.1
-      slash: 3.0.0
-      strip-json-comments: 3.1.1
-    optionalDependencies:
-      '@types/node': 20.19.41
-      ts-node: 10.9.2(@types/node@24.12.4)(typescript@5.9.3)
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - supports-color
 
   jest-config@30.4.2(@types/node@24.12.4)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3)):
     dependencies:
@@ -10487,7 +10455,7 @@ snapshots:
       '@jest/environment': 30.4.1
       '@jest/fake-timers': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       jest-mock: 30.4.1
       jest-util: 30.4.1
       jest-validate: 30.4.1
@@ -10495,7 +10463,7 @@ snapshots:
   jest-haste-map@30.4.1:
     dependencies:
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -10535,7 +10503,7 @@ snapshots:
   jest-mock@30.4.1:
     dependencies:
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       jest-util: 30.4.1
 
   jest-pnp-resolver@1.2.3(jest-resolve@30.4.1):
@@ -10569,7 +10537,7 @@ snapshots:
       '@jest/test-result': 30.4.1
       '@jest/transform': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       chalk: 4.1.2
       emittery: 0.13.1
       exit-x: 0.2.2
@@ -10598,7 +10566,7 @@ snapshots:
       '@jest/test-result': 30.4.1
       '@jest/transform': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       chalk: 4.1.2
       cjs-module-lexer: 2.2.0
       collect-v8-coverage: 1.0.3
@@ -10645,7 +10613,7 @@ snapshots:
   jest-util@30.4.1:
     dependencies:
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       chalk: 4.1.2
       ci-info: 4.4.0
       graceful-fs: 4.2.11
@@ -10664,7 +10632,7 @@ snapshots:
     dependencies:
       '@jest/test-result': 30.4.1
       '@jest/types': 30.4.1
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.13.1
@@ -10673,13 +10641,13 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
   jest-worker@30.4.1:
     dependencies:
-      '@types/node': 20.19.41
+      '@types/node': 24.12.4
       '@ungap/structured-clone': 1.3.1
       jest-util: 30.4.1
       merge-stream: 2.0.0
