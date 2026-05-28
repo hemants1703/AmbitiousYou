@@ -2,7 +2,7 @@ import { signupAction } from "@/actions/(auth)/signup/signup";
 import { signupInitialState } from "@/actions/(auth)/signup/signup-state";
 import AmbitiousYouLogo from "@/components/(landing)/ambitiousyou-logo";
 import { SignupForm } from "@/components/(auth)/signup/signup-form";
-import Image from "next/image";
+import "@/styles/auth-background.css";
 import Link from "next/link";
 
 export default function SignupPage() {
@@ -20,9 +20,7 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-muted lg:block">
-        <Image src="/auth.svg" alt="Image" fill className="object-cover dark:brightness-[0.2] dark:grayscale" />
-      </div>
+      <div className="auth-background auth-background-signup hidden lg:block" aria-hidden="true" />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { loginAction } from "@/actions/(auth)/login/login";
 import { loginInitialState } from "@/actions/(auth)/login/login-state";
 import AmbitiousYouLogo from "@/components/(landing)/ambitiousyou-logo";
 import { LoginForm } from "@/components/(auth)/login/login-form";
-import Image from "next/image";
+import "@/styles/auth-background.css";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -20,9 +20,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-muted lg:block">
-        <Image loading="eager" src="/auth.svg" alt="Image" fill className="object-cover dark:brightness-[0.2] dark:grayscale" />
-      </div>
+      <div className="auth-background auth-background-login hidden lg:block" aria-hidden="true" />
     </div>
   );
 }

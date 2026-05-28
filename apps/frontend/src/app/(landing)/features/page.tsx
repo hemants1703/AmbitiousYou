@@ -3,6 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, ChartBarIcon, CheckIcon, PlusCircleIcon, FilterIcon, TargetIcon, XIcon } from "lucide-react";
+import { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +12,33 @@ const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
 });
+
+export const metadata: Metadata = {
+  title: "Features - AmbitiousYou",
+  description: "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.",
+  openGraph: {
+    title: "Features - AmbitiousYou",
+    description: "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.",
+    url: "https://ambitiousyou.com/features",
+    siteName: "AmbitiousYou",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png",
+        width: 1200,
+        height: 630,
+        alt: "AmbitiousYou Features",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Features - AmbitiousYou",
+    description: "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.",
+    images: ["https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png"],
+  },
+};
 
 export default function Features() {
   return (
