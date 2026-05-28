@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
 import { MilestonesModule } from './milestones/milestones.module';
+import { AmbitionsModule } from './ambitions/ambitions.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MilestonesModule } from './milestones/milestones.module';
     NotesModule,
     TasksModule,
     MilestonesModule,
+    AmbitionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
