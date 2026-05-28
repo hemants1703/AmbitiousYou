@@ -1,32 +1,48 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
-import { EntityManager } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let mockEntityManager: jest.Mocked<EntityManager>;
+  let usersRepository: jest.Mocked<Repository<UserEntity>>;
+  let mockQueryBuilder: {
+    addSelect: jest.Mock;
+    where: jest.Mock;
+    getOne: jest.Mock;
+  };
 
   beforeEach(async () => {
-    mockEntityManager = {
+    mockQueryBuilder = {
+      addSelect: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      getOne: jest.fn(),
+    };
+
+    usersRepository = {
+      create: jest.fn(),
       save: jest.fn(),
-      find: jest.fn(),
       findOne: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
-    } as unknown as jest.Mocked<EntityManager>;
+      createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
+    } as unknown as jest.Mocked<Repository<UserEntity>>;
 
     const testingModule: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
         {
-          provide: EntityManager,
-          useValue: mockEntityManager,
+          provide: getRepositoryToken(UserEntity),
+          useValue: usersRepository,
         },
       ],
     }).compile();
 
     userService = testingModule.get<UsersService>(UsersService);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should be defined', () => {
@@ -36,67 +52,72 @@ describe('UsersService', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       const createUserDto = { name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech', password: 'password123' };
-      const createdUser = { id: '1', ...createUserDto };
 
-      mockEntityManager.save.mockResolvedValue(createdUser);
+      const createdUser = {
+        id: '1',
+        name: createUserDto.name,
+        email: createUserDto.email,
+        emailVerified: false,
+        passwordHash: 'hashed-password',
+        image: null,
+        createdAt: new Date('2026-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2026-01-01T00:00:00.000Z'),
+      } as UserEntity;
+
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
+      usersRepository.create.mockReturnValue(createdUser);
+      usersRepository.save.mockResolvedValue(createdUser);
 
       const result = await userService.create(createUserDto);
 
-      expect((mockEntityManager.save as jest.Mock).mock.calls[0]).toEqual([createUserDto]);
+      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
+      expect(usersRepository.create).toHaveBeenCalledWith({
+        id: expect.any(String),
+        name: createUserDto.name,
+        email: createUserDto.email,
+        emailVerified: false,
+        passwordHash: 'hashed-password',
+        image: null,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+      expect(usersRepository.save).toHaveBeenCalledWith(createdUser);
       expect(result).toEqual(createdUser);
     });
   });
 
-  describe('findAll', () => {
-    it('should return an array of users', async () => {
-      const users = [
-        { id: '1', name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech' },
-        { id: '2', name: 'John Doe', email: 'john@doe.com' },
-      ];
-
-      mockEntityManager.find.mockResolvedValue(users);
-
-      const result = await userService.findAll();
-
-      expect((mockEntityManager.find as jest.Mock).mock.calls[0]).toEqual([UserEntity]);
-      expect(result).toEqual(users);
-    });
-  });
-
-  describe('findOne', () => {
-    it('should return a user by id', async () => {
+  describe('findOneByEmail', () => {
+    it('should return a user by email', async () => {
       const user = { id: '1', name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech' };
 
-      mockEntityManager.findOne.mockResolvedValue(user);
+      usersRepository.findOne.mockResolvedValue(user as UserEntity);
 
-      const result = await userService.findOne('1');
+      const result = await userService.findOneByEmail('hemant@hemantsharma.tech');
 
-      expect((mockEntityManager.findOne as jest.Mock).mock.calls[0]).toEqual([UserEntity, { where: { id: '1' } }]);
+      expect(usersRepository.findOne).toHaveBeenCalledWith({ where: { email: 'hemant@hemantsharma.tech' } });
       expect(result).toEqual(user);
     });
   });
 
-  describe('update', () => {
-    it('should update a user by id', async () => {
-      const updatedUserDto = { name: 'Hemant Sharma Updated', email: 'hemant@hemantsharma.tech' };
+  describe('findOneByEmailWithPassword', () => {
+    it('should return a user by email including passwordHash', async () => {
+      const user = {
+        id: '1',
+        name: 'Hemant Sharma',
+        email: 'hemant@hemantsharma.tech',
+        passwordHash: 'hashed-password',
+      } as UserEntity;
 
-      mockEntityManager.update.mockResolvedValue({ affected: 1, raw: {}, generatedMaps: [] });
+      mockQueryBuilder.getOne.mockResolvedValue(user);
 
-      const result = await userService.update('1', updatedUserDto);
+      const result = await userService.findOneByEmailWithPassword('hemant@hemantsharma.tech');
 
-      expect((mockEntityManager.update as jest.Mock).mock.calls[0]).toEqual([UserEntity, '1', updatedUserDto]);
-      expect(result).toEqual({ affected: 1, raw: {}, generatedMaps: [] });
-    });
-  });
-
-  describe('remove', () => {
-    it('should remove a user by id', async () => {
-      mockEntityManager.delete.mockResolvedValue({ affected: 1, raw: {} });
-
-      const result = await userService.remove('1');
-
-      expect((mockEntityManager.delete as jest.Mock).mock.calls[0]).toEqual([UserEntity, '1']);
-      expect(result).toEqual({ affected: 1, raw: {} });
+      expect(usersRepository.createQueryBuilder).toHaveBeenCalledWith('user');
+      expect(mockQueryBuilder.addSelect).toHaveBeenCalledWith('user.passwordHash');
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('user.email = :email', {
+        email: 'hemant@hemantsharma.tech',
+      });
+      expect(result).toEqual(user);
     });
   });
 });

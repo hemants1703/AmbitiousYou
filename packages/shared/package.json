@@ -2,11 +2,18 @@
   "name": "@ambitiousyou/shared",
   "version": "1.0.0",
   "description": "Shared types and utilities for AmbitiousYou",
-  "main": "index.ts",
-  "types": "index.ts",
+  "type": "module",
+  "main": "./types/index.js",
+  "types": "./types/index.d.ts",
   "exports": {
-    ".": "./index.ts",
-    "./types": "./types/index.ts"
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./types/index.js"
+    },
+    "./types": {
+      "types": "./types/index.d.ts",
+      "default": "./types/index.js"
+    }
   },
   "private": true
 }

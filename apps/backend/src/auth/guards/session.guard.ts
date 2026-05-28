@@ -1,10 +1,11 @@
-import { CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SessionEntity } from '../entities/session.entity';
-import { Repository } from 'typeorm/browser/repository/Repository.js';
+import { Repository } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import type { Request } from 'express';
 
+@Injectable()
 export class SessionGuard implements CanActivate {
   constructor(
     @InjectRepository(SessionEntity) private readonly sessionRepository: Repository<SessionEntity>,
@@ -16,6 +17,10 @@ export class SessionGuard implements CanActivate {
 
     // Extract token from cookies or Authorization header
     const token = this.extractTokenFromCookies(request) || this.extractTokenFromHeaders(request);
+
+    if (!token) {
+      throw new UnauthorizedException('Missing session token');
+    }
 
     // Search for a session with the provided token
     const session = await this.sessionRepository.findOne({ where: { token } });
@@ -51,7 +56,7 @@ export class SessionGuard implements CanActivate {
   }
 
   private extractTokenFromCookies(request: Request): string | undefined {
-    const cookies = request.cookies as Record<string, any>;
+    const cookies = request.cookies as Record<string, any> | undefined;
     return cookies?.sessionToken as string | undefined;
   }
 }

@@ -1,4 +1,4 @@
-import { NewUser } from '@ambitiousyou/shared/types';
+import type { NewUser } from '@ambitiousyou/shared/types';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class RegisterUserDto implements NewUser {

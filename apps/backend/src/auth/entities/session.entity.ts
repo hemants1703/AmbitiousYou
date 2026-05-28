@@ -5,27 +5,27 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 
 @Entity('sessions')
 export class SessionEntity implements Session {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string = '';
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'user_id' })
   userId: string = '';
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'token' })
   token: string = '';
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'expires_at' })
   expiresAt: Date = new Date();
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true, name: 'ip_address' })
   ipAddress: string | null = null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true, name: 'user_agent' })
   userAgent: string | null = null;
 
-  @CreateDateColumn({ nullable: false })
+  @CreateDateColumn({ nullable: false, name: 'created_at' })
   createdAt: Date = new Date();
 
-  @UpdateDateColumn({ nullable: false })
+  @UpdateDateColumn({ nullable: false, name: 'updated_at' })
   updatedAt: Date = new Date();
 }

@@ -8,25 +8,25 @@ export class UserEntity implements User {
   @PrimaryGeneratedColumn('uuid')
   id: string = '';
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'name' })
   name: string = '';
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false, unique: true, name: 'email' })
   email: string = '';
 
-  @Column({ nullable: false, default: false })
+  @Column({ nullable: false, default: false, name: 'email_verified' })
   emailVerified: boolean = false;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'password_hash', select: false })
   passwordHash: string = '';
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true, name: 'image' })
   image: string | null = null;
 
-  @CreateDateColumn({ nullable: false })
+  @CreateDateColumn({ nullable: false, name: 'created_at' })
   createdAt: Date = new Date();
 
-  @UpdateDateColumn({ nullable: false })
+  @UpdateDateColumn({ nullable: false, name: 'updated_at' })
   updatedAt: Date = new Date();
 
   //  RELATIONS
