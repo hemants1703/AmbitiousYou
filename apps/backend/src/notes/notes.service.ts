@@ -11,7 +11,10 @@ export class NotesService {
 
   async createNote(createNoteDto: CreateNoteDto) {
     try {
-      return await this.notesRepository.save(createNoteDto);
+      return await this.notesRepository.save({
+        id: crypto.randomUUID(),
+        ...createNoteDto,
+      });
     } catch (error) {
       console.error('Error creating note:', error);
       throw new HttpException('Failed to create note', 500);
