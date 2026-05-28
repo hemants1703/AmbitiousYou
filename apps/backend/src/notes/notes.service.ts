@@ -9,10 +9,12 @@ import { Repository } from 'typeorm';
 export class NotesService {
   constructor(@InjectRepository(NoteEntity) private readonly notesRepository: Repository<NoteEntity>) {}
 
-  async createNote(createNoteDto: CreateNoteDto) {
-    return await this.notesRepository.save({
+  createNote(createNoteDto: CreateNoteDto): NoteEntity {
+    return this.notesRepository.create({
       id: crypto.randomUUID(),
       ...createNoteDto,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
   }
 

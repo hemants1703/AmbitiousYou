@@ -11,8 +11,8 @@ export class NotesController {
 
   @UseGuards(SessionGuard)
   @Post()
-  async createNote(@Body() createNoteDto: CreateNoteDto): Promise<NoteEntity> {
-    return await this.notesService.createNote(createNoteDto);
+  createNote(@Body() createNoteDto: CreateNoteDto): NoteEntity {
+    return this.notesService.createNote(createNoteDto);
   }
 
   @UseGuards(SessionGuard)
