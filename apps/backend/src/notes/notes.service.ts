@@ -9,8 +9,8 @@ import { Repository } from 'typeorm';
 export class NotesService {
   constructor(@InjectRepository(NoteEntity) private readonly notesRepository: Repository<NoteEntity>) {}
 
-  createNote(createNoteDto: CreateNoteDto): NoteEntity {
-    return this.notesRepository.create({
+  async createNote(createNoteDto: CreateNoteDto): Promise<NoteEntity> {
+    return await this.notesRepository.save({
       id: crypto.randomUUID(),
       ...createNoteDto,
       createdAt: new Date(),
