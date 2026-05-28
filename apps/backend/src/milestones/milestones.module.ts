@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MilestonesService } from './milestones.service';
-import { MilestonesController } from './milestones.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MilestoneEntity } from './entities/milestone.entity';
-import { SessionGuard } from 'src/auth/guards/session.guard';
+import { AmbitionEntity } from 'src/ambitions/entities/ambition.entity';
 import { SessionEntity } from 'src/auth/entities/session.entity';
+import { SessionGuard } from 'src/auth/guards/session.guard';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { MilestoneEntity } from './entities/milestone.entity';
+import { MilestonesController } from './milestones.controller';
+import { MilestonesService } from './milestones.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MilestoneEntity, SessionEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([MilestoneEntity, SessionEntity, UserEntity, AmbitionEntity])],
   controllers: [MilestonesController],
   providers: [MilestonesService, SessionGuard],
 })

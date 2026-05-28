@@ -11,5 +11,6 @@ import { SessionGuard } from 'src/auth/guards/session.guard';
   imports: [TypeOrmModule.forFeature([AmbitionEntity, SessionEntity, UserEntity])],
   controllers: [AmbitionsController],
   providers: [AmbitionsService, SessionGuard],
+  exports: [AmbitionEntity],
 })
 export class AmbitionsModule {}

@@ -6,9 +6,10 @@ import { NoteEntity } from './entities/note.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionEntity } from 'src/auth/entities/session.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { AmbitionEntity } from 'src/ambitions/entities/ambition.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([NoteEntity, SessionEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([NoteEntity, SessionEntity, UserEntity, AmbitionEntity])],
   controllers: [NotesController],
   providers: [NotesService, SessionGuard],
 })

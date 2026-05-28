@@ -1,11 +1,18 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { AmbitionEntity } from 'src/ambitions/entities/ambition.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('tasks')
 export class TaskEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string = '';
 
+  @Column({ type: 'uuid', name: 'user_id' })
+  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
+  userId: string = '';
+
   @Column({ type: 'uuid', name: 'ambition_id' })
+  @ManyToOne(() => AmbitionEntity, (ambition) => ambition.id, { onDelete: 'CASCADE' })
   ambitionId: string = '';
 
   @Column({ type: 'varchar', length: 255, name: 'task', nullable: false })

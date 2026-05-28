@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { AmbitionEntity } from 'src/ambitions/entities/ambition.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('milestones')
 export class MilestoneEntity {
@@ -6,9 +8,11 @@ export class MilestoneEntity {
   id: string = '';
 
   @Column({ type: 'uuid', name: 'user_id', nullable: false })
+  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   userId: string = '';
 
   @Column({ type: 'uuid', name: 'ambition_id', nullable: false })
+  @ManyToOne(() => AmbitionEntity, (ambition) => ambition.id, { onDelete: 'CASCADE' })
   ambitionId: string = '';
 
   @Column({ type: 'varchar', length: 255, nullable: false })
