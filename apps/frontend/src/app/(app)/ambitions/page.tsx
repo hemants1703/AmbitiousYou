@@ -32,7 +32,7 @@ function NoAmbitionsFoundPage() {
           <p className="text-muted-foreground">View and manage all your ambitions in one place</p>
         </div>
         <Button asChild size="sm" className="w-full md:w-auto">
-          <Link prefetch={true} href={`/ambitions/new?ref=ambitions`} className="md:ml-0 flex justify-center items-center gap-1">
+          <Link prefetch={true} href="/ambitions/create" className="md:ml-0 flex justify-center items-center gap-1">
             <PlusCircleIcon className="h-4 w-4" />
             Create New Ambition
           </Link>

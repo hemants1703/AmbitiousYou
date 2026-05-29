@@ -1,4 +1,5 @@
 import { NewAmbition } from '@ambitiousyou/shared';
+import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAmbitionDto implements NewAmbition {
@@ -19,10 +20,12 @@ export class CreateAmbitionDto implements NewAmbition {
 
   @IsDate()
   @IsNotEmpty({ message: 'ambitionStartDate must be a valid date' })
+  @Type(() => Date)
   ambitionStartDate: Date = new Date();
 
   @IsDate()
   @IsNotEmpty({ message: 'ambitionEndDate must be a valid date' })
+  @Type(() => Date)
   ambitionEndDate: Date = new Date();
 
   @IsEnum(['low', 'medium', 'high'], { message: 'ambitionPriority must be either low, medium, or high' })
