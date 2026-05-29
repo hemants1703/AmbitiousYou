@@ -76,21 +76,44 @@ export class AmbitionsService {
   }
 
   async findAllAmbitionsFromSessionToken(sessionToken: string): Promise<AmbitionEntity[] | null> {
-    const session = await this.entityManager
-      .createQueryBuilder()
-      .select('session.userId', 'userId')
-      .from('sessions', 'session')
+    const ambitions = await this.entityManager
+      .getRepository(AmbitionEntity)
+      .createQueryBuilder('ambition')
+      .innerJoin('sessions', 'session', 'session.user_id = ambition.user_id')
+      .innerJoin('users', 'user', 'user.id = session.user_id')
       .where('session.token = :sessionToken', { sessionToken })
-      .getRawOne<{ userId: string }>();
+      .orderBy('ambition.created_at', 'DESC')
+      .getMany();
 
-    if (!session || !session.userId) {
+    return ambitions.length ? ambitions : null;
+  }
+
+  async findAmbitionDetailsBySessionTokenAndId(sessionToken: string, ambitionId: string): Promise<AmbitionEntity | null> {
+    const ambition = await this.entityManager
+      .getRepository(AmbitionEntity)
+      .createQueryBuilder('ambition')
+      .innerJoin('sessions', 'session', 'session.user_id = ambition.user_id')
+      .innerJoin('users', 'user', 'user.id = session.user_id')
+      .leftJoinAndMapMany('ambition.tasks', TaskEntity, 'task', 'task.ambition_id = ambition.id AND ambition.ambition_tracking_method = :taskTrackingMethod', { taskTrackingMethod: 'task' })
+      .leftJoinAndMapMany('ambition.milestones', MilestoneEntity, 'milestone', 'milestone.ambition_id = ambition.id AND ambition.ambition_tracking_method = :milestoneTrackingMethod', {
+        milestoneTrackingMethod: 'milestone',
+      })
+      .leftJoinAndMapMany('ambition.notes', NoteEntity, 'note', 'note.ambition_id = ambition.id')
+      .where('session.token = :sessionToken', { sessionToken })
+      .andWhere('ambition.id = :ambitionId', { ambitionId })
+      .getOne();
+
+    if (!ambition) {
       return null;
     }
 
-    return await this.ambitionsRepository.find({
-      where: { userId: session.userId },
-      order: { createdAt: 'DESC' },
-    });
+    if (ambition.ambitionTrackingMethod === 'task') {
+      delete (ambition as AmbitionEntity & { milestones?: MilestoneEntity[] }).milestones;
+    } else {
+      delete (ambition as AmbitionEntity & { tasks?: TaskEntity[] }).tasks;
+    }
+
+    return ambition;
   }
 
   async findOneAmbitionById(ambitionId: string): Promise<AmbitionEntity | null> {

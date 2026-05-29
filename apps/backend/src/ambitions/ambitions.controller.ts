@@ -23,6 +23,13 @@ export class AmbitionsController {
   }
 
   @UseGuards(SessionGuard)
+  @Get(':ambitionId/details')
+  async findAmbitionDetailsBySessionTokenAndId(@Headers('Authorization') authorization: string, @Param('ambitionId') ambitionId: string): Promise<AmbitionEntity | null> {
+    const token = authorization.replace(/^Bearer\s+/i, '');
+    return await this.ambitionsService.findAmbitionDetailsBySessionTokenAndId(token, ambitionId);
+  }
+
+  @UseGuards(SessionGuard)
   @Get(':ambitionId')
   async findOneAmbitionById(@Param('ambitionId') ambitionId: string): Promise<AmbitionEntity | null> {
     return await this.ambitionsService.findOneAmbitionById(ambitionId);
