@@ -5,6 +5,8 @@ import { SignupForm } from "@/components/(auth)/signup/signup-form";
 import "@/styles/auth-background.css";
 import Link from "next/link";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getSessionToken } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -19,7 +21,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SignupPage() {
+export default async function SignupPage() {
+  if (await getSessionToken()) return redirect("/dashboard");
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">

@@ -5,6 +5,8 @@ import { LoginForm } from "@/components/(auth)/login/login-form";
 import "@/styles/auth-background.css";
 import Link from "next/link";
 import { Metadata } from "next";
+import { getSessionToken } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -19,7 +21,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  if (await getSessionToken()) return redirect("/dashboard");
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
