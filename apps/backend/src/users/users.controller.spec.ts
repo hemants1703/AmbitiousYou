@@ -45,11 +45,11 @@ describe('UsersController', () => {
     expect(usersController).toBeDefined();
   });
 
-  describe('findOneById', () => {
-    it('should call usersService.findOneById with correct id', async () => {
-      const userId = '1';
+  describe('findUserFromSessionToken', () => {
+    it('should call usersService.findUserBySessionToken with correct token', async () => {
+      const sessionToken = '1';
       const user = buildUser({
-        id: userId,
+        id: '1',
         name: 'John Doe',
         email: 'john@example.com',
         emailVerified: true,
@@ -57,48 +57,10 @@ describe('UsersController', () => {
 
       mockUsersService.findOneById.mockResolvedValue(user);
 
-      const result = await usersController.findOneById(userId);
+      const result = await usersController.findUserFromSessionToken(sessionToken);
 
-      expect(mockUsersService.findOneById).toHaveBeenCalledWith(userId);
+      expect(mockUsersService.findOneById).toHaveBeenCalledWith(sessionToken);
       expect(result).toEqual(user);
-    });
-
-    it('should return a single user by id', async () => {
-      const userId = '2';
-      const user = buildUser({
-        id: userId,
-        name: 'Jane Doe',
-        email: 'jane@example.com',
-        emailVerified: false,
-      });
-
-      mockUsersService.findOneById.mockResolvedValue(user);
-
-      const result = await usersController.findOneById(userId);
-
-      expect(result).toEqual(user);
-      if (!result) {
-        throw new Error('Expected user to be defined');
-      }
-      expect(result.id).toBe(userId);
-      expect(result.name).toBe('Jane Doe');
-    });
-
-    it('should return null if user not found', async () => {
-      const userId = '999';
-      mockUsersService.findOneById.mockResolvedValue(null);
-
-      const result = await usersController.findOneById(userId);
-
-      expect(result).toBeNull();
-    });
-
-    it('should handle errors from usersService', async () => {
-      const userId = '1';
-      const error = new Error('Database error');
-      mockUsersService.findOneById.mockRejectedValue(error);
-
-      await expect(usersController.findOneById(userId)).rejects.toThrow('Database error');
     });
   });
 });

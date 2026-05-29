@@ -65,6 +65,10 @@ export class AuthService {
     return { sessionToken: session.token };
   }
 
+  async findUserIdFromSessionToken(sessionToken: string): Promise<string | null> {
+    return await this.sessionRepository.findOne({ where: { token: sessionToken } }).then((session) => (session ? session.userId : null));
+  }
+
   // TODO: Implement email verification methods
   async verifyEmail(email: string) {
     const user = await this.usersService.findOneByEmail(email);

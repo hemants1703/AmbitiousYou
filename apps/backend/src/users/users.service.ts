@@ -48,4 +48,8 @@ export class UsersService {
   async findOneById(id: string): Promise<UserEntity | null> {
     return await this.usersRepository.findOne({ where: { id } });
   }
+
+  async findUserBySessionToken(token: string): Promise<UserEntity | null> {
+    return await this.usersRepository.createQueryBuilder('user').innerJoin('sessions', 'session', 'session.user_id = user.id').where('session.token = :token', { token }).getOne();
+  }
 }
