@@ -2,6 +2,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getUser } from "@/lib/api/sidebar/get-user";
+import { getSessionToken } from "@/lib/auth";
 import { Metadata } from "next";
 import { redirect, RedirectType } from "next/navigation";
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const userDetails = await getUser();
+  const userDetails = await getUser(await getSessionToken());
 
   if (!userDetails) {
     return redirect("/login", RedirectType.replace);

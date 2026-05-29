@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import * as Select from "@/components/ui/select";
 import * as Tooltip from "@/components/ui/tooltip";
 import { XIcon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 
 export interface AmbitionFiltersState {
   status?: "active" | "completed" | "missed";
@@ -13,41 +13,33 @@ export interface AmbitionFiltersState {
   search?: string;
 }
 
-export default function AmbitionFilters() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
+interface AmbitionFiltersProps {
+  value: AmbitionFiltersState;
+  onChange: (nextValue: AmbitionFiltersState) => void;
+  onClear: () => void;
+}
 
-  const [hasSearchParams, setHasSearchParams] = useState(searchParams.toString().length > 0);
+export default function AmbitionFilters(props: AmbitionFiltersProps) {
+  const hasActiveFilters = Boolean(props.value.status || props.value.priority || props.value.search?.trim());
 
-  const updateFilters = (key: string, value: string | null) => {
-    const updatedSearchParams = new URLSearchParams(searchParams.toString());
-
-    if (value && value.trim()) {
-      updatedSearchParams.set(key, value.trim());
-    } else {
-      updatedSearchParams.delete(key);
-    }
-
-    const searchParamsString = updatedSearchParams.toString();
-    const url = searchParamsString ? `${pathname}?${searchParamsString}` : pathname;
-
-    router.push(url);
+  const updateFilters = (key: keyof AmbitionFiltersState, value: string | null) => {
+    props.onChange({
+      ...props.value,
+      [key]: value && value.trim() ? value.trim() : undefined,
+    });
   };
 
-  const clearFilters = () => router.push(pathname);
-
-  useEffect(() => {
-    (async () => setHasSearchParams(searchParams.toString().length > 0))();
-  }, [searchParams]);
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    updateFilters("search", event.target.value);
+  };
 
   return (
-    <div className="flex gap-2 justify-end items-center">
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-end">
       {/* Clear Filters Button */}
-      {hasSearchParams && (
+      {hasActiveFilters && (
         <Tooltip.Tooltip>
           <Tooltip.TooltipTrigger asChild>
-            <Button variant="destructive" size="icon" onClick={clearFilters} className="rounded-full size-6">
+            <Button variant="destructive" size="icon" onClick={props.onClear} className="rounded-full size-9 self-end lg:self-auto" aria-label="Clear filters">
               <XIcon />
             </Button>
           </Tooltip.TooltipTrigger>
@@ -55,29 +47,31 @@ export default function AmbitionFilters() {
         </Tooltip.Tooltip>
       )}
 
-      {/* Status Filter */}
-      <Select.Select value={searchParams.get("status") || ""} onValueChange={(value) => updateFilters("status", value)}>
-        <Select.SelectTrigger>
-          <Select.SelectValue placeholder="Status" />
-        </Select.SelectTrigger>
-        <Select.SelectContent>
-          <Select.SelectItem value="active">Active</Select.SelectItem>
-          <Select.SelectItem value="completed">Completed</Select.SelectItem>
-          <Select.SelectItem value="missed">Missed</Select.SelectItem>
-        </Select.SelectContent>
-      </Select.Select>
+      <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[40rem]">
+        <Input value={props.value.search || ""} onChange={handleSearchChange} placeholder="Search ambitions…" aria-label="Search ambitions" />
 
-      {/* Priority Filter */}
-      <Select.Select value={searchParams.get("priority") || ""} onValueChange={(value) => updateFilters("priority", value)}>
-        <Select.SelectTrigger>
-          <Select.SelectValue placeholder="Priority" />
-        </Select.SelectTrigger>
-        <Select.SelectContent>
-          <Select.SelectItem value="low">Low</Select.SelectItem>
-          <Select.SelectItem value="medium">Medium</Select.SelectItem>
-          <Select.SelectItem value="high">High</Select.SelectItem>
-        </Select.SelectContent>
-      </Select.Select>
+        <Select.Select value={props.value.status || ""} onValueChange={(value) => updateFilters("status", value)}>
+          <Select.SelectTrigger aria-label="Filter by status">
+            <Select.SelectValue placeholder="Status" />
+          </Select.SelectTrigger>
+          <Select.SelectContent>
+            <Select.SelectItem value="active">Active</Select.SelectItem>
+            <Select.SelectItem value="completed">Completed</Select.SelectItem>
+            <Select.SelectItem value="missed">Missed</Select.SelectItem>
+          </Select.SelectContent>
+        </Select.Select>
+
+        <Select.Select value={props.value.priority || ""} onValueChange={(value) => updateFilters("priority", value)}>
+          <Select.SelectTrigger aria-label="Filter by priority">
+            <Select.SelectValue placeholder="Priority" />
+          </Select.SelectTrigger>
+          <Select.SelectContent>
+            <Select.SelectItem value="low">Low</Select.SelectItem>
+            <Select.SelectItem value="medium">Medium</Select.SelectItem>
+            <Select.SelectItem value="high">High</Select.SelectItem>
+          </Select.SelectContent>
+        </Select.Select>
+      </div>
     </div>
   );
 }

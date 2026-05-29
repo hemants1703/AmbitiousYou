@@ -1,38 +1,29 @@
-import AmbitionCard from "@/components/(app)/ambitions/ambition-card";
-import AmbitionFilters from "@/components/(app)/ambitions/ambition-filters";
+import AmbitionsClientView from "@/components/ambitions/ambitions-client-view";
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
-import { Ambition, Milestone } from "@ambitiousyou/shared/types";
+import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
+import { getSessionToken } from "@/lib/auth";
+import { Ambition } from "@ambitiousyou/shared/types";
 import { FilterIcon, PlusCircleIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "All Ambitions | AmbitiousYou",
+  title: "All Ambitions",
 };
 
-interface AmbitionsPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+export default async function AmbitionsPage() {
+  const ambitions: Ambition[] | null = await getAmbitions(await getSessionToken());
+  if (ambitions === null) throw new Error("Failed to fetch ambitions");
+
+  if (ambitions.length === 0) {
+    return <NoAmbitionsFoundPage />;
+  }
+
+  return <AmbitionsClientView ambitions={ambitions} />;
 }
 
-export default async function AmbitionsPage(props: AmbitionsPageProps) {
-  const searchParams = await props.searchParams;
-
-  // Initialize AmbitionsService class instance
-  const ambitionsService = new AmbitionsService();
-
-  // Fetch active ambitions
-  const activeAmbitions = await ambitionsService.fetchAmbitionsByFilters(searchParams as AmbitionFiltersState, userData.id);
-  if (activeAmbitions instanceof Error) throw activeAmbitions;
-
-  // Fetch tasks for ambition
-  const tasks = await ambitionsService.fetchUserTasks(userData.id);
-  if (tasks instanceof Error) throw tasks;
-
-  // Fetch milestones for ambition
-  const milestones = await ambitionsService.fetchUserMilestones(userData.id);
-  if (milestones instanceof Error) throw milestones;
-
+function NoAmbitionsFoundPage() {
   return (
     <div className="flex flex-col p-6 md:p-8 pt-6 gap-6 max-sm:max-w-screen-sm md:max-w-3xl lg:max-w-5xl xl:max-w-7xl mx-auto">
       <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="flex flex-col md:flex-row gap-2 justify-between items-center">
@@ -48,39 +39,9 @@ export default async function AmbitionsPage(props: AmbitionsPageProps) {
         </Button>
       </MotionWrapper>
 
-      <AmbitionFilters />
-
-      {/* Ambitions List */}
-      <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {activeAmbitions.length > 0 ? (
-          activeAmbitions.map((ambition: Ambition, index: number) => {
-            let completedTasksOrMilestones = 0;
-            let totalTasksOrMilestones = 0;
-
-            if (ambition.ambitionTrackingMethod === "task") {
-              const TasksList = tasks.filter((t) => t.ambitionId === ambition.id);
-              completedTasksOrMilestones = TasksList.filter((t) => t.taskCompleted).length;
-              totalTasksOrMilestones = TasksList.length;
-            } else if (ambition.ambitionTrackingMethod === "milestone") {
-              const MilestonesList = milestones.filter((m: Milestone) => m.ambitionId === ambition.id);
-              completedTasksOrMilestones = MilestonesList.filter((m: Milestone) => m.milestoneCompleted).length;
-              totalTasksOrMilestones = MilestonesList.length;
-            }
-
-            return (
-              <MotionWrapper key={ambition.id} transition={{ duration: 0.3, delay: 0.05 * index }}>
-                <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
-                  <AmbitionCard ambition={ambition} index={index} completedTasksOrMilestones={completedTasksOrMilestones} totalTasksOrMilestones={totalTasksOrMilestones} />
-                </Link>
-              </MotionWrapper>
-            );
-          })
-        ) : (
-          <MotionWrapper className="col-span-full text-center py-10 text-muted-foreground">
-            <FilterIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
-            <p>No ambitions match your filters</p>
-          </MotionWrapper>
-        )}
+      <MotionWrapper className="col-span-full text-center py-10 text-muted-foreground">
+        <FilterIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
+        <p>You haven&apos;t created any ambitions yet</p>
       </MotionWrapper>
     </div>
   );

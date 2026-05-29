@@ -1,7 +1,7 @@
 import { MotionWrapper } from "@/components/motion-wrapper";
 import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CalendarIcon, ChevronRightIcon, CheckCircleIcon } from "lucide-react";
+import { CalendarIcon, ChevronRightIcon, GaugeIcon } from "lucide-react";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
 import "@/styles/ambition-card.css";
@@ -15,7 +15,7 @@ interface AmbitionCardProps {
 }
 
 export default function AmbitionCard(props: AmbitionCardProps) {
-  const progressPercentage = (props.completedTasksOrMilestones / props.totalTasksOrMilestones) * 100;
+  const progressPercentage = Math.min(Math.max(props.ambition.ambitionPercentageCompleted, 0), 100);
 
   return (
     <div
@@ -38,7 +38,7 @@ export default function AmbitionCard(props: AmbitionCardProps) {
             <div>
               <div className="flex justify-between mb-1 text-sm">
                 <span>Progress</span>
-                <span>{progressPercentage.toFixed(0)}%</span>
+                <span className="tabular-nums">{progressPercentage.toFixed(0)}%</span>
               </div>
               <MotionWrapper
                 initial={{ width: 0 }}
@@ -50,12 +50,10 @@ export default function AmbitionCard(props: AmbitionCardProps) {
                 <Progress value={progressPercentage} className="h-1 *:bg-(--ambition-color)" />
               </MotionWrapper>
             </div>
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-1">
-                <CheckCircleIcon className="h-3.5 w-3.5" />
-                <span>
-                  {props.completedTasksOrMilestones}/{props.totalTasksOrMilestones} {props.ambition.ambitionTrackingMethod}s
-                </span>
+                <GaugeIcon className="h-3.5 w-3.5" />
+                <span>Tracking by {props.ambition.ambitionTrackingMethod}</span>
               </div>
               <div className="flex items-center gap-1">
                 <CalendarIcon className="h-3.5 w-3.5" />
