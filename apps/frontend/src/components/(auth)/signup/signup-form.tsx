@@ -18,7 +18,6 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <form className={cn("flex flex-col gap-6", className)} action={formAction} {...props}>
@@ -43,12 +42,6 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
           <FieldLabel htmlFor="password">Password</FieldLabel>
           <Input id="password" name="password" type="password" required className="border-border bg-background" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} />
           <FieldDescription>Must be at least 8 characters long.</FieldDescription>
-        </Field>
-
-        <Field>
-          <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
-          <Input id="confirmPassword" name="confirmPassword" type="password" required className="border-border bg-background" autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
-          <FieldDescription>Please confirm your password.</FieldDescription>
         </Field>
 
         {state.error ? (

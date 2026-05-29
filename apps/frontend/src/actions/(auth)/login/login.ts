@@ -7,10 +7,6 @@ export type LoginState = {
   error: string | null;
 };
 
-function getBackendUrl() {
-  return process.env.BACKEND_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:3001";
-}
-
 async function getClientMetadata() {
   const requestHeaders = await headers();
   const userAgent = requestHeaders.get("user-agent") ?? "";
@@ -34,17 +30,14 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
   }
 
   try {
-    const response = await fetch(`${getBackendUrl()}/auth/login`, {
+    const response = await fetch(`${process.env.API_URL}/auth/login`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email,
         password,
         ...(await getClientMetadata()),
       }),
-      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -66,7 +59,7 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
       };
     }
 
-    const payload = (await response.json()) as { sessionToken?: string };
+    const payload = (await response.json()) as { sessionToken: string };
 
     if (!payload.sessionToken) {
       return {
