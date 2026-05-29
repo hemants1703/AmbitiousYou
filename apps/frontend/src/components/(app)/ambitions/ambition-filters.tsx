@@ -47,7 +47,7 @@ export default function AmbitionFilters(props: AmbitionFiltersProps) {
         </Tooltip.Tooltip>
       )}
 
-      <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[40rem]">
+      <div className="grid gap-3 sm:grid-cols-3 lg:min-w-160">
         <Input value={props.value.search || ""} onChange={handleSearchChange} placeholder="Search ambitions…" aria-label="Search ambitions" />
 
         <Select.Select value={props.value.status || ""} onValueChange={(value) => updateFilters("status", value)}>
