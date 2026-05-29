@@ -131,3 +131,24 @@
     @apply font-sans;
   }
 }
+
+/* Ensure browsers render form controls correctly in dark mode and light mode */
+html {
+  color-scheme: light dark;
+}
+
+/* Visible focus rings per AGENTS.md: prefer :focus-visible and keep outline replacement accessible */
+:where(:focus-visible) {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
