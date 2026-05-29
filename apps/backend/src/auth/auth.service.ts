@@ -65,8 +65,14 @@ export class AuthService {
     return { sessionToken: session.token };
   }
 
-  async findUserIdFromSessionToken(sessionToken: string): Promise<string | null> {
-    return await this.sessionRepository.findOne({ where: { token: sessionToken } }).then((session) => (session ? session.userId : null));
+  async logoutUser(token: string): Promise<void> {
+    const session = await this.sessionRepository.findOne({ where: { token } });
+
+    if (!session) {
+      throw new ConflictException('Session not found');
+    }
+
+    await this.sessionRepository.delete({ token });
   }
 
   // TODO: Implement email verification methods

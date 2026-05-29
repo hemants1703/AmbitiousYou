@@ -19,9 +19,9 @@ export class AuthController {
   }
 
   @UseGuards(SessionGuard)
-  @Get()
-  async getUserIdBySessionToken(@Headers('Authorization') authorization: string): Promise<string | null> {
-    const sessionToken = authorization.split(' ')[1];
-    return await this.authService.findUserIdFromSessionToken(sessionToken);
+  @Get('/logout')
+  async logoutUser(@Headers('authorization') authorization: string): Promise<void> {
+    const token = authorization.replace(/^Bearer\s+/i, '');
+    await this.authService.logoutUser(token);
   }
 }
