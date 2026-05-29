@@ -80,7 +80,7 @@ export class AmbitionsService {
       .createQueryBuilder()
       .select('session.userId', 'userId')
       .from('sessions', 'session')
-      .where('session.sessionToken = :sessionToken', { sessionToken })
+      .where('session.token = :sessionToken', { sessionToken })
       .getRawOne<{ userId: string }>();
 
     if (!session || !session.userId) {
