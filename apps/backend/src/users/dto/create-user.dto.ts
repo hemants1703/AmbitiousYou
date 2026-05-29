@@ -1,8 +1,8 @@
 import type { NewUser } from '@ambitiousyou/shared/types';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
 
 export class CreateUserDto implements NewUser {
-  @IsString()
+  @IsString({ message: 'Name must be a string' })
   @IsNotEmpty()
   name: string = '';
 
@@ -10,7 +10,11 @@ export class CreateUserDto implements NewUser {
   @IsNotEmpty()
   email: string = '';
 
-  @IsString()
+  @IsString({ message: 'Password must be a string' })
   @IsNotEmpty()
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, {
+    message: 'Password must contain at least one letter and one number and can include special characters @$!%*?&',
+  })
   password: string = '';
 }

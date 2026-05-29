@@ -9,20 +9,20 @@ export class SessionEntity implements Session {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ nullable: false, name: 'user_id' })
+  @Column({ type: 'uuid', nullable: false, name: 'user_id' })
   @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
-  userId: string = '';
+  userId!: string;
 
-  @Column({ nullable: false, name: 'token' })
+  @Column({ type: 'varchar', length: 255, nullable: false, name: 'token' })
   token: string = '';
 
   @Column({ nullable: false, name: 'expires_at' })
   expiresAt: Date = new Date();
 
-  @Column({ type: 'text', nullable: true, name: 'ip_address' })
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'ip_address' })
   ipAddress: string | null = null;
 
-  @Column({ type: 'text', nullable: true, name: 'user_agent' })
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'user_agent' })
   userAgent: string | null = null;
 
   @CreateDateColumn({ nullable: false, name: 'created_at' })

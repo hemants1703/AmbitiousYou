@@ -6,16 +6,16 @@ export class VerificationEntity implements Verification {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ nullable: false, name: 'user_id' })
+  @Column({ type: 'uuid', nullable: false, name: 'user_id' })
   userId: string = '';
 
-  @Column({ nullable: false, name: 'identifier' })
+  @Column({ type: 'varchar', length: 255, nullable: false, name: 'identifier' })
   identifier: string = '';
 
-  @Column({ nullable: false, name: 'value' })
+  @Column({ type: 'varchar', length: 255, nullable: false, name: 'value' })
   value: string = '';
 
-  @Column({ nullable: false, name: 'expires_at' })
+  @Column({ type: 'varchar', length: 255, nullable: false, name: 'expires_at' })
   expiresAt: Date = new Date();
 
   @CreateDateColumn({ nullable: true, name: 'created_at' })
