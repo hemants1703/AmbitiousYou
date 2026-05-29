@@ -137,6 +137,12 @@ html {
   color-scheme: light dark;
 }
 
+/* Improve touch responsiveness on mobile and match tap highlight to design */
+html, button, a, input, textarea, select {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.04);
+}
+
 /* Visible focus rings per AGENTS.md: prefer :focus-visible and keep outline replacement accessible */
 :where(:focus-visible) {
   outline: 3px solid var(--color-ring);

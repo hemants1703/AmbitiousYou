@@ -1,7 +1,7 @@
 .ambition-card {
   position: relative;
   border-radius: 0.75rem;
-  transition: all 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
 
 .ambition-card::before {
@@ -16,7 +16,7 @@
     var(--ambition-color) 100%
   );
   opacity: 0.15;
-  transition: all 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: background 0.8s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
   pointer-events: none;
 }
 
