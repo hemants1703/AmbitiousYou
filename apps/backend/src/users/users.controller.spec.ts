@@ -62,5 +62,16 @@ describe('UsersController', () => {
       expect(mockUsersService.findOneById).toHaveBeenCalledWith(sessionToken);
       expect(result).toEqual(user);
     });
+
+    it('should return null if user is not found', async () => {
+      const sessionToken = 'non-existent-token';
+
+      mockUsersService.findOneById.mockResolvedValue(null);
+
+      const result = await usersController.findUserFromSessionToken(sessionToken);
+
+      expect(mockUsersService.findOneById).toHaveBeenCalledWith(sessionToken);
+      expect(result).toBeNull();
+    });
   });
 });
