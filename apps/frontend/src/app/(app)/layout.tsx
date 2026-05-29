@@ -1,7 +1,9 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getUser } from "@/lib/api/sidebar/get-user";
 import { Metadata } from "next";
+import { redirect, RedirectType } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -11,6 +13,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const userDetails = await getUser();
+
+  if (!userDetails) {
+    return redirect("/login", RedirectType.replace);
+  }
+
   return (
     <main>
       <SidebarProvider
@@ -20,7 +28,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             "--header-height": "calc(var(--spacing) * 12)",
           } as React.CSSProperties
         }>
-        <AppSidebar variant="inset" />
+        <AppSidebar variant="inset" userDetails={userDetails} />
         <SidebarInset>
           <SiteHeader />
           <div className="flex flex-1 flex-col">

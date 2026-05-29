@@ -8,6 +8,7 @@ import { NavUser } from "@/components/nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { CircleHelpIcon, LayoutDashboardIcon, SearchIcon, Settings2Icon, TargetIcon } from "lucide-react";
 import AmbitiousYouLogo from "./(landing)/ambitiousyou-logo";
+import { User } from "@ambitiousyou/shared";
 
 const data = {
   user: {
@@ -46,7 +47,7 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ userDetails, ...props }: React.ComponentProps<typeof Sidebar> & { userDetails: User }) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -63,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser userDetails={userDetails} />
       </SidebarFooter>
     </Sidebar>
   );
