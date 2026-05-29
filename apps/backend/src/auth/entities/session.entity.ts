@@ -1,5 +1,6 @@
 import type { Session } from '@ambitiousyou/shared/types';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 // Sessions table to store user sessions in multiple devices for authentication and authorization purposes
 
@@ -9,6 +10,7 @@ export class SessionEntity implements Session {
   id!: string;
 
   @Column({ nullable: false, name: 'user_id' })
+  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   userId: string = '';
 
   @Column({ nullable: false, name: 'token' })
