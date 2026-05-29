@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { AmbitionsService } from './ambitions.service';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
@@ -17,8 +17,9 @@ export class AmbitionsController {
 
   @UseGuards(SessionGuard)
   @Get()
-  async findAllAmbitionsByUserId(@Query('userId') userId: string): Promise<AmbitionEntity[] | null> {
-    return await this.ambitionsService.findAllAmbitionsForUserId(userId);
+  async findAllAmbitionsFromSessionToken(@Headers('Authorization') authorization: string): Promise<AmbitionEntity[] | null> {
+    const token = authorization.replace(/^Bearer\s+/i, '');
+    return await this.ambitionsService.findAllAmbitionsFromSessionToken(token);
   }
 
   @UseGuards(SessionGuard)

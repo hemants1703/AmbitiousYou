@@ -75,12 +75,21 @@ export class AmbitionsService {
     });
   }
 
-  async findAllAmbitionsForUserId(userId: string): Promise<AmbitionEntity[] | null> {
+  async findAllAmbitionsFromSessionToken(sessionToken: string): Promise<AmbitionEntity[] | null> {
+    const session = await this.entityManager
+      .createQueryBuilder()
+      .select('session.userId', 'userId')
+      .from('sessions', 'session')
+      .where('session.sessionToken = :sessionToken', { sessionToken })
+      .getRawOne<{ userId: string }>();
+
+    if (!session || !session.userId) {
+      return null;
+    }
+
     return await this.ambitionsRepository.find({
-      where: { userId },
-      order: {
-        createdAt: 'DESC',
-      },
+      where: { userId: session.userId },
+      order: { createdAt: 'DESC' },
     });
   }
 
