@@ -4,6 +4,20 @@ import AmbitiousYouLogo from "@/components/(landing)/ambitiousyou-logo";
 import { SignupForm } from "@/components/(auth)/signup/signup-form";
 import "@/styles/auth-background.css";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up",
+  description: "Create a new account",
+  openGraph: {
+    title: "Sign Up - AmbitiousYou",
+    description: "Create a new account",
+  },
+  twitter: {
+    title: "Sign Up - AmbitiousYou",
+    description: "Create a new account",
+  },
+};
 
 export default function SignupPage() {
   return (

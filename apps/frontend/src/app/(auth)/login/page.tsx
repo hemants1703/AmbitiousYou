@@ -4,6 +4,20 @@ import AmbitiousYouLogo from "@/components/(landing)/ambitiousyou-logo";
 import { LoginForm } from "@/components/(auth)/login/login-form";
 import "@/styles/auth-background.css";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Login to your account",
+  openGraph: {
+    title: "Login - AmbitiousYou",
+    description: "Login to your account",
+  },
+  twitter: {
+    title: "Login - AmbitiousYou",
+    description: "Login to your account",
+  },
+};
 
 export default function LoginPage() {
   return (
