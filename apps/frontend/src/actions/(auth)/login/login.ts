@@ -29,6 +29,8 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
     };
   }
 
+  let sessionToken: string | null = null;
+
   try {
     const response = await fetch(`${process.env.API_URL}/auth/login`, {
       method: "POST",
@@ -67,19 +69,21 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
       };
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set("sessionToken", payload.sessionToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    redirect("/dashboard");
+    sessionToken = payload.sessionToken;
   } catch {
     return {
       error: "Unable to reach the authentication server.",
     };
   }
+
+  const cookieStore = await cookies();
+  cookieStore.set("sessionToken", sessionToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  redirect("/dashboard");
 }
