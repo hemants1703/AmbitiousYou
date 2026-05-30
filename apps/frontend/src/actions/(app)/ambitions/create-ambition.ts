@@ -31,10 +31,6 @@ function readString(formData: FormData, name: string): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function readBoolean(formData: FormData, name: string): boolean {
-  return readString(formData, name) === "true";
-}
-
 function parseDate(value: string): Date | null {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? null : date;

@@ -5,8 +5,8 @@ import { LoginForm } from "@/components/(auth)/login/login-form";
 import "@/styles/auth-background.css";
 import Link from "next/link";
 import { Metadata } from "next";
-import { getSessionToken } from "@/lib/auth";
-import { redirect } from "next/navigation";
+
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "Login",

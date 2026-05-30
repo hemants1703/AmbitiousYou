@@ -126,8 +126,12 @@ async function AmbitionDialogs(props: AmbitionDetailsPageProps & { milestones: M
   const concernedMilestone = props.milestones.find((milestone: Milestone) => milestone.id === mark_milestone_as_completed);
   if (!concernedMilestone) return null;
 
-  const isMilestoneNotWithinTargetDateRangeFromToday = new Date(concernedMilestone.milestoneTargetDate).toLocaleDateString() >= new Date().toLocaleDateString();
-  if (isMilestoneNotWithinTargetDateRangeFromToday) return null;
+  const milestoneTargetDate = new Date(concernedMilestone.milestoneTargetDate);
+  const today = new Date();
+  milestoneTargetDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  if (milestoneTargetDate >= today) return null;
 
   if (mark_milestone_as_completed && !concernedMilestone.milestoneCompleted) {
     return <MarkMilestoneAsCompletedDialog milestone={concernedMilestone} ambitionId={ambitionId} />;

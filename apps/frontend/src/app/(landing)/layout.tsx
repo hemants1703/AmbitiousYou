@@ -1,6 +1,8 @@
 import Navbar from "@/components/(landing)/navbar";
 import Footer from "@/components/(landing)/footer";
 
+export const dynamic = "force-static";
+
 export default async function LandingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>

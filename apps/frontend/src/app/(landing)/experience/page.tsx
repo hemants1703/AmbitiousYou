@@ -1,6 +1,8 @@
 import ExperienceFlow from "@/components/(landing)/experience/experience-flow";
 import { Metadata } from "next";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "Experience - AmbitiousYou | Interactive Demo",
   description: "Discover how AmbitiousYou transforms your goals into reality. Choose your journey, interact with real features, and create an ambition that's waiting for you.",

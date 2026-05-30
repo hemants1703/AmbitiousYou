@@ -2,6 +2,8 @@ import AnimatedHero from "@/components/(landing)/homepage/animated-hero";
 import CTA from "@/components/(landing)/homepage/cta";
 import Features from "@/components/(landing)/homepage/features";
 
+export const dynamic = "force-static";
+
 export default function Home() {
   return (
     <>

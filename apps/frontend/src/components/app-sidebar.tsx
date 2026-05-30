@@ -6,7 +6,7 @@ import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { CircleHelpIcon, LayoutDashboardIcon, SearchIcon, Settings2Icon, TargetIcon } from "lucide-react";
+import { CircleHelpIcon, LayoutDashboardIcon, Settings2Icon, TargetIcon } from "lucide-react";
 import AmbitiousYouLogo from "./(landing)/ambitiousyou-logo";
 import { User } from "@ambitiousyou/shared";
 

@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "Terms & Conditions - AmbitiousYou",
   description: "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.",

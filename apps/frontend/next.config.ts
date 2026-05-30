@@ -9,7 +9,18 @@ const nextConfig: NextConfig = {
   },
   images: {
     qualities: [75, 100],
-    remotePatterns: [new URL("https://peerlist.io/api/v1/projects/embed/PRJHMQ6R6ERP8ADAR2DRGOM6RQ9RP6?showUpvote=true&theme=dark")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dej4ks4wd/**",
+      },
+      {
+        protocol: "https",
+        hostname: "peerlist.io",
+        pathname: "/api/v1/projects/embed/**",
+      },
+    ],
   },
 };
 

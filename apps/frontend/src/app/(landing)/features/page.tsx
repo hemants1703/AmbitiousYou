@@ -8,6 +8,8 @@ import { Bricolage_Grotesque } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = "force-static";
+
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],

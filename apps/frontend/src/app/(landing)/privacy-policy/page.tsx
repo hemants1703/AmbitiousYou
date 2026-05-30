@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "Privacy Policy - AmbitiousYou",
   description: "Read the privacy policy for AmbitiousYou, your go-to platform for personal growth and development.",

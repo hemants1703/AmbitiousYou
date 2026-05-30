@@ -4,7 +4,6 @@ import { ArrowRightIcon, CheckCircleIcon, HeartIcon, RocketIcon, StarIcon, Targe
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
 import DashboardMockup from "./dashboard-mockup";
-import Image from "next/image";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],

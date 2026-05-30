@@ -5,8 +5,8 @@ import { SignupForm } from "@/components/(auth)/signup/signup-form";
 import "@/styles/auth-background.css";
 import Link from "next/link";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getSessionToken } from "@/lib/auth";
+
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "Sign Up",
