@@ -1,10 +1,7 @@
-"use client";
-
-import * as React from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { ComponentType } from "react";
+import Link from "next/link";
 import { BellIcon, CreditCardIcon, LockKeyholeIcon, UserRoundIcon } from "lucide-react";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { User } from "@ambitiousyou/shared";
 
 import { AccountSettingsTab } from "./account-settings-tab";
@@ -22,7 +19,7 @@ interface SettingsTabsProps {
 const tabItems: Array<{
   value: SettingsTabValue;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
 }> = [
   { value: "account", label: "Account", icon: UserRoundIcon },
   { value: "billing", label: "Billing", icon: CreditCardIcon },
@@ -31,33 +28,34 @@ const tabItems: Array<{
 ];
 
 export function SettingsTabs(props: SettingsTabsProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const handleTabChange = (value: string) => {
-    const nextTab = value as SettingsTabValue;
-    const params = new URLSearchParams(searchParams.toString());
-
-    params.set("tab", nextTab);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  };
+  const activePanels = {
+    account: <AccountSettingsTab userDetails={props.userDetails} />,
+    billing: <BillingSettingsTab />,
+    notifications: <NotificationsSettingsTab />,
+    security: <SecuritySettingsTab />,
+  } satisfies Record<SettingsTabValue, React.ReactNode>;
 
   return (
-    <Tabs className="w-full gap-4" value={props.activeTab} onValueChange={handleTabChange}>
-      <TabsList className="w-full justify-start overflow-x-auto rounded-3xl sm:w-fit" aria-label="Settings sections">
+    <div className="flex w-full flex-col gap-4">
+      <div className="flex w-fit items-center gap-2 overflow-x-auto rounded-3xl bg-muted p-1 sm:w-fit" role="tablist" aria-label="Settings sections">
         {tabItems.map((tab) => (
-          <TabsTrigger key={tab.value} value={tab.value} className="min-w-0 sm:min-w-32">
+          <Link
+            key={tab.value}
+            href={tab.value === "account" ? "/settings" : `/settings?tab=${tab.value}`}
+            role="tab"
+            aria-selected={props.activeTab === tab.value}
+            aria-current={props.activeTab === tab.value ? "page" : undefined}
+            className={[
+              "inline-flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-w-32",
+              props.activeTab === tab.value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+            ].join(" ")}>
             <tab.icon className="size-4" />
             <span>{tab.label}</span>
-          </TabsTrigger>
+          </Link>
         ))}
-      </TabsList>
+      </div>
 
-      <AccountSettingsTab userDetails={props.userDetails} />
-      <BillingSettingsTab />
-      <NotificationsSettingsTab />
-      <SecuritySettingsTab />
-    </Tabs>
+      {activePanels[props.activeTab]}
+    </div>
   );
 }
