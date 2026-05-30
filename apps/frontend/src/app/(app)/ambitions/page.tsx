@@ -25,8 +25,8 @@ export default async function AmbitionsPage() {
 
 function NoAmbitionsFoundPage() {
   return (
-    <div className="flex flex-col p-6 md:p-8 pt-6 gap-6 max-sm:max-w-screen-sm md:max-w-3xl lg:max-w-5xl xl:max-w-7xl mx-auto">
-      <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="flex flex-col md:flex-row gap-2 justify-between items-center">
+    <div className="flex flex-col p-6 md:p-8 gap-6 max-sm:max-w-screen-sm md:max-w-3xl lg:max-w-5xl xl:max-w-7xl mx-auto">
+      <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="flex flex-col md:flex-row gap-2 justify-between items-center">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Your Ambitions</h1>
           <p className="text-muted-foreground">View and manage all your ambitions in one place</p>

@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import * as Select from "@/components/ui/select";
-import * as Tooltip from "@/components/ui/tooltip";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { XIcon } from "lucide-react";
 import { ChangeEvent } from "react";
 
@@ -37,40 +37,42 @@ export default function AmbitionFilters(props: AmbitionFiltersProps) {
     <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-end">
       {/* Clear Filters Button */}
       {hasActiveFilters && (
-        <Tooltip.Tooltip>
-          <Tooltip.TooltipTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
             <Button variant="destructive" size="icon" onClick={props.onClear} className="rounded-full size-9 self-end lg:self-auto" aria-label="Clear filters">
               <XIcon />
             </Button>
-          </Tooltip.TooltipTrigger>
-          <Tooltip.TooltipContent>Clear Filters</Tooltip.TooltipContent>
-        </Tooltip.Tooltip>
+          </TooltipTrigger>
+          <TooltipContent>Clear Filters</TooltipContent>
+        </Tooltip>
       )}
 
-      <div className="grid gap-3 sm:grid-cols-3 lg:min-w-160">
+      <div className="flex gap-2 justify-between lg:min-w-160">
         <Input value={props.value.search || ""} onChange={handleSearchChange} placeholder="Search ambitions…" aria-label="Search ambitions" />
 
-        <Select.Select value={props.value.status || ""} onValueChange={(value) => updateFilters("status", value)}>
-          <Select.SelectTrigger aria-label="Filter by status">
-            <Select.SelectValue placeholder="Status" />
-          </Select.SelectTrigger>
-          <Select.SelectContent>
-            <Select.SelectItem value="active">Active</Select.SelectItem>
-            <Select.SelectItem value="completed">Completed</Select.SelectItem>
-            <Select.SelectItem value="missed">Missed</Select.SelectItem>
-          </Select.SelectContent>
-        </Select.Select>
+        <div className="flex gap-2">
+          <Select value={props.value.status || ""} onValueChange={(value) => updateFilters("status", value)}>
+            <SelectTrigger size="sm" aria-label="Filter by status" className="**:data-[slot=select-value]:block **:data-[slot=select-value]:truncate">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="missed">Missed</SelectItem>
+            </SelectContent>
+          </Select>
 
-        <Select.Select value={props.value.priority || ""} onValueChange={(value) => updateFilters("priority", value)}>
-          <Select.SelectTrigger aria-label="Filter by priority">
-            <Select.SelectValue placeholder="Priority" />
-          </Select.SelectTrigger>
-          <Select.SelectContent>
-            <Select.SelectItem value="low">Low</Select.SelectItem>
-            <Select.SelectItem value="medium">Medium</Select.SelectItem>
-            <Select.SelectItem value="high">High</Select.SelectItem>
-          </Select.SelectContent>
-        </Select.Select>
+          <Select value={props.value.priority || ""} onValueChange={(value) => updateFilters("priority", value)}>
+            <SelectTrigger size="sm" aria-label="Filter by priority" className="**:data-[slot=select-value]:block **:data-[slot=select-value]:truncate">
+              <SelectValue placeholder="Priority" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="low">Low</SelectItem>
+              <SelectItem value="medium">Medium</SelectItem>
+              <SelectItem value="high">High</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </div>
   );

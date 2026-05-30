@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  if (await getSessionToken()) return redirect("/dashboard");
+  // if (await getSessionToken()) return redirect("/dashboard");
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">

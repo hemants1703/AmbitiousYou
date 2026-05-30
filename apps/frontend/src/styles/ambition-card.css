@@ -1,6 +1,6 @@
 .ambition-card {
   position: relative;
-  border-radius: 0.75rem;
+  border-radius: 2.1rem;
   transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
 
