@@ -1,6 +1,6 @@
 import { NewAmbition } from '@ambitiousyou/shared';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAmbitionDto implements NewAmbition {
   @IsString()
