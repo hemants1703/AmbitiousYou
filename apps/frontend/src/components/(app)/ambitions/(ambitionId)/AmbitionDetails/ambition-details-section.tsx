@@ -6,7 +6,6 @@ import type { Ambition, Milestone, Note, Task, User } from "@ambitiousyou/shared
 import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, ListTodoIcon, NotebookPenIcon, TimerResetIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import NotesDrawer from "./notes-drawer";
-import CompletedDrawer from "./completed-drawer";
 
 type AmbitionDetailsSectionProps = {
   user: User;
@@ -29,7 +28,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
   const overdueCount = openItems.filter((item) => getDaysUntil(getItemDate(item)) < 0).length;
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,1fr)]">
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,1fr)]">
       <div className="space-y-6">
         <Card>
           <CardHeader>
@@ -52,8 +51,8 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 space-y-1">
                         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Priority {index + 1}</p>
-                        <p className="line-clamp-2 font-medium break-words">{getItemTitle(item)}</p>
-                        <p className="line-clamp-2 text-sm text-muted-foreground break-words">{getItemDescription(item) || "No description provided."}</p>
+                        <p className="line-clamp-2 font-medium wrap-break-word">{getItemTitle(item)}</p>
+                        <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getItemDescription(item) || "No description provided."}</p>
                       </div>
                       <Badge variant="outline" className={daysUntil < 0 ? "border-destructive/30 bg-destructive/10 text-destructive" : ""}>
                         {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
@@ -90,8 +89,8 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                     <div key={item.id} className="rounded-2xl border border-border/60 p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="line-clamp-1 font-medium break-words">{getItemTitle(item)}</p>
-                          <p className="line-clamp-1 text-sm text-muted-foreground break-words">{getItemDescription(item) || "No description provided."}</p>
+                          <p className="line-clamp-1 font-medium wrap-break-word">{getItemTitle(item)}</p>
+                          <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{getItemDescription(item) || "No description provided."}</p>
                         </div>
                         <Badge variant="outline" className={daysUntil < 0 ? "border-destructive/30 bg-destructive/10 text-destructive" : ""}>
                           {daysUntil < 0 ? "Overdue" : "Upcoming"}
@@ -113,13 +112,14 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
               {completedItems.length === 0 ? (
                 <p className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">No completed items yet.</p>
               ) : (
-                <>
-                  <div className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">
-                    <p className="font-medium">{getItemTitle(completedItems[0])}</p>
-                    <p className="text-sm">{getItemDescription(completedItems[0])}</p>
+                completedItems.map((item) => (
+                  <div key={item.id} className="rounded-2xl border border-border/60 bg-muted/30 p-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="line-clamp-1 min-w-0 font-medium wrap-break-word">{getItemTitle(item)}</p>
+                      <Badge variant="secondary">Done</Badge>
+                    </div>
                   </div>
-                  <CompletedDrawer items={completedItems} ambitionName={props.ambition.ambitionName} />
-                </>
+                ))
               )}
             </div>
           </CardContent>
@@ -161,7 +161,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
             ) : (
               props.notes.slice(0, 2).map((note) => (
                 <div key={note.id} className="rounded-2xl border border-border/60 p-3 text-sm">
-                  <p className="line-clamp-3 break-words">{note.note}</p>
+                  <p className="line-clamp-3 wrap-break-word">{note.note}</p>
                 </div>
               ))
             )}
