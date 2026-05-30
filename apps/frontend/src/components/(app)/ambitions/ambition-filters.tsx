@@ -52,7 +52,7 @@ export default function AmbitionFilters(props: AmbitionFiltersProps) {
 
         <div className="flex gap-2">
           <Select value={props.value.status || ""} onValueChange={(value) => updateFilters("status", value)}>
-            <SelectTrigger size="sm" aria-label="Filter by status" className="**:data-[slot=select-value]:block **:data-[slot=select-value]:truncate">
+            <SelectTrigger aria-label="Filter by status" className="**:data-[slot=select-value]:block **:data-[slot=select-value]:truncate">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -63,7 +63,7 @@ export default function AmbitionFilters(props: AmbitionFiltersProps) {
           </Select>
 
           <Select value={props.value.priority || ""} onValueChange={(value) => updateFilters("priority", value)}>
-            <SelectTrigger size="sm" aria-label="Filter by priority" className="**:data-[slot=select-value]:block **:data-[slot=select-value]:truncate">
+            <SelectTrigger aria-label="Filter by priority" className="**:data-[slot=select-value]:block **:data-[slot=select-value]:truncate">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>

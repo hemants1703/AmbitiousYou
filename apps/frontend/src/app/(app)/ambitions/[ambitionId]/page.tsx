@@ -65,7 +65,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   const notes: Note[] = ambition.notes ?? [];
 
   return (
-    <section className="p-6 md:p-8 pt-6 min-h-screen">
+    <section className="w-full">
       <div className="space-y-6 max-w-7xl mx-auto w-full">
         {/* HEADER - Static content */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">

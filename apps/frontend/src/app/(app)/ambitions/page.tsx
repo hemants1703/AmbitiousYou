@@ -39,7 +39,7 @@ function NoAmbitionsFoundPage() {
         </Button>
       </MotionWrapper>
 
-      <MotionWrapper className="col-span-full text-center py-10 text-muted-foreground">
+      <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="col-span-full text-center py-10 text-muted-foreground">
         <FilterIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
         <p>You haven&apos;t created any ambitions yet</p>
       </MotionWrapper>
