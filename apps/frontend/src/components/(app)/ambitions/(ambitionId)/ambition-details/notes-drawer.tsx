@@ -12,7 +12,7 @@ interface NotesDrawerProps {
 
 export default function NotesDrawer(props: NotesDrawerProps) {
   return (
-    <Drawer>
+    <Drawer direction="top">
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-full rounded-2xl">
           <BookOpenTextIcon className="size-4" />

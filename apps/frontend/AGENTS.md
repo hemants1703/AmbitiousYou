@@ -156,6 +156,7 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - **File Structure:** When creating new components, use PascalCase for the components function (UserProfile(props) {}) themselves and kebab-case for file naming (user-profile.tsx) and camelCase for any variables, uppercase for constants etc.
 - **Props Handling:** Each props should not be destructuring things manually, create a TS interface for that file and name it *Props and infer the type. Eg - UserProfile(props: UserProfileProps) {}. Of course only when props are present otherwise not and use as props.key only.
 - **Using Lucide:** When importing icons from 'lucide-react', make sure to import the icons in *Icon pattern, so it is distinguishable of being an icon, lucide already exports those such as SunIcon not Sun as SunIcon.
+- **Supporting Components:** for example (ambitionId) details page should have it's supporting components placed under `src/components/(app)/(ambitions)/(ambitionId)` and nowhere else, follow similar structure always for any page's supporting components.
 
 ## Performance Targets
 - **TypeScript/JavaScript bloat:** Minimal, server-first

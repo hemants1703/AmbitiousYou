@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import type { Ambition, Milestone, Note, Task, User } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, ListTodoIcon, NotebookPenIcon, TimerResetIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import NotesDrawer from "./notes-drawer";
+import NotesDrawer from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-drawer";
 import CompletedDrawer from "./completed-drawer";
 
 type AmbitionDetailsSectionProps = {
@@ -52,8 +52,8 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 space-y-1">
                         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Priority {index + 1}</p>
-                        <p className="line-clamp-2 font-medium break-words">{getItemTitle(item)}</p>
-                        <p className="line-clamp-2 text-sm text-muted-foreground break-words">{getItemDescription(item) || "No description provided."}</p>
+                        <p className="line-clamp-2 font-medium wrap-break-word">{getItemTitle(item)}</p>
+                        <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getItemDescription(item) || "No description provided."}</p>
                       </div>
                       <Badge variant="outline" className={daysUntil < 0 ? "border-destructive/30 bg-destructive/10 text-destructive" : ""}>
                         {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
@@ -90,8 +90,8 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                     <div key={item.id} className="rounded-2xl border border-border/60 p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="line-clamp-1 font-medium break-words">{getItemTitle(item)}</p>
-                          <p className="line-clamp-1 text-sm text-muted-foreground break-words">{getItemDescription(item) || "No description provided."}</p>
+                          <p className="line-clamp-1 font-medium wrap-break-word">{getItemTitle(item)}</p>
+                          <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{getItemDescription(item) || "No description provided."}</p>
                         </div>
                         <Badge variant="outline" className={daysUntil < 0 ? "border-destructive/30 bg-destructive/10 text-destructive" : ""}>
                           {daysUntil < 0 ? "Overdue" : "Upcoming"}
@@ -161,7 +161,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
             ) : (
               props.notes.slice(0, 2).map((note) => (
                 <div key={note.id} className="rounded-2xl border border-border/60 p-3 text-sm">
-                  <p className="line-clamp-3 break-words">{note.note}</p>
+                  <p className="line-clamp-3 wrap-break-word">{note.note}</p>
                 </div>
               ))
             )}

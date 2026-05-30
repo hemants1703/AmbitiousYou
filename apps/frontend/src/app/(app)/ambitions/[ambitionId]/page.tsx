@@ -1,11 +1,10 @@
-import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/AmbitionDetails/ambition-details-section";
-import EditAmbitionDialog from "@/components/(app)/ambitions/(ambitionId)/AmbitionDetails/edit-ambition-dialog";
-import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/Milestones/mark-milestone-as-completed-dialog";
-
+import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
+import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
+import { DeleteAmbitionDialog } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/delete-ambition-dialog";
+import EditAmbitionDialog from "@/components/(app)/ambitions/(ambitionId)/ambition-details/edit-ambition-dialog";
+import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/milestones/mark-milestone-as-completed-dialog";
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
-import AmbitionOptionsDropdown from "@/features/(app)/ambitions/view/AmbitionOptionsDropdown";
-import { DeleteAmbitionDialog } from "@/features/(app)/ambitions/view/DeleteAmbitionDialog";
+import { MotionWrapper } from "@/components/motion-wrapper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,12 +13,12 @@ import { Separator } from "@/components/ui/separator";
 import { getAmbitionDetails, type AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { getUser } from "@/lib/api/sidebar/get-user";
 import { getSessionToken } from "@/lib/auth";
+import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, SparklesIcon, StarIcon, TargetIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
 import { cache, type ReactNode } from "react";
-import { MotionWrapper } from "@/components/motion-wrapper";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ ambitionId: string }>;
@@ -79,7 +78,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
   return (
     <section className="w-full pb-8">
-      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-6">
+      <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
         <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
           <Card className="relative border border-border/60 bg-background/80 shadow-2xl backdrop-blur-sm">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,hsl(var(--primary)/0.2),transparent_36%),radial-gradient(circle_at_86%_20%,hsl(var(--ring)/0.2),transparent_35%)]" />

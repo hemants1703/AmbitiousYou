@@ -12,7 +12,7 @@ interface CompletedDrawerProps {
 
 export default function CompletedDrawer(props: CompletedDrawerProps) {
   return (
-    <Drawer>
+    <Drawer direction="top">
       <DrawerTrigger asChild>
         <Button variant="ghost" className="w-full text-sm">
           See all completed
