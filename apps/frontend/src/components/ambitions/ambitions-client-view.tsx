@@ -48,7 +48,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
           <p className="text-muted-foreground">View and manage all your ambitions in one place</p>
         </div>
         <Button asChild size="sm" className="w-full md:w-auto">
-          <Link prefetch={true} href="/ambitions/new?ref=ambitions" className="flex items-center justify-center gap-1 md:ml-0">
+          <Link prefetch={true} href="/ambitions/new" className="flex items-center justify-center gap-1 md:ml-0">
             <PlusCircleIcon className="h-4 w-4" />
             Create New Ambition
           </Link>
