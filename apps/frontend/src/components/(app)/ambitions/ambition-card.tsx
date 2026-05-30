@@ -44,12 +44,12 @@ export default function AmbitionCard(props: AmbitionCardProps) {
               </MotionWrapper>
             </div>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-1">
-                <GaugeIcon className="h-3.5 w-3.5" />
-                <span>Tracking by {props.ambition.ambitionTrackingMethod}</span>
+              <div className="flex items-center justify-start gap-1">
+                <GaugeIcon className="size-3.5" />
+                <span className="text-xs tracking-tighter font-black uppercase">{props.ambition.ambitionTrackingMethod}</span>
               </div>
               <div className="flex items-center gap-1">
-                <CalendarIcon className="h-3.5 w-3.5" />
+                <CalendarIcon className="size-3.5" />
                 <span>
                   Due{" "}
                   {new Date(props.ambition.ambitionEndDate).toLocaleDateString("en-US", {

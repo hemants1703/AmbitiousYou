@@ -4,6 +4,7 @@ import { DeleteAmbitionDialog } from "@/components/(app)/ambitions/(ambitionId)/
 import EditAmbitionDialog from "@/components/(app)/ambitions/(ambitionId)/ambition-details/edit-ambition-dialog";
 import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/milestones/mark-milestone-as-completed-dialog";
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
+import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,7 @@ import { getAmbitionDetails, type AmbitionDetails } from "@/lib/api/ambitions/ge
 import { getUser } from "@/lib/api/sidebar/get-user";
 import { getSessionToken } from "@/lib/auth";
 import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, SparklesIcon, StarIcon, TargetIcon } from "lucide-react";
+import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, StarIcon, TargetIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
@@ -79,27 +80,28 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   return (
     <section className="w-full pb-8">
       <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
-        <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
-          <Card className="relative border border-border/60 bg-background/80 shadow-2xl backdrop-blur-sm">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,hsl(var(--primary)/0.2),transparent_36%),radial-gradient(circle_at_86%_20%,hsl(var(--ring)/0.2),transparent_35%)]" />
+        <div className="flex flex-wrap items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-full bg-background/80">
+            <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
+              <ChevronLeftIcon className="size-4" />
+              Back to ambitions
+            </Link>
+          </Button>
 
-            <CardContent className="relative space-y-6 p-4 sm:p-6 lg:p-8">
+          <div className="ml-auto hidden sm:block">
+            <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
+          </div>
+
+          <div className="sm:hidden">
+            <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
+          </div>
+        </div>
+
+        <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
+          <Card>
+            <CardContent className="space-y-6 px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex min-w-0 flex-1 flex-col gap-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Button asChild variant="outline" size="sm" className="rounded-full bg-background/80">
-                      <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
-                        <ChevronLeftIcon className="size-4" />
-                        Back to ambitions
-                      </Link>
-                    </Button>
-                    <Badge variant="outline" className="rounded-full border-primary/30 bg-primary/10 text-primary">
-                      <SparklesIcon className="size-3.5" />
-                      Focus view
-                    </Badge>
-                    <StatusBadge ambitionStatus={ambition.ambitionStatus} />
-                  </div>
-
                   <div className="space-y-2">
                     <h1 className="line-clamp-2 text-2xl font-bold tracking-tight text-balance sm:text-3xl lg:text-4xl">
                       {ambition.ambitionName}
@@ -110,33 +112,21 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
                   <div className="flex flex-wrap items-center gap-2">
                     <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority!} />
-                    <Badge variant="outline" className="rounded-full">
-                      <TargetIcon className="size-3.5" />
-                      {ambition.ambitionTrackingMethod === "task" ? "Task-driven" : "Milestone-driven"}
-                    </Badge>
-                    <Badge variant="outline" className="rounded-full">
+                    <Badge variant="outline">
                       <CheckCircle2Icon className="size-3.5" />
                       {completedItems}/{trackedItems.length || 0} completed
                     </Badge>
+                    <AmbitionStatusBadge ambitionStatus={ambition.ambitionStatus} />
                   </div>
-                </div>
-
-                <div className="ml-auto hidden sm:block">
-                  <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
-                </div>
-
-                <div className="sm:hidden">
-                  <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
                 </div>
               </div>
 
-              <div className="space-y-4 rounded-3xl border border-border/60 bg-card/70 p-4 sm:p-5">
+              <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-sm font-medium">Ambition progress</p>
                   <p className="text-sm font-semibold tabular-nums">{progress}%</p>
                 </div>
-                <Progress value={progress} className="h-3 bg-muted/80" />
-                <Separator className="my-1" />
+                <Progress value={progress} className="h-1" />
 
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                   <QuickStatCard icon={<CalendarDaysIcon className="size-4" />} label="Start" value={formatDate(ambition.ambitionStartDate)} helper={`${activeDays} day window`} />
@@ -161,21 +151,6 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
         <AmbitionDialogs {...props} milestones={milestones} ambition={ambition} />
       </div>
     </section>
-  );
-}
-
-function StatusBadge(props: { ambitionStatus: Ambition["ambitionStatus"] }) {
-  const statusMap: Record<Ambition["ambitionStatus"], { label: string; className: string }> = {
-    active: { label: "Active", className: "border-emerald-500/30 bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" },
-    completed: { label: "Completed", className: "border-sky-500/30 bg-sky-500/15 text-sky-800 dark:text-sky-300" },
-    missed: { label: "Missed", className: "border-amber-500/30 bg-amber-500/15 text-amber-800 dark:text-amber-300" },
-  };
-
-  const currentStatus = statusMap[props.ambitionStatus];
-  return (
-    <Badge variant="outline" className={`rounded-full ${currentStatus.className}`}>
-      {currentStatus.label}
-    </Badge>
   );
 }
 
