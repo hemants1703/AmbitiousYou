@@ -10,7 +10,7 @@ export class CreateAmbitionTaskDto extends OmitType(CreateTaskDto, ['userId', 'a
 
 export class CreateAmbitionMilestoneDto extends OmitType(CreateMilestoneDto, ['userId', 'ambitionId'] as const) {}
 
-export class CreateAmbitionNoteDto extends OmitType(CreateNoteDto, ['userId', 'ambitionId'] as const) {}
+export class CreateAmbitionNoteDto extends OmitType(CreateNoteDto, ['ambitionId'] as const) {}
 
 export class CreateAmbitionWithItemsDto extends CreateAmbitionDto {
   @ValidateIf((o: CreateAmbitionDto) => o.ambitionTrackingMethod === 'task')

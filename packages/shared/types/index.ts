@@ -98,7 +98,7 @@ export type Note = {
   updatedAt: Date | null;
 };
 
-export type NewNote = Pick<Note, "userId" | "ambitionId" | "note">;
+export type NewNote = Pick<Note, "ambitionId" | "note">;
 
 // Settings types
 export type Settings = {
