@@ -236,7 +236,7 @@ export default function CreateAmbitionForm() {
               <FieldLabel htmlFor="ambitionDefinition" tooltip="Optional context that explains the why behind the goal.">
                 Definition
               </FieldLabel>
-              <Textarea id="ambitionDefinition" name="ambitionDefinition" value={ambitionDefinition} onChange={(event) => setAmbitionDefinition(event.target.value)} placeholder="What does success look like?" rows={4} spellCheck />
+              <Textarea id="ambitionDefinition" name="ambitionDefinition" value={ambitionDefinition} onChange={(event) => setAmbitionDefinition(event.target.value)} placeholder="What does success look like? (Optional field)" rows={4} spellCheck />
             </div>
 
             <div className="space-y-2">
