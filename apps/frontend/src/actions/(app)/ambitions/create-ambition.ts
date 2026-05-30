@@ -140,7 +140,6 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
   const ambitionStartDate = parseDate(readString(formData, "ambitionStartDate"));
   const ambitionEndDate = parseDate(readString(formData, "ambitionEndDate"));
-  const isFavourited = readBoolean(formData, "isFavourited");
 
   if (!ambitionName || !ambitionTrackingMethod || !ambitionPriority || !ambitionStartDate || !ambitionEndDate) {
     return {
@@ -178,7 +177,6 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
     ambitionStartDate: ambitionStartDate.toISOString(),
     ambitionEndDate: ambitionEndDate.toISOString(),
     ambitionPriority,
-    isFavourited,
     ...(ambitionTrackingMethod === "task" ? { tasks } : {}),
     ...(ambitionTrackingMethod === "milestone" ? { milestones } : {}),
     ...(notes.length > 0 ? { notes } : {}),

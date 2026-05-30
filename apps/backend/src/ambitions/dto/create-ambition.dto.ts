@@ -1,6 +1,6 @@
 import { NewAmbition } from '@ambitiousyou/shared';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateAmbitionDto implements NewAmbition {
   @IsString()
@@ -31,7 +31,4 @@ export class CreateAmbitionDto implements NewAmbition {
   @IsEnum(['low', 'medium', 'high'], { message: 'ambitionPriority must be either low, medium, or high' })
   @IsNotEmpty({ message: 'ambitionPriority must be a valid priority' })
   ambitionPriority: 'low' | 'medium' | 'high' = 'medium';
-
-  @IsBoolean()
-  isFavourited: boolean = false;
 }
