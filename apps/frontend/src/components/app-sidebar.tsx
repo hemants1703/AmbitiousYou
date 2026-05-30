@@ -36,13 +36,8 @@ const data = {
     },
     {
       title: "Get Help",
-      url: "#",
+      url: "mailto:support@ambitiousyou.com",
       icon: <CircleHelpIcon />,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: <SearchIcon />,
     },
   ],
 };

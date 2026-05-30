@@ -14,6 +14,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
 import { cache } from "react";
+import { MotionWrapper } from "@/components/motion-wrapper";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ ambitionId: string }>;
@@ -68,36 +69,40 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
     <section className="w-full">
       <div className="space-y-6 max-w-7xl mx-auto w-full">
         {/* HEADER - Static content */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="flex sm:flex-row flex-col justify-start sm:justify-start items-start sm:items-center gap-3 max-sm:w-full">
-            <div className="flex items-center justify-between gap-3 max-sm:w-full">
-              <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
-                <ChevronLeft className="size-8 bg-foreground/10 rounded-full p-2" />
-              </Link>
+        <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex sm:flex-row flex-col justify-start sm:justify-start items-start sm:items-center gap-3 max-sm:w-full">
+              <div className="flex items-center justify-between gap-3 max-sm:w-full">
+                <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
+                  <ChevronLeft className="size-8 bg-foreground/10 rounded-full p-2" />
+                </Link>
 
-              <div className="block sm:hidden">
-                <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
+                <div className="block sm:hidden">
+                  <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold mt-1 flex items-center gap-1">
+                  {ambition.ambitionName} {ambition.isFavourited && <Star className="size-6 fill-yellow-500 text-yellow-500" />}
+                </h1>
+                <div className="flex items-center gap-2">
+                  <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority!} />
+                </div>
               </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold mt-1 flex items-center gap-1">
-                {ambition.ambitionName} {ambition.isFavourited && <Star className="size-6 fill-yellow-500 text-yellow-500" />}
-              </h1>
-              <div className="flex items-center gap-2">
-                <AmbitionPriorityBadge ambitionPriority={ambition.ambitionPriority!} />
-              </div>
+
+            {/* Interactive actions - Client component */}
+            <div className="hidden sm:block">
+              <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
             </div>
+
+            <AmbitionDialogs {...props} milestones={milestones} ambition={ambition} />
           </div>
+        </MotionWrapper>
 
-          {/* Interactive actions - Client component */}
-          <div className="hidden sm:block">
-            <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
-          </div>
-
-          <AmbitionDialogs {...props} milestones={milestones} ambition={ambition} />
-        </div>
-
-        <AmbitionDetailsSection user={userDetails} ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
+        <MotionWrapper initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
+          <AmbitionDetailsSection user={userDetails} ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
+        </MotionWrapper>
       </div>
     </section>
   );
