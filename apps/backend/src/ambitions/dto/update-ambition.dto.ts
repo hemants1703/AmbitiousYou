@@ -13,10 +13,6 @@ export class UpdateAmbitionDto extends PartialType(CreateAmbitionDto) {
   @IsEnum(['low', 'medium', 'high'])
   ambitionPriority: 'low' | 'medium' | 'high' = 'low';
 
-  @IsString()
-  @IsNotEmpty()
-  ambitionColor: string = '#000000';
-
   @IsBoolean()
   isFavourited: boolean = false;
 }

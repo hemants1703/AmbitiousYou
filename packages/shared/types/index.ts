@@ -50,14 +50,13 @@ export type Ambition = {
   ambitionStatus: "active" | "completed" | "missed";
   ambitionPriority: "low" | "medium" | "high";
   ambitionPercentageCompleted: number;
-  ambitionColor: string;
   isFavourited: boolean;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
 
 export type NewAmbition = Pick<Ambition, "userId" | "ambitionName" | "ambitionTrackingMethod" | "ambitionStartDate" | "ambitionEndDate"> &
-  Partial<Pick<Ambition, "ambitionDefinition" | "ambitionCompletionDate" | "ambitionStatus" | "ambitionPriority" | "ambitionPercentageCompleted" | "ambitionColor" | "isFavourited">>;
+  Partial<Pick<Ambition, "ambitionDefinition" | "ambitionCompletionDate" | "ambitionStatus" | "ambitionPriority" | "ambitionPercentageCompleted" | "isFavourited">>;
 
 // Task types
 export type Task = {

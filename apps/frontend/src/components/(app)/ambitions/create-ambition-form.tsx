@@ -93,7 +93,6 @@ export default function CreateAmbitionForm() {
   const [ambitionDefinition, setAmbitionDefinition] = useState("");
   const [trackingMethod, setTrackingMethod] = useState<TrackingMethod>("task");
   const [priority, setPriority] = useState<Priority>("medium");
-  const [ambitionColor, setAmbitionColor] = useState(colorPresets[0]);
   const [startDate, setStartDate] = useState(toDateInputValue(new Date()));
   const [endDate, setEndDate] = useState(toDateInputValue(addDays(new Date(), 30)));
   const [isFavourited, setIsFavourited] = useState(false);
@@ -147,7 +146,6 @@ export default function CreateAmbitionForm() {
           <form action={formAction} className="flex flex-col gap-6">
             <input name="ambitionTrackingMethod" type="hidden" value={trackingMethod} />
             <input name="ambitionPriority" type="hidden" value={priority} />
-            <input name="ambitionColor" type="hidden" value={ambitionColor} />
             <input name="ambitionStartDate" type="hidden" value={startDate} />
             <input name="ambitionEndDate" type="hidden" value={endDate} />
 
@@ -212,35 +210,6 @@ export default function CreateAmbitionForm() {
                   </Select.SelectContent>
                 </Select.Select>
                 <FieldDescription>{trackingMethod === "task" ? "Use tasks for goals that progress through concrete actions." : "Use milestones for goals that move in clear phases."}</FieldDescription>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="ambitionColor">Accent color</Label>
-                <div className="flex flex-wrap gap-2">
-                  {colorPresets.map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => setAmbitionColor(color)}
-                      className={cn(
-                        "size-9 rounded-full border transition-transform focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30",
-                        ambitionColor === color ? "scale-105 border-foreground/40 shadow-sm" : "border-border/70 hover:scale-105",
-                      )}
-                      style={{ backgroundColor: color }}
-                      aria-label={`Use ${color} as the ambition color`}
-                    />
-                  ))}
-                  <Input
-                    id="ambitionColor"
-                    name="ambitionColor"
-                    value={ambitionColor}
-                    onChange={(event) => setAmbitionColor(event.target.value)}
-                    placeholder="#0ea5e9"
-                    className="max-w-36 border-border bg-background font-mono uppercase"
-                    spellCheck={false}
-                  />
-                </div>
-                <FieldDescription>The color appears in ambition cards and helps the goal stand out at a glance.</FieldDescription>
               </div>
             </div>
 
@@ -497,14 +466,14 @@ export default function CreateAmbitionForm() {
             <CardDescription>See the ambition the way it will feel in the rest of the app.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5 pt-6">
-            <div className="rounded-3xl border border-border/70 p-4" style={{ boxShadow: `0 0 0 1px ${ambitionColor}1a inset` }}>
+            <div className="rounded-3xl border border-border/70 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 space-y-2">
                   <p className="text-sm font-medium text-muted-foreground">Draft ambition</p>
                   <h3 className="line-clamp-2 text-xl font-semibold tracking-tight">{ambitionName || "Your ambition title will appear here"}</h3>
                   <p className="line-clamp-3 text-sm text-muted-foreground">{ambitionDefinition || "Add a short definition to clarify the goal before you commit to it."}</p>
                 </div>
-                <div className="size-11 shrink-0 rounded-full border border-border/70" style={{ backgroundColor: ambitionColor }} aria-hidden="true" />
+                <div className="size-11 shrink-0 rounded-full border border-border/70" aria-hidden="true" />
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-3 text-sm">

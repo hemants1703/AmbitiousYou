@@ -50,7 +50,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "high",
           ambitionPercentageCompleted: 40,
-          ambitionColor: "#00bfff",
           isFavourited: true,
         },
         milestones: [
@@ -119,7 +118,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "high",
           ambitionPercentageCompleted: 55,
-          ambitionColor: "#9966cc",
           isFavourited: true,
         },
         tasks: [
@@ -187,7 +185,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "high",
           ambitionPercentageCompleted: 60,
-          ambitionColor: "#ff7733",
           isFavourited: true,
         },
         milestones: [
@@ -255,7 +252,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "medium",
           ambitionPercentageCompleted: 50,
-          ambitionColor: "#32cd32",
           isFavourited: false,
         },
         milestones: [
@@ -316,7 +312,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "high",
           ambitionPercentageCompleted: 45,
-          ambitionColor: "#ff69b4",
           isFavourited: true,
         },
         milestones: [
@@ -384,7 +379,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "medium",
           ambitionPercentageCompleted: 35,
-          ambitionColor: "#fcda03",
           isFavourited: true,
         },
         tasks: [
@@ -453,7 +447,6 @@ export const personas: Persona[] = [
           ambitionStatus: "active",
           ambitionPriority: "high",
           ambitionPercentageCompleted: 65,
-          ambitionColor: "#00ced1",
           isFavourited: true,
         },
         tasks: [

@@ -32,10 +32,6 @@ export class CreateAmbitionDto implements NewAmbition {
   @IsNotEmpty({ message: 'ambitionPriority must be a valid priority' })
   ambitionPriority: 'low' | 'medium' | 'high' = 'medium';
 
-  @IsString()
-  @IsNotEmpty({ message: 'ambitionColor must be a non-empty string' })
-  ambitionColor: string = '#000000';
-
   @IsBoolean()
   isFavourited: boolean = false;
 }

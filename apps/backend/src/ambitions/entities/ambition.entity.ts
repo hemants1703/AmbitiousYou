@@ -37,9 +37,6 @@ export class AmbitionEntity {
   @Column({ type: 'int', name: 'ambition_percentage_completed', nullable: false, default: 0 })
   ambitionPercentageCompleted: number = 0;
 
-  @Column({ type: 'varchar', length: 7, name: 'ambition_color', nullable: false, default: '#000000' })
-  ambitionColor: string = '#000000';
-
   @Column({ type: 'boolean', name: 'is_favourited', default: false })
   isFavourited: boolean = false;
 

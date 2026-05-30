@@ -131,7 +131,6 @@ export class AmbitionsService {
       ambitionName: updateAmbitionDto.ambitionName,
       ambitionDefinition: updateAmbitionDto.ambitionDefinition,
       ambitionPriority: updateAmbitionDto.ambitionPriority,
-      ambitionColor: updateAmbitionDto.ambitionColor,
       isFavourited: updateAmbitionDto.isFavourited,
       updatedAt: new Date(),
     });

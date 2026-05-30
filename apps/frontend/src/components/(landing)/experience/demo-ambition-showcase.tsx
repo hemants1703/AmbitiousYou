@@ -62,7 +62,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
         <div className="grid lg:grid-cols-5 gap-6">
           {/* Ambition Overview Card */}
           <MotionWrapper initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="lg:col-span-2">
-            <Card.Card className="h-full relative overflow-hidden" style={{ "--ambition-color": props.ambition.ambition.ambitionColor } as React.CSSProperties}>
+            <Card.Card className="h-full relative overflow-hidden">
               {/* Decorative gradient */}
               <div className="absolute inset-0 bg-linear-to-br from-transparent via-transparent to-(--ambition-color) opacity-10 pointer-events-none" />
 

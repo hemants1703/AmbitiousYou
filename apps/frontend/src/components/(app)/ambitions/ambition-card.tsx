@@ -4,7 +4,6 @@ import { Progress } from "@/components/ui/progress";
 import { CalendarIcon, ChevronRightIcon, GaugeIcon } from "lucide-react";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
-import "@/styles/ambition-card.css";
 import { Ambition } from "@ambitiousyou/shared/types";
 
 interface AmbitionCardProps {
@@ -18,13 +17,7 @@ export default function AmbitionCard(props: AmbitionCardProps) {
   const progressPercentage = Math.min(Math.max(props.ambition.ambitionPercentageCompleted, 0), 100);
 
   return (
-    <div
-      style={
-        {
-          "--ambition-color": props.ambition.ambitionColor,
-        } as React.CSSProperties
-      }
-      className="ambition-card active:scale-[0.99] active:translate-y-px active:brightness-80">
+    <div className="ambition-card active:scale-[0.99] active:translate-y-px active:brightness-80">
       <Card.Card className="bg-transparent cursor-pointer">
         <Card.CardHeader>
           <div className="flex items-center justify-between">

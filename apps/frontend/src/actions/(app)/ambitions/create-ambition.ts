@@ -138,14 +138,13 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
   const ambitionDefinition = readString(formData, "ambitionDefinition");
   const ambitionTrackingMethod = readString(formData, "ambitionTrackingMethod") as "task" | "milestone" | "";
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
-  const ambitionColor = readString(formData, "ambitionColor");
   const ambitionStartDate = parseDate(readString(formData, "ambitionStartDate"));
   const ambitionEndDate = parseDate(readString(formData, "ambitionEndDate"));
   const isFavourited = readBoolean(formData, "isFavourited");
 
-  if (!ambitionName || !ambitionTrackingMethod || !ambitionPriority || !ambitionColor || !ambitionStartDate || !ambitionEndDate) {
+  if (!ambitionName || !ambitionTrackingMethod || !ambitionPriority || !ambitionStartDate || !ambitionEndDate) {
     return {
-      error: "Fill in the ambition name, tracking method, priority, color, and dates before creating it.",
+      error: "Fill in the ambition name, tracking method, priority, and dates before creating it.",
     };
   }
 
@@ -179,7 +178,6 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
     ambitionStartDate: ambitionStartDate.toISOString(),
     ambitionEndDate: ambitionEndDate.toISOString(),
     ambitionPriority,
-    ambitionColor,
     isFavourited,
     ...(ambitionTrackingMethod === "task" ? { tasks } : {}),
     ...(ambitionTrackingMethod === "milestone" ? { milestones } : {}),
