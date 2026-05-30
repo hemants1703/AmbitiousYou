@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
+import { ThemeToggle } from "../theme-toggle";
 
 export default function Footer() {
   const exploreLinks = [
@@ -80,14 +81,14 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Theme & Newsletter */}
-          {/* <div className="space-y-4">
+          {/* Preferences */}
+          <div className="space-y-4">
             <h4 className="text-lg font-semibold">Preferences</h4>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <span className="text-sm text-muted-foreground">Theme:</span>
-              <ThemeToggler />
+              <ThemeToggle />
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* Bottom Bar */}

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeColorSync } from "@/components/theme-color-sync";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -136,12 +138,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
         {/* Additional meta tags not covered by Next.js Metadata API */}
         <meta name="apple-mobile-web-app-title" content="AmbitiousYou" />
         <meta name="application-name" content="AmbitiousYou" />
-        <meta name="theme-color" content="#64ccc5" />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="msapplication-TileColor" content="#64ccc5" />
 
         {/* LinkedIn & legacy crawler compatibility */}
@@ -158,11 +160,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* Preconnect to external resources for performance */}
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
-      <body className="min-h-full flex flex-col">
-        <TooltipProvider>
-          {children}
-          <Toaster richColors theme="system" />
-        </TooltipProvider>
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeColorSync />
+          <TooltipProvider>
+            {children}
+            <Toaster richColors theme="system" />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

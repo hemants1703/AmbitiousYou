@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
+import { ThemeToggle } from "../theme-toggle";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
 
 const navLinks = [
@@ -103,6 +104,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Button variant="outline" size="sm" className="h-9 px-4" asChild>
               <Link prefetch={true} href="/login">
                 Log in
@@ -151,6 +153,11 @@ export default function Navbar() {
           </div>
 
           <div className="space-y-4 mt-auto">
+            <div className="flex items-center justify-between rounded-3xl border border-border/60 bg-background/70 px-4 py-3 backdrop-blur-sm">
+              <span className="text-sm text-muted-foreground">Theme</span>
+              <ThemeToggle />
+            </div>
+
             <div className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               <Button variant="outline" className="w-full" asChild>
                 <Link prefetch={true} href="/login" onClick={toggleNavbar}>
