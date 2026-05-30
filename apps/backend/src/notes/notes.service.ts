@@ -1,17 +1,31 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NoteEntity } from './entities/note.entity';
 import { Repository } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class NotesService {
   constructor(@InjectRepository(NoteEntity) private readonly notesRepository: Repository<NoteEntity>) {}
 
-  async createNote(createNoteDto: CreateNoteDto): Promise<NoteEntity> {
+  async createNote(token: string, createNoteDto: CreateNoteDto): Promise<NoteEntity> {
+    const user = await this.notesRepository.manager
+      .getRepository(UserEntity)
+      .createQueryBuilder('user')
+      .innerJoin('sessions', 'session', 'session.user_id = user.id')
+      .select('user.id', 'id')
+      .where('session.token = :token', { token })
+      .getRawOne<{ id: string }>();
+
+    if (!user || !user.id) {
+      throw new UnauthorizedException('Invalid or expired session token');
+    }
+
     return await this.notesRepository.save({
       id: crypto.randomUUID(),
+      userId: user.id,
       ...createNoteDto,
       createdAt: new Date(),
       updatedAt: new Date(),

@@ -4,10 +4,6 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateNoteDto implements NewNote {
   @IsString()
   @IsNotEmpty()
-  userId: string = '';
-
-  @IsString()
-  @IsNotEmpty()
   ambitionId: string = '';
 
   @IsString()

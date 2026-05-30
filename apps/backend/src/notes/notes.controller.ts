@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Headers } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
@@ -11,8 +11,9 @@ export class NotesController {
 
   @UseGuards(SessionGuard)
   @Post()
-  async createNote(@Body() createNoteDto: CreateNoteDto): Promise<NoteEntity> {
-    return await this.notesService.createNote(createNoteDto);
+  async createNote(@Headers('Authorization') authorization: string, @Body() createNoteDto: CreateNoteDto): Promise<NoteEntity> {
+    const token = authorization.replace(/^Bearer\s+/i, '');
+    return await this.notesService.createNote(token, createNoteDto);
   }
 
   @UseGuards(SessionGuard)
