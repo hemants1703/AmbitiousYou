@@ -9,27 +9,26 @@ import { TaskEntity } from './entities/task.entity';
 export class TasksService {
   constructor(@InjectRepository(TaskEntity) private readonly tasksRepository: Repository<TaskEntity>) {}
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+  async createTask(userId: string, createTaskDto: CreateTaskDto): Promise<TaskEntity> {
     return await this.tasksRepository.save({
       id: crypto.randomUUID(),
+      userId,
       ...createTaskDto,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
   }
 
-  async findAllTasksForAmbitionId(ambitionId: string): Promise<TaskEntity[] | null> {
-    return await this.tasksRepository.find({
-      where: { ambitionId },
-    });
+  async findAllTasksForAmbitionId(userId: string, ambitionId: string): Promise<TaskEntity[] | null> {
+    return await this.tasksRepository.find({ where: { ambitionId, userId } });
   }
 
-  async findOneTaskById(taskId: string): Promise<TaskEntity | null> {
-    return await this.tasksRepository.findOne({ where: { id: taskId } });
+  async findOneTaskById(userId: string, taskId: string): Promise<TaskEntity | null> {
+    return await this.tasksRepository.findOne({ where: { id: taskId, userId } });
   }
 
-  async updateTaskById(taskId: string, updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
-    const task = await this.findOneTaskById(taskId);
+  async updateTaskById(userId: string, taskId: string, updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
+    const task = await this.findOneTaskById(userId, taskId);
     if (!task) {
       throw new BadRequestException('Task not found');
     }
@@ -45,8 +44,8 @@ export class TasksService {
     return await this.tasksRepository.save(task);
   }
 
-  async removeTaskById(taskId: string): Promise<TaskEntity> {
-    const task = await this.findOneTaskById(taskId);
+  async removeTaskById(userId: string, taskId: string): Promise<TaskEntity> {
+    const task = await this.findOneTaskById(userId, taskId);
     if (!task) {
       throw new BadRequestException('Task not found');
     }

@@ -4,38 +4,35 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { TaskEntity } from './entities/task.entity';
+import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 
 @Controller('tasks')
+@UseGuards(SessionGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @UseGuards(SessionGuard)
   @Post()
-  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<TaskEntity> {
-    return await this.tasksService.createTask(createTaskDto);
+  async createTask(@CurrentUserId() userId: string, @Body() createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+    return await this.tasksService.createTask(userId, createTaskDto);
   }
 
-  @UseGuards(SessionGuard)
   @Get()
-  async findAllTasksForAmbitionId(@Query('ambitionId') ambitionId: string): Promise<TaskEntity[] | null> {
-    return await this.tasksService.findAllTasksForAmbitionId(ambitionId);
+  async findAllTasksForAmbitionId(@CurrentUserId() userId: string, @Query('ambitionId') ambitionId: string): Promise<TaskEntity[] | null> {
+    return await this.tasksService.findAllTasksForAmbitionId(userId, ambitionId);
   }
 
-  @UseGuards(SessionGuard)
   @Get(':taskId')
-  async findOneTask(@Param('taskId') taskId: string): Promise<TaskEntity | null> {
-    return await this.tasksService.findOneTaskById(taskId);
+  async findOneTask(@CurrentUserId() userId: string, @Param('taskId') taskId: string): Promise<TaskEntity | null> {
+    return await this.tasksService.findOneTaskById(userId, taskId);
   }
 
-  @UseGuards(SessionGuard)
   @Patch(':taskId')
-  async updateTask(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
-    return await this.tasksService.updateTaskById(taskId, updateTaskDto);
+  async updateTask(@CurrentUserId() userId: string, @Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
+    return await this.tasksService.updateTaskById(userId, taskId, updateTaskDto);
   }
 
-  @UseGuards(SessionGuard)
   @Delete(':taskId')
-  async removeTask(@Param('taskId') taskId: string): Promise<TaskEntity> {
-    return await this.tasksService.removeTaskById(taskId);
+  async removeTask(@CurrentUserId() userId: string, @Param('taskId') taskId: string): Promise<TaskEntity> {
+    return await this.tasksService.removeTaskById(userId, taskId);
   }
 }

@@ -5,10 +5,6 @@ import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-valid
 export class CreateTaskDto implements NewTask {
   @IsString()
   @IsNotEmpty()
-  userId: string = '';
-
-  @IsString()
-  @IsNotEmpty()
   ambitionId: string = '';
 
   @IsString()

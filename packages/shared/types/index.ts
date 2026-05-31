@@ -71,7 +71,7 @@ export type Task = {
   updatedAt: Date | null;
 };
 
-export type NewTask = Pick<Task, "userId" | "ambitionId" | "task" | "taskDeadline"> & Partial<Pick<Task, "taskDescription" | "taskCompleted">>;
+export type NewTask = Pick<Task, "ambitionId" | "task" | "taskDeadline"> & Partial<Pick<Task, "taskDescription" | "taskCompleted">>;
 
 // Milestone types
 export type Milestone = {
