@@ -1,42 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Headers } from '@nestjs/common';
-import { NotesService } from './notes.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { SessionGuard } from 'src/auth/guards/session.guard';
+import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NoteEntity } from './entities/note.entity';
-import { SessionGuard } from 'src/auth/guards/session.guard';
+import { NotesService } from './notes.service';
 
 @Controller('notes')
+@UseGuards(SessionGuard)
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
-  @UseGuards(SessionGuard)
   @Post()
-  async createNote(@Headers('Authorization') authorization: string, @Body() createNoteDto: CreateNoteDto): Promise<NoteEntity> {
-    const token = authorization.replace(/^Bearer\s+/i, '');
-    return await this.notesService.createNote(token, createNoteDto);
+  async createNote(@CurrentUserId() userId: string, @Body() createNoteDto: CreateNoteDto): Promise<NoteEntity> {
+    return await this.notesService.createNote(userId, createNoteDto);
   }
 
-  @UseGuards(SessionGuard)
-  @Get()
-  findAllNotesForAmbitionId(@Query('ambitionId') ambitionId: string) {
-    return this.notesService.findAllNotesForAmbitionId(ambitionId);
+  // route changed to avoid conflict with noteId route
+  @Get('ambition/:ambitionId')
+  async findAllNotesForAmbitionId(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string): Promise<NoteEntity[]> {
+    return await this.notesService.findAllNotesForAmbitionId(userId, ambitionId);
   }
 
-  @UseGuards(SessionGuard)
   @Get(':noteId')
-  findOneNoteById(@Param('noteId') noteId: string) {
-    return this.notesService.findOneNoteById(noteId);
+  async findOneNoteById(@CurrentUserId() userId: string, @Param('noteId') noteId: string): Promise<NoteEntity | null> {
+    return await this.notesService.findOneNoteById(userId, noteId);
   }
 
-  @UseGuards(SessionGuard)
   @Patch(':noteId')
-  async update(@Param('noteId') noteId: string, @Body() updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
-    return await this.notesService.updateNote(noteId, updateNoteDto);
+  async update(@CurrentUserId() userId: string, @Param('noteId') noteId: string, @Body() updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
+    return await this.notesService.updateNote(userId, noteId, updateNoteDto);
   }
 
-  @UseGuards(SessionGuard)
   @Delete(':noteId')
-  remove(@Param('noteId') noteId: string) {
-    return this.notesService.removeNote(noteId);
+  async removeNote(@CurrentUserId() userId: string, @Param('noteId') noteId: string): Promise<NoteEntity> {
+    return await this.notesService.removeNote(userId, noteId);
   }
 }

@@ -2,15 +2,11 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { InjectRepository } from '@nestjs/typeorm';
 import { SessionEntity } from '../entities/session.entity';
 import { Repository } from 'typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
 import type { Request } from 'express';
 
 @Injectable()
 export class SessionGuard implements CanActivate {
-  constructor(
-    @InjectRepository(SessionEntity) private readonly sessionRepository: Repository<SessionEntity>,
-    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  constructor(@InjectRepository(SessionEntity) private readonly sessionRepository: Repository<SessionEntity>) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -36,15 +32,9 @@ export class SessionGuard implements CanActivate {
       throw new UnauthorizedException('Session token has expired');
     }
 
-    // If session is valid, fetch the associated user
-    const user = await this.userRepository.findOne({ where: { id: session.userId } });
-
-    // If user associated with the session is not found, deny access
-    if (!user) {
-      throw new UnauthorizedException('User associated with session not found');
-    }
-
-    request['user'] = user;
+    // Attach only the userId from the session to the request.
+    // This avoids an extra user lookup here; services can query user data if needed.
+    request['user'] = { id: session.userId };
     request['session'] = session;
 
     return true;
