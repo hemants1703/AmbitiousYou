@@ -27,7 +27,7 @@ export class NotesService {
     return await this.notesRepository.findOne({ where: { id: noteId, userId } });
   }
 
-  async updateNote(userId: string, noteId: string, updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
+  async updateNoteById(userId: string, noteId: string, updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
     const note = await this.findOneNoteById(userId, noteId);
     if (!note) {
       throw new NotFoundException('Note not found');
@@ -41,7 +41,7 @@ export class NotesService {
     return await this.notesRepository.save(note);
   }
 
-  async removeNote(userId: string, noteId: string): Promise<NoteEntity> {
+  async removeNoteById(userId: string, noteId: string): Promise<NoteEntity> {
     const note = await this.findOneNoteById(userId, noteId);
     if (!note) {
       throw new BadRequestException('Note not found');

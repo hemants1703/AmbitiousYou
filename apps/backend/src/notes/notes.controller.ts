@@ -28,12 +28,12 @@ export class NotesController {
   }
 
   @Patch(':noteId')
-  async update(@CurrentUserId() userId: string, @Param('noteId') noteId: string, @Body() updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
-    return await this.notesService.updateNote(userId, noteId, updateNoteDto);
+  async updateNoteById(@CurrentUserId() userId: string, @Param('noteId') noteId: string, @Body() updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
+    return await this.notesService.updateNoteById(userId, noteId, updateNoteDto);
   }
 
   @Delete(':noteId')
-  async removeNote(@CurrentUserId() userId: string, @Param('noteId') noteId: string): Promise<NoteEntity> {
-    return await this.notesService.removeNote(userId, noteId);
+  async removeNoteById(@CurrentUserId() userId: string, @Param('noteId') noteId: string): Promise<NoteEntity> {
+    return await this.notesService.removeNoteById(userId, noteId);
   }
 }
