@@ -1,4 +1,4 @@
-import { ConflictException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -73,6 +73,15 @@ export class AuthService {
     }
 
     await this.sessionRepository.delete({ token });
+  }
+
+  async getCurrentUserSession(userId: string, token: string): Promise<SessionEntity> {
+    const session = await this.sessionRepository.findOne({ where: { token, userId } });
+    if (!session) {
+      throw new NotFoundException('Session not found');
+    }
+
+    return session;
   }
 
   // TODO: Implement email verification methods

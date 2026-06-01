@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { CurrentSession } from './decorators/current-session.decorator';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { RegisterUserDto } from './dto/register-auth.dto';
+import { SessionEntity } from './entities/session.entity';
 import { SessionGuard } from './guards/session.guard';
+import { CurrentUserId } from './decorators/current-user-id.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -20,8 +23,13 @@ export class AuthController {
 
   @UseGuards(SessionGuard)
   @Get('/logout')
-  async logoutUser(@Headers('authorization') authorization: string): Promise<void> {
-    const token = authorization.replace(/^Bearer\s+/i, '');
-    await this.authService.logoutUser(token);
+  async logoutUser(@CurrentSession() sessionToken: string): Promise<void> {
+    await this.authService.logoutUser(sessionToken);
+  }
+
+  @UseGuards(SessionGuard)
+  @Get('/sessions')
+  async getCurrentUserSession(@CurrentUserId() userId: string, @CurrentSession() sessionToken: string): Promise<SessionEntity> {
+    return await this.authService.getCurrentUserSession(userId, sessionToken);
   }
 }
