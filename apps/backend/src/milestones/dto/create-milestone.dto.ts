@@ -5,10 +5,6 @@ import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
 export class CreateMilestoneDto implements NewMilestone {
   @IsString()
   @IsNotEmpty()
-  userId: string = '';
-
-  @IsString()
-  @IsNotEmpty()
   ambitionId: string = '';
 
   @IsString()

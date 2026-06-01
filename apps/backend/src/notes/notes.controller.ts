@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -16,9 +16,8 @@ export class NotesController {
     return await this.notesService.createNote(userId, createNoteDto);
   }
 
-  // route changed to avoid conflict with noteId route
-  @Get('ambition/:ambitionId')
-  async findAllNotesForAmbitionId(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string): Promise<NoteEntity[]> {
+  @Get()
+  async findAllNotesForAmbitionId(@CurrentUserId() userId: string, @Query('ambitionId') ambitionId: string): Promise<NoteEntity[]> {
     return await this.notesService.findAllNotesForAmbitionId(userId, ambitionId);
   }
 

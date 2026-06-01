@@ -9,30 +9,29 @@ import { MilestoneEntity } from './entities/milestone.entity';
 export class MilestonesService {
   constructor(@InjectRepository(MilestoneEntity) private readonly milestoneRepository: Repository<MilestoneEntity>) {}
 
-  createMilestone(createMilestoneDto: CreateMilestoneDto): MilestoneEntity {
+  createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): MilestoneEntity {
     return this.milestoneRepository.create({
       id: crypto.randomUUID(),
+      userId,
       ...createMilestoneDto,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
   }
 
-  async findAllMilestonesForAmbitionId(ambitionId: string): Promise<MilestoneEntity[] | null> {
+  async findAllMilestonesForAmbitionId(userId: string, ambitionId: string): Promise<MilestoneEntity[] | null> {
     return await this.milestoneRepository.find({
-      where: { ambitionId },
-      order: {
-        createdAt: 'DESC',
-      },
+      where: { ambitionId, userId },
+      order: { createdAt: 'DESC' },
     });
   }
 
-  async findOneMilestoneById(milestoneId: string): Promise<MilestoneEntity | null> {
-    return await this.milestoneRepository.findOneBy({ id: milestoneId });
+  async findOneMilestoneById(userId: string, milestoneId: string): Promise<MilestoneEntity | null> {
+    return await this.milestoneRepository.findOneBy({ id: milestoneId, userId });
   }
 
-  async updateMilestoneById(milestoneId: string, updateMilestoneDto: UpdateMilestoneDto): Promise<MilestoneEntity> {
-    const milestone = await this.findOneMilestoneById(milestoneId);
+  async updateMilestoneById(userId: string, milestoneId: string, updateMilestoneDto: UpdateMilestoneDto): Promise<MilestoneEntity> {
+    const milestone = await this.findOneMilestoneById(userId, milestoneId);
     if (!milestone) {
       throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
     }
@@ -47,8 +46,8 @@ export class MilestonesService {
     });
   }
 
-  async removeMilestoneById(milestoneId: string): Promise<MilestoneEntity> {
-    const milestone = await this.findOneMilestoneById(milestoneId);
+  async removeMilestoneById(userId: string, milestoneId: string): Promise<MilestoneEntity> {
+    const milestone = await this.findOneMilestoneById(userId, milestoneId);
     if (!milestone) {
       throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
     }

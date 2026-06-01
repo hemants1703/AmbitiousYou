@@ -86,7 +86,7 @@ export type Milestone = {
   updatedAt: Date | null;
 };
 
-export type NewMilestone = Pick<Milestone, "userId" | "ambitionId" | "milestone" | "milestoneTargetDate"> & Partial<Pick<Milestone, "milestoneDescription" | "milestoneCompleted">>;
+export type NewMilestone = Pick<Milestone, "ambitionId" | "milestone" | "milestoneTargetDate"> & Partial<Pick<Milestone, "milestoneDescription" | "milestoneCompleted">>;
 
 // Note types
 export type Note = {
