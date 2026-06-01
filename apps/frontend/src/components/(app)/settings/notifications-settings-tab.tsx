@@ -1,33 +1,85 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+"use client";
 
-import { DetailItem, SummaryBlock, dummySettingsByTab, formatDate } from "./settings-shared";
+import { BellIcon, MailIcon } from "lucide-react";
+import { useState } from "react";
+import type { ReactNode } from "react";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+
+interface NotificationRowProps {
+  id: string;
+  icon: ReactNode;
+  label: string;
+  description: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}
+
+function NotificationRow(props: NotificationRowProps) {
+  return (
+    <div className="flex items-start justify-between gap-4 rounded-2xl border border-border/60 bg-background/50 p-4">
+      <div className="flex min-w-0 items-start gap-3">
+        <div className="mt-0.5 shrink-0 text-muted-foreground">{props.icon}</div>
+        <div className="min-w-0 space-y-0.5">
+          <Label htmlFor={props.id} className="cursor-pointer text-sm font-medium text-foreground">
+            {props.label}
+          </Label>
+          <p className="text-xs text-muted-foreground">{props.description}</p>
+        </div>
+      </div>
+      <Switch
+        id={props.id}
+        checked={props.checked}
+        onCheckedChange={props.onCheckedChange}
+        aria-label={props.label}
+        className="mt-0.5 shrink-0"
+      />
+    </div>
+  );
+}
 
 export function NotificationsSettingsTab() {
-  const settings = dummySettingsByTab.notifications;
+  const [emailActivity, setEmailActivity] = useState(true);
+  const [ambitionReminders, setAmbitionReminders] = useState(false);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Notifications settings</CardTitle>
-        <CardDescription>Dummy data shaped from the shared Settings type.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          <SummaryBlock label="Settings ID" value={settings.id} />
-          <SummaryBlock label="User ID" value={settings.userId} />
-          <SummaryBlock label="Timezone" value={settings.userTimezone} />
-        </div>
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BellIcon className="size-4 text-primary" />
+            Notification preferences
+          </CardTitle>
+          <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <NotificationRow
+            id="email-activity"
+            icon={<MailIcon className="size-4" />}
+            label="Email account activity"
+            description="Receive emails about sign-ins, profile changes, and security events."
+            checked={emailActivity}
+            onCheckedChange={setEmailActivity}
+          />
+          <NotificationRow
+            id="ambition-reminders"
+            icon={<BellIcon className="size-4" />}
+            label="Ambition reminders"
+            description="Push notifications when deadlines are approaching or milestones are due."
+            checked={ambitionReminders}
+            onCheckedChange={setAmbitionReminders}
+          />
+        </CardContent>
+      </Card>
 
-        <Separator />
-
-        <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <DetailItem label="Email account activity" value={settings.emailAccountActivity ? "Enabled" : "Disabled"} />
-          <DetailItem label="Push ambition reminders" value={settings.pushAmbitionReminders ? "Enabled" : "Disabled"} />
-          <DetailItem label="Created" value={formatDate(settings.createdAt)} />
-          <DetailItem label="Updated" value={formatDate(settings.updatedAt)} />
-        </dl>
-      </CardContent>
-    </Card>
+      <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+        <p className="text-xs text-muted-foreground">
+          <span className="font-medium text-foreground">Preferences are not saved yet&nbsp;—&nbsp;</span>
+          backend persistence for notifications is coming soon.
+        </p>
+      </div>
+    </div>
   );
 }

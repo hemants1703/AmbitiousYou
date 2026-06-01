@@ -1,9 +1,7 @@
-import type { ComponentType } from "react";
-import Link from "next/link";
-import { BellIcon, CreditCardIcon, LockKeyholeIcon, UserRoundIcon } from "lucide-react";
-
 import type { User } from "@ambitiousyou/shared";
-
+import { BellIcon, CreditCardIcon, LockKeyholeIcon, UserRoundIcon } from "lucide-react";
+import Link from "next/link";
+import type { ComponentType } from "react";
 import { AccountSettingsTab } from "./account-settings-tab";
 import { BillingSettingsTab } from "./billing-settings-tab";
 import { NotificationsSettingsTab } from "./notifications-settings-tab";
@@ -14,17 +12,19 @@ export type SettingsTabValue = "account" | "billing" | "notifications" | "securi
 interface SettingsTabsProps {
   activeTab: SettingsTabValue;
   userDetails: User;
+  sessionToken: string;
 }
 
 const tabItems: Array<{
   value: SettingsTabValue;
   label: string;
+  description: string;
   icon: ComponentType<{ className?: string }>;
 }> = [
-  { value: "account", label: "Account", icon: UserRoundIcon },
-  { value: "billing", label: "Billing", icon: CreditCardIcon },
-  { value: "notifications", label: "Notifications", icon: BellIcon },
-  { value: "security", label: "Security", icon: LockKeyholeIcon },
+  { value: "account", label: "Account", description: "Profile & identity", icon: UserRoundIcon },
+  { value: "billing", label: "Billing", description: "Plans & payments", icon: CreditCardIcon },
+  { value: "notifications", label: "Notifications", description: "Alerts & reminders", icon: BellIcon },
+  { value: "security", label: "Security", description: "Password & sessions", icon: LockKeyholeIcon },
 ];
 
 export function SettingsTabs(props: SettingsTabsProps) {
@@ -32,30 +32,54 @@ export function SettingsTabs(props: SettingsTabsProps) {
     account: <AccountSettingsTab userDetails={props.userDetails} />,
     billing: <BillingSettingsTab />,
     notifications: <NotificationsSettingsTab />,
-    security: <SecuritySettingsTab />,
+    security: <SecuritySettingsTab sessionToken={props.sessionToken} />,
   } satisfies Record<SettingsTabValue, React.ReactNode>;
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <div className="flex w-fit items-center gap-2 overflow-x-auto rounded-3xl bg-muted p-1 sm:w-fit" role="tablist" aria-label="Settings sections">
-        {tabItems.map((tab) => (
-          <Link
-            key={tab.value}
-            href={tab.value === "account" ? "/settings" : `/settings?tab=${tab.value}`}
-            role="tab"
-            aria-selected={props.activeTab === tab.value}
-            aria-current={props.activeTab === tab.value ? "page" : undefined}
-            className={[
-              "inline-flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-w-32",
-              props.activeTab === tab.value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
-            ].join(" ")}>
-            <tab.icon className="size-4" />
-            <span>{tab.label}</span>
-          </Link>
-        ))}
-      </div>
+    <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-8">
+      <nav aria-label="Settings sections" className="lg:w-52 lg:shrink-0">
+        <div
+          className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-x-visible lg:pb-0"
+          role="tablist"
+        >
+          {tabItems.map((tab) => {
+            const isActive = props.activeTab === tab.value;
+            return (
+              <Link
+                key={tab.value}
+                href={tab.value === "account" ? "/settings" : `/settings?tab=${tab.value}`}
+                role="tab"
+                aria-selected={isActive}
+                aria-current={isActive ? "page" : undefined}
+                className={[
+                  "group flex min-w-fit items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:w-full",
+                  isActive
+                    ? "bg-muted font-medium text-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                ].join(" ")}
+              >
+                <tab.icon className="size-4 shrink-0" />
+                <div className="hidden lg:block">
+                  <p className="leading-tight">{tab.label}</p>
+                  <p
+                    className={[
+                      "text-xs leading-tight",
+                      isActive
+                        ? "text-muted-foreground"
+                        : "text-muted-foreground/60 group-hover:text-muted-foreground/80",
+                    ].join(" ")}
+                  >
+                    {tab.description}
+                  </p>
+                </div>
+                <span className="lg:hidden">{tab.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
 
-      {activePanels[props.activeTab]}
+      <div className="min-w-0 flex-1">{activePanels[props.activeTab]}</div>
     </div>
   );
 }
