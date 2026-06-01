@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ArrowRightIcon, CheckCircleIcon, HeartIcon, RocketIcon, StarIcon, TargetIcon, ZapIcon } from "lucide-react";
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
-import DashboardMockup from "./dashboard-mockup";
+import DashboardPreview from "./dashboard-preview";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -66,7 +66,7 @@ export default function AnimatedHero() {
       {/* Animated App Preview - Using the real dashboard mockup */}
       <div className="mt-16 w-full max-w-5xl mx-auto relative z-10">
         <div className="bg-linear-to-tr from-primary/20 to-secondary/10 rounded-xl p-1 shadow-xl">
-          <DashboardMockup />
+          <DashboardPreview />
         </div>
 
         {/* Animated floating badges */}
