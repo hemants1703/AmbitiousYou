@@ -17,29 +17,27 @@ export class AmbitionsController {
   }
 
   @Get()
-  async findAllAmbitionsFromSessionToken(@Headers('Authorization') authorization: string): Promise<AmbitionEntity[] | null> {
-    const token = authorization.replace(/^Bearer\s+/i, '');
-    return await this.ambitionsService.findAllAmbitionsFromSessionToken(token);
+  async findAllAmbitionsByUserId(@CurrentUserId() userId: string): Promise<AmbitionEntity[] | null> {
+    return await this.ambitionsService.findAllAmbitionsByUserId(userId);
   }
 
   @Get(':ambitionId/details')
-  async findAmbitionDetailsBySessionTokenAndId(@Headers('Authorization') authorization: string, @Param('ambitionId') ambitionId: string): Promise<AmbitionEntity | null> {
-    const token = authorization.replace(/^Bearer\s+/i, '');
-    return await this.ambitionsService.findAmbitionDetailsBySessionTokenAndId(token, ambitionId);
+  async findAmbitionDetailsByUserIdAndId(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string): Promise<AmbitionEntity | null> {
+    return await this.ambitionsService.findAmbitionDetailsByUserIdAndId(userId, ambitionId);
   }
 
   @Get(':ambitionId')
-  async findOneAmbitionById(@Param('ambitionId') ambitionId: string): Promise<AmbitionEntity | null> {
-    return await this.ambitionsService.findOneAmbitionById(ambitionId);
+  async findOneAmbitionById(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string): Promise<AmbitionEntity | null> {
+    return await this.ambitionsService.findOneAmbitionById(userId, ambitionId);
   }
 
   @Patch(':ambitionId')
-  async updateAmbitionById(@Param('ambitionId') ambitionId: string, @Body() updateAmbitionDto: UpdateAmbitionDto): Promise<AmbitionEntity> {
-    return await this.ambitionsService.updateAmbitionById(ambitionId, updateAmbitionDto);
+  async updateAmbitionById(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string, @Body() updateAmbitionDto: UpdateAmbitionDto): Promise<AmbitionEntity> {
+    return await this.ambitionsService.updateAmbitionById(userId, ambitionId, updateAmbitionDto);
   }
 
   @Delete(':ambitionId')
-  async removeAmbitionById(@Param('ambitionId') ambitionId: string): Promise<AmbitionEntity> {
-    return await this.ambitionsService.removeAmbitionById(ambitionId);
+  async removeAmbitionById(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string): Promise<AmbitionEntity> {
+    return await this.ambitionsService.removeAmbitionById(userId, ambitionId);
   }
 }

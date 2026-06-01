@@ -76,31 +76,22 @@ export class AmbitionsService {
     });
   }
 
-  async findAllAmbitionsFromSessionToken(sessionToken: string): Promise<AmbitionEntity[] | null> {
+  async findAllAmbitionsByUserId(userId: string): Promise<AmbitionEntity[] | null> {
     const ambitions = await this.entityManager
       .getRepository(AmbitionEntity)
       .createQueryBuilder('ambition')
-      .innerJoin('sessions', 'session', 'session.user_id = ambition.user_id')
-      .innerJoin('users', 'user', 'user.id = session.user_id')
-      .where('session.token = :sessionToken', { sessionToken })
+      .where('ambition.user_id = :userId', { userId })
       .orderBy('ambition.created_at', 'DESC')
       .getMany();
 
     return ambitions.length ? ambitions : null;
   }
 
-  async findAmbitionDetailsBySessionTokenAndId(sessionToken: string, ambitionId: string): Promise<AmbitionEntity | null> {
+  async findAmbitionDetailsByUserIdAndId(userId: string, ambitionId: string): Promise<AmbitionEntity | null> {
     const ambition = await this.entityManager
       .getRepository(AmbitionEntity)
       .createQueryBuilder('ambition')
-      .innerJoin('sessions', 'session', 'session.user_id = ambition.user_id')
-      .innerJoin('users', 'user', 'user.id = session.user_id')
-      .leftJoinAndMapMany('ambition.tasks', TaskEntity, 'task', 'task.ambition_id = ambition.id AND ambition.ambition_tracking_method = :taskTrackingMethod', { taskTrackingMethod: 'task' })
-      .leftJoinAndMapMany('ambition.milestones', MilestoneEntity, 'milestone', 'milestone.ambition_id = ambition.id AND ambition.ambition_tracking_method = :milestoneTrackingMethod', {
-        milestoneTrackingMethod: 'milestone',
-      })
-      .leftJoinAndMapMany('ambition.notes', NoteEntity, 'note', 'note.ambition_id = ambition.id')
-      .where('session.token = :sessionToken', { sessionToken })
+      .where('ambition.user_id = :userId', { userId })
       .andWhere('ambition.id = :ambitionId', { ambitionId })
       .getOne();
 
@@ -117,12 +108,12 @@ export class AmbitionsService {
     return ambition;
   }
 
-  async findOneAmbitionById(ambitionId: string): Promise<AmbitionEntity | null> {
-    return await this.ambitionsRepository.findOne({ where: { id: ambitionId } });
+  async findOneAmbitionById(userId: string, ambitionId: string): Promise<AmbitionEntity | null> {
+    return await this.ambitionsRepository.findOne({ where: { id: ambitionId, userId } });
   }
 
-  async updateAmbitionById(ambitionId: string, updateAmbitionDto: UpdateAmbitionDto): Promise<AmbitionEntity> {
-    const ambition = await this.findOneAmbitionById(ambitionId);
+  async updateAmbitionById(userId: string, ambitionId: string, updateAmbitionDto: UpdateAmbitionDto): Promise<AmbitionEntity> {
+    const ambition = await this.findOneAmbitionById(userId, ambitionId);
     if (!ambition) {
       throw new BadRequestException(`Ambition with id ${ambitionId} not found`);
     }
@@ -137,8 +128,8 @@ export class AmbitionsService {
     });
   }
 
-  async removeAmbitionById(id: string): Promise<AmbitionEntity> {
-    const ambition = await this.findOneAmbitionById(id);
+  async removeAmbitionById(userId: string, id: string): Promise<AmbitionEntity> {
+    const ambition = await this.findOneAmbitionById(userId, id);
     if (!ambition) {
       throw new BadRequestException(`Ambition with id ${id} not found`);
     }

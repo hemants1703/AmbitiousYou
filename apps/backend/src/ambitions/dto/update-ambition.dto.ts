@@ -1,8 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAmbitionDto } from './create-ambition.dto';
 import { IsBoolean, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { CreateAmbitionDto } from './create-ambition.dto';
 
-export class UpdateAmbitionDto extends PartialType(CreateAmbitionDto) {
+export class UpdateAmbitionDto extends CreateAmbitionDto {
   @IsString()
   @IsNotEmpty()
   ambitionName: string = '';
