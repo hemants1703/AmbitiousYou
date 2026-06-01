@@ -5,11 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AmbitionDetails, getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { getUser } from "@/lib/api/sidebar/get-user";
 import { getSessionToken } from "@/lib/auth";
-import { ChevronLeftIcon } from "lucide-react";
+import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon, RouteIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
-import { cache } from "react";
+import { cache, type ReactNode } from "react";
 
 interface EditAmbitionPageProps {
   params: Promise<{ ambitionId: string }>;
@@ -49,6 +49,7 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
   }
 
   const dateWindowLabel = `${formatDate(ambition.ambitionStartDate)} – ${formatDate(ambition.ambitionEndDate)}`;
+  const trackingLabel = ambition.ambitionTrackingMethod === "task" ? "Task based" : "Milestone based";
 
   return (
     <div className="mx-auto flex w-full max-w-350 flex-col">
@@ -68,8 +69,8 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
         </div>
       </MotionWrapper>
 
-      <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
-        <Card>
+      <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="grid items-start gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
           <CardContent className="py-2">
             <EditAmbitionForm
               ambitionId={ambition.id}
@@ -80,11 +81,56 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
               ambitionTrackingMethod={ambition.ambitionTrackingMethod}
               ambitionStartDate={new Date(ambition.ambitionStartDate).toISOString()}
               ambitionEndDate={new Date(ambition.ambitionEndDate).toISOString()}
-              dateWindowLabel={dateWindowLabel}
             />
           </CardContent>
         </Card>
+
+        <aside aria-label="Fixed at creation" className="lg:col-span-1">
+          <Card className="bg-muted/30">
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-2">
+                <LockIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <h2 className="text-sm font-semibold tracking-tight">Fixed at creation</h2>
+              </div>
+              <p className="text-sm text-muted-foreground">A few things lock in when an ambition is created and can&rsquo;t be changed here.</p>
+
+              <div className="space-y-3">
+                <LockedDetail icon={<RouteIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />} label="Tracking method" value={trackingLabel} />
+                <LockedDetail icon={<CalendarRangeIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />} label="Active window" value={dateWindowLabel} />
+              </div>
+
+              <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
+                <ListChecksIcon className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+                <span>
+                  Manage individual {ambition.ambitionTrackingMethod === "task" ? "tasks" : "milestones"} from the{" "}
+                  <Link prefetch={true} href={`/ambitions/${ambition.id}`} className="font-medium text-foreground underline-offset-4 hover:underline">
+                    detail page
+                  </Link>
+                  .
+                </span>
+              </p>
+            </CardContent>
+          </Card>
+        </aside>
       </MotionWrapper>
+    </div>
+  );
+}
+
+interface LockedDetailProps {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}
+
+function LockedDetail(props: LockedDetailProps) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-background/60 px-3 py-2.5">
+      {props.icon}
+      <div className="min-w-0">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{props.label}</p>
+        <p className="truncate text-sm font-medium">{props.value}</p>
+      </div>
     </div>
   );
 }

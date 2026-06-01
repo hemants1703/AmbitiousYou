@@ -1,8 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateNoteDto } from './create-note.dto';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateNoteDto extends PartialType(CreateNoteDto) {
+// Editing a note only changes its text, so we validate `note` on its own here.
+// Extending PartialType(CreateNoteDto) reintroduced `ambitionId` (which defaults to '')
+// and failed @IsNotEmpty on every update, so the standalone shape is intentional.
+export class UpdateNoteDto {
   @IsString()
   @IsNotEmpty()
   note: string = '';

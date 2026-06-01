@@ -75,7 +75,8 @@ export default function NotesDrawer(props: NotesDrawerProps) {
       setEditingText("");
 
       try {
-        const result = await updateNoteAction(noteId, text);
+        const noteAmbitionId = snapshotNotes.find((n) => n.id === noteId)?.ambitionId ?? props.ambitionId;
+        const result = await updateNoteAction(noteId, text, noteAmbitionId);
         if (result.error) {
           setError(result.error);
           setLocalNotes(snapshotNotes);

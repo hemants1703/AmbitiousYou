@@ -1,28 +1,23 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
-import { CreateMilestoneDto } from './create-milestone.dto';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class UpdateMilestoneDto extends PartialType(CreateMilestoneDto) {
-  @IsString()
-  @IsNotEmpty()
-  userId: string = '';
-
-  @IsString()
-  @IsNotEmpty()
-  ambitionId: string = '';
-
+// Standalone on purpose: extending PartialType(CreateMilestoneDto) pulled in `ambitionId`
+// (which defaults to '') and failed @IsNotEmpty on every update, since the update body
+// never resends it. A milestone update only touches the fields below.
+export class UpdateMilestoneDto {
   @IsString()
   @IsNotEmpty()
   milestone: string = '';
 
   @IsString()
-  milestoneDescription: string = '';
+  @IsOptional()
+  milestoneDescription?: string;
 
   @IsBoolean()
-  @IsNotEmpty()
   milestoneCompleted: boolean = false;
 
   @IsDate()
   @IsNotEmpty()
+  @Type(() => Date)
   milestoneTargetDate: Date = new Date();
 }

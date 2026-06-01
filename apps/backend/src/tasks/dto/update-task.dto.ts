@@ -1,21 +1,23 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTaskDto } from './create-task.dto';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class UpdateTaskDto extends PartialType(CreateTaskDto) {
-  @IsNotEmpty()
+// Standalone on purpose: extending PartialType(CreateTaskDto) pulled in `ambitionId`
+// (which defaults to '') and failed @IsNotEmpty on every update, since the update body
+// never resends it. A task update only touches the fields below.
+export class UpdateTaskDto {
   @IsString()
+  @IsNotEmpty()
   task: string = '';
 
-  @IsNotEmpty()
   @IsString()
-  taskDescription: string = '';
+  @IsOptional()
+  taskDescription?: string;
 
-  @IsNotEmpty()
   @IsBoolean()
   taskCompleted: boolean = false;
 
+  @IsDate()
   @IsNotEmpty()
-  @IsString()
+  @Type(() => Date)
   taskDeadline: Date = new Date();
 }

@@ -1,12 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import type { Ambition, Milestone, Note, Task, User } from "@ambitiousyou/shared/types";
-import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, ListTodoIcon, NotebookPenIcon, TimerResetIcon } from "lucide-react";
+import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, NotebookPenIcon, TimerResetIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-card";
-import CompletedDrawer from "./completed-drawer";
+import ExecutionBoard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board";
 
 type AmbitionDetailsSectionProps = {
   user: User;
@@ -66,64 +65,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ListTodoIcon className="size-4 text-primary" />
-              Execution Board
-            </CardTitle>
-            <CardDescription>{props.ambition.ambitionTrackingMethod === "task" ? "Tasks" : "Milestones"} organized to surface open work before completed items.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Open</p>
-                <Badge variant="outline">{openItems.length}</Badge>
-              </div>
-              {prioritizedOpenItems.length === 0 ? (
-                <p className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">No open items right now.</p>
-              ) : (
-                prioritizedOpenItems.map((item) => {
-                  const daysUntil = getDaysUntil(getItemDate(item));
-
-                  return (
-                    <div key={item.id} className="rounded-2xl border border-border/60 p-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="line-clamp-1 font-medium wrap-break-word">{getItemTitle(item)}</p>
-                          <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{getItemDescription(item) || "No description provided."}</p>
-                        </div>
-                        <Badge variant="outline" className={daysUntil < 0 ? "border-destructive/30 bg-destructive/10 text-destructive" : ""}>
-                          {daysUntil < 0 ? "Overdue" : "Upcoming"}
-                        </Badge>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Completed</p>
-                <Badge variant="outline">{completedItems.length}</Badge>
-              </div>
-              {completedItems.length === 0 ? (
-                <p className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">No completed items yet.</p>
-              ) : (
-                <>
-                  <div className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">
-                    <p className="font-medium">{getItemTitle(completedItems[0])}</p>
-                    <p className="text-sm">{getItemDescription(completedItems[0])}</p>
-                  </div>
-                  <CompletedDrawer items={completedItems} ambitionName={props.ambition.ambitionName} />
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <ExecutionBoard ambitionId={props.ambition.id} trackingMethod={props.ambition.ambitionTrackingMethod} tasks={props.tasks} milestones={props.milestones} />
       </div>
 
       <div className="space-y-6">

@@ -2,7 +2,7 @@
 
 import { getSessionToken } from "@/lib/auth";
 
-export async function updateNoteAction(noteId: string, noteText: string): Promise<{ error: string | null }> {
+export async function updateNoteAction(noteId: string, noteText: string, ambitionId: string): Promise<{ error: string | null }> {
   const sessionToken = await getSessionToken();
 
   const response = await fetch(`${process.env.API_URL}/notes/${noteId}`, {
@@ -11,7 +11,7 @@ export async function updateNoteAction(noteId: string, noteText: string): Promis
       "Content-Type": "application/json",
       Authorization: `Bearer ${sessionToken}`,
     },
-    body: JSON.stringify({ note: noteText }),
+    body: JSON.stringify({ note: noteText, ambitionId }),
   });
 
   if (!response.ok) {
