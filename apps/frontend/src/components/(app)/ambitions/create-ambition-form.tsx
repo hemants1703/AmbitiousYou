@@ -17,6 +17,8 @@ import { useActionState, useState, type ComponentProps, type ReactNode } from "r
 import type { DateRange } from "react-day-picker";
 import { format, parseISO } from "date-fns";
 
+const AMBITION_NAME_MAX_LENGTH = 80;
+
 type TrackingMethod = "task" | "milestone";
 type Priority = "low" | "medium" | "high";
 
@@ -167,10 +169,17 @@ export default function CreateAmbitionForm() {
         <section className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <FieldLabel htmlFor="ambitionName" tooltip="Use a short outcome-focused title. This is what appears in lists and cards.">
-                Ambition name
-              </FieldLabel>
-              <Input id="ambitionName" name="ambitionName" value={ambitionName} onChange={(event) => setAmbitionName(event.target.value)} placeholder="Launch a focused morning routine…" autoComplete="off" spellCheck={false} required />
+              <div className="flex items-center justify-between gap-2">
+                <FieldLabel htmlFor="ambitionName" tooltip="Use a short outcome-focused title. This is what appears in lists and cards.">
+                  Ambition name
+                </FieldLabel>
+                {ambitionName.length >= AMBITION_NAME_MAX_LENGTH - 20 ? (
+                  <span className="text-xs tabular-nums text-muted-foreground" aria-live="polite">
+                    {ambitionName.length}/{AMBITION_NAME_MAX_LENGTH}
+                  </span>
+                ) : null}
+              </div>
+              <Input id="ambitionName" name="ambitionName" value={ambitionName} onChange={(event) => setAmbitionName(event.target.value)} placeholder="Launch a focused morning routine…" autoComplete="off" spellCheck={false} maxLength={AMBITION_NAME_MAX_LENGTH} required />
             </div>
 
             <div className="grid grid-cols-2 gap-4">

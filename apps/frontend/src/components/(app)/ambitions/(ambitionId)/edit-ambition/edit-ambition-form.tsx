@@ -13,6 +13,8 @@ import { CircleHelpIcon, Loader2Icon, SaveIcon } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useEffect, useState, type ComponentProps, type MouseEvent } from "react";
 
+const AMBITION_NAME_MAX_LENGTH = 80;
+
 type Priority = "low" | "medium" | "high";
 
 interface EditAmbitionFormProps {
@@ -100,35 +102,29 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
       <input name="ambitionEndDate" type="hidden" value={props.ambitionEndDate} />
 
       <section className="space-y-4">
-        <div className="space-y-2">
-          <FieldLabel htmlFor="ambitionName" tooltip="Use a short, outcome-focused title. This is what appears in your lists and cards.">
-            Ambition name
-          </FieldLabel>
-          <Input
-            id="ambitionName"
-            name="ambitionName"
-            value={ambitionName}
-            onChange={(event) => setAmbitionName(event.target.value)}
-            placeholder="Launch a focused morning routine…"
-            autoComplete="off"
-            spellCheck={false}
-            required
-          />
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <FieldLabel htmlFor="ambitionDefinition" tooltip="Optional context that explains the why behind the goal.">
-              Definition
-            </FieldLabel>
-            <Textarea
-              id="ambitionDefinition"
-              name="ambitionDefinition"
-              value={ambitionDefinition}
-              onChange={(event) => setAmbitionDefinition(event.target.value)}
-              placeholder="What does success look like? (Optional field)"
-              rows={4}
-              spellCheck
+            <div className="flex items-center justify-between gap-2">
+              <FieldLabel htmlFor="ambitionName" tooltip="Use a short, outcome-focused title. This is what appears in your lists and cards.">
+                Ambition name
+              </FieldLabel>
+              {ambitionName.length >= AMBITION_NAME_MAX_LENGTH - 20 ? (
+                <span className="text-xs tabular-nums text-muted-foreground" aria-live="polite">
+                  {ambitionName.length}/{AMBITION_NAME_MAX_LENGTH}
+                </span>
+              ) : null}
+            </div>
+            <Input
+              id="ambitionName"
+              name="ambitionName"
+              value={ambitionName}
+              onChange={(event) => setAmbitionName(event.target.value)}
+              placeholder="Launch a focused morning routine…"
+              autoComplete="off"
+              spellCheck={false}
+              maxLength={AMBITION_NAME_MAX_LENGTH}
+              autoFocus
+              required
             />
           </div>
 
@@ -150,48 +146,21 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
             </Select.Select>
           </div>
         </div>
-      </section>
 
-      <Separator />
-
-      <section className="space-y-3">
-        <div className="flex items-center gap-1.5">
-          <h2 className="text-sm font-semibold tracking-tight">Fixed at creation</h2>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                aria-label="Fixed at creation help"
-                className="inline-flex size-4 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-                <CircleHelpIcon className="size-3.5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>Tracking method and the active window are locked once an ambition is created.</TooltipContent>
-          </Tooltip>
+        <div className="space-y-2">
+          <FieldLabel htmlFor="ambitionDefinition" tooltip="Optional context that explains the why behind the goal.">
+            Definition
+          </FieldLabel>
+          <Textarea
+            id="ambitionDefinition"
+            name="ambitionDefinition"
+            value={ambitionDefinition}
+            onChange={(event) => setAmbitionDefinition(event.target.value)}
+            placeholder="What does success look like? (Optional field)"
+            rows={5}
+            spellCheck
+          />
         </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3 py-2.5">
-            <RouteIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Tracking method</p>
-              <p className="truncate text-sm font-medium">{trackingLabel}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3 py-2.5">
-            <CalendarRangeIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Active window</p>
-              <p className="truncate text-sm font-medium">{props.dateWindowLabel}</p>
-            </div>
-          </div>
-        </div>
-
-        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <ListChecksIcon className="size-3.5 shrink-0" aria-hidden="true" />
-          Manage individual {props.ambitionTrackingMethod === "task" ? "tasks" : "milestones"} from the ambition&rsquo;s detail page.
-        </p>
       </section>
 
       {state.error ? (

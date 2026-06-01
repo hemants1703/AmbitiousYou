@@ -20,7 +20,7 @@ export function ActiveAmbitionsGrid(props: ActiveAmbitionsGridProps) {
     );
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight">
           <TargetIcon className="size-5 text-primary" />

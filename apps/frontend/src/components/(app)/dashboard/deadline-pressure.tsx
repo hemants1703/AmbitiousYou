@@ -35,7 +35,7 @@ export function DeadlinePressure(props: DeadlinePressureProps) {
       </CardHeader>
       <CardContent>
         {total === 0 ? (
-          <p className="rounded-2xl border border-border/60 bg-muted/20 p-5 text-center text-sm text-muted-foreground">No open items with upcoming deadlines.</p>
+          <p className="rounded-2xl border border-border/60 bg-muted/20 p-6 text-center text-sm text-muted-foreground">No open items with upcoming deadlines.</p>
         ) : (
           <ChartContainer config={chartConfig} className="aspect-auto h-44 w-full">
             <BarChart accessibilityLayer data={data} layout="vertical" margin={{ left: 4, right: 28, top: 2, bottom: 2 }}>
