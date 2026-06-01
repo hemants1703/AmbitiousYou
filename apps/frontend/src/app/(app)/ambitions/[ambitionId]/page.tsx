@@ -1,7 +1,5 @@
 import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
-import { DeleteAmbitionDialog } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/delete-ambition-dialog";
-import EditAmbitionDialog from "@/components/(app)/ambitions/(ambitionId)/ambition-details/edit-ambition-dialog";
 import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/milestones/mark-milestone-as-completed-dialog";
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
@@ -23,8 +21,6 @@ import { cache, type ReactNode } from "react";
 interface AmbitionDetailsPageProps {
   params: Promise<{ ambitionId: string }>;
   searchParams: Promise<{
-    edit_ambition?: string;
-    delete_ambition?: string;
     mark_milestone_as_completed?: string;
     ref?: string | undefined;
   }>;
@@ -182,17 +178,7 @@ function getDaysBetween(startDate: Date | string, endDate: Date | string) {
 
 async function AmbitionDialogs(props: AmbitionDetailsPageProps & { milestones: Milestone[]; ambition: Ambition }) {
   const { ambitionId } = await props.params;
-  const { edit_ambition, delete_ambition, mark_milestone_as_completed } = await props.searchParams;
-
-  // EDIT AMBITION DIALOG
-  if (edit_ambition === ambitionId) {
-    return <EditAmbitionDialog ambition={props.ambition} />;
-  }
-
-  // DELETE AMBITION DIALOG
-  if (delete_ambition === ambitionId) {
-    return <DeleteAmbitionDialog ambitionId={ambitionId} />;
-  }
+  const { mark_milestone_as_completed } = await props.searchParams;
 
   // MARK MILESTONE AS COMPLETED DIALOG
   const concernedMilestone = props.milestones.find((milestone: Milestone) => milestone.id === mark_milestone_as_completed);
@@ -206,6 +192,6 @@ async function AmbitionDialogs(props: AmbitionDetailsPageProps & { milestones: M
   if (milestoneTargetDate >= today) return null;
 
   if (mark_milestone_as_completed && !concernedMilestone.milestoneCompleted) {
-    return <MarkMilestoneAsCompletedDialog milestone={concernedMilestone} ambitionId={ambitionId} />;
+    return <MarkMilestoneAsCompletedDialog ambitionId={ambitionId} />;
   }
 }

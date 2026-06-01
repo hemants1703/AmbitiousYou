@@ -1,23 +1,30 @@
+// "use client";
+
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
+import { DialogStateProps } from "./ambition-options-dropdown";
 
 type DeleteAmbitionDialogProps = {
   ambitionId: string;
+  toggleDeleteDialog: (state: DialogStateProps | undefined) => void;
 };
 
 export function DeleteAmbitionDialog(props: DeleteAmbitionDialogProps) {
   return (
-    <Card className="border-dashed border-destructive/40 bg-background/90 lg:col-span-2">
-      <CardHeader>
-        <CardTitle>Delete ambition</CardTitle>
-        <CardDescription>This dialog is wired to the route state and can host the destructive action next.</CardDescription>
-      </CardHeader>
-      <CardContent className="flex items-center justify-end gap-3">
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/ambitions/${props.ambitionId}`}>Cancel</Link>
-        </Button>
-      </CardContent>
-    </Card>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">Show Dialog</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>This action cannot be undone. This will permanently delete your ambition from our servers.</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => props.toggleDeleteDialog(undefined)}>Cancel</AlertDialogCancel>
+          <AlertDialogAction>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
