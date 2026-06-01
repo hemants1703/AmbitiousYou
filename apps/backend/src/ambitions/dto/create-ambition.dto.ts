@@ -1,10 +1,11 @@
 import { NewAmbition } from '@ambitiousyou/shared';
 import { Type } from 'class-transformer';
-import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateAmbitionDto implements NewAmbition {
   @IsString()
   @IsNotEmpty({ message: 'ambitionName must be a non-empty string' })
+  @MaxLength(80, { message: 'ambitionName must be 80 characters or fewer' })
   ambitionName: string = '';
 
   @IsString()
