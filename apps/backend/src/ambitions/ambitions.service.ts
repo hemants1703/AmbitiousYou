@@ -15,10 +15,11 @@ export class AmbitionsService {
     @InjectEntityManager() private readonly entityManager: EntityManager,
   ) {}
 
-  async createAmbition(createAmbitionDto: CreateAmbitionWithItemsDto): Promise<AmbitionEntity> {
+  async createAmbition(userId: string, createAmbitionDto: CreateAmbitionWithItemsDto): Promise<AmbitionEntity> {
     return await this.entityManager.transaction(async (manager) => {
       const ambition = manager.create(AmbitionEntity, {
         ...createAmbitionDto,
+        userId,
         ambitionStatus: 'active',
         ambitionPercentageCompleted: 0,
         createdAt: new Date(),
@@ -31,7 +32,7 @@ export class AmbitionsService {
         const tasks = createAmbitionDto.tasks.map((task) =>
           manager.create(TaskEntity, {
             ...task,
-            userId: createAmbitionDto.userId,
+            userId,
             ambitionId: savedAmbition.id,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -46,7 +47,7 @@ export class AmbitionsService {
         const milestones = createAmbitionDto.milestones.map((milestone) =>
           manager.create(MilestoneEntity, {
             ...milestone,
-            userId: createAmbitionDto.userId,
+            userId,
             ambitionId: savedAmbition.id,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -61,7 +62,7 @@ export class AmbitionsService {
         const notes = createAmbitionDto.notes.map((note) =>
           manager.create(NoteEntity, {
             ...note,
-            userId: createAmbitionDto.userId,
+            userId,
             ambitionId: savedAmbition.id,
             createdAt: new Date(),
             updatedAt: new Date(),

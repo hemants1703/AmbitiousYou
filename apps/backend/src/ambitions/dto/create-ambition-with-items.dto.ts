@@ -6,9 +6,9 @@ import { CreateNoteDto } from 'src/notes/dto/create-note.dto';
 import { CreateMilestoneDto } from 'src/milestones/dto/create-milestone.dto';
 import { CreateAmbitionDto } from './create-ambition.dto';
 
-export class CreateAmbitionTaskDto extends OmitType(CreateTaskDto, ['userId', 'ambitionId'] as const) {}
+export class CreateAmbitionTaskDto extends OmitType(CreateTaskDto, ['ambitionId'] as const) {}
 
-export class CreateAmbitionMilestoneDto extends OmitType(CreateMilestoneDto, ['userId', 'ambitionId'] as const) {}
+export class CreateAmbitionMilestoneDto extends OmitType(CreateMilestoneDto, ['ambitionId'] as const) {}
 
 export class CreateAmbitionNoteDto extends OmitType(CreateNoteDto, ['ambitionId'] as const) {}
 

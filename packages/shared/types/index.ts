@@ -55,7 +55,7 @@ export type Ambition = {
   updatedAt: Date | null;
 };
 
-export type NewAmbition = Pick<Ambition, "userId" | "ambitionName" | "ambitionTrackingMethod" | "ambitionStartDate" | "ambitionEndDate"> &
+export type NewAmbition = Pick<Ambition, "ambitionName" | "ambitionTrackingMethod" | "ambitionStartDate" | "ambitionEndDate"> &
   Partial<Pick<Ambition, "ambitionDefinition" | "ambitionCompletionDate" | "ambitionStatus" | "ambitionPriority" | "ambitionPercentageCompleted" | "isFavourited">>;
 
 // Task types

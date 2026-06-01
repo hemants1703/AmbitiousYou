@@ -4,10 +4,6 @@ import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAmbitionDto implements NewAmbition {
   @IsString()
-  @IsNotEmpty({ message: 'userId must be a non-empty string' })
-  userId: string = '';
-
-  @IsString()
   @IsNotEmpty({ message: 'ambitionName must be a non-empty string' })
   ambitionName: string = '';
 
