@@ -11,6 +11,12 @@ export const getAmbitions = cache(async (sessionToken: string): Promise<Ambition
     return null;
   }
 
-  const ambitionsData: Ambition[] | null = await ambitions.json();
+  const responseText = await ambitions.text();
+
+  if(!responseText.trim()) {
+    return null;
+  }
+
+  const ambitionsData: Ambition[] = JSON.parse(responseText);
   return ambitionsData;
 });
