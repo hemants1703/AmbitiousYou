@@ -9,10 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { getAmbitionDetails, type AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
+import { getNotes } from "@/lib/api/notes/get-notes";
 import { getUser } from "@/lib/api/sidebar/get-user";
 import { getSessionToken } from "@/lib/auth";
 import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, StarIcon } from "lucide-react";
+import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect, RedirectType } from "next/navigation";
@@ -56,14 +57,18 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   const { ambitionId } = await props.params;
   const searchParams = await props.searchParams;
 
-  const ambition = await getAmbitionData(sessionToken, ambitionId);
+  const [ambition, fetchedNotes] = await Promise.all([
+    getAmbitionData(sessionToken, ambitionId),
+    getNotes(sessionToken, ambitionId),
+  ]);
+
   if (!ambition) {
     throw new Error(`Failed to fetch ambition ${ambitionId}`);
   }
 
   const tasks: Task[] = ambition.ambitionTrackingMethod === "task" ? (ambition.tasks ?? []) : [];
   const milestones: Milestone[] = ambition.ambitionTrackingMethod === "milestone" ? (ambition.milestones ?? []) : [];
-  const notes: Note[] = ambition.notes ?? [];
+  const notes: Note[] = fetchedNotes;
   const trackedItems = ambition.ambitionTrackingMethod === "task" ? tasks : milestones;
 
   const completedItems = trackedItems.filter((item) => ("taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted)).length;
@@ -85,11 +90,11 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
           </Button>
 
           <div className="ml-auto hidden sm:block">
-            <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
+            <AmbitionOptionsDropdown ambitionId={ambition.id} ambitionName={ambition.ambitionName} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
           </div>
 
           <div className="sm:hidden">
-            <AmbitionOptionsDropdown ambitionId={ambition.id} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
+            <AmbitionOptionsDropdown ambitionId={ambition.id} ambitionName={ambition.ambitionName} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
           </div>
         </div>
 
@@ -102,7 +107,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
                   <div className="space-y-2">
                     <h1 className="line-clamp-2 text-2xl font-bold tracking-tight text-balance sm:text-3xl lg:text-4xl">
                       {ambition.ambitionName}
-                      {ambition.isFavourited ? <StarIcon className="ml-2 inline-flex size-7 fill-yellow-500 text-yellow-500 align-text-bottom" aria-label="Favourited ambition" /> : null}
+                      {ambition.isFavourited ? <HeartIcon className="ml-2 inline-flex size-7 fill-pink-500 text-pink-500 align-text-bottom" aria-label="Favourited ambition" /> : null}
                     </h1>
                     <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">{ambition.ambitionDefinition || "A clear destination. Keep momentum, complete key work, and turn this ambition into a measurable outcome."}</p>
                   </div>

@@ -1,6 +1,5 @@
 "use server";
 
-import { getUser } from "@/lib/api/sidebar/get-user";
 import { getSessionToken } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -122,13 +121,6 @@ function parseNotes(formData: FormData): CreateNotePayload[] {
 
 export async function createAmbitionAction(_: CreateAmbitionState, formData: FormData): Promise<CreateAmbitionState> {
   const sessionToken = await getSessionToken();
-  const user = await getUser(sessionToken);
-
-  if (!user) {
-    return {
-      error: "Unable to resolve your account. Please sign in again.",
-    };
-  }
 
   const ambitionName = readString(formData, "ambitionName");
   const ambitionDefinition = readString(formData, "ambitionDefinition");
@@ -166,7 +158,6 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
   }
 
   const payload = {
-    userId: user.id,
     ambitionName,
     ambitionDefinition,
     ambitionTrackingMethod,

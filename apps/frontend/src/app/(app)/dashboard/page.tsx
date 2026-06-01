@@ -1,16 +1,44 @@
-import { ChartAreaInteractive } from "@/components/chart-area-interactive";
-import { DataTable } from "@/components/data-table";
-import { SectionCards } from "@/components/section-cards";
-import data from "./data.json";
+import { ActiveAmbitionsGrid } from "@/components/(app)/dashboard/active-ambitions-grid";
+import { DashboardEmptyState } from "@/components/(app)/dashboard/dashboard-empty-state";
+import { DashboardInsights } from "@/components/(app)/dashboard/dashboard-insights";
+import { DashboardSkeleton } from "@/components/(app)/dashboard/dashboard-skeleton";
+import { DashboardStats } from "@/components/(app)/dashboard/dashboard-stats";
+import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
+import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
+import { getUser } from "@/lib/api/sidebar/get-user";
+import { getSessionToken } from "@/lib/auth";
+import { Metadata } from "next";
+import { redirect, RedirectType } from "next/navigation";
+import { Suspense } from "react";
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
+
+export default async function DashboardPage() {
+  const sessionToken = await getSessionToken();
+  const [userDetails, ambitions] = await Promise.all([getUser(sessionToken), getAmbitions(sessionToken)]);
+
+  if (!userDetails) {
+    return redirect("/login", RedirectType.replace);
+  }
+
+  const firstName = userDetails.name.trim().split(/\s+/)[0] || userDetails.name;
+
+  if (!ambitions || ambitions.length === 0) {
+    return <DashboardEmptyState firstName={firstName} />;
+  }
+
   return (
-    <>
-      <SectionCards />
-      <div className="px-4 lg:px-6">
-        <ChartAreaInteractive />
-      </div>
-      <DataTable data={data} />
-    </>
+    <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
+      <WelcomeHeader user={userDetails} ambitions={ambitions} />
+      <DashboardStats ambitions={ambitions} />
+
+      <Suspense fallback={<DashboardSkeleton />}>
+        <DashboardInsights sessionToken={sessionToken} ambitions={ambitions} />
+      </Suspense>
+
+      <ActiveAmbitionsGrid ambitions={ambitions} />
+    </div>
   );
 }

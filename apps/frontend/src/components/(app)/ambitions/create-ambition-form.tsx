@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { ArrowRightIcon, CalendarIcon, CircleHelpIcon, FlameIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useActionState, useState, type ComponentProps, type ReactNode } from "react";
 import type { DateRange } from "react-day-picker";
-import { addDays, format, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 type TrackingMethod = "task" | "milestone";
 type Priority = "low" | "medium" | "high";
@@ -34,11 +34,6 @@ type MilestoneDraft = {
   milestoneTargetDate: string;
 };
 
-type NoteDraft = {
-  id: string;
-  note: string;
-};
-
 type FieldLabelProps = Omit<ComponentProps<typeof Label>, "children"> & {
   children: string;
   tooltip: string;
@@ -55,7 +50,7 @@ function createTaskDraft(): TaskDraft {
     id: crypto.randomUUID(),
     task: "",
     taskDescription: "",
-    taskDeadline: toDateInputValue(addDays(new Date(), 7)),
+    taskDeadline: "",
   };
 }
 
@@ -64,14 +59,7 @@ function createMilestoneDraft(): MilestoneDraft {
     id: crypto.randomUUID(),
     milestone: "",
     milestoneDescription: "",
-    milestoneTargetDate: toDateInputValue(addDays(new Date(), 14)),
-  };
-}
-
-function createNoteDraft(): NoteDraft {
-  return {
-    id: crypto.randomUUID(),
-    note: "",
+    milestoneTargetDate: "",
   };
 }
 
@@ -135,15 +123,11 @@ export default function CreateAmbitionForm() {
   const [priority, setPriority] = useState<Priority>("medium");
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 30),
-  });
-  const [startDate, setStartDate] = useState(() => toDateInputValue(dateRange?.from ?? new Date()));
-  const [endDate, setEndDate] = useState(() => toDateInputValue(dateRange?.to ?? addDays(new Date(), 30)));
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [tasks, setTasks] = useState<TaskDraft[]>([createTaskDraft()]);
   const [milestones, setMilestones] = useState<MilestoneDraft[]>([createMilestoneDraft()]);
-  const [notes, setNotes] = useState<NoteDraft[]>([]);
 
   const updateTask = (id: string, field: keyof Omit<TaskDraft, "id">, value: string) => {
     setTasks((current) => current.map((task) => (task.id === id ? { ...task, [field]: value } : task)));
@@ -153,20 +137,12 @@ export default function CreateAmbitionForm() {
     setMilestones((current) => current.map((milestone) => (milestone.id === id ? { ...milestone, [field]: value } : milestone)));
   };
 
-  const updateNote = (id: string, value: string) => {
-    setNotes((current) => current.map((note) => (note.id === id ? { ...note, note: value } : note)));
-  };
-
   const removeTask = (id: string) => {
     setTasks((current) => (current.length > 1 ? current.filter((task) => task.id !== id) : current));
   };
 
   const removeMilestone = (id: string) => {
     setMilestones((current) => (current.length > 1 ? current.filter((milestone) => milestone.id !== id) : current));
-  };
-
-  const removeNote = (id: string) => {
-    setNotes((current) => current.filter((note) => note.id !== id));
   };
 
   const handleDateRangeSelect = (range: DateRange | undefined) => {
@@ -207,8 +183,10 @@ export default function CreateAmbitionForm() {
                     <Select.SelectValue placeholder="Tracking method" />
                   </Select.SelectTrigger>
                   <Select.SelectContent>
-                    <Select.SelectItem value="task">Task based</Select.SelectItem>
-                    <Select.SelectItem value="milestone">Milestone based</Select.SelectItem>
+                    <Select.SelectGroup>
+                      <Select.SelectItem value="task">Task based</Select.SelectItem>
+                      <Select.SelectItem value="milestone">Milestone based</Select.SelectItem>
+                    </Select.SelectGroup>
                   </Select.SelectContent>
                 </Select.Select>
               </div>
@@ -222,9 +200,11 @@ export default function CreateAmbitionForm() {
                     <Select.SelectValue placeholder="Priority" />
                   </Select.SelectTrigger>
                   <Select.SelectContent>
-                    <Select.SelectItem value="low">Low</Select.SelectItem>
-                    <Select.SelectItem value="medium">Medium</Select.SelectItem>
-                    <Select.SelectItem value="high">High</Select.SelectItem>
+                    <Select.SelectGroup>
+                      <Select.SelectItem value="low">Low</Select.SelectItem>
+                      <Select.SelectItem value="medium">Medium</Select.SelectItem>
+                      <Select.SelectItem value="high">High</Select.SelectItem>
+                    </Select.SelectGroup>
                   </Select.SelectContent>
                 </Select.Select>
               </div>
@@ -410,44 +390,6 @@ export default function CreateAmbitionForm() {
               ))}
             </div>
           )}
-        </section>
-
-        <Separator />
-
-        <section className="space-y-4">
-          <SectionHeading
-            title="Notes"
-            tooltip="Add any extra context you want stored with the ambition. Blank notes are ignored on submit."
-            action={
-              <Button type="button" variant="outline" size="sm" onClick={() => setNotes((current) => [...current, createNoteDraft()])}>
-                <PlusIcon className="size-4" />
-                Add note
-              </Button>
-            }
-          />
-
-          <div className="space-y-3">
-            {notes.map((note, index) => (
-              <div key={note.id} className="rounded-2xl border border-border/60 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-muted-foreground">Note {index + 1}</p>
-                  </div>
-
-                  <Button type="button" variant="ghost" size="icon" onClick={() => removeNote(note.id)} aria-label={`Remove note ${index + 1}`} className="size-8 rounded-full">
-                    <Trash2Icon className="size-4" />
-                  </Button>
-                </div>
-
-                <div className="mt-4 space-y-2">
-                  <FieldLabel htmlFor={`notes.${index}.note`} tooltip="Use this for a reminder, constraint, or any extra detail worth keeping.">
-                    Note text
-                  </FieldLabel>
-                  <Textarea id={`notes.${index}.note`} name={`notes.${index}.note`} value={note.note} onChange={(event) => updateNote(note.id, event.target.value)} placeholder="What should future-you remember about this ambition?" rows={3} />
-                </div>
-              </div>
-            ))}
-          </div>
         </section>
 
         {state.error ? (

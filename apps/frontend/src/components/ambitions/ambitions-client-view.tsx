@@ -28,6 +28,10 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
         return false;
       }
 
+      if (filters.favouritesOnly && !ambition.isFavourited) {
+        return false;
+      }
+
       if (searchValue) {
         const searchableText = [ambition.ambitionName, ambition.ambitionDefinition, ambition.ambitionTrackingMethod, ambition.ambitionStatus, ambition.ambitionPriority].filter(Boolean).join(" ").toLowerCase();
 
@@ -38,7 +42,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
 
       return true;
     });
-  }, [filters.priority, filters.search, filters.status, props.ambitions]);
+  }, [filters.favouritesOnly, filters.priority, filters.search, filters.status, props.ambitions]);
 
   return (
     <div className="mx-auto flex max-w-screen-2xl w-full flex-col gap-6">

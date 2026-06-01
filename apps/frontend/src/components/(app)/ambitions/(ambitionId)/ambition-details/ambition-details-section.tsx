@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import type { Ambition, Milestone, Note, Task, User } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, ListTodoIcon, NotebookPenIcon, TimerResetIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import NotesDrawer from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-drawer";
+import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-card";
 import CompletedDrawer from "./completed-drawer";
 
 type AmbitionDetailsSectionProps = {
@@ -155,17 +155,8 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
             <CardTitle>Notes</CardTitle>
             <CardDescription>Keep detailed context available without crowding the main execution view.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {props.notes.length === 0 ? (
-              <p className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">No notes yet for this ambition.</p>
-            ) : (
-              props.notes.slice(0, 2).map((note) => (
-                <div key={note.id} className="rounded-2xl border border-border/60 p-3 text-sm">
-                  <p className="line-clamp-3 wrap-break-word">{note.note}</p>
-                </div>
-              ))
-            )}
-            <NotesDrawer notes={props.notes} ambitionName={props.ambition.ambitionName} />
+          <CardContent>
+            <NotesCard notes={props.notes} ambitionId={props.ambition.id} ambitionName={props.ambition.ambitionName} />
           </CardContent>
         </Card>
       </div>

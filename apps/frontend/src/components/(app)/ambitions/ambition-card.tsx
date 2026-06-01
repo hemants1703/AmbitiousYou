@@ -1,7 +1,7 @@
 import { MotionWrapper } from "@/components/motion-wrapper";
 import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CalendarIcon, ChevronRightIcon, GaugeIcon } from "lucide-react";
+import { CalendarIcon, ChevronRightIcon, GaugeIcon, HeartIcon } from "lucide-react";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
 import { Ambition } from "@ambitiousyou/shared/types";
@@ -20,8 +20,11 @@ export default function AmbitionCard(props: AmbitionCardProps) {
     <div className="ambition-card active:scale-[0.99] active:translate-y-px active:brightness-80">
       <Card.Card className="bg-transparent cursor-pointer">
         <Card.CardHeader>
-          <div className="flex items-center justify-between">
-            <Card.CardTitle className="mt-2 line-clamp-1">{props.ambition.ambitionName}</Card.CardTitle>
+          <div className="flex items-center justify-between gap-2">
+            <div className="mt-2 flex min-w-0 items-center gap-1.5">
+              {props.ambition.isFavourited ? <HeartIcon className="size-4 shrink-0 fill-pink-500 text-pink-500" aria-label="Favourited" /> : null}
+              <Card.CardTitle className="line-clamp-1">{props.ambition.ambitionName}</Card.CardTitle>
+            </div>
             <AmbitionPriorityBadge ambitionPriority={props.ambition.ambitionPriority!} />
           </div>
           <Card.CardDescription className="line-clamp-1">{props.ambition.ambitionDefinition || "\u00A0"}</Card.CardDescription>
