@@ -21,7 +21,7 @@ export default function AnimatedHero() {
 
       <div className="text-center max-w-4xl mx-auto relative z-10">
         {/* Animated Headline */}
-        <h1 className={cn(bricolage.className, "tracking-tight text-5xl md:text-7xl font-extrabold mb-6", "bg-clip-text text-transparent bg-linear-to-r from-primary via-primary/90 to-primary/70 leading-tight")}>
+        <h1 className={cn(bricolage.className, "tracking-tight text-5xl md:text-7xl font-extrabold mb-6", "bg-clip-text text-transparent bg-linear-to-r from-foreground via-foreground/90 to-foreground/70 leading-tight")}>
           For Those Who Dare to Dream Beyond Limits
         </h1>
 
