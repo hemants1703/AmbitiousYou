@@ -75,6 +75,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   return (
     <section className="w-full pb-8">
       <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
+        {/* HEADER */}
         <div className="flex flex-wrap items-center gap-2">
           <Button asChild variant="outline" size="sm" className="rounded-full bg-background/80">
             <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
@@ -92,6 +93,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
           </div>
         </div>
 
+        {/* AMBITION DETAILS */}
         <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
           <Card>
             <CardContent className="space-y-6 px-4 sm:px-6 lg:px-8">
