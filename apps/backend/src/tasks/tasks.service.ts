@@ -44,16 +44,17 @@ export class TasksService {
     return await this.tasksRepository.save(task);
   }
 
-  async markTaskAsCompleted(userId: string, taskId: string): Promise<TaskEntity> {
+  async toggleTaskCompletionStatus(userId: string, taskId: string): Promise<TaskEntity> {
     const task = await this.tasksRepository.findOne({ where: { id: taskId, userId } });
     if (!task) {
       throw new BadRequestException('Task not found');
     }
 
-    task.taskCompleted = !task.taskCompleted;
-    task.updatedAt = new Date();
-
-    return await this.tasksRepository.save(task);
+    return await this.tasksRepository.save({
+      ...task,
+      taskCompleted: !task.taskCompleted,
+      updatedAt: new Date(),
+    });
   }
 
   async removeTaskById(userId: string, taskId: string): Promise<TaskEntity> {

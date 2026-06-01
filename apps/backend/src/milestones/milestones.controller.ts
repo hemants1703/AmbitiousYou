@@ -31,6 +31,11 @@ export class MilestonesController {
     return await this.milestonesService.updateMilestoneById(userId, milestoneId, updateMilestoneDto);
   }
 
+  @Patch(':milestoneId/toggle-completion')
+  async toggleMilestoneCompletionStatus(@CurrentUserId() userId: string, @Param('milestoneId') milestoneId: string): Promise<MilestoneEntity> {
+    return await this.milestonesService.toggleMilestoneCompletionStatus(userId, milestoneId);
+  }
+
   @Delete(':milestoneId')
   async removeMilestoneById(@CurrentUserId() userId: string, @Param('milestoneId') milestoneId: string): Promise<MilestoneEntity> {
     return await this.milestonesService.removeMilestoneById(userId, milestoneId);

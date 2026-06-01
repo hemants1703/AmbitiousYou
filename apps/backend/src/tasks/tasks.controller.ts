@@ -31,9 +31,9 @@ export class TasksController {
     return await this.tasksService.updateTaskById(userId, taskId, updateTaskDto);
   }
 
-  @Patch(':taskId/mark-completed')
-  async markTaskAsCompleted(@CurrentUserId() userId: string, @Param('taskId') taskId: string): Promise<TaskEntity> {
-    return await this.tasksService.markTaskAsCompleted(userId, taskId);
+  @Patch(':taskId/toggle-completion')
+  async toggleTaskCompletionStatus(@CurrentUserId() userId: string, @Param('taskId') taskId: string): Promise<TaskEntity> {
+    return await this.tasksService.toggleTaskCompletionStatus(userId, taskId);
   }
 
   @Delete(':taskId')

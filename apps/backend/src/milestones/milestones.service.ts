@@ -46,6 +46,19 @@ export class MilestonesService {
     });
   }
 
+  async toggleMilestoneCompletionStatus(userId: string, milestoneId: string): Promise<MilestoneEntity> {
+    const milestone = await this.findOneMilestoneById(userId, milestoneId);
+    if (!milestone) {
+      throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
+    }
+
+    return await this.milestoneRepository.save({
+      ...milestone,
+      milestoneCompleted: !milestone.milestoneCompleted,
+      updatedAt: new Date(),
+    });
+  }
+
   async removeMilestoneById(userId: string, milestoneId: string): Promise<MilestoneEntity> {
     const milestone = await this.findOneMilestoneById(userId, milestoneId);
     if (!milestone) {
