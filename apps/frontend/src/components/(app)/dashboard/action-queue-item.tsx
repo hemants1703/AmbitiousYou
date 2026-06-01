@@ -87,7 +87,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
         ) : null}
 
         <div className="flex items-start justify-between gap-2">
-          <p className={cn("line-clamp-2 font-medium wrap-break-word", done && "text-muted-foreground line-through")}>{props.title}</p>
+          <p className={cn("min-w-0 line-clamp-2 font-medium wrap-break-word", done && "text-muted-foreground line-through")}>{props.title}</p>
           <Badge variant="outline" className={cn("shrink-0 tabular-nums", overdue && "border-destructive/30 bg-destructive/10 text-destructive")}>
             {formatDue(props.daysUntil)}
           </Badge>
@@ -96,7 +96,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
         {props.description ? <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{props.description}</p> : null}
 
         <Link href={`/ambitions/${props.ambitionId}`} prefetch className="flex max-w-full items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none">
-          <span className="truncate" translate="no">
+          <span className="min-w-0 truncate" translate="no">
             {props.ambitionName}
           </span>
         </Link>

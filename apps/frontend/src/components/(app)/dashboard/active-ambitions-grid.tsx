@@ -35,7 +35,7 @@ export function ActiveAmbitionsGrid(props: ActiveAmbitionsGridProps) {
       </div>
 
       {active.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-4xl border border-dashed border-border/70 bg-background/60 p-10 text-center">
+        <div className="flex flex-col items-center gap-2 rounded-4xl border border-dashed border-border/70 bg-background/60 p-8 text-center">
           <TargetIcon className="size-8 text-muted-foreground/40" />
           <p className="font-medium">No active ambitions right now</p>
           <p className="max-w-sm text-sm text-muted-foreground">Every completed goal started as an active one. Ready to set your next?</p>
