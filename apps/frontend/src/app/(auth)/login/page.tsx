@@ -2,11 +2,10 @@ import { loginAction } from "@/actions/(auth)/login/login";
 import { loginInitialState } from "@/actions/(auth)/login/login-state";
 import AmbitiousYouLogo from "@/components/(landing)/ambitiousyou-logo";
 import { LoginForm } from "@/components/(auth)/login/login-form";
+import { redirectIfAuthenticated } from "@/lib/auth";
 import "@/styles/auth-background.css";
 import Link from "next/link";
 import { Metadata } from "next";
-
-export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  // if (await getSessionToken()) return redirect("/dashboard");
+  await redirectIfAuthenticated();
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">

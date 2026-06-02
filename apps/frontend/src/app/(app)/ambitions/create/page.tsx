@@ -1,12 +1,15 @@
 import CreateAmbitionForm from "@/components/(app)/ambitions/create-ambition-form";
 import { MotionWrapper } from "@/components/motion-wrapper";
+import { requireUser } from "@/lib/auth";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Create Ambition",
 };
 
-export default function CreateAmbitionPage() {
+export default async function CreateAmbitionPage() {
+  await requireUser();
+
   return (
     <div className="mx-auto flex w-full max-w-screen-2xl flex-col">
       <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="flex flex-col md:flex-row md:items-end md:justify-between">

@@ -10,13 +10,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { getAmbitionDetails, type AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { getNotes } from "@/lib/api/notes/get-notes";
-import { getUser } from "@/lib/api/sidebar/get-user";
-import { getSessionToken } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { redirect, RedirectType } from "next/navigation";
 import { cache, type ReactNode } from "react";
 
 interface AmbitionDetailsPageProps {
@@ -32,7 +30,7 @@ const getAmbitionData = cache(async (sessionToken: string, ambitionId: string): 
 });
 
 export async function generateMetadata(props: AmbitionDetailsPageProps): Promise<Metadata> {
-  const sessionToken = await getSessionToken();
+  const { sessionToken } = await requireUser();
 
   const { ambitionId } = await props.params;
 
@@ -47,12 +45,7 @@ export async function generateMetadata(props: AmbitionDetailsPageProps): Promise
 }
 
 export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProps) {
-  const sessionToken = await getSessionToken();
-  const userDetails = await getUser(sessionToken);
-
-  if (!userDetails) {
-    return redirect("/login", RedirectType.replace);
-  }
+  const { user: userDetails, sessionToken } = await requireUser();
 
   const { ambitionId } = await props.params;
   const searchParams = await props.searchParams;

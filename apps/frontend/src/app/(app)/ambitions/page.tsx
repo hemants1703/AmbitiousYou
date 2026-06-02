@@ -2,7 +2,7 @@ import AmbitionsClientView from "@/components/ambitions/ambitions-client-view";
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
 import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
-import { getSessionToken } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { Ambition } from "@ambitiousyou/shared/types";
 import { FilterIcon, PlusCircleIcon } from "lucide-react";
 import { Metadata } from "next";
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AmbitionsPage() {
-  const ambitions: Ambition[] | null = await getAmbitions(await getSessionToken());
+  const { sessionToken } = await requireUser();
+  const ambitions: Ambition[] | null = await getAmbitions(sessionToken);
 
   if (!ambitions || ambitions.length === 0) {
     return <NoAmbitionsFoundPage />;

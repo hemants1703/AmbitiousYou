@@ -5,10 +5,8 @@ import { DashboardSkeleton } from "@/components/(app)/dashboard/dashboard-skelet
 import { DashboardStats } from "@/components/(app)/dashboard/dashboard-stats";
 import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
 import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
-import { getUser } from "@/lib/api/sidebar/get-user";
-import { getSessionToken } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { Metadata } from "next";
-import { redirect, RedirectType } from "next/navigation";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -16,12 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const sessionToken = await getSessionToken();
-  const [userDetails, ambitions] = await Promise.all([getUser(sessionToken), getAmbitions(sessionToken)]);
-
-  if (!userDetails) {
-    return redirect("/login", RedirectType.replace);
-  }
+  const { user: userDetails, sessionToken } = await requireUser();
+  const ambitions = await getAmbitions(sessionToken);
 
   const firstName = userDetails.name.trim().split(/\s+/)[0] || userDetails.name;
 

@@ -3,12 +3,10 @@ import { MotionWrapper } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AmbitionDetails, getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
-import { getUser } from "@/lib/api/sidebar/get-user";
-import { getSessionToken } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon, RouteIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { redirect, RedirectType } from "next/navigation";
 import { cache, type ReactNode } from "react";
 
 interface EditAmbitionPageProps {
@@ -20,7 +18,7 @@ const getAmbitionData = cache(async (sessionToken: string, ambitionId: string): 
 });
 
 export async function generateMetadata(props: EditAmbitionPageProps): Promise<Metadata> {
-  const sessionToken = await getSessionToken();
+  const { sessionToken } = await requireUser();
   const { ambitionId } = await props.params;
   const ambition = await getAmbitionData(sessionToken, ambitionId);
 
@@ -34,12 +32,7 @@ function formatDate(value: Date | string) {
 }
 
 export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
-  const sessionToken = await getSessionToken();
-  const userDetails = await getUser(sessionToken);
-
-  if (!userDetails) {
-    return redirect("/login", RedirectType.replace);
-  }
+  const { sessionToken } = await requireUser();
 
   const { ambitionId } = await props.params;
 

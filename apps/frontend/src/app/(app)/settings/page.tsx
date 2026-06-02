@@ -1,8 +1,6 @@
 import { MotionWrapper } from "@/components/motion-wrapper";
-import { getUser } from "@/lib/api/sidebar/get-user";
-import { getSessionToken } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import type { Metadata } from "next";
-import { redirect, RedirectType } from "next/navigation";
 import { SettingsTabs, type SettingsTabValue } from "../../../components/(app)/settings/settings-tabs";
 
 type SettingsPageProps = {
@@ -16,12 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SettingsPage(props: SettingsPageProps) {
-  const sessionToken = await getSessionToken();
-  const userDetails = await getUser(sessionToken);
-
-  if (!userDetails) {
-    return redirect("/login", RedirectType.replace);
-  }
+  const { user: userDetails, sessionToken } = await requireUser();
 
   const { tab } = await props.searchParams;
   const activeTab = validTabs.includes(tab as SettingsTabValue)
