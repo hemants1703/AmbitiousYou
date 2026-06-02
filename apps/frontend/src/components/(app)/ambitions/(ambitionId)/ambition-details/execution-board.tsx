@@ -1,13 +1,5 @@
 "use client";
 
-import { createMilestoneAction } from "@/actions/(app)/milestones/create-milestone";
-import { deleteMilestoneAction } from "@/actions/(app)/milestones/delete-milestone";
-import { toggleMilestoneCompletionAction } from "@/actions/(app)/milestones/toggle-milestone-completion";
-import { updateMilestoneAction } from "@/actions/(app)/milestones/update-milestone";
-import { createTaskAction } from "@/actions/(app)/tasks/create-task";
-import { deleteTaskAction } from "@/actions/(app)/tasks/delete-task";
-import { toggleTaskCompletionAction } from "@/actions/(app)/tasks/toggle-task-completion";
-import { updateTaskAction } from "@/actions/(app)/tasks/update-task";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -17,6 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { createMilestoneAction } from "@/lib/actions/(app)/milestones/create-milestone";
+import { deleteMilestoneAction } from "@/lib/actions/(app)/milestones/delete-milestone";
+import { toggleMilestoneCompletionAction } from "@/lib/actions/(app)/milestones/toggle-milestone-completion";
+import { updateMilestoneAction } from "@/lib/actions/(app)/milestones/update-milestone";
+import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
+import { deleteTaskAction } from "@/lib/actions/(app)/tasks/delete-task";
+import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-task-completion";
+import { updateTaskAction } from "@/lib/actions/(app)/tasks/update-task";
 import { cn } from "@/lib/utils";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { format, parseISO } from "date-fns";
@@ -206,9 +206,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
       setItems((prev) =>
         prev.map((current) => {
           if (current.id !== item.id) return current;
-          return isTask
-            ? ({ ...(current as Task), taskCompleted: !(current as Task).taskCompleted } as Task)
-            : ({ ...(current as Milestone), milestoneCompleted: !(current as Milestone).milestoneCompleted } as Milestone);
+          return isTask ? ({ ...(current as Task), taskCompleted: !(current as Task).taskCompleted } as Task) : ({ ...(current as Milestone), milestoneCompleted: !(current as Milestone).milestoneCompleted } as Milestone);
         }),
       );
 
@@ -265,8 +263,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
                 setEditingId(null);
                 setConfirmDeleteId(null);
                 setAdding(true);
-              }}
-            >
+              }}>
               <PlusIcon className="size-4" />
               Add {noun}
             </Button>

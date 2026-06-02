@@ -1,6 +1,5 @@
 "use client";
 
-import { createNoteAction } from "@/actions/(app)/notes/create-note";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { Note } from "@ambitiousyou/shared/types";
@@ -8,6 +7,7 @@ import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import NotesDrawer from "./notes-drawer";
+import { createNoteAction } from "@/lib/actions/(app)/notes/create-note";
 
 interface NotesCardProps {
   notes: Note[];
@@ -30,7 +30,7 @@ export default function NotesCard(props: NotesCardProps) {
   const newNoteRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setLocalNotes(props.notes);
+    (async () => setLocalNotes(props.notes))();
   }, [props.notes]);
 
   useEffect(() => {
@@ -100,8 +100,7 @@ export default function NotesCard(props: NotesCardProps) {
               onClick={() => {
                 setAddingNote(false);
                 setNewNoteText("");
-              }}
-            >
+              }}>
               Cancel
             </Button>
           </div>
@@ -116,8 +115,7 @@ export default function NotesCard(props: NotesCardProps) {
           onClick={() => {
             setError(null);
             setAddingNote(true);
-          }}
-        >
+          }}>
           <PlusIcon className="size-4" />
           Add note
         </Button>
@@ -138,19 +136,13 @@ export default function NotesCard(props: NotesCardProps) {
           <div key={note.id} className="rounded-2xl border border-border/60 bg-background/50 p-3 text-sm space-y-1">
             <p className="line-clamp-3 wrap-break-word">{note.note}</p>
             <p className="text-xs text-muted-foreground">
-              {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime()
-                ? `Updated ${formatNoteDate(note.updatedAt)}`
-                : note.createdAt
-                  ? `Added ${formatNoteDate(note.createdAt)}`
-                  : ""}
+              {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime() ? `Updated ${formatNoteDate(note.updatedAt)}` : note.createdAt ? `Added ${formatNoteDate(note.createdAt)}` : ""}
             </p>
           </div>
         ))
       )}
 
-      {localNotes.length > 0 && (
-        <NotesDrawer notes={localNotes} ambitionId={props.ambitionId} ambitionName={props.ambitionName} />
-      )}
+      {localNotes.length > 0 && <NotesDrawer notes={localNotes} ambitionId={props.ambitionId} ambitionName={props.ambitionName} />}
     </div>
   );
 }

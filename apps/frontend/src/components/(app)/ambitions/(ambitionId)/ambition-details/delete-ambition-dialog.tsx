@@ -1,21 +1,12 @@
 "use client";
 
-import { deleteAmbitionAction } from "@/actions/(app)/ambitions/delete-ambition";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DialogStateProps } from "./ambition-options-dropdown";
+import { deleteAmbitionAction } from "@/lib/actions/(app)/ambitions/delete-ambition";
 
 type DeleteAmbitionDialogProps = {
   ambitionId: string;

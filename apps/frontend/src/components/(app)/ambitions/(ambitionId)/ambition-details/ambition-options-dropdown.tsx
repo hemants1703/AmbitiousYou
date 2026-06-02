@@ -1,6 +1,5 @@
 "use client";
 
-import { toggleAmbitionFavouriteAction } from "@/actions/(app)/ambitions/toggle-ambition-favourite";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { HeartIcon, Loader2Icon, MoreVertical, PencilIcon, Trash2Icon } from "lucide-react";
@@ -8,6 +7,7 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { DeleteAmbitionDialog } from "./delete-ambition-dialog";
+import { toggleAmbitionFavouriteAction } from "@/lib/actions/(app)/ambitions/toggle-ambition-favourite";
 
 type AmbitionOptionsDropdownProps = {
   ambitionId: string;
@@ -59,11 +59,7 @@ export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownPr
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onClick={handleToggleFavourite} disabled={isTogglingFavourite} onSelect={(event) => event.preventDefault()}>
-            {isTogglingFavourite ? (
-              <Loader2Icon className="size-4 animate-spin" />
-            ) : (
-              <HeartIcon className={isFavourited ? "size-4 fill-pink-500 text-pink-500" : "size-4"} />
-            )}
+            {isTogglingFavourite ? <Loader2Icon className="size-4 animate-spin" /> : <HeartIcon className={isFavourited ? "size-4 fill-pink-500 text-pink-500" : "size-4"} />}
             {isFavourited ? "Remove favourite" : "Add to favourites"}
           </DropdownMenuItem>
           <DropdownMenuItem asChild>

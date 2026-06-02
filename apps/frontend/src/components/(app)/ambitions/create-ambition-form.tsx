@@ -1,7 +1,5 @@
 "use client";
 
-import { createAmbitionAction } from "@/actions/(app)/ambitions/create-ambition";
-import { createAmbitionInitialState } from "@/actions/(app)/ambitions/create-ambition-state";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -16,6 +14,8 @@ import { ArrowRightIcon, CalendarIcon, CircleHelpIcon, FlameIcon, PlusIcon, Tras
 import { useActionState, useState, type ComponentProps, type ReactNode } from "react";
 import type { DateRange } from "react-day-picker";
 import { format, parseISO } from "date-fns";
+import { createAmbitionAction } from "@/lib/actions/(app)/ambitions/create-ambition";
+import { createAmbitionInitialState } from "@/lib/actions/(app)/ambitions/create-ambition-state";
 
 const AMBITION_NAME_MAX_LENGTH = 80;
 
@@ -179,7 +179,17 @@ export default function CreateAmbitionForm() {
                   </span>
                 ) : null}
               </div>
-              <Input id="ambitionName" name="ambitionName" value={ambitionName} onChange={(event) => setAmbitionName(event.target.value)} placeholder="Launch a focused morning routine…" autoComplete="off" spellCheck={false} maxLength={AMBITION_NAME_MAX_LENGTH} required />
+              <Input
+                id="ambitionName"
+                name="ambitionName"
+                value={ambitionName}
+                onChange={(event) => setAmbitionName(event.target.value)}
+                placeholder="Launch a focused morning routine…"
+                autoComplete="off"
+                spellCheck={false}
+                maxLength={AMBITION_NAME_MAX_LENGTH}
+                required
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">

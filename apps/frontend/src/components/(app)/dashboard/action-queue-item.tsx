@@ -1,7 +1,5 @@
 "use client";
 
-import { toggleMilestoneCompletionAction } from "@/actions/(app)/milestones/toggle-milestone-completion";
-import { toggleTaskCompletionAction } from "@/actions/(app)/tasks/toggle-task-completion";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ItemKind } from "@/lib/dashboard/tracked-items";
@@ -10,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-task-completion";
+import { toggleMilestoneCompletionAction } from "@/lib/actions/(app)/milestones/toggle-milestone-completion";
 
 interface ActionQueueItemProps {
   id: string;
@@ -59,12 +59,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
   const overdue = props.daysUntil < 0;
 
   return (
-    <div
-      className={cn(
-        "flex items-start gap-3 rounded-2xl border p-3 transition-colors",
-        props.isNextMove ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60",
-        done && "opacity-60",
-      )}>
+    <div className={cn("flex items-start gap-3 rounded-2xl border p-3 transition-colors", props.isNextMove ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60", done && "opacity-60")}>
       <button
         type="button"
         onClick={handleComplete}

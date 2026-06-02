@@ -1,13 +1,13 @@
 "use client";
 
-import { updateAmbitionAction } from "@/actions/(app)/ambitions/update-ambition";
-import { updateAmbitionInitialState } from "@/actions/(app)/ambitions/update-ambition-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import * as Select from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { updateAmbitionAction } from "@/lib/actions/(app)/ambitions/update-ambition";
+import { updateAmbitionInitialState } from "@/lib/actions/(app)/ambitions/update-ambition-state";
 import { cn } from "@/lib/utils";
 import { CircleHelpIcon, Loader2Icon, SaveIcon } from "lucide-react";
 import Link from "next/link";
@@ -61,10 +61,7 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
   const [ambitionDefinition, setAmbitionDefinition] = useState(props.ambitionDefinition);
   const [priority, setPriority] = useState<Priority>(props.ambitionPriority);
 
-  const isDirty =
-    ambitionName.trim() !== props.ambitionName.trim() ||
-    ambitionDefinition.trim() !== props.ambitionDefinition.trim() ||
-    priority !== props.ambitionPriority;
+  const isDirty = ambitionName.trim() !== props.ambitionName.trim() || ambitionDefinition.trim() !== props.ambitionDefinition.trim() || priority !== props.ambitionPriority;
 
   // Warn before a hard navigation (refresh, tab close) while there are unsaved edits.
   useEffect(() => {
@@ -151,15 +148,7 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
           <FieldLabel htmlFor="ambitionDefinition" tooltip="Optional context that explains the why behind the goal.">
             Definition
           </FieldLabel>
-          <Textarea
-            id="ambitionDefinition"
-            name="ambitionDefinition"
-            value={ambitionDefinition}
-            onChange={(event) => setAmbitionDefinition(event.target.value)}
-            placeholder="What does success look like? (Optional field)"
-            rows={5}
-            spellCheck
-          />
+          <Textarea id="ambitionDefinition" name="ambitionDefinition" value={ambitionDefinition} onChange={(event) => setAmbitionDefinition(event.target.value)} placeholder="What does success look like? (Optional field)" rows={5} spellCheck />
         </div>
       </section>
 

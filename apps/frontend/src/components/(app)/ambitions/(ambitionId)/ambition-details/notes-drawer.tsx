@@ -1,11 +1,11 @@
 "use client";
 
-import { deleteNoteAction } from "@/actions/(app)/notes/delete-note";
-import { updateNoteAction } from "@/actions/(app)/notes/update-note";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Textarea } from "@/components/ui/textarea";
+import { deleteNoteAction } from "@/lib/actions/(app)/notes/delete-note";
+import { updateNoteAction } from "@/lib/actions/(app)/notes/update-note";
 import type { Note } from "@ambitiousyou/shared/types";
 import { BookOpenTextIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
   const editingRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setLocalNotes(props.notes);
+    (async () => setLocalNotes(props.notes))();
   }, [props.notes]);
 
   useEffect(() => {
@@ -68,9 +68,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
     const snapshotNotes = localNotes;
 
     startTransition(async () => {
-      setLocalNotes((prev) =>
-        prev.map((n) => (n.id === noteId ? { ...n, note: text, updatedAt: new Date() } : n)),
-      );
+      setLocalNotes((prev) => prev.map((n) => (n.id === noteId ? { ...n, note: text, updatedAt: new Date() } : n)));
       setEditingId(null);
       setEditingText("");
 
@@ -153,9 +151,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
           )}
 
           {localNotes.length === 0 ? (
-            <div className="rounded-2xl border border-border/60 bg-muted/20 p-4 text-sm text-muted-foreground">
-              No notes yet for this ambition.
-            </div>
+            <div className="rounded-2xl border border-border/60 bg-muted/20 p-4 text-sm text-muted-foreground">No notes yet for this ambition.</div>
           ) : (
             localNotes.map((note) => {
               const isEditing = editingId === note.id;
@@ -164,15 +160,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
               return (
                 <article
                   key={note.id}
-                  className={[
-                    "rounded-2xl border p-4 transition-colors",
-                    isEditing
-                      ? "border-primary/30 bg-background/50"
-                      : isConfirmingDelete
-                        ? "border-destructive/30 bg-destructive/5"
-                        : "border-border/60 bg-background/50",
-                  ].join(" ")}
-                >
+                  className={["rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-border/60 bg-background/50"].join(" ")}>
                   {isEditing ? (
                     <div className="space-y-3">
                       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Editing</p>
@@ -214,33 +202,13 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                       <p className="text-sm wrap-break-word">{note.note}</p>
                       <div className="flex items-center justify-between gap-2">
                         <p className="text-xs text-muted-foreground">
-                          {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime()
-                            ? `Updated ${formatNoteDate(note.updatedAt)}`
-                            : note.createdAt
-                              ? `Added ${formatNoteDate(note.createdAt)}`
-                              : ""}
+                          {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime() ? `Updated ${formatNoteDate(note.updatedAt)}` : note.createdAt ? `Added ${formatNoteDate(note.createdAt)}` : ""}
                         </p>
                         <div className="flex items-center gap-1">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="size-7 rounded-lg text-muted-foreground hover:text-foreground"
-                            aria-label="Edit note"
-                            disabled={isPending}
-                            onClick={() => handleStartEdit(note)}
-                          >
+                          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label="Edit note" disabled={isPending} onClick={() => handleStartEdit(note)}>
                             <PencilIcon className="size-3.5" />
                           </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="size-7 rounded-lg text-muted-foreground hover:text-destructive"
-                            aria-label="Delete note"
-                            disabled={isPending}
-                            onClick={() => handleStartDelete(note.id)}
-                          >
+                          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-destructive" aria-label="Delete note" disabled={isPending} onClick={() => handleStartDelete(note.id)}>
                             <XIcon className="size-3.5" />
                           </Button>
                         </div>
