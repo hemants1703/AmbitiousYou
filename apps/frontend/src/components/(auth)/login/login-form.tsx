@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import type { LoginState } from "@/lib/actions/(auth)/login/login";
 import { cn } from "@/lib/utils";
-import { useActionState, useState } from "react";
-import type { LoginState } from "@/actions/(auth)/login/login";
 import Link from "next/link";
+import { useActionState, useState } from "react";
 
 type LoginFormProps = Omit<React.ComponentProps<"form">, "action"> & {
   action: (state: LoginState, formData: FormData) => Promise<LoginState>;
@@ -55,7 +55,7 @@ export function LoginForm({ action, initialState, className, ...props }: LoginFo
         <Field>
           <FieldDescription className="text-center">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="underline underline-offset-4">
+          <Link href="/signup" className="underline underline-offset-4 hover:text-foreground!">
               Sign up
             </Link>
           </FieldDescription>

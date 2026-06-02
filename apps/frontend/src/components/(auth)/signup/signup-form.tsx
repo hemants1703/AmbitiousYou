@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import type { SignupState } from "@/lib/actions/(auth)/signup/signup";
 import { cn } from "@/lib/utils";
-import { useActionState, useState } from "react";
-import type { SignupState } from "@/actions/(auth)/signup/signup";
 import Link from "next/link";
+import { useActionState, useState } from "react";
 
 type SignupFormProps = Omit<React.ComponentProps<"form">, "action"> & {
   action: (state: SignupState, formData: FormData) => Promise<SignupState>;
@@ -59,7 +59,7 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
         <Field>
           <FieldDescription className="px-6 text-center">
             Already have an account?{" "}
-            <Link href="/login" className="underline underline-offset-4">
+            <Link href="/login" className="underline underline-offset-4 hover:text-foreground!">
               Login
             </Link>
           </FieldDescription>

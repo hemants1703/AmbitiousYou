@@ -1,11 +1,12 @@
-import { signupAction } from "@/actions/(auth)/signup/signup";
-import { signupInitialState } from "@/actions/(auth)/signup/signup-state";
+
 import AmbitiousYouLogo from "@/components/(landing)/ambitiousyou-logo";
 import { SignupForm } from "@/components/(auth)/signup/signup-form";
 import { redirectIfAuthenticated } from "@/lib/auth";
 import "@/styles/auth-background.css";
 import Link from "next/link";
 import { Metadata } from "next";
+import { signupAction } from "@/lib/actions/(auth)/signup/signup";
+import { signupInitialState } from "@/lib/actions/(auth)/signup/signup-state";
 
 export const metadata: Metadata = {
   title: "Sign Up",
