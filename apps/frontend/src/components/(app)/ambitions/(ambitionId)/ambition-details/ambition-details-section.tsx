@@ -33,7 +33,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TimerResetIcon className="size-4 text-primary" />
+              <TimerResetIcon className="size-4 text-foreground" />
               What You Should Focus On Next
             </CardTitle>
             <CardDescription>Prioritized by urgency and target date so the most important work stays visible first.</CardDescription>

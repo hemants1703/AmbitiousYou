@@ -247,7 +247,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <ListTodoIcon className="size-4 text-primary" />
+              <ListTodoIcon className="size-4 text-foreground" />
               Execution Board
             </CardTitle>
             <CardDescription>{isTask ? "Tasks" : "Milestones"} you can add, complete, edit, and remove as the work progresses.</CardDescription>
