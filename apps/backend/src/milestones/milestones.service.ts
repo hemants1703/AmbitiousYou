@@ -9,8 +9,8 @@ import { MilestoneEntity } from './entities/milestone.entity';
 export class MilestonesService {
   constructor(@InjectRepository(MilestoneEntity) private readonly milestoneRepository: Repository<MilestoneEntity>) {}
 
-  createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): MilestoneEntity {
-    return this.milestoneRepository.create({
+  async createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): Promise<MilestoneEntity> {
+    return await this.milestoneRepository.save({
       id: crypto.randomUUID(),
       userId,
       ...createMilestoneDto,

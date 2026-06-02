@@ -11,6 +11,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { getAmbitionDetails, type AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { getNotes } from "@/lib/api/notes/get-notes";
+import { getTasks } from "@/lib/api/tasks/get-tasks";
+import { getMilestones } from "@/lib/api/milestones/get-milestones";
 import { requireUser } from "@/lib/auth";
 import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon } from "lucide-react";
@@ -51,17 +53,21 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   const { ambitionId } = await props.params;
   const searchParams = await props.searchParams;
 
-  const [ambition, fetchedNotes] = await Promise.all([
+  const [ambition, fetchedNotes, fetchedTasks, fetchedMilestones] = await Promise.all([
     getAmbitionData(sessionToken, ambitionId),
     getNotes(sessionToken, ambitionId),
+    getTasks(sessionToken, ambitionId),
+    getMilestones(sessionToken, ambitionId),
   ]);
 
   if (!ambition) {
     throw new Error(`Failed to fetch ambition ${ambitionId}`);
   }
 
-  const tasks: Task[] = ambition.ambitionTrackingMethod === "task" ? (ambition.tasks ?? []) : [];
-  const milestones: Milestone[] = ambition.ambitionTrackingMethod === "milestone" ? (ambition.milestones ?? []) : [];
+  // The `/ambitions/:id/details` endpoint does not return tasks/milestones, so we read each
+  // collection from its dedicated list endpoint (mirroring how notes are fetched above).
+  const tasks: Task[] = ambition.ambitionTrackingMethod === "task" ? fetchedTasks : [];
+  const milestones: Milestone[] = ambition.ambitionTrackingMethod === "milestone" ? fetchedMilestones : [];
   const notes: Note[] = fetchedNotes;
   const trackedItems = ambition.ambitionTrackingMethod === "task" ? tasks : milestones;
 

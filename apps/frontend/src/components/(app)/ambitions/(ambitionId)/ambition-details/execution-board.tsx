@@ -116,9 +116,9 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
     };
 
     if (isTask) {
-      return { ...base, task: draft.title, taskDescription: draft.description, taskCompleted: false, taskDeadline: new Date(draft.date) } satisfies Task;
+      return { ...base, task: draft.title, taskDescription: draft.description, taskCompleted: false, taskDeadline: parseISO(draft.date) } satisfies Task;
     }
-    return { ...base, milestone: draft.title, milestoneDescription: draft.description, milestoneCompleted: false, milestoneTargetDate: new Date(draft.date) } satisfies Milestone;
+    return { ...base, milestone: draft.title, milestoneDescription: draft.description, milestoneCompleted: false, milestoneTargetDate: parseISO(draft.date) } satisfies Milestone;
   }
 
   function handleCreate() {
@@ -127,7 +127,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
     setError(null);
 
     const optimistic = buildOptimisticItem({ ...newDraft, title });
-    const isoDate = new Date(newDraft.date).toISOString();
+    const isoDate = parseISO(newDraft.date).toISOString();
     const description = newDraft.description.trim();
     const snapshot = items;
 
@@ -166,7 +166,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
     if (!title || !editDraft.date) return;
     setError(null);
 
-    const isoDate = new Date(editDraft.date).toISOString();
+    const isoDate = parseISO(editDraft.date).toISOString();
     const description = editDraft.description.trim();
     const completed = isCompleted(item);
     const snapshot = items;
@@ -176,8 +176,8 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
         prev.map((current) => {
           if (current.id !== item.id) return current;
           return isTask
-            ? ({ ...(current as Task), task: title, taskDescription: description, taskDeadline: new Date(editDraft.date), updatedAt: new Date() } as Task)
-            : ({ ...(current as Milestone), milestone: title, milestoneDescription: description, milestoneTargetDate: new Date(editDraft.date), updatedAt: new Date() } as Milestone);
+            ? ({ ...(current as Task), task: title, taskDescription: description, taskDeadline: parseISO(editDraft.date), updatedAt: new Date() } as Task)
+            : ({ ...(current as Milestone), milestone: title, milestoneDescription: description, milestoneTargetDate: parseISO(editDraft.date), updatedAt: new Date() } as Milestone);
         }),
       );
       setEditingId(null);

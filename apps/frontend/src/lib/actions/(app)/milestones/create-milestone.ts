@@ -13,8 +13,6 @@ export type CreateMilestoneInput = {
 export async function createMilestoneAction(input: CreateMilestoneInput): Promise<{ milestone: Milestone | null; error: string | null }> {
   const sessionToken = await getSessionToken();
 
-  const now = new Date().toISOString();
-
   const response = await fetch(`${process.env.API_URL}/milestones`, {
     method: "POST",
     headers: {
@@ -27,8 +25,6 @@ export async function createMilestoneAction(input: CreateMilestoneInput): Promis
       milestoneDescription: input.milestoneDescription ?? "",
       milestoneCompleted: false,
       milestoneTargetDate: input.milestoneTargetDate,
-      createdAt: now,
-      updatedAt: now,
     }),
   });
 
