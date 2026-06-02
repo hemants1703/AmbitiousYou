@@ -23,7 +23,7 @@ export function ActiveAmbitionsGrid(props: ActiveAmbitionsGridProps) {
     <section className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight">
-          <TargetIcon className="size-5 text-primary" />
+          <TargetIcon className="size-5 text-foreground" />
           Your active ambitions
         </h2>
         <Button asChild variant="ghost" size="sm">

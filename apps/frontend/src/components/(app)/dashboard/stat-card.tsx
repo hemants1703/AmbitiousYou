@@ -29,7 +29,7 @@ export function StatCard(props: StatCardProps) {
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{props.label}</p>
           <p className="text-2xl font-semibold tabular-nums @[150px]/card:text-3xl">{props.value}</p>
         </div>
-        <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-2xl", chipByTone[props.tone ?? "default"])} aria-hidden="true">
+        <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-2xl bg-foreground/10! text-foreground/60!", chipByTone[props.tone ?? "default"])} aria-hidden="true">
           {props.icon}
         </span>
       </div>

@@ -12,7 +12,7 @@ export function WeeklyPreview(props: WeeklyPreviewProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <CalendarRangeIcon className="size-4 text-primary" />
+          <CalendarRangeIcon className="size-4 text-foreground" />
           Coming up this week
         </CardTitle>
         <CardDescription>What&apos;s due over the next 7 days.</CardDescription>

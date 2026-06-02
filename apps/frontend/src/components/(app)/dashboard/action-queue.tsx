@@ -20,7 +20,7 @@ export function ActionQueue(props: ActionQueueProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ListChecksIcon className="size-4 text-primary" />
+          <ListChecksIcon className="size-4 text-foreground" />
           Your next moves
         </CardTitle>
         <CardDescription>The most urgent open work across every ambition — soonest deadlines first.</CardDescription>

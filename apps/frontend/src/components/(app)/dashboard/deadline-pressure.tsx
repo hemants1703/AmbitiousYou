@@ -28,7 +28,7 @@ export function DeadlinePressure(props: DeadlinePressureProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <GaugeIcon className="size-4 text-primary" />
+          <GaugeIcon className="size-4 text-foreground" />
           Deadline pressure
         </CardTitle>
         <CardDescription>Open items grouped by when they&apos;re due.</CardDescription>
