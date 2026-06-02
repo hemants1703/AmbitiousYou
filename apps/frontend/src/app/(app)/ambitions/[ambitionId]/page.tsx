@@ -1,6 +1,7 @@
 import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
-import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/milestones/mark-milestone-as-completed-dialog";
+import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/Milestones/mark-milestone-as-completed-dialog";
+
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
 import { MotionWrapper } from "@/components/motion-wrapper";
@@ -99,8 +100,8 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
                 <div className="flex min-w-0 flex-1 flex-col gap-4">
                   <div className="space-y-2">
                     <h1 className="line-clamp-2 text-2xl font-bold tracking-tight text-balance sm:text-3xl lg:text-4xl">
+                      {ambition.isFavourited ? <HeartIcon className="mr-2 mb-2 inline-flex size-7 fill-pink-500 text-pink-500 align-text-bottom" aria-label="Favourited ambition" /> : null}
                       {ambition.ambitionName}
-                      {ambition.isFavourited ? <HeartIcon className="ml-2 inline-flex size-7 fill-pink-500 text-pink-500 align-text-bottom" aria-label="Favourited ambition" /> : null}
                     </h1>
                     <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">{ambition.ambitionDefinition || "A clear destination. Keep momentum, complete key work, and turn this ambition into a measurable outcome."}</p>
                   </div>
