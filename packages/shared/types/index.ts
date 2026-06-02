@@ -110,5 +110,3 @@ export type Settings = {
   createdAt: Date | null;
   updatedAt: Date | null;
 };
-
-export type NewSettings = Pick<Settings, "userId" | "userTimezone"> & Partial<Pick<Settings, "emailAccountActivity" | "pushAmbitionReminders">>;

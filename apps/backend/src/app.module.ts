@@ -9,6 +9,7 @@ import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
 import { MilestonesModule } from './milestones/milestones.module';
 import { AmbitionsModule } from './ambitions/ambitions.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AmbitionsModule } from './ambitions/ambitions.module';
     TasksModule,
     MilestonesModule,
     AmbitionsModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,10 +4,14 @@ import bcrypt from 'bcrypt';
 import { QueryFailedError, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { SettingsService } from 'src/settings/settings.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(UserEntity) private readonly usersRepository: Repository<UserEntity>) {}
+  constructor(
+    @InjectRepository(UserEntity) private readonly usersRepository: Repository<UserEntity>,
+    private readonly settingsService: SettingsService,
+  ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -33,6 +37,8 @@ export class UsersService {
         throw new ConflictException('Username already exists');
       }
     }
+
+    await this.settingsService.createSettingsForUserId(savedUser.id);
 
     return savedUser;
   }
