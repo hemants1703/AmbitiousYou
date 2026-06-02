@@ -27,7 +27,7 @@ export default function BeforeAfter() {
     <section className="py-20">
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 backdrop-blur-sm text-primary font-medium text-sm">
+          <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-foreground/10 backdrop-blur-sm text-foreground font-medium text-sm">
             <ArrowRightLeftIcon className="mr-2 h-4 w-4" />
             The shift
           </div>

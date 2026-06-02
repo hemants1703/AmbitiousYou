@@ -15,8 +15,8 @@ export default function AnimatedHero() {
     <section className="relative flex flex-col justify-center items-center w-full pt-7 pb-32 px-4">
       {/* Floating decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <TargetIcon className="absolute top-24 left-[10%] h-16 w-16 text-red-500" />
-        <StarIcon className="absolute top-40 right-[15%] h-16 w-16 text-cyan-500" />
+        <TargetIcon className="absolute top-24 left-[10%] h-16 w-16 text-red-500/20" />
+        <StarIcon className="absolute top-40 right-[15%] h-16 w-16 text-cyan-500/20" />
       </div>
 
       <div className="text-center max-w-4xl mx-auto relative z-10">

@@ -144,8 +144,8 @@ export default function Features() {
               <MotionWrapper key={item.step} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.15 }}>
                 <div className="flex flex-col items-center text-center space-y-4">
                   <MotionWrapper whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-primary">{item.step}</span>
+                    <div className="h-16 w-16 rounded-full bg-foreground/10 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-foreground">{item.step}</span>
                     </div>
                   </MotionWrapper>
                   <h3 className="text-xl font-bold">{item.title}</h3>
@@ -251,7 +251,7 @@ export default function Features() {
 
             <MotionWrapper initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
               <div className="bg-background p-8 rounded-lg border shadow h-full">
-                <h3 className="text-xl font-bold mb-4 text-primary">With AmbitiousYou</h3>
+                <h3 className="text-xl font-bold mb-4 text-foreground">With AmbitiousYou</h3>
                 <ul className="space-y-4">
                   {["All ambitions organized in one unified system", "Visual progress tracking keeps you motivated daily", "Prioritization tools ensure focus on what matters most", "Time analytics show where your efforts are yielding results"].map(
                     (item, index) => (

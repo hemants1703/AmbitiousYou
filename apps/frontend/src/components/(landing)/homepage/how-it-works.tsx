@@ -19,7 +19,7 @@ function Step(props: StepProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-center">
       <div className={cn(props.reverse && "md:order-2")}>
-        <span className={cn(bricolage.className, "block text-6xl md:text-7xl font-extrabold leading-none text-primary/20 mb-3")}>{props.number}</span>
+        <span className={cn(bricolage.className, "block text-6xl md:text-7xl font-extrabold leading-none text-foreground/20 mb-3")}>{props.number}</span>
         <h3 className={cn(bricolage.className, "text-2xl md:text-3xl font-bold mb-3")}>{props.title}</h3>
         <p className="text-lg text-muted-foreground max-w-md">{props.description}</p>
       </div>
@@ -134,7 +134,7 @@ export default function HowItWorks() {
     <section className="py-20">
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-20">
-          <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-primary/10 backdrop-blur-sm text-primary font-medium text-sm">
+          <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-foreground/10 backdrop-blur-sm text-foreground font-medium text-sm">
             <RouteIcon className="mr-2 h-4 w-4" />
             How it works
           </div>
