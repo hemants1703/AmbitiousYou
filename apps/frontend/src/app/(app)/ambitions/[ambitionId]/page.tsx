@@ -1,6 +1,5 @@
 import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
-import MarkMilestoneAsCompletedDialog from "@/components/(app)/ambitions/(ambitionId)/Milestones/mark-milestone-as-completed-dialog";
 
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
@@ -14,7 +13,7 @@ import { getNotes } from "@/lib/api/notes/get-notes";
 import { getTasks } from "@/lib/api/tasks/get-tasks";
 import { getMilestones } from "@/lib/api/milestones/get-milestones";
 import { requireUser } from "@/lib/auth";
-import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
+import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -23,7 +22,6 @@ import { cache, type ReactNode } from "react";
 interface AmbitionDetailsPageProps {
   params: Promise<{ ambitionId: string }>;
   searchParams: Promise<{
-    mark_milestone_as_completed?: string;
     ref?: string | undefined;
   }>;
 }
@@ -150,7 +148,6 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
           <AmbitionDetailsSection user={userDetails} ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
         </MotionWrapper>
 
-        <AmbitionDialogs {...props} milestones={milestones} ambition={ambition} />
       </div>
     </section>
   );
@@ -181,24 +178,4 @@ function getDaysBetween(startDate: Date | string, endDate: Date | string) {
   to.setHours(0, 0, 0, 0);
 
   return Math.ceil((to.getTime() - from.getTime()) / dayInMs);
-}
-
-async function AmbitionDialogs(props: AmbitionDetailsPageProps & { milestones: Milestone[]; ambition: Ambition }) {
-  const { ambitionId } = await props.params;
-  const { mark_milestone_as_completed } = await props.searchParams;
-
-  // MARK MILESTONE AS COMPLETED DIALOG
-  const concernedMilestone = props.milestones.find((milestone: Milestone) => milestone.id === mark_milestone_as_completed);
-  if (!concernedMilestone) return null;
-
-  const milestoneTargetDate = new Date(concernedMilestone.milestoneTargetDate);
-  const today = new Date();
-  milestoneTargetDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  if (milestoneTargetDate >= today) return null;
-
-  if (mark_milestone_as_completed && !concernedMilestone.milestoneCompleted) {
-    return <MarkMilestoneAsCompletedDialog ambitionId={ambitionId} />;
-  }
 }

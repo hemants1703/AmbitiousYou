@@ -8,9 +8,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import * as Select from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { ArrowRightIcon, CalendarIcon, CircleHelpIcon, FlameIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { ArrowRightIcon, CalendarIcon, CircleHelpIcon, FlagIcon, FlameIcon, ListTodoIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useActionState, useState, type ComponentProps, type ReactNode } from "react";
 import type { DateRange } from "react-day-picker";
 import { format, parseISO } from "date-fns";
@@ -192,42 +193,62 @@ export default function CreateAmbitionForm() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2 w-full">
-                <FieldLabel htmlFor="ambitionTrackingMethod" tooltip="Choose whether this ambition progresses through tasks or through milestones.">
-                  Tracking method
-                </FieldLabel>
-                <Select.Select value={trackingMethod} onValueChange={(value) => setTrackingMethod(value as TrackingMethod)}>
-                  <Select.SelectTrigger id="ambitionTrackingMethod" aria-label="Tracking method" className="w-full">
-                    <Select.SelectValue placeholder="Tracking method" />
-                  </Select.SelectTrigger>
-                  <Select.SelectContent>
-                    <Select.SelectGroup>
-                      <Select.SelectItem value="task">Task based</Select.SelectItem>
-                      <Select.SelectItem value="milestone">Milestone based</Select.SelectItem>
-                    </Select.SelectGroup>
-                  </Select.SelectContent>
-                </Select.Select>
-              </div>
-
-              <div className="space-y-2 w-full">
-                <FieldLabel htmlFor="ambitionPriority" tooltip="Set how this ambition should be prioritized relative to your other goals.">
-                  Priority
-                </FieldLabel>
-                <Select.Select value={priority} onValueChange={(value) => setPriority(value as Priority)}>
-                  <Select.SelectTrigger id="ambitionPriority" aria-label="Priority" className="w-full">
-                    <Select.SelectValue placeholder="Priority" />
-                  </Select.SelectTrigger>
-                  <Select.SelectContent>
-                    <Select.SelectGroup>
-                      <Select.SelectItem value="low">Low</Select.SelectItem>
-                      <Select.SelectItem value="medium">Medium</Select.SelectItem>
-                      <Select.SelectItem value="high">High</Select.SelectItem>
-                    </Select.SelectGroup>
-                  </Select.SelectContent>
-                </Select.Select>
-              </div>
+            <div className="space-y-2 w-full">
+              <FieldLabel htmlFor="ambitionPriority" tooltip="Set how this ambition should be prioritized relative to your other goals.">
+                Priority
+              </FieldLabel>
+              <Select.Select value={priority} onValueChange={(value) => setPriority(value as Priority)}>
+                <Select.SelectTrigger id="ambitionPriority" aria-label="Priority" className="w-full">
+                  <Select.SelectValue placeholder="Priority" />
+                </Select.SelectTrigger>
+                <Select.SelectContent>
+                  <Select.SelectGroup>
+                    <Select.SelectItem value="low">Low</Select.SelectItem>
+                    <Select.SelectItem value="medium">Medium</Select.SelectItem>
+                    <Select.SelectItem value="high">High</Select.SelectItem>
+                  </Select.SelectGroup>
+                </Select.SelectContent>
+              </Select.Select>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <FieldLabel htmlFor="ambitionTrackingMethod" tooltip="Tasks are concrete, repeatable to-dos. Milestones are one-time, target-dated achievements. Pick whichever matches how you'll measure progress.">
+              How will you track progress?
+            </FieldLabel>
+            <ToggleGroup
+              type="single"
+              value={trackingMethod}
+              onValueChange={(value) => {
+                if (value) setTrackingMethod(value as TrackingMethod);
+              }}
+              className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+              <ToggleGroupItem
+                value="task"
+                variant="outline"
+                aria-label="Track with tasks"
+                className="h-auto w-full flex-col items-start justify-start gap-1.5 whitespace-normal rounded-2xl border p-4 text-left data-[state=on]:border-primary data-[state=on]:bg-primary/5">
+                <span className="flex items-center gap-2 font-medium text-foreground">
+                  <ListTodoIcon className="size-4" />
+                  Tasks
+                </span>
+                <span className="text-sm text-muted-foreground">Concrete steps you can check and uncheck anytime.</span>
+                <span className="text-xs text-muted-foreground">e.g. &ldquo;Run 3&times; this week&rdquo;</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="milestone"
+                variant="outline"
+                aria-label="Track with milestones"
+                className="h-auto w-full flex-col items-start justify-start gap-1.5 whitespace-normal rounded-2xl border p-4 text-left data-[state=on]:border-primary data-[state=on]:bg-primary/5">
+                <span className="flex items-center gap-2 font-medium text-foreground">
+                  <FlagIcon className="size-4" />
+                  Milestones
+                </span>
+                <span className="text-sm text-muted-foreground">Bigger, fuzzier outcomes with a target date. Reaching one is permanent.</span>
+                <span className="text-xs text-muted-foreground">e.g. &ldquo;Land a 12&nbsp;LPA job&rdquo;</span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+            {trackingMethod === "milestone" ? <p className="text-xs text-muted-foreground">Milestones are marked complete once and can&rsquo;t be reopened&mdash;great for goals you can&rsquo;t fully script yet.</p> : null}
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -273,7 +294,7 @@ export default function CreateAmbitionForm() {
         <section className="space-y-4">
           <SectionHeading
             title={trackingMethod === "task" ? "Tasks" : "Milestones"}
-            tooltip={trackingMethod === "task" ? "Add one or more concrete actions that will be saved with the ambition." : "Add one or more milestones that mark progress toward the ambition."}
+            tooltip={trackingMethod === "task" ? "Add one or more concrete, repeatable actions. You can check and uncheck these anytime." : "Add one or more milestones — bigger, target-dated achievements. Each is marked reached once and can't be reopened."}
             action={
               <Button type="button" variant="outline" size="sm" onClick={() => (trackingMethod === "task" ? setTasks((current) => [...current, createTaskDraft()]) : setMilestones((current) => [...current, createMilestoneDraft()]))}>
                 <PlusIcon className="size-4" />
@@ -363,7 +384,7 @@ export default function CreateAmbitionForm() {
                         name={`milestones.${index}.milestone`}
                         value={milestone.milestone}
                         onChange={(event) => updateMilestone(milestone.id, "milestone", event.target.value)}
-                        placeholder="Reach the first 1,000 minutes of practice…"
+                        placeholder="Land a 12 LPA job…"
                         required
                       />
                     </div>

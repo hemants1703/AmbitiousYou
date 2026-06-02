@@ -6,6 +6,7 @@ import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, NotebookPenIcon, Ti
 import type { ReactNode } from "react";
 import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-card";
 import ExecutionBoard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board";
+import { getDate as getItemDate, getDaysUntil, getDescription as getItemDescription, getTitle as getItemTitle, isCompleted as isItemCompleted, sortByPriority } from "@/lib/(app)/tracked-item";
 
 type AmbitionDetailsSectionProps = {
   user: User;
@@ -14,8 +15,6 @@ type AmbitionDetailsSectionProps = {
   milestones: Milestone[];
   notes: Note[];
 };
-
-type TrackedItem = Task | Milestone;
 
 export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProps) {
   const trackedItems = props.ambition.ambitionTrackingMethod === "task" ? props.tasks : props.milestones;
@@ -65,7 +64,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
           </CardContent>
         </Card>
 
-        <ExecutionBoard ambitionId={props.ambition.id} trackingMethod={props.ambition.ambitionTrackingMethod} tasks={props.tasks} milestones={props.milestones} />
+        <ExecutionBoard ambitionId={props.ambition.id} ambitionName={props.ambition.ambitionName} trackingMethod={props.ambition.ambitionTrackingMethod} tasks={props.tasks} milestones={props.milestones} />
       </div>
 
       <div className="space-y-6">
@@ -75,19 +74,19 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
             <CardDescription>Snapshot of your current momentum and risk.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <p className="text-muted-foreground">Overall progress</p>
                 <p className="font-semibold tabular-nums">{clampedProgress}%</p>
               </div>
-              <Progress value={clampedProgress} className="h-3" />
-            </div>
+              <Progress value={clampedProgress} className="h-px" />
+            </div> */}
 
             <div className="grid gap-2">
-              <HealthRow icon={<CircleDotIcon className="size-4" />} label="Open work" value={`${openItems.length}`} />
-              <HealthRow icon={<CheckCircle2Icon className="size-4" />} label="Completed" value={`${completedItems.length}`} />
-              <HealthRow icon={<CalendarClockIcon className="size-4" />} label="Overdue" value={`${overdueCount}`} tone={overdueCount > 0 ? "danger" : "default"} />
-              <HealthRow icon={<NotebookPenIcon className="size-4" />} label="Notes" value={`${props.notes.length}`} />
+              <HealthRow icon={<CircleDotIcon className="size-4 text-foreground" />} label="Open work" value={`${openItems.length}`} />
+              <HealthRow icon={<CheckCircle2Icon className="size-4 text-green-500" />} label="Completed" value={`${completedItems.length}`} />
+              <HealthRow icon={<CalendarClockIcon className="size-4 text-destructive" />} label="Overdue" value={`${overdueCount}`} tone={overdueCount > 0 ? "danger" : "default"} />
+              <HealthRow icon={<NotebookPenIcon className="size-4 text-yellow-500" />} label="Notes" value={`${props.notes.length}`} />
             </div>
           </CardContent>
         </Card>
@@ -104,43 +103,6 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
       </div>
     </div>
   );
-}
-
-function getItemTitle(item: TrackedItem) {
-  return "task" in item ? item.task : item.milestone;
-}
-
-function getItemDescription(item: TrackedItem) {
-  return "taskDescription" in item ? item.taskDescription : item.milestoneDescription;
-}
-
-function getItemDate(item: TrackedItem) {
-  return "taskDeadline" in item ? item.taskDeadline : item.milestoneTargetDate;
-}
-
-function isItemCompleted(item: TrackedItem) {
-  return "taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted;
-}
-
-function sortByPriority(firstItem: TrackedItem, secondItem: TrackedItem) {
-  const firstDaysUntil = getDaysUntil(getItemDate(firstItem));
-  const secondDaysUntil = getDaysUntil(getItemDate(secondItem));
-
-  if (firstDaysUntil < 0 && secondDaysUntil >= 0) return -1;
-  if (firstDaysUntil >= 0 && secondDaysUntil < 0) return 1;
-
-  return new Date(getItemDate(firstItem)).getTime() - new Date(getItemDate(secondItem)).getTime();
-}
-
-function getDaysUntil(dateValue: Date | string) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const targetDate = new Date(dateValue);
-  targetDate.setHours(0, 0, 0, 0);
-
-  const dayInMilliseconds = 1000 * 60 * 60 * 24;
-  return Math.ceil((targetDate.getTime() - today.getTime()) / dayInMilliseconds);
 }
 
 interface HealthRowProps {

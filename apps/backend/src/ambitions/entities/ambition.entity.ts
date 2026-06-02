@@ -26,7 +26,7 @@ export class AmbitionEntity {
   ambitionEndDate: Date = new Date();
 
   @Column({ type: 'timestamp', name: 'ambition_completion_date', nullable: true })
-  ambitionCompletionDate: Date = new Date();
+  ambitionCompletionDate: Date | null = null;
 
   @Column({ type: 'enum', enum: ['active', 'completed', 'missed'], name: 'ambition_status', nullable: false, default: 'active' })
   ambitionStatus: 'active' | 'completed' | 'missed' = 'active';

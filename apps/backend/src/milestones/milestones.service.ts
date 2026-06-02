@@ -1,21 +1,29 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { MilestoneEntity } from './entities/milestone.entity';
+import { recalculateAmbitionProgress } from 'src/ambitions/ambition-progress.util';
 
 @Injectable()
 export class MilestonesService {
-  constructor(@InjectRepository(MilestoneEntity) private readonly milestoneRepository: Repository<MilestoneEntity>) {}
+  constructor(
+    @InjectRepository(MilestoneEntity) private readonly milestoneRepository: Repository<MilestoneEntity>,
+    @InjectEntityManager() private readonly entityManager: EntityManager,
+  ) {}
 
   async createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): Promise<MilestoneEntity> {
-    return await this.milestoneRepository.save({
-      id: crypto.randomUUID(),
-      userId,
-      ...createMilestoneDto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    return await this.entityManager.transaction(async (manager) => {
+      const saved = await manager.getRepository(MilestoneEntity).save({
+        id: crypto.randomUUID(),
+        userId,
+        ...createMilestoneDto,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      await recalculateAmbitionProgress(manager, { userId, ambitionId: createMilestoneDto.ambitionId });
+      return saved;
     });
   }
 
@@ -31,40 +39,61 @@ export class MilestonesService {
   }
 
   async updateMilestoneById(userId: string, milestoneId: string, updateMilestoneDto: UpdateMilestoneDto): Promise<MilestoneEntity> {
-    const milestone = await this.findOneMilestoneById(userId, milestoneId);
-    if (!milestone) {
-      throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
-    }
+    return await this.entityManager.transaction(async (manager) => {
+      const milestoneRepository = manager.getRepository(MilestoneEntity);
+      const milestone = await milestoneRepository.findOne({ where: { id: milestoneId, userId } });
+      if (!milestone) {
+        throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
+      }
 
-    return await this.milestoneRepository.save({
-      ...milestone,
-      milestone: updateMilestoneDto.milestone,
-      milestoneDescription: updateMilestoneDto.milestoneDescription,
-      milestoneCompleted: updateMilestoneDto.milestoneCompleted,
-      milestoneTargetDate: updateMilestoneDto.milestoneTargetDate,
-      updatedAt: new Date(),
+      const saved = await milestoneRepository.save({
+        ...milestone,
+        milestone: updateMilestoneDto.milestone,
+        milestoneDescription: updateMilestoneDto.milestoneDescription,
+        milestoneCompleted: updateMilestoneDto.milestoneCompleted,
+        milestoneTargetDate: updateMilestoneDto.milestoneTargetDate,
+        updatedAt: new Date(),
+      });
+      await recalculateAmbitionProgress(manager, { userId, ambitionId: milestone.ambitionId });
+      return saved;
     });
   }
 
   async toggleMilestoneCompletionStatus(userId: string, milestoneId: string): Promise<MilestoneEntity> {
-    const milestone = await this.findOneMilestoneById(userId, milestoneId);
-    if (!milestone) {
-      throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
-    }
+    return await this.entityManager.transaction(async (manager) => {
+      const milestoneRepository = manager.getRepository(MilestoneEntity);
+      const milestone = await milestoneRepository.findOne({ where: { id: milestoneId, userId } });
+      if (!milestone) {
+        throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
+      }
 
-    return await this.milestoneRepository.save({
-      ...milestone,
-      milestoneCompleted: !milestone.milestoneCompleted,
-      updatedAt: new Date(),
+      // Milestones are one-way: reaching one is a permanent achievement and cannot be reopened.
+      if (milestone.milestoneCompleted) {
+        throw new BadRequestException('Milestones cannot be reopened once completed');
+      }
+
+      const saved = await milestoneRepository.save({
+        ...milestone,
+        milestoneCompleted: true,
+        updatedAt: new Date(),
+      });
+      await recalculateAmbitionProgress(manager, { userId, ambitionId: milestone.ambitionId });
+      return saved;
     });
   }
 
   async removeMilestoneById(userId: string, milestoneId: string): Promise<MilestoneEntity> {
-    const milestone = await this.findOneMilestoneById(userId, milestoneId);
-    if (!milestone) {
-      throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
-    }
+    return await this.entityManager.transaction(async (manager) => {
+      const milestoneRepository = manager.getRepository(MilestoneEntity);
+      const milestone = await milestoneRepository.findOne({ where: { id: milestoneId, userId } });
+      if (!milestone) {
+        throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
+      }
 
-    return await this.milestoneRepository.remove(milestone);
+      const ambitionId = milestone.ambitionId;
+      const removed = await milestoneRepository.remove(milestone);
+      await recalculateAmbitionProgress(manager, { userId, ambitionId });
+      return removed;
+    });
   }
 }

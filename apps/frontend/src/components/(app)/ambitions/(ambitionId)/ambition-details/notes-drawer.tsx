@@ -73,8 +73,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
       setEditingText("");
 
       try {
-        const noteAmbitionId = snapshotNotes.find((n) => n.id === noteId)?.ambitionId ?? props.ambitionId;
-        const result = await updateNoteAction(noteId, text, noteAmbitionId);
+        const result = await updateNoteAction(noteId, text);
         if (result.error) {
           setError(result.error);
           setLocalNotes(snapshotNotes);
@@ -160,7 +159,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
               return (
                 <article
                   key={note.id}
-                  className={["rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-border/60 bg-background/50"].join(" ")}>
+                  className={["group rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-border/60 bg-background/50"].join(" ")}>
                   {isEditing ? (
                     <div className="space-y-3">
                       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Editing</p>
@@ -204,7 +203,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                         <p className="text-xs text-muted-foreground">
                           {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime() ? `Updated ${formatNoteDate(note.updatedAt)}` : note.createdAt ? `Added ${formatNoteDate(note.createdAt)}` : ""}
                         </p>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
                           <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label="Edit note" disabled={isPending} onClick={() => handleStartEdit(note)}>
                             <PencilIcon className="size-3.5" />
                           </Button>

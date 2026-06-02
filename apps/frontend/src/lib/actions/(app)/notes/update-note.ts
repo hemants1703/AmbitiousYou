@@ -2,16 +2,18 @@
 
 import { getSessionToken } from "@/lib/auth";
 
-export async function updateNoteAction(noteId: string, noteText: string, ambitionId: string): Promise<{ error: string | null }> {
+export async function updateNoteAction(noteId: string, noteText: string): Promise<{ error: string | null }> {
   const sessionToken = await getSessionToken();
 
+  // Only `note` is whitelisted by the backend UpdateNoteDto; sending `ambitionId`
+  // trips the global forbidNonWhitelisted ValidationPipe and 400s every edit.
   const response = await fetch(`${process.env.API_URL}/notes/${noteId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${sessionToken}`,
     },
-    body: JSON.stringify({ note: noteText, ambitionId }),
+    body: JSON.stringify({ note: noteText }),
   });
 
   if (!response.ok) {

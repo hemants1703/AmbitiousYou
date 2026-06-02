@@ -1,21 +1,29 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskEntity } from './entities/task.entity';
+import { recalculateAmbitionProgress } from 'src/ambitions/ambition-progress.util';
 
 @Injectable()
 export class TasksService {
-  constructor(@InjectRepository(TaskEntity) private readonly tasksRepository: Repository<TaskEntity>) {}
+  constructor(
+    @InjectRepository(TaskEntity) private readonly tasksRepository: Repository<TaskEntity>,
+    @InjectEntityManager() private readonly entityManager: EntityManager,
+  ) {}
 
   async createTask(userId: string, createTaskDto: CreateTaskDto): Promise<TaskEntity> {
-    return await this.tasksRepository.save({
-      id: crypto.randomUUID(),
-      userId,
-      ...createTaskDto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    return await this.entityManager.transaction(async (manager) => {
+      const saved = await manager.getRepository(TaskEntity).save({
+        id: crypto.randomUUID(),
+        userId,
+        ...createTaskDto,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      await recalculateAmbitionProgress(manager, { userId, ambitionId: createTaskDto.ambitionId });
+      return saved;
     });
   }
 
@@ -28,41 +36,56 @@ export class TasksService {
   }
 
   async updateTaskById(userId: string, taskId: string, updateTaskDto: UpdateTaskDto): Promise<TaskEntity> {
-    const task = await this.findOneTaskById(userId, taskId);
-    if (!task) {
-      throw new BadRequestException('Task not found');
-    }
+    return await this.entityManager.transaction(async (manager) => {
+      const taskRepository = manager.getRepository(TaskEntity);
+      const task = await taskRepository.findOne({ where: { id: taskId, userId } });
+      if (!task) {
+        throw new BadRequestException('Task not found');
+      }
 
-    Object.assign(task, {
-      ...task,
-      task: updateTaskDto.task,
-      taskDescription: updateTaskDto.taskDescription,
-      taskCompleted: updateTaskDto.taskCompleted,
-      taskDeadline: updateTaskDto.taskDeadline,
-      updatedAt: new Date(),
+      Object.assign(task, {
+        task: updateTaskDto.task,
+        taskDescription: updateTaskDto.taskDescription,
+        taskCompleted: updateTaskDto.taskCompleted,
+        taskDeadline: updateTaskDto.taskDeadline,
+        updatedAt: new Date(),
+      });
+      const saved = await taskRepository.save(task);
+      await recalculateAmbitionProgress(manager, { userId, ambitionId: task.ambitionId });
+      return saved;
     });
-    return await this.tasksRepository.save(task);
   }
 
   async toggleTaskCompletionStatus(userId: string, taskId: string): Promise<TaskEntity> {
-    const task = await this.tasksRepository.findOne({ where: { id: taskId, userId } });
-    if (!task) {
-      throw new BadRequestException('Task not found');
-    }
+    return await this.entityManager.transaction(async (manager) => {
+      const taskRepository = manager.getRepository(TaskEntity);
+      const task = await taskRepository.findOne({ where: { id: taskId, userId } });
+      if (!task) {
+        throw new BadRequestException('Task not found');
+      }
 
-    return await this.tasksRepository.save({
-      ...task,
-      taskCompleted: !task.taskCompleted,
-      updatedAt: new Date(),
+      const saved = await taskRepository.save({
+        ...task,
+        taskCompleted: !task.taskCompleted,
+        updatedAt: new Date(),
+      });
+      await recalculateAmbitionProgress(manager, { userId, ambitionId: task.ambitionId });
+      return saved;
     });
   }
 
   async removeTaskById(userId: string, taskId: string): Promise<TaskEntity> {
-    const task = await this.findOneTaskById(userId, taskId);
-    if (!task) {
-      throw new BadRequestException('Task not found');
-    }
+    return await this.entityManager.transaction(async (manager) => {
+      const taskRepository = manager.getRepository(TaskEntity);
+      const task = await taskRepository.findOne({ where: { id: taskId, userId } });
+      if (!task) {
+        throw new BadRequestException('Task not found');
+      }
 
-    return await this.tasksRepository.remove(task);
+      const ambitionId = task.ambitionId;
+      const removed = await taskRepository.remove(task);
+      await recalculateAmbitionProgress(manager, { userId, ambitionId });
+      return removed;
+    });
   }
 }

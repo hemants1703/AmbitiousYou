@@ -1,28 +1,40 @@
-import { getAmbitionDetails, type AmbitionDetails } from "./get-ambition-details";
+import type { AmbitionDetails } from "./get-ambition-details";
+import { getTasks } from "@/lib/api/tasks/get-tasks";
+import { getMilestones } from "@/lib/api/milestones/get-milestones";
 import type { Ambition } from "@ambitiousyou/shared/types";
 
 export interface ActiveAmbitionDetailsResult {
   details: AmbitionDetails[];
-  /** True when at least one ambition's details failed to load. */
+  /** True when at least one ambition's items failed to load (thrown/network error). */
   hadErrors: boolean;
 }
 
 /**
- * Fetches details for the supplied ambitions in parallel.
+ * Fetches each supplied ambition's tracked items (tasks or milestones) in parallel
+ * and merges them onto the ambition.
  *
- * `getAmbitionDetails` throws on a non-ok response, so we use Promise.allSettled
- * to isolate failures per ambition: one ambition failing to load drops only that
- * ambition from the aggregation instead of crashing the whole dashboard. The
- * underlying fetches are React-cached per (token, id), so this dedupes naturally.
+ * The `GET /ambitions/:id/details` endpoint does NOT return tasks/milestones, so we
+ * read each ambition's collection from its dedicated list endpoint — the same
+ * `getTasks`/`getMilestones` helpers the ambition-details page uses. `Promise.allSettled`
+ * isolates failures per ambition so one failing fetch drops only that ambition instead
+ * of crashing the dashboard. (`getTasks`/`getMilestones` already return `[]` on a non-ok
+ * response, so `hadErrors` reflects only thrown/network failures.)
  */
 export async function getActiveAmbitionDetails(sessionToken: string, ambitions: Ambition[]): Promise<ActiveAmbitionDetailsResult> {
-  const settled = await Promise.allSettled(ambitions.map((ambition) => getAmbitionDetails(sessionToken, ambition.id)));
+  const settled = await Promise.allSettled(
+    ambitions.map(async (ambition): Promise<AmbitionDetails> => {
+      if (ambition.ambitionTrackingMethod === "task") {
+        return { ...ambition, tasks: await getTasks(sessionToken, ambition.id) };
+      }
+      return { ...ambition, milestones: await getMilestones(sessionToken, ambition.id) };
+    }),
+  );
 
   const details: AmbitionDetails[] = [];
   let hadErrors = false;
 
   for (const result of settled) {
-    if (result.status === "fulfilled" && result.value) {
+    if (result.status === "fulfilled") {
       details.push(result.value);
     } else {
       hadErrors = true;
