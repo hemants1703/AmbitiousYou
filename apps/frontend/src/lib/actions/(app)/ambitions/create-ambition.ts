@@ -1,10 +1,11 @@
 "use server";
 
 import { getSessionToken } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export type CreateAmbitionState = {
   error: string | null;
+  success?: boolean;
 };
 
 type ParsedItem = Record<string, string>;
@@ -199,5 +200,9 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
     };
   }
 
-  redirect("/ambitions");
+  // Mark the list stale so the client navigation lands on a freshly-rendered page.
+  // We return success (instead of redirecting) so the form can clear its saved draft.
+  revalidatePath("/ambitions");
+
+  return { error: null, success: true };
 }
