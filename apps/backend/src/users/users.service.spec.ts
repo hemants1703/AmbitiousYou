@@ -1,40 +1,28 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { SettingsService } from 'src/settings/settings.service';
 import bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let usersRepository: jest.Mocked<Repository<UserEntity>>;
-  let mockQueryBuilder: {
-    addSelect: jest.Mock;
-    where: jest.Mock;
-    getOne: jest.Mock;
-  };
+  let prisma: { user: { create: jest.Mock; findUnique: jest.Mock } };
+  let settingsService: { createSettingsForUserId: jest.Mock };
 
   beforeEach(async () => {
-    mockQueryBuilder = {
-      addSelect: jest.fn().mockReturnThis(),
-      where: jest.fn().mockReturnThis(),
-      getOne: jest.fn(),
+    prisma = {
+      user: {
+        create: jest.fn(),
+        findUnique: jest.fn(),
+      },
     };
-
-    usersRepository = {
-      create: jest.fn(),
-      save: jest.fn(),
-      findOne: jest.fn(),
-      createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
-    } as unknown as jest.Mocked<Repository<UserEntity>>;
+    settingsService = { createSettingsForUserId: jest.fn() };
 
     const testingModule: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
-        {
-          provide: getRepositoryToken(UserEntity),
-          useValue: usersRepository,
-        },
+        { provide: PrismaService, useValue: prisma },
+        { provide: SettingsService, useValue: settingsService },
       ],
     }).compile();
 
@@ -50,7 +38,7 @@ describe('UsersService', () => {
   });
 
   describe('createUser', () => {
-    it('should create a new user', async () => {
+    it('should create a new user and seed its settings', async () => {
       const createUserDto = { name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech', password: 'password123' };
 
       const createdUser = {
@@ -58,31 +46,29 @@ describe('UsersService', () => {
         name: createUserDto.name,
         email: createUserDto.email,
         emailVerified: false,
-        passwordHash: 'hashed-password',
         image: null,
         createdAt: new Date('2026-01-01T00:00:00.000Z'),
         updatedAt: new Date('2026-01-01T00:00:00.000Z'),
-      } as UserEntity;
+      };
 
       const hashSpy = jest.spyOn(bcrypt, 'hash') as unknown as jest.SpyInstance<Promise<string>, [string | Buffer, string | number]>;
       hashSpy.mockResolvedValue('hashed-password');
-      usersRepository.create.mockReturnValue(createdUser);
-      usersRepository.save.mockResolvedValue(createdUser);
+      prisma.user.create.mockResolvedValue(createdUser);
+      settingsService.createSettingsForUserId.mockResolvedValue(undefined);
 
       const result = await userService.createUser(createUserDto);
 
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
-      expect(usersRepository.create).toHaveBeenCalledWith({
-        id: expect.any(String),
-        name: createUserDto.name,
-        email: createUserDto.email,
-        emailVerified: false,
-        passwordHash: 'hashed-password',
-        image: null,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
+      expect(prisma.user.create).toHaveBeenCalledWith({
+        data: {
+          name: createUserDto.name,
+          email: createUserDto.email,
+          emailVerified: false,
+          passwordHash: 'hashed-password',
+          image: null,
+        },
       });
-      expect(usersRepository.save).toHaveBeenCalledWith(createdUser);
+      expect(settingsService.createSettingsForUserId).toHaveBeenCalledWith(createdUser.id);
       expect(result).toEqual(createdUser);
     });
   });
@@ -91,11 +77,11 @@ describe('UsersService', () => {
     it('should return a user by email', async () => {
       const user = { id: '1', name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech' };
 
-      usersRepository.findOne.mockResolvedValue(user as UserEntity);
+      prisma.user.findUnique.mockResolvedValue(user);
 
       const result = await userService.findOneByEmail('hemant@hemantsharma.tech');
 
-      expect(usersRepository.findOne).toHaveBeenCalledWith({ where: { email: 'hemant@hemantsharma.tech' } });
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: 'hemant@hemantsharma.tech' } });
       expect(result).toEqual(user);
     });
   });
@@ -107,16 +93,15 @@ describe('UsersService', () => {
         name: 'Hemant Sharma',
         email: 'hemant@hemantsharma.tech',
         passwordHash: 'hashed-password',
-      } as UserEntity;
+      };
 
-      mockQueryBuilder.getOne.mockResolvedValue(user);
+      prisma.user.findUnique.mockResolvedValue(user);
 
       const result = await userService.findOneByEmailWithPassword('hemant@hemantsharma.tech');
 
-      expect(usersRepository.createQueryBuilder).toHaveBeenCalledWith('user');
-      expect(mockQueryBuilder.addSelect).toHaveBeenCalledWith('user.passwordHash');
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith('user.email = :email', {
-        email: 'hemant@hemantsharma.tech',
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { email: 'hemant@hemantsharma.tech' },
+        omit: { passwordHash: false },
       });
       expect(result).toEqual(user);
     });

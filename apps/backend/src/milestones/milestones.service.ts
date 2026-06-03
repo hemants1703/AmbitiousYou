@@ -1,68 +1,59 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { Milestone } from '@prisma/client';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
-import { MilestoneEntity } from './entities/milestone.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { recalculateAmbitionProgress } from 'src/ambitions/ambition-progress.util';
 
 @Injectable()
 export class MilestonesService {
-  constructor(
-    @InjectRepository(MilestoneEntity) private readonly milestoneRepository: Repository<MilestoneEntity>,
-    @InjectEntityManager() private readonly entityManager: EntityManager,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): Promise<MilestoneEntity> {
-    return await this.entityManager.transaction(async (manager) => {
-      const saved = await manager.getRepository(MilestoneEntity).save({
-        id: crypto.randomUUID(),
-        userId,
-        ...createMilestoneDto,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+  async createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): Promise<Milestone> {
+    return await this.prisma.$transaction(async (tx) => {
+      const saved = await tx.milestone.create({
+        data: { userId, ...createMilestoneDto },
       });
-      await recalculateAmbitionProgress(manager, { userId, ambitionId: createMilestoneDto.ambitionId });
+      await recalculateAmbitionProgress(tx, { userId, ambitionId: createMilestoneDto.ambitionId });
       return saved;
     });
   }
 
-  async findAllMilestonesForAmbitionId(userId: string, ambitionId: string): Promise<MilestoneEntity[] | null> {
-    return await this.milestoneRepository.find({
+  async findAllMilestonesForAmbitionId(userId: string, ambitionId: string): Promise<Milestone[] | null> {
+    return await this.prisma.milestone.findMany({
       where: { ambitionId, userId },
-      order: { createdAt: 'DESC' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
-  async findOneMilestoneById(userId: string, milestoneId: string): Promise<MilestoneEntity | null> {
-    return await this.milestoneRepository.findOneBy({ id: milestoneId, userId });
+  async findOneMilestoneById(userId: string, milestoneId: string): Promise<Milestone | null> {
+    return await this.prisma.milestone.findFirst({ where: { id: milestoneId, userId } });
   }
 
-  async updateMilestoneById(userId: string, milestoneId: string, updateMilestoneDto: UpdateMilestoneDto): Promise<MilestoneEntity> {
-    return await this.entityManager.transaction(async (manager) => {
-      const milestoneRepository = manager.getRepository(MilestoneEntity);
-      const milestone = await milestoneRepository.findOne({ where: { id: milestoneId, userId } });
+  async updateMilestoneById(userId: string, milestoneId: string, updateMilestoneDto: UpdateMilestoneDto): Promise<Milestone> {
+    return await this.prisma.$transaction(async (tx) => {
+      const milestone = await tx.milestone.findFirst({ where: { id: milestoneId, userId } });
       if (!milestone) {
         throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
       }
 
-      const saved = await milestoneRepository.save({
-        ...milestone,
-        milestone: updateMilestoneDto.milestone,
-        milestoneDescription: updateMilestoneDto.milestoneDescription,
-        milestoneCompleted: updateMilestoneDto.milestoneCompleted,
-        milestoneTargetDate: updateMilestoneDto.milestoneTargetDate,
-        updatedAt: new Date(),
+      const saved = await tx.milestone.update({
+        where: { id: milestone.id },
+        data: {
+          milestone: updateMilestoneDto.milestone,
+          milestoneDescription: updateMilestoneDto.milestoneDescription,
+          milestoneCompleted: updateMilestoneDto.milestoneCompleted,
+          milestoneTargetDate: updateMilestoneDto.milestoneTargetDate,
+        },
       });
-      await recalculateAmbitionProgress(manager, { userId, ambitionId: milestone.ambitionId });
+      await recalculateAmbitionProgress(tx, { userId, ambitionId: milestone.ambitionId });
       return saved;
     });
   }
 
-  async toggleMilestoneCompletionStatus(userId: string, milestoneId: string): Promise<MilestoneEntity> {
-    return await this.entityManager.transaction(async (manager) => {
-      const milestoneRepository = manager.getRepository(MilestoneEntity);
-      const milestone = await milestoneRepository.findOne({ where: { id: milestoneId, userId } });
+  async toggleMilestoneCompletionStatus(userId: string, milestoneId: string): Promise<Milestone> {
+    return await this.prisma.$transaction(async (tx) => {
+      const milestone = await tx.milestone.findFirst({ where: { id: milestoneId, userId } });
       if (!milestone) {
         throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
       }
@@ -72,27 +63,25 @@ export class MilestonesService {
         throw new BadRequestException('Milestones cannot be reopened once completed');
       }
 
-      const saved = await milestoneRepository.save({
-        ...milestone,
-        milestoneCompleted: true,
-        updatedAt: new Date(),
+      const saved = await tx.milestone.update({
+        where: { id: milestone.id },
+        data: { milestoneCompleted: true },
       });
-      await recalculateAmbitionProgress(manager, { userId, ambitionId: milestone.ambitionId });
+      await recalculateAmbitionProgress(tx, { userId, ambitionId: milestone.ambitionId });
       return saved;
     });
   }
 
-  async removeMilestoneById(userId: string, milestoneId: string): Promise<MilestoneEntity> {
-    return await this.entityManager.transaction(async (manager) => {
-      const milestoneRepository = manager.getRepository(MilestoneEntity);
-      const milestone = await milestoneRepository.findOne({ where: { id: milestoneId, userId } });
+  async removeMilestoneById(userId: string, milestoneId: string): Promise<Milestone> {
+    return await this.prisma.$transaction(async (tx) => {
+      const milestone = await tx.milestone.findFirst({ where: { id: milestoneId, userId } });
       if (!milestone) {
         throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
       }
 
       const ambitionId = milestone.ambitionId;
-      const removed = await milestoneRepository.remove(milestone);
-      await recalculateAmbitionProgress(manager, { userId, ambitionId });
+      const removed = await tx.milestone.delete({ where: { id: milestone.id } });
+      await recalculateAmbitionProgress(tx, { userId, ambitionId });
       return removed;
     });
   }

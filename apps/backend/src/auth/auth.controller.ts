@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { CurrentSession } from './decorators/current-session.decorator';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { RegisterUserDto } from './dto/register-auth.dto';
-import { SessionEntity } from './entities/session.entity';
 import { SessionGuard } from './guards/session.guard';
 import { CurrentUserId } from './decorators/current-user-id.decorator';
 
@@ -30,7 +29,7 @@ export class AuthController {
 
   @UseGuards(SessionGuard)
   @Get('/sessions')
-  async getUserSessions(@CurrentUserId() userId: string): Promise<SessionEntity[]> {
+  async getUserSessions(@CurrentUserId() userId: string): Promise<Session[]> {
     return await this.authService.getUserSessions(userId);
   }
 }

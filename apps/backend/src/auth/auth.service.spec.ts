@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
-import { SessionEntity } from './entities/session.entity';
-import { VerificationEntity } from './entities/verification.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
@@ -15,41 +13,32 @@ jest.mock('bcrypt', () => ({
 describe('AuthService', () => {
   let service: AuthService;
   let mockUsersService: any;
-  let mockSessionRepository: any;
-  let mockVerificationRepository: any;
+  let prisma: any;
 
   beforeEach(async () => {
     mockUsersService = {
       findOneByEmail: jest.fn(),
       findOneByEmailWithPassword: jest.fn(),
-      create: jest.fn(),
+      createUser: jest.fn(),
     };
 
-    mockSessionRepository = {
-      create: jest.fn(),
-      save: jest.fn(),
-    };
-
-    mockVerificationRepository = {
-      create: jest.fn(),
-      save: jest.fn(),
+    prisma = {
+      session: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        deleteMany: jest.fn(),
+      },
+      verification: {
+        create: jest.fn(),
+      },
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        {
-          provide: UsersService,
-          useValue: mockUsersService,
-        },
-        {
-          provide: getRepositoryToken(SessionEntity),
-          useValue: mockSessionRepository,
-        },
-        {
-          provide: getRepositoryToken(VerificationEntity),
-          useValue: mockVerificationRepository,
-        },
+        { provide: UsersService, useValue: mockUsersService },
+        { provide: PrismaService, useValue: prisma },
       ],
     }).compile();
 
@@ -77,7 +66,6 @@ describe('AuthService', () => {
       const mockUser = {
         id: 'uuid-1',
         ...registerUserDto,
-        passwordHash: 'hashedPassword',
         emailVerified: false,
         image: null,
         createdAt: new Date(),
@@ -95,37 +83,26 @@ describe('AuthService', () => {
         updatedAt: new Date(),
       };
 
-      mockUsersService.create.mockResolvedValue(mockUser);
-      mockSessionRepository.create.mockReturnValue(mockSession);
-      mockSessionRepository.save.mockResolvedValue(mockSession);
+      mockUsersService.createUser.mockResolvedValue(mockUser);
+      prisma.session.create.mockResolvedValue(mockSession);
 
       const result = await service.registerUser(registerUserDto);
 
       expect(mockUsersService.findOneByEmail).toHaveBeenCalledWith(registerUserDto.email);
-      expect(mockUsersService.create).toHaveBeenCalledWith(registerUserDto);
-      expect(mockSessionRepository.create).toHaveBeenCalled();
-      expect(mockSessionRepository.save).toHaveBeenCalledWith(mockSession);
-      expect(result).toEqual({
-        sessionToken: 'session-token',
-      });
+      expect(mockUsersService.createUser).toHaveBeenCalledWith(registerUserDto);
+      expect(prisma.session.create).toHaveBeenCalled();
+      expect(result).toEqual({ sessionToken: 'session-token' });
     });
 
     it('should throw ConflictException if email already exists', async () => {
-      const existingUser = {
-        id: 'uuid-2',
-        ...registerUserDto,
-      };
-
-      mockUsersService.findOneByEmail.mockResolvedValue(existingUser);
+      mockUsersService.findOneByEmail.mockResolvedValue({ id: 'uuid-2', ...registerUserDto });
 
       await expect(service.registerUser(registerUserDto)).rejects.toThrow(ConflictException);
       expect(mockUsersService.findOneByEmail).toHaveBeenCalledWith(registerUserDto.email);
     });
 
     it('should throw ConflictException with correct message if email exists', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue({
-        id: 'uuid-2',
-      });
+      mockUsersService.findOneByEmail.mockResolvedValue({ id: 'uuid-2' });
 
       await expect(service.registerUser(registerUserDto)).rejects.toThrow('Email is already in use');
     });
@@ -164,18 +141,14 @@ describe('AuthService', () => {
 
       mockUsersService.findOneByEmailWithPassword.mockResolvedValue(mockUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-      mockSessionRepository.create.mockReturnValue(mockSession);
-      mockSessionRepository.save.mockResolvedValue(mockSession);
+      prisma.session.create.mockResolvedValue(mockSession);
 
       const result = await service.loginUser(loginUserDto);
 
       expect(mockUsersService.findOneByEmailWithPassword).toHaveBeenCalledWith(loginUserDto.email);
       expect(bcrypt.compare).toHaveBeenCalledWith(loginUserDto.password, mockUser.passwordHash);
-      expect(mockSessionRepository.create).toHaveBeenCalled();
-      expect(mockSessionRepository.save).toHaveBeenCalledWith(mockSession);
-      expect(result).toEqual({
-        sessionToken: 'session-token',
-      });
+      expect(prisma.session.create).toHaveBeenCalled();
+      expect(result).toEqual({ sessionToken: 'session-token' });
     });
 
     it('should throw ConflictException if user email not found', async () => {
@@ -192,26 +165,22 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if password is invalid', async () => {
-      const mockUser = {
+      mockUsersService.findOneByEmailWithPassword.mockResolvedValue({
         id: 'uuid-1',
         email: loginUserDto.email,
         passwordHash: 'hashedPassword',
-      };
-
-      mockUsersService.findOneByEmailWithPassword.mockResolvedValue(mockUser);
+      });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       await expect(service.loginUser(loginUserDto)).rejects.toThrow('Invalid email or password');
     });
 
     it('should throw UnauthorizedException with correct message if password is invalid', async () => {
-      const mockUser = {
+      mockUsersService.findOneByEmailWithPassword.mockResolvedValue({
         id: 'uuid-1',
         email: loginUserDto.email,
         passwordHash: 'hashedPassword',
-      };
-
-      mockUsersService.findOneByEmailWithPassword.mockResolvedValue(mockUser);
+      });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       try {

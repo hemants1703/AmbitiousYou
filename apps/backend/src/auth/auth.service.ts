@@ -1,19 +1,16 @@
 import { ConflictException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
+import { Session } from '@prisma/client';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { SessionEntity } from './entities/session.entity';
-import { VerificationEntity } from './entities/verification.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    @InjectRepository(SessionEntity) private readonly sessionRepository: Repository<SessionEntity>,
-    @InjectRepository(VerificationEntity) private readonly verificationRepository: Repository<VerificationEntity>,
+    private readonly prisma: PrismaService,
   ) {}
 
   async registerUser(createUserDto: CreateUserDto): Promise<{ sessionToken: string }> {
@@ -24,17 +21,15 @@ export class AuthService {
 
     const user = await this.usersService.createUser(createUserDto);
 
-    const session = this.sessionRepository.create({
-      id: crypto.randomUUID(),
-      userId: user.id,
-      token: crypto.randomUUID(),
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
-      ipAddress: null,
-      userAgent: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const session = await this.prisma.session.create({
+      data: {
+        userId: user.id,
+        token: crypto.randomUUID(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
+        ipAddress: null,
+        userAgent: null,
+      },
     });
-    await this.sessionRepository.save(session);
 
     return { sessionToken: session.token };
   }
@@ -50,35 +45,33 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const session = this.sessionRepository.create({
-      id: crypto.randomUUID(),
-      userId: user.id,
-      token: crypto.randomUUID(),
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
-      ipAddress: loginUserDto.ipAddress ?? null,
-      userAgent: loginUserDto.userAgent ?? null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const session = await this.prisma.session.create({
+      data: {
+        userId: user.id,
+        token: crypto.randomUUID(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
+        ipAddress: loginUserDto.ipAddress ?? null,
+        userAgent: loginUserDto.userAgent ?? null,
+      },
     });
-    await this.sessionRepository.save(session);
 
     return { sessionToken: session.token };
   }
 
   async logoutUser(token: string): Promise<void> {
-    const session = await this.sessionRepository.findOne({ where: { token } });
+    const session = await this.prisma.session.findFirst({ where: { token } });
 
     if (!session) {
       throw new ConflictException('Session not found');
     }
 
-    await this.sessionRepository.delete({ token });
+    await this.prisma.session.deleteMany({ where: { token } });
   }
 
-  async getUserSessions(userId: string): Promise<SessionEntity[]> {
-    return await this.sessionRepository.find({
+  async getUserSessions(userId: string): Promise<Session[]> {
+    return await this.prisma.session.findMany({
       where: { userId },
-      order: { createdAt: 'DESC' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -90,16 +83,14 @@ export class AuthService {
     }
 
     try {
-      const verification = this.verificationRepository.create({
-        id: crypto.randomUUID(),
-        userId: user.id,
-        identifier: 'email',
-        value: crypto.randomUUID(),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expires in 24 hours
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      await this.prisma.verification.create({
+        data: {
+          userId: user.id,
+          identifier: 'email',
+          value: crypto.randomUUID(),
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expires in 24 hours
+        },
       });
-      await this.verificationRepository.save(verification);
     } catch (error) {
       console.error('Error in verifyEmail: ', error);
       throw new HttpException('Failed to create verification record', 500);

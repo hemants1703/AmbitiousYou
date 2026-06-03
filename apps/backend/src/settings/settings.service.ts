@@ -1,28 +1,25 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Settings } from '@prisma/client';
 import { UpdateSettingDto } from './dto/update-setting.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { SettingsEntity } from './entities/setting.entity';
-import { Repository } from 'typeorm';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SettingsService {
-  constructor(@InjectRepository(SettingsEntity) private settingsRepository: Repository<SettingsEntity>) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async createSettingsForUserId(userId: string): Promise<SettingsEntity> {
-    const settings = this.settingsRepository.create({
-      id: crypto.randomUUID(),
-      userId,
-      userTimezone: '',
-      emailAccountActivity: true,
-      pushAmbitionReminders: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+  async createSettingsForUserId(userId: string): Promise<Settings> {
+    return await this.prisma.settings.create({
+      data: {
+        userId,
+        userTimezone: '',
+        emailAccountActivity: true,
+        pushAmbitionReminders: false,
+      },
     });
-    return await this.settingsRepository.save(settings);
   }
 
-  async findAllSettingsForUserId(userId: string): Promise<SettingsEntity | null> {
-    const settings = await this.settingsRepository.findOne({ where: { userId } });
+  async findAllSettingsForUserId(userId: string): Promise<Settings | null> {
+    const settings = await this.prisma.settings.findUnique({ where: { userId } });
     if (!settings) {
       throw new BadRequestException('Settings not found for the user');
     }
@@ -30,13 +27,15 @@ export class SettingsService {
     return settings;
   }
 
-  async updateSettingForUserId(userId: string, updateSettingDto: UpdateSettingDto): Promise<SettingsEntity> {
-    const settings = await this.settingsRepository.findOne({ where: { userId } });
+  async updateSettingForUserId(userId: string, updateSettingDto: UpdateSettingDto): Promise<Settings> {
+    const settings = await this.prisma.settings.findUnique({ where: { userId } });
     if (!settings) {
       throw new BadRequestException('Setting not found');
     }
-    
-    Object.assign(settings, updateSettingDto);
-    return await this.settingsRepository.save(settings);
+
+    return await this.prisma.settings.update({
+      where: { userId },
+      data: { ...updateSettingDto },
+    });
   }
 }

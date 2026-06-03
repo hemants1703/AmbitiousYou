@@ -1,52 +1,45 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Note } from '@prisma/client';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { NoteEntity } from './entities/note.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class NotesService {
-  constructor(@InjectRepository(NoteEntity) private readonly notesRepository: Repository<NoteEntity>) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async createNote(userId: string, createNoteDto: CreateNoteDto): Promise<NoteEntity> {
-    return await this.notesRepository.save({
-      id: crypto.randomUUID(),
-      userId,
-      ...createNoteDto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+  async createNote(userId: string, createNoteDto: CreateNoteDto): Promise<Note> {
+    return await this.prisma.note.create({
+      data: { userId, ...createNoteDto },
     });
   }
 
-  async findAllNotesForAmbitionId(userId: string, ambitionId: string): Promise<NoteEntity[]> {
-    return await this.notesRepository.find({ where: { ambitionId, userId } });
+  async findAllNotesForAmbitionId(userId: string, ambitionId: string): Promise<Note[]> {
+    return await this.prisma.note.findMany({ where: { ambitionId, userId } });
   }
 
-  async findOneNoteById(userId: string, noteId: string): Promise<NoteEntity | null> {
-    return await this.notesRepository.findOne({ where: { id: noteId, userId } });
+  async findOneNoteById(userId: string, noteId: string): Promise<Note | null> {
+    return await this.prisma.note.findFirst({ where: { id: noteId, userId } });
   }
 
-  async updateNoteById(userId: string, noteId: string, updateNoteDto: UpdateNoteDto): Promise<NoteEntity> {
+  async updateNoteById(userId: string, noteId: string, updateNoteDto: UpdateNoteDto): Promise<Note> {
     const note = await this.findOneNoteById(userId, noteId);
     if (!note) {
       throw new NotFoundException('Note not found');
     }
 
-    Object.assign(note, {
-      ...note,
-      note: updateNoteDto.note,
-      updatedAt: new Date(),
+    return await this.prisma.note.update({
+      where: { id: note.id },
+      data: { note: updateNoteDto.note },
     });
-    return await this.notesRepository.save(note);
   }
 
-  async removeNoteById(userId: string, noteId: string): Promise<NoteEntity> {
+  async removeNoteById(userId: string, noteId: string): Promise<Note> {
     const note = await this.findOneNoteById(userId, noteId);
     if (!note) {
       throw new BadRequestException('Note not found');
     }
 
-    return await this.notesRepository.remove(note);
+    return await this.prisma.note.delete({ where: { id: note.id } });
   }
 }

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthController', () => {
@@ -21,6 +22,7 @@ describe('AuthController', () => {
           provide: AuthService,
           useValue: mockAuthService,
         },
+        { provide: PrismaService, useValue: {} },
       ],
     }).compile();
 
