@@ -1,4 +1,4 @@
-import type { User } from "@ambitiousyou/shared";
+import type { Settings, User } from "@ambitiousyou/shared";
 import { BellIcon, CreditCardIcon, LockKeyholeIcon, UserRoundIcon } from "lucide-react";
 import Link from "next/link";
 import type { ComponentType } from "react";
@@ -12,6 +12,7 @@ export type SettingsTabValue = "account" | "billing" | "notifications" | "securi
 interface SettingsTabsProps {
   activeTab: SettingsTabValue;
   userDetails: User;
+  userSettings: Settings;
   sessionToken: string;
 }
 
@@ -31,7 +32,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
   const activePanels = {
     account: <AccountSettingsTab userDetails={props.userDetails} />,
     billing: <BillingSettingsTab />,
-    notifications: <NotificationsSettingsTab />,
+    notifications: <NotificationsSettingsTab userSettings={props.userSettings} />,
     security: <SecuritySettingsTab sessionToken={props.sessionToken} />,
   } satisfies Record<SettingsTabValue, React.ReactNode>;
 

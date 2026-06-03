@@ -7,6 +7,9 @@ import type { ReactNode } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Settings } from "@ambitiousyou/shared";
+import { togglePushAmbitionRemindersSetting } from "@/lib/actions/(app)/settings/update-settings";
+import { toast } from "sonner";
 
 interface NotificationRowProps {
   id: string;
@@ -14,7 +17,7 @@ interface NotificationRowProps {
   label: string;
   description: string;
   checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 function NotificationRow(props: NotificationRowProps) {
@@ -31,8 +34,9 @@ function NotificationRow(props: NotificationRowProps) {
       </div>
       <Switch
         id={props.id}
+        disabled={props.onCheckedChange === undefined}
         checked={props.checked}
-        onCheckedChange={props.onCheckedChange}
+        onCheckedChange={props.onCheckedChange ? (checked) => props.onCheckedChange!(checked) : undefined}
         aria-label={props.label}
         className="mt-0.5 shrink-0"
       />
@@ -40,46 +44,47 @@ function NotificationRow(props: NotificationRowProps) {
   );
 }
 
-export function NotificationsSettingsTab() {
-  const [emailActivity, setEmailActivity] = useState(true);
-  const [ambitionReminders, setAmbitionReminders] = useState(false);
+interface NotificationsSettingsTabProps {
+  userSettings: Settings;
+}
+
+export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
+  const [pushAmbitionReminders, setPushAmbitionReminders] = useState(props.userSettings.pushAmbitionReminders);
 
   return (
-    <div className="space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BellIcon className="size-4 text-primary" />
-            Notification preferences
-          </CardTitle>
-          <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <NotificationRow
-            id="email-activity"
-            icon={<MailIcon className="size-4" />}
-            label="Email account activity"
-            description="Receive emails about sign-ins, profile changes, and security events."
-            checked={emailActivity}
-            onCheckedChange={setEmailActivity}
-          />
-          <NotificationRow
-            id="ambition-reminders"
-            icon={<BellIcon className="size-4" />}
-            label="Ambition reminders"
-            description="Push notifications when deadlines are approaching or milestones are due."
-            checked={ambitionReminders}
-            onCheckedChange={setAmbitionReminders}
-          />
-        </CardContent>
-      </Card>
-
-      <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
-        <p className="text-xs text-muted-foreground">
-          <span className="font-medium text-foreground">Preferences are not saved yet&nbsp;—&nbsp;</span>
-          backend persistence for notifications is coming soon.
-        </p>
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BellIcon className="size-4 text-primary" />
+          Notification preferences
+        </CardTitle>
+        <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <NotificationRow
+          id="email-activity"
+          icon={<MailIcon className="size-4" />}
+          label="Email account activity"
+          description="Receive emails about sign-ins, profile changes, and security events."
+          checked={props.userSettings.emailAccountActivity}
+        />
+        <NotificationRow
+          id="ambition-reminders"
+          icon={<BellIcon className="size-4" />}
+          label="Ambition reminders"
+          description="Push notifications when deadlines are approaching or milestones are due."
+          checked={pushAmbitionReminders}
+          onCheckedChange={async (checked) => {
+            try {
+              const updatedSettings = await togglePushAmbitionRemindersSetting(checked);
+              setPushAmbitionReminders(updatedSettings.pushAmbitionReminders);
+            } catch (error) {
+              console.error("Failed to update settings:", error);
+              toast.error("Failed to update notification settings. Please try again.");
+            }
+          }}
+        />
+      </CardContent>
+    </Card>
   );
 }
