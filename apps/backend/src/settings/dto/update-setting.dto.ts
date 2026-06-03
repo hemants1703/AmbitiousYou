@@ -7,9 +7,5 @@ export class UpdateSettingDto {
 
   @IsBoolean()
   @IsOptional()
-  emailAccountActivity: boolean = false;
-
-  @IsBoolean()
-  @IsOptional()
   pushAmbitionReminders: boolean = false;
 }
