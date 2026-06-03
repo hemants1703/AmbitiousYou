@@ -13,7 +13,9 @@ export async function GET() {
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${sessionToken.value}` },
   });
 
-  (await cookies()).delete("sessionToken");
+  const cookieStore = await cookies();
+  cookieStore.delete("sessionToken");
+  cookieStore.delete("ay_auth"); // clear the readable logged-in hint alongside the token
 
   redirect("/");
 }

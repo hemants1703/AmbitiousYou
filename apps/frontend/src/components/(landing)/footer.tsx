@@ -1,16 +1,17 @@
 import Link from "next/link";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
 import { ThemeToggle } from "../theme-toggle";
+import FooterAuthLinks from "./footer-auth-links";
 
 export default function Footer() {
+  // Login/Sign Up live in <FooterAuthLinks> (auth-aware); the rest are static.
   const exploreLinks = [
     { title: "Home", href: "/" },
     { title: "Experience", href: "/experience" },
     { title: "Features", href: "/features" },
-    { title: "Login", href: "/login" },
-    { title: "Sign Up", href: "/signup" },
-    { title: "Contact Us", href: "mailto:support@ambitiousyou.pro" },
   ];
+
+  const contactLink = { title: "Contact Us", href: "mailto:support@ambitiousyou.pro" };
 
   const legalLinks = [
     { title: "Privacy Policy", href: "/privacy-policy" },
@@ -64,6 +65,12 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <FooterAuthLinks />
+              <li key={contactLink.href}>
+                <Link prefetch={true} href={contactLink.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                  {contactLink.title}
+                </Link>
+              </li>
             </ul>
           </div>
 

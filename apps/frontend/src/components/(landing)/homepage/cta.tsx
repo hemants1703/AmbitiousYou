@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
 import { ArrowRightIcon, RocketIcon } from "lucide-react";
+import PrimaryCta from "../primary-cta";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -19,11 +20,7 @@ export default function CTA() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
-              <Link prefetch={true} href="/signup" className="flex items-center gap-2">
-                Set your first goal <RocketIcon className="h-5 w-5" />
-              </Link>
-            </Button>
+            <PrimaryCta loggedOutLabel="Set your first goal" loggedOutHref="/signup" size="lg" className="text-lg h-12 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all" icon={<RocketIcon className="h-5 w-5" />} />
             <Button asChild size="lg" variant="outline" className="text-lg h-12 px-8">
               <Link prefetch={true} href="/experience" className="flex items-center gap-2">
                 Experience For Free <ArrowRightIcon className="h-5 w-5" />

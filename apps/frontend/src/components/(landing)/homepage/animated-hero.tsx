@@ -4,6 +4,7 @@ import { ArrowRightIcon, CheckCircleIcon, HeartIcon, RocketIcon, StarIcon, Targe
 import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
 import DashboardPreview from "./dashboard-preview";
+import PrimaryCta from "../primary-cta";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -30,11 +31,7 @@ export default function AnimatedHero() {
 
         {/* Animated CTA buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" variant="outline">
-            <Link prefetch={true} href="/signup" className="flex items-center gap-2">
-              Get Started <RocketIcon className="h-6 w-6" />
-            </Link>
-          </Button>
+          <PrimaryCta loggedOutLabel="Get Started" loggedOutHref="/signup" size="lg" variant="outline" icon={<RocketIcon className="h-6 w-6" />} />
           <Button asChild size="lg">
             <Link prefetch={true} href="/experience" className="flex items-center gap-2">
               Experience For Free <ArrowRightIcon className="h-5 w-5" />

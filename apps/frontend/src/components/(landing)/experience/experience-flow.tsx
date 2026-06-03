@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, BriefcaseIcon, ChartLineIcon, ChevronDownIcon, HeartIcon, PaletteIcon, RefreshCwIcon, RocketIcon, SchoolIcon, SparklesIcon } from "lucide-react";
 import { Bricolage_Grotesque } from "next/font/google";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import PrimaryCta from "@/components/(landing)/primary-cta";
 import DemoAmbitionShowcase from "./demo-ambition-showcase";
 import { Persona, personas } from "./persona-data";
 import PersonaSelector from "./persona-selector";
@@ -125,9 +125,7 @@ export default function ExperienceFlow() {
               Start Your Journey
               <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" asChild className="text-lg h-12 px-8">
-              <Link href="/signup">Skip to Sign Up</Link>
-            </Button>
+            <PrimaryCta loggedOutLabel="Skip to Sign Up" loggedOutHref="/signup" size="lg" className="text-lg h-12 px-8" />
           </div>
         </MotionWrapper>
 
@@ -162,12 +160,7 @@ export default function ExperienceFlow() {
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">Join thousands of ambitious people who are already achieving their goals with AmbitiousYou. Your journey starts now.</p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button size="lg" asChild className="text-lg h-12 px-10 shadow-lg shadow-primary/20">
-                <Link href="/signup">
-                  <RocketIcon className="mr-2 h-5 w-5" />
-                  Get Started Free
-                </Link>
-              </Button>
+              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="text-lg h-12 px-10 shadow-lg shadow-primary/20" icon={<RocketIcon className="h-5 w-5" />} />
             </div>
 
             {/* Trust indicators */}

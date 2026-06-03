@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import PrimaryCta from "@/components/(landing)/primary-cta";
 
 export const dynamic = "force-static";
 
@@ -59,11 +60,7 @@ export default function Features() {
             </div>
             <MotionWrapper initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button asChild size="lg">
-                  <Link prefetch={true} href="/signup" className="h-10 px-8">
-                    Get Started Free
-                  </Link>
-                </Button>
+                <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="h-10 px-8" />
                 <Button asChild size="lg">
                   <Link href="/experience" className="h-10 px-8">
                     Try It Now
@@ -186,11 +183,7 @@ export default function Features() {
                 </div>
 
                 <div className="flex flex-col gap-2 min-[400px]:flex-row pt-4">
-                  <Button asChild variant="default">
-                    <Link prefetch={true} href="/signup" className="h-10 px-8">
-                      Start Your Journey
-                    </Link>
-                  </Button>
+                  <PrimaryCta loggedOutLabel="Start Your Journey" loggedOutHref="/signup" variant="default" className="h-10 px-8" />
                 </div>
               </div>
             </MotionWrapper>
@@ -324,11 +317,7 @@ export default function Features() {
             <MotionWrapper initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 }}>
               <div className="mx-auto w-full max-w-sm space-y-2">
                 <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
-                  <Button asChild variant="default" size="lg" className="px-8">
-                    <Link prefetch={true} href="/signup">
-                      Get Started Free <ArrowRightIcon className="ml-1 h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" variant="default" size="lg" className="px-8" icon={<ArrowRightIcon className="h-4 w-4" />} />
                 </div>
               </div>
             </MotionWrapper>

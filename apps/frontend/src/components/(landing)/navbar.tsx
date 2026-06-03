@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../theme-toggle";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
+import { useAuthHint } from "@/hooks/use-auth-hint";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
+  const isLoggedIn = useAuthHint();
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -105,16 +107,27 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Button variant="outline" size="sm" className="h-9 px-4" asChild>
-              <Link prefetch={true} href="/login">
-                Log in
-              </Link>
-            </Button>
-            <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
-              <Link prefetch={true} href="/signup">
-                Sign up
-              </Link>
-            </Button>
+            {/* Reserve the logged-out width (justify-end) so the post-hydration swap to a single button doesn't shift the nav links (CLS). */}
+            <div className="flex items-center justify-end gap-3 min-w-44">
+              {isLoggedIn ? (
+                <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
+                  <Link href="/dashboard">Go to Dashboard</Link>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" className="h-9 px-4" asChild>
+                    <Link prefetch={true} href="/login">
+                      Log in
+                    </Link>
+                  </Button>
+                  <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
+                    <Link prefetch={true} href="/signup">
+                      Sign up
+                    </Link>
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -158,21 +171,33 @@ export default function Navbar() {
               <ThemeToggle />
             </div>
 
-            <div className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-              <Button variant="outline" className="w-full" asChild>
-                <Link prefetch={true} href="/login" onClick={toggleNavbar}>
-                  Log in
-                </Link>
-              </Button>
-            </div>
+            {isLoggedIn ? (
+              <div className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+                <Button className="w-full" asChild>
+                  <Link href="/dashboard" onClick={toggleNavbar}>
+                    Go to Dashboard
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link prefetch={true} href="/login" onClick={toggleNavbar}>
+                      Log in
+                    </Link>
+                  </Button>
+                </div>
 
-            <div className={`transition-all duration-300 delay-400 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-              <Button className="w-full" asChild>
-                <Link prefetch={true} href="/signup" onClick={toggleNavbar}>
-                  Sign up
-                </Link>
-              </Button>
-            </div>
+                <div className={`transition-all duration-300 delay-400 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+                  <Button className="w-full" asChild>
+                    <Link prefetch={true} href="/signup" onClick={toggleNavbar}>
+                      Sign up
+                    </Link>
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

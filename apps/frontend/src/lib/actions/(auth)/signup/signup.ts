@@ -54,5 +54,15 @@ export async function signupAction(_: SignupState, formData: FormData): Promise<
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  // Readable (non-httpOnly) hint so client components can show a logged-in
+  // affordance without reading the httpOnly token. Carries no secret — see useAuthHint.
+  cookieStore.set("ay_auth", "1", {
+    httpOnly: false,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
   redirect("/dashboard");
 }
