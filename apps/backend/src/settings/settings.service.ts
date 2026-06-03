@@ -35,6 +35,7 @@ export class SettingsService {
     if (!settings) {
       throw new BadRequestException('Setting not found');
     }
+    
     Object.assign(settings, updateSettingDto);
     return await this.settingsRepository.save(settings);
   }
