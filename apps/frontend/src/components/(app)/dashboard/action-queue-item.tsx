@@ -1,9 +1,10 @@
 "use client";
 
+import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ItemKind } from "@/lib/dashboard/tracked-items";
-import { CheckIcon, Loader2Icon, SparklesIcon } from "lucide-react";
+import { CheckIcon, FlagIcon, ListTodoIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -57,21 +58,27 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
   }
 
   const overdue = props.daysUntil < 0;
+  const isMilestone = props.kind === "milestone";
+
+  const completeButton = (
+    <button
+      type="button"
+      onClick={isMilestone ? undefined : handleComplete}
+      disabled={isPending || done}
+      aria-label={isMilestone ? `Mark milestone “${props.title}” reached` : `Mark task “${props.title}” complete`}
+      className={cn(
+        // Visual circle is 24px; the ::before expands the touch target to ~44px for mobile (AGENTS.md).
+        "relative mt-0.5 flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-full border transition-colors before:absolute before:-inset-2.5 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        done ? "border-emerald-500 bg-emerald-500 text-white" : "border-muted-foreground/40 text-transparent hover:border-primary hover:text-primary/50 disabled:opacity-50",
+      )}>
+      {isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : <CheckIcon className="size-3.5" />}
+    </button>
+  );
 
   return (
     <div className={cn("flex items-start gap-3 rounded-2xl border p-3 transition-colors", props.isNextMove ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60", done && "opacity-60")}>
-      <button
-        type="button"
-        onClick={handleComplete}
-        disabled={isPending || done}
-        aria-label={`Mark “${props.title}” complete`}
-        className={cn(
-          // Visual circle is 24px; the ::before expands the touch target to ~44px for mobile (AGENTS.md).
-          "relative mt-0.5 flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-full border transition-colors before:absolute before:-inset-2.5 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          done ? "border-emerald-500 bg-emerald-500 text-white" : "border-muted-foreground/40 text-transparent hover:border-primary hover:text-primary/50 disabled:opacity-50",
-        )}>
-        {isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : <CheckIcon className="size-3.5" />}
-      </button>
+      {/* Completing a milestone is irreversible, so it goes through a confirm dialog; tasks toggle directly. */}
+      {isMilestone ? <ConfirmMilestoneCompletion title={props.title} onConfirm={handleComplete}>{completeButton}</ConfirmMilestoneCompletion> : completeButton}
 
       <div className="min-w-0 flex-1 space-y-1">
         {props.isNextMove ? (
@@ -90,11 +97,16 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
 
         {props.description ? <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{props.description}</p> : null}
 
-        <Link href={`/ambitions/${props.ambitionId}`} prefetch className="flex max-w-full items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none">
-          <span className="min-w-0 truncate" translate="no">
-            {props.ambitionName}
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="inline-flex shrink-0 items-center gap-1 font-medium">
+            {isMilestone ? <FlagIcon className="size-3" /> : <ListTodoIcon className="size-3" />}
+            {isMilestone ? "Milestone" : "Task"}
           </span>
-        </Link>
+          <span aria-hidden="true">·</span>
+          <Link href={`/ambitions/${props.ambitionId}`} prefetch className="min-w-0 truncate transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none" translate="no">
+            {props.ambitionName}
+          </Link>
+        </div>
       </div>
     </div>
   );

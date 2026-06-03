@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -146,31 +146,14 @@ function CompletionControl(props: CompletionControlProps) {
   }
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <button
-          type="button"
-          disabled={props.isPending}
-          aria-label={`Mark milestone "${getTitle(props.item)}" as reached`}
-          className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-          <FlagIcon className="size-3" />
-        </button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogMedia className="bg-primary/10 text-primary">
-            <FlagIcon aria-hidden="true" />
-          </AlertDialogMedia>
-          <AlertDialogTitle>Mark this milestone as reached?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Milestones are one-time achievements. Marking <span className="font-medium text-foreground">{getTitle(props.item)}</span> as reached is permanent — you won&rsquo;t be able to reopen it.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={props.onToggle}>Yes, mark reached</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmMilestoneCompletion title={getTitle(props.item)} onConfirm={props.onToggle}>
+      <button
+        type="button"
+        disabled={props.isPending}
+        aria-label={`Mark milestone "${getTitle(props.item)}" as reached`}
+        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+        <FlagIcon className="size-3" />
+      </button>
+    </ConfirmMilestoneCompletion>
   );
 }
