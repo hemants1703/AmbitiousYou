@@ -1,4 +1,6 @@
-import { Prisma } from '@prisma/client';
+import { and, eq, sql } from 'drizzle-orm';
+import type { Tx } from 'src/db';
+import { ambitions, milestones, tasks } from 'src/db';
 
 /**
  * Recompute and persist an ambition's completion percentage (and derived status)
@@ -8,8 +10,12 @@ import { Prisma } from '@prisma/client';
  *
  * Bounded cost: one ambition load + at most two counts + one update.
  */
-export async function recalculateAmbitionProgress(tx: Prisma.TransactionClient, params: { userId: string; ambitionId: string }): Promise<void> {
-  const ambition = await tx.ambition.findFirst({ where: { id: params.ambitionId, userId: params.userId } });
+export async function recalculateAmbitionProgress(tx: Tx, params: { userId: string; ambitionId: string }): Promise<void> {
+  const [ambition] = await tx
+    .select()
+    .from(ambitions)
+    .where(and(eq(ambitions.id, params.ambitionId), eq(ambitions.userId, params.userId)))
+    .limit(1);
   if (!ambition) {
     return;
   }
@@ -18,11 +24,21 @@ export async function recalculateAmbitionProgress(tx: Prisma.TransactionClient, 
   let completed: number;
 
   if (ambition.ambitionTrackingMethod === 'task') {
-    total = await tx.task.count({ where: { ambitionId: params.ambitionId, userId: params.userId } });
-    completed = await tx.task.count({ where: { ambitionId: params.ambitionId, userId: params.userId, taskCompleted: true } });
+    [{ total, completed }] = await tx
+      .select({
+        total: sql<number>`count(*)::int`,
+        completed: sql<number>`count(*) filter (where ${tasks.taskCompleted})::int`,
+      })
+      .from(tasks)
+      .where(and(eq(tasks.ambitionId, params.ambitionId), eq(tasks.userId, params.userId)));
   } else {
-    total = await tx.milestone.count({ where: { ambitionId: params.ambitionId, userId: params.userId } });
-    completed = await tx.milestone.count({ where: { ambitionId: params.ambitionId, userId: params.userId, milestoneCompleted: true } });
+    [{ total, completed }] = await tx
+      .select({
+        total: sql<number>`count(*)::int`,
+        completed: sql<number>`count(*) filter (where ${milestones.milestoneCompleted})::int`,
+      })
+      .from(milestones)
+      .where(and(eq(milestones.ambitionId, params.ambitionId), eq(milestones.userId, params.userId)));
   }
 
   const ambitionPercentageCompleted = total === 0 ? 0 : Math.round((completed / total) * 100);
@@ -44,8 +60,5 @@ export async function recalculateAmbitionProgress(tx: Prisma.TransactionClient, 
     ambitionCompletionDate = null;
   }
 
-  await tx.ambition.update({
-    where: { id: ambition.id },
-    data: { ambitionPercentageCompleted, ambitionStatus, ambitionCompletionDate },
-  });
+  await tx.update(ambitions).set({ ambitionPercentageCompleted, ambitionStatus, ambitionCompletionDate }).where(eq(ambitions.id, ambition.id));
 }

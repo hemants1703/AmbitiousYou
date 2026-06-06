@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/unbound-method -- the auto-mocked Drizzle `db` and mocked bcrypt module are intentionally `any`-typed in tests. */
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { UsersService } from 'src/users/users.service';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from './auth.service';
+import { UsersService } from 'src/users/users.service';
+import { db } from 'src/db';
+import { buildChain } from 'src/test-utils/db-chain';
 
+jest.mock('src/db');
 jest.mock('bcrypt', () => ({
   compare: jest.fn(),
   hash: jest.fn(),
@@ -13,33 +16,17 @@ jest.mock('bcrypt', () => ({
 describe('AuthService', () => {
   let service: AuthService;
   let mockUsersService: any;
-  let prisma: any;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
     mockUsersService = {
       findOneByEmail: jest.fn(),
       findOneByEmailWithPassword: jest.fn(),
       createUser: jest.fn(),
     };
 
-    prisma = {
-      session: {
-        create: jest.fn(),
-        findFirst: jest.fn(),
-        findMany: jest.fn(),
-        deleteMany: jest.fn(),
-      },
-      verification: {
-        create: jest.fn(),
-      },
-    };
-
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        { provide: UsersService, useValue: mockUsersService },
-        { provide: PrismaService, useValue: prisma },
-      ],
+      providers: [AuthService, { provide: UsersService, useValue: mockUsersService }],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -54,24 +41,10 @@ describe('AuthService', () => {
   });
 
   describe('registerUser', () => {
-    const registerUserDto = {
-      name: 'John Doe',
-      email: 'john@example.com',
-      password: 'password123',
-    };
+    const registerUserDto = { name: 'John Doe', email: 'john@example.com', password: 'password123' };
 
     it('should successfully register a new user', async () => {
-      mockUsersService.findOneByEmail.mockResolvedValue(null);
-
-      const mockUser = {
-        id: 'uuid-1',
-        ...registerUserDto,
-        emailVerified: false,
-        image: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
+      const mockUser = { id: 'uuid-1', ...registerUserDto, emailVerified: false, image: null, createdAt: new Date(), updatedAt: new Date() };
       const mockSession = {
         id: 'session-uuid',
         userId: 'uuid-1',
@@ -83,14 +56,15 @@ describe('AuthService', () => {
         updatedAt: new Date(),
       };
 
+      mockUsersService.findOneByEmail.mockResolvedValue(null);
       mockUsersService.createUser.mockResolvedValue(mockUser);
-      prisma.session.create.mockResolvedValue(mockSession);
+      (db.insert as jest.Mock).mockReturnValueOnce(buildChain([mockSession]));
 
       const result = await service.registerUser(registerUserDto);
 
       expect(mockUsersService.findOneByEmail).toHaveBeenCalledWith(registerUserDto.email);
       expect(mockUsersService.createUser).toHaveBeenCalledWith(registerUserDto);
-      expect(prisma.session.create).toHaveBeenCalled();
+      expect(db.insert).toHaveBeenCalled();
       expect(result).toEqual({ sessionToken: 'session-token' });
     });
 
@@ -109,12 +83,7 @@ describe('AuthService', () => {
   });
 
   describe('loginUser', () => {
-    const loginUserDto = {
-      email: 'john@example.com',
-      password: 'password123',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0',
-    };
+    const loginUserDto = { email: 'john@example.com', password: 'password123', ipAddress: '192.168.1.1', userAgent: 'Mozilla/5.0' };
 
     it('should successfully login a user', async () => {
       const mockUser = {
@@ -127,7 +96,6 @@ describe('AuthService', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-
       const mockSession = {
         id: 'session-uuid',
         userId: 'uuid-1',
@@ -141,13 +109,13 @@ describe('AuthService', () => {
 
       mockUsersService.findOneByEmailWithPassword.mockResolvedValue(mockUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-      prisma.session.create.mockResolvedValue(mockSession);
+      (db.insert as jest.Mock).mockReturnValueOnce(buildChain([mockSession]));
 
       const result = await service.loginUser(loginUserDto);
 
       expect(mockUsersService.findOneByEmailWithPassword).toHaveBeenCalledWith(loginUserDto.email);
       expect(bcrypt.compare).toHaveBeenCalledWith(loginUserDto.password, mockUser.passwordHash);
-      expect(prisma.session.create).toHaveBeenCalled();
+      expect(db.insert).toHaveBeenCalled();
       expect(result).toEqual({ sessionToken: 'session-token' });
     });
 
@@ -165,28 +133,20 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if password is invalid', async () => {
-      mockUsersService.findOneByEmailWithPassword.mockResolvedValue({
-        id: 'uuid-1',
-        email: loginUserDto.email,
-        passwordHash: 'hashedPassword',
-      });
+      mockUsersService.findOneByEmailWithPassword.mockResolvedValue({ id: 'uuid-1', email: loginUserDto.email, passwordHash: 'hashedPassword' });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       await expect(service.loginUser(loginUserDto)).rejects.toThrow('Invalid email or password');
     });
 
     it('should throw UnauthorizedException with correct message if password is invalid', async () => {
-      mockUsersService.findOneByEmailWithPassword.mockResolvedValue({
-        id: 'uuid-1',
-        email: loginUserDto.email,
-        passwordHash: 'hashedPassword',
-      });
+      mockUsersService.findOneByEmailWithPassword.mockResolvedValue({ id: 'uuid-1', email: loginUserDto.email, passwordHash: 'hashedPassword' });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       try {
         await service.loginUser(loginUserDto);
         fail('Should have thrown UnauthorizedException');
-      } catch (error) {
+      } catch (error: any) {
         expect(error).toBeInstanceOf(UnauthorizedException);
         expect(error.message).toBe('Invalid email or password');
       }

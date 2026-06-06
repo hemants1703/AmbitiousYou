@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
+
+jest.mock('src/db');
 
 describe('AuthController', () => {
   let authController: AuthController;
-  let authService: AuthService;
-  let mockAuthService: any;
+  let mockAuthService: jest.Mocked<Pick<AuthService, 'registerUser' | 'loginUser'>>;
 
   beforeEach(async () => {
     mockAuthService = {
@@ -17,17 +17,10 @@ describe('AuthController', () => {
 
     const testingModule: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [
-        {
-          provide: AuthService,
-          useValue: mockAuthService,
-        },
-        { provide: PrismaService, useValue: {} },
-      ],
+      providers: [{ provide: AuthService, useValue: mockAuthService }],
     }).compile();
 
     authController = testingModule.get<AuthController>(AuthController);
-    authService = testingModule.get<AuthService>(AuthService);
   });
 
   afterEach(() => {
@@ -39,36 +32,15 @@ describe('AuthController', () => {
   });
 
   describe('registerUser', () => {
-    const registerUserDto = {
-      name: 'John Doe',
-      email: 'john@example.com',
-      password: 'password123',
-    };
+    const registerUserDto = { name: 'John Doe', email: 'john@example.com', password: 'password123' };
 
     it('should call authService.registerUser with correct parameters', async () => {
-      const expectedResult = {
-        userId: 'uuid-1',
-        message: 'Check email for verification link',
-      };
-
+      const expectedResult = { sessionToken: 'session-token-123' };
       mockAuthService.registerUser.mockResolvedValue(expectedResult);
 
       const result = await authController.registerUser(registerUserDto);
 
       expect(mockAuthService.registerUser).toHaveBeenCalledWith(registerUserDto);
-      expect(result).toEqual(expectedResult);
-    });
-
-    it('should return the result from authService.registerUser', async () => {
-      const expectedResult = {
-        userId: 'uuid-1',
-        message: 'Check email for verification link',
-      };
-
-      mockAuthService.registerUser.mockResolvedValue(expectedResult);
-
-      const result = await authController.registerUser(registerUserDto);
-
       expect(result).toEqual(expectedResult);
     });
 
@@ -79,45 +51,23 @@ describe('AuthController', () => {
     });
 
     it('should handle errors from authService', async () => {
-      const error = new Error('Database error');
-      mockAuthService.registerUser.mockRejectedValue(error);
+      mockAuthService.registerUser.mockRejectedValue(new Error('Database error'));
 
       await expect(authController.registerUser(registerUserDto)).rejects.toThrow('Database error');
     });
   });
 
   describe('loginUser', () => {
-    const loginUserDto = {
-      email: 'john@example.com',
-      password: 'password123',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0',
-    };
+    const loginUserDto = { email: 'john@example.com', password: 'password123', ipAddress: '192.168.1.1', userAgent: 'Mozilla/5.0' };
 
     it('should call authService.loginUser with correct parameters', async () => {
-      const expectedResult = {
-        sessionToken: 'session-token-123',
-      };
-
+      const expectedResult = { sessionToken: 'session-token-123' };
       mockAuthService.loginUser.mockResolvedValue(expectedResult);
 
       const result = await authController.loginUser(loginUserDto);
 
       expect(mockAuthService.loginUser).toHaveBeenCalledWith(loginUserDto);
       expect(result).toEqual(expectedResult);
-    });
-
-    it('should return sessionToken from authService.loginUser', async () => {
-      const expectedResult = {
-        sessionToken: 'session-token-123',
-      };
-
-      mockAuthService.loginUser.mockResolvedValue(expectedResult);
-
-      const result = await authController.loginUser(loginUserDto);
-
-      expect(result).toEqual(expectedResult);
-      expect(result.sessionToken).toBe('session-token-123');
     });
 
     it('should propagate UnauthorizedException from authService', async () => {
@@ -133,8 +83,7 @@ describe('AuthController', () => {
     });
 
     it('should handle errors from authService', async () => {
-      const error = new Error('Database error');
-      mockAuthService.loginUser.mockRejectedValue(error);
+      mockAuthService.loginUser.mockRejectedValue(new Error('Database error'));
 
       await expect(authController.loginUser(loginUserDto)).rejects.toThrow('Database error');
     });

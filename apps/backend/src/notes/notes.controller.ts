@@ -3,7 +3,7 @@ import { SessionGuard } from 'src/auth/guards/session.guard';
 import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { Note } from '@prisma/client';
+import type { Note } from 'src/db';
 import { NotesService } from './notes.service';
 
 @Controller('notes')

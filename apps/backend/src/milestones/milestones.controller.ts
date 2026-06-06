@@ -3,7 +3,7 @@ import { MilestonesService } from './milestones.service';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
 import { SessionGuard } from 'src/auth/guards/session.guard';
-import { Milestone } from '@prisma/client';
+import type { Milestone } from 'src/db';
 import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 
 @Controller('milestones')

@@ -3,7 +3,7 @@ import { SessionGuard } from 'src/auth/guards/session.guard';
 import { AmbitionsService } from './ambitions.service';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
-import { Ambition } from '@prisma/client';
+import type { Ambition } from 'src/db';
 import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 
 @Controller('ambitions')

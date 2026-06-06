@@ -1,29 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/unbound-method -- the auto-mocked Drizzle `db` is intentionally `any`-typed in tests. */
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { SettingsService } from 'src/settings/settings.service';
 import bcrypt from 'bcrypt';
+import { UsersService } from './users.service';
+import { SettingsService } from 'src/settings/settings.service';
+import { db } from 'src/db';
+import { buildChain } from 'src/test-utils/db-chain';
+
+jest.mock('src/db');
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let prisma: { user: { create: jest.Mock; findUnique: jest.Mock } };
   let settingsService: { createSettingsForUserId: jest.Mock };
 
   beforeEach(async () => {
-    prisma = {
-      user: {
-        create: jest.fn(),
-        findUnique: jest.fn(),
-      },
-    };
+    jest.clearAllMocks();
     settingsService = { createSettingsForUserId: jest.fn() };
 
     const testingModule: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        { provide: PrismaService, useValue: prisma },
-        { provide: SettingsService, useValue: settingsService },
-      ],
+      providers: [UsersService, { provide: SettingsService, useValue: settingsService }],
     }).compile();
 
     userService = testingModule.get<UsersService>(UsersService);
@@ -38,7 +32,7 @@ describe('UsersService', () => {
   });
 
   describe('createUser', () => {
-    it('should create a new user and seed its settings', async () => {
+    it('should hash the password, insert the user, and seed its settings', async () => {
       const createUserDto = { name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech', password: 'password123' };
 
       const createdUser = {
@@ -51,58 +45,71 @@ describe('UsersService', () => {
         updatedAt: new Date('2026-01-01T00:00:00.000Z'),
       };
 
-      const hashSpy = jest.spyOn(bcrypt, 'hash') as unknown as jest.SpyInstance<Promise<string>, [string | Buffer, string | number]>;
-      hashSpy.mockResolvedValue('hashed-password');
-      prisma.user.create.mockResolvedValue(createdUser);
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password' as never);
+      (db.insert as jest.Mock).mockReturnValueOnce(buildChain([createdUser]));
       settingsService.createSettingsForUserId.mockResolvedValue(undefined);
 
       const result = await userService.createUser(createUserDto);
 
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
-      expect(prisma.user.create).toHaveBeenCalledWith({
-        data: {
-          name: createUserDto.name,
-          email: createUserDto.email,
-          emailVerified: false,
-          passwordHash: 'hashed-password',
-          image: null,
-        },
-      });
+      expect(db.insert).toHaveBeenCalled();
       expect(settingsService.createSettingsForUserId).toHaveBeenCalledWith(createdUser.id);
       expect(result).toEqual(createdUser);
     });
   });
 
   describe('findOneByEmail', () => {
-    it('should return a user by email', async () => {
-      const user = { id: '1', name: 'Hemant Sharma', email: 'hemant@hemantsharma.tech' };
+    it('should return the user with public columns only', async () => {
+      const user = {
+        id: '1',
+        name: 'Hemant Sharma',
+        email: 'hemant@hemantsharma.tech',
+        emailVerified: true,
+        image: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-      prisma.user.findUnique.mockResolvedValue(user);
+      (db.select as jest.Mock).mockReturnValueOnce(buildChain([user]));
 
       const result = await userService.findOneByEmail('hemant@hemantsharma.tech');
 
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: 'hemant@hemantsharma.tech' } });
+      expect(db.select).toHaveBeenCalled();
+      // public columns projection (no passwordHash) is passed as the first arg to db.select
+      const selectArg = (db.select as jest.Mock).mock.calls[0][0];
+      expect(selectArg).not.toHaveProperty('passwordHash');
       expect(result).toEqual(user);
+    });
+
+    it('should return null when no user matches', async () => {
+      (db.select as jest.Mock).mockReturnValueOnce(buildChain([]));
+
+      const result = await userService.findOneByEmail('missing@example.com');
+
+      expect(result).toBeNull();
     });
   });
 
   describe('findOneByEmailWithPassword', () => {
-    it('should return a user by email including passwordHash', async () => {
+    it('should return the full user row including passwordHash', async () => {
       const user = {
         id: '1',
         name: 'Hemant Sharma',
         email: 'hemant@hemantsharma.tech',
         passwordHash: 'hashed-password',
+        emailVerified: true,
+        image: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
-      prisma.user.findUnique.mockResolvedValue(user);
+      (db.select as jest.Mock).mockReturnValueOnce(buildChain([user]));
 
       const result = await userService.findOneByEmailWithPassword('hemant@hemantsharma.tech');
 
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { email: 'hemant@hemantsharma.tech' },
-        omit: { passwordHash: false },
-      });
+      // login query calls db.select() with no projection arg => full row
+      const selectArg = (db.select as jest.Mock).mock.calls[0][0];
+      expect(selectArg).toBeUndefined();
       expect(result).toEqual(user);
     });
   });

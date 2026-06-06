@@ -3,7 +3,7 @@ import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingsService } from './settings.service';
-import { Settings } from '@prisma/client';
+import type { Settings } from 'src/db';
 
 @Controller('settings')
 @UseGuards(SessionGuard)

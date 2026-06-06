@@ -1,11 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { eq } from 'drizzle-orm';
 import type { Request } from 'express';
+import { db, sessions } from 'src/db';
 
 @Injectable()
 export class SessionGuard implements CanActivate {
-  constructor(private readonly prisma: PrismaService) {}
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
 
@@ -17,7 +16,7 @@ export class SessionGuard implements CanActivate {
     }
 
     // Search for a session with the provided token
-    const session = await this.prisma.session.findFirst({ where: { token } });
+    const [session] = await db.select().from(sessions).where(eq(sessions.token, token)).limit(1);
 
     // If no session is found, deny access
     if (!session) {
@@ -26,7 +25,7 @@ export class SessionGuard implements CanActivate {
 
     // If session is found but expired, delete it and deny access
     if (new Date(session.expiresAt) < new Date()) {
-      await this.prisma.session.delete({ where: { id: session.id } });
+      await db.delete(sessions).where(eq(sessions.id, session.id));
       throw new UnauthorizedException('Session token has expired');
     }
 

@@ -1,41 +1,42 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Settings } from '@prisma/client';
+import { eq } from 'drizzle-orm';
 import { UpdateSettingDto } from './dto/update-setting.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { db, settings, type Settings } from 'src/db';
 
 @Injectable()
 export class SettingsService {
-  constructor(private readonly prisma: PrismaService) {}
-
   async createSettingsForUserId(userId: string): Promise<Settings> {
-    return await this.prisma.settings.create({
-      data: {
+    const [created] = await db
+      .insert(settings)
+      .values({
         userId,
         userTimezone: '',
         emailAccountActivity: true,
         pushAmbitionReminders: false,
-      },
-    });
+      })
+      .returning();
+    return created;
   }
 
-  async findAllSettingsForUserId(userId: string): Promise<Settings | null> {
-    const settings = await this.prisma.settings.findUnique({ where: { userId } });
-    if (!settings) {
+  async findAllSettingsForUserId(userId: string): Promise<Settings> {
+    const [row] = await db.select().from(settings).where(eq(settings.userId, userId)).limit(1);
+    if (!row) {
       throw new BadRequestException('Settings not found for the user');
     }
-
-    return settings;
+    return row;
   }
 
   async updateSettingForUserId(userId: string, updateSettingDto: UpdateSettingDto): Promise<Settings> {
-    const settings = await this.prisma.settings.findUnique({ where: { userId } });
-    if (!settings) {
+    const [existing] = await db.select({ id: settings.id }).from(settings).where(eq(settings.userId, userId)).limit(1);
+    if (!existing) {
       throw new BadRequestException('Setting not found');
     }
 
-    return await this.prisma.settings.update({
-      where: { userId },
-      data: { ...updateSettingDto },
-    });
+    const [updated] = await db
+      .update(settings)
+      .set({ ...updateSettingDto })
+      .where(eq(settings.userId, userId))
+      .returning();
+    return updated;
   }
 }

@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SettingsController } from './settings.controller';
 import { SettingsService } from './settings.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+
+jest.mock('src/db');
 
 describe('SettingsController', () => {
   let controller: SettingsController;
@@ -9,7 +10,7 @@ describe('SettingsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SettingsController],
-      providers: [SettingsService, { provide: PrismaService, useValue: {} }],
+      providers: [SettingsService],
     }).compile();
 
     controller = module.get<SettingsController>(SettingsController);

@@ -1,19 +1,33 @@
 {
   "name": "@ambitiousyou/shared",
   "version": "1.0.0",
-  "description": "Shared types and utilities for AmbitiousYou",
-  "type": "module",
-  "main": "./types/index.js",
-  "types": "./types/index.d.ts",
+  "description": "Single source of truth: Drizzle schema + derived types for AmbitiousYou. Consumed by apps/backend (runtime) and apps/frontend (types).",
+  "main": "./dist/db/index.js",
+  "types": "./dist/db/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "default": "./types/index.js"
+      "types": "./dist/db/index.d.ts",
+      "default": "./dist/db/index.js"
+    },
+    "./db": {
+      "types": "./dist/db/index.d.ts",
+      "default": "./dist/db/index.js"
     },
     "./types": {
-      "types": "./types/index.d.ts",
-      "default": "./types/index.js"
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
     }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
   },
   "private": true
 }

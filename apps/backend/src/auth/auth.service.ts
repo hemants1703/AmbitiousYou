@@ -1,17 +1,17 @@
 import { ConflictException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
-import { Session } from '@prisma/client';
+import { desc, eq } from 'drizzle-orm';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { db, sessions, verifications, type Session } from 'src/db';
+
+const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const VERIFICATION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   async registerUser(createUserDto: CreateUserDto): Promise<{ sessionToken: string }> {
     const existingUser = await this.usersService.findOneByEmail(createUserDto.email);
@@ -21,15 +21,16 @@ export class AuthService {
 
     const user = await this.usersService.createUser(createUserDto);
 
-    const session = await this.prisma.session.create({
-      data: {
+    const [session] = await db
+      .insert(sessions)
+      .values({
         userId: user.id,
         token: crypto.randomUUID(),
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
+        expiresAt: new Date(Date.now() + SESSION_TTL_MS),
         ipAddress: null,
         userAgent: null,
-      },
-    });
+      })
+      .returning();
 
     return { sessionToken: session.token };
   }
@@ -45,34 +46,31 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const session = await this.prisma.session.create({
-      data: {
+    const [session] = await db
+      .insert(sessions)
+      .values({
         userId: user.id,
         token: crypto.randomUUID(),
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days
+        expiresAt: new Date(Date.now() + SESSION_TTL_MS),
         ipAddress: loginUserDto.ipAddress ?? null,
         userAgent: loginUserDto.userAgent ?? null,
-      },
-    });
+      })
+      .returning();
 
     return { sessionToken: session.token };
   }
 
   async logoutUser(token: string): Promise<void> {
-    const session = await this.prisma.session.findFirst({ where: { token } });
-
-    if (!session) {
+    const [existing] = await db.select({ id: sessions.id }).from(sessions).where(eq(sessions.token, token)).limit(1);
+    if (!existing) {
       throw new ConflictException('Session not found');
     }
 
-    await this.prisma.session.deleteMany({ where: { token } });
+    await db.delete(sessions).where(eq(sessions.token, token));
   }
 
   async getUserSessions(userId: string): Promise<Session[]> {
-    return await this.prisma.session.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-    });
+    return await db.select().from(sessions).where(eq(sessions.userId, userId)).orderBy(desc(sessions.createdAt));
   }
 
   // TODO: Implement email verification methods
@@ -83,19 +81,15 @@ export class AuthService {
     }
 
     try {
-      await this.prisma.verification.create({
-        data: {
-          userId: user.id,
-          identifier: 'email',
-          value: crypto.randomUUID(),
-          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expires in 24 hours
-        },
+      await db.insert(verifications).values({
+        userId: user.id,
+        identifier: 'email',
+        value: crypto.randomUUID(),
+        expiresAt: new Date(Date.now() + VERIFICATION_TTL_MS),
       });
     } catch (error) {
       console.error('Error in verifyEmail: ', error);
       throw new HttpException('Failed to create verification record', 500);
     }
   }
-
-  // TODO: Implement logout and session management methods
 }

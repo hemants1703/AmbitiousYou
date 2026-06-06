@@ -4,6 +4,8 @@ import { UsersService } from './users.service';
 import type { User } from '@ambitiousyou/shared/types';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 
+jest.mock('src/db');
+
 describe('UsersController', () => {
   let usersController: UsersController;
   let mockUsersService: jest.Mocked<Pick<UsersService, 'findUserBySessionToken'>>;

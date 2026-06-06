@@ -1,34 +1,42 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import bcrypt from 'bcrypt';
-import { Prisma, User } from '@prisma/client';
-import type { User as SharedUser } from '@ambitiousyou/shared/types';
+import { eq, getTableColumns } from 'drizzle-orm';
+import type { User } from '@ambitiousyou/shared/types';
 import { CreateUserDto } from './dto/create-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { SettingsService } from 'src/settings/settings.service';
+import { db, sessions, users } from 'src/db';
+
+// Default-deny projection on every public user read — the destructure drops
+// `passwordHash` from `getTableColumns(users)`. The single login escape hatch
+// (`findOneByEmailWithPassword`) reads the full row instead.
+const { passwordHash: _passwordHash, ...publicUserColumns } = getTableColumns(users);
+
+// node-postgres surfaces a UNIQUE constraint violation as SQLSTATE 23505 on
+// the thrown DatabaseError.
+const PG_UNIQUE_VIOLATION = '23505';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly settingsService: SettingsService,
-  ) {}
+  constructor(private readonly settingsService: SettingsService) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<SharedUser> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-    let user: SharedUser;
+    let user: User;
     try {
-      user = await this.prisma.user.create({
-        data: {
+      const [created] = await db
+        .insert(users)
+        .values({
           name: createUserDto.name,
           email: createUserDto.email,
           emailVerified: false,
           passwordHash: hashedPassword,
           image: null,
-        },
-      });
+        })
+        .returning(publicUserColumns);
+      user = created;
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+      if (e !== null && typeof e === 'object' && 'code' in e && (e as { code?: string }).code === PG_UNIQUE_VIOLATION) {
         throw new ConflictException('Username already exists');
       }
       throw e;
@@ -39,21 +47,24 @@ export class UsersService {
     return user;
   }
 
-  async findOneByEmail(email: string): Promise<SharedUser | null> {
-    return await this.prisma.user.findUnique({ where: { email } });
+  async findOneByEmail(email: string): Promise<User | null> {
+    const [user] = await db.select(publicUserColumns).from(users).where(eq(users.email, email)).limit(1);
+    return user ?? null;
   }
 
-  async findOneByEmailWithPassword(email: string): Promise<User | null> {
-    // Override the client-wide omit so the password hash is available for login.
-    return await this.prisma.user.findUnique({ where: { email }, omit: { passwordHash: false } });
+  /** Login-only escape hatch — returns the full row including `passwordHash`. */
+  async findOneByEmailWithPassword(email: string) {
+    const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    return user ?? null;
   }
 
-  async findOneById(id: string): Promise<SharedUser | null> {
-    return await this.prisma.user.findUnique({ where: { id } });
+  async findOneById(id: string): Promise<User | null> {
+    const [user] = await db.select(publicUserColumns).from(users).where(eq(users.id, id)).limit(1);
+    return user ?? null;
   }
 
-  async findUserBySessionToken(token: string): Promise<SharedUser | null> {
-    const session = await this.prisma.session.findFirst({ where: { token }, include: { user: true } });
-    return session?.user ?? null;
+  async findUserBySessionToken(token: string): Promise<User | null> {
+    const [row] = await db.select(publicUserColumns).from(sessions).innerJoin(users, eq(users.id, sessions.userId)).where(eq(sessions.token, token)).limit(1);
+    return row ?? null;
   }
 }

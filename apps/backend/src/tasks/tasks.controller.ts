@@ -3,7 +3,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { SessionGuard } from 'src/auth/guards/session.guard';
-import { Task } from '@prisma/client';
+import type { Task } from 'src/db';
 import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
 
 @Controller('tasks')
