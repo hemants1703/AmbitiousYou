@@ -158,10 +158,7 @@ export class AuthService {
       .limit(1);
 
     if (existing && new Date(existing.expiresAt) > new Date()) {
-      throw new HttpException(
-        'A verification link was already sent and is still valid. Please check your inbox and try again later.',
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
+      throw new HttpException('A verification link was already sent and is still valid. Please check your inbox and try again later.', HttpStatus.TOO_MANY_REQUESTS);
     }
 
     await this.sendEmailVerification(user);

@@ -169,9 +169,7 @@ describe('AuthService', () => {
 
     it('rejects with 429 while a valid verification token still exists', async () => {
       mockUsersService.findOneById.mockResolvedValue(unverifiedUser);
-      (db.select as jest.Mock).mockReturnValueOnce(
-        buildChain([{ id: 'v1', userId: 'uuid-1', identifier: 'email', value: 'token', expiresAt: new Date(Date.now() + 60_000) }]),
-      );
+      (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ id: 'v1', userId: 'uuid-1', identifier: 'email', value: 'token', expiresAt: new Date(Date.now() + 60_000) }]));
 
       await expect(service.resendVerification('uuid-1')).rejects.toThrow(HttpException);
       expect(db.insert).not.toHaveBeenCalled();
