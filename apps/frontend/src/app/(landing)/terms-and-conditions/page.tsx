@@ -1,13 +1,23 @@
 import { Metadata } from "next";
+import { absoluteUrl, siteConfig } from "@/lib/site";
 
 export const dynamic = "force-static";
 
+const title = "Terms & Conditions - AmbitiousYou";
+const description = "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.";
+
 export const metadata: Metadata = {
-  title: "Terms & Conditions - AmbitiousYou",
-  description: "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.",
+  title,
+  description,
+  alternates: { canonical: "/terms-and-conditions" },
   openGraph: {
-    title: "Terms & Conditions - AmbitiousYou",
-    description: "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.",
+    title,
+    description,
+    url: absoluteUrl("/terms-and-conditions"),
+    siteName: siteConfig.name,
+    images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: title }],
+    locale: "en_US",
+    type: "website",
   },
 };
 

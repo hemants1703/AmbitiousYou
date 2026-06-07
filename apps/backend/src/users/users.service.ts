@@ -63,8 +63,8 @@ export class UsersService {
     return user ?? null;
   }
 
-  async findUserBySessionToken(token: string): Promise<User | null> {
-    const [row] = await db.select(publicUserColumns).from(sessions).innerJoin(users, eq(users.id, sessions.userId)).where(eq(sessions.token, token)).limit(1);
+  async findUser(userId: string): Promise<User | null> {
+    const [row] = await db.select(publicUserColumns).from(users).where(eq(users.id, userId)).limit(1);
     return row ?? null;
   }
 }

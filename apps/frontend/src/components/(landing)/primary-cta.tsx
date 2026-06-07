@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useAuthHint } from "@/hooks/use-auth-hint";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -21,7 +21,7 @@ interface PrimaryCtaProps {
  * anonymous-visitor experience are unaffected.
  */
 export default function PrimaryCta(props: PrimaryCtaProps) {
-  const isLoggedIn = useAuthHint();
+  const isLoggedIn = useAuthStatus();
   const href = isLoggedIn ? "/dashboard" : props.loggedOutHref;
   const label = isLoggedIn ? "Go to Dashboard" : props.loggedOutLabel;
 

@@ -8,6 +8,10 @@ import { Bricolage_Grotesque } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryCta from "@/components/(landing)/primary-cta";
+import JsonLd from "@/components/seo/json-ld";
+import { featuresFaq } from "@/components/(landing)/features/faq-data";
+import { breadcrumbSchema, faqPageSchema } from "@/lib/seo/schemas";
+import { absoluteUrl, siteConfig } from "@/lib/site";
 
 export const dynamic = "force-static";
 
@@ -16,17 +20,20 @@ const bricolage = Bricolage_Grotesque({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const description = "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.";
+
 export const metadata: Metadata = {
   title: "Features - AmbitiousYou",
-  description: "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.",
+  description,
+  alternates: { canonical: "/features" },
   openGraph: {
     title: "Features - AmbitiousYou",
-    description: "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.",
-    url: "https://ambitiousyou.com/features",
-    siteName: "AmbitiousYou",
+    description,
+    url: absoluteUrl("/features"),
+    siteName: siteConfig.name,
     images: [
       {
-        url: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png",
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
         alt: "AmbitiousYou Features",
@@ -38,14 +45,23 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Features - AmbitiousYou",
-    description: "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.",
-    images: ["https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png"],
+    description,
+    images: [siteConfig.ogImage],
   },
 };
 
 export default function Features() {
   return (
     <div className="flex flex-col items-center w-full">
+      <JsonLd
+        data={[
+          faqPageSchema(featuresFaq),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Features", path: "/features" },
+          ]),
+        ]}
+      />
       {/* Animated Hero Section */}
       <section className="w-full pt-20">
         <div className=" px-4 md:px-6">
@@ -277,25 +293,7 @@ export default function Features() {
 
           <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
-              {[
-                {
-                  question: "How is AmbitiousYou different from regular task managers?",
-                  answer:
-                    "Unlike simple task managers, AmbitiousYou is specifically designed for long-term ambition tracking with dual progress methods (tasks or milestones), built-in time tracking, and powerful analytics that keep you motivated and focused on your biggest goals.",
-                },
-                {
-                  question: "Is there a free plan available?",
-                  answer: "Yes! AmbitiousYou offers a comprehensive free plan that includes up to 3 active ambitions, basic progress tracking, and access to our core dashboard features. No credit card required to get started.",
-                },
-                {
-                  question: "How secure is my data?",
-                  answer: "We take data privacy seriously. All your information is encrypted both in transit and at rest. We never sell your data to third parties, and you can export or delete your information at any time.",
-                },
-                {
-                  question: "Can I use AmbitiousYou on all my devices?",
-                  answer: "Absolutely! AmbitiousYou works seamlessly on desktop, tablet, and mobile devices with a responsive web design. Native mobile apps for iOS and Android are coming soon!",
-                },
-              ].map((faq, index) => (
+              {featuresFaq.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index + 1}`}>
                   <AccordionTrigger>{faq.question}</AccordionTrigger>
                   <AccordionContent>{faq.answer}</AccordionContent>

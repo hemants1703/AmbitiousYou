@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../theme-toggle";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
-import { useAuthHint } from "@/hooks/use-auth-hint";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -20,7 +20,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
-  const isLoggedIn = useAuthHint();
+  const isLoggedIn = useAuthStatus();
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {

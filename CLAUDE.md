@@ -77,7 +77,7 @@ Drizzle is used in **raw SQL-style** — no DI ceremony, no `db.query.*` relatio
   - `(landing)/` — public marketing pages (`/`, `/features`, `/experience`, `/privacy-policy`, `/terms-and-conditions`).
   - `(auth)/` — `/login`, `/signup`. Use `redirectIfAuthenticated()` to bounce signed-in visitors to `/dashboard`.
   - `(app)/` — authenticated app (`/dashboard`, `/ambitions`, `/ambitions/[ambitionId]`, `/ambitions/create`, `/settings`). The layout calls `requireUser()`.
-  - `api/logout/` — the only Route Handler; everything else goes through Server Actions.
+  - `api/logout/` and `api/auth/status/` — the only Route Handlers (`logout` clears the session cookies; `auth/status` validates the session against the backend so the static public pages can show a correct logged-in affordance, and self-heals stale cookies); everything else goes through Server Actions.
 - Auth gate (`src/lib/auth.ts`): three functions with distinct contracts. **Use the right one** — the file documents why.
   - `requireUser()` — mandatory gate for protected pages. Reads the cookie *and* calls the backend to validate; redirects to `/login` on missing OR forged/expired. Wrapped by React `cache()` so layout + page in the same request = one backend call.
   - `getSessionToken()` — returns the raw cookie value without validating it. Only safe to use when the downstream backend call is itself behind `SessionGuard` (a forged token will be rejected there with a 401). Never use this to gate a render.

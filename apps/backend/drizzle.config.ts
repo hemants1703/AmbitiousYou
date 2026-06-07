@@ -1,12 +1,15 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
 import { defineConfig } from 'drizzle-kit';
 
-// dotenv loads the sibling `.env` automatically. drizzle-kit doesn't load env
-// files on its own, so we do it here. At runtime, the NestJS app reads
-// DATABASE_URL via @nestjs/config; this file is only consumed by the CLI.
+// drizzle-kit doesn't load env files on its own. Mirror ConfigModule's
+// precedence (first wins): `.env` is gitignored and usually absent, so we load
+// the committed `.env.development` too — plain `dotenv/config` reads only
+// `.env`, which would leave DATABASE_URL unset. Missing files are skipped.
+config({ path: ['.env.development', '.env.production', '.env'] });
+
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
-  throw new Error('DATABASE_URL must be set to run drizzle-kit (check apps/backend/.env)');
+  throw new Error('DATABASE_URL must be set to run drizzle-kit (check apps/backend/.env.development)');
 }
 
 export default defineConfig({

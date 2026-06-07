@@ -8,7 +8,7 @@ jest.mock('src/db');
 
 describe('UsersController', () => {
   let usersController: UsersController;
-  let mockUsersService: jest.Mocked<Pick<UsersService, 'findUserBySessionToken'>>;
+  let mockUsersService: jest.Mocked<Pick<UsersService, 'findUser'>>;
 
   const buildUser = (overrides: Partial<User> = {}): User => ({
     id: 'user-id',
@@ -23,7 +23,7 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     mockUsersService = {
-      findUserBySessionToken: jest.fn(),
+      findUser: jest.fn(),
     };
 
     const testingModule: TestingModule = await Test.createTestingModule({
@@ -50,20 +50,20 @@ describe('UsersController', () => {
     it('should call usersService.findUserBySessionToken with the bearer token stripped', async () => {
       const user = buildUser({ id: '1', name: 'John Doe', email: 'john@example.com', emailVerified: true });
 
-      mockUsersService.findUserBySessionToken.mockResolvedValue(user);
+      mockUsersService.findUser.mockResolvedValue(user);
 
-      const result = await usersController.findUserFromSessionToken('Bearer token-123');
+      const result = await usersController.findUser('123');
 
-      expect(mockUsersService.findUserBySessionToken).toHaveBeenCalledWith('token-123');
+      expect(mockUsersService.findUser).toHaveBeenCalledWith('123');
       expect(result).toEqual(user);
     });
 
     it('should return null if user is not found', async () => {
-      mockUsersService.findUserBySessionToken.mockResolvedValue(null);
+      mockUsersService.findUser.mockResolvedValue(null);
 
-      const result = await usersController.findUserFromSessionToken('Bearer non-existent-token');
+      const result = await usersController.findUser('Bearer non-existent-token');
 
-      expect(mockUsersService.findUserBySessionToken).toHaveBeenCalledWith('non-existent-token');
+      expect(mockUsersService.findUser).toHaveBeenCalledWith('non-existent-token');
       expect(result).toBeNull();
     });
   });

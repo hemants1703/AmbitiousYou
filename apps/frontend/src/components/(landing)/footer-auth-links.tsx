@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuthHint } from "@/hooks/use-auth-hint";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 
 /**
  * Footer "Explore" list items that depend on auth: logged-out shows Login +
@@ -10,7 +10,7 @@ import { useAuthHint } from "@/hooks/use-auth-hint";
  * logged-out branch is what prerenders statically (SEO-safe — see useAuthHint).
  */
 export default function FooterAuthLinks() {
-  const isLoggedIn = useAuthHint();
+  const isLoggedIn = useAuthStatus();
 
   if (isLoggedIn) {
     return (

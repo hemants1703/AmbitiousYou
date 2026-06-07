@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeColorSync } from "@/components/theme-color-sync";
 import { ThemeProvider } from "@/components/theme-provider";
+import { siteConfig } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,32 +16,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const siteConfig = {
-  name: "AmbitiousYou",
-  title: "AmbitiousYou — Where ambitious goals become inevitable outcomes",
-  description: "Priority management and progress tracking that motivates. Structure your dreams, track your progress, become unstoppable.",
-  url: "https://ambitiousyou.pro", // Update with your actual domain
-  ogImage: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png",
-  creator: "@AmbitiousYouHQ", // Update with your Twitter handle
-  keywords: [
-    "goal tracking",
-    "ambition management",
-    "productivity app",
-    "goal setting",
-    "milestone tracking",
-    "task management",
-    "personal development",
-    "life goals",
-    "achievement tracking",
-    "progress tracking",
-    "AI goal planning",
-    "habit tracking",
-    "self improvement",
-    "goal breakdown",
-    "priority management",
-  ],
-};
 
 export const metadata: Metadata = {
   // Base metadata
@@ -102,15 +77,13 @@ export const metadata: Metadata = {
     site: siteConfig.creator,
   },
 
-  // Icons & Favicon
+  // Icons & Favicon — reference only assets that exist on disk
+  // (src/app/favicon.ico is served at /favicon.ico).
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon0.svg", type: "image/svg+xml" },
-      { url: "/png_logos/favicon_16px.png", sizes: "16x16", type: "image/png" },
-      { url: "/png_logos/favicon_32px.png", sizes: "32x32", type: "image/png" },
+      { url: "/svg_logos/favicon_32px.svg", type: "image/svg+xml" },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
     shortcut: "/favicon.ico",
   },
 
@@ -140,24 +113,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
-        {/* Additional meta tags not covered by Next.js Metadata API */}
+        {/* Extra tags not covered by the Metadata API. OG image tags are emitted
+            from `openGraph.images`, so they are intentionally not duplicated here. */}
         <meta name="apple-mobile-web-app-title" content="AmbitiousYou" />
         <meta name="application-name" content="AmbitiousYou" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="msapplication-TileColor" content="#64ccc5" />
-
-        {/* LinkedIn & legacy crawler compatibility */}
         <meta name="author" content="AmbitiousYou" />
-        <meta name="image" property="og:image" content="https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png" />
-        <meta property="og:image:secure_url" content="https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png" />
-        <meta property="og:logo" content="https://ambitiousyou.pro/png_logos/logo_250px.png" />
 
-        {/* WhatsApp specific - prefers these formats */}
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="675" />
-        <meta property="og:updated_time" content="2025-01-01T00:00:00+00:00" />
-
-        {/* Preconnect to external resources for performance */}
+        {/* Preconnect to the image CDN for faster OG/illustration loads. */}
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
