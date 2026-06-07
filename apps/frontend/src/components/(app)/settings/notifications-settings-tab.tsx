@@ -68,7 +68,7 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
           description="Receive emails about sign-ins, profile changes, and security events."
           checked={props.userSettings.emailAccountActivity}
         />
-        <NotificationRow
+        {/* <NotificationRow
           id="ambition-reminders"
           icon={<BellIcon className="size-4" />}
           label="Ambition reminders"
@@ -83,7 +83,7 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
               toast.error("Failed to update notification settings. Please try again.");
             }
           }}
-        />
+        /> */}
       </CardContent>
     </Card>
   );

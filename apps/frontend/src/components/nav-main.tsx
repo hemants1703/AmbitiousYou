@@ -28,10 +28,10 @@ export function NavMain(props: NavMainProps) {
                 <span>Create New Ambition</span>
               </Link>
             </SidebarMenuButton>
-            <Button size="icon" className="size-8 group-data-[collapsible=icon]:opacity-0" variant="outline">
+            {/* <Button size="icon" className="size-8 group-data-[collapsible=icon]:opacity-0" variant="outline">
               <SparklesIcon />
               <span className="sr-only">AI</span>
-            </Button>
+            </Button> */}
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
