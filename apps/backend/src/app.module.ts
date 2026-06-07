@@ -9,6 +9,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { MilestonesModule } from './milestones/milestones.module';
 import { AmbitionsModule } from './ambitions/ambitions.module';
 import { SettingsModule } from './settings/settings.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SettingsModule } from './settings/settings.module';
     MilestonesModule,
     AmbitionsModule,
     SettingsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

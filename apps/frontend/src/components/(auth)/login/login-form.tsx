@@ -34,9 +34,9 @@ export function LoginForm({ action, initialState, className, ...props }: LoginFo
         <Field>
           <div className="flex items-center">
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
+            <Link href="/forgot-password" className="ml-auto text-sm underline-offset-4 hover:underline">
               Forgot your password?
-            </a>
+            </Link>
           </div>
           <Input id="password" name="password" type="password" required className="border-border bg-background" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
         </Field>

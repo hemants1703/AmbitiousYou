@@ -4,6 +4,7 @@ import { KeyRoundIcon, LockKeyholeIcon, MonitorIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ResetPasswordCard } from "./reset-password-card";
 
 interface SecuritySettingsTabProps {
   sessionToken: string;
@@ -100,6 +101,8 @@ export async function SecuritySettingsTab(props: SecuritySettingsTabProps) {
           </div>
         </CardContent>
       </Card>
+
+      <ResetPasswordCard />
 
       <Card>
         <CardHeader>

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { formatDate } from "./settings-shared";
+import { ResendVerificationButton } from "./resend-verification-button";
 
 interface AccountSettingsTabProps {
   userDetails: User;
@@ -63,6 +64,15 @@ export function AccountSettingsTab(props: AccountSettingsTabProps) {
               </div>
             </div>
           </div>
+
+          {!props.userDetails.emailVerified ? (
+            <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-muted/30 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-xs text-muted-foreground">
+                Verify your email to secure your account. Check your inbox for the verification link.
+              </p>
+              <ResendVerificationButton />
+            </div>
+          ) : null}
 
           <div className="rounded-2xl border border-border/60 bg-muted/30 p-4">
             <dt className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">

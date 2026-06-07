@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return -- intentional `any` typing for the chainable test double. */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return -- intentional `any` typing for the chainable test double. */
 
 /**
  * Jest auto-mock for `src/db`. Activated in any spec via `jest.mock('src/db')`.

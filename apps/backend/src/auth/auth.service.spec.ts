@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/unbound-method -- the auto-mocked Drizzle `db` and mocked bcrypt module are intentionally `any`-typed in tests. */
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
+import { EmailService } from 'src/notifications/email.service';
 import { db } from 'src/db';
 import { buildChain } from 'src/test-utils/db-chain';
 
@@ -16,17 +17,27 @@ jest.mock('bcrypt', () => ({
 describe('AuthService', () => {
   let service: AuthService;
   let mockUsersService: any;
+  let mockEmailService: any;
 
   beforeEach(async () => {
     jest.clearAllMocks();
     mockUsersService = {
       findOneByEmail: jest.fn(),
       findOneByEmailWithPassword: jest.fn(),
+      findOneById: jest.fn(),
       createUser: jest.fn(),
+      updatePassword: jest.fn(),
+    };
+    mockEmailService = {
+      sendVerificationEmail: jest.fn(),
+      sendWelcomeEmail: jest.fn(),
+      sendPasswordResetEmail: jest.fn(),
+      sendPasswordResetConfirmationEmail: jest.fn(),
+      sendPasswordChangedEmail: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService, { provide: UsersService, useValue: mockUsersService }],
+      providers: [AuthService, { provide: UsersService, useValue: mockUsersService }, { provide: EmailService, useValue: mockEmailService }],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -150,6 +161,38 @@ describe('AuthService', () => {
         expect(error).toBeInstanceOf(UnauthorizedException);
         expect(error.message).toBe('Invalid email or password');
       }
+    });
+  });
+
+  describe('resendVerification', () => {
+    const unverifiedUser = { id: 'uuid-1', name: 'John Doe', email: 'john@example.com', emailVerified: false };
+
+    it('rejects with 429 while a valid verification token still exists', async () => {
+      mockUsersService.findOneById.mockResolvedValue(unverifiedUser);
+      (db.select as jest.Mock).mockReturnValueOnce(
+        buildChain([{ id: 'v1', userId: 'uuid-1', identifier: 'email', value: 'token', expiresAt: new Date(Date.now() + 60_000) }]),
+      );
+
+      await expect(service.resendVerification('uuid-1')).rejects.toThrow(HttpException);
+      expect(db.insert).not.toHaveBeenCalled();
+    });
+
+    it('issues a new verification email when no valid token exists', async () => {
+      mockUsersService.findOneById.mockResolvedValue(unverifiedUser);
+      // db.select default chain resolves to [] — no outstanding token.
+
+      const result = await service.resendVerification('uuid-1');
+
+      expect(result).toEqual({ success: true });
+      expect(db.insert).toHaveBeenCalled();
+      expect(mockEmailService.sendVerificationEmail).toHaveBeenCalled();
+    });
+
+    it('throws BadRequestException when the email is already verified', async () => {
+      mockUsersService.findOneById.mockResolvedValue({ ...unverifiedUser, emailVerified: true });
+
+      await expect(service.resendVerification('uuid-1')).rejects.toThrow(BadRequestException);
+      expect(db.insert).not.toHaveBeenCalled();
     });
   });
 });

@@ -4,7 +4,7 @@ import { eq, getTableColumns } from 'drizzle-orm';
 import type { User } from '@ambitiousyou/shared/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SettingsService } from 'src/settings/settings.service';
-import { db, sessions, users } from 'src/db';
+import { db, users } from 'src/db';
 
 // Default-deny projection on every public user read — the destructure drops
 // `passwordHash` from `getTableColumns(users)`. The single login escape hatch
@@ -66,5 +66,11 @@ export class UsersService {
   async findUser(userId: string): Promise<User | null> {
     const [row] = await db.select(publicUserColumns).from(users).where(eq(users.id, userId)).limit(1);
     return row ?? null;
+  }
+
+  /** Sets a new password for the user (used by the auth reset/forgot flows). */
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
   }
 }

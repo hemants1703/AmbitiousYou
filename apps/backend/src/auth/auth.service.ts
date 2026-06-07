@@ -1,17 +1,32 @@
-import { ConflictException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
+import { EmailService } from 'src/notifications/email.service';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { db, sessions, verifications, type Session } from 'src/db';
+import { db, sessions, users, verifications, type Session, type User } from 'src/db';
 
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
-const VERIFICATION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const VERIFICATION_TTL_MS = 60 * 60 * 1000; // 1 hour
+const PASSWORD_RESET_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+const EMAIL_IDENTIFIER = 'email';
+const PASSWORD_RESET_IDENTIFIER = 'password-reset';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  private readonly logger = new Logger(AuthService.name);
+
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly emailService: EmailService,
+  ) {}
+
+  // Frontend origin used to build links inside transactional emails.
+  private base(): string {
+    return process.env.APP_BASE_URL ?? 'https://www.ambitiousyou.pro';
+  }
 
   async registerUser(createUserDto: CreateUserDto): Promise<{ sessionToken: string }> {
     const existingUser = await this.usersService.findOneByEmail(createUserDto.email);
@@ -31,6 +46,10 @@ export class AuthService {
         userAgent: null,
       })
       .returning();
+
+    // Soft verification: the user is logged in immediately; the verification
+    // email is fire-and-forget so registration never blocks on email delivery.
+    void this.sendEmailVerification(user);
 
     return { sessionToken: session.token };
   }
@@ -73,23 +92,152 @@ export class AuthService {
     return await db.select().from(sessions).where(eq(sessions.userId, userId)).orderBy(desc(sessions.createdAt));
   }
 
-  // TODO: Implement email verification methods
-  async verifyEmail(email: string) {
-    const user = await this.usersService.findOneByEmail(email);
-    if (!user) {
-      throw new ConflictException('User not found');
-    }
+  // --- Email verification -------------------------------------------------
 
+  /**
+   * Issues a fresh email-verification token (replacing any prior one) and sends
+   * the verification email. Self-contained and never throws — safe to call as
+   * `void` (signup) or to `await` (resend).
+   */
+  private async sendEmailVerification(user: User): Promise<void> {
     try {
+      const token = crypto.randomUUID();
+      await db.delete(verifications).where(and(eq(verifications.userId, user.id), eq(verifications.identifier, EMAIL_IDENTIFIER)));
       await db.insert(verifications).values({
         userId: user.id,
-        identifier: 'email',
-        value: crypto.randomUUID(),
+        identifier: EMAIL_IDENTIFIER,
+        value: token,
         expiresAt: new Date(Date.now() + VERIFICATION_TTL_MS),
       });
+
+      void this.emailService.sendVerificationEmail(user.email, user.name, `${this.base()}/verify-email?token=${token}`);
     } catch (error) {
-      console.error('Error in verifyEmail: ', error);
-      throw new HttpException('Failed to create verification record', 500);
+      this.logger.error(`Failed to issue verification email for user ${user.id}`, error as Error);
     }
+  }
+
+  async verifyEmailToken(token: string): Promise<{ success: true }> {
+    const [row] = await db
+      .select()
+      .from(verifications)
+      .where(and(eq(verifications.value, token), eq(verifications.identifier, EMAIL_IDENTIFIER)))
+      .limit(1);
+
+    if (!row || new Date(row.expiresAt) < new Date()) {
+      throw new UnauthorizedException('Invalid or expired verification token');
+    }
+
+    await db.update(users).set({ emailVerified: true }).where(eq(users.id, row.userId));
+    await db.delete(verifications).where(eq(verifications.id, row.id));
+
+    const user = await this.usersService.findOneById(row.userId);
+    if (user) {
+      void this.emailService.sendWelcomeEmail(user.email, user.name, `${this.base()}/dashboard`);
+    }
+
+    return { success: true };
+  }
+
+  async resendVerification(userId: string): Promise<{ success: true }> {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    if (user.emailVerified) {
+      throw new BadRequestException('Email is already verified');
+    }
+
+    // Rate limit: while a still-valid verification token exists, don't issue a
+    // new one — prevents spamming the resend button. The token's 1h TTL doubles
+    // as the cooldown window.
+    const [existing] = await db
+      .select()
+      .from(verifications)
+      .where(and(eq(verifications.userId, userId), eq(verifications.identifier, EMAIL_IDENTIFIER)))
+      .orderBy(desc(verifications.expiresAt))
+      .limit(1);
+
+    if (existing && new Date(existing.expiresAt) > new Date()) {
+      throw new HttpException(
+        'A verification link was already sent and is still valid. Please check your inbox and try again later.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
+    await this.sendEmailVerification(user);
+    return { success: true };
+  }
+
+  // --- Password reset -----------------------------------------------------
+
+  /**
+   * Forgot-password request (before auth). Always resolves with a generic
+   * success regardless of whether the email belongs to a real account, so the
+   * endpoint can't be used to enumerate users.
+   */
+  async forgotPassword(email: string): Promise<{ success: true }> {
+    const user = await this.usersService.findOneByEmail(email);
+    if (user) {
+      try {
+        const token = crypto.randomUUID();
+        await db.delete(verifications).where(and(eq(verifications.userId, user.id), eq(verifications.identifier, PASSWORD_RESET_IDENTIFIER)));
+        await db.insert(verifications).values({
+          userId: user.id,
+          identifier: PASSWORD_RESET_IDENTIFIER,
+          value: token,
+          expiresAt: new Date(Date.now() + PASSWORD_RESET_TTL_MS),
+        });
+
+        void this.emailService.sendPasswordResetEmail(user.email, user.name, `${this.base()}/reset-password?token=${token}`);
+      } catch (error) {
+        this.logger.error(`Failed to issue password-reset email for ${email}`, error as Error);
+      }
+    }
+
+    return { success: true };
+  }
+
+  /** Forgot-password completion (before auth) — set a new password via token. */
+  async forgotPasswordReset(token: string, password: string): Promise<{ success: true }> {
+    const [row] = await db
+      .select()
+      .from(verifications)
+      .where(and(eq(verifications.value, token), eq(verifications.identifier, PASSWORD_RESET_IDENTIFIER)))
+      .limit(1);
+
+    if (!row || new Date(row.expiresAt) < new Date()) {
+      throw new UnauthorizedException('Invalid or expired reset token');
+    }
+
+    await this.usersService.updatePassword(row.userId, password);
+    await db.delete(verifications).where(eq(verifications.id, row.id));
+    // Recovering an account invalidates every existing session for safety.
+    await db.delete(sessions).where(eq(sessions.userId, row.userId));
+
+    const user = await this.usersService.findOneById(row.userId);
+    if (user) {
+      void this.emailService.sendPasswordResetConfirmationEmail(user.email, user.name, `${this.base()}/login`);
+    }
+
+    return { success: true };
+  }
+
+  /**
+   * Settings "Reset password" (after auth). Sets a new password and, when the
+   * user opts in, drops every session (including the current one).
+   */
+  async resetPassword(userId: string, newPassword: string, signOutAllDevices: boolean): Promise<{ success: true; signedOut: boolean }> {
+    await this.usersService.updatePassword(userId, newPassword);
+
+    if (signOutAllDevices) {
+      await db.delete(sessions).where(eq(sessions.userId, userId));
+    }
+
+    const user = await this.usersService.findOneById(userId);
+    if (user) {
+      void this.emailService.sendPasswordChangedEmail(user.email, user.name);
+    }
+
+    return { success: true, signedOut: signOutAllDevices };
   }
 }
