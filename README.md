@@ -59,6 +59,8 @@ The parts I'm most proud of — each one is a deliberate decision, not an accide
 | 6 | **A marketing site that's static *and* auth-aware *and* self-healing.** The landing pages are `force-static` for SEO, yet still show "Go to Dashboard" to logged-in users — validated against the backend via a dynamic route handler that clears stale cookies when a session is gone. | You don't have to choose between a fast, indexable static site and correct, personalized UI. |
 | 7 | **Technical SEO, done properly.** Per-page canonical URLs, JSON-LD structured data (Organization, WebSite, SoftwareApplication, FAQ), and generated `sitemap.xml` / `robots.txt` / `manifest` — all driven from one site-config source of truth. | The product is built to be discovered, not just built. |
 | 8 | **Strict input validation.** A global `ValidationPipe` with `whitelist + forbidNonWhitelisted + transform` rejects any unexpected field with a 400; every payload is DTO-defined. | The API has a hard, explicit contract surface. |
+| 9 | **Transactional email & account recovery.** Signup sends an **Azure Communication Services** verification email (verify-then-welcome); logged-out **password recovery** and an in-app **reset** run single-use token flows that reuse one `verifications` table and confirm by email — and forgot-password is **non-enumerating**. | The full account lifecycle (verify, recover, change) is handled securely: 1-hour single-use tokens, sessions invalidated on reset, and HTML-escaped templates. |
+| 10 | **Defense-in-depth, by design.** Per-IP **rate limiting** (`@nestjs/throttler`) on auth routes, **Helmet** headers, a **CSRF-resistant `POST` logout**, and per-user **ownership checks on every write**. | Brute-force, email-bombing, forced-logout, and cross-tenant writes are closed off — not left to chance. |
 
 ---
 
@@ -71,9 +73,10 @@ The parts I'm most proud of — each one is a deliberate decision, not an accide
 - **NestJS 11** (modular, dependency-injected)
 - **Drizzle ORM 0.45** over **PostgreSQL** (`pg`)
 - Opaque-token sessions + `bcrypt` password hashing
+- Transactional email via **Azure Communication Services**
+- Rate limiting (`@nestjs/throttler`) + **Helmet** headers
 - `class-validator` DTOs + global `ValidationPipe`
-- **drizzle-kit** migrations
-- **Jest 30** unit tests (auto-mocked DB layer)
+- **drizzle-kit** migrations · **Jest 30** unit tests
 
 </td><td valign="top" width="50%">
 
@@ -128,8 +131,8 @@ flowchart LR
 
     subgraph BE["apps/backend · NestJS :3001"]
         direction TB
-        GUARD["SessionGuard + ValidationPipe"]
-        MODS["Modules: auth · ambitions ·<br/>tasks · milestones · notes · settings"]
+        GUARD["Helmet · ThrottlerGuard<br/>SessionGuard · ValidationPipe"]
+        MODS["Modules: auth · ambitions · tasks ·<br/>milestones · notes · settings · notifications"]
     end
 
     DB[("PostgreSQL")]
@@ -159,6 +162,7 @@ Every domain type is **inferred from these tables** and shared across the stack.
 erDiagram
     USERS ||--o{ AMBITIONS : owns
     USERS ||--o{ SESSIONS : authenticates
+    USERS ||--o{ VERIFICATIONS : "verify & reset tokens"
     USERS ||--|| SETTINGS : configures
     AMBITIONS ||--o{ TASKS : "tracked by"
     AMBITIONS ||--o{ MILESTONES : "tracked by"
@@ -214,6 +218,13 @@ erDiagram
         varchar token
         timestamp expiresAt
     }
+    VERIFICATIONS {
+        uuid id PK
+        uuid userId FK
+        varchar identifier "email | password-reset"
+        varchar value "single-use token · 1h TTL"
+        timestamp expiresAt
+    }
 ```
 
 A nice detail: **tasks and milestones are deliberately different.** Tasks are checkable and reversible. Milestones model one-time achievements — completing one is **permanent** (the UI gates it behind a confirm dialog and the backend rejects re-opening), because "I graduated" doesn't get un-happened.
@@ -228,7 +239,7 @@ A nice detail: **tasks and milestones are deliberately different.** Tasks are ch
 - **Notes** — capture context against any ambition.
 - **Dashboard** — an at-a-glance view of active ambitions and progress insights, aggregated resiliently with `Promise.allSettled` so one slow fetch never breaks the page.
 - **Settings** — timezone-aware preferences and notification toggles.
-- **Auth** — email/password sign-up & login, server-validated session gating on every protected route, and a polished, accessible marketing site for logged-out visitors.
+- **Auth & account lifecycle** — email/password sign-up & login with **email verification** (verify-then-welcome), logged-out **forgot-password** recovery, and an in-settings **password reset** (with an optional "sign out of all devices") — all backed by Azure Communication Services emails. Server-validated session gating guards every protected route, and the marketing site stays polished and accessible for logged-out visitors.
 
 ---
 
@@ -239,7 +250,8 @@ AmbitiousYou/
 ├── apps/
 │   ├── backend/                 # NestJS 11 + Drizzle + PostgreSQL (REST API :3001)
 │   │   ├── src/
-│   │   │   ├── auth/            # SessionGuard, decorators, login/register/logout
+│   │   │   ├── auth/            # SessionGuard · login/register/logout · verify-email · password reset
+│   │   │   ├── notifications/  # Azure Communication Services email + HTML templates
 │   │   │   ├── ambitions/      # incl. ambition-progress.util.ts (atomic recalc)
 │   │   │   ├── tasks/ milestones/ notes/ settings/ users/
 │   │   │   └── db/             # pg.Pool client + drizzle wiring + migrations
@@ -273,7 +285,15 @@ pnpm install
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ambitiousyou_dev"
 PORT=3001
+
+# Transactional email (optional in dev). Without AZURE_CONNECTION_STRING the app
+# still boots and simply logs-and-skips sends. APP_BASE_URL is the frontend
+# origin used to build the links inside emails.
+AZURE_CONNECTION_STRING="endpoint=https://<region>.communication.azure.com/;accesskey=<key>"
+APP_BASE_URL="http://localhost:3000"
 ```
+
+> Keep real secrets out of the git-tracked `.env.development` — put a live `AZURE_CONNECTION_STRING` in the gitignored `apps/backend/.env.local` instead.
 
 **3. Configure the frontend** — create `apps/frontend/.env.local`:
 
@@ -352,12 +372,19 @@ The marketing pages render statically (`force-static`) for indexability and spee
 
 </details>
 
+<details>
+<summary><b>Account-lifecycle email & recovery (one token table, two flows)</b></summary>
+
+Signup fires a fire-and-forget **Azure Communication Services** verification email; clicking the link marks the account verified and triggers the welcome email. Logged-out password recovery and the in-settings password reset both run token flows that **reuse a single `verifications` table** — keyed by an `identifier` of `email` or `password-reset`, with 1-hour single-use tokens. Forgot-password is **non-enumerating** (an identical response whether or not the address exists), completing a reset **invalidates every session**, and resends are **rate-limited by the live token's lifetime**. Interpolated values are HTML-escaped before they ever touch the template, and email send never blocks the request (fire-and-forget, logged on failure).
+
+</details>
+
 ---
 
 ## 🗺 Roadmap
 
 - 📊 Richer analytics & time-investment insights across ambitions
-- 🔔 Email + push reminders (the settings + schema scaffolding already exist)
+- 🔔 Push reminders & digest emails (transactional auth emails — verify, welcome, password reset — already ship via Azure Communication Services)
 - 📱 Native mobile apps
 - 🤝 Public ambition sharing & accountability
 

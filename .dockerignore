@@ -1,0 +1,36 @@
+# Keep the build context small AND keep local env/secrets out of image layers.
+# Runtime env is injected by the orchestrator (--env-file on the VPS), never baked.
+**/node_modules
+**/dist
+**/.next
+**/out
+**/coverage
+**/.turbo
+
+# never copy local env files into the image (e.g. apps/backend/.env.production).
+# NOTE: no `!...` negation anywhere in this file — a re-include pattern forces
+# BuildKit to walk every dir (incl. node_modules) and can fail on Windows pnpm
+# junctions. .env.example lives in the repo for docs; it isn't needed in-image.
+**/.env
+**/.env.*
+
+# frontend deploys on Vercel. We don't exclude it wholesale here because the
+# Dockerfile needs apps/frontend/package.json for --frozen-lockfile validation
+# (a dir-exclude + `!` re-include negation can trip the Windows junction walk).
+# Frontend SOURCE never enters the image — the Dockerfile only COPYs the
+# backend, shared, and the individual manifests. node_modules/.next are excluded
+# above, so the extra context is just a few MB of source.
+
+# git + tooling + docs that don't belong in the image
+.git
+.gitignore
+.github
+.kamal
+infra
+**/*.log
+**/.DS_Store
+.vscode
+.idea
+**/*.tsbuildinfo
+README.md
+CLAUDE.md
