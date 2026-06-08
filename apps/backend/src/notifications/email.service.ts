@@ -13,6 +13,13 @@ const TEMPLATE_DIR = join(__dirname, 'templates', 'email');
 
 type TemplateName = 'verify-email' | 'signup-welcome' | 'password-reset' | 'password-reset-verification' | 'password-update-confirmation';
 
+// Escape interpolated values so user-controlled data (e.g. a display name) can't
+// inject markup into the email HTML. URLs are unaffected (no special chars to
+// escape; an `&` would be correctly attribute-encoded).
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
@@ -59,7 +66,7 @@ export class EmailService {
   private render(template: TemplateName, replacements: Record<string, string>): string {
     let html = this.loadTemplate(template);
     for (const [token, value] of Object.entries(replacements)) {
-      html = html.replaceAll(`{{${token}}}`, value);
+      html = html.replaceAll(`{{${token}}}`, escapeHtml(value));
     }
     return html;
   }

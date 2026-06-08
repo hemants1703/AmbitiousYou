@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import type { Session } from '@ambitiousyou/shared/types';
 import { AuthService } from './auth.service';
 import { CurrentSession } from './decorators/current-session.decorator';
@@ -15,18 +16,22 @@ import { SessionGuard } from './guards/session.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('/register')
   async registerUser(@Body() registerUserDto: RegisterUserDto): Promise<{ sessionToken: string }> {
     return await this.authService.registerUser(registerUserDto);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('/login')
   async loginUser(@Body() loginUserDto: LoginUserDto): Promise<{ sessionToken: string }> {
     return await this.authService.loginUser(loginUserDto);
   }
 
+  // POST (not GET) so the action is CSRF-resistant — a cross-site top-level
+  // navigation can't force a logout.
   @UseGuards(SessionGuard)
-  @Get('/logout')
+  @Post('/logout')
   async logoutUser(@CurrentSession() session: Session): Promise<void> {
     await this.authService.logoutUser(session.token);
   }
@@ -44,6 +49,7 @@ export class AuthController {
     return await this.authService.verifyEmailToken(verifyEmailDto.token);
   }
 
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @UseGuards(SessionGuard)
   @Post('/verify-email/resend')
   async resendVerification(@CurrentUserId() userId: string): Promise<{ success: true }> {
@@ -52,6 +58,7 @@ export class AuthController {
 
   // --- Password reset -------------------------------------------------------
 
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('/forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<{ success: true }> {
     return await this.authService.forgotPassword(forgotPasswordDto.email);

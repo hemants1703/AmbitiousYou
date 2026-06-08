@@ -1,14 +1,23 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { and, desc, eq } from 'drizzle-orm';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
 import { recalculateAmbitionProgress } from 'src/ambitions/ambition-progress.util';
-import { db, milestones, type Milestone } from 'src/db';
+import { db, ambitions, milestones, type Milestone } from 'src/db';
 
 @Injectable()
 export class MilestonesService {
   async createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): Promise<Milestone> {
     return await db.transaction(async (tx) => {
+      const [ambition] = await tx
+        .select({ id: ambitions.id })
+        .from(ambitions)
+        .where(and(eq(ambitions.id, createMilestoneDto.ambitionId), eq(ambitions.userId, userId)))
+        .limit(1);
+      if (!ambition) {
+        throw new NotFoundException('Ambition not found');
+      }
+
       const [saved] = await tx
         .insert(milestones)
         .values({ userId, ...createMilestoneDto })

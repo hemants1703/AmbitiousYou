@@ -16,6 +16,15 @@ if (!process.env.DATABASE_URL) {
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
+// node-postgres emits 'error' on IDLE clients when the connection drops out from
+// under us (network blip, Supabase restart / idle timeout). Without a listener
+// this surfaces as an uncaught exception that crashes the whole process. Log and
+// swallow it — the pool transparently discards the dead client and opens a fresh
+// one on the next query, so the app stays up through transient DB outages.
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle Postgres client:', err.message);
+});
+
 /**
  * Process-wide Drizzle client. No relational query builder (`db.query.*`) —
  * use the SQL-style core API instead (`db.select().from().where()...`,

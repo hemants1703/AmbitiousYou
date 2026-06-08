@@ -1,10 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { closeDatabase } from './db';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Behind a single reverse proxy (nginx) in prod/dev. Trust one hop so that
+  // `req.ip` (and the per-IP ThrottlerGuard) reflects the real client from
+  // `X-Forwarded-For` rather than the proxy's address — otherwise every user
+  // shares one rate-limit bucket. nginx sets X-Forwarded-For/X-Real-IP.
+  app.set('trust proxy', 1);
+
+  // Security response headers (X-Content-Type-Options, HSTS, etc.).
+  app.use(helmet());
 
   app.useGlobalPipes(
     new ValidationPipe({

@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { User } from "@ambitiousyou/shared";
+import { logoutAction } from "@/lib/actions/(auth)/logout/logout";
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -66,11 +67,14 @@ export function NavUser(props: NavUserProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild className="w-full">
-              <Link href="/api/logout" className="w-full">
-                <LogOutIcon />
-                Log out
-              </Link>
+            <DropdownMenuItem
+              className="w-full"
+              onSelect={() => {
+                void logoutAction();
+              }}
+            >
+              <LogOutIcon />
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

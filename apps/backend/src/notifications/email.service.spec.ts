@@ -46,6 +46,14 @@ describe('EmailService', () => {
     expect(html.split(link).length - 1).toBeGreaterThanOrEqual(2);
   });
 
+  it('HTML-escapes interpolated user values', async () => {
+    await service.sendVerificationEmail('user@example.com', '<b>Ada</b>', 'https://app.test/verify-email?token=abc');
+
+    const html = beginSendMock.mock.calls[0][0].content.html as string;
+    expect(html).toContain('&lt;b&gt;Ada&lt;/b&gt;');
+    expect(html).not.toContain('<b>Ada</b>');
+  });
+
   it('skips sending when the Azure connection string is absent', async () => {
     delete process.env.AZURE_CONNECTION_STRING;
     const unconfigured = new EmailService();

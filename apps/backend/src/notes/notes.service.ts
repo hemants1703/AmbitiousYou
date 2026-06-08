@@ -2,11 +2,20 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { and, eq } from 'drizzle-orm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { db, notes, type Note } from 'src/db';
+import { db, ambitions, notes, type Note } from 'src/db';
 
 @Injectable()
 export class NotesService {
   async createNote(userId: string, createNoteDto: CreateNoteDto): Promise<Note> {
+    const [ambition] = await db
+      .select({ id: ambitions.id })
+      .from(ambitions)
+      .where(and(eq(ambitions.id, createNoteDto.ambitionId), eq(ambitions.userId, userId)))
+      .limit(1);
+    if (!ambition) {
+      throw new NotFoundException('Ambition not found');
+    }
+
     const [created] = await db
       .insert(notes)
       .values({ userId, ...createNoteDto })

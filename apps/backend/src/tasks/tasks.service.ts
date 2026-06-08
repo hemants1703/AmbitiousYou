@@ -1,14 +1,23 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { recalculateAmbitionProgress } from 'src/ambitions/ambition-progress.util';
-import { db, tasks, type Task } from 'src/db';
+import { db, ambitions, tasks, type Task } from 'src/db';
 
 @Injectable()
 export class TasksService {
   async createTask(userId: string, createTaskDto: CreateTaskDto): Promise<Task> {
     return await db.transaction(async (tx) => {
+      const [ambition] = await tx
+        .select({ id: ambitions.id })
+        .from(ambitions)
+        .where(and(eq(ambitions.id, createTaskDto.ambitionId), eq(ambitions.userId, userId)))
+        .limit(1);
+      if (!ambition) {
+        throw new NotFoundException('Ambition not found');
+      }
+
       const [saved] = await tx
         .insert(tasks)
         .values({ userId, ...createTaskDto })
