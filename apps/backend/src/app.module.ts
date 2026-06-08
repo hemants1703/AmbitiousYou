@@ -16,7 +16,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.development', '.env.production', '.env'] }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env.development', '.env.production', '.env'] }),
     // Global default rate limit (100 req / minute / IP). Auth endpoints tighten
     // this further with @Throttle. Behind a proxy in prod, enable Express
     // `trust proxy` so the per-IP key reflects the real client.
