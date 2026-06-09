@@ -5,9 +5,12 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   // Transpile the workspace `@ambitiousyou/shared` package's TS source
-  // directly, so the frontend doesn't depend on `pnpm --filter
-  // @ambitiousyou/shared build` having run. The backend still needs the
-  // built dist/ for its Node runtime — that's wired via its own prebuild.
+  // directly. NOTE: this only handles transpilation — module resolution
+  // still follows the package's `exports` map, which points at `dist/`.
+  // So `next build`'s type-check needs `@ambitiousyou/shared` built first.
+  // That's wired via this app's `prebuild` script (see package.json), and
+  // Vercel triggers it by running `pnpm build` (see vercel.json) rather
+  // than bare `next build`.
   transpilePackages: ["@ambitiousyou/shared"],
   turbopack: {
     root: path.join(__dirname, "../.."),
