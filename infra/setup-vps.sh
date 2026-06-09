@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-time VPS provisioning + hardening for the AmbitiousYou backend.
-# Target: fresh Ubuntu 24.04 LTS (Hetzner CX22 or similar). Run as root.
+# Target: fresh Ubuntu 24.04 LTS (DigitalOcean 2 GB droplet, or similar). Run as root.
 #   ssh root@<VPS_IP> 'bash -s' < infra/setup-vps.sh
 #
 # After this: create the per-env backend.env files (see README), point DNS at
@@ -90,7 +90,7 @@ cat <<'NEXT'
   4. As the deploy user, authenticate to GHCR so it can pull private images:
        echo <READ_PACKAGES_PAT> | docker login ghcr.io -u <github-user> --password-stdin
      (skip if you make the GHCR package public.)
-  5. Point DNS A records api / api-dev at this host, then issue certs:
-       certbot --nginx -d api.ambitiousyou.pro -d api-dev.ambitiousyou.pro
+  5. Point DNS A records api / api.dev at this host, then issue certs:
+       certbot --nginx -d api.ambitiousyou.pro -d api.dev.ambitiousyou.pro
   6. Push to dev (then main) — GitHub Actions builds, migrates, and deploys.
 NEXT
