@@ -85,11 +85,31 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Zero-downtime blue-green swap on the VPS (see infra/deploy.sh).
+      # Ship the latest deploy.sh to the VPS so it's always present and in sync
+      # with the repo — no manual copy step. Lands at /opt/ambitiousyou/deploy.sh
+      # (strip_components drops the infra/ prefix). Needs /opt/ambitiousyou to
+      # exist + be writable by VPS_USER (created by setup-vps.sh); if this step
+      # fails with "no such directory", CI is hitting a wrong/un-provisioned host.
+      - name: Ship deploy.sh to the VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: infra/deploy.sh
+          target: /opt/ambitiousyou
+          strip_components: 1
+
+      # Zero-downtime blue-green swap on the VPS (see infra/deploy.sh). Prints
+      # hostname/whoami/ls first so a wrong-host VPS_HOST is obvious in the log.
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          script: bash /opt/ambitiousyou/deploy.sh ${{ env.DEPLOY_ENV }} ${{ env.IMAGE }}:${{ github.sha }}
+          script: |
+            echo "Connected to host=$(hostname) as user=$(whoami)"
+            ls -la /opt/ambitiousyou/ || true
+            chmod +x /opt/ambitiousyou/deploy.sh
+            bash /opt/ambitiousyou/deploy.sh ${{ env.DEPLOY_ENV }} ${{ env.IMAGE }}:${{ github.sha }}
