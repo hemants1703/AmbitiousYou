@@ -1,6 +1,6 @@
 name: deploy-backend
 
-# Push to dev  -> deploys the DEV backend  (api-dev.ambitiousyou.pro, Supabase dev)
+# Push to dev  -> deploys the DEV backend  (api.dev.ambitiousyou.pro, Supabase dev)
 # Push to main -> deploys the PROD backend (api.ambitiousyou.pro,    Supabase prod)
 # Path-filtered so frontend-only changes don't redeploy the backend.
 on:
