@@ -23,8 +23,10 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # GitHub Environment supplies the per-env secrets (DATABASE_URL, etc.)
-    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    # GitHub Environment supplies the per-env secrets (DATABASE_URL, etc.).
+    # Names MUST match the environments in repo Settings exactly (case-sensitive):
+    # `Production` (main branch) / `Development` (any other branch).
+    environment: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Development (dev branch)' }}
     env:
       DEPLOY_ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
       IMAGE: ghcr.io/${{ github.repository_owner }}/ambitiousyou-backend

@@ -6,7 +6,7 @@ into the Docker image** (`.dockerignore` excludes `infra/`).
 
 | File | Purpose | Where it ends up |
 |---|---|---|
-| `setup-vps.sh` | One-time provision + hardening (Docker, nginx, certbot, ufw, deploy user) | run once as root on the VPS |
+| `setup-vps.sh` | One-time provision + hardening (Docker, nginx, certbot, ufw, the `hemant` deploy user) | run once as root / via `sudo` on the VPS |
 | `deploy.sh` | Zero-downtime blue-green container swap for one env | `/opt/ambitiousyou/deploy.sh` |
 | `nginx/sites.conf` | Reverse-proxy server blocks (certbot adds TLS) | `/etc/nginx/sites-available/` |
 
@@ -161,24 +161,27 @@ Swap is a safety net for short spikes, not a substitute for RAM (it's slow disk)
   user `postgres.<ref>`), append `?sslmode=require`. Use it for both runtime and CI migrations.
 
 ### 2. VPS
+Run as your sudo user `hemant`. `DEPLOY_PUBKEY` is the CI deploy **public** key
+(omit it if your `VPS_SSH_KEY` secret is a personal key already in
+`~/.ssh/authorized_keys`). `setup-vps.sh` makes `/opt/ambitiousyou` owned by `hemant`.
 ```
-ssh root@<VPS_IP> 'DEPLOY_PUBKEY="ssh-ed25519 AAAA... ci-deploy" bash -s' < infra/setup-vps.sh
-scp infra/deploy.sh        deploy@<VPS_IP>:/opt/ambitiousyou/deploy.sh
-scp infra/nginx/sites.conf deploy@<VPS_IP>:/tmp/ambitiousyou.conf
-# on the VPS, as root:
-chmod +x /opt/ambitiousyou/deploy.sh && chown deploy:deploy /opt/ambitiousyou/deploy.sh
-mv /tmp/ambitiousyou.conf /etc/nginx/sites-available/ambitiousyou.conf
-ln -sf /etc/nginx/sites-available/ambitiousyou.conf /etc/nginx/sites-enabled/
-rm -f /etc/nginx/sites-enabled/default
-nginx -t && systemctl reload nginx
+ssh hemant@<VPS_IP> 'sudo DEPLOY_PUBKEY="ssh-ed25519 AAAA... ci-deploy" bash -s' < infra/setup-vps.sh
+scp infra/deploy.sh        hemant@<VPS_IP>:/opt/ambitiousyou/deploy.sh
+scp infra/nginx/sites.conf hemant@<VPS_IP>:/tmp/ambitiousyou.conf
+# then, on the VPS (ssh hemant@<VPS_IP>):
+chmod +x /opt/ambitiousyou/deploy.sh
+sudo mv /tmp/ambitiousyou.conf /etc/nginx/sites-available/ambitiousyou.conf
+sudo ln -sf /etc/nginx/sites-available/ambitiousyou.conf /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo nginx -t && sudo systemctl reload nginx
 ```
-Create the secret env files (mode 600, owner deploy):
+Create the secret env files (mode 600, owner hemant):
 ```
 /opt/ambitiousyou/prod/backend.env
 /opt/ambitiousyou/dev/backend.env
 ```
 each with `DATABASE_URL`, `APP_BASE_URL`, `AZURE_CONNECTION_STRING`, `NODE_ENV=production`.
-Then `docker login ghcr.io` as deploy (read:packages PAT) unless the image is public.
+Then `docker login ghcr.io` as hemant (read:packages PAT) unless the image is public.
 
 ### 3. DNS
 | Record | Type | Value |
@@ -192,9 +195,11 @@ Then `docker login ghcr.io` as deploy (read:packages PAT) unless the image is pu
 Then issue certs: `certbot --nginx -d api.ambitiousyou.pro -d api.dev.ambitiousyou.pro`
 
 ### 4. GitHub
-- **Environments** `production` + `development`, each with secrets:
-  `DATABASE_URL`, `APP_BASE_URL`, `AZURE_CONNECTION_STRING`.
-- **Repo secrets:** `VPS_HOST`, `VPS_USER` (=`deploy`), `VPS_SSH_KEY` (CI deploy private key).
+- **Environments** `Production` + `Development` (case-sensitive — must match the
+  workflow exactly). Each needs the **`DATABASE_URL`** secret (the migrate step reads
+  it); add it under *Environment secrets*, NOT *Variables*. `APP_BASE_URL` /
+  `AZURE_CONNECTION_STRING` are not needed here — they live in the VPS `backend.env`.
+- **Repo secrets:** `VPS_HOST`, `VPS_USER` (=`hemant`), `VPS_SSH_KEY` (the private key whose **public** half is in `hemant`'s `authorized_keys`).
 - GHCR push uses the built-in `GITHUB_TOKEN` (workflow already has `packages: write`).
 
 ### 5. Vercel

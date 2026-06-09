@@ -7,9 +7,12 @@
 # this host, issue certs (certbot, see below), then push to dev/main to deploy.
 set -euo pipefail
 
-DEPLOY_USER=deploy
-# Paste the CI deploy public key here (or append it afterwards). The matching
-# PRIVATE key goes into GitHub secret VPS_SSH_KEY.
+# The OS user GitHub Actions SSHes in as (also owns /opt/ambitiousyou). Defaults
+# to your existing sudo user `hemant`; override with `DEPLOY_USER=deploy ...` if
+# you'd rather a dedicated least-privilege user. Must equal the VPS_USER secret.
+DEPLOY_USER="${DEPLOY_USER:-hemant}"
+# The CI deploy PUBLIC key (its private half goes in GitHub secret VPS_SSH_KEY).
+# It is APPENDED to the user's authorized_keys, so an existing login key survives.
 DEPLOY_PUBKEY="${DEPLOY_PUBKEY:-}"
 
 echo "==> apt update + base packages"
@@ -28,7 +31,7 @@ fi
 
 echo "==> Docker Engine + compose plugin"
 install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
   > /etc/apt/sources.list.d/docker.list
@@ -40,9 +43,12 @@ id -u "$DEPLOY_USER" >/dev/null 2>&1 || adduser --disabled-password --gecos "" "
 usermod -aG docker "$DEPLOY_USER"
 install -d -m 700 -o "$DEPLOY_USER" -g "$DEPLOY_USER" "/home/$DEPLOY_USER/.ssh"
 if [ -n "$DEPLOY_PUBKEY" ]; then
-  echo "$DEPLOY_PUBKEY" > "/home/$DEPLOY_USER/.ssh/authorized_keys"
-  chown "$DEPLOY_USER:$DEPLOY_USER" "/home/$DEPLOY_USER/.ssh/authorized_keys"
-  chmod 600 "/home/$DEPLOY_USER/.ssh/authorized_keys"
+  KEYS="/home/$DEPLOY_USER/.ssh/authorized_keys"
+  touch "$KEYS"
+  # Append (never overwrite) so an existing user's personal login key survives.
+  grep -qxF "$DEPLOY_PUBKEY" "$KEYS" || echo "$DEPLOY_PUBKEY" >> "$KEYS"
+  chown "$DEPLOY_USER:$DEPLOY_USER" "$KEYS"
+  chmod 600 "$KEYS"
 fi
 
 echo "==> narrow sudoers for deploy (nginx reload only, no password)"
@@ -66,28 +72,30 @@ systemctl restart ssh || systemctl restart sshd || true
 
 echo "==> on-host layout under /opt/ambitiousyou"
 install -d -o "$DEPLOY_USER" -g "$DEPLOY_USER" /opt/ambitiousyou/prod /opt/ambitiousyou/dev
-# Seed active_port so the first deploy swaps onto the other (PORTS[0]) port.
-echo 3002 > /opt/ambitiousyou/prod/active_port
-echo 3102 > /opt/ambitiousyou/dev/active_port
+# Seed active_port so the FIRST deploy swaps onto the other (PORTS[0]) port.
+# Guarded so re-running this script never resets a live deploy's state.
+[ -f /opt/ambitiousyou/prod/active_port ] || echo 3002 > /opt/ambitiousyou/prod/active_port
+[ -f /opt/ambitiousyou/dev/active_port ]  || echo 3102 > /opt/ambitiousyou/dev/active_port
 chown "$DEPLOY_USER:$DEPLOY_USER" /opt/ambitiousyou/prod/active_port /opt/ambitiousyou/dev/active_port
 
 echo "==> seed initial nginx upstreams (point at the seeded active ports)"
-echo 'upstream backend_prod { server 127.0.0.1:3002; }' > /etc/nginx/conf.d/upstream-prod.conf
-echo 'upstream backend_dev  { server 127.0.0.1:3102; }' > /etc/nginx/conf.d/upstream-dev.conf
+# Guarded so re-running doesn't repoint nginx away from a live container.
+[ -f /etc/nginx/conf.d/upstream-prod.conf ] || echo 'upstream backend_prod { server 127.0.0.1:3002; }' > /etc/nginx/conf.d/upstream-prod.conf
+[ -f /etc/nginx/conf.d/upstream-dev.conf ]  || echo 'upstream backend_dev  { server 127.0.0.1:3102; }' > /etc/nginx/conf.d/upstream-dev.conf
 
 cat <<'NEXT'
 
 ==> Provisioning done. Remaining MANUAL steps:
 
-  1. Copy infra/deploy.sh to /opt/ambitiousyou/deploy.sh (chmod +x, chown deploy).
+  1. Copy infra/deploy.sh to /opt/ambitiousyou/deploy.sh (chmod +x, chown hemant).
   2. Copy infra/nginx/sites.conf to /etc/nginx/sites-available/ambitiousyou.conf
      and symlink into sites-enabled; remove the default site.
-  3. Create the per-env secret files (mode 600, owned by deploy):
+  3. Create the per-env secret files (mode 600, owned by hemant):
        /opt/ambitiousyou/prod/backend.env
        /opt/ambitiousyou/dev/backend.env
      each with DATABASE_URL (Supabase session-pooler URL), APP_BASE_URL,
      AZURE_CONNECTION_STRING, NODE_ENV=production.
-  4. As the deploy user, authenticate to GHCR so it can pull private images:
+  4. As hemant, authenticate to GHCR so it can pull private images:
        echo <READ_PACKAGES_PAT> | docker login ghcr.io -u <github-user> --password-stdin
      (skip if you make the GHCR package public.)
   5. Point DNS A records api / api.dev at this host, then issue certs:
