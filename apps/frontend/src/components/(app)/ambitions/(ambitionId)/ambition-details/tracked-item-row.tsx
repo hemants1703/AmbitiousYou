@@ -5,9 +5,10 @@ import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, toMoveDetail, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
-import { CheckIcon, EyeIcon, FlagIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
+import { CheckIcon, EyeIcon, FlagIcon, MoreVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
 import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
@@ -104,25 +105,35 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-2">
-          {/* Always visible so reading the full details is discoverable (the row title is also clickable). */}
-          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`View details of ${kind}`} onClick={() => moveDetail.open(toMoveDetail(item))}>
-            <EyeIcon className="size-4" />
-          </Button>
-
-          <div className="flex flex-col items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
-            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-white! hover:bg-red-500!" aria-label={`Delete ${kind}`} disabled={props.isPending} onClick={props.onStartDelete}>
-              <XIcon className="size-4" />
+        {/* All per-move actions live in one dropdown to keep the row uncluttered (the title is still click-to-view). */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button type="button" variant="ghost" size="icon" className="size-7 shrink-0 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`Options for ${kind}`}>
+              <MoreVerticalIcon className="size-4" />
             </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem onClick={() => moveDetail.open(toMoveDetail(item))}>
+              <EyeIcon className="size-4" />
+              View details
+            </DropdownMenuItem>
 
             {/* Reached milestones are locked achievements — no editing, only removal. */}
             {!(isMs && completed) && (
-              <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-background hover:bg-foreground!" aria-label={`Edit ${kind}`} disabled={props.isPending} onClick={props.onStartEdit}>
-                <PencilIcon className="size-3.5" />
-              </Button>
+              <DropdownMenuItem disabled={props.isPending} onClick={props.onStartEdit}>
+                <PencilIcon className="size-4" />
+                Edit {kind}
+              </DropdownMenuItem>
             )}
-          </div>
-        </div>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem variant="destructive" disabled={props.isPending} onClick={props.onStartDelete}>
+              <Trash2Icon className="size-4" />
+              Delete {kind}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
