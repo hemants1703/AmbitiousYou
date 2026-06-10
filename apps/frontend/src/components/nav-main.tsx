@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { CirclePlusIcon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -14,6 +14,8 @@ interface NavMainProps {
 }
 
 export function NavMain(props: NavMainProps) {
+  const { setOpenMobile } = useSidebar();
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -23,7 +25,7 @@ export function NavMain(props: NavMainProps) {
               asChild
               tooltip="Create New Ambition"
               className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground">
-              <Link href="/ambitions/create" className="flex items-center gap-2">
+              <Link href="/ambitions/create" className="flex items-center gap-2" onClick={() => setOpenMobile(false)}>
                 <CirclePlusIcon />
                 <span>Create New Ambition</span>
               </Link>
@@ -38,7 +40,7 @@ export function NavMain(props: NavMainProps) {
           {props.items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={item.url}>
+                <Link href={item.url} onClick={() => setOpenMobile(false)}>
                   {item.icon}
                   <span>{item.title}</span>
                 </Link>

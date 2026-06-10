@@ -13,7 +13,7 @@ interface NavUserProps {
 }
 
 export function NavUser(props: NavUserProps) {
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
 
   return (
     <SidebarMenu>
@@ -48,19 +48,19 @@ export function NavUser(props: NavUserProps) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href="/settings?tab=account">
+                <Link href="/settings?tab=account" onClick={() => setOpenMobile(false)}>
                   <CircleUserRoundIcon />
                   Account
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/settings?tab=billing">
+                <Link href="/settings?tab=billing" onClick={() => setOpenMobile(false)}>
                   <CreditCardIcon />
                   Billing
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/settings?tab=notifications">
+                <Link href="/settings?tab=notifications" onClick={() => setOpenMobile(false)}>
                   <BellIcon />
                   Notifications
                 </Link>

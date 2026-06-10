@@ -61,7 +61,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="max-h-[85vh]">
+      <DrawerContent className="max-h-[85vh] w-[80vw]!">
         <DrawerHeader className="text-left">
           <DrawerTitle className="flex items-center gap-2">
             <ListChecksIcon className="size-4" />
