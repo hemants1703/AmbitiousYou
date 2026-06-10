@@ -13,7 +13,7 @@ export const siteConfig = {
   title: "AmbitiousYou — Where ambitious goals become inevitable outcomes",
   description: "Priority management and progress tracking that motivates. Structure your dreams, track your progress, become unstoppable.",
   url: SITE_URL,
-  ogImage: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png",
+  ogImage: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1781083117/OG_IMAGE_AY.png",
   creator: "@AmbitiousYouHQ",
   keywords: [
     "goal tracking",
