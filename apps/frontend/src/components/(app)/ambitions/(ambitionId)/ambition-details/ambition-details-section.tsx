@@ -17,7 +17,7 @@ type AmbitionDetailsSectionProps = {
 };
 
 export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProps) {
-  const trackedItems = props.ambition.ambitionTrackingMethod === "task" ? props.tasks : props.milestones;
+  const trackedItems = [...props.tasks, ...props.milestones];
   const completedItems = trackedItems.filter((item) => isItemCompleted(item));
   const openItems = trackedItems.filter((item) => !isItemCompleted(item));
   const prioritizedOpenItems = [...openItems].sort(sortByPriority);
@@ -64,7 +64,14 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
           </CardContent>
         </Card>
 
-        <ExecutionBoard ambitionId={props.ambition.id} ambitionName={props.ambition.ambitionName} trackingMethod={props.ambition.ambitionTrackingMethod} tasks={props.tasks} milestones={props.milestones} />
+        <ExecutionBoard
+          ambitionId={props.ambition.id}
+          ambitionName={props.ambition.ambitionName}
+          ambitionStartDate={props.ambition.ambitionStartDate}
+          ambitionEndDate={props.ambition.ambitionEndDate}
+          tasks={props.tasks}
+          milestones={props.milestones}
+        />
       </div>
 
       <div className="space-y-6">

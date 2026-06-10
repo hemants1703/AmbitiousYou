@@ -44,9 +44,8 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
   const isFavourited = readString(formData, "isFavourited") === "true";
 
-  // The tracking method and date window can't change after creation, but the backend DTO still
-  // validates them, so we round-trip the original values straight from the hidden form fields.
-  const ambitionTrackingMethod = readString(formData, "ambitionTrackingMethod") as "task" | "milestone" | "";
+  // The date window can't change after creation, but the backend DTO still validates it,
+  // so we round-trip the original values straight from the hidden form fields.
   const ambitionStartDate = parseDate(readString(formData, "ambitionStartDate"));
   const ambitionEndDate = parseDate(readString(formData, "ambitionEndDate"));
 
@@ -62,14 +61,13 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
     return { error: "Choose a priority before saving." };
   }
 
-  if (!ambitionTrackingMethod || !ambitionStartDate || !ambitionEndDate) {
+  if (!ambitionStartDate || !ambitionEndDate) {
     return { error: "Something went wrong reading this ambition. Refresh the page and try again." };
   }
 
   const payload = {
     ambitionName,
     ambitionDefinition,
-    ambitionTrackingMethod,
     ambitionStartDate: ambitionStartDate.toISOString(),
     ambitionEndDate: ambitionEndDate.toISOString(),
     ambitionPriority,

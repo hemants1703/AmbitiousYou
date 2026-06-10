@@ -1,14 +1,14 @@
 "use client";
 
-import { emptyDraft, getDate, getDescription, getTitle, toDateInputValue, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { emptyDraft, getDate, getDescription, getKind, getTitle, toDateInputValue, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { useState } from "react";
+import type { Matcher } from "react-day-picker";
 import { TrackedItemRow } from "./tracked-item-row";
 
 interface TrackedItemListProps {
   items: TrackedItem[];
-  noun: "task" | "milestone";
   isPending: boolean;
-  disabledBefore: Date;
+  dateDisabled: Matcher[];
   onToggle: (item: TrackedItem) => void;
   onUpdate: (item: TrackedItem, draft: DraftState) => void;
   onDelete: (itemId: string) => void;
@@ -16,9 +16,9 @@ interface TrackedItemListProps {
 }
 
 /**
- * Renders a list of tracked-item rows and owns the per-row edit/delete UI state.
- * CRUD itself lives in the shared `useTrackedItems` hook (passed in as handlers),
- * so the inline preview and the management drawer stay in sync.
+ * Renders a list of move rows and owns the per-row edit/delete UI state. CRUD itself
+ * lives in the shared `useTrackedItems` hook (passed in as handlers), so the inline
+ * preview and the management drawer stay in sync.
  */
 export function TrackedItemList(props: TrackedItemListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export function TrackedItemList(props: TrackedItemListProps) {
   function startEdit(item: TrackedItem) {
     setConfirmDeleteId(null);
     setEditingId(item.id);
-    setEditDraft({ title: getTitle(item), description: getDescription(item), date: toDateInputValue(new Date(getDate(item))) });
+    setEditDraft({ kind: getKind(item), title: getTitle(item), description: getDescription(item), date: toDateInputValue(new Date(getDate(item))) });
   }
 
   function cancelEdit() {
@@ -52,11 +52,10 @@ export function TrackedItemList(props: TrackedItemListProps) {
         <TrackedItemRow
           key={item.id}
           item={item}
-          noun={props.noun}
           isEditing={editingId === item.id}
           isConfirmingDelete={confirmDeleteId === item.id}
           editDraft={editDraft}
-          disabledBefore={props.disabledBefore}
+          dateDisabled={props.dateDisabled}
           isPending={props.isPending}
           onToggle={() => props.onToggle(item)}
           onStartEdit={() => startEdit(item)}

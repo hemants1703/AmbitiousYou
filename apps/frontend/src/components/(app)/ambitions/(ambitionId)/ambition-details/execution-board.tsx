@@ -4,37 +4,38 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { emptyDraft, sortByPriority, type DraftState, type TrackedItem, type TrackingMethod } from "@/lib/(app)/tracked-item";
+import { emptyDraft, sortByPriority, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { useTrackedItems } from "@/lib/(app)/use-tracked-items";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
-import { CheckCircle2Icon, FlagIcon, ListTodoIcon, PlusIcon } from "lucide-react";
+import { CheckCircle2Icon, ListChecksIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
+import type { Matcher } from "react-day-picker";
 import { ExecutionBoardDrawer } from "./execution-board-drawer";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 import { TrackedItemList } from "./tracked-item-list";
 
-const PREVIEW_LIMIT = 5;
+const PREVIEW_LIMIT = 3;
 
 interface ExecutionBoardProps {
   ambitionId: string;
   ambitionName: string;
-  trackingMethod: TrackingMethod;
+  ambitionStartDate: Date | string;
+  ambitionEndDate: Date | string;
   tasks: Task[];
   milestones: Milestone[];
 }
 
 export default function ExecutionBoard(props: ExecutionBoardProps) {
-  const sourceItems: TrackedItem[] = props.trackingMethod === "task" ? props.tasks : props.milestones;
-  const board = useTrackedItems({ ambitionId: props.ambitionId, trackingMethod: props.trackingMethod, sourceItems });
+  const sourceItems: TrackedItem[] = [...props.tasks, ...props.milestones];
+  const board = useTrackedItems({ ambitionId: props.ambitionId, sourceItems });
 
   const [adding, setAdding] = useState(false);
   const [newDraft, setNewDraft] = useState<DraftState>(emptyDraft);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Every move's date must stay inside the ambition's window — both when adding and editing.
+  const dateDisabled: Matcher[] = [{ before: new Date(props.ambitionStartDate) }, { after: new Date(props.ambitionEndDate) }];
 
   const previewOpen = [...board.openItems].sort(sortByPriority).slice(0, PREVIEW_LIMIT);
-  const Icon = board.isTask ? ListTodoIcon : FlagIcon;
 
   function handleCreate() {
     board.create(newDraft);
@@ -48,10 +49,10 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Icon className="size-4 text-foreground" />
+              <ListChecksIcon className="size-4 text-foreground" />
               Execution Board
             </CardTitle>
-            <CardDescription>{board.isTask ? "Tasks are concrete steps you can check and uncheck as you go." : "Milestones are meaningful, one-time achievements — reaching one is permanent."}</CardDescription>
+            <CardDescription>Your moves toward this ambition — check off tasks and reach milestones as you go.</CardDescription>
           </div>
           {!adding ? (
             <Button
@@ -64,7 +65,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
                 setAdding(true);
               }}>
               <PlusIcon className="size-4" />
-              Add {board.noun}
+              Add move
             </Button>
           ) : null}
         </div>
@@ -79,10 +80,9 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
 
         {adding ? (
           <TrackedItemDraftEditor
-            label={`New ${board.noun}`}
+            label="New move"
             draft={newDraft}
-            noun={board.noun}
-            disabledBefore={today}
+            dateDisabled={dateDisabled}
             isPending={board.isPending}
             onChange={setNewDraft}
             onSubmit={handleCreate}
@@ -95,7 +95,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">{board.isTask ? "Up next" : "In progress"}</p>
+            <p className="text-sm font-medium">Up next</p>
             <Badge variant="outline" className="tabular-nums">
               {board.openItems.length} open
             </Badge>
@@ -103,13 +103,12 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
 
           <TrackedItemList
             items={previewOpen}
-            noun={board.noun}
             isPending={board.isPending}
-            disabledBefore={today}
+            dateDisabled={dateDisabled}
             onToggle={board.toggle}
             onUpdate={board.update}
             onDelete={board.remove}
-            emptyMessage={board.isTask ? "No open tasks right now. Add one to get moving." : "No open milestones right now. Add one to aim for."}
+            emptyMessage="No open moves right now. Add one to get moving."
           />
 
           {board.openItems.length > PREVIEW_LIMIT ? (
@@ -124,10 +123,10 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <CheckCircle2Icon className="size-4" />
           <span className="font-medium tabular-nums text-foreground">{board.completedItems.length}</span>
-          {board.isTask ? "completed" : "reached"}
+          completed
         </div>
 
-        <ExecutionBoardDrawer board={board} ambitionName={props.ambitionName} disabledBefore={today} />
+        <ExecutionBoardDrawer board={board} ambitionName={props.ambitionName} dateDisabled={dateDisabled} />
       </CardContent>
     </Card>
   );

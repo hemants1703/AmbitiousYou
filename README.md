@@ -38,7 +38,7 @@ A full-stack goal & progress-tracking platform that turns big, vague ambitions i
 
 ## Overview
 
-**AmbitiousYou** helps people structure their biggest goals — *ambitions* — and drive them to completion. Each ambition is broken down with one of two tracking philosophies (granular **tasks** or one-time **milestones**), annotated with notes, and scored with a live completion percentage that the system derives automatically as work gets done.
+**AmbitiousYou** helps people structure their biggest goals — *ambitions* — and drive them to completion. Each ambition is broken down into **moves** — a free mix of granular **tasks** and one-time **milestones** — annotated with notes, and scored with a live completion percentage that the system derives automatically as work gets done.
 
 It's built as a **TypeScript monorepo** with a clean separation of concerns:
 
@@ -256,7 +256,6 @@ erDiagram
         uuid id PK
         uuid userId FK
         varchar ambitionName
-        enum ambitionTrackingMethod "task or milestone"
         enum ambitionStatus "active, completed, missed"
         enum ambitionPriority "low, medium, high"
         int ambitionPercentageCompleted "server-derived"
@@ -311,8 +310,8 @@ A nice detail: **tasks and milestones are deliberately different.** Tasks are ch
 
 ## 🚀 Feature Tour
 
-- **Ambitions** — create a goal with a tracking method, priority, start/end dates, and a definition; favourite, edit, and watch its progress bar fill as work completes.
-- **Dual progress tracking** — switch between task-based and milestone-based execution per ambition; the completion `%` and status are computed for you.
+- **Ambitions** — create a goal with a priority, start/end dates, and a definition; favourite, edit, and watch its progress bar fill as work completes.
+- **Moves (tasks + milestones)** — track each ambition with a free mix of checkable tasks and one-time milestones; the completion `%` and status are computed for you across both.
 - **Execution board** — manage tasks/milestones inline with **optimistic UI**, a search-and-filter drawer, and instant reconciliation on the server response.
 - **Notes** — capture context against any ambition.
 - **Dashboard** — an at-a-glance view of active ambitions and progress insights, aggregated resiliently with `Promise.allSettled` so one slow fetch never breaks the page.

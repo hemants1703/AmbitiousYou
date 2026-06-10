@@ -8,19 +8,38 @@ import { parseISO } from "date-fns";
  * identically.
  */
 
-export type TrackingMethod = "task" | "milestone";
+/** The two sub-types of a "move". A move is a Task (reversible) or a Milestone (permanent). */
+export type MoveKind = "task" | "milestone";
+/** @deprecated Ambitions are no longer single-method; use {@link MoveKind} for a move's sub-type. */
+export type TrackingMethod = MoveKind;
 export type TrackedItem = Task | Milestone;
 
 export type DraftState = {
+  kind: MoveKind;
   title: string;
   description: string;
   date: string;
 };
 
-export const emptyDraft: DraftState = { title: "", description: "", date: "" };
+export const emptyDraft: DraftState = { kind: "task", title: "", description: "", date: "" };
 
 export function isMilestone(item: TrackedItem): item is Milestone {
   return "milestone" in item;
+}
+
+/** A persisted item's sub-type, derived structurally (Task and Milestone rows are disjoint). */
+export function getKind(item: TrackedItem): MoveKind {
+  return "task" in item ? "task" : "milestone";
+}
+
+/** Short date label for a move: tasks have a deadline ("Due"), milestones a target ("Target"). */
+export function getDateLabel(item: TrackedItem): "Due" | "Target" {
+  return "task" in item ? "Due" : "Target";
+}
+
+/** Past-tense completion verb: tasks are "completed", milestones are "reached". */
+export function getCompletedVerb(item: TrackedItem): "completed" | "reached" {
+  return "task" in item ? "completed" : "reached";
 }
 
 export function getTitle(item: TrackedItem): string {

@@ -23,7 +23,6 @@ interface EditAmbitionFormProps {
   ambitionDefinition: string;
   ambitionPriority: Priority;
   isFavourited: boolean;
-  ambitionTrackingMethod: "task" | "milestone";
   ambitionStartDate: string;
   ambitionEndDate: string;
 }
@@ -94,7 +93,6 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
       <input name="ambitionId" type="hidden" value={props.ambitionId} />
       <input name="ambitionPriority" type="hidden" value={priority} />
       <input name="isFavourited" type="hidden" value={props.isFavourited ? "true" : "false"} />
-      <input name="ambitionTrackingMethod" type="hidden" value={props.ambitionTrackingMethod} />
       <input name="ambitionStartDate" type="hidden" value={props.ambitionStartDate} />
       <input name="ambitionEndDate" type="hidden" value={props.ambitionEndDate} />
 

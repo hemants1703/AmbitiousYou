@@ -29,7 +29,6 @@ export async function toggleAmbitionFavouriteAction(ambitionId: string): Promise
   const payload = {
     ambitionName: ambition.ambitionName,
     ambitionDefinition: ambition.ambitionDefinition ?? "",
-    ambitionTrackingMethod: ambition.ambitionTrackingMethod,
     ambitionStartDate: new Date(ambition.ambitionStartDate).toISOString(),
     ambitionEndDate: new Date(ambition.ambitionEndDate).toISOString(),
     ambitionPriority: ambition.ambitionPriority,

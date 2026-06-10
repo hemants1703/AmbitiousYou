@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AmbitionDetails, getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { requireUser } from "@/lib/auth";
-import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon, RouteIcon } from "lucide-react";
+import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cache, type ReactNode } from "react";
@@ -42,7 +42,6 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
   }
 
   const dateWindowLabel = `${formatDate(ambition.ambitionStartDate)} – ${formatDate(ambition.ambitionEndDate)}`;
-  const trackingLabel = ambition.ambitionTrackingMethod === "task" ? "Task based" : "Milestone based";
 
   return (
     <div className="mx-auto flex w-full max-w-350 flex-col">
@@ -71,7 +70,6 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
               ambitionDefinition={ambition.ambitionDefinition ?? ""}
               ambitionPriority={ambition.ambitionPriority ?? "medium"}
               isFavourited={ambition.isFavourited ?? false}
-              ambitionTrackingMethod={ambition.ambitionTrackingMethod}
               ambitionStartDate={new Date(ambition.ambitionStartDate).toISOString()}
               ambitionEndDate={new Date(ambition.ambitionEndDate).toISOString()}
             />
@@ -88,14 +86,13 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
               <p className="text-sm text-muted-foreground">A few things lock in when an ambition is created and can&rsquo;t be changed here.</p>
 
               <div className="space-y-3">
-                <LockedDetail icon={<RouteIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />} label="Tracking method" value={trackingLabel} />
                 <LockedDetail icon={<CalendarRangeIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />} label="Active window" value={dateWindowLabel} />
               </div>
 
               <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
                 <ListChecksIcon className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
                 <span>
-                  Manage individual {ambition.ambitionTrackingMethod === "task" ? "tasks" : "milestones"} from the{" "}
+                  Manage individual moves from the{" "}
                   <Link prefetch={true} href={`/ambitions/${ambition.id}`} className="font-medium text-foreground underline-offset-4 hover:underline">
                     detail page
                   </Link>

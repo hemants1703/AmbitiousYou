@@ -12,6 +12,7 @@ interface StatCardProps {
   tone?: StatTone;
   /** Optional extra content rendered above the helper (e.g. a mini progress bar). */
   children?: ReactNode;
+  className?: string;
 }
 
 const chipByTone: Record<StatTone, string> = {
@@ -23,13 +24,13 @@ const chipByTone: Record<StatTone, string> = {
 
 export function StatCard(props: StatCardProps) {
   return (
-    <Card size="sm" className="@container/card gap-3">
+    <Card size="sm" className="gap-3">
       <div className="flex items-start justify-between gap-3 px-4">
         <div className="min-w-0 space-y-1">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{props.label}</p>
           <p className="text-2xl font-semibold tabular-nums @[150px]/card:text-3xl">{props.value}</p>
         </div>
-        <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-2xl bg-foreground/10! text-foreground/60!", chipByTone[props.tone ?? "default"])} aria-hidden="true">
+        <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-2xl", chipByTone[props.tone ?? "default"])} aria-hidden="true">
           {props.icon}
         </span>
       </div>

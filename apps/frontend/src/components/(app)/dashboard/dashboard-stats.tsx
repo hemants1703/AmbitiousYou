@@ -25,9 +25,9 @@ export function DashboardStats(props: DashboardStatsProps) {
 
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <StatCard icon={<TargetIcon className="size-5" />} label="Active" value={`${active.length}`} helper={totalLabel} />
+      <StatCard icon={<TargetIcon className="size-5" />} label="Active" value={`${active.length}`} helper={totalLabel} tone="default" />
 
-      <StatCard icon={<GaugeIcon className="size-5" />} label="Avg progress" value={`${averageProgress}%`} helper={active.length > 0 ? "across active ambitions" : "no active ambitions"}>
+      <StatCard icon={<GaugeIcon className="size-5" />} label="Avg progress" value={`${averageProgress}%`} helper={active.length > 0 ? "across active ambitions" : "no active ambitions"} tone={averageProgress === 100 ? "positive" : "default"}>
         <Progress value={averageProgress} className="h-1.5" aria-label={`Average progress ${averageProgress} percent`} />
       </StatCard>
 

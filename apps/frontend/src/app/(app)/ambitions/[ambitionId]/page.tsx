@@ -63,11 +63,12 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   }
 
   // The `/ambitions/:id/details` endpoint does not return tasks/milestones, so we read each
-  // collection from its dedicated list endpoint (mirroring how notes are fetched above).
-  const tasks: Task[] = ambition.ambitionTrackingMethod === "task" ? fetchedTasks : [];
-  const milestones: Milestone[] = ambition.ambitionTrackingMethod === "milestone" ? fetchedMilestones : [];
+  // collection from its dedicated list endpoint (mirroring how notes are fetched above). An
+  // ambition can hold BOTH kinds now ("moves"), so we keep both and merge for the overview.
+  const tasks: Task[] = fetchedTasks;
+  const milestones: Milestone[] = fetchedMilestones;
   const notes: Note[] = fetchedNotes;
-  const trackedItems = ambition.ambitionTrackingMethod === "task" ? tasks : milestones;
+  const trackedItems = [...tasks, ...milestones];
 
   const completedItems = trackedItems.filter((item) => ("taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted)).length;
   const activeDays = Math.max(1, getDaysBetween(ambition.ambitionStartDate, ambition.ambitionEndDate));
@@ -137,7 +138,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
                     value={ambition.ambitionCompletionDate ? formatDate(ambition.ambitionCompletionDate) : "In progress"}
                     helper={ambition.ambitionCompletionDate ? "Completed date" : "Not completed yet"}
                   />
-                  <QuickStatCard icon={<CheckCircle2Icon className="size-4" />} label="Tracking" value={`${trackedItems.length}`} helper={ambition.ambitionTrackingMethod === "task" ? "tasks attached" : "milestones attached"} />
+                  <QuickStatCard icon={<CheckCircle2Icon className="size-4" />} label="Moves" value={`${trackedItems.length}`} helper={`${tasks.length} ${tasks.length === 1 ? "task" : "tasks"} · ${milestones.length} ${milestones.length === 1 ? "milestone" : "milestones"}`} />
                 </div>
               </div>
             </CardContent>

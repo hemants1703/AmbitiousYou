@@ -10,23 +10,22 @@ export interface ActiveAmbitionDetailsResult {
 }
 
 /**
- * Fetches each supplied ambition's tracked items (tasks or milestones) in parallel
- * and merges them onto the ambition.
+ * Fetches each supplied ambition's tracked items ("moves" — a mix of tasks and
+ * milestones) in parallel and merges them onto the ambition.
  *
  * The `GET /ambitions/:id/details` endpoint does NOT return tasks/milestones, so we
- * read each ambition's collection from its dedicated list endpoint — the same
- * `getTasks`/`getMilestones` helpers the ambition-details page uses. `Promise.allSettled`
- * isolates failures per ambition so one failing fetch drops only that ambition instead
- * of crashing the dashboard. (`getTasks`/`getMilestones` already return `[]` on a non-ok
- * response, so `hadErrors` reflects only thrown/network failures.)
+ * read each ambition's collections from their dedicated list endpoints — the same
+ * `getTasks`/`getMilestones` helpers the ambition-details page uses. Since an ambition
+ * can now hold both kinds, we fetch BOTH. `Promise.allSettled` isolates failures per
+ * ambition so one failing fetch drops only that ambition instead of crashing the
+ * dashboard. (`getTasks`/`getMilestones` already return `[]` on a non-ok response, so
+ * `hadErrors` reflects only thrown/network failures.)
  */
 export async function getActiveAmbitionDetails(sessionToken: string, ambitions: Ambition[]): Promise<ActiveAmbitionDetailsResult> {
   const settled = await Promise.allSettled(
     ambitions.map(async (ambition): Promise<AmbitionDetails> => {
-      if (ambition.ambitionTrackingMethod === "task") {
-        return { ...ambition, tasks: await getTasks(sessionToken, ambition.id) };
-      }
-      return { ...ambition, milestones: await getMilestones(sessionToken, ambition.id) };
+      const [tasks, milestones] = await Promise.all([getTasks(sessionToken, ambition.id), getMilestones(sessionToken, ambition.id)]);
+      return { ...ambition, tasks, milestones };
     }),
   );
 

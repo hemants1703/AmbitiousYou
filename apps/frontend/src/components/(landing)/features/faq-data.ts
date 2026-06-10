@@ -8,7 +8,7 @@ export const featuresFaq: readonly FaqItem[] = [
   {
     question: "How is AmbitiousYou different from regular task managers?",
     answer:
-      "Unlike simple task managers, AmbitiousYou is specifically designed for long-term ambition tracking with dual progress methods (tasks or milestones), built-in time tracking, and powerful analytics that keep you motivated and focused on your biggest goals.",
+      "Unlike simple task managers, AmbitiousYou is specifically designed for long-term ambition tracking. Each ambition is built from moves — a free mix of checkable tasks and one-time milestones — alongside built-in time tracking and powerful analytics that keep you motivated and focused on your biggest goals.",
   },
   {
     question: "Is there a free plan available?",

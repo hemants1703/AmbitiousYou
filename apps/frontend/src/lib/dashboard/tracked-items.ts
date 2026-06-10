@@ -52,7 +52,8 @@ export function getItemKind(item: TrackedItem): ItemKind {
 }
 
 export function getTrackedItems(ambition: AmbitionDetails): TrackedItem[] {
-  return ambition.ambitionTrackingMethod === "task" ? (ambition.tasks ?? []) : (ambition.milestones ?? []);
+  // An ambition's "moves" are its tasks and milestones combined.
+  return [...(ambition.tasks ?? []), ...(ambition.milestones ?? [])];
 }
 
 /**
@@ -224,8 +225,7 @@ export function computeAttentionFlags(ambitions: AmbitionDetails[]): AttentionFl
     };
 
     if (overdueOpen.length > 0) {
-      const noun = ambition.ambitionTrackingMethod === "task" ? "task" : "milestone";
-      flags.push({ ...base, severity: "overdue", reason: `${pluralize(overdueOpen.length, noun)} overdue` });
+      flags.push({ ...base, severity: "overdue", reason: `${pluralize(overdueOpen.length, "move")} overdue` });
       continue;
     }
 

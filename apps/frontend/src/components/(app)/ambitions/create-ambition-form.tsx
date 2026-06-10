@@ -18,12 +18,14 @@ import type { DateRange, Matcher } from "react-day-picker";
 import { format, parseISO } from "date-fns";
 import { createAmbitionAction } from "@/lib/actions/(app)/ambitions/create-ambition";
 import { createAmbitionInitialState } from "@/lib/actions/(app)/ambitions/create-ambition-state";
-import { clearDraft, draftHasContent, loadDraft, saveDraft, type MilestoneDraft, type TaskDraft } from "@/lib/(app)/create-ambition-draft";
+import { clearDraft, draftHasContent, loadDraft, saveDraft, type MoveDraft, type MoveKind } from "@/lib/(app)/create-ambition-draft";
 
 const AMBITION_NAME_MAX_LENGTH = 80;
 
-type TrackingMethod = "task" | "milestone";
 type Priority = "low" | "medium" | "high";
+
+const MOVE_KIND_TOOLTIP =
+  "A move is either a Task or a Milestone. Task — a concrete to-do you can check and uncheck anytime. Milestone — a one-time achievement; marking it reached is permanent.";
 
 type FieldLabelProps = Omit<ComponentProps<typeof Label>, "children"> & {
   children: string;
@@ -36,21 +38,13 @@ type SectionHeadingProps = {
   action?: ReactNode;
 };
 
-function createTaskDraft(): TaskDraft {
+function createMoveDraft(kind: MoveKind = "task"): MoveDraft {
   return {
     id: crypto.randomUUID(),
-    task: "",
-    taskDescription: "",
-    taskDeadline: "",
-  };
-}
-
-function createMilestoneDraft(): MilestoneDraft {
-  return {
-    id: crypto.randomUUID(),
-    milestone: "",
-    milestoneDescription: "",
-    milestoneTargetDate: "",
+    kind,
+    title: "",
+    description: "",
+    date: "",
   };
 }
 
@@ -111,15 +105,13 @@ export default function CreateAmbitionForm() {
   const [state, formAction, isPending] = useActionState(createAmbitionAction, createAmbitionInitialState);
   const [ambitionName, setAmbitionName] = useState("");
   const [ambitionDefinition, setAmbitionDefinition] = useState("");
-  const [trackingMethod, setTrackingMethod] = useState<TrackingMethod>("task");
   const [priority, setPriority] = useState<Priority>("medium");
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [tasks, setTasks] = useState<TaskDraft[]>([createTaskDraft()]);
-  const [milestones, setMilestones] = useState<MilestoneDraft[]>([createMilestoneDraft()]);
+  const [moves, setMoves] = useState<MoveDraft[]>([createMoveDraft()]);
   const [restored, setRestored] = useState(false);
 
   // Gates the save effect so the pre-hydration render can't clobber a stored draft.
@@ -135,7 +127,6 @@ export default function CreateAmbitionForm() {
       /* eslint-disable react-hooks/set-state-in-effect -- one-time external-store hydration (see comment above) */
       setAmbitionName(draft.ambitionName);
       setAmbitionDefinition(draft.ambitionDefinition);
-      setTrackingMethod(draft.trackingMethod);
       setPriority(draft.priority);
       setStartDate(draft.startDate);
       setEndDate(draft.endDate);
@@ -144,9 +135,8 @@ export default function CreateAmbitionForm() {
       const to = draft.endDate ? parseISO(draft.endDate) : undefined;
       setDateRange(from ? { from, to: to ?? from } : undefined);
 
-      // Keep the seeded first row when the draft has no items of that kind.
-      if (draft.tasks.length > 0) setTasks(draft.tasks);
-      if (draft.milestones.length > 0) setMilestones(draft.milestones);
+      // Keep the seeded first row when the draft has no moves yet.
+      if (draft.moves.length > 0) setMoves(draft.moves);
 
       if (draftHasContent(draft)) setRestored(true);
       /* eslint-enable react-hooks/set-state-in-effect */
@@ -159,13 +149,13 @@ export default function CreateAmbitionForm() {
   // instead of storing noise, so an untouched page (and "Start fresh") leaves nothing behind.
   useEffect(() => {
     if (!hydratedRef.current) return;
-    const draft = { ambitionName, ambitionDefinition, trackingMethod, priority, startDate, endDate, tasks, milestones };
+    const draft = { ambitionName, ambitionDefinition, priority, startDate, endDate, moves };
     if (draftHasContent(draft)) {
       saveDraft(draft);
     } else {
       clearDraft();
     }
-  }, [ambitionName, ambitionDefinition, trackingMethod, priority, startDate, endDate, tasks, milestones]);
+  }, [ambitionName, ambitionDefinition, priority, startDate, endDate, moves]);
 
   // The action returns success instead of redirecting, so we clear the draft and
   // navigate here — keeping draft removal tied to a real creation, not plain navigation.
@@ -180,37 +170,31 @@ export default function CreateAmbitionForm() {
     clearDraft();
     setAmbitionName("");
     setAmbitionDefinition("");
-    setTrackingMethod("task");
     setPriority("medium");
     setDateRange(undefined);
     setStartDate("");
     setEndDate("");
-    setTasks([createTaskDraft()]);
-    setMilestones([createMilestoneDraft()]);
+    setMoves([createMoveDraft()]);
     setRestored(false);
   };
 
-  const updateTask = (id: string, field: keyof Omit<TaskDraft, "id">, value: string) => {
-    setTasks((current) => current.map((task) => (task.id === id ? { ...task, [field]: value } : task)));
+  const updateMove = (id: string, field: "title" | "description" | "date", value: string) => {
+    setMoves((current) => current.map((move) => (move.id === id ? { ...move, [field]: value } : move)));
   };
 
-  const updateMilestone = (id: string, field: keyof Omit<MilestoneDraft, "id">, value: string) => {
-    setMilestones((current) => current.map((milestone) => (milestone.id === id ? { ...milestone, [field]: value } : milestone)));
+  const setMoveKind = (id: string, kind: MoveKind) => {
+    setMoves((current) => current.map((move) => (move.id === id ? { ...move, kind } : move)));
   };
 
-  const removeTask = (id: string) => {
-    setTasks((current) => (current.length > 1 ? current.filter((task) => task.id !== id) : current));
-  };
-
-  const removeMilestone = (id: string) => {
-    setMilestones((current) => (current.length > 1 ? current.filter((milestone) => milestone.id !== id) : current));
+  const removeMove = (id: string) => {
+    setMoves((current) => (current.length > 1 ? current.filter((move) => move.id !== id) : current));
   };
 
   const handleDateRangeSelect = (range: DateRange | undefined) => {
     setDateRange(range);
 
     if (!range?.from) {
-      // Collapsing the window hides the item section (it gates on these strings).
+      // Collapsing the window hides the moves section (it gates on these strings).
       setStartDate("");
       setEndDate("");
       return;
@@ -221,22 +205,37 @@ export default function CreateAmbitionForm() {
     setStartDate(nextStart);
     setEndDate(nextEnd);
 
-    // Item target dates must stay inside the ambition window. All values are
-    // "YYYY-MM-DD", so lexicographic comparison is chronological — drop any that fall out.
+    // Move dates must stay inside the ambition window. All values are "YYYY-MM-DD",
+    // so lexicographic comparison is chronological — drop any that fall out.
     const inWindow = (date: string) => date !== "" && date >= nextStart && date <= nextEnd;
-    setTasks((current) => current.map((task) => (inWindow(task.taskDeadline) ? task : { ...task, taskDeadline: "" })));
-    setMilestones((current) => current.map((milestone) => (inWindow(milestone.milestoneTargetDate) ? milestone : { ...milestone, milestoneTargetDate: "" })));
+    setMoves((current) => current.map((move) => (inWindow(move.date) ? move : { ...move, date: "" })));
   };
 
-  // Item entry unlocks only once the ambition window exists; each item's date is then
+  // Move entry unlocks only once the ambition window exists; each move's date is then
   // confined to that window so nothing can be scheduled outside the ambition.
   const hasDateRange = Boolean(startDate && endDate);
   const itemDateDisabled: Matcher[] = hasDateRange ? [{ before: parseISO(startDate) }, { after: parseISO(endDate) }] : [];
+  const hasValidMove = moves.some((move) => move.title.trim() && move.date);
+
+  // Map each move to its kind-specific form-field prefix with separate running indices,
+  // so the server action's existing `tasks.${i}` / `milestones.${i}` parser is unchanged.
+  let taskIndex = 0;
+  let milestoneIndex = 0;
+  const encodedMoves = moves.map((move) => {
+    const isTask = move.kind === "task";
+    const prefix = isTask ? `tasks.${taskIndex++}` : `milestones.${milestoneIndex++}`;
+    return {
+      move,
+      isTask,
+      titleName: isTask ? `${prefix}.task` : `${prefix}.milestone`,
+      dateName: isTask ? `${prefix}.taskDeadline` : `${prefix}.milestoneTargetDate`,
+      descriptionName: isTask ? `${prefix}.taskDescription` : `${prefix}.milestoneDescription`,
+    };
+  });
 
   return (
     <div className="mx-auto w-full">
       <form action={formAction} className="space-y-6">
-        <input name="ambitionTrackingMethod" type="hidden" value={trackingMethod} />
         <input name="ambitionPriority" type="hidden" value={priority} />
         <input name="ambitionStartDate" type="hidden" value={startDate} />
         <input name="ambitionEndDate" type="hidden" value={endDate} />
@@ -296,45 +295,6 @@ export default function CreateAmbitionForm() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <FieldLabel htmlFor="ambitionTrackingMethod" tooltip="Tasks are concrete, repeatable to-dos. Milestones are one-time, target-dated achievements. Pick whichever matches how you'll measure progress.">
-              How will you track progress?
-            </FieldLabel>
-            <ToggleGroup
-              type="single"
-              value={trackingMethod}
-              onValueChange={(value) => {
-                if (value) setTrackingMethod(value as TrackingMethod);
-              }}
-              className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-              <ToggleGroupItem
-                value="task"
-                variant="outline"
-                aria-label="Track with tasks"
-                className="h-auto w-full flex-col items-start justify-start gap-1.5 whitespace-normal rounded-2xl border p-4 text-left data-[state=on]:border-primary data-[state=on]:bg-primary/5">
-                <span className="flex items-center gap-2 font-medium text-foreground">
-                  <ListTodoIcon className="size-4" />
-                  Tasks
-                </span>
-                <span className="text-sm text-muted-foreground">Concrete steps you can check and uncheck anytime.</span>
-                <span className="text-xs text-muted-foreground">e.g. &ldquo;Run 3&times; this week&rdquo;</span>
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="milestone"
-                variant="outline"
-                aria-label="Track with milestones"
-                className="h-auto w-full flex-col items-start justify-start gap-1.5 whitespace-normal rounded-2xl border p-4 text-left data-[state=on]:border-primary data-[state=on]:bg-primary/5">
-                <span className="flex items-center gap-2 font-medium text-foreground">
-                  <FlagIcon className="size-4" />
-                  Milestones
-                </span>
-                <span className="text-sm text-muted-foreground">Bigger, fuzzier outcomes with a target date. Reaching one is permanent.</span>
-                <span className="text-xs text-muted-foreground">e.g. &ldquo;Land a 12&nbsp;LPA job&rdquo;</span>
-              </ToggleGroupItem>
-            </ToggleGroup>
-            {trackingMethod === "milestone" ? <p className="text-xs text-muted-foreground">Milestones are marked complete once and can&rsquo;t be reopened&mdash;great for goals you can&rsquo;t fully script yet.</p> : null}
-          </div>
-
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <FieldLabel htmlFor="ambitionDefinition" tooltip="Optional context that explains the why behind the goal.">
@@ -379,150 +339,99 @@ export default function CreateAmbitionForm() {
 
             <section className="space-y-4">
               <SectionHeading
-                title={trackingMethod === "task" ? "Tasks" : "Milestones"}
-                tooltip={trackingMethod === "task" ? "Add one or more concrete, repeatable actions. You can check and uncheck these anytime." : "Add one or more milestones — bigger, target-dated achievements. Each is marked reached once and can't be reopened."}
+                title="Build your plan"
+                tooltip="Add the moves for this ambition — a free mix of tasks and milestones. Toggle each row between Task and Milestone."
                 action={
-                  <Button type="button" variant="outline" size="sm" onClick={() => (trackingMethod === "task" ? setTasks((current) => [...current, createTaskDraft()]) : setMilestones((current) => [...current, createMilestoneDraft()]))}>
+                  <Button type="button" variant="outline" size="sm" onClick={() => setMoves((current) => [...current, createMoveDraft("task")])}>
                     <PlusIcon className="size-4" />
-                    Add another
+                    Add move
                   </Button>
                 }
               />
 
-              {trackingMethod === "task" ? (
-                <div className="space-y-3">
-                  {tasks.map((task, index) => (
-                    <div key={task.id} className="rounded-2xl border border-border/60 p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium text-muted-foreground">Task {index + 1}</p>
-                        </div>
-
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeTask(task.id)} aria-label={`Remove task ${index + 1}`} className="size-8 rounded-full">
-                          <Trash2Icon className="size-4" />
-                        </Button>
+              <div className="space-y-3">
+                {encodedMoves.map(({ move, isTask, titleName, dateName, descriptionName }, index) => (
+                  <div key={move.id} className="rounded-2xl border border-border/60 p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground">Move {index + 1}</p>
+                        <ToggleGroup
+                          type="single"
+                          value={move.kind}
+                          onValueChange={(value) => {
+                            if (value) setMoveKind(move.id, value as MoveKind);
+                          }}
+                          className="gap-1">
+                          <ToggleGroupItem value="task" variant="outline" aria-label="Track as a task" className="h-8 gap-1.5 px-2.5 text-xs data-[state=on]:border-primary data-[state=on]:bg-primary/5">
+                            <ListTodoIcon className="size-3.5" />
+                            Task
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="milestone" variant="outline" aria-label="Track as a milestone" className="h-8 gap-1.5 px-2.5 text-xs data-[state=on]:border-primary data-[state=on]:bg-primary/5">
+                            <FlagIcon className="size-3.5" />
+                            Milestone
+                          </ToggleGroupItem>
+                        </ToggleGroup>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              type="button"
+                              aria-label="What is the difference between a task and a milestone?"
+                              className="inline-flex size-4 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                              <CircleHelpIcon className="size-3.5" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">{MOVE_KIND_TOOLTIP}</TooltipContent>
+                        </Tooltip>
                       </div>
 
-                      <div className="mt-4 grid gap-4 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <FieldLabel htmlFor={`tasks.${index}.task`} tooltip="Keep the title action-oriented and specific.">
-                            Task title
-                          </FieldLabel>
-                          <Input id={`tasks.${index}.task`} name={`tasks.${index}.task`} value={task.task} onChange={(event) => updateTask(task.id, "task", event.target.value)} placeholder="Complete the first two weeks of the habit…" required />
-                        </div>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeMove(move.id)} aria-label={`Remove move ${index + 1}`} className="size-8 rounded-full" disabled={moves.length === 1}>
+                        <Trash2Icon className="size-4" />
+                      </Button>
+                    </div>
 
-                        <div className="space-y-2">
-                          <FieldLabel htmlFor={`tasks.${index}.taskDeadline`} tooltip="Pick the date this task should be done by — it must fall within the ambition's date range.">
-                            Task deadline
-                          </FieldLabel>
-                          <input name={`tasks.${index}.taskDeadline`} type="hidden" value={task.taskDeadline} />
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button type="button" variant="outline" data-empty={!task.taskDeadline} className="w-full justify-start bg-background text-left font-normal data-[empty=true]:text-muted-foreground">
-                                <CalendarIcon />
-                                {task.taskDeadline ? format(toSelectedDate(task.taskDeadline) ?? new Date(task.taskDeadline), "PPP") : <span>Pick a date</span>}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar mode="single" selected={toSelectedDate(task.taskDeadline)} onSelect={(selectedDate) => updateTask(task.id, "taskDeadline", selectedDate ? toDateInputValue(selectedDate) : "")} disabled={itemDateDisabled} />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <FieldLabel htmlFor={titleName} tooltip={isTask ? "Keep the title action-oriented and specific." : "Keep the title specific to the outcome you want to reach."}>
+                          {isTask ? "Task title" : "Milestone title"}
+                        </FieldLabel>
+                        <Input id={titleName} name={titleName} value={move.title} onChange={(event) => updateMove(move.id, "title", event.target.value)} placeholder={isTask ? "Complete the first two weeks of the habit…" : "Land a 12 LPA job…"} />
+                      </div>
 
-                        <div className="space-y-2 md:col-span-2">
-                          <FieldLabel htmlFor={`tasks.${index}.taskDescription`} tooltip="Optional context, acceptance criteria, or extra notes for this task.">
-                            Task description
-                          </FieldLabel>
-                          <Textarea
-                            id={`tasks.${index}.taskDescription`}
-                            name={`tasks.${index}.taskDescription`}
-                            value={task.taskDescription}
-                            onChange={(event) => updateTask(task.id, "taskDescription", event.target.value)}
-                            placeholder="Optional context, acceptance criteria, or notes…"
-                            rows={3}
-                          />
-                        </div>
+                      <div className="space-y-2">
+                        <FieldLabel htmlFor={dateName} tooltip={`Pick the date this ${isTask ? "task should be done" : "milestone should be reached"} by — it must fall within the ambition's date range.`}>
+                          {isTask ? "Task deadline" : "Target date"}
+                        </FieldLabel>
+                        <input name={dateName} type="hidden" value={move.date} />
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button type="button" variant="outline" data-empty={!move.date} className="w-full justify-start bg-background text-left font-normal data-[empty=true]:text-muted-foreground">
+                              <CalendarIcon />
+                              {move.date ? format(toSelectedDate(move.date) ?? new Date(move.date), "PPP") : <span>{isTask ? "Pick a deadline" : "Pick a target date"}</span>}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar mode="single" selected={toSelectedDate(move.date)} onSelect={(selectedDate) => updateMove(move.id, "date", selectedDate ? toDateInputValue(selectedDate) : "")} disabled={itemDateDisabled} />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <FieldLabel htmlFor={descriptionName} tooltip="Optional context, acceptance criteria, or extra notes for this move.">
+                          {isTask ? "Task description" : "Milestone description"}
+                        </FieldLabel>
+                        <Textarea id={descriptionName} name={descriptionName} value={move.description} onChange={(event) => updateMove(move.id, "description", event.target.value)} placeholder="Optional context, acceptance criteria, or notes…" rows={3} />
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {milestones.map((milestone, index) => (
-                    <div key={milestone.id} className="rounded-2xl border border-border/60 p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium text-muted-foreground">Milestone {index + 1}</p>
-                        </div>
-
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeMilestone(milestone.id)} aria-label={`Remove milestone ${index + 1}`} className="size-8 rounded-full">
-                          <Trash2Icon className="size-4" />
-                        </Button>
-                      </div>
-
-                      <div className="mt-4 grid gap-4 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <FieldLabel htmlFor={`milestones.${index}.milestone`} tooltip="Keep the title specific to the outcome you want to reach.">
-                            Milestone title
-                          </FieldLabel>
-                          <Input
-                            id={`milestones.${index}.milestone`}
-                            name={`milestones.${index}.milestone`}
-                            value={milestone.milestone}
-                            onChange={(event) => updateMilestone(milestone.id, "milestone", event.target.value)}
-                            placeholder="Land a 12 LPA job…"
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <FieldLabel htmlFor={`milestones.${index}.milestoneTargetDate`} tooltip="Pick the date this milestone should be reached by — it must fall within the ambition's date range.">
-                            Target date
-                          </FieldLabel>
-                          <input name={`milestones.${index}.milestoneTargetDate`} type="hidden" value={milestone.milestoneTargetDate} />
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button type="button" variant="outline" data-empty={!milestone.milestoneTargetDate} className="w-full justify-start bg-background text-left font-normal data-[empty=true]:text-muted-foreground">
-                                <CalendarIcon />
-                                {milestone.milestoneTargetDate ? format(toSelectedDate(milestone.milestoneTargetDate) ?? new Date(milestone.milestoneTargetDate), "PPP") : <span>Pick a date</span>}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={toSelectedDate(milestone.milestoneTargetDate)}
-                                onSelect={(selectedDate) => updateMilestone(milestone.id, "milestoneTargetDate", selectedDate ? toDateInputValue(selectedDate) : "")}
-                                disabled={itemDateDisabled}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-
-                        <div className="space-y-2 md:col-span-2">
-                          <FieldLabel htmlFor={`milestones.${index}.milestoneDescription`} tooltip="Optional context or notes that define the milestone more clearly.">
-                            Milestone description
-                          </FieldLabel>
-                          <Textarea
-                            id={`milestones.${index}.milestoneDescription`}
-                            name={`milestones.${index}.milestoneDescription`}
-                            value={milestone.milestoneDescription}
-                            onChange={(event) => updateMilestone(milestone.id, "milestoneDescription", event.target.value)}
-                            placeholder="Optional notes about the milestone definition…"
-                            rows={3}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                  </div>
+                ))}
+              </div>
             </section>
           </>
         ) : (
           <div className="rounded-2xl border border-dashed border-border/60 px-6 py-10 text-center">
             <CalendarRangeIcon className="mx-auto mb-3 size-6 text-muted-foreground" aria-hidden="true" />
-            <p className="text-sm font-medium">Set your date range to start adding {trackingMethod === "task" ? "tasks" : "milestones"}</p>
-            <p className="mt-1 text-sm text-muted-foreground">Pick the ambition&rsquo;s window above — then every {trackingMethod === "task" ? "task" : "milestone"} you add stays inside it…</p>
+            <p className="text-sm font-medium">Set your date range to start adding moves</p>
+            <p className="mt-1 text-sm text-muted-foreground">Pick the ambition&rsquo;s window above — then every move you add stays inside it…</p>
           </div>
         )}
 
@@ -533,7 +442,7 @@ export default function CreateAmbitionForm() {
         ) : null}
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-          <Button type="submit" disabled={isPending} className="w-full sm:w-auto">
+          <Button type="submit" disabled={isPending || !hasDateRange || !hasValidMove} className="w-full sm:w-auto">
             {isPending ? (
               <>
                 <ArrowRightIcon className="size-4 animate-pulse" />

@@ -4,11 +4,12 @@ import { ambitions, milestones, tasks } from 'src/db';
 
 /**
  * Recompute and persist an ambition's completion percentage (and derived status)
- * from its tracked items. Runs inside the caller's transaction `tx`, so the
- * triggering task/milestone mutation and this ambition update commit atomically —
- * the ambition stays accurate without any extra request from the client.
+ * from its tracked items ("moves" — a mixture of tasks and milestones). Runs inside
+ * the caller's transaction `tx`, so the triggering task/milestone mutation and this
+ * ambition update commit atomically — the ambition stays accurate without any extra
+ * request from the client.
  *
- * Bounded cost: one ambition load + at most two counts + one update.
+ * Bounded cost: one ambition load + exactly two counts (tasks + milestones) + one update.
  */
 export async function recalculateAmbitionProgress(tx: Tx, params: { userId: string; ambitionId: string }): Promise<void> {
   const [ambition] = await tx
@@ -20,26 +21,25 @@ export async function recalculateAmbitionProgress(tx: Tx, params: { userId: stri
     return;
   }
 
-  let total: number;
-  let completed: number;
+  // Progress aggregates BOTH kinds of move: completed tasks + reached milestones over the total of each.
+  const [taskAgg] = await tx
+    .select({
+      total: sql<number>`count(*)::int`,
+      completed: sql<number>`count(*) filter (where ${tasks.taskCompleted})::int`,
+    })
+    .from(tasks)
+    .where(and(eq(tasks.ambitionId, params.ambitionId), eq(tasks.userId, params.userId)));
 
-  if (ambition.ambitionTrackingMethod === 'task') {
-    [{ total, completed }] = await tx
-      .select({
-        total: sql<number>`count(*)::int`,
-        completed: sql<number>`count(*) filter (where ${tasks.taskCompleted})::int`,
-      })
-      .from(tasks)
-      .where(and(eq(tasks.ambitionId, params.ambitionId), eq(tasks.userId, params.userId)));
-  } else {
-    [{ total, completed }] = await tx
-      .select({
-        total: sql<number>`count(*)::int`,
-        completed: sql<number>`count(*) filter (where ${milestones.milestoneCompleted})::int`,
-      })
-      .from(milestones)
-      .where(and(eq(milestones.ambitionId, params.ambitionId), eq(milestones.userId, params.userId)));
-  }
+  const [milestoneAgg] = await tx
+    .select({
+      total: sql<number>`count(*)::int`,
+      completed: sql<number>`count(*) filter (where ${milestones.milestoneCompleted})::int`,
+    })
+    .from(milestones)
+    .where(and(eq(milestones.ambitionId, params.ambitionId), eq(milestones.userId, params.userId)));
+
+  const total = taskAgg.total + milestoneAgg.total;
+  const completed = taskAgg.completed + milestoneAgg.completed;
 
   const ambitionPercentageCompleted = total === 0 ? 0 : Math.round((completed / total) * 100);
 

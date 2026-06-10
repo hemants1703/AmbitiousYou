@@ -110,8 +110,8 @@ export default function Features() {
               </MotionWrapper>
               <AnimatedFeatureCard
                 icon={<TargetIcon className="size-10 text-red-500" />}
-                title="Dual Tracking Methods"
-                description="Choose between task-based or milestone-based progress tracking for each ambition, tailored to your unique goals and working style."
+                title="Tasks & Milestones, Together"
+                description="Every ambition is built from moves — mix checkable tasks and one-time milestones in whatever blend fits the goal. No forced either-or."
                 delay={0.1}
               />
             </div>
@@ -141,12 +141,12 @@ export default function Features() {
               {
                 step: "1",
                 title: "Create Your Ambition",
-                description: "Define your goal with our guided setup process, setting deadlines, priorities and tracking methods.",
+                description: "Define your goal with our guided setup process, setting deadlines, priorities, and your first moves.",
               },
               {
                 step: "2",
                 title: "Track Your Progress",
-                description: "Break down your ambition into manageable milestones and track your progress visually.",
+                description: "Break your ambition into moves — tasks and milestones — and watch your progress fill in visually.",
               },
               {
                 step: "3",

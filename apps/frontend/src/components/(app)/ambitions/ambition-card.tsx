@@ -1,7 +1,7 @@
 import { MotionWrapper } from "@/components/motion-wrapper";
 import * as Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CalendarIcon, ChevronRightIcon, FlagIcon, HeartIcon, ListTodoIcon } from "lucide-react";
+import { CalendarIcon, ChevronRightIcon, HeartIcon, ListChecksIcon } from "lucide-react";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
 import { Ambition } from "@ambitiousyou/shared/types";
@@ -47,8 +47,8 @@ export default function AmbitionCard(props: AmbitionCardProps) {
           </div>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center justify-start gap-1">
-              {props.ambition.ambitionTrackingMethod === "task" ? <ListTodoIcon className="size-3.5" /> : <FlagIcon className="size-3.5" />}
-              <span className="text-xs tracking-tighter font-black uppercase">{props.ambition.ambitionTrackingMethod === "task" ? "Tasks" : "Milestones"}</span>
+              <ListChecksIcon className="size-3.5" />
+              <span className="text-xs tracking-tighter font-black uppercase">Moves</span>
             </div>
             <div className="flex items-center gap-1">
               <CalendarIcon className="size-3.5" />

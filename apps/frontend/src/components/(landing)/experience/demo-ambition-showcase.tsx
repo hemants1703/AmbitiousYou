@@ -37,7 +37,9 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
     return isToggled ? !originallyCompleted : originallyCompleted;
   };
 
-  const items = props.ambition.ambition.ambitionTrackingMethod === "task" ? props.ambition.tasks || [] : props.ambition.milestones || [];
+  const items = [...(props.ambition.tasks ?? []), ...(props.ambition.milestones ?? [])];
+  const taskCount = props.ambition.tasks?.length ?? 0;
+  const milestoneCount = props.ambition.milestones?.length ?? 0;
 
   const totalItems = items.length;
   const completedCount = items.filter((item) => {
@@ -88,7 +90,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                     <span className="font-medium">Overall Progress</span>
                     <span className="font-bold text-lg">{props.progress}%</span>
                   </div>
-                  <Progress value={props.progress} className="h-2 *:bg-(--ambition-color) *:transition-all *:duration-500" />
+                  <Progress value={props.progress} className="h-1 *:transition-all *:duration-500" />
                 </div>
 
                 {/* Stats Grid */}
@@ -110,7 +112,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                     <div>
                       <p className="text-xs text-muted-foreground">Completed</p>
                       <p className="text-sm font-medium">
-                        {completedCount}/{totalItems} {props.ambition.ambition.ambitionTrackingMethod}s
+                        {completedCount}/{totalItems} moves
                       </p>
                     </div>
                   </div>
@@ -133,8 +135,10 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                       <TargetIcon className="h-4 w-4 text-amber-500" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Method</p>
-                      <p className="text-sm font-medium capitalize">{props.ambition.ambition.ambitionTrackingMethod}-based</p>
+                      <p className="text-xs text-muted-foreground">Moves</p>
+                      <p className="text-sm font-medium">
+                        {taskCount} {taskCount === 1 ? "task" : "tasks"} · {milestoneCount} {milestoneCount === 1 ? "milestone" : "milestones"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -149,7 +153,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                 <div className="flex items-center justify-between">
                   <Card.CardTitle className="text-lg flex items-center gap-2">
                     <CircleCheckIcon className="h-5 w-5 text-primary" />
-                    {props.ambition.ambition.ambitionTrackingMethod === "task" ? "Tasks" : "Milestones"}
+                    Moves
                   </Card.CardTitle>
                   <Badge variant="secondary" className="text-xs">
                     Interactive Demo
@@ -174,7 +178,13 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                           onClick={() => props.onToggleItem(item.id)}>
                           <Checkbox checked={isCompleted} onCheckedChange={() => props.onToggleItem(item.id)} className={cn("mt-0.5 transition-all", isCompleted && "data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500")} />
                           <div className="flex-1 min-w-0">
-                            <p className={cn("text-sm font-medium transition-all", isCompleted && "line-through text-muted-foreground")}>{itemName}</p>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="gap-1 px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                {"task" in item ? <CircleCheckIcon className="size-2.5" /> : <FlagIcon className="size-2.5" />}
+                                {"task" in item ? "Task" : "Milestone"}
+                              </Badge>
+                            </div>
+                            <p className={cn("text-sm font-medium transition-all mt-1", isCompleted && "line-through text-muted-foreground")}>{itemName}</p>
                             {itemDescription && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{itemDescription}</p>}
                           </div>
                           <div className="flex items-center gap-2 shrink-0">

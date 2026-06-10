@@ -63,7 +63,7 @@ export default function DashboardPreview() {
       </div>
 
       {/* App shell */}
-      <div className="flex h-[600px] w-full bg-background">
+      <div className="flex h-150 w-full bg-background">
         {/* Sidebar */}
         <aside className="hidden w-56 shrink-0 flex-col border-r border-border bg-background md:flex">
           <div className="flex h-14 items-center border-b border-border px-4">
@@ -102,7 +102,6 @@ export default function DashboardPreview() {
             <div className="rounded-md p-2">
               <MoonIcon className="size-4 text-muted-foreground" />
             </div>
-            <div className="flex size-8 items-center justify-center rounded-full bg-primary/20 text-sm font-medium">AS</div>
           </div>
 
           {/* Dashboard content */}

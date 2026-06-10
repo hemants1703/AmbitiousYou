@@ -125,14 +125,13 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
 
   const ambitionName = readString(formData, "ambitionName");
   const ambitionDefinition = readString(formData, "ambitionDefinition");
-  const ambitionTrackingMethod = readString(formData, "ambitionTrackingMethod") as "task" | "milestone" | "";
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
   const ambitionStartDate = parseDate(readString(formData, "ambitionStartDate"));
   const ambitionEndDate = parseDate(readString(formData, "ambitionEndDate"));
 
-  if (!ambitionName || !ambitionTrackingMethod || !ambitionPriority || !ambitionStartDate || !ambitionEndDate) {
+  if (!ambitionName || !ambitionPriority || !ambitionStartDate || !ambitionEndDate) {
     return {
-      error: "Fill in the ambition name, tracking method, priority, and dates before creating it.",
+      error: "Fill in the ambition name, priority, and dates before creating it.",
     };
   }
 
@@ -146,27 +145,21 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
   const milestones = parseMilestones(formData);
   const notes = parseNotes(formData);
 
-  if (ambitionTrackingMethod === "task" && tasks.length === 0) {
+  // An ambition is tracked by "moves" — a free mix of tasks and milestones. At least one is required.
+  if (tasks.length === 0 && milestones.length === 0) {
     return {
-      error: "Add at least one task to track this ambition.",
-    };
-  }
-
-  if (ambitionTrackingMethod === "milestone" && milestones.length === 0) {
-    return {
-      error: "Add at least one milestone to track this ambition.",
+      error: "Add at least one move — a task or a milestone — to track this ambition.",
     };
   }
 
   const payload = {
     ambitionName,
     ambitionDefinition,
-    ambitionTrackingMethod,
     ambitionStartDate: ambitionStartDate.toISOString(),
     ambitionEndDate: ambitionEndDate.toISOString(),
     ambitionPriority,
-    ...(ambitionTrackingMethod === "task" ? { tasks } : {}),
-    ...(ambitionTrackingMethod === "milestone" ? { milestones } : {}),
+    ...(tasks.length > 0 ? { tasks } : {}),
+    ...(milestones.length > 0 ? { milestones } : {}),
     ...(notes.length > 0 ? { notes } : {}),
   };
 

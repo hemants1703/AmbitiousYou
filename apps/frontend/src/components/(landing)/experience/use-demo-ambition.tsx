@@ -44,7 +44,7 @@ export function useDemoAmbition() {
     const currentAmbition = state.ambition;
     if (!currentAmbition) return 0;
 
-    const items = currentAmbition.ambition.ambitionTrackingMethod === "task" ? currentAmbition.tasks || [] : currentAmbition.milestones || [];
+    const items = [...(currentAmbition.tasks ?? []), ...(currentAmbition.milestones ?? [])];
 
     if (items.length === 0) return 0;
 

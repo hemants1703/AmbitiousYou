@@ -6,7 +6,7 @@ import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
 import { deleteTaskAction } from "@/lib/actions/(app)/tasks/delete-task";
 import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-task-completion";
 import { updateTaskAction } from "@/lib/actions/(app)/tasks/update-task";
-import { isCompleted, type DraftState, type TrackedItem, type TrackingMethod } from "@/lib/(app)/tracked-item";
+import { getCompletedVerb, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { parseISO } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ import { toast } from "sonner";
 
 export interface UseTrackedItemsParams {
   ambitionId: string;
-  trackingMethod: TrackingMethod;
+  /** The merged list of moves (tasks + milestones) for this ambition. */
   sourceItems: TrackedItem[];
 }
 
@@ -26,8 +26,8 @@ export interface UseTrackedItemsResult {
   isPending: boolean;
   error: string | null;
   clearError: () => void;
-  noun: "task" | "milestone";
-  isTask: boolean;
+  /** Umbrella noun for an item — always "move" (each move is a task or a milestone). */
+  noun: "move";
   create: (draft: DraftState) => void;
   update: (item: TrackedItem, draft: DraftState) => void;
   toggle: (item: TrackedItem) => void;
@@ -35,16 +35,18 @@ export interface UseTrackedItemsResult {
 }
 
 /**
- * Single source of truth for an ambition's tracked items: optimistic local state
- * + the create/update/toggle/remove server-action handlers. Instantiate ONCE in
- * the Execution Board and pass the result into the management drawer — never call
- * it twice, or the inline preview and the drawer would diverge.
+ * Single source of truth for an ambition's moves (tasks + milestones): optimistic
+ * local state + the create/update/toggle/remove server-action handlers. Instantiate
+ * ONCE in the Execution Board and pass the result into the management drawer — never
+ * call it twice, or the inline preview and the drawer would diverge.
+ *
+ * Each move's sub-type is derived PER ITEM (duck-typing) so a mixed list dispatches to
+ * the right task/milestone action. The one exception is `create`, where the kind comes
+ * from `draft.kind` (the optimistic item doesn't exist yet to duck-type).
  */
 export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsResult {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const isTask = params.trackingMethod === "task";
-  const noun = isTask ? "task" : "milestone";
 
   const [items, setItems] = useState<TrackedItem[]>(params.sourceItems);
   const [syncedSource, setSyncedSource] = useState<TrackedItem[]>(params.sourceItems);
@@ -65,7 +67,7 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
       updatedAt: new Date(),
     };
 
-    if (isTask) {
+    if (draft.kind === "task") {
       return { ...base, task: draft.title, taskDescription: draft.description, taskCompleted: false, taskDeadline: parseISO(draft.date) } satisfies Task;
     }
     return { ...base, milestone: draft.title, milestoneDescription: draft.description, milestoneCompleted: false, milestoneTargetDate: parseISO(draft.date) } satisfies Milestone;
@@ -84,13 +86,14 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     startTransition(async () => {
       setItems((prev) => [optimistic, ...prev]);
 
-      const result = isTask
-        ? await createTaskAction({ ambitionId: params.ambitionId, task: title, taskDescription: description, taskDeadline: isoDate })
-        : await createMilestoneAction({ ambitionId: params.ambitionId, milestone: title, milestoneDescription: description, milestoneTargetDate: isoDate });
+      const result =
+        draft.kind === "task"
+          ? await createTaskAction({ ambitionId: params.ambitionId, task: title, taskDescription: description, taskDeadline: isoDate })
+          : await createMilestoneAction({ ambitionId: params.ambitionId, milestone: title, milestoneDescription: description, milestoneTargetDate: isoDate });
 
       const created = "task" in result ? result.task : result.milestone;
       if (result.error || !created) {
-        setError(result.error ?? `Failed to create ${noun}. Please try again.`);
+        setError(result.error ?? "Failed to add move. Please try again.");
         setItems(snapshot);
       } else {
         setItems((prev) => prev.map((item) => (item.id === optimistic.id ? created : item)));
@@ -113,19 +116,19 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
       setItems((prev) =>
         prev.map((current) => {
           if (current.id !== item.id) return current;
-          return isTask
-            ? ({ ...(current as Task), task: title, taskDescription: description, taskDeadline: parseISO(draft.date), updatedAt: new Date() } as Task)
-            : ({ ...(current as Milestone), milestone: title, milestoneDescription: description, milestoneTargetDate: parseISO(draft.date), updatedAt: new Date() } as Milestone);
+          return isMilestone(current)
+            ? ({ ...current, milestone: title, milestoneDescription: description, milestoneTargetDate: parseISO(draft.date), updatedAt: new Date() } as Milestone)
+            : ({ ...(current as Task), task: title, taskDescription: description, taskDeadline: parseISO(draft.date), updatedAt: new Date() } as Task);
         }),
       );
 
-      const result = isTask
-        ? await updateTaskAction(item.id, { task: title, taskDescription: description, taskCompleted: completed, taskDeadline: isoDate })
-        : await updateMilestoneAction(item.id, { milestone: title, milestoneDescription: description, milestoneCompleted: completed, milestoneTargetDate: isoDate });
+      const result = isMilestone(item)
+        ? await updateMilestoneAction(item.id, { milestone: title, milestoneDescription: description, milestoneCompleted: completed, milestoneTargetDate: isoDate })
+        : await updateTaskAction(item.id, { task: title, taskDescription: description, taskCompleted: completed, taskDeadline: isoDate });
 
       const updated = "task" in result ? result.task : result.milestone;
       if (result.error || !updated) {
-        setError(result.error ?? `Failed to update ${noun}. Please try again.`);
+        setError(result.error ?? "Failed to update move. Please try again.");
         setItems(snapshot);
       } else {
         setItems((prev) => prev.map((current) => (current.id === item.id ? updated : current)));
@@ -137,37 +140,42 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
   function toggle(item: TrackedItem) {
     setError(null);
     const snapshot = items;
+    const wasCompleted = isCompleted(item);
+    const kindLabel = isMilestone(item) ? "Milestone" : "Task";
+    const verb = getCompletedVerb(item);
 
     startTransition(async () => {
       setItems((prev) =>
         prev.map((current) => {
           if (current.id !== item.id) return current;
-          return isTask
-            ? ({ ...(current as Task), taskCompleted: !(current as Task).taskCompleted } as Task)
-            : ({ ...(current as Milestone), milestoneCompleted: !(current as Milestone).milestoneCompleted } as Milestone);
+          return isMilestone(current)
+            ? ({ ...current, milestoneCompleted: !current.milestoneCompleted } as Milestone)
+            : ({ ...(current as Task), taskCompleted: !(current as Task).taskCompleted } as Task);
         }),
       );
 
-      const result = isTask ? await toggleTaskCompletionAction(item.id) : await toggleMilestoneCompletionAction(item.id);
+      const result = isMilestone(item) ? await toggleMilestoneCompletionAction(item.id) : await toggleTaskCompletionAction(item.id);
       if (result.error) {
         setError(result.error);
         setItems(snapshot);
-        toast.error(`Failed to update ${noun} status. Please try again.`);
+        toast.error("Failed to update move. Please try again.");
       } else {
         router.refresh();
-        toast.success(`${noun[0].toUpperCase() + noun.slice(1)} marked as ${isCompleted(item) ? "not completed" : "completed"}.`);
+        toast.success(wasCompleted ? `${kindLabel} marked as not ${verb}.` : `${kindLabel} marked as ${verb}.`);
       }
     });
   }
 
   function remove(itemId: string) {
+    const target = items.find((current) => current.id === itemId);
+    if (!target) return;
     setError(null);
     const snapshot = items;
 
     startTransition(async () => {
       setItems((prev) => prev.filter((current) => current.id !== itemId));
 
-      const result = isTask ? await deleteTaskAction(itemId) : await deleteMilestoneAction(itemId);
+      const result = isMilestone(target) ? await deleteMilestoneAction(itemId) : await deleteTaskAction(itemId);
       if (result.error) {
         setError(result.error);
         setItems(snapshot);
@@ -187,8 +195,7 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     isPending,
     error,
     clearError: () => setError(null),
-    noun,
-    isTask,
+    noun: "move",
     create,
     update,
     toggle,

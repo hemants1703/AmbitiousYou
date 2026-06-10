@@ -33,7 +33,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
       }
 
       if (searchValue) {
-        const searchableText = [ambition.ambitionName, ambition.ambitionDefinition, ambition.ambitionTrackingMethod, ambition.ambitionStatus, ambition.ambitionPriority].filter(Boolean).join(" ").toLowerCase();
+        const searchableText = [ambition.ambitionName, ambition.ambitionDefinition, ambition.ambitionStatus, ambition.ambitionPriority].filter(Boolean).join(" ").toLowerCase();
 
         if (!searchableText.includes(searchValue)) {
           return false;

@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { emptyDraft, getDescription, getTitle, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import type { UseTrackedItemsResult } from "@/lib/(app)/use-tracked-items";
-import { FlagIcon, ListTodoIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { ListChecksIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
+import type { Matcher } from "react-day-picker";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 import { TrackedItemList } from "./tracked-item-list";
 
@@ -17,7 +18,7 @@ const PAGE_SIZE = 50;
 interface ExecutionBoardDrawerProps {
   board: UseTrackedItemsResult;
   ambitionName: string;
-  disabledBefore: Date;
+  dateDisabled: Matcher[];
 }
 
 function filterItems(items: TrackedItem[], query: string): TrackedItem[] {
@@ -34,11 +35,10 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
   const [adding, setAdding] = useState(false);
   const [newDraft, setNewDraft] = useState<DraftState>(emptyDraft);
 
-  const Icon = board.isTask ? ListTodoIcon : FlagIcon;
   const filteredOpen = filterItems(board.openItems, query);
   const filteredCompleted = filterItems(board.completedItems, query);
   const total = board.items.length;
-  const triggerLabel = total > 0 ? `View all ${total} ${board.noun}s` : `Manage ${board.noun}s`;
+  const triggerLabel = total > 0 ? `View all ${total} moves` : "Manage moves";
 
   function resetWindows(nextQuery: string) {
     setQuery(nextQuery);
@@ -56,7 +56,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
     <Drawer direction="right">
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-full">
-          <Icon className="size-4" />
+          <ListChecksIcon className="size-4" />
           {triggerLabel}
         </Button>
       </DrawerTrigger>
@@ -64,15 +64,15 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
       <DrawerContent className="max-h-[85vh]">
         <DrawerHeader className="text-left">
           <DrawerTitle className="flex items-center gap-2">
-            <Icon className="size-4" />
-            {board.isTask ? "Tasks" : "Milestones"}
+            <ListChecksIcon className="size-4" />
+            Moves
           </DrawerTitle>
           <DrawerDescription>
-            Manage every {board.noun} for{" "}
+            Manage every move for{" "}
             <span className="font-medium text-foreground" translate="no">
               {props.ambitionName}
             </span>
-            .{board.isTask ? "" : " Milestones are marked reached once and can't be reopened."}
+            . Tasks can be checked and unchecked; milestones are marked reached once and can&rsquo;t be reopened.
           </DrawerDescription>
         </DrawerHeader>
 
@@ -86,7 +86,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="relative flex-1">
               <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="search" inputMode="search" aria-label={`Search ${board.noun}s`} placeholder={`Search ${board.noun}s…`} value={query} onChange={(event) => resetWindows(event.target.value)} className="pl-9" />
+              <Input type="search" inputMode="search" aria-label="Search moves" placeholder="Search moves…" value={query} onChange={(event) => resetWindows(event.target.value)} className="pl-9" />
             </div>
             {!adding ? (
               <Button
@@ -99,17 +99,16 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
                   setAdding(true);
                 }}>
                 <PlusIcon className="size-4" />
-                Add {board.noun}
+                Add move
               </Button>
             ) : null}
           </div>
 
           {adding ? (
             <TrackedItemDraftEditor
-              label={`New ${board.noun}`}
+              label="New move"
               draft={newDraft}
-              noun={board.noun}
-              disabledBefore={props.disabledBefore}
+              dateDisabled={props.dateDisabled}
               isPending={board.isPending}
               onChange={setNewDraft}
               onSubmit={handleCreate}
@@ -129,7 +128,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="completed">
-                {board.isTask ? "Completed" : "Reached"}
+                Completed
                 <Badge variant="outline" className="tabular-nums">
                   {board.completedItems.length}
                 </Badge>
@@ -139,13 +138,12 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
             <TabsContent value="open" className="mt-3 min-h-0 space-y-3 overflow-y-auto overscroll-contain pr-1">
               <TrackedItemList
                 items={filteredOpen.slice(0, visibleOpen)}
-                noun={board.noun}
                 isPending={board.isPending}
-                disabledBefore={props.disabledBefore}
+                dateDisabled={props.dateDisabled}
                 onToggle={board.toggle}
                 onUpdate={board.update}
                 onDelete={board.remove}
-                emptyMessage={query ? `No open ${board.noun}s match “${query}”.` : `No open ${board.noun}s.`}
+                emptyMessage={query ? `No open moves match “${query}”.` : "No open moves."}
               />
               {filteredOpen.length > visibleOpen ? (
                 <Button type="button" variant="ghost" className="w-full" onClick={() => setVisibleOpen((count) => count + PAGE_SIZE)}>
@@ -157,13 +155,12 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
             <TabsContent value="completed" className="mt-3 min-h-0 space-y-3 overflow-y-auto overscroll-contain pr-1">
               <TrackedItemList
                 items={filteredCompleted.slice(0, visibleCompleted)}
-                noun={board.noun}
                 isPending={board.isPending}
-                disabledBefore={props.disabledBefore}
+                dateDisabled={props.dateDisabled}
                 onToggle={board.toggle}
                 onUpdate={board.update}
                 onDelete={board.remove}
-                emptyMessage={query ? `No ${board.isTask ? "completed" : "reached"} ${board.noun}s match “${query}”.` : `No ${board.isTask ? "completed" : "reached"} ${board.noun}s yet.`}
+                emptyMessage={query ? `No completed moves match “${query}”.` : "No completed moves yet."}
               />
               {filteredCompleted.length > visibleCompleted ? (
                 <Button type="button" variant="ghost" className="w-full" onClick={() => setVisibleCompleted((count) => count + PAGE_SIZE)}>

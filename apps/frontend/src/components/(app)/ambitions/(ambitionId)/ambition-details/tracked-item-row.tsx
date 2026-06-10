@@ -4,18 +4,18 @@ import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { formatDate, getDate, getDaysUntil, getDescription, getTitle, isCompleted, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
-import { CheckIcon, FlagIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
+import { CheckIcon, FlagIcon, ListTodoIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
+import type { Matcher } from "react-day-picker";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 
 interface TrackedItemRowProps {
   item: TrackedItem;
-  noun: "task" | "milestone";
   isEditing: boolean;
   isConfirmingDelete: boolean;
   editDraft: DraftState;
-  disabledBefore: Date;
+  dateDisabled: Matcher[];
   isPending: boolean;
   onToggle: () => void;
   onStartEdit: () => void;
@@ -30,17 +30,18 @@ interface TrackedItemRowProps {
 export function TrackedItemRow(props: TrackedItemRowProps) {
   const { item } = props;
   const completed = isCompleted(item);
-  const isMilestone = props.noun === "milestone";
+  const isMs = isMilestone(item);
+  const kind = getKind(item);
   const daysUntil = getDaysUntil(getDate(item));
 
   if (props.isEditing) {
     return (
       <TrackedItemDraftEditor
-        label={`Editing ${props.noun}`}
+        label={`Editing ${kind}`}
         draft={props.editDraft}
-        noun={props.noun}
-        disabledBefore={props.disabledBefore}
+        dateDisabled={props.dateDisabled}
         isPending={props.isPending}
+        lockKind
         onChange={props.onEditChange}
         onSubmit={props.onSaveEdit}
         onCancel={props.onCancelEdit}
@@ -51,7 +52,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
   if (props.isConfirmingDelete) {
     return (
       <div className="space-y-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-4">
-        <p className="text-sm font-medium text-destructive">Delete this {props.noun}?</p>
+        <p className="text-sm font-medium text-destructive">Delete this {kind}?</p>
         <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getTitle(item)}</p>
         <div className="flex items-center gap-2">
           <Button type="button" variant="destructive" size="sm" disabled={props.isPending} onClick={props.onConfirmDelete}>
@@ -69,43 +70,54 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
   return (
     <div className="group rounded-2xl bg-background border border-border/60 p-3">
       <div className="flex items-start gap-3">
-        <CompletionControl item={item} isMilestone={isMilestone} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
+        <CompletionControl item={item} isMilestone={isMs} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
 
         <div className="min-w-0 flex-1">
           <p className={cn("font-medium wrap-break-word", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
           {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getDescription(item)}</p> : null}
-          {isMilestone && completed ? (
-            <p className="mt-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">Reached</p>
-          ) : (
-            <div className="mt-1 flex items-center gap-2">
-              <p className="text-xs text-muted-foreground">
-                {props.noun === "task" ? "Due" : "Target"} {formatDate(getDate(item))}
-              </p>
-              {!completed && (
-                <Badge variant="outline" className={cn("hidden sm:inline-flex", daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
-                  {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
-                </Badge>
-              )}
-            </div>
-          )}
+
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <KindBadge isMilestone={isMs} />
+            {isMs && completed ? (
+              <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Reached</span>
+            ) : (
+              <>
+                <p className="text-xs text-muted-foreground">
+                  {getDateLabel(item)} {formatDate(getDate(item))}
+                </p>
+                {!completed && (
+                  <Badge variant="outline" className={cn("hidden sm:inline-flex", daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
+                    {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
+                  </Badge>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
-        {/* <div className="flex items-center gap-1"> */}
         <div className="flex flex-col items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
-          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-white! hover:bg-red-500!" aria-label={`Delete ${props.noun}`} disabled={props.isPending} onClick={props.onStartDelete}>
+          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-white! hover:bg-red-500!" aria-label={`Delete ${kind}`} disabled={props.isPending} onClick={props.onStartDelete}>
             <XIcon className="size-4" />
           </Button>
 
           {/* Reached milestones are locked achievements — no editing, only removal. */}
-          {!(isMilestone && completed) && (
-            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-background hover:bg-foreground!" aria-label={`Edit ${props.noun}`} disabled={props.isPending} onClick={props.onStartEdit}>
+          {!(isMs && completed) && (
+            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-background hover:bg-foreground!" aria-label={`Edit ${kind}`} disabled={props.isPending} onClick={props.onStartEdit}>
               <PencilIcon className="size-3.5" />
             </Button>
           )}
         </div>
-        {/* </div> */}
       </div>
     </div>
+  );
+}
+
+function KindBadge(props: { isMilestone: boolean }) {
+  return (
+    <Badge variant="outline" className="gap-1 px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+      {props.isMilestone ? <FlagIcon className="size-2.5" /> : <ListTodoIcon className="size-2.5" />}
+      {props.isMilestone ? "Milestone" : "Task"}
+    </Badge>
   );
 }
 

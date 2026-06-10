@@ -8,26 +8,21 @@ import { db, ambitions, milestones, notes, tasks, type Ambition } from 'src/db';
 export class AmbitionsService {
   async createAmbition(userId: string, createAmbitionDto: CreateAmbitionWithItemsDto): Promise<Ambition> {
     return await db.transaction(async (tx) => {
-      const { tasks: tasksDto, milestones: milestonesDto, notes: notesDto, ...ambitionData } = createAmbitionDto;
+      const { tasks: tasksDto, milestones: milestonesDto, ...ambitionData } = createAmbitionDto;
 
       const [ambition] = await tx
         .insert(ambitions)
         .values({ ...ambitionData, userId })
         .returning();
 
-      // Tracking method `task` guarantees `tasks` is present; the length check guards an empty array.
+      // Tasks and milestones are both optional ("moves" can be any mix); the AtLeastOneMove
+      // DTO constraint guarantees at least one across both. Insert whichever are present.
       if (tasksDto?.length) {
         await tx.insert(tasks).values(tasksDto.map((task) => ({ ...task, userId, ambitionId: ambition.id })));
       }
 
-      // Tracking method `milestone` guarantees `milestones` is present; the length check guards an empty array.
       if (milestonesDto?.length) {
         await tx.insert(milestones).values(milestonesDto.map((milestone) => ({ ...milestone, userId, ambitionId: ambition.id })));
-      }
-
-      // Notes are optional, so we will check if they are present before creating them.
-      if (notesDto?.length) {
-        await tx.insert(notes).values(notesDto.map((note) => ({ ...note, userId, ambitionId: ambition.id })));
       }
 
       return ambition;

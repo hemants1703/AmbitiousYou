@@ -8,61 +8,47 @@
  * "no draft" rather than crashing the form.
  */
 
-export type TaskDraft = {
-  id: string;
-  task: string;
-  taskDescription: string;
-  taskDeadline: string;
-};
+export type MoveKind = "task" | "milestone";
 
-export type MilestoneDraft = {
+/** One "move" being drafted — a task or a milestone. The form works on a single mixed list. */
+export type MoveDraft = {
   id: string;
-  milestone: string;
-  milestoneDescription: string;
-  milestoneTargetDate: string;
+  kind: MoveKind;
+  title: string;
+  description: string;
+  date: string; // "YYYY-MM-DD" | ""
 };
 
 export interface CreateAmbitionDraft {
   ambitionName: string;
   ambitionDefinition: string;
-  trackingMethod: "task" | "milestone";
   priority: "low" | "medium" | "high";
   startDate: string; // "YYYY-MM-DD" | ""  (dateRange is reconstructed from these on load)
   endDate: string; // "YYYY-MM-DD" | ""
-  tasks: TaskDraft[];
-  milestones: MilestoneDraft[];
+  moves: MoveDraft[];
 }
 
-const STORAGE_KEY = "ambitiousyou:create-ambition-draft:v1";
-const DRAFT_VERSION = 1;
+// v2: ambitions hold a free mix of tasks + milestones ("moves"), replacing the v1
+// trackingMethod + separate tasks/milestones arrays. Old v1 drafts fail the version
+// check below and cleanly degrade to "no draft".
+const STORAGE_KEY = "ambitiousyou:create-ambition-draft:v2";
+const DRAFT_VERSION = 2;
 
 type DraftEnvelope = {
   version: number;
   draft: CreateAmbitionDraft;
 };
 
-function normalizeTasks(value: unknown): TaskDraft[] {
+function normalizeMoves(value: unknown): MoveDraft[] {
   if (!Array.isArray(value)) return [];
   return value.map((entry) => {
-    const record = (entry ?? {}) as Partial<TaskDraft>;
+    const record = (entry ?? {}) as Partial<MoveDraft>;
     return {
       id: typeof record.id === "string" && record.id ? record.id : crypto.randomUUID(),
-      task: typeof record.task === "string" ? record.task : "",
-      taskDescription: typeof record.taskDescription === "string" ? record.taskDescription : "",
-      taskDeadline: typeof record.taskDeadline === "string" ? record.taskDeadline : "",
-    };
-  });
-}
-
-function normalizeMilestones(value: unknown): MilestoneDraft[] {
-  if (!Array.isArray(value)) return [];
-  return value.map((entry) => {
-    const record = (entry ?? {}) as Partial<MilestoneDraft>;
-    return {
-      id: typeof record.id === "string" && record.id ? record.id : crypto.randomUUID(),
-      milestone: typeof record.milestone === "string" ? record.milestone : "",
-      milestoneDescription: typeof record.milestoneDescription === "string" ? record.milestoneDescription : "",
-      milestoneTargetDate: typeof record.milestoneTargetDate === "string" ? record.milestoneTargetDate : "",
+      kind: record.kind === "milestone" ? "milestone" : "task",
+      title: typeof record.title === "string" ? record.title : "",
+      description: typeof record.description === "string" ? record.description : "",
+      date: typeof record.date === "string" ? record.date : "",
     };
   });
 }
@@ -83,12 +69,10 @@ export function loadDraft(): CreateAmbitionDraft | null {
     return {
       ambitionName: typeof draft.ambitionName === "string" ? draft.ambitionName : "",
       ambitionDefinition: typeof draft.ambitionDefinition === "string" ? draft.ambitionDefinition : "",
-      trackingMethod: draft.trackingMethod === "milestone" ? "milestone" : "task",
       priority: draft.priority === "low" || draft.priority === "high" ? draft.priority : "medium",
       startDate: typeof draft.startDate === "string" ? draft.startDate : "",
       endDate: typeof draft.endDate === "string" ? draft.endDate : "",
-      tasks: normalizeTasks(draft.tasks),
-      milestones: normalizeMilestones(draft.milestones),
+      moves: normalizeMoves(draft.moves),
     };
   } catch {
     return null;
@@ -123,7 +107,6 @@ export function draftHasContent(draft: CreateAmbitionDraft): boolean {
       draft.ambitionDefinition ||
       draft.startDate ||
       draft.endDate ||
-      draft.tasks.some((task) => task.task || task.taskDescription || task.taskDeadline) ||
-      draft.milestones.some((milestone) => milestone.milestone || milestone.milestoneDescription || milestone.milestoneTargetDate),
+      draft.moves.some((move) => move.title || move.description || move.date),
   );
 }

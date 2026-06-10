@@ -29,8 +29,8 @@ AI-native keyword set, then ③ which reuses infrastructure we already have.
 
 ## ① AI Goal Breakdown — *ship first*
 **What:** the user submits an ambition (name + optional definition + start/end dates) and gets a
-proposed plan: a set of **tasks** (with deadlines spread across the ambition window) or
-**milestones**, matching the ambition's `trackingMethod`.
+proposed plan: a set of **moves** — a mix of **tasks** (with deadlines spread across the ambition
+window) and **milestones** — that together cover the goal.
 
 **How:**
 - Endpoint `POST /ambitions/:id/ai-breakdown` → `AiService.breakdownAmbition()`.

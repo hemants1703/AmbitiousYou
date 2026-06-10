@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsOptional, ValidateIf, ValidateNested } from 'class-validator';
+import { IsArray, IsOptional, Validate, ValidateNested, ValidatorConstraint, ValidatorConstraintInterface, type ValidationArguments } from 'class-validator';
 import { OmitType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
 import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
@@ -12,24 +12,33 @@ export class CreateAmbitionMilestoneDto extends OmitType(CreateMilestoneDto, ['a
 
 export class CreateAmbitionNoteDto extends OmitType(CreateNoteDto, ['ambitionId'] as const) {}
 
+/**
+ * An ambition is tracked by "moves" — a free mixture of tasks and/or milestones.
+ * Both arrays are optional individually, but together they must contain at least one
+ * item, otherwise the ambition has nothing to track. Attached to `tasks` (always
+ * defined thanks to the `= []` default) so it runs even on a milestones-only payload.
+ */
+@ValidatorConstraint({ name: 'AtLeastOneMove', async: false })
+class AtLeastOneMoveConstraint implements ValidatorConstraintInterface {
+  validate(_value: unknown, args: ValidationArguments): boolean {
+    const dto = args.object as CreateAmbitionWithItemsDto;
+    return (dto.tasks?.length ?? 0) + (dto.milestones?.length ?? 0) >= 1;
+  }
+
+  defaultMessage(): string {
+    return 'Add at least one move (a task or a milestone) to track this ambition';
+  }
+}
+
 export class CreateAmbitionWithItemsDto extends CreateAmbitionDto {
-  @ValidateIf((o: CreateAmbitionDto) => o.ambitionTrackingMethod === 'task')
+  @Validate(AtLeastOneMoveConstraint)
   @IsArray()
-  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => CreateAmbitionTaskDto)
-  tasks?: CreateAmbitionTaskDto[];
+  tasks: CreateAmbitionTaskDto[] = [];
 
-  @ValidateIf((o: CreateAmbitionDto) => o.ambitionTrackingMethod === 'milestone')
   @IsArray()
-  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => CreateAmbitionMilestoneDto)
-  milestones?: CreateAmbitionMilestoneDto[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateAmbitionNoteDto)
-  @IsOptional()
-  notes?: CreateAmbitionNoteDto[];
+  milestones: CreateAmbitionMilestoneDto[] = [];
 }

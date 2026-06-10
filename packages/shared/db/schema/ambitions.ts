@@ -1,6 +1,6 @@
 import { boolean, integer, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { users } from './users';
-import { ambitionPriorityEnum, ambitionStatusEnum, ambitionTrackingMethodEnum } from './enums';
+import { ambitionPriorityEnum, ambitionStatusEnum } from './enums';
 
 export const ambitions = pgTable('ambitions', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -9,7 +9,6 @@ export const ambitions = pgTable('ambitions', {
     .references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   ambitionName: varchar('ambition_name', { length: 255 }).notNull(),
   ambitionDefinition: text('ambition_definition'),
-  ambitionTrackingMethod: ambitionTrackingMethodEnum('ambition_tracking_method').notNull(),
   ambitionStartDate: timestamp('ambition_start_date', { precision: 3 }).notNull(),
   ambitionEndDate: timestamp('ambition_end_date', { precision: 3 }).notNull(),
   ambitionCompletionDate: timestamp('ambition_completion_date', { precision: 3 }),
@@ -24,7 +23,7 @@ export const ambitions = pgTable('ambitions', {
 });
 
 export type Ambition = typeof ambitions.$inferSelect;
-export type NewAmbition = Pick<Ambition, 'ambitionName' | 'ambitionTrackingMethod' | 'ambitionStartDate' | 'ambitionEndDate'> &
+export type NewAmbition = Pick<Ambition, 'ambitionName' | 'ambitionStartDate' | 'ambitionEndDate'> &
   Partial<
     Pick<
       Ambition,

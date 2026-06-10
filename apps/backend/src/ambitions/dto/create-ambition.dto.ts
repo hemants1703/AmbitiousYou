@@ -11,10 +11,6 @@ export class CreateAmbitionDto implements NewAmbition {
   @IsString()
   ambitionDefinition: string = '';
 
-  @IsEnum(['task', 'milestone'], { message: 'ambitionTrackingMethod must be either task or milestone' })
-  @IsNotEmpty({ message: 'ambitionTrackingMethod must be a valid tracking method' })
-  ambitionTrackingMethod!: 'task' | 'milestone';
-
   @IsDate()
   @IsNotEmpty({ message: 'ambitionStartDate must be a valid date' })
   @Type(() => Date)
