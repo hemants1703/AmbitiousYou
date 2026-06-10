@@ -57,7 +57,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
     return (
       <div className="space-y-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-4">
         <p className="text-sm font-medium text-destructive">Delete this {kind}?</p>
-        <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getTitle(item)}</p>
+        <p className="line-clamp-2 text-sm text-muted-foreground wrap-anywhere">{getTitle(item)}</p>
         <div className="flex items-center gap-2">
           <Button type="button" variant="destructive" size="sm" disabled={props.isPending} onClick={props.onConfirmDelete}>
             <Trash2Icon className="size-3.5" />
@@ -82,8 +82,8 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
             onClick={() => moveDetail.open(toMoveDetail(item))}
             aria-label={`View details of ${kind}: ${getTitle(item)}`}
             className="block min-h-6 w-full cursor-pointer rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <p className={cn("font-medium wrap-break-word", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
-            {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getDescription(item)}</p> : null}
+            <p className={cn("font-medium wrap-anywhere", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
+            {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-anywhere">{getDescription(item)}</p> : null}
           </button>
 
           <div className="mt-1 flex flex-wrap items-center gap-2">

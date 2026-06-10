@@ -24,9 +24,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           } as React.CSSProperties
         }>
         <AppSidebar variant="inset" userDetails={userDetails} />
-        <SidebarInset>
+        <SidebarInset className="min-w-0">
           <SiteHeader />
-              <div className="flex flex-col gap-4 md:gap-6 px-6 md:px-8 py-4 md:py-6">{children}</div>
+          <div className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </main>

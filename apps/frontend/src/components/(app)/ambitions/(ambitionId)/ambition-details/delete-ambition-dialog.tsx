@@ -50,7 +50,7 @@ export function DeleteAmbitionDialog(props: DeleteAmbitionDialogProps) {
           </AlertDialogMedia>
           <AlertDialogTitle>Delete this ambition?</AlertDialogTitle>
           <AlertDialogDescription>
-            This permanently deletes <span className="font-medium wrap-break-word text-foreground">{props.ambitionName}</span> along with its tasks, milestones, and notes. This action cannot be undone.
+            This permanently deletes <span className="font-medium wrap-anywhere text-foreground">{props.ambitionName}</span> along with its tasks, milestones, and notes. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

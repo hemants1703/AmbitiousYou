@@ -141,7 +141,7 @@ export default function NotesCard(props: NotesCardProps) {
         ) : (
           previewNotes.map((note) => (
             <div key={note.id} className={`space-y-1 rounded-2xl border p-3 text-sm ${NOTE_TINT}`}>
-              <p className="line-clamp-3 wrap-break-word">{note.note}</p>
+              <p className="line-clamp-3 wrap-anywhere">{note.note}</p>
               <p className="text-xs text-muted-foreground">
                 {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime() ? `Updated ${formatNoteDate(note.updatedAt)}` : note.createdAt ? `Added ${formatNoteDate(note.createdAt)}` : ""}
               </p>

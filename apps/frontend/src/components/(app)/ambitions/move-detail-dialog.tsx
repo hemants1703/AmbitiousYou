@@ -65,7 +65,7 @@ function MoveDetailContent(props: { detail: MoveDetail }) {
           )}
         </div>
 
-        <DialogTitle className="wrap-break-word">{detail.title}</DialogTitle>
+        <DialogTitle className="wrap-anywhere">{detail.title}</DialogTitle>
 
         {showDate ? (
           <DialogDescription>
@@ -87,7 +87,7 @@ function MoveDetailContent(props: { detail: MoveDetail }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         {detail.description ? (
-          <p className="text-sm whitespace-pre-wrap text-muted-foreground wrap-break-word">{detail.description}</p>
+          <p className="text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{detail.description}</p>
         ) : (
           <p className="text-sm text-muted-foreground italic">No description provided.</p>
         )}

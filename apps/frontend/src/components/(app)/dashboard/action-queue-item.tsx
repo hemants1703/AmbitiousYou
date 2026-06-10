@@ -112,7 +112,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
             type="button"
             onClick={openDetail}
             aria-label={`View details of ${props.kind}: ${props.title}`}
-            className={cn("min-w-0 line-clamp-2 cursor-pointer rounded-md text-left font-medium wrap-break-word focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", done && "text-muted-foreground line-through")}>
+            className={cn("min-w-0 line-clamp-2 cursor-pointer rounded-md text-left font-medium wrap-anywhere focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", done && "text-muted-foreground line-through")}>
             {props.title}
           </button>
           <Badge variant="outline" className={cn("shrink-0 tabular-nums", overdue && "border-destructive/30 bg-destructive/10 text-destructive")}>
@@ -120,7 +120,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
           </Badge>
         </div>
 
-        {props.description ? <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{props.description}</p> : null}
+        {props.description ? <p className="line-clamp-1 text-sm text-muted-foreground wrap-anywhere">{props.description}</p> : null}
 
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <MoveKindBadge kind={props.kind} />

@@ -4,7 +4,7 @@ export function DetailItem(props: { label: string; value: string }) {
   return (
     <div className="space-y-1 rounded-3xl border border-border/60 bg-muted/30 p-4">
       <dt className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{props.label}</dt>
-      <dd className="wrap-break-word text-sm font-medium text-foreground">{props.value}</dd>
+      <dd className="wrap-anywhere text-sm font-medium text-foreground">{props.value}</dd>
     </div>
   );
 }
@@ -13,7 +13,7 @@ export function SummaryBlock(props: { label: string; value: string }) {
   return (
     <div className="rounded-3xl border border-border/60 bg-background p-4 shadow-sm">
       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{props.label}</p>
-      <p className="mt-2 wrap-break-word text-sm font-medium text-foreground">{props.value}</p>
+      <p className="mt-2 wrap-anywhere text-sm font-medium text-foreground">{props.value}</p>
     </div>
   );
 }

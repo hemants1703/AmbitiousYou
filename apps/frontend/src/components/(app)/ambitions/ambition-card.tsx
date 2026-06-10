@@ -22,11 +22,11 @@ export default function AmbitionCard(props: AmbitionCardProps) {
         <div className="flex items-center justify-between gap-2">
           <div className="mt-2 flex min-w-0 items-center gap-1.5">
             {props.ambition.isFavourited ? <HeartIcon className="mb-1 size-4 shrink-0 fill-pink-500 text-pink-500" aria-label="Favourited" /> : null}
-            <Card.CardTitle className="line-clamp-1">{props.ambition.ambitionName}</Card.CardTitle>
+            <Card.CardTitle className="line-clamp-1 wrap-anywhere">{props.ambition.ambitionName}</Card.CardTitle>
           </div>
           <AmbitionPriorityBadge ambitionPriority={props.ambition.ambitionPriority!} />
         </div>
-        <Card.CardDescription className="line-clamp-1">{props.ambition.ambitionDefinition || "\u00A0"}</Card.CardDescription>
+        <Card.CardDescription className="line-clamp-1 wrap-anywhere">{props.ambition.ambitionDefinition || "\u00A0"}</Card.CardDescription>
       </Card.CardHeader>
       <Card.CardContent>
         <div className="space-y-4">

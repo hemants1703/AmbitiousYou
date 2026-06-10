@@ -80,7 +80,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
     <section className="w-full pb-8">
       <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
         {/* HEADER */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 max-sm:justify-between">
           <Button asChild variant="outline" size="sm" className="rounded-full bg-background/80">
             <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
               <ChevronLeftIcon className="size-4" />
@@ -104,11 +104,11 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex min-w-0 flex-1 flex-col gap-4">
                   <div className="space-y-2">
-                    <h1 className="line-clamp-2 text-2xl font-bold tracking-tight text-balance sm:text-3xl lg:text-4xl">
+                    <h1 className="line-clamp-2 wrap-anywhere text-2xl font-bold tracking-tight text-balance sm:text-3xl lg:text-4xl">
                       {ambition.isFavourited ? <HeartIcon className="mr-2 mb-2 inline-flex size-7 fill-pink-500 text-pink-500 align-text-bottom" aria-label="Favourited ambition" /> : null}
                       {ambition.ambitionName}
                     </h1>
-                    <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">{ambition.ambitionDefinition || "A clear destination. Keep momentum, complete key work, and turn this ambition into a measurable outcome."}</p>
+                    <p className="max-w-3xl wrap-anywhere text-sm text-muted-foreground sm:text-base">{ambition.ambitionDefinition || "A clear destination. Keep momentum, complete key work, and turn this ambition into a measurable outcome."}</p>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">

@@ -43,8 +43,8 @@ export function FocusNextCard(props: FocusNextCardProps) {
                   onClick={() => moveDetail.open(toMoveDetail(item))}
                   aria-label={`View details of ${kind}: ${getTitle(item)}`}
                   className="block w-full cursor-pointer space-y-1 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <p className="line-clamp-2 font-medium wrap-break-word">{getTitle(item)}</p>
-                  <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getDescription(item) || "No description provided."}</p>
+                  <p className="line-clamp-2 font-medium wrap-anywhere">{getTitle(item)}</p>
+                  <p className="line-clamp-2 text-sm text-muted-foreground wrap-anywhere">{getDescription(item) || "No description provided."}</p>
                 </button>
               </div>
               <div className="flex shrink-0 flex-col items-end gap-2">

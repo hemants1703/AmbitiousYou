@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { HeartIcon, Loader2Icon, MoreVertical, PencilIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
@@ -68,6 +68,7 @@ export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownPr
               Edit ambition
             </Link>
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onClick={() => setOpenDeleteAmbitionDialog({ open: true, ambitionId: props.ambitionId })}>
             <Trash2Icon className="size-4" />
             Delete ambition

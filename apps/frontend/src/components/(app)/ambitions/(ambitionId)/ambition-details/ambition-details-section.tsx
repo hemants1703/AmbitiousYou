@@ -28,9 +28,9 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
   const overdueCount = openItems.filter((item) => getDaysUntil(getItemDate(item)) < 0).length;
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,1fr)]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,1fr)]">
       <MoveDetailProvider>
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -55,7 +55,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
         </div>
       </MoveDetailProvider>
 
-      <div className="space-y-6">
+      <div className="min-w-0 space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Ambition Health</CardTitle>
