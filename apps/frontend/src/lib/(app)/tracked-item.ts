@@ -27,6 +27,25 @@ export const emptyDraft: DraftState = { kind: "task", title: "", description: ""
 export const MOVE_TITLE_MAX_LENGTH = 255;
 
 /**
+ * The normalized, read-only shape the move detail dialog renders. Built from a full
+ * TrackedItem (via {@link toMoveDetail}) on the ambition pages, or assembled directly
+ * from a flattened cross-ambition item on the dashboard. Timestamps and `ambitionName`
+ * are optional, so a surface that genuinely lacks them simply omits those lines.
+ */
+export interface MoveDetail {
+  kind: MoveKind;
+  title: string;
+  description: string;
+  /** Deadline (task) or target date (milestone). */
+  date: Date | string;
+  completed: boolean;
+  createdAt?: Date | string | null;
+  updatedAt?: Date | string | null;
+  /** Parent ambition, shown for cross-ambition surfaces (e.g. the dashboard queue). */
+  ambitionName?: string;
+}
+
+/**
  * Color identity for each move kind, applied consistently everywhere a task or
  * milestone shows (badge, card left-stripe, picker selected-state). Task = teal
  * (calm, in your control), Milestone = fuchsia (an aspirational peak). Full literal
@@ -83,6 +102,19 @@ export function getDate(item: TrackedItem): Date | string {
 
 export function isCompleted(item: TrackedItem): boolean {
   return "taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted;
+}
+
+/** Project a persisted move into the normalized {@link MoveDetail} the detail dialog reads. */
+export function toMoveDetail(item: TrackedItem): MoveDetail {
+  return {
+    kind: getKind(item),
+    title: getTitle(item),
+    description: getDescription(item),
+    date: getDate(item),
+    completed: isCompleted(item),
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  };
 }
 
 /** Format a Date as the local-calendar `YYYY-MM-DD` a date input/picker expects. */

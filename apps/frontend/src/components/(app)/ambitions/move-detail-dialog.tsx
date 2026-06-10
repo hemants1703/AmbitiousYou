@@ -4,56 +4,55 @@ import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { formatDate, getDaysUntil, MOVE_KIND_STYLE, type MoveDetail } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
 import { CheckCircle2Icon } from "lucide-react";
 
 interface MoveDetailDialogProps {
-  item: TrackedItem | null;
+  detail: MoveDetail | null;
   onOpenChange: (open: boolean) => void;
 }
 
 /**
- * Read-only detail view for a single move. Lists every field — kind, status,
- * date, the FULL (unclamped, scrollable) description, and timestamps — so a long
- * description can be read in full, which no list surface allows (they all clamp
- * to two lines). Mutations stay on the row; this view never edits.
+ * Read-only detail view for a single move (task or milestone). Lists every field —
+ * kind, status, date, the FULL (unclamped, scrollable) description, and any
+ * timestamps — so a long description can be read in full, which no list surface
+ * allows (they all clamp). Shared across the ambition detail page and the dashboard
+ * "next moves" card; mutations stay on the rows, this view never edits.
  */
 export function MoveDetailDialog(props: MoveDetailDialogProps) {
-  const { item } = props;
+  const { detail } = props;
 
   return (
-    <Dialog open={item !== null} onOpenChange={props.onOpenChange}>
-      {item && <MoveDetailContent item={item} />}
+    <Dialog open={detail !== null} onOpenChange={props.onOpenChange}>
+      {detail && <MoveDetailContent detail={detail} />}
     </Dialog>
   );
 }
 
-function MoveDetailContent(props: { item: TrackedItem }) {
-  const { item } = props;
-  const kind = getKind(item);
-  const style = MOVE_KIND_STYLE[kind];
-  const completed = isCompleted(item);
-  const isMs = isMilestone(item);
-  const description = getDescription(item);
-  const daysUntil = getDaysUntil(getDate(item));
+function MoveDetailContent(props: { detail: MoveDetail }) {
+  const { detail } = props;
+  const style = MOVE_KIND_STYLE[detail.kind];
+  const completed = detail.completed;
+  const isMs = detail.kind === "milestone";
+  const dateLabel = isMs ? "Target" : "Due";
+  const daysUntil = getDaysUntil(detail.date);
 
-  // Reached milestones intentionally show no date (they're a moment, not a deadline) —
-  // mirrors the row. Open items and completed tasks keep their Due/Target date.
+  // Reached milestones intentionally show no date (a moment, not a deadline) — mirrors the row.
   const showDate = !(isMs && completed);
 
   const timestamp =
-    item.updatedAt && item.createdAt && new Date(item.updatedAt).getTime() !== new Date(item.createdAt).getTime()
-      ? `Updated ${formatDate(item.updatedAt)}`
-      : item.createdAt
-        ? `Added ${formatDate(item.createdAt)}`
+    detail.updatedAt && detail.createdAt && new Date(detail.updatedAt).getTime() !== new Date(detail.createdAt).getTime()
+      ? `Updated ${formatDate(detail.updatedAt)}`
+      : detail.createdAt
+        ? `Added ${formatDate(detail.createdAt)}`
         : "";
 
   return (
     <DialogContent>
       <DialogHeader className={cn("border-l-4 pl-3", style.stripe)}>
         <div className="flex flex-wrap items-center gap-2">
-          <MoveKindBadge kind={kind} />
+          <MoveKindBadge kind={detail.kind} />
           {completed ? (
             <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
               <CheckCircle2Icon className="size-3.5" />
@@ -66,20 +65,29 @@ function MoveDetailContent(props: { item: TrackedItem }) {
           )}
         </div>
 
-        <DialogTitle className="wrap-break-word">{getTitle(item)}</DialogTitle>
+        <DialogTitle className="wrap-break-word">{detail.title}</DialogTitle>
 
         {showDate ? (
           <DialogDescription>
-            {getDateLabel(item)} {formatDate(getDate(item))}
+            {dateLabel} {formatDate(detail.date)}
           </DialogDescription>
         ) : (
           <DialogDescription className="sr-only">Milestone reached</DialogDescription>
         )}
+
+        {detail.ambitionName ? (
+          <p className="text-xs text-muted-foreground">
+            in{" "}
+            <span className="font-medium text-foreground" translate="no">
+              {detail.ambitionName}
+            </span>
+          </p>
+        ) : null}
       </DialogHeader>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-        {description ? (
-          <p className="text-sm whitespace-pre-wrap text-muted-foreground wrap-break-word">{description}</p>
+        {detail.description ? (
+          <p className="text-sm whitespace-pre-wrap text-muted-foreground wrap-break-word">{detail.description}</p>
         ) : (
           <p className="text-sm text-muted-foreground italic">No description provided.</p>
         )}

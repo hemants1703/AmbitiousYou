@@ -1,12 +1,14 @@
 "use client";
 
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
+import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MOVE_KIND_STYLE } from "@/lib/(app)/tracked-item";
 import type { ItemKind } from "@/lib/dashboard/tracked-items";
-import { CheckIcon, Loader2Icon, SparklesIcon } from "lucide-react";
+import { CheckIcon, EyeIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -19,6 +21,8 @@ interface ActionQueueItemProps {
   kind: ItemKind;
   title: string;
   description: string | null;
+  /** Deadline (task) or target date (milestone) — shown in the detail dialog, not the row. */
+  date: Date;
   ambitionId: string;
   ambitionName: string;
   daysUntil: number;
@@ -34,8 +38,21 @@ function formatDue(daysUntil: number): string {
 
 export function ActionQueueItem(props: ActionQueueItemProps) {
   const router = useRouter();
+  const moveDetail = useMoveDetail();
   const [isPending, startTransition] = useTransition();
   const [done, setDone] = useState(false);
+
+  function openDetail() {
+    moveDetail.open({
+      kind: props.kind,
+      title: props.title,
+      description: props.description ?? "",
+      date: props.date,
+      // The action queue only surfaces open items.
+      completed: false,
+      ambitionName: props.ambitionName,
+    });
+  }
 
   function handleComplete() {
     if (done || isPending) return;
@@ -91,7 +108,13 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
         ) : null}
 
         <div className="flex items-start justify-between gap-2">
-          <p className={cn("min-w-0 line-clamp-2 font-medium wrap-break-word", done && "text-muted-foreground line-through")}>{props.title}</p>
+          <button
+            type="button"
+            onClick={openDetail}
+            aria-label={`View details of ${props.kind}: ${props.title}`}
+            className={cn("min-w-0 line-clamp-2 cursor-pointer rounded-md text-left font-medium wrap-break-word focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", done && "text-muted-foreground line-through")}>
+            {props.title}
+          </button>
           <Badge variant="outline" className={cn("shrink-0 tabular-nums", overdue && "border-destructive/30 bg-destructive/10 text-destructive")}>
             {formatDue(props.daysUntil)}
           </Badge>
@@ -107,6 +130,17 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
           </Link>
         </div>
       </div>
+
+      {/* Always visible so peeking the full details is discoverable (the title is also clickable). */}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="size-7 shrink-0 rounded-lg text-muted-foreground hover:text-foreground"
+        aria-label={`View details of ${props.kind}`}
+        onClick={openDetail}>
+        <EyeIcon className="size-4" />
+      </Button>
     </div>
   );
 }

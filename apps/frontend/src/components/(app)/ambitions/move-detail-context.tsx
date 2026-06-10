@@ -1,12 +1,12 @@
 "use client";
 
-import type { TrackedItem } from "@/lib/(app)/tracked-item";
+import type { MoveDetail } from "@/lib/(app)/tracked-item";
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { MoveDetailDialog } from "./move-detail-dialog";
 
 interface MoveDetailContextValue {
-  selectedMove: TrackedItem | null;
-  open: (item: TrackedItem) => void;
+  selectedDetail: MoveDetail | null;
+  open: (detail: MoveDetail) => void;
   close: () => void;
 }
 
@@ -17,29 +17,27 @@ interface MoveDetailProviderProps {
 }
 
 /**
- * Holds the single "which move is being read" state for an ambition's details
- * section and renders the one read-only detail dialog. Wrap the surfaces that
- * list moves (focus card + execution board) in this provider; any descendant
- * opens the dialog via {@link useMoveDetail} — no prop-drilling through the
- * list/board layers. Each surface opens with the `TrackedItem` it already holds
- * (the focus card uses server data, the board its optimistic copy).
+ * Holds the single "which move is being read" state for a surface that lists moves
+ * (ambition detail page or dashboard "next moves" card) and renders the one read-only
+ * detail dialog. Any descendant opens it via {@link useMoveDetail} with a normalized
+ * `MoveDetail` — no prop-drilling through the list/board layers.
  */
 export function MoveDetailProvider(props: MoveDetailProviderProps) {
-  const [selectedMove, setSelectedMove] = useState<TrackedItem | null>(null);
+  const [selectedDetail, setSelectedDetail] = useState<MoveDetail | null>(null);
 
   const value: MoveDetailContextValue = {
-    selectedMove,
-    open: (item) => setSelectedMove(item),
-    close: () => setSelectedMove(null),
+    selectedDetail,
+    open: (detail) => setSelectedDetail(detail),
+    close: () => setSelectedDetail(null),
   };
 
   return (
     <MoveDetailContext.Provider value={value}>
       {props.children}
       <MoveDetailDialog
-        item={selectedMove}
+        detail={selectedDetail}
         onOpenChange={(open) => {
-          if (!open) setSelectedMove(null);
+          if (!open) setSelectedDetail(null);
         }}
       />
     </MoveDetailContext.Provider>

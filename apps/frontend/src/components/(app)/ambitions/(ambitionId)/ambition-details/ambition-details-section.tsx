@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-card";
 import ExecutionBoard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board";
 import { FocusNextCard } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/focus-next-card";
-import { MoveDetailProvider } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/move-detail-context";
+import { MoveDetailProvider } from "@/components/(app)/ambitions/move-detail-context";
 import { getDate as getItemDate, getDaysUntil, isCompleted as isItemCompleted, sortByPriority } from "@/lib/(app)/tracked-item";
 
 type AmbitionDetailsSectionProps = {

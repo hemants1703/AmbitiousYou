@@ -5,11 +5,11 @@ import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, toMoveDetail, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
 import { CheckIcon, EyeIcon, FlagIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
-import { useMoveDetail } from "./move-detail-context";
+import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 
 interface TrackedItemRowProps {
@@ -78,7 +78,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
         <div className="min-w-0 flex-1">
           <button
             type="button"
-            onClick={() => moveDetail.open(item)}
+            onClick={() => moveDetail.open(toMoveDetail(item))}
             aria-label={`View details of ${kind}: ${getTitle(item)}`}
             className="block min-h-6 w-full cursor-pointer rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <p className={cn("font-medium wrap-break-word", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
@@ -106,7 +106,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
 
         <div className="flex flex-col items-center gap-2">
           {/* Always visible so reading the full details is discoverable (the row title is also clickable). */}
-          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`View details of ${kind}`} onClick={() => moveDetail.open(item)}>
+          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`View details of ${kind}`} onClick={() => moveDetail.open(toMoveDetail(item))}>
             <EyeIcon className="size-4" />
           </Button>
 

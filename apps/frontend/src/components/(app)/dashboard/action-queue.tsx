@@ -1,3 +1,4 @@
+import { MoveDetailProvider } from "@/components/(app)/ambitions/move-detail-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { QueueItem } from "@/lib/dashboard/tracked-items";
@@ -48,7 +49,7 @@ export function ActionQueue(props: ActionQueueProps) {
             <p className="text-sm text-muted-foreground">No open work due across your active ambitions. Enjoy the momentum — or line up something new.</p>
           </div>
         ) : (
-          <>
+          <MoveDetailProvider>
             {props.items.map((item, index) => (
               <ActionQueueItem
                 key={`${item.kind}-${item.id}`}
@@ -56,6 +57,7 @@ export function ActionQueue(props: ActionQueueProps) {
                 kind={item.kind}
                 title={item.title}
                 description={item.description}
+                date={item.date}
                 ambitionId={item.ambitionId}
                 ambitionName={item.ambitionName}
                 daysUntil={item.daysUntil}
@@ -67,7 +69,7 @@ export function ActionQueue(props: ActionQueueProps) {
                 +{remaining} more open {remaining === 1 ? "item" : "items"} across your ambitions
               </p>
             ) : null}
-          </>
+          </MoveDetailProvider>
         )}
       </CardContent>
     </Card>

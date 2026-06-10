@@ -3,10 +3,10 @@
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getDate, getDaysUntil, getDescription, getKind, getTitle, MOVE_KIND_STYLE, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { getDate, getDaysUntil, getDescription, getKind, getTitle, MOVE_KIND_STYLE, toMoveDetail, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
 import { EyeIcon } from "lucide-react";
-import { useMoveDetail } from "./move-detail-context";
+import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 
 interface FocusNextCardProps {
   items: TrackedItem[];
@@ -40,7 +40,7 @@ export function FocusNextCard(props: FocusNextCardProps) {
                 </div>
                 <button
                   type="button"
-                  onClick={() => moveDetail.open(item)}
+                  onClick={() => moveDetail.open(toMoveDetail(item))}
                   aria-label={`View details of ${kind}: ${getTitle(item)}`}
                   className="block w-full cursor-pointer space-y-1 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <p className="line-clamp-2 font-medium wrap-break-word">{getTitle(item)}</p>
@@ -51,7 +51,7 @@ export function FocusNextCard(props: FocusNextCardProps) {
                 <Badge variant="outline" className={cn("tabular-nums", daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
                   {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
                 </Badge>
-                <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`View details of ${kind}`} onClick={() => moveDetail.open(item)}>
+                <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`View details of ${kind}`} onClick={() => moveDetail.open(toMoveDetail(item))}>
                   <EyeIcon className="size-4" />
                 </Button>
               </div>
