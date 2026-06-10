@@ -1,16 +1,16 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { emptyDraft, sortByPriority, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { useTrackedItems } from "@/lib/(app)/use-tracked-items";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
-import { CheckCircle2Icon, ListChecksIcon, PlusIcon } from "lucide-react";
+import { CheckCircle2Icon, ListChecksIcon } from "lucide-react";
 import { useState } from "react";
 import type { Matcher } from "react-day-picker";
 import { ExecutionBoardDrawer } from "./execution-board-drawer";
+import { HoverExpandButton } from "./hover-expand-button";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 import { TrackedItemList } from "./tracked-item-list";
 
@@ -46,29 +46,23 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <ListChecksIcon className="size-4 text-foreground" />
-              Execution Board
-            </CardTitle>
-            <CardDescription>Your moves toward this ambition — check off tasks and reach milestones as you go.</CardDescription>
-          </div>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2">
+            <ListChecksIcon className="size-4 text-foreground" />
+            Execution Board
+          </CardTitle>
           {!adding ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
+            <HoverExpandButton
+              label="Add move"
               disabled={board.isPending}
               onClick={() => {
                 board.clearError();
                 setAdding(true);
-              }}>
-              <PlusIcon className="size-4" />
-              Add move
-            </Button>
+              }}
+            />
           ) : null}
         </div>
+        <CardDescription>Your moves toward this ambition — check off tasks and reach milestones as you go.</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-5">

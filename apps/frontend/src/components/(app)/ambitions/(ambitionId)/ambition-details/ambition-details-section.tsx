@@ -80,13 +80,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Notes</CardTitle>
-            <CardDescription>Keep detailed context available without crowding the main execution view.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <NotesCard notes={props.notes} ambitionId={props.ambition.id} ambitionName={props.ambition.ambitionName} />
-          </CardContent>
+          <NotesCard notes={props.notes} ambitionId={props.ambition.id} ambitionName={props.ambition.ambitionName} />
         </Card>
       </div>
     </div>

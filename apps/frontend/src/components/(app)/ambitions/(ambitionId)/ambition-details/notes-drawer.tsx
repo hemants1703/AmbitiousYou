@@ -111,7 +111,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
     });
   }
 
-  const triggerLabel = localNotes.length > 2 ? `View all ${localNotes.length} notes` : "Manage notes";
+  const triggerLabel = localNotes.length > 5 ? `View all ${localNotes.length} notes` : "Manage notes";
 
   return (
     <Drawer direction="top">
@@ -152,14 +152,15 @@ export default function NotesDrawer(props: NotesDrawerProps) {
           {localNotes.length === 0 ? (
             <div className="rounded-2xl border border-border/60 bg-muted/20 p-4 text-sm text-muted-foreground">No notes yet for this ambition.</div>
           ) : (
-            localNotes.map((note) => {
+            <div className="columns-1 gap-3 sm:columns-2 lg:columns-3">
+              {localNotes.map((note) => {
               const isEditing = editingId === note.id;
               const isConfirmingDelete = confirmDeleteId === note.id;
 
               return (
                 <article
                   key={note.id}
-                  className={["group rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-border/60 bg-background/50"].join(" ")}>
+                  className={["group mb-3 break-inside-avoid rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-yellow-400/40 bg-yellow-100/70 dark:border-yellow-400/15 dark:bg-yellow-400/10"].join(" ")}>
                   {isEditing ? (
                     <div className="space-y-3">
                       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Editing</p>
@@ -216,7 +217,8 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                   )}
                 </article>
               );
-            })
+            })}
+            </div>
           )}
         </div>
 

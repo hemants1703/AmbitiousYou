@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { emptyDraft, getDescription, getTitle, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { getDescription, getTitle, type TrackedItem } from "@/lib/(app)/tracked-item";
 import type { UseTrackedItemsResult } from "@/lib/(app)/use-tracked-items";
-import { ListChecksIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { ListChecksIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 import type { Matcher } from "react-day-picker";
-import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 import { TrackedItemList } from "./tracked-item-list";
 
 const PAGE_SIZE = 50;
@@ -32,8 +31,6 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
   const [query, setQuery] = useState("");
   const [visibleOpen, setVisibleOpen] = useState(PAGE_SIZE);
   const [visibleCompleted, setVisibleCompleted] = useState(PAGE_SIZE);
-  const [adding, setAdding] = useState(false);
-  const [newDraft, setNewDraft] = useState<DraftState>(emptyDraft);
 
   const filteredOpen = filterItems(board.openItems, query);
   const filteredCompleted = filterItems(board.completedItems, query);
@@ -44,12 +41,6 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
     setQuery(nextQuery);
     setVisibleOpen(PAGE_SIZE);
     setVisibleCompleted(PAGE_SIZE);
-  }
-
-  function handleCreate() {
-    board.create(newDraft);
-    setNewDraft(emptyDraft);
-    setAdding(false);
   }
 
   return (
@@ -83,41 +74,10 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
             </div>
           ) : null}
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative flex-1">
-              <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="search" inputMode="search" aria-label="Search moves" placeholder="Search moves…" value={query} onChange={(event) => resetWindows(event.target.value)} className="pl-9" />
-            </div>
-            {!adding ? (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={board.isPending}
-                onClick={() => {
-                  board.clearError();
-                  setAdding(true);
-                }}>
-                <PlusIcon className="size-4" />
-                Add move
-              </Button>
-            ) : null}
+          <div className="relative">
+            <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input type="search" inputMode="search" aria-label="Search moves" placeholder="Search moves…" value={query} onChange={(event) => resetWindows(event.target.value)} className="pl-9" />
           </div>
-
-          {adding ? (
-            <TrackedItemDraftEditor
-              label="New move"
-              draft={newDraft}
-              dateDisabled={props.dateDisabled}
-              isPending={board.isPending}
-              onChange={setNewDraft}
-              onSubmit={handleCreate}
-              onCancel={() => {
-                setAdding(false);
-                setNewDraft(emptyDraft);
-              }}
-            />
-          ) : null}
 
           <Tabs defaultValue="open" className="flex min-h-0 flex-1 flex-col">
             <TabsList className="w-full">
