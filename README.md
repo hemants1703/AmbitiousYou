@@ -17,11 +17,16 @@ A full-stack goal & progress-tracking platform that turns big, vague ambitions i
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
   <img src="https://img.shields.io/badge/Drizzle_ORM-C5F74F?style=flat-square&logo=drizzle&logoColor=black" alt="Drizzle ORM" />
   <img src="https://img.shields.io/badge/Tailwind_v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions" />
+  <img src="https://img.shields.io/badge/nginx-009639?style=flat-square&logo=nginx&logoColor=white" alt="nginx" />
 </p>
 
 <p>
   <a href="#-getting-started">Getting Started</a> ·
   <a href="#-architecture">Architecture</a> ·
+  <a href="#-deployment--infrastructure">Deployment</a> ·
+  <a href="#-security">Security</a> ·
   <a href="#-engineering-highlights">Engineering Highlights</a> ·
   <a href="#-data-model">Data Model</a> ·
   <a href="#-about-the-author">Author</a>
@@ -99,10 +104,11 @@ The parts I'm most proud of — each one is a deliberate decision, not an accide
 </td><td valign="top">
 
 **Tooling & Infra**
-- **pnpm** workspace monorepo
-- ESLint 9 + Prettier
-- Graceful shutdown (SIGTERM/SIGINT → pool drain)
-- Strict, accessibility-first UI rule set (`AGENTS.md`)
+- **pnpm** workspace monorepo · ESLint 9 + Prettier
+- **Docker** (multi-stage) · **GitHub Actions** CI/CD
+- **nginx** blue-green · **Let's Encrypt** · DigitalOcean VPS
+- **Vercel** (frontend) · **Supabase** Postgres
+- Graceful shutdown (SIGTERM → pool drain)
 
 </td></tr>
 </table>
@@ -151,6 +157,78 @@ flowchart LR
 **Request lifecycle (a typical mutation):** a client component calls a typed **Server Action** → the action attaches the session token and `POST`/`PATCH`es the NestJS API → `SessionGuard` validates the token → the feature service runs the write inside a **transaction**, recalculating derived state atomically → the action `revalidatePath()`s the affected routes and the UI reconciles.
 
 **Why Drizzle, SQL-first:** services import a process-wide `db` client and write queries that read like SQL (`db.select().from().innerJoin().where()`), use explicit transactions for multi-entity creates, and prefer a single filtered aggregate over multiple count queries. No relational-builder magic, no hidden N+1s — the data access is exactly what you'd expect from the SQL.
+
+---
+
+## 🚢 Deployment & Infrastructure
+
+Two environments, fully automated, **zero-downtime** — every `git push` ships. The frontend rides Vercel's git integration; the backend runs as a Docker container on a self-managed Linux VPS, deployed by a hand-built CI/CD pipeline with a blue-green swap behind nginx.
+
+```mermaid
+flowchart LR
+    PUSH["git push<br/>(dev / main)"]
+
+    subgraph GHA["GitHub Actions"]
+        direction TB
+        MIG["migrate Supabase<br/>(drizzle-kit)"]
+        BUILD["build multi-stage<br/>Docker image"]
+        GHCR["push → GHCR"]
+        MIG --> BUILD --> GHCR
+    end
+
+    subgraph VPS["DigitalOcean VPS"]
+        direction TB
+        NGINX["nginx + Let's Encrypt TLS"]
+        SWAP["blue-green swap<br/>health-gated"]
+        CTR["NestJS container :3001"]
+        NGINX --> SWAP --> CTR
+    end
+
+    VERCEL["Vercel — frontend"]
+    SUPA[("Supabase<br/>PostgreSQL")]
+
+    PUSH --> GHA
+    PUSH --> VERCEL
+    GHCR -->|"scp + SSH"| NGINX
+    CTR --> SUPA
+    MIG -.-> SUPA
+```
+
+| Surface | Production | Development |
+|---|---|---|
+| Frontend (Vercel) | `www.ambitiousyou.pro` | `dev.ambitiousyou.pro` |
+| Backend (VPS) | `api.ambitiousyou.pro` | `api.dev.ambitiousyou.pro` |
+| Database (Supabase) | prod project | dev project |
+
+**Zero-downtime blue-green swap.** On deploy, the new image starts on an *idle* port (prod `3001`↔`3002`, dev `3101`↔`3102`) while the current container keeps serving. Only after the new one passes a **DB-aware `/health` check** does nginx's upstream get rewritten and gracefully reloaded — then the old container is drained (`SIGTERM`, 30s grace) and removed. A failed health check **aborts the deploy and leaves production untouched**.
+
+**Multi-stage Docker image.** A `node:22-bookworm-slim` build stage compiles the shared package + backend and prunes to production-only dependencies (`pnpm deploy`); the runtime stage ships only `dist/` + pruned `node_modules`, runs as a **non-root user**, and declares a container `HEALTHCHECK`.
+
+**The pipeline** (`.github/workflows/deploy-backend.yml`): `git push` → verify DB connectivity → run migrations → build & push the image to GHCR → `scp` the deploy script → SSH-trigger the blue-green swap. The branch picks the target — `dev` → dev, `main` → prod — each against its own Supabase project and env file.
+
+**Hardened host.** The Ubuntu VPS is provisioned by one idempotent script (`infra/setup-vps.sh`): Docker, nginx, Certbot, a `ufw` firewall (22/80/443 only), fail2ban, swap, **key-only SSH**, and a least-privilege deploy user whose `sudo` is scoped to *just* the nginx reload. Runtime secrets are injected from host env files — never baked into the image or committed.
+
+---
+
+## 🔒 Security
+
+Defense-in-depth, enforced by the design rather than by remembering to.
+
+**Rate limiting** — `@nestjs/throttler`, per-IP and proxy-aware (`trust proxy`):
+
+| Scope | Limit |
+|---|---|
+| Global (every route) | **100** req / min |
+| `POST /auth/register`, `/auth/login` | **5** req / min |
+| `/auth/forgot-password`, verify-email resend | **3** req / min |
+
+- **Sessions, not JWTs** — server-issued **opaque UUID** tokens in PostgreSQL, 7-day TTL, **instantly revocable**, auto-deleted on expiry, validated on every protected request.
+- **Password handling** — `bcrypt` (cost 10) + a **default-deny column projection** that makes it *physically impossible* for a public query to return the hash; only the login path opts in.
+- **Cookies** — `httpOnly` + `sameSite=lax` + `secure` (production), 7-day max-age.
+- **Hard input contract** — global `ValidationPipe` (`whitelist + forbidNonWhitelisted + transform`) rejects any unknown field with a 400.
+- **HTTP hardening** — Helmet headers, per-user ownership checks on every write, **non-enumerating** password recovery, and a reset that invalidates all sessions.
+- **No CORS attack surface** — all browser→backend traffic goes through server-side Server Actions / route handlers, so the API isn't exposed to cross-origin browser calls.
+- **Transport & operations** — TLS everywhere (Let's Encrypt), runtime-injected secrets, and a graceful shutdown that drains the connection pool on every rollover.
 
 ---
 
@@ -383,6 +461,12 @@ Signup fires a fire-and-forget **Azure Communication Services** verification ema
 
 ## 🗺 Roadmap
 
+**AI features** — planned; full build spec in [`docs/AI-ROADMAP.md`](docs/AI-ROADMAP.md):
+- 🧩 **AI goal breakdown** — an LLM decomposes an ambition into structured tasks & milestones with deadlines (tool-calling + schema-validated output).
+- 💬 **RAG assistant** — chat grounded in *your own* ambitions, tasks & notes via pgvector semantic search.
+- 🧭 **AI progress coach** — scheduled, personalized insights & nudges on your goals.
+
+**Product:**
 - 📊 Richer analytics & time-investment insights across ambitions
 - 🔔 Push reminders & digest emails (transactional auth emails — verify, welcome, password reset — already ship via Azure Communication Services)
 - 📱 Native mobile apps
