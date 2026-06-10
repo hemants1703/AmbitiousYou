@@ -5,11 +5,11 @@ import { defineConfig } from 'drizzle-kit';
 // precedence (first wins): `.env` is gitignored and usually absent, so we load
 // the committed `.env.development` too — plain `dotenv/config` reads only
 // `.env`, which would leave DATABASE_URL unset. Missing files are skipped.
-config({ path: ['.env.development', '.env.production', '.env'] });
+config({ path: ['.env.local', '.env.development', '.env.production', '.env'] });
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
-  throw new Error('DATABASE_URL must be set to run drizzle-kit (check apps/backend/.env.development)');
+  throw new Error('DATABASE_URL must be set to run drizzle-kit (check apps/backend/.env.local)');
 }
 
 export default defineConfig({

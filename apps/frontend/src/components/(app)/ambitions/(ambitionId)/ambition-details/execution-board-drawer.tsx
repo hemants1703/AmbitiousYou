@@ -53,9 +53,9 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
   }
 
   return (
-    <Drawer direction="top">
+    <Drawer direction="right">
       <DrawerTrigger asChild>
-        <Button variant="outline" className="w-full rounded-2xl">
+        <Button variant="outline" className="w-full">
           <Icon className="size-4" />
           {triggerLabel}
         </Button>

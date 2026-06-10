@@ -11,6 +11,7 @@ import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { parseISO } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 export interface UseTrackedItemsParams {
   ambitionId: string;
@@ -151,8 +152,10 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
       if (result.error) {
         setError(result.error);
         setItems(snapshot);
+        toast.error(`Failed to update ${noun} status. Please try again.`);
       } else {
         router.refresh();
+        toast.success(`${noun[0].toUpperCase() + noun.slice(1)} marked as ${isCompleted(item) ? "not completed" : "completed"}.`);
       }
     });
   }

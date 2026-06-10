@@ -8,10 +8,10 @@ import { config } from 'dotenv';
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
-config({ path: ['.env.development', '.env.production', '.env'] });
+config({ path: ['.env.local', '.env.development', '.env.production', '.env'] });
 
 if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL must be set (check apps/backend/.env.development)');
+  throw new Error('DATABASE_URL must be set (check apps/backend/.env.local)');
 }
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });

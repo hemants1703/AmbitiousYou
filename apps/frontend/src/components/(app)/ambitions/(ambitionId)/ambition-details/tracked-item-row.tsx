@@ -35,18 +35,16 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
 
   if (props.isEditing) {
     return (
-      <div className="rounded-2xl border border-primary/30 bg-background/50 p-4">
-        <TrackedItemDraftEditor
-          label={`Editing ${props.noun}`}
-          draft={props.editDraft}
-          noun={props.noun}
-          disabledBefore={props.disabledBefore}
-          isPending={props.isPending}
-          onChange={props.onEditChange}
-          onSubmit={props.onSaveEdit}
-          onCancel={props.onCancelEdit}
-        />
-      </div>
+      <TrackedItemDraftEditor
+        label={`Editing ${props.noun}`}
+        draft={props.editDraft}
+        noun={props.noun}
+        disabledBefore={props.disabledBefore}
+        isPending={props.isPending}
+        onChange={props.onEditChange}
+        onSubmit={props.onSaveEdit}
+        onCancel={props.onCancelEdit}
+      />
     );
   }
 
@@ -69,7 +67,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
   }
 
   return (
-    <div className="group rounded-2xl border border-border/60 p-3">
+    <div className="group rounded-2xl bg-background border border-border/60 p-3">
       <div className="flex items-start gap-3">
         <CompletionControl item={item} isMilestone={isMilestone} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
 
@@ -79,30 +77,33 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
           {isMilestone && completed ? (
             <p className="mt-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">Reached</p>
           ) : (
-            <p className="mt-1 text-xs text-muted-foreground">
-              {props.noun === "task" ? "Due" : "Target"} {formatDate(getDate(item))}
-            </p>
+            <div className="mt-1 flex items-center gap-2">
+              <p className="text-xs text-muted-foreground">
+                {props.noun === "task" ? "Due" : "Target"} {formatDate(getDate(item))}
+              </p>
+              {!completed && (
+                <Badge variant="outline" className={cn("hidden sm:inline-flex", daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
+                  {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
+                </Badge>
+              )}
+            </div>
           )}
         </div>
 
-        <div className="flex items-center gap-1">
-          {!completed && (
-            <Badge variant="outline" className={cn("hidden sm:inline-flex", daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
-              {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
-            </Badge>
-          )}
-          <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
-            {/* Reached milestones are locked achievements — no editing, only removal. */}
-            {!(isMilestone && completed) && (
-              <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`Edit ${props.noun}`} disabled={props.isPending} onClick={props.onStartEdit}>
-                <PencilIcon className="size-3.5" />
-              </Button>
-            )}
-            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-destructive" aria-label={`Delete ${props.noun}`} disabled={props.isPending} onClick={props.onStartDelete}>
-              <XIcon className="size-3.5" />
+        {/* <div className="flex items-center gap-1"> */}
+        <div className="flex flex-col items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
+          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-white! hover:bg-red-500!" aria-label={`Delete ${props.noun}`} disabled={props.isPending} onClick={props.onStartDelete}>
+            <XIcon className="size-4" />
+          </Button>
+
+          {/* Reached milestones are locked achievements — no editing, only removal. */}
+          {!(isMilestone && completed) && (
+            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-background hover:bg-foreground!" aria-label={`Edit ${props.noun}`} disabled={props.isPending} onClick={props.onStartEdit}>
+              <PencilIcon className="size-3.5" />
             </Button>
-          </div>
+          )}
         </div>
+        {/* </div> */}
       </div>
     </div>
   );
@@ -128,7 +129,7 @@ function CompletionControl(props: CompletionControlProps) {
         checked={props.completed}
         disabled={props.isPending}
         onCheckedChange={props.onToggle}
-        className="mt-0.5"
+        className="mt-0.5 rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
         aria-label={props.completed ? "Mark task as not completed" : "Mark task as completed"}
       />
     );
