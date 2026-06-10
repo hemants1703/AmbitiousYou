@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
-import { CheckIcon, FlagIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
+import { CheckIcon, EyeIcon, FlagIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
+import { useMoveDetail } from "./move-detail-context";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 
 interface TrackedItemRowProps {
@@ -30,6 +31,7 @@ interface TrackedItemRowProps {
 
 export function TrackedItemRow(props: TrackedItemRowProps) {
   const { item } = props;
+  const moveDetail = useMoveDetail();
   const completed = isCompleted(item);
   const isMs = isMilestone(item);
   const kind = getKind(item);
@@ -74,8 +76,14 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
         <CompletionControl item={item} isMilestone={isMs} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
 
         <div className="min-w-0 flex-1">
-          <p className={cn("font-medium wrap-break-word", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
-          {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getDescription(item)}</p> : null}
+          <button
+            type="button"
+            onClick={() => moveDetail.open(item)}
+            aria-label={`View details of ${kind}: ${getTitle(item)}`}
+            className="block min-h-6 w-full cursor-pointer rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <p className={cn("font-medium wrap-break-word", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
+            {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getDescription(item)}</p> : null}
+          </button>
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <MoveKindBadge kind={kind} />
@@ -96,17 +104,24 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
-          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-white! hover:bg-red-500!" aria-label={`Delete ${kind}`} disabled={props.isPending} onClick={props.onStartDelete}>
-            <XIcon className="size-4" />
+        <div className="flex flex-col items-center gap-2">
+          {/* Always visible so reading the full details is discoverable (the row title is also clickable). */}
+          <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label={`View details of ${kind}`} onClick={() => moveDetail.open(item)}>
+            <EyeIcon className="size-4" />
           </Button>
 
-          {/* Reached milestones are locked achievements — no editing, only removal. */}
-          {!(isMs && completed) && (
-            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-background hover:bg-foreground!" aria-label={`Edit ${kind}`} disabled={props.isPending} onClick={props.onStartEdit}>
-              <PencilIcon className="size-3.5" />
+          <div className="flex flex-col items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
+            <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-white! hover:bg-red-500!" aria-label={`Delete ${kind}`} disabled={props.isPending} onClick={props.onStartDelete}>
+              <XIcon className="size-4" />
             </Button>
-          )}
+
+            {/* Reached milestones are locked achievements — no editing, only removal. */}
+            {!(isMs && completed) && (
+              <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-background hover:bg-foreground!" aria-label={`Edit ${kind}`} disabled={props.isPending} onClick={props.onStartEdit}>
+                <PencilIcon className="size-3.5" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

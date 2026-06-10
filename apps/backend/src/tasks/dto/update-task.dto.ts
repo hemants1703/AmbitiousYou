@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 // Standalone on purpose: extending PartialType(CreateTaskDto) pulled in `ambitionId`
 // (which defaults to '') and failed @IsNotEmpty on every update, since the update body
@@ -7,6 +7,7 @@ import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-valid
 export class UpdateTaskDto {
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255, { message: 'task must be 255 characters or fewer' })
   task: string = '';
 
   @IsString()

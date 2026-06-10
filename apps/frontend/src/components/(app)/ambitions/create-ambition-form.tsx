@@ -19,6 +19,7 @@ import { format, parseISO } from "date-fns";
 import { createAmbitionAction } from "@/lib/actions/(app)/ambitions/create-ambition";
 import { createAmbitionInitialState } from "@/lib/actions/(app)/ambitions/create-ambition-state";
 import { clearDraft, draftHasContent, loadDraft, saveDraft, type MoveDraft, type MoveKind } from "@/lib/(app)/create-ambition-draft";
+import { MOVE_TITLE_MAX_LENGTH } from "@/lib/(app)/tracked-item";
 
 const AMBITION_NAME_MAX_LENGTH = 80;
 
@@ -364,10 +365,17 @@ export default function CreateAmbitionForm() {
                       {/* Right: the move's details. */}
                       <div className="space-y-4">
                         <div className="space-y-2">
-                          <FieldLabel htmlFor={titleName} tooltip={isTask ? "Keep the title action-oriented and specific." : "Keep the title specific to the outcome you want to reach."}>
-                            {isTask ? "Task title" : "Milestone title"}
-                          </FieldLabel>
-                          <Input id={titleName} name={titleName} value={move.title} onChange={(event) => updateMove(move.id, "title", event.target.value)} placeholder={isTask ? "Complete the first two weeks of the habit…" : "Land a 12 LPA job…"} />
+                          <div className="flex items-center justify-between gap-2">
+                            <FieldLabel htmlFor={titleName} tooltip={isTask ? "Keep the title action-oriented and specific." : "Keep the title specific to the outcome you want to reach."}>
+                              {isTask ? "Task title" : "Milestone title"}
+                            </FieldLabel>
+                            {move.title.length >= MOVE_TITLE_MAX_LENGTH - 20 ? (
+                              <span className="text-xs tabular-nums text-muted-foreground" aria-live="polite">
+                                {move.title.length}/{MOVE_TITLE_MAX_LENGTH}
+                              </span>
+                            ) : null}
+                          </div>
+                          <Input id={titleName} name={titleName} value={move.title} onChange={(event) => updateMove(move.id, "title", event.target.value)} placeholder={isTask ? "Complete the first two weeks of the habit…" : "Land a 12 LPA job…"} maxLength={MOVE_TITLE_MAX_LENGTH} />
                         </div>
 
                         <div className="space-y-2">

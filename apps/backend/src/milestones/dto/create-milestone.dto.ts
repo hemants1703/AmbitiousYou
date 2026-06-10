@@ -1,6 +1,6 @@
 import { NewMilestone } from '@ambitiousyou/shared';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateMilestoneDto implements NewMilestone {
   @IsString()
@@ -9,6 +9,7 @@ export class CreateMilestoneDto implements NewMilestone {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255, { message: 'milestone must be 255 characters or fewer' })
   milestone: string = '';
 
   @IsString()

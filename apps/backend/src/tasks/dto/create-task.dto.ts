@@ -1,6 +1,6 @@
 import { NewTask } from '@ambitiousyou/shared';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateTaskDto implements NewTask {
   @IsString()
@@ -9,6 +9,7 @@ export class CreateTaskDto implements NewTask {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255, { message: 'task must be 255 characters or fewer' })
   task: string = '';
 
   @IsString()

@@ -23,6 +23,9 @@ export type DraftState = {
 
 export const emptyDraft: DraftState = { kind: "task", title: "", description: "", date: "" };
 
+/** Max title length for a move — mirrors varchar(255) on tasks.task / milestones.milestone. */
+export const MOVE_TITLE_MAX_LENGTH = 255;
+
 /**
  * Color identity for each move kind, applied consistently everywhere a task or
  * milestone shows (badge, card left-stripe, picker selected-state). Task = teal

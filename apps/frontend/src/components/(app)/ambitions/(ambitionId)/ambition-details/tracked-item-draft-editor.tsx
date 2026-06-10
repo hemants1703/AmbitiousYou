@@ -6,7 +6,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { toDateInputValue, toSelectedDate, type DraftState } from "@/lib/(app)/tracked-item";
+import { MOVE_TITLE_MAX_LENGTH, toDateInputValue, toSelectedDate, type DraftState } from "@/lib/(app)/tracked-item";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
@@ -42,10 +42,16 @@ export function TrackedItemDraftEditor(props: TrackedItemDraftEditorProps) {
         value={draft.title}
         onChange={(event) => onChange({ ...draft, title: event.target.value })}
         placeholder={isTask ? "Task title" : "Milestone title"}
+        maxLength={MOVE_TITLE_MAX_LENGTH}
         onKeyDown={(event) => {
           if (event.key === "Escape") props.onCancel();
         }}
       />
+      {draft.title.length >= MOVE_TITLE_MAX_LENGTH - 20 ? (
+        <p className="text-right text-xs tabular-nums text-muted-foreground" aria-live="polite">
+          {draft.title.length}/{MOVE_TITLE_MAX_LENGTH}
+        </p>
+      ) : null}
 
       <Popover>
         <PopoverTrigger asChild>
