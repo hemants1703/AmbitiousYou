@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png" alt="AmbitiousYou" width="100%" />
+<img src="https://res.cloudinary.com/dej4ks4wd/image/upload/v1781083117/OG_IMAGE_AY.png" alt="AmbitiousYou" width="100%" />
 
 # AmbitiousYou
 
