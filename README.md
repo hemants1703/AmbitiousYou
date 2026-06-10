@@ -9,7 +9,7 @@
 A full-stack goal & progress-tracking platform that turns big, vague ambitions into structured, measurable plans — and keeps the numbers honest by computing progress on the server, inside the same transaction as every change.
 
 <p>
-  <!-- <a href="https://www.ambitiousyou.pro"><img src="https://img.shields.io/badge/Live-www.ambitiousyou.pro-64ccc5?style=flat-square&logo=vercel&logoColor=white" alt="Live site" /></a> -->
+  <a href="https://www.ambitiousyou.pro"><img src="https://img.shields.io/badge/Live-www.ambitiousyou.pro-64ccc5?style=flat-square&logo=vercel&logoColor=white" alt="Live site" /></a>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Next.js%2016-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/React%2019-149ECA?style=flat-square&logo=react&logoColor=white" alt="React 19" />
