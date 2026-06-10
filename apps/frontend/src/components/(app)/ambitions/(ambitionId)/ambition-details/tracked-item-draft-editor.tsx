@@ -1,15 +1,14 @@
 "use client";
 
+import { MoveKindSelector } from "@/components/(app)/ambitions/move-kind-selector";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { toDateInputValue, toSelectedDate, type DraftState, type MoveKind } from "@/lib/(app)/tracked-item";
+import { toDateInputValue, toSelectedDate, type DraftState } from "@/lib/(app)/tracked-item";
 import { format } from "date-fns";
-import { CalendarIcon, CircleHelpIcon, FlagIcon, ListTodoIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
 
 interface TrackedItemDraftEditorProps {
@@ -32,40 +31,11 @@ export function TrackedItemDraftEditor(props: TrackedItemDraftEditorProps) {
 
   return (
     <div className="space-y-3 rounded-2xl border border-primary/30 bg-background/50 p-4">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{props.label}</p>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              aria-label="What is the difference between a task and a milestone?"
-              className="inline-flex size-4 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-              <CircleHelpIcon className="size-3.5" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent className="max-w-xs">
-            <span className="font-medium text-foreground">Task</span> — a concrete to-do you can check and uncheck anytime. <span className="font-medium text-foreground">Milestone</span> — a one-time achievement; marking it reached is permanent.
-          </TooltipContent>
-        </Tooltip>
-      </div>
+      <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{props.label}</p>
 
-      <ToggleGroup
-        type="single"
-        value={draft.kind}
-        onValueChange={(value) => {
-          if (value) onChange({ ...draft, kind: value as MoveKind });
-        }}
-        disabled={props.lockKind}
-        className="grid w-full grid-cols-2 gap-2">
-        <ToggleGroupItem value="task" variant="outline" aria-label="Task" className="gap-1.5 data-[state=on]:border-primary data-[state=on]:bg-primary/5">
-          <ListTodoIcon className="size-4" />
-          Task
-        </ToggleGroupItem>
-        <ToggleGroupItem value="milestone" variant="outline" aria-label="Milestone" className="gap-1.5 data-[state=on]:border-primary data-[state=on]:bg-primary/5">
-          <FlagIcon className="size-4" />
-          Milestone
-        </ToggleGroupItem>
-      </ToggleGroup>
+      {/* Editing keeps the kind fixed — the label ("Editing task/milestone") already states it,
+          so the descriptive picker only shows when adding a new move. */}
+      {!props.lockKind ? <MoveKindSelector value={draft.kind} onValueChange={(kind) => onChange({ ...draft, kind })} /> : null}
 
       <Input
         autoFocus

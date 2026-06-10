@@ -23,6 +23,30 @@ export type DraftState = {
 
 export const emptyDraft: DraftState = { kind: "task", title: "", description: "", date: "" };
 
+/**
+ * Color identity for each move kind, applied consistently everywhere a task or
+ * milestone shows (badge, card left-stripe, picker selected-state). Task = teal
+ * (calm, in your control), Milestone = fuchsia (an aspirational peak). Full literal
+ * Tailwind strings so the JIT keeps them, and `text-600/dark:text-400` so the hue
+ * reads the same in light and dark mode.
+ */
+export const MOVE_KIND_STYLE: Record<MoveKind, { label: string; text: string; badge: string; stripe: string; selected: string }> = {
+  task: {
+    label: "Task",
+    text: "text-teal-600 dark:text-teal-400",
+    badge: "border-teal-500/30 bg-teal-500/10 text-teal-700 dark:text-teal-300",
+    stripe: "border-l-teal-500",
+    selected: "data-[state=on]:border-teal-500 data-[state=on]:bg-teal-500/5",
+  },
+  milestone: {
+    label: "Milestone",
+    text: "text-fuchsia-600 dark:text-fuchsia-400",
+    badge: "border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300",
+    stripe: "border-l-fuchsia-500",
+    selected: "data-[state=on]:border-fuchsia-500 data-[state=on]:bg-fuchsia-500/5",
+  },
+};
+
 export function isMilestone(item: TrackedItem): item is Milestone {
   return "milestone" in item;
 }

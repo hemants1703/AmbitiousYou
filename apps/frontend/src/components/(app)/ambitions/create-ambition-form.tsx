@@ -8,10 +8,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import * as Select from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { MoveKindSelector } from "@/components/(app)/ambitions/move-kind-selector";
 import { cn } from "@/lib/utils";
-import { ArrowRightIcon, CalendarIcon, CalendarRangeIcon, CircleHelpIcon, FlagIcon, FlameIcon, ListTodoIcon, PlusIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
+import { ArrowRightIcon, CalendarIcon, CalendarRangeIcon, CircleHelpIcon, FlameIcon, PlusIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
 import { useActionState, useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import type { DateRange, Matcher } from "react-day-picker";
@@ -23,9 +23,6 @@ import { clearDraft, draftHasContent, loadDraft, saveDraft, type MoveDraft, type
 const AMBITION_NAME_MAX_LENGTH = 80;
 
 type Priority = "low" | "medium" | "high";
-
-const MOVE_KIND_TOOLTIP =
-  "A move is either a Task or a Milestone. Task — a concrete to-do you can check and uncheck anytime. Milestone — a one-time achievement; marking it reached is permanent.";
 
 type FieldLabelProps = Omit<ComponentProps<typeof Label>, "children"> & {
   children: string;
@@ -352,74 +349,51 @@ export default function CreateAmbitionForm() {
               <div className="space-y-3">
                 {encodedMoves.map(({ move, isTask, titleName, dateName, descriptionName }, index) => (
                   <div key={move.id} className="rounded-2xl border border-border/60 p-4">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-muted-foreground">Move {index + 1}</p>
-                        <ToggleGroup
-                          type="single"
-                          value={move.kind}
-                          onValueChange={(value) => {
-                            if (value) setMoveKind(move.id, value as MoveKind);
-                          }}
-                          className="gap-1">
-                          <ToggleGroupItem value="task" variant="outline" aria-label="Track as a task" className="h-8 gap-1.5 px-2.5 text-xs data-[state=on]:border-primary data-[state=on]:bg-primary/5">
-                            <ListTodoIcon className="size-3.5" />
-                            Task
-                          </ToggleGroupItem>
-                          <ToggleGroupItem value="milestone" variant="outline" aria-label="Track as a milestone" className="h-8 gap-1.5 px-2.5 text-xs data-[state=on]:border-primary data-[state=on]:bg-primary/5">
-                            <FlagIcon className="size-3.5" />
-                            Milestone
-                          </ToggleGroupItem>
-                        </ToggleGroup>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <button
-                              type="button"
-                              aria-label="What is the difference between a task and a milestone?"
-                              className="inline-flex size-4 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-                              <CircleHelpIcon className="size-3.5" />
-                            </button>
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">{MOVE_KIND_TOOLTIP}</TooltipContent>
-                        </Tooltip>
-                      </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-medium text-muted-foreground">Move {index + 1}</p>
 
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeMove(move.id)} aria-label={`Remove move ${index + 1}`} className="size-8 rounded-full" disabled={moves.length === 1}>
                         <Trash2Icon className="size-4" />
                       </Button>
                     </div>
 
-                    <div className="mt-4 grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <FieldLabel htmlFor={titleName} tooltip={isTask ? "Keep the title action-oriented and specific." : "Keep the title specific to the outcome you want to reach."}>
-                          {isTask ? "Task title" : "Milestone title"}
-                        </FieldLabel>
-                        <Input id={titleName} name={titleName} value={move.title} onChange={(event) => updateMove(move.id, "title", event.target.value)} placeholder={isTask ? "Complete the first two weeks of the habit…" : "Land a 12 LPA job…"} />
-                      </div>
+                    <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                      {/* Left: pick the kind, with inline explanations of task vs milestone. */}
+                      <MoveKindSelector value={move.kind} onValueChange={(kind) => setMoveKind(move.id, kind)} className="grid grid-cols-1 gap-2" />
 
-                      <div className="space-y-2">
-                        <FieldLabel htmlFor={dateName} tooltip={`Pick the date this ${isTask ? "task should be done" : "milestone should be reached"} by — it must fall within the ambition's date range.`}>
-                          {isTask ? "Task deadline" : "Target date"}
-                        </FieldLabel>
-                        <input name={dateName} type="hidden" value={move.date} />
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button type="button" variant="outline" data-empty={!move.date} className="w-full justify-start bg-background text-left font-normal data-[empty=true]:text-muted-foreground">
-                              <CalendarIcon />
-                              {move.date ? format(toSelectedDate(move.date) ?? new Date(move.date), "PPP") : <span>{isTask ? "Pick a deadline" : "Pick a target date"}</span>}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <Calendar mode="single" selected={toSelectedDate(move.date)} onSelect={(selectedDate) => updateMove(move.id, "date", selectedDate ? toDateInputValue(selectedDate) : "")} disabled={itemDateDisabled} />
-                          </PopoverContent>
-                        </Popover>
-                      </div>
+                      {/* Right: the move's details. */}
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <FieldLabel htmlFor={titleName} tooltip={isTask ? "Keep the title action-oriented and specific." : "Keep the title specific to the outcome you want to reach."}>
+                            {isTask ? "Task title" : "Milestone title"}
+                          </FieldLabel>
+                          <Input id={titleName} name={titleName} value={move.title} onChange={(event) => updateMove(move.id, "title", event.target.value)} placeholder={isTask ? "Complete the first two weeks of the habit…" : "Land a 12 LPA job…"} />
+                        </div>
 
-                      <div className="space-y-2 md:col-span-2">
-                        <FieldLabel htmlFor={descriptionName} tooltip="Optional context, acceptance criteria, or extra notes for this move.">
-                          {isTask ? "Task description" : "Milestone description"}
-                        </FieldLabel>
-                        <Textarea id={descriptionName} name={descriptionName} value={move.description} onChange={(event) => updateMove(move.id, "description", event.target.value)} placeholder="Optional context, acceptance criteria, or notes…" rows={3} />
+                        <div className="space-y-2">
+                          <FieldLabel htmlFor={dateName} tooltip={`Pick the date this ${isTask ? "task should be done" : "milestone should be reached"} by — it must fall within the ambition's date range.`}>
+                            {isTask ? "Task deadline" : "Target date"}
+                          </FieldLabel>
+                          <input name={dateName} type="hidden" value={move.date} />
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button type="button" variant="outline" data-empty={!move.date} className="w-full justify-start bg-background text-left font-normal data-[empty=true]:text-muted-foreground">
+                                <CalendarIcon />
+                                {move.date ? format(toSelectedDate(move.date) ?? new Date(move.date), "PPP") : <span>{isTask ? "Pick a deadline" : "Pick a target date"}</span>}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar mode="single" selected={toSelectedDate(move.date)} onSelect={(selectedDate) => updateMove(move.id, "date", selectedDate ? toDateInputValue(selectedDate) : "")} disabled={itemDateDisabled} />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+
+                        <div className="space-y-2">
+                          <FieldLabel htmlFor={descriptionName} tooltip="Optional context, acceptance criteria, or extra notes for this move.">
+                            {isTask ? "Task description" : "Milestone description"}
+                          </FieldLabel>
+                          <Textarea id={descriptionName} name={descriptionName} value={move.description} onChange={(event) => updateMove(move.id, "description", event.target.value)} placeholder="Optional context, acceptance criteria, or notes…" rows={3} />
+                        </div>
                       </div>
                     </div>
                   </div>

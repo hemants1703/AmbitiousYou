@@ -1,11 +1,13 @@
 "use client";
 
 import { MotionWrapper } from "@/components/motion-wrapper";
+import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as Card from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
+import { MOVE_KIND_STYLE } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRef } from "react";
@@ -167,6 +169,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                   {items.map((item, index) => {
                     const originallyCompleted = "taskCompleted" in item ? (item.taskCompleted ?? false) : "milestoneCompleted" in item ? (item.milestoneCompleted ?? false) : false;
                     const isCompleted = isItemCompleted(item.id, originallyCompleted);
+                    const itemKind = "task" in item ? "task" : "milestone";
                     const itemName = "task" in item ? item.task : item.milestone;
                     const itemDescription = "taskDescription" in item ? item.taskDescription : item.milestoneDescription;
                     const itemDate = "taskDeadline" in item ? item.taskDeadline : item.milestoneTargetDate;
@@ -174,15 +177,12 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                     return (
                       <MotionWrapper key={item.id} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }}>
                         <div
-                          className={cn("group flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer", "hover:bg-muted/50 hover:border-primary/30", isCompleted && "bg-green-500/5 border-green-500/20")}
+                          className={cn("group flex items-start gap-3 p-3 rounded-lg border border-l-4 transition-all cursor-pointer", "hover:bg-muted/50 hover:border-primary/30", isCompleted && "bg-green-500/5 border-green-500/20", MOVE_KIND_STYLE[itemKind].stripe)}
                           onClick={() => props.onToggleItem(item.id)}>
                           <Checkbox checked={isCompleted} onCheckedChange={() => props.onToggleItem(item.id)} className={cn("mt-0.5 transition-all", isCompleted && "data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500")} />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <Badge variant="outline" className="gap-1 px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                {"task" in item ? <CircleCheckIcon className="size-2.5" /> : <FlagIcon className="size-2.5" />}
-                                {"task" in item ? "Task" : "Milestone"}
-                              </Badge>
+                              <MoveKindBadge kind={itemKind} />
                             </div>
                             <p className={cn("text-sm font-medium transition-all mt-1", isCompleted && "line-through text-muted-foreground")}>{itemName}</p>
                             {itemDescription && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{itemDescription}</p>}

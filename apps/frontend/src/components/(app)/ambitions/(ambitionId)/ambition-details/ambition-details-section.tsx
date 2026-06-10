@@ -6,7 +6,9 @@ import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, NotebookPenIcon, Ti
 import type { ReactNode } from "react";
 import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-card";
 import ExecutionBoard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board";
-import { getDate as getItemDate, getDaysUntil, getDescription as getItemDescription, getTitle as getItemTitle, isCompleted as isItemCompleted, sortByPriority } from "@/lib/(app)/tracked-item";
+import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
+import { cn } from "@/lib/utils";
+import { getDate as getItemDate, getDaysUntil, getDescription as getItemDescription, getKind, getTitle as getItemTitle, isCompleted as isItemCompleted, MOVE_KIND_STYLE, sortByPriority } from "@/lib/(app)/tracked-item";
 
 type AmbitionDetailsSectionProps = {
   user: User;
@@ -46,10 +48,13 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
                 const daysUntil = getDaysUntil(itemDate);
 
                 return (
-                  <div key={item.id} className="rounded-3xl border border-border/60 bg-background/70 p-4">
+                  <div key={item.id} className={cn("rounded-3xl border border-border/60 border-l-4 bg-background/70 p-4", MOVE_KIND_STYLE[getKind(item)].stripe)}>
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 space-y-1">
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Priority {index + 1}</p>
+                        <div className="flex items-center gap-2">
+                          <MoveKindBadge kind={getKind(item)} />
+                          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Priority {index + 1}</p>
+                        </div>
                         <p className="line-clamp-2 font-medium wrap-break-word">{getItemTitle(item)}</p>
                         <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getItemDescription(item) || "No description provided."}</p>
                       </div>

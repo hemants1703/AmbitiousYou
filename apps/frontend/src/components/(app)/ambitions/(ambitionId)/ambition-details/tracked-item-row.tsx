@@ -1,12 +1,13 @@
 "use client";
 
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
+import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
-import { CheckIcon, FlagIcon, ListTodoIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
+import { CheckIcon, FlagIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 
@@ -68,7 +69,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
   }
 
   return (
-    <div className="group rounded-2xl bg-background border border-border/60 p-3">
+    <div className={cn("group rounded-2xl bg-background border border-border/60 border-l-4 p-3", MOVE_KIND_STYLE[kind].stripe)}>
       <div className="flex items-start gap-3">
         <CompletionControl item={item} isMilestone={isMs} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
 
@@ -77,7 +78,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
           {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-break-word">{getDescription(item)}</p> : null}
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <KindBadge isMilestone={isMs} />
+            <MoveKindBadge kind={kind} />
             {isMs && completed ? (
               <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Reached</span>
             ) : (
@@ -109,15 +110,6 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
         </div>
       </div>
     </div>
-  );
-}
-
-function KindBadge(props: { isMilestone: boolean }) {
-  return (
-    <Badge variant="outline" className="gap-1 px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-      {props.isMilestone ? <FlagIcon className="size-2.5" /> : <ListTodoIcon className="size-2.5" />}
-      {props.isMilestone ? "Milestone" : "Task"}
-    </Badge>
   );
 }
 

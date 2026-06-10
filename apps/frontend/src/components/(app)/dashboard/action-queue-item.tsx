@@ -1,10 +1,12 @@
 "use client";
 
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
+import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { MOVE_KIND_STYLE } from "@/lib/(app)/tracked-item";
 import type { ItemKind } from "@/lib/dashboard/tracked-items";
-import { CheckIcon, FlagIcon, ListTodoIcon, Loader2Icon, SparklesIcon } from "lucide-react";
+import { CheckIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -76,7 +78,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
   );
 
   return (
-    <div className={cn("flex items-start gap-3 rounded-2xl border p-3 transition-colors", props.isNextMove ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60", done && "opacity-60")}>
+    <div className={cn("flex items-start gap-3 rounded-2xl border border-l-4 p-3 transition-colors", props.isNextMove ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60", MOVE_KIND_STYLE[props.kind].stripe, done && "opacity-60")}>
       {/* Completing a milestone is irreversible, so it goes through a confirm dialog; tasks toggle directly. */}
       {isMilestone ? <ConfirmMilestoneCompletion title={props.title} onConfirm={handleComplete}>{completeButton}</ConfirmMilestoneCompletion> : completeButton}
 
@@ -98,10 +100,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
         {props.description ? <p className="line-clamp-1 text-sm text-muted-foreground wrap-break-word">{props.description}</p> : null}
 
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <span className="inline-flex shrink-0 items-center gap-1 font-medium">
-            {isMilestone ? <FlagIcon className="size-3" /> : <ListTodoIcon className="size-3" />}
-            {isMilestone ? "Milestone" : "Task"}
-          </span>
+          <MoveKindBadge kind={props.kind} />
           <span aria-hidden="true">·</span>
           <Link href={`/ambitions/${props.ambitionId}`} prefetch className="min-w-0 truncate transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none" translate="no">
             {props.ambitionName}

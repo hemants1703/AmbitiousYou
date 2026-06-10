@@ -1,7 +1,10 @@
 "use client";
 
+import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { getKind, MOVE_KIND_STYLE } from "@/lib/(app)/tracked-item";
+import { cn } from "@/lib/utils";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { CheckCircle2Icon } from "lucide-react";
 
@@ -30,9 +33,10 @@ export default function CompletedDrawer(props: CompletedDrawerProps) {
             <div className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">No completed items.</div>
           ) : (
             props.items.map((item) => (
-              <article key={item.id} className="rounded-2xl border border-border/60 p-3">
+              <article key={item.id} className={cn("rounded-2xl border border-border/60 border-l-4 p-3", MOVE_KIND_STYLE[getKind(item)].stripe)}>
                 <div className="flex items-start justify-between gap-3">
-                  <div>
+                  <div className="space-y-1">
+                    <MoveKindBadge kind={getKind(item)} />
                     <p className="font-medium">{"task" in item ? item.task : item.milestone}</p>
                     <p className="text-sm text-muted-foreground">{"taskDescription" in item ? item.taskDescription : item.milestoneDescription}</p>
                   </div>
