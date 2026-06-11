@@ -1,24 +1,19 @@
-import { MotionWrapper } from "@/components/motion-wrapper";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ArrowRightIcon, ChartBarIcon, CheckIcon, PlusCircleIcon, FilterIcon, TargetIcon, XIcon } from "lucide-react";
+import { CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, type LucideIcon } from "lucide-react";
 import { Metadata } from "next";
-import { Bricolage_Grotesque } from "next/font/google";
-import Image from "next/image";
 import Link from "next/link";
 import PrimaryCta from "@/components/(landing)/primary-cta";
+import ComparisonLedger from "@/components/(landing)/comparison-ledger";
+import LandingSection, { Eyebrow, LANDING_CARD } from "@/components/(landing)/landing-section";
+import MockFrame from "@/components/(landing)/mock-frame";
 import JsonLd from "@/components/seo/json-ld";
 import { featuresFaq } from "@/components/(landing)/features/faq-data";
 import { breadcrumbSchema, faqPageSchema } from "@/lib/seo/schemas";
 import { absoluteUrl, siteConfig } from "@/lib/site";
 
 export const dynamic = "force-static";
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
 
 const description = "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.";
 
@@ -50,9 +45,110 @@ export const metadata: Metadata = {
   },
 };
 
+const coreFeatures: { icon: LucideIcon; title: string; description: string; coreIdea?: boolean }[] = [
+  {
+    icon: LayoutDashboardIcon,
+    title: "Ambition Dashboard",
+    description: "Visualize all your goals in one place with our intuitive dashboard that provides at-a-glance progress tracking and priority management.",
+  },
+  {
+    icon: TargetIcon,
+    title: "Tasks & Milestones, Together",
+    description: "Every ambition is built from moves — mix checkable tasks and one-time milestones in whatever blend fits the goal. No forced either-or.",
+    coreIdea: true,
+  },
+  {
+    icon: FilterIcon,
+    title: "Custom Organization",
+    description: "Categorize and prioritize your ambitions with flexible color-coding, and filtering options for perfect organization.",
+  },
+  {
+    icon: PlusCircleIcon,
+    title: "Quick Ambition Creation",
+    description: "Our streamlined ambition creation process gets you from idea to execution in minutes, not hours.",
+  },
+];
+
+const howItWorksSteps = [
+  {
+    step: "01",
+    title: "Create Your Ambition",
+    description: "Define your goal with our guided setup process, setting deadlines, priorities, and your first moves.",
+  },
+  {
+    step: "02",
+    title: "Track Your Progress",
+    description: "Break your ambition into moves — tasks and milestones — and watch your progress fill in visually.",
+  },
+  {
+    step: "03",
+    title: "Achieve & Celebrate",
+    description: "Reach your goals faster with data-backed insights and celebrate your accomplishments along the way.",
+  },
+];
+
+const benefits = ["Every ambition, its moves, notes, and progress — in one place instead of five apps", "Set up your first ambition in about a minute — no setup marathon", "Progress recalculates as you check off moves, so you always know where you stand"];
+
+const differencePairs = [
+  { without: "Goals scattered across multiple apps and notes", with: "All ambitions organized in one unified system" },
+  { without: "Unclear progress tracking leads to abandoned ambitions", with: "Visual progress tracking keeps you motivated daily" },
+  { without: "Overwhelming feeling when managing multiple goals", with: "Prioritization tools ensure focus on what matters most" },
+  { without: "No visibility into how far along any goal actually is", with: "Dashboard insights show where your effort is paying off" },
+];
+
+function AmbitionVignette() {
+  const moves = [
+    { kind: "Milestone", label: "Complete the AWS certification", done: true },
+    { kind: "Task", label: "Write the architecture design doc", done: true },
+    { kind: "Milestone", label: "Lead the Q2 architecture review", done: false },
+  ];
+
+  return (
+    <div aria-hidden="true" className="rounded-2xl bg-linear-to-tr from-primary/15 to-secondary/10 p-1.5 shadow-lg">
+      <MockFrame url="ambitiousyou.pro/ambitions" className="shadow-none">
+        <div className="bg-card/90 p-5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2">
+              <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: "#00bfff" }} />
+              <span className="truncate text-sm font-semibold">Get Promoted to Senior Engineer</span>
+            </div>
+            <span className="shrink-0 rounded border border-red-500 px-1.5 py-0.5 font-mono text-xs uppercase text-red-500">High</span>
+          </div>
+
+          <div className="mt-4">
+            <div className="mb-1 flex justify-between text-xs">
+              <span className="font-medium">Progress</span>
+              <span className="tabular-nums text-muted-foreground">2 of 3 moves · 67%</span>
+            </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div className="h-full rounded-full bg-primary" style={{ width: "67%" }} />
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            {moves.map((move) => (
+              <div key={move.label} className="flex items-center gap-3 rounded-lg border border-border/60 bg-background/60 px-3 py-2">
+                {move.done ? (
+                  <span className="flex size-5 shrink-0 items-center justify-center rounded-md border border-primary bg-primary">
+                    <CheckIcon className="size-3.5 text-primary-foreground" />
+                  </span>
+                ) : (
+                  <span className="size-5 shrink-0 rounded-md border border-border" />
+                )}
+                <span className={cn("min-w-0 truncate text-sm", move.done && "text-muted-foreground line-through")}>{move.label}</span>
+                <span className={cn("ml-auto shrink-0 rounded border px-1 font-mono text-[10px] uppercase", move.kind === "Milestone" ? "border-violet-500/50 text-violet-600 dark:text-violet-400" : "border-border text-muted-foreground")}>{move.kind}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </MockFrame>
+    </div>
+  );
+}
+
 export default function Features() {
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex w-full flex-col items-center">
       <JsonLd
         data={[
           faqPageSchema(featuresFaq),
@@ -62,280 +158,116 @@ export default function Features() {
           ]),
         ]}
       />
-      {/* Animated Hero Section */}
-      <section className="w-full pt-20">
-        <div className=" px-4 md:px-6">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className="space-y-2">
-              <MotionWrapper initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-                <h1 className={cn(bricolage.className, "text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl")}>Features Built for the Ambitious</h1>
-              </MotionWrapper>
-              <MotionWrapper initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
-                <p className="mx-auto max-w-175 text-muted-foreground md:text-xl">Tools designed to elevate your performance, streamline your workflow, and help you achieve your most ambitious goals.</p>
-              </MotionWrapper>
-            </div>
-            <MotionWrapper initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="h-10 px-8" />
-                <Button asChild size="lg">
-                  <Link href="/experience" className="h-10 px-8">
-                    Try It Now
-                  </Link>
-                </Button>
+
+      {/* Hero */}
+      <section className="relative w-full px-4 pt-16 md:px-6 md:pt-20">
+        {/* <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80" style={{ background: "radial-gradient(32rem 14rem at 50% 0%, color-mix(in oklch, oklch(0.56 0.24 300) 9%, transparent) 0%, transparent 70%)" }} /> */}
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
+          <h1 className="lp-hero-enter font-brand text-4xl font-semibold leading-[1.08] tracking-[-0.03em] text-balance sm:text-5xl md:text-6xl">Features Built for the Ambitious</h1>
+          <p className="lp-hero-enter-2 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">Tools designed to elevate your performance, streamline your workflow, and help you achieve your most ambitious goals.</p>
+          <div className="lp-hero-enter-3 mt-8 flex flex-col gap-3 min-[400px]:flex-row">
+            <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" />
+            <Button asChild size="lg" variant="outline">
+              <Link prefetch={true} href="/experience">
+                Try It Now
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Core Features */}
+      <LandingSection eyebrow="Core features" title="Core Features" lede="Everything you need to take your productivity to the next level." className="pb-12 md:pb-16">
+        <div className="lp-reveal grid grid-cols-1 gap-5 md:grid-cols-2">
+          {coreFeatures.map((feature) => (
+            <div key={feature.title} className={cn(LANDING_CARD, "p-6", feature.coreIdea && "border-primary/30")}>
+              {feature.coreIdea ? (
+                <p className="lp-eyebrow mb-3 font-mono text-xs font-medium uppercase tracking-[0.18em]">The core idea</p>
+              ) : null}
+              <div className="flex items-center gap-2.5">
+                <feature.icon aria-hidden="true" className="size-5 shrink-0 text-primary" />
+                <h3 className="font-brand text-lg font-semibold tracking-[-0.01em] md:text-xl">{feature.title}</h3>
               </div>
-            </MotionWrapper>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </LandingSection>
+
+      {/* How AmbitiousYou Works */}
+      <LandingSection id="how-it-works" eyebrow="The process" title="How AmbitiousYou Works" lede="Our simple process helps you transform goals into achievements." className="py-12 md:py-16">
+        <ol className="lp-reveal grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+          {howItWorksSteps.map((item) => (
+            <li key={item.step} className="border-t border-border/60 pt-5">
+              <Eyebrow index={item.step}>Step</Eyebrow>
+              <h3 className="mt-3 font-brand text-lg font-semibold tracking-[-0.01em] md:text-xl">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">{item.description}</p>
+            </li>
+          ))}
+        </ol>
+      </LandingSection>
+
+      {/* Benefits */}
+      <section className="w-full scroll-mt-24 py-12 md:py-16">
+        <div className="mx-auto max-w-6xl px-4 md:px-6">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="lp-reveal">
+              <Eyebrow>Why ambitious people choose us</Eyebrow>
+              <h2 className="mt-4 font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Transform your potential into exceptional results</h2>
+              <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted-foreground md:text-lg">It’s built for people who refuse to settle — one calm, private place where every goal actually moves.</p>
+
+              <ul className="mt-7 space-y-4">
+                {benefits.map((benefit) => (
+                  <li key={benefit} className="flex items-start gap-3">
+                    <CheckIcon aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-green-500" />
+                    <p className="text-base font-medium leading-snug">{benefit}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8">
+                <PrimaryCta loggedOutLabel="Start Your Journey" loggedOutHref="/signup" />
+              </div>
+            </div>
+
+            <div className="lp-reveal">
+              <AmbitionVignette />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Animated Core Features Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className=" px-4 md:px-6">
-          <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Core Features</h2>
-              <p className="mx-auto max-w-175 text-muted-foreground md:text-xl">Everything you need to take your productivity to the next level.</p>
-            </div>
-          </MotionWrapper>
-          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-2">
-            <AnimatedFeatureCard
-              icon={<ChartBarIcon className="size-10 text-blue-500" />}
-              title="Ambition Dashboard"
-              description="Visualize all your goals in one place with our intuitive dashboard that provides at-a-glance progress tracking and priority management."
-              delay={0}
-            />
-            <div className="relative">
-              <MotionWrapper initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.3, type: "spring" }} className="absolute -top-2 -right-2 z-10">
-                <div className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">MOST POPULAR</div>
-              </MotionWrapper>
-              <AnimatedFeatureCard
-                icon={<TargetIcon className="size-10 text-red-500" />}
-                title="Tasks & Milestones, Together"
-                description="Every ambition is built from moves — mix checkable tasks and one-time milestones in whatever blend fits the goal. No forced either-or."
-                delay={0.1}
-              />
-            </div>
-            <AnimatedFeatureCard
-              icon={<FilterIcon className="size-10 text-green-500" />}
-              title="Custom Organization"
-              description="Categorize and prioritize your ambitions with flexible color-coding, and filtering options for perfect organization."
-              delay={0.2}
-            />
-            <AnimatedFeatureCard icon={<PlusCircleIcon className="size-10 text-cyan-500" />} title="Quick Ambition Creation" description="Our streamlined ambition creation process gets you from idea to execution in minutes, not hours." delay={0.3} />
-          </div>
-        </div>
-      </section>
+      {/* The Ambitious Difference */}
+      <LandingSection eyebrow="The difference" title="The Ambitious Difference" lede="See how your life transforms when you start using AmbitiousYou." align="center" className="py-12 md:py-16">
+        <ComparisonLedger pairs={differencePairs} />
+      </LandingSection>
 
-      {/* Animated How It Works Section */}
-      <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32">
-        <div className=" px-4 md:px-6">
-          <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">How AmbitiousYou Works</h2>
-              <p className="mx-auto max-w-175 text-muted-foreground md:text-xl">Our simple process helps you transform goals into achievements</p>
-            </div>
-          </MotionWrapper>
-
-          <div className="grid gap-12 lg:grid-cols-3">
-            {[
-              {
-                step: "1",
-                title: "Create Your Ambition",
-                description: "Define your goal with our guided setup process, setting deadlines, priorities, and your first moves.",
-              },
-              {
-                step: "2",
-                title: "Track Your Progress",
-                description: "Break your ambition into moves — tasks and milestones — and watch your progress fill in visually.",
-              },
-              {
-                step: "3",
-                title: "Achieve & Celebrate",
-                description: "Reach your goals faster with data-backed insights and celebrate your accomplishments along the way.",
-              },
-            ].map((item, index) => (
-              <MotionWrapper key={item.step} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.15 }}>
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <MotionWrapper whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <div className="h-16 w-16 rounded-full bg-foreground/10 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-foreground">{item.step}</span>
-                    </div>
-                  </MotionWrapper>
-                  <h3 className="text-xl font-bold">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </div>
-              </MotionWrapper>
+      {/* FAQ */}
+      <LandingSection eyebrow="FAQ" title="Frequently Asked Questions" lede="Everything you need to know about getting started with AmbitiousYou." align="center" className="py-12 md:py-16">
+        <div className="lp-reveal mx-auto max-w-3xl">
+          <Accordion type="single" collapsible className="w-full">
+            {featuresFaq.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index + 1}`}>
+                <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                <AccordionContent>{faq.answer}</AccordionContent>
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
-      </section>
+      </LandingSection>
 
-      {/* Animated Benefits Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className=" px-4 md:px-6">
-          <div className="grid gap-10 lg:grid-cols-2 lg:gap-12 items-center">
-            <MotionWrapper initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <div className="space-y-4">
-                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Why ambitious people choose us</div>
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Transform your potential into exceptional results</h2>
-                <p className="max-w-150 text-muted-foreground md:text-xl/relaxed">
-                  Our platform is designed specifically for those who refuse to settle for mediocrity. See how we&apos;ve helped thousands of ambitious professionals exceed their goals.
-                </p>
-
-                <div className="space-y-4 mt-6">
-                  {[
-                    "Increase productivity by up to 37% within the first month",
-                    "Reduce time spent on administrative tasks by 64%",
-                    "Achieve goals 2.5x faster with our structured approach",
-                    // "Join a community of 50,000+ high-achievers",
-                  ].map((benefit, index) => (
-                    <MotionWrapper key={benefit} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}>
-                      <div className="flex items-start gap-2">
-                        <CheckIcon className="h-5 w-5 mt-0.5 text-green-500 shrink-0" />
-                        <p className="text-base font-medium leading-tight">{benefit}</p>
-                      </div>
-                    </MotionWrapper>
-                  ))}
-                </div>
-
-                <div className="flex flex-col gap-2 min-[400px]:flex-row pt-4">
-                  <PrimaryCta loggedOutLabel="Start Your Journey" loggedOutHref="/signup" variant="default" className="h-10 px-8" />
-                </div>
-              </div>
-            </MotionWrapper>
-
-            <MotionWrapper initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}>
-              <div className="rounded-lg border bg-background p-2 shadow-lg">
-                <div className="overflow-hidden rounded-md">
-                  <div className="bg-muted aspect-video w-full">
-                    <Image
-                      src="https://res.cloudinary.com/dej4ks4wd/image/upload/v1765910319/OG_IMAGE_AY.png"
-                      alt="AmbitiousYou"
-                      width={1000}
-                      height={1000}
-                      className="w-full h-full object-cover"
-                      quality={100}
-                      loading="lazy"
-                      unoptimized={true}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  </div>
-                </div>
-              </div>
-            </MotionWrapper>
-          </div>
-        </div>
-      </section>
-
-      {/* Animated Before/After Comparison Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className=" px-4 md:px-6">
-          <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex flex-col items-center space-y-4 text-center mb-12">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">The Ambitious Difference</h2>
-              <p className="mx-auto max-w-175 text-muted-foreground md:text-xl">See how your life transforms when you start using AmbitiousYou</p>
+      {/* CTA */}
+      <section className="w-full py-16 md:py-24">
+        <div className="mx-auto max-w-6xl px-4 md:px-6">
+          <div className="lp-reveal relative mx-auto max-w-2xl text-center">
+            <h2 className="font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Ready to achieve your most ambitious goals?</h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">Start for free today — your first ambition takes about a minute to set up. No credit card required.</p>
+            <div className="mt-8 flex justify-center">
+              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="px-8" />
             </div>
-          </MotionWrapper>
-
-          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            <MotionWrapper initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <div className="bg-background p-8 rounded-lg border shadow-sm h-full">
-                <h3 className="text-xl font-bold mb-4 text-muted-foreground">Before AmbitiousYou</h3>
-                <ul className="space-y-4">
-                  {["Goals scattered across multiple apps and notes", "Unclear progress tracking leads to abandoned ambitions", "Overwhelming feeling when managing multiple goals", "No visibility into time investment across goals"].map(
-                    (item, index) => (
-                      <MotionWrapper key={item} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}>
-                        <li className="flex items-start gap-2">
-                          <div className="mt-1 text-destructive shrink-0">
-                            <XIcon className="h-5 w-5" />
-                          </div>
-                          <p>{item}</p>
-                        </li>
-                      </MotionWrapper>
-                    ),
-                  )}
-                </ul>
-              </div>
-            </MotionWrapper>
-
-            <MotionWrapper initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
-              <div className="bg-background p-8 rounded-lg border shadow h-full">
-                <h3 className="text-xl font-bold mb-4 text-foreground">With AmbitiousYou</h3>
-                <ul className="space-y-4">
-                  {["All ambitions organized in one unified system", "Visual progress tracking keeps you motivated daily", "Prioritization tools ensure focus on what matters most", "Time analytics show where your efforts are yielding results"].map(
-                    (item, index) => (
-                      <MotionWrapper key={item} initial={{ opacity: 0, x: 10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}>
-                        <li className="flex items-start gap-2">
-                          <div className="mt-1 text-green-500 shrink-0">
-                            <CheckIcon className="h-5 w-5" />
-                          </div>
-                          <p>{item}</p>
-                        </li>
-                      </MotionWrapper>
-                    ),
-                  )}
-                </ul>
-              </div>
-            </MotionWrapper>
           </div>
-        </div>
-      </section>
-
-      {/* Animated FAQ Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className=" px-4 md:px-6">
-          <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex flex-col items-center space-y-4 text-center mb-12">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Frequently Asked Questions</h2>
-              <p className="mx-auto max-w-175 text-muted-foreground md:text-xl">Everything you need to know about getting started with AmbitiousYou</p>
-            </div>
-          </MotionWrapper>
-
-          <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="w-full">
-              {featuresFaq.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index + 1}`}>
-                  <AccordionTrigger>{faq.question}</AccordionTrigger>
-                  <AccordionContent>{faq.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </MotionWrapper>
-        </div>
-      </section>
-
-      {/* Animated CTA Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className=" px-4 md:px-6">
-          <MotionWrapper initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Ready to achieve your most ambitious goals?</h2>
-              <p className="mx-auto max-w-175 md:text-xl/relaxed">Start for free today and see the difference in your productivity within the first week. No credit card required.</p>
-            </div>
-            <MotionWrapper initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 }}>
-              <div className="mx-auto w-full max-w-sm space-y-2">
-                <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
-                  <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" variant="default" size="lg" className="px-8" icon={<ArrowRightIcon className="h-4 w-4" />} />
-                </div>
-              </div>
-            </MotionWrapper>
-          </MotionWrapper>
         </div>
       </section>
     </div>
-  );
-}
-
-function AnimatedFeatureCard({ icon, title, description, delay = 0 }: { icon: React.ReactNode; title: string; description: string; delay?: number }) {
-  return (
-    <MotionWrapper initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay }}>
-      <div className="flex flex-col items-center space-y-3 rounded-lg border p-6 bg-background shadow-sm transition-all hover:shadow-md h-full">
-        <MotionWrapper whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }}>
-          <div className="p-3 rounded-full bg-muted">{icon}</div>
-        </MotionWrapper>
-        <h3 className="text-xl font-bold">{title}</h3>
-        <p className="text-muted-foreground text-center">{description}</p>
-      </div>
-    </MotionWrapper>
   );
 }

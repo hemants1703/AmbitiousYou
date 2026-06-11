@@ -1,74 +1,100 @@
-import { Bricolage_Grotesque } from "next/font/google";
-import { BarChart3Icon, BellIcon, LockIcon, StarIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { BarChart3Icon, BellIcon, GaugeIcon, LockIcon, SparklesIcon, StarIcon, type LucideIcon } from "lucide-react";
+import LandingSection, { LANDING_CARD } from "../landing-section";
 
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
+interface FeatureCardProps {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  comingSoon?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
 
-export default function Features() {
+function FeatureCard(props: FeatureCardProps) {
   return (
-    <section className="py-20">
-      <div className="max-w-6xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center px-4 py-1 mb-6 rounded-full bg-foreground/10 backdrop-blur-sm text-foreground font-medium text-sm">
-            <BarChart3Icon className="mr-2 h-4 w-4" />
-            Features
-          </div>
-          <h2 className={`${bricolage.className} tracking-tight text-3xl md:text-5xl font-bold mb-6`}>Transform How You Achieve Your Goals</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">AmbitiousYou provides the tools you need to set, track, and accomplish your most ambitious goals.</p>
-        </div>
-
-        <div className="select-none perspective-normal transform-3d grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Feature cards with hover animations and consistent styling */}
-          {[
-            {
-              icon: <BarChart3Icon className="h-6 w-6 text-blue-500" />,
-              title: "Goal Hierarchy",
-              description: "Organize your ambitions from big dreams to daily tasks in a structured, manageable system.",
-            },
-            {
-              icon: <StarIcon className="h-6 w-6 text-yellow-500" />,
-              title: "Priority Management",
-              description: "Focus on what matters most with our intuitive priority system that adapts to your changing needs.",
-            },
-            {
-              icon: <BarChart3Icon className="h-6 w-6 text-primary" />,
-              title: "Progress Tracking",
-              description: "Visualize your journey with beautiful charts and analytics that keep you motivated.",
-            },
-            {
-              icon: <LockIcon className="h-6 w-6 text-green-500" />,
-              title: "Private & Secure",
-              description: "Your ambitions are personal. We keep them private and secure and never share them with anyone.",
-            },
-            {
-              icon: <BellIcon className="h-6 w-6 text-blue-500" />,
-              title: "Smart Notifications",
-              description: "Get personalized reminders at the right time to keep you on track with your goals. Coming soon!",
-            },
-            {
-              icon: <StarIcon className="h-6 w-6 text-cyan-500" />,
-              title: "AI Assistance",
-              description: "Receive intelligent suggestions to overcome obstacles and optimize your approach. Coming soon!",
-            },
-          ].map((feature, i) => (
-            <FeatureCard key={i} icon={feature.icon} title={feature.title} description={feature.description} />
-          ))}
-        </div>
+    <div className={cn(LANDING_CARD, "flex flex-col p-6", props.className)}>
+      <div className="flex items-center gap-2.5">
+        <props.icon aria-hidden="true" className="size-5 shrink-0 text-primary" />
+        <h3 className="font-brand text-lg font-semibold tracking-[-0.01em] md:text-xl">{props.title}</h3>
+        {props.comingSoon ? (
+          <Badge variant="secondary" className="ml-auto shrink-0 text-xs">
+            Coming soon
+          </Badge>
+        ) : null}
       </div>
-    </section>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{props.description}</p>
+      {props.children}
+    </div>
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+function HierarchyVignette() {
+  const moves = [
+    { kind: "Task", label: "Read 20 pages of the ML book" },
+    { kind: "Milestone", label: "Finish the fundamentals course" },
+    { kind: "Task", label: "Train the model on the dataset" },
+  ];
+
   return (
-    <div className="group bg-card/80 backdrop-blur-sm rounded-xl p-5 shadow-sm border border-border hover:border-primary/50 hover:shadow-lg transition-all ease-in-out">
-      <div className="h-fit w-fit rounded-full bg-primary/10 flex items-center justify-center mb-5 py-3 px-4 gap-2 group-hover:scale-[1.02] transition-transform duration-300">
-        <span>{icon}</span>
-        <h3 className="text-xl font-bold">{title}</h3>
+    <div aria-hidden="true" className="mt-6 rounded-xl border border-border/60 bg-background/60 p-4">
+      <div className="flex items-center gap-2">
+        <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: "#00bfff" }} />
+        <span className="truncate text-sm font-medium">Learn Machine Learning</span>
+        <span className="ml-auto shrink-0 text-xs tabular-nums text-muted-foreground">67%</span>
       </div>
-      <p className="text-muted-foreground">{description}</p>
+      <div className="mt-3 space-y-2 border-l border-border/60 pl-4">
+        {moves.map((move) => (
+          <div key={move.label} className="flex items-center gap-2">
+            <span className={cn("shrink-0 rounded border px-1 font-mono text-[10px] uppercase", move.kind === "Milestone" ? "border-violet-500/50 text-violet-600 dark:text-violet-400" : "border-border text-muted-foreground")}>{move.kind}</span>
+            <span className="truncate text-xs text-muted-foreground">{move.label}</span>
+          </div>
+        ))}
+      </div>
     </div>
+  );
+}
+
+function ProgressVignette() {
+  const rows = [
+    { label: "Learn Machine Learning", color: "#00bfff", value: 67 },
+    { label: "Run a Marathon", color: "#32cd32", value: 75 },
+    { label: "Launch Side Project", color: "#ff7733", value: 55 },
+  ];
+
+  return (
+    <div aria-hidden="true" className="mt-6 space-y-3 rounded-xl border border-border/60 bg-background/60 p-4">
+      {rows.map((row) => (
+        <div key={row.label}>
+          <div className="mb-1 flex justify-between text-xs">
+            <span className="truncate font-medium">{row.label}</span>
+            <span className="ml-2 shrink-0 tabular-nums text-muted-foreground">{row.value}%</span>
+          </div>
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full" style={{ width: `${row.value}%`, backgroundColor: row.color }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function Features() {
+  return (
+    <LandingSection eyebrow="Features" title="Transform How You Achieve Your Goals" lede="AmbitiousYou provides the tools you need to set, track, and accomplish your most ambitious goals.">
+      <div className="lp-reveal grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">
+        <FeatureCard icon={BarChart3Icon} title="Goal Hierarchy" description="Organize your ambitions from big dreams to daily tasks in a structured, manageable system." className="lg:col-span-4">
+          <HierarchyVignette />
+        </FeatureCard>
+        <FeatureCard icon={StarIcon} title="Priority Management" description="Focus on what matters most with our intuitive priority system that adapts to your changing needs." className="lg:col-span-2" />
+        <FeatureCard icon={LockIcon} title="Private & Secure" description="Your ambitions are personal. We keep them private and secure and never share them with anyone." className="lg:col-span-2" />
+        <FeatureCard icon={GaugeIcon} title="Progress Tracking" description="Visualize your journey with beautiful charts and analytics that keep you motivated." className="lg:col-span-4">
+          <ProgressVignette />
+        </FeatureCard>
+        <FeatureCard icon={BellIcon} title="Smart Notifications" description="Get personalized reminders at the right time to keep you on track with your goals." comingSoon className="lg:col-span-3" />
+        <FeatureCard icon={SparklesIcon} title="AI Assistance" description="Receive intelligent suggestions to overcome obstacles and optimize your approach." comingSoon className="lg:col-span-3" />
+      </div>
+    </LandingSection>
   );
 }

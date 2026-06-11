@@ -1,21 +1,14 @@
 "use client";
 
-import { MotionWrapper } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { ArrowRightIcon, BriefcaseIcon, ChartLineIcon, ChevronDownIcon, HeartIcon, PaletteIcon, RefreshCwIcon, RocketIcon, SchoolIcon, SparklesIcon } from "lucide-react";
-import { Bricolage_Grotesque } from "next/font/google";
+import { ArrowRightIcon, BriefcaseIcon, ChartLineIcon, ChevronDownIcon, HeartIcon, PaletteIcon, RefreshCwIcon, RocketIcon, SchoolIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import PrimaryCta from "@/components/(landing)/primary-cta";
+import { Eyebrow } from "@/components/(landing)/landing-section";
 import DemoAmbitionShowcase from "./demo-ambition-showcase";
 import { Persona, personas } from "./persona-data";
 import PersonaSelector from "./persona-selector";
 import { useDemoAmbition } from "./use-demo-ambition";
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
 
 const iconComponents: Record<string, React.ElementType> = {
   briefcase: BriefcaseIcon,
@@ -27,8 +20,12 @@ const iconComponents: Record<string, React.ElementType> = {
   "chart-line": ChartLineIcon,
 };
 
+function scrollBehavior(): ScrollBehavior {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
 export default function ExperienceFlow() {
-  const { state, isLoaded, selectPersona, toggleItemComplete, calculateProgress } = useDemoAmbition();
+  const { state, selectPersona, toggleItemComplete, calculateProgress } = useDemoAmbition();
 
   const [activeSection, setActiveSection] = useState<"hero" | "personas" | "showcase">("hero");
   const showcaseRef = useRef<HTMLDivElement>(null);
@@ -37,7 +34,7 @@ export default function ExperienceFlow() {
   useEffect(() => {
     if (state.personaId && showcaseRef.current && activeSection === "personas") {
       setTimeout(() => {
-        showcaseRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        showcaseRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: "start" });
         setActiveSection("showcase");
       }, 300);
     }
@@ -55,130 +52,95 @@ export default function ExperienceFlow() {
 
   const scrollToPersonas = useCallback(() => {
     const personaSection = document.getElementById("persona-section");
-    personaSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    personaSection?.scrollIntoView({ behavior: scrollBehavior(), block: "start" });
     setActiveSection("personas");
   }, []);
-
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-pulse flex flex-col items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-primary/20" />
-          <p className="text-sm text-muted-foreground">Loading experience...</p>
-        </div>
-      </div>
-    );
-  }
 
   const selectedPersona = state.personaId ? personas.find((p) => p.id === state.personaId) : null;
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center min-h-[85vh] px-4 pt-8 pb-16">
-        {/* Animated persona icons floating in background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {personas.slice(0, 5).map((persona, index) => {
-            const IconComponent = iconComponents[persona.icon] || RocketIcon;
-            return (
-              <MotionWrapper
-                key={persona.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{
-                  opacity: [0.1, 0.2, 0.1],
-                  y: [0, -20, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  delay: index * 0.5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
-                className="absolute"
-                style={{
-                  left: `${15 + index * 18}%`,
-                  top: `${20 + (index % 3) * 25}%`,
-                }}>
-                <IconComponent className="h-8 w-8 md:h-12 md:w-12" style={{ color: persona.color }} />
-              </MotionWrapper>
-            );
-          })}
+      <section className="relative flex min-h-[80svh] flex-col items-center justify-center px-4 pb-16 pt-8">
+        {/* Local hero glow */}
+        {/* <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80" style={{ background: "radial-gradient(32rem 14rem at 50% 0%, color-mix(in oklch, oklch(0.56 0.24 300) 9%, transparent) 0%, transparent 70%)" }} /> */}
+
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
+          <div className="lp-hero-enter flex justify-center">
+            <Eyebrow>Interactive Experience</Eyebrow>
+          </div>
+
+          <h1 className="lp-hero-enter mt-5 bg-linear-to-r from-foreground via-foreground to-foreground/70 bg-clip-text font-brand text-4xl font-semibold leading-[1.08] tracking-[-0.03em] text-balance text-transparent md:text-5xl lg:text-6xl">See Yourself in Action</h1>
+
+          <p className="lp-hero-enter-2 mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">Discover how AmbitiousYou transforms your goals into reality. Choose your journey, interact with real features, and create an ambition that&apos;s waiting for you.</p>
+
+          {/* Persona spectrum — a preview of the choice below, not decoration */}
+          <ul className="lp-hero-enter-3 mt-8 flex flex-wrap items-center justify-center gap-2">
+            {personas.map((persona) => {
+              const IconComponent = iconComponents[persona.icon] || RocketIcon;
+              return (
+                <li key={persona.id}>
+                  <button type="button" onClick={scrollToPersonas} aria-label={`${persona.name} — jump to persona selection`} className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card/50 transition-colors hover:border-primary/40 hover:bg-card">
+                    <IconComponent aria-hidden="true" className="size-5" style={{ color: persona.color }} />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="lp-hero-enter-3 mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button size="lg" onClick={scrollToPersonas} className="group h-12 px-8">
+              Start Your Journey
+              <ArrowRightIcon aria-hidden="true" className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <PrimaryCta loggedOutLabel="Skip to Sign Up" loggedOutHref="/signup" size="lg" variant="outline" className="h-12 px-8" />
+          </div>
         </div>
 
-        <MotionWrapper initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10 text-center max-w-4xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-primary/5 border border-primary/10 rounded-full">
-            <SparklesIcon className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium">Interactive Experience</span>
-          </div>
-
-          <h1 className={cn(bricolage.className, "text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight mb-6", "bg-clip-text text-transparent bg-linear-to-r from-foreground via-foreground to-foreground/70")}>
-            See Yourself in Action
-          </h1>
-
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Discover how AmbitiousYou transforms your goals into reality. Choose your journey, interact with real features, and create an ambition that&apos;s waiting for you.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" onClick={scrollToPersonas} className="text-lg h-12 px-8 group">
-              Start Your Journey
-              <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <PrimaryCta loggedOutLabel="Skip to Sign Up" loggedOutHref="/signup" size="lg" className="text-lg h-12 px-8" />
-          </div>
-        </MotionWrapper>
-
-        {/* Scroll indicator */}
-        <MotionWrapper initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <button onClick={scrollToPersonas} className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+        {/* Scroll affordance */}
+        <div className="lp-hero-enter-4 absolute bottom-8 left-1/2 -translate-x-1/2">
+          <button type="button" onClick={scrollToPersonas} className="group flex flex-col items-center gap-2 p-2 text-muted-foreground transition-colors hover:text-foreground">
             <span className="text-xs font-medium">Explore below</span>
-            <MotionWrapper animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-              <ChevronDownIcon className="h-5 w-5" />
-            </MotionWrapper>
+            <ChevronDownIcon aria-hidden="true" className="size-5 transition-transform group-hover:translate-y-0.5" />
           </button>
-        </MotionWrapper>
+        </div>
       </section>
 
       {/* Persona Selection Section */}
-      <div id="persona-section">
+      <div id="persona-section" className="scroll-mt-24">
         <PersonaSelector selectedPersonaId={state.personaId} onSelectPersona={handleSelectPersona} />
       </div>
 
       {/* Showcase Section - Only visible when persona is selected */}
       {selectedPersona && state.ambition && (
-        <div ref={showcaseRef}>
+        <div ref={showcaseRef} className="scroll-mt-24">
           <DemoAmbitionShowcase persona={selectedPersona} ambition={state.ambition} completedItems={state.completedItems} onToggleItem={toggleItemComplete} progress={calculateProgress()} />
         </div>
       )}
 
       {/* Final CTA Section */}
       <section className="w-full py-16 md:py-24">
-        <div className=" px-4 md:px-6 max-w-3xl mx-auto text-center bg-background/30 border border-primary/20 rounded-xl p-10 shadow-xl backdrop-blur-sm">
-          <MotionWrapper initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <h2 className={cn(bricolage.className, "text-3xl md:text-4xl font-bold tracking-tight mb-4")}>Ready to make it real?</h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">Join thousands of ambitious people who are already achieving their goals with AmbitiousYou. Your journey starts now.</p>
+        <div className="mx-auto max-w-3xl px-4 md:px-6">
+          <div className="lp-reveal relative overflow-hidden rounded-3xl border border-primary/20 bg-card/80 p-10 text-center shadow-xl backdrop-blur-sm">
+            <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="text-lg h-12 px-10 shadow-lg shadow-primary/20" icon={<RocketIcon className="h-5 w-5" />} />
+            <h2 className="font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Ready to make it real?</h2>
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">Everything you just tried works exactly like this in the app — plus notes, insights, and a dashboard of your own. Your journey starts now.</p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="h-12 px-10 shadow-lg shadow-primary/20" />
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                <span>No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                <span>Free forever plan</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                <span>Setup in 2 minutes</span>
-              </div>
-            </div>
-          </MotionWrapper>
+            <ul className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+              {["No credit card required", "Free to use", "Set up in about a minute"].map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <span aria-hidden="true" className="size-2 rounded-full bg-green-500" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
     </div>

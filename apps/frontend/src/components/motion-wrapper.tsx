@@ -1,7 +1,11 @@
 "use client";
 
-import { HTMLMotionProps, motion } from "framer-motion";
+import { HTMLMotionProps, motion, MotionConfig } from "framer-motion";
 
 export function MotionWrapper({ children, ...props }: HTMLMotionProps<"div"> & { children: React.ReactNode }) {
-  return <motion.div {...props}>{children}</motion.div>;
+  return (
+    <MotionConfig reducedMotion="user">
+      <motion.div {...props}>{children}</motion.div>
+    </MotionConfig>
+  );
 }

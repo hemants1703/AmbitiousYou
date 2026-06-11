@@ -13,6 +13,12 @@
  * disabled under prefers-reduced-motion via globals.css.
  */
 
+/* Faint aurora tint for the form column so small screens (no panel) aren't
+   flat — works over both light and dark backgrounds. */
+.auth-wash {
+  background-image: radial-gradient(60% 22rem at 50% 0%, oklch(0.56 0.24 300 / 0.07) 0%, transparent 70%);
+}
+
 .auth-background {
   position: relative;
   overflow: hidden;

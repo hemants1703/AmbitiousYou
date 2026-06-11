@@ -5,6 +5,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui
 import { Input } from "@/components/ui/input";
 import type { SignupState } from "@/lib/actions/(auth)/signup/signup";
 import { cn } from "@/lib/utils";
+import { LoaderCircleIcon, TriangleAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 
@@ -22,8 +23,8 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
   return (
     <form className={cn("flex flex-col gap-6", className)} action={formAction} {...props}>
       <FieldGroup>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
+        <div className="flex flex-col gap-1">
+          <h1 className="font-brand text-2xl font-semibold tracking-[-0.02em]">Create your account</h1>
           <p className="text-balance text-sm text-muted-foreground">Fill in the form below to create your account</p>
         </div>
 
@@ -45,14 +46,22 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
         </Field>
 
         {state.error ? (
-          <p className="text-sm text-destructive" aria-live="polite">
+          <p className="flex items-start gap-2 text-sm text-destructive" aria-live="polite">
+            <TriangleAlertIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
             {state.error}
           </p>
         ) : null}
 
         <Field>
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Creating account..." : "Create Account"}
+            {isPending ? (
+              <>
+                <LoaderCircleIcon aria-hidden="true" className="size-4 animate-spin" />
+                Creating account…
+              </>
+            ) : (
+              "Create Account"
+            )}
           </Button>
         </Field>
 

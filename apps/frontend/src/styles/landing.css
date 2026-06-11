@@ -1,0 +1,54 @@
+/*
+ * Landing-surface motion & accents. CSS-first so landing pages stay server
+ * components; every animation is gated on prefers-reduced-motion and animates
+ * compositor-friendly properties (opacity/transform) only.
+ */
+
+/* Brand eyebrow colour — brighter in dark mode so the small mono type holds
+   contrast over the aurora. */
+.lp-eyebrow {
+  color: oklch(0.46 0.21 265);
+}
+.dark .lp-eyebrow {
+  color: oklch(0.75 0.12 265);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* One-shot hero entrance, staggered via the -2/-3/-4 variants. */
+  .lp-hero-enter,
+  .lp-hero-enter-2,
+  .lp-hero-enter-3,
+  .lp-hero-enter-4 {
+    animation: lp-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .lp-hero-enter-2 {
+    animation-delay: 90ms;
+  }
+  .lp-hero-enter-3 {
+    animation-delay: 180ms;
+  }
+  .lp-hero-enter-4 {
+    animation-delay: 280ms;
+  }
+
+  /* Scroll-driven section reveal. Progressive enhancement: browsers without
+     scroll-driven animations render the content statically. */
+  @supports (animation-timeline: view()) {
+    .lp-reveal {
+      animation: lp-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@keyframes lp-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -16,7 +16,14 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#ffffff",
     icons: [
       { src: "/favicon.ico", sizes: "any", type: "image/x-icon" },
-      { src: "/svg_logos/favicon_32px.svg", sizes: "any", type: "image/svg+xml" },
+      { src: "/svg_logos/favicon_32px.svg", sizes: "32x32", type: "image/svg+xml" },
+      { src: "/svg_logos/favicon_16px.svg", sizes: "16x16", type: "image/svg+xml" },
+      { src: "/svg_logos/logo_150px.svg", sizes: "150x150", type: "image/svg+xml" },
+      { src: "/svg_logos/logo_250px.svg", sizes: "250x250", type: "image/svg+xml" },
+      { src: "/png_logos/favicon_32px.png", sizes: "32x32", type: "image/png" },
+      { src: "/png_logos/favicon_16px.png", sizes: "16x16", type: "image/png" },
+      { src: "/png_logos/logo_150px.png", sizes: "150x150", type: "image/png" },
+      { src: "/png_logos/logo_250px.png", sizes: "250x250", type: "image/png" },
     ],
   };
 }

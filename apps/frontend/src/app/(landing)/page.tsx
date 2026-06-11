@@ -1,4 +1,4 @@
-import AnimatedHero from "@/components/(landing)/homepage/animated-hero";
+import Hero from "@/components/(landing)/homepage/hero";
 import BeforeAfter from "@/components/(landing)/homepage/before-after";
 import CTA from "@/components/(landing)/homepage/cta";
 import Features from "@/components/(landing)/homepage/features";
@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <>
       <JsonLd data={[organizationSchema(), webSiteSchema(), softwareApplicationSchema()]} />
-      <AnimatedHero />
+      <Hero />
       <ProblemAgitation />
       <HowItWorks />
       <Features />

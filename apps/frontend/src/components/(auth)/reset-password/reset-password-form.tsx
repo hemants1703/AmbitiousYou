@@ -5,6 +5,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui
 import { Input } from "@/components/ui/input";
 import type { ResetPasswordState } from "@/lib/actions/(auth)/reset-password/reset-password";
 import { cn } from "@/lib/utils";
+import { LoaderCircleIcon, TriangleAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 
@@ -22,8 +23,8 @@ export function ResetPasswordForm({ action, initialState, token, className, ...p
   return (
     <form className={cn("flex flex-col gap-6", className)} action={formAction} {...props}>
       <FieldGroup>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold">Reset your password</h1>
+        <div className="flex flex-col gap-1">
+          <h1 className="font-brand text-2xl font-semibold tracking-[-0.02em]">Reset your password</h1>
           <p className="text-balance text-sm text-muted-foreground">Choose a new password for your account.</p>
         </div>
 
@@ -59,14 +60,22 @@ export function ResetPasswordForm({ action, initialState, token, className, ...p
         </Field>
 
         {state.error ? (
-          <p className="text-sm text-destructive" aria-live="polite">
+          <p className="flex items-start gap-2 text-sm text-destructive" aria-live="polite">
+            <TriangleAlertIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
             {state.error}
           </p>
         ) : null}
 
         <Field>
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Resetting..." : "Reset password"}
+            {isPending ? (
+              <>
+                <LoaderCircleIcon aria-hidden="true" className="size-4 animate-spin" />
+                Resetting…
+              </>
+            ) : (
+              "Reset password"
+            )}
           </Button>
         </Field>
 

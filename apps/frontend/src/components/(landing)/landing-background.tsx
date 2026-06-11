@@ -22,7 +22,7 @@ export default function LandingBackground() {
 
       {/* Aurora — three large, overlapping, soft glows that blend into one smooth colour field at the top */}
       <div
-        className="absolute inset-0 opacity-45 dark:opacity-100"
+        className="absolute inset-0 opacity-40 dark:opacity-100"
         style={{
           background: `
             radial-gradient(42rem 30rem at 50% -12%, color-mix(in oklch, ${VIOLET} 52%, transparent) 0%, transparent 72%),
@@ -34,7 +34,7 @@ export default function LandingBackground() {
 
       {/* Bright light source — the spotlight core at top centre */}
       <div
-        className="absolute inset-x-0 -top-10 h-72 opacity-50 dark:opacity-90"
+        className="absolute inset-x-0 -top-10 h-72 opacity-40 dark:opacity-90"
         style={{ background: `radial-gradient(26rem 13rem at 50% 0%, color-mix(in oklch, ${VIOLET} 55%, white 22%) 0%, transparent 70%)` }}
       />
 

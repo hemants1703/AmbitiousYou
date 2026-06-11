@@ -1,13 +1,15 @@
 "use client";
 
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { ThemeToggle } from "../theme-toggle";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
 import { useAuthStatus } from "@/hooks/use-auth-status";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -16,90 +18,35 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [navbarToggled, setNavbarToggled] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navbarMenuRef = useRef<HTMLDivElement | null>(null);
   const pagePathname = usePathname();
   const isLoggedIn = useAuthStatus();
 
-  // Handle scroll events to change navbar appearance
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as HTMLElement;
-      if (navbarMenuRef.current && !navbarMenuRef.current.contains(target) && !target.closest("button")) {
-        setNavbarToggled(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [navbarMenuRef]);
-
-  // Prevent scrolling when mobile menu is open
-  useEffect(() => {
-    if (navbarToggled) {
-      // Save the current scroll position
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-    } else {
-      // Restore the scroll position
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
-      }
-    }
-
-    return () => {
-      // Cleanup
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-    };
-  }, [navbarToggled]);
-
-  function toggleNavbar() {
-    setNavbarToggled(!navbarToggled);
-  }
-
   return (
-    <nav className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${scrolled ? "p-4 bg-background/0 backdrop-blur-lg shadow-sm" : "py-4"}`}>
-      <div className="max-w-screen-2xl mx-auto px-4 flex items-center justify-between max-sm:z-50">
+    <nav className={cn("fixed left-0 right-0 top-0 z-50 w-full py-4 transition-colors duration-300", scrolled ? "border-b border-border/40 bg-background/50 backdrop-blur-sm" : "border-b border-transparent")}>
+      <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4">
         {/* Logo */}
-        <Link
-          prefetch={true}
-          href="/"
-          onClick={() => {
-            if (navbarToggled) toggleNavbar();
-          }}
-          className="z-50">
+        <Link prefetch={true} href="/">
           <AmbitiousYouLogo />
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden items-center gap-8 md:flex">
           <div className="flex items-center gap-6">
             {navLinks.map((link) => {
               const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
 
               return (
-                <Link prefetch={true} key={link.href} href={link.href} className={`relative px-1 py-2 text-sm font-medium transition-colors ${isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+                <Link prefetch={true} key={link.href} href={link.href} className={cn("relative px-1 py-2 text-sm font-medium transition-colors", isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
                   {link.label}
-                  {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary transition-all duration-300" />}
+                  {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary" />}
                 </Link>
               );
             })}
@@ -108,7 +55,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             {/* Reserve the logged-out width (justify-end) so the post-hydration swap to a single button doesn't shift the nav links (CLS). */}
-            <div className="flex items-center justify-end gap-3 min-w-44">
+            <div className="flex min-w-44 items-center justify-end gap-3">
               {isLoggedIn ? (
                 <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
                   <Link href="/dashboard">Go to Dashboard</Link>
@@ -131,74 +78,72 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="flex items-center gap-3 md:hidden max-sm:z-50">
-          <button onClick={toggleNavbar} className="relative w-10 h-10 flex items-center justify-center rounded-md focus:outline-none z-50" aria-label="Toggle Menu">
-            <div className="absolute inset-0 rounded-md bg-primary/5 hover:bg-primary/10 transition-colors"></div>
-            <div className="flex flex-col justify-center items-center w-6 h-6">
-              <span className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${navbarToggled ? "rotate-45" : "-translate-y-2"}`} />
-              <span className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 ${navbarToggled ? "opacity-0" : "opacity-100"}`} />
-              <span className={`bg-foreground block h-0.5 w-6 rounded-sm transition-all duration-300 absolute ${navbarToggled ? "-rotate-45" : "translate-y-2"}`} />
-            </div>
-          </button>
-        </div>
-      </div>
+        {/* Mobile Menu — Sheet handles focus trap, Escape, and scroll lock */}
+        <div className="flex items-center md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Open menu" className="size-11">
+                <MenuIcon className="size-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="flex w-5/6 flex-col">
+              <SheetHeader>
+                <SheetTitle className="font-brand">Menu</SheetTitle>
+                <SheetDescription className="sr-only">Site navigation</SheetDescription>
+              </SheetHeader>
 
-      {/* Mobile Menu */}
-      <div
-        ref={navbarMenuRef}
-        className={`fixed inset-0 top-0 left-0 w-full h-full bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ${navbarToggled ? "opacity-100 pointer-events-auto z-40" : "opacity-0 pointer-events-none z-0"}`}>
-        <div className="flex flex-col h-full justify-between px-6 pt-24 pb-10 overflow-auto">
-          <div className="space-y-6">
-            <p className="text-sm text-muted-foreground">NAVIGATION</p>
-            {navLinks.map((link, index) => {
-              const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
+              <div className="flex-1 overflow-y-auto overscroll-contain px-6">
+                <ul>
+                  {navLinks.map((link) => {
+                    const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
 
-              return (
-                <div key={link.href} className={`transform transition-transform duration-300 delay-${index * 100} ${navbarToggled ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`} style={{ transitionDelay: `${index * 75}ms` }}>
-                  <Link prefetch={true} href={link.href} onClick={toggleNavbar} className={`flex items-center justify-between py-3 border-b border-border ${isActive ? "text-primary font-medium" : "text-foreground"}`}>
-                    <span>{link.label}</span>
-                    <ChevronRightIcon className="h-5 w-5 opacity-70" />
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="space-y-4 mt-auto">
-            <div className="flex items-center justify-between rounded-3xl border border-border/60 bg-background/70 px-4 py-3 backdrop-blur-sm">
-              <span className="text-sm text-muted-foreground">Theme</span>
-              <ThemeToggle />
-            </div>
-
-            {isLoggedIn ? (
-              <div className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-                <Button className="w-full" asChild>
-                  <Link href="/dashboard" onClick={toggleNavbar}>
-                    Go to Dashboard
-                  </Link>
-                </Button>
+                    return (
+                      <li key={link.href}>
+                        <SheetClose asChild>
+                          <Link prefetch={true} href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-primary" : "text-foreground")}>
+                            <span>{link.label}</span>
+                            <ChevronRightIcon aria-hidden="true" className="size-5 opacity-70" />
+                          </Link>
+                        </SheetClose>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-            ) : (
-              <>
-                <div className={`transition-all duration-300 delay-300 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link prefetch={true} href="/login" onClick={toggleNavbar}>
-                      Log in
-                    </Link>
-                  </Button>
+
+              <SheetFooter>
+                <div className="flex items-center justify-between rounded-3xl border border-border/60 bg-background/70 px-4 py-3">
+                  <span className="text-sm text-muted-foreground">Theme</span>
+                  <ThemeToggle />
                 </div>
 
-                <div className={`transition-all duration-300 delay-400 ${navbarToggled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-                  <Button className="w-full" asChild>
-                    <Link prefetch={true} href="/signup" onClick={toggleNavbar}>
-                      Sign up
-                    </Link>
-                  </Button>
-                </div>
-              </>
-            )}
-          </div>
+                {isLoggedIn ? (
+                  <SheetClose asChild>
+                    <Button className="w-full" asChild>
+                      <Link href="/dashboard">Go to Dashboard</Link>
+                    </Button>
+                  </SheetClose>
+                ) : (
+                  <>
+                    <SheetClose asChild>
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link prefetch={true} href="/login">
+                          Log in
+                        </Link>
+                      </Button>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Button className="w-full" asChild>
+                        <Link prefetch={true} href="/signup">
+                          Sign up
+                        </Link>
+                      </Button>
+                    </SheetClose>
+                  </>
+                )}
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>

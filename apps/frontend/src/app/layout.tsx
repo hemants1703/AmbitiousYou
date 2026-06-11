@@ -85,6 +85,13 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
       { url: "/svg_logos/favicon_32px.svg", type: "image/svg+xml" },
+      { url: "/svg_logos/favicon_16px.svg", type: "image/svg+xml" },
+      { url: "/svg_logos/logo_150px.svg", type: "image/svg+xml" },
+      { url: "/svg_logos/logo_250px.svg", type: "image/svg+xml" },
+      { url: "/png_logos/favicon_32px.png", type: "image/png" },
+      { url: "/png_logos/favicon_16px.png", type: "image/png" },
+      { url: "/png_logos/logo_150px.png", type: "image/png" },
+      { url: "/png_logos/logo_250px.png", type: "image/png" },
     ],
     shortcut: "/favicon.ico",
   },

@@ -17,8 +17,6 @@ const initialState: DemoAmbitionState = {
 
 export function useDemoAmbition() {
   const [state, setState] = useState<DemoAmbitionState>(initialState);
-  // Always loaded since we're not using localStorage anymore
-  const isLoaded = true;
 
   const selectPersona = useCallback((personaId: string, ambition: PersonaAmbition) => {
     setState((prev) => ({
@@ -81,7 +79,6 @@ export function useDemoAmbition() {
 
   return {
     state,
-    isLoaded,
     selectPersona,
     toggleItemComplete,
     calculateProgress,
