@@ -12,7 +12,7 @@ const withoutPoints = [
 const withPoints = [
   "Every ambition structured in one private place.",
   "A system carries you on the days motivation doesn’t.",
-  "The streak you’ve built makes you want to keep it.",
+  "Every Monday picks up right where you left off.",
   "Progress you can see, so momentum compounds.",
   "Big goals broken into the one move you make today.",
 ];

@@ -1,4 +1,4 @@
-import { CheckIcon, FlameIcon } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import LandingSection, { Eyebrow } from "../landing-section";
 import MockFrame from "../mock-frame";
@@ -72,14 +72,15 @@ function DailyActionsMock() {
     { label: "Watch lecture 4: gradient descent", done: true },
     { label: "Train the model on the dataset", done: false },
   ];
+  const doneCount = actions.filter((action) => action.done).length;
 
   return (
     <div className="bg-card/90 p-5">
       <div className="mb-4 flex items-center justify-between">
         <span className="text-sm font-bold">Today’s actions</span>
-        <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400">
-          <FlameIcon className="size-3.5" />
-          12-day streak
+        <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
+          <CheckIcon className="size-3.5 text-primary" />
+          {doneCount} of {actions.length} done
         </span>
       </div>
       <div className="space-y-2.5">
