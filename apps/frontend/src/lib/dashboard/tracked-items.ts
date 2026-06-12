@@ -29,6 +29,7 @@ export interface QueueItem {
   ambitionId: string;
   ambitionName: string;
   ambitionPriority: Ambition["ambitionPriority"];
+  ambitionMotivation: string | null;
 }
 
 export function getItemTitle(item: TrackedItem): string {
@@ -100,6 +101,7 @@ function toQueueItem(item: TrackedItem, ambition: AmbitionDetails): QueueItem {
     ambitionId: ambition.id,
     ambitionName: ambition.ambitionName,
     ambitionPriority: ambition.ambitionPriority,
+    ambitionMotivation: ambition.ambitionMotivation,
   };
 }
 
@@ -245,6 +247,33 @@ export function computeAttentionFlags(ambitions: AmbitionDetails[]): AttentionFl
 
   const severityRank: Record<AttentionSeverity, number> = { overdue: 0, stalled: 1, ready: 2 };
   return flags.sort((first, second) => severityRank[first.severity] - severityRank[second.severity] || priorityWeight(second.priority) - priorityWeight(first.priority));
+}
+
+export interface LeadMotivation {
+  ambitionId: string;
+  ambitionName: string;
+  motivation: string;
+}
+
+/**
+ * The single "why" to surface prominently at the top of the dashboard: the
+ * motivation of the user's most pressing ambition (the one owning the most urgent
+ * open move, since `openItems` arrives urgency-sorted), falling back to any active
+ * ambition that has a motivation set. Returns null when none is set, so the banner
+ * stays hidden rather than rendering an empty shell.
+ */
+export function pickLeadMotivation(openItems: QueueItem[], ambitions: AmbitionDetails[]): LeadMotivation | null {
+  const fromQueue = openItems.find((item) => item.ambitionMotivation?.trim());
+  if (fromQueue?.ambitionMotivation) {
+    return { ambitionId: fromQueue.ambitionId, ambitionName: fromQueue.ambitionName, motivation: fromQueue.ambitionMotivation.trim() };
+  }
+
+  const fromAmbition = ambitions.find((ambition) => ambition.ambitionMotivation?.trim());
+  if (fromAmbition?.ambitionMotivation) {
+    return { ambitionId: fromAmbition.id, ambitionName: fromAmbition.ambitionName, motivation: fromAmbition.ambitionMotivation.trim() };
+  }
+
+  return null;
 }
 
 function pluralize(count: number, noun: string): string {

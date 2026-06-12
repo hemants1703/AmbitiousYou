@@ -63,6 +63,7 @@ export class AmbitionsService {
       .set({
         ambitionName: updateAmbitionDto.ambitionName,
         ambitionDefinition: updateAmbitionDto.ambitionDefinition,
+        ambitionMotivation: updateAmbitionDto.ambitionMotivation,
         ambitionPriority: updateAmbitionDto.ambitionPriority,
         isFavourited: updateAmbitionDto.isFavourited,
       })

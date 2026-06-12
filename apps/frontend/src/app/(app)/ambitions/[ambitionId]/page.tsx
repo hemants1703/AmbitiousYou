@@ -14,7 +14,7 @@ import { getTasks } from "@/lib/api/tasks/get-tasks";
 import { getMilestones } from "@/lib/api/milestones/get-milestones";
 import { requireUser } from "@/lib/auth";
 import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon } from "lucide-react";
+import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon, QuoteIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cache, type ReactNode } from "react";
@@ -122,6 +122,8 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
                 </div>
               </div>
 
+              <AmbitionMotivationCallout ambitionId={ambition.id} motivation={ambition.ambitionMotivation} />
+
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-sm font-medium">Ambition progress</p>
@@ -151,6 +153,31 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
       </div>
     </section>
+  );
+}
+
+function AmbitionMotivationCallout(props: { ambitionId: string; motivation: string | null }) {
+  const motivation = props.motivation?.trim();
+
+  if (!motivation) {
+    return (
+      <Link
+        href={`/ambitions/${props.ambitionId}/edit`}
+        className="flex items-center gap-2 rounded-2xl border border-dashed border-border/60 px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        <QuoteIcon className="size-4 shrink-0" aria-hidden="true" />
+        Add your motivation — remember why you started.
+      </Link>
+    );
+  }
+
+  return (
+    <figure className="rounded-2xl border-l-2 border-primary/40 bg-primary/5 px-4 py-3">
+      <figcaption className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <QuoteIcon className="size-3.5" aria-hidden="true" />
+        Your motivation
+      </figcaption>
+      <blockquote className="wrap-anywhere text-sm italic text-foreground/90 sm:text-base">{motivation}</blockquote>
+    </figure>
   );
 }
 

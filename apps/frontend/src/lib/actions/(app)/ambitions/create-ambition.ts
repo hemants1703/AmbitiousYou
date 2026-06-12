@@ -125,6 +125,7 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
 
   const ambitionName = readString(formData, "ambitionName");
   const ambitionDefinition = readString(formData, "ambitionDefinition");
+  const ambitionMotivation = readString(formData, "ambitionMotivation");
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
   const ambitionStartDate = parseDate(readString(formData, "ambitionStartDate"));
   const ambitionEndDate = parseDate(readString(formData, "ambitionEndDate"));
@@ -155,6 +156,7 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
   const payload = {
     ambitionName,
     ambitionDefinition,
+    ambitionMotivation,
     ambitionStartDate: ambitionStartDate.toISOString(),
     ambitionEndDate: ambitionEndDate.toISOString(),
     ambitionPriority,

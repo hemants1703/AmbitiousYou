@@ -56,7 +56,7 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight text-balance">Edit ambition</h1>
           <p className="text-muted-foreground">
-            Update the name, definition, and priority for <span className="font-medium text-foreground">{ambition.ambitionName}</span>.
+            Update the name, definition, motivation, and priority for <span className="font-medium text-foreground">{ambition.ambitionName}</span>.
           </p>
         </div>
       </MotionWrapper>
@@ -68,6 +68,7 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
               ambitionId={ambition.id}
               ambitionName={ambition.ambitionName}
               ambitionDefinition={ambition.ambitionDefinition ?? ""}
+              ambitionMotivation={ambition.ambitionMotivation ?? ""}
               ambitionPriority={ambition.ambitionPriority ?? "medium"}
               isFavourited={ambition.isFavourited ?? false}
               ambitionStartDate={new Date(ambition.ambitionStartDate).toISOString()}

@@ -103,6 +103,7 @@ export default function CreateAmbitionForm() {
   const [state, formAction, isPending] = useActionState(createAmbitionAction, createAmbitionInitialState);
   const [ambitionName, setAmbitionName] = useState("");
   const [ambitionDefinition, setAmbitionDefinition] = useState("");
+  const [ambitionMotivation, setAmbitionMotivation] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -125,6 +126,7 @@ export default function CreateAmbitionForm() {
       /* eslint-disable react-hooks/set-state-in-effect -- one-time external-store hydration (see comment above) */
       setAmbitionName(draft.ambitionName);
       setAmbitionDefinition(draft.ambitionDefinition);
+      setAmbitionMotivation(draft.ambitionMotivation);
       setPriority(draft.priority);
       setStartDate(draft.startDate);
       setEndDate(draft.endDate);
@@ -147,13 +149,13 @@ export default function CreateAmbitionForm() {
   // instead of storing noise, so an untouched page (and "Start fresh") leaves nothing behind.
   useEffect(() => {
     if (!hydratedRef.current) return;
-    const draft = { ambitionName, ambitionDefinition, priority, startDate, endDate, moves };
+    const draft = { ambitionName, ambitionDefinition, ambitionMotivation, priority, startDate, endDate, moves };
     if (draftHasContent(draft)) {
       saveDraft(draft);
     } else {
       clearDraft();
     }
-  }, [ambitionName, ambitionDefinition, priority, startDate, endDate, moves]);
+  }, [ambitionName, ambitionDefinition, ambitionMotivation, priority, startDate, endDate, moves]);
 
   // The action returns success instead of redirecting, so we clear the draft and
   // navigate here — keeping draft removal tied to a real creation, not plain navigation.
@@ -168,6 +170,7 @@ export default function CreateAmbitionForm() {
     clearDraft();
     setAmbitionName("");
     setAmbitionDefinition("");
+    setAmbitionMotivation("");
     setPriority("medium");
     setDateRange(undefined);
     setStartDate("");
@@ -328,6 +331,22 @@ export default function CreateAmbitionForm() {
                 </PopoverContent>
               </Popover>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <FieldLabel htmlFor="ambitionMotivation" tooltip="Captured while your motivation is highest — we resurface it when you start slipping.">
+              My Motivation
+            </FieldLabel>
+            <Textarea
+              id="ambitionMotivation"
+              name="ambitionMotivation"
+              value={ambitionMotivation}
+              onChange={(event) => setAmbitionMotivation(event.target.value)}
+              placeholder="e.g., I want to finally transition into a tech career and increase my income…"
+              rows={3}
+              spellCheck
+            />
+            <p className="text-xs text-muted-foreground">We&rsquo;ll remind you of this when things get tough.</p>
           </div>
         </section>
 

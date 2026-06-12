@@ -41,6 +41,7 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
   const ambitionId = readString(formData, "ambitionId");
   const ambitionName = readString(formData, "ambitionName");
   const ambitionDefinition = readString(formData, "ambitionDefinition");
+  const ambitionMotivation = readString(formData, "ambitionMotivation");
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
   const isFavourited = readString(formData, "isFavourited") === "true";
 
@@ -68,6 +69,7 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
   const payload = {
     ambitionName,
     ambitionDefinition,
+    ambitionMotivation,
     ambitionStartDate: ambitionStartDate.toISOString(),
     ambitionEndDate: ambitionEndDate.toISOString(),
     ambitionPriority,

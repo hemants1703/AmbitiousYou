@@ -21,6 +21,7 @@ interface EditAmbitionFormProps {
   ambitionId: string;
   ambitionName: string;
   ambitionDefinition: string;
+  ambitionMotivation: string;
   ambitionPriority: Priority;
   isFavourited: boolean;
   ambitionStartDate: string;
@@ -58,9 +59,14 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
 
   const [ambitionName, setAmbitionName] = useState(props.ambitionName);
   const [ambitionDefinition, setAmbitionDefinition] = useState(props.ambitionDefinition);
+  const [ambitionMotivation, setAmbitionMotivation] = useState(props.ambitionMotivation);
   const [priority, setPriority] = useState<Priority>(props.ambitionPriority);
 
-  const isDirty = ambitionName.trim() !== props.ambitionName.trim() || ambitionDefinition.trim() !== props.ambitionDefinition.trim() || priority !== props.ambitionPriority;
+  const isDirty =
+    ambitionName.trim() !== props.ambitionName.trim() ||
+    ambitionDefinition.trim() !== props.ambitionDefinition.trim() ||
+    ambitionMotivation.trim() !== props.ambitionMotivation.trim() ||
+    priority !== props.ambitionPriority;
 
   // Warn before a hard navigation (refresh, tab close) while there are unsaved edits.
   useEffect(() => {
@@ -147,6 +153,22 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
             Definition
           </FieldLabel>
           <Textarea id="ambitionDefinition" name="ambitionDefinition" value={ambitionDefinition} onChange={(event) => setAmbitionDefinition(event.target.value)} placeholder="What does success look like? (Optional field)" rows={5} spellCheck />
+        </div>
+
+        <div className="space-y-2">
+          <FieldLabel htmlFor="ambitionMotivation" tooltip="Captured while your motivation is highest — we resurface it when you start slipping.">
+            My Motivation
+          </FieldLabel>
+          <Textarea
+            id="ambitionMotivation"
+            name="ambitionMotivation"
+            value={ambitionMotivation}
+            onChange={(event) => setAmbitionMotivation(event.target.value)}
+            placeholder="e.g., I want to finally transition into a tech career and increase my income…"
+            rows={4}
+            spellCheck
+          />
+          <p className="text-xs text-muted-foreground">We&rsquo;ll remind you of this when things get tough.</p>
         </div>
       </section>
 

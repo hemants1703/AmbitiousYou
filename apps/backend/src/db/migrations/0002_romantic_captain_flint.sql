@@ -1,0 +1,1 @@
+ALTER TABLE "ambitions" ADD COLUMN "ambition_motivation" text;

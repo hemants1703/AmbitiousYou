@@ -15,6 +15,13 @@
       "when": 1781089045306,
       "tag": "0001_perpetual_william_stryker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781279448041,
+      "tag": "0002_romantic_captain_flint",
+      "breakpoints": true
     }
   ]
 }

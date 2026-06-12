@@ -22,6 +22,7 @@ export type MoveDraft = {
 export interface CreateAmbitionDraft {
   ambitionName: string;
   ambitionDefinition: string;
+  ambitionMotivation: string;
   priority: "low" | "medium" | "high";
   startDate: string; // "YYYY-MM-DD" | ""  (dateRange is reconstructed from these on load)
   endDate: string; // "YYYY-MM-DD" | ""
@@ -69,6 +70,7 @@ export function loadDraft(): CreateAmbitionDraft | null {
     return {
       ambitionName: typeof draft.ambitionName === "string" ? draft.ambitionName : "",
       ambitionDefinition: typeof draft.ambitionDefinition === "string" ? draft.ambitionDefinition : "",
+      ambitionMotivation: typeof draft.ambitionMotivation === "string" ? draft.ambitionMotivation : "",
       priority: draft.priority === "low" || draft.priority === "high" ? draft.priority : "medium",
       startDate: typeof draft.startDate === "string" ? draft.startDate : "",
       endDate: typeof draft.endDate === "string" ? draft.endDate : "",
@@ -105,6 +107,7 @@ export function draftHasContent(draft: CreateAmbitionDraft): boolean {
   return Boolean(
     draft.ambitionName ||
       draft.ambitionDefinition ||
+      draft.ambitionMotivation ||
       draft.startDate ||
       draft.endDate ||
       draft.moves.some((move) => move.title || move.description || move.date),

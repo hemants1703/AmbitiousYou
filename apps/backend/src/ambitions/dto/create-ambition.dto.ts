@@ -11,6 +11,9 @@ export class CreateAmbitionDto implements NewAmbition {
   @IsString()
   ambitionDefinition: string = '';
 
+  @IsString()
+  ambitionMotivation: string = '';
+
   @IsDate()
   @IsNotEmpty({ message: 'ambitionStartDate must be a valid date' })
   @Type(() => Date)

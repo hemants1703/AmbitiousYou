@@ -10,6 +10,9 @@ export class UpdateAmbitionDto extends CreateAmbitionDto {
   @IsString()
   ambitionDefinition: string = '';
 
+  @IsString()
+  ambitionMotivation: string = '';
+
   @IsEnum(['low', 'medium', 'high'])
   ambitionPriority: 'low' | 'medium' | 'high' = 'low';
 

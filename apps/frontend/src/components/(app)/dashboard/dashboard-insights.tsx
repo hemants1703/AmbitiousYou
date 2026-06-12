@@ -1,10 +1,11 @@
 import { getActiveAmbitionDetails } from "@/lib/api/ambitions/get-active-ambition-details";
-import { bucketByDeadline, computeAttentionFlags, flattenOpenItems, groupUpcomingByDay } from "@/lib/dashboard/tracked-items";
+import { bucketByDeadline, computeAttentionFlags, flattenOpenItems, groupUpcomingByDay, pickLeadMotivation } from "@/lib/dashboard/tracked-items";
 import type { Ambition } from "@ambitiousyou/shared/types";
 import { InfoIcon } from "lucide-react";
 import { ActionQueue } from "./action-queue";
 import { AttentionList } from "./attention-list";
 import { DeadlinePressure } from "./deadline-pressure";
+import { MotivationBanner } from "./motivation-banner";
 import { WeeklyPreview } from "./weekly-preview";
 
 const QUEUE_LIMIT = 7;
@@ -28,12 +29,15 @@ export async function DashboardInsights(props: DashboardInsightsProps) {
   const buckets = bucketByDeadline(openItems);
   const upcoming = groupUpcomingByDay(openItems);
   const flags = computeAttentionFlags(details);
+  const leadMotivation = pickLeadMotivation(openItems, details);
 
   // Distinguish "genuinely nothing open" from "every detail call failed".
   const loadFailed = activeAmbitions.length > 0 && details.length === 0;
 
   return (
     <section className="flex flex-col gap-6 duration-500 animate-in fade-in">
+      {leadMotivation ? <MotivationBanner ambitionId={leadMotivation.ambitionId} ambitionName={leadMotivation.ambitionName} motivation={leadMotivation.motivation} /> : null}
+
       {hadErrors && !loadFailed ? (
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
           <InfoIcon className="size-3.5 shrink-0" />
@@ -43,8 +47,8 @@ export async function DashboardInsights(props: DashboardInsightsProps) {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,1fr)]">
         <div className="flex min-w-0 flex-col gap-6">
-          <ActionQueue items={queue} totalOpen={openItems.length} loadFailed={loadFailed} />
           <AttentionList flags={flags} />
+          <ActionQueue items={queue} totalOpen={openItems.length} loadFailed={loadFailed} />
         </div>
         <div className="flex min-w-0 flex-col gap-6">
           <DeadlinePressure buckets={buckets} />
