@@ -55,12 +55,16 @@ export class MilestonesService {
         throw new BadRequestException(`Milestone with id ${milestoneId} not found`);
       }
 
+      // Stamp the completion time when an edit first marks the milestone reached; never clear it (one-way).
+      const milestoneCompletedAt = updateMilestoneDto.milestoneCompleted && !milestone.milestoneCompletedAt ? new Date() : undefined;
+
       const [saved] = await tx
         .update(milestones)
         .set({
           milestone: updateMilestoneDto.milestone,
           milestoneDescription: updateMilestoneDto.milestoneDescription,
           milestoneCompleted: updateMilestoneDto.milestoneCompleted,
+          milestoneCompletedAt,
           milestoneTargetDate: updateMilestoneDto.milestoneTargetDate,
         })
         .where(eq(milestones.id, milestone.id))
@@ -86,7 +90,11 @@ export class MilestonesService {
         throw new BadRequestException('Milestones cannot be reopened once completed');
       }
 
-      const [saved] = await tx.update(milestones).set({ milestoneCompleted: true }).where(eq(milestones.id, milestone.id)).returning();
+      const [saved] = await tx
+        .update(milestones)
+        .set({ milestoneCompleted: true, milestoneCompletedAt: new Date() })
+        .where(eq(milestones.id, milestone.id))
+        .returning();
       await recalculateAmbitionProgress(tx, { userId, ambitionId: milestone.ambitionId });
       return saved;
     });

@@ -13,6 +13,9 @@ export const tasks = pgTable('tasks', {
   task: varchar('task', { length: 255 }).notNull(),
   taskDescription: text('task_description'),
   taskCompleted: boolean('task_completed').notNull().default(false),
+  // Server-stamped when the task is toggled complete; cleared when un-completed. Powers the dashboard
+  // movement chart. Nullable: incomplete tasks (and rows predating this column) have no completion time.
+  taskCompletedAt: timestamp('task_completed_at', { precision: 3 }),
   taskDeadline: timestamp('task_deadline', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { precision: 3 }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3 })

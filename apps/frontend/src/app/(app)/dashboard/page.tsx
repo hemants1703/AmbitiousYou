@@ -1,6 +1,8 @@
 import { DashboardEmptyState } from "@/components/(app)/dashboard/dashboard-empty-state";
 import { DashboardInsights } from "@/components/(app)/dashboard/dashboard-insights";
+import { DashboardMovement } from "@/components/(app)/dashboard/dashboard-movement";
 import { DashboardSkeleton } from "@/components/(app)/dashboard/dashboard-skeleton";
+import { MovementSkeleton } from "@/components/(app)/dashboard/movement-skeleton";
 import { DashboardStats } from "@/components/(app)/dashboard/dashboard-stats";
 import { ReviveMissed } from "@/components/(app)/dashboard/revive-missed";
 import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
@@ -35,6 +37,10 @@ export default async function DashboardPage() {
       </Suspense>
 
       <ReviveMissed ambitions={missed} />
+
+      <Suspense fallback={<MovementSkeleton />}>
+        <DashboardMovement sessionToken={sessionToken} ambitions={ambitions} />
+      </Suspense>
     </div>
   );
 }

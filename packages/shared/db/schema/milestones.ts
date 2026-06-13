@@ -13,6 +13,9 @@ export const milestones = pgTable('milestones', {
   milestone: varchar('milestone', { length: 255 }).notNull(),
   milestoneDescription: text('milestone_description'),
   milestoneCompleted: boolean('milestone_completed').notNull().default(false),
+  // Server-stamped when the milestone is reached (one-way; never cleared). Powers the dashboard
+  // movement chart. Nullable: unreached milestones (and rows predating this column) have no completion time.
+  milestoneCompletedAt: timestamp('milestone_completed_at', { precision: 3 }),
   milestoneTargetDate: timestamp('milestone_target_date', { precision: 3 }).notNull(),
   createdAt: timestamp('created_at', { precision: 3 }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3 })

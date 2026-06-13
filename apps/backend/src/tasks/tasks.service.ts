@@ -54,12 +54,17 @@ export class TasksService {
         throw new BadRequestException('Task not found');
       }
 
+      // Keep the completion timestamp authoritative even when completion is flipped via an edit.
+      // undefined → leave the column untouched (Drizzle skips it); preserve an existing stamp on re-save; clear on un-complete.
+      const taskCompletedAt = updateTaskDto.taskCompleted === undefined ? undefined : updateTaskDto.taskCompleted ? (task.taskCompletedAt ?? new Date()) : null;
+
       const [saved] = await tx
         .update(tasks)
         .set({
           task: updateTaskDto.task,
           taskDescription: updateTaskDto.taskDescription,
           taskCompleted: updateTaskDto.taskCompleted,
+          taskCompletedAt,
           taskDeadline: updateTaskDto.taskDeadline,
         })
         .where(eq(tasks.id, task.id))
@@ -80,7 +85,12 @@ export class TasksService {
         throw new BadRequestException('Task not found');
       }
 
-      const [saved] = await tx.update(tasks).set({ taskCompleted: !task.taskCompleted }).where(eq(tasks.id, task.id)).returning();
+      const nextCompleted = !task.taskCompleted;
+      const [saved] = await tx
+        .update(tasks)
+        .set({ taskCompleted: nextCompleted, taskCompletedAt: nextCompleted ? new Date() : null })
+        .where(eq(tasks.id, task.id))
+        .returning();
       await recalculateAmbitionProgress(tx, { userId, ambitionId: task.ambitionId });
       return saved;
     });

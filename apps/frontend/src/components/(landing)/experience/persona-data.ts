@@ -2,8 +2,8 @@ import { Ambition, Milestone, Task } from "@ambitiousyou/shared/types";
 
 export interface PersonaAmbition {
   ambition: Omit<Ambition, "userId" | "createdAt" | "updatedAt">;
-  tasks?: Omit<Task, "userId" | "createdAt" | "updatedAt">[];
-  milestones?: Omit<Milestone, "userId" | "createdAt" | "updatedAt">[];
+  tasks?: Omit<Task, "userId" | "createdAt" | "updatedAt" | "taskCompletedAt">[];
+  milestones?: Omit<Milestone, "userId" | "createdAt" | "updatedAt" | "milestoneCompletedAt">[];
 }
 
 export interface Persona {

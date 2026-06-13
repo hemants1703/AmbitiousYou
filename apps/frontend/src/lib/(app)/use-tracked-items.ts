@@ -68,9 +68,9 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     };
 
     if (draft.kind === "task") {
-      return { ...base, task: draft.title, taskDescription: draft.description, taskCompleted: false, taskDeadline: parseISO(draft.date) } satisfies Task;
+      return { ...base, task: draft.title, taskDescription: draft.description, taskCompleted: false, taskCompletedAt: null, taskDeadline: parseISO(draft.date) } satisfies Task;
     }
-    return { ...base, milestone: draft.title, milestoneDescription: draft.description, milestoneCompleted: false, milestoneTargetDate: parseISO(draft.date) } satisfies Milestone;
+    return { ...base, milestone: draft.title, milestoneDescription: draft.description, milestoneCompleted: false, milestoneCompletedAt: null, milestoneTargetDate: parseISO(draft.date) } satisfies Milestone;
   }
 
   function create(draft: DraftState) {

@@ -48,6 +48,15 @@ export function isItemCompleted(item: TrackedItem): boolean {
   return "taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted;
 }
 
+/**
+ * When the move was completed, or null if it isn't completed / predates the completion-timestamp
+ * column. Server-stamped (`new Date()`) on completion; over HTTP it arrives as an ISO string, so
+ * callers must `new Date(...)` it defensively.
+ */
+export function getItemCompletedAt(item: TrackedItem): Date | string | null {
+  return "taskCompletedAt" in item ? item.taskCompletedAt : item.milestoneCompletedAt;
+}
+
 export function getItemKind(item: TrackedItem): ItemKind {
   return "task" in item ? "task" : "milestone";
 }
@@ -161,7 +170,7 @@ function dayLabel(item: QueueItem): string {
   return WEEKDAY_FORMATTER.format(item.date);
 }
 
-function dayKey(date: Date): string {
+export function dayKey(date: Date): string {
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, "0");
   const day = `${date.getDate()}`.padStart(2, "0");
