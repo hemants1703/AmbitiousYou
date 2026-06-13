@@ -7,7 +7,7 @@ import { DashboardStats } from "@/components/(app)/dashboard/dashboard-stats";
 import { ReviveMissed } from "@/components/(app)/dashboard/revive-missed";
 import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
 import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
-import { requireUser } from "@/lib/auth";
+import { getSessionToken, requireUser } from "@/lib/auth";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -16,8 +16,14 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const { user: userDetails, sessionToken } = await requireUser();
-  const ambitions = await getAmbitions(sessionToken);
+  // Validate the session and load the ambitions concurrently rather than in
+  // series. getAmbitions only needs the raw cookie, and the /ambitions endpoint
+  // enforces auth itself (SessionGuard), so overlapping the fetch with
+  // requireUser's validation removes a backend round-trip WITHOUT weakening the
+  // gate — requireUser still redirects on an invalid session before any of this
+  // page renders.
+  const sessionToken = await getSessionToken();
+  const [{ user: userDetails }, ambitions] = await Promise.all([requireUser(), getAmbitions(sessionToken)]);
 
   const firstName = userDetails.name.trim().split(/\s+/)[0] || userDetails.name;
 
