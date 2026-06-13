@@ -29,6 +29,13 @@
       "when": 1781372482731,
       "tag": "0003_perpetual_epoch",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781379256750,
+      "tag": "0004_normalize_move_deadlines",
+      "breakpoints": true
     }
   ]
 }

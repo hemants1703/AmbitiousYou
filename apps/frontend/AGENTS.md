@@ -161,3 +161,9 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 ## Performance Targets
 - **TypeScript/JavaScript bloat:** Minimal, server-first
 - **Load Time:** Users should feel the webapp to be super fast.
+- **Backend:** Use the data fetched from backend as efficiently you can, no need to ping and disturb the backend for every single thing or even the things that can be handled from the already existing data.
+- **Caching:** Heavily use caching as much as possible to make sure we are not hitting backend all the time, memoize the calculated data, use Next.js advanced caching techniques for it, only purge caches when there is any kind of update to the relevant related data.
+- **Navigation:** should always feel natural, fast and instant, figure out all the ways that is suggested by Vercel & Next.js to keep things fast for users. Navigation speed is a priority.
+
+## Cost Optimisation
+- **Vercel:** The frontend Next.js app is deployed on Vercel free tier. Cost optimisation to make sure the free tier resources are used as less as possible to make sure we never hit the free tier limits.

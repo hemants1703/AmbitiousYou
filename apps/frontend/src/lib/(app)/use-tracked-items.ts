@@ -79,7 +79,10 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     setError(null);
 
     const optimistic = buildOptimisticItem({ ...draft, title });
-    const isoDate = parseISO(draft.date).toISOString();
+    // Send the calendar day ("YYYY-MM-DD") as-is so the backend stores UTC midnight of that day — the
+    // move's day is then preserved on any server timezone. (parseISO(...).toISOString() would send the
+    // user's local-midnight-as-UTC instant, which lands on the previous day on a UTC server → off-by-one.)
+    const dateValue = draft.date;
     const description = draft.description.trim();
     const snapshot = items;
 
@@ -88,8 +91,8 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
 
       const result =
         draft.kind === "task"
-          ? await createTaskAction({ ambitionId: params.ambitionId, task: title, taskDescription: description, taskDeadline: isoDate })
-          : await createMilestoneAction({ ambitionId: params.ambitionId, milestone: title, milestoneDescription: description, milestoneTargetDate: isoDate });
+          ? await createTaskAction({ ambitionId: params.ambitionId, task: title, taskDescription: description, taskDeadline: dateValue })
+          : await createMilestoneAction({ ambitionId: params.ambitionId, milestone: title, milestoneDescription: description, milestoneTargetDate: dateValue });
 
       const created = "task" in result ? result.task : result.milestone;
       if (result.error || !created) {
@@ -107,7 +110,10 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     if (!title || !draft.date) return;
     setError(null);
 
-    const isoDate = parseISO(draft.date).toISOString();
+    // Send the calendar day ("YYYY-MM-DD") as-is so the backend stores UTC midnight of that day — the
+    // move's day is then preserved on any server timezone. (parseISO(...).toISOString() would send the
+    // user's local-midnight-as-UTC instant, which lands on the previous day on a UTC server → off-by-one.)
+    const dateValue = draft.date;
     const description = draft.description.trim();
     const completed = isCompleted(item);
     const snapshot = items;
@@ -123,8 +129,8 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
       );
 
       const result = isMilestone(item)
-        ? await updateMilestoneAction(item.id, { milestone: title, milestoneDescription: description, milestoneCompleted: completed, milestoneTargetDate: isoDate })
-        : await updateTaskAction(item.id, { task: title, taskDescription: description, taskCompleted: completed, taskDeadline: isoDate });
+        ? await updateMilestoneAction(item.id, { milestone: title, milestoneDescription: description, milestoneCompleted: completed, milestoneTargetDate: dateValue })
+        : await updateTaskAction(item.id, { task: title, taskDescription: description, taskCompleted: completed, taskDeadline: dateValue });
 
       const updated = "task" in result ? result.task : result.milestone;
       if (result.error || !updated) {
