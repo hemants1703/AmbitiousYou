@@ -25,10 +25,10 @@ export function MotivationBanner(props: MotivationBannerProps) {
       href={`/ambitions/${props.ambitionId}`}
       prefetch
       aria-label={`Open ${props.ambitionName} and revisit why you started it`}
-      className="group block rounded-3xl border border-primary/20 bg-linear-to-br from-primary/10 via-primary/5 to-transparent p-6 shadow-sm transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-7">
+      className="group block rounded-3xl border border-chart-1/20 bg-linear-to-br from-chart-1/10 via-chart-1/5 to-transparent p-6 shadow-sm transition-colors hover:border-chart-1/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-7">
       {/* The frame: this is a promise *you* made — read before anything else. */}
       <div className="flex items-center justify-between gap-3">
-        <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary/80">
+        <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary/80 dark:text-chart-1/80">
           <SparklesIcon className="size-3.5 shrink-0" aria-hidden="true" />
           Remember why you started this!
         </p>
@@ -41,7 +41,7 @@ export function MotivationBanner(props: MotivationBannerProps) {
       </h2>
 
       {/* The why: the reason, in the user's own words — intimate, set just beneath. */}
-      <blockquote className="mt-4 line-clamp-3 wrap-anywhere border-l-2 border-primary/30 pl-3.5 text-sm leading-relaxed text-foreground/80 sm:text-base">
+      <blockquote className="mt-4 line-clamp-3 wrap-anywhere border-l-2 border-chart-1/30 pl-3.5 text-sm leading-relaxed text-foreground/80 sm:text-base">
         {props.motivation}
       </blockquote>
     </Link>

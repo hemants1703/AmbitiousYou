@@ -88,7 +88,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
       className={cn(
         // Visual circle is 24px; the ::before expands the touch target to ~44px for mobile (AGENTS.md).
         "relative mt-0.5 flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-full border transition-colors before:absolute before:-inset-2.5 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        done ? "border-emerald-500 bg-emerald-500 text-white" : "border-muted-foreground/40 text-transparent hover:border-primary hover:text-primary/50 disabled:opacity-50",
+        done ? "border-emerald-500 bg-emerald-500 text-white" : "border-muted-foreground/40 text-transparent hover:border-primary dark:hover:border-chart-1 hover:text-primary/50 disabled:opacity-50",
       )}>
       {isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : <CheckIcon className="size-3.5" />}
     </button>
