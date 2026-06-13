@@ -50,6 +50,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
   const { ambitionId } = await props.params;
   const searchParams = await props.searchParams;
+  const backTarget = resolveBackTarget(searchParams.ref);
 
   const [ambition, fetchedNotes, fetchedTasks, fetchedMilestones] = await Promise.all([
     getAmbitionData(sessionToken, ambitionId),
@@ -82,9 +83,9 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
         {/* HEADER */}
         <div className="flex flex-wrap items-center gap-2 max-sm:justify-between">
           <Button asChild variant="outline" size="sm" className="rounded-full bg-background/80">
-            <Link prefetch={true} href={searchParams.ref ? `/${searchParams.ref}` : "/ambitions"}>
+            <Link prefetch={true} href={backTarget.href}>
               <ChevronLeftIcon className="size-4" />
-              Back to ambitions
+              {backTarget.label}
             </Link>
           </Button>
 
@@ -192,6 +193,26 @@ function QuickStatCard(props: { icon: ReactNode; label: string; value: string; h
       <p className="mt-0.5 text-xs text-muted-foreground">{props.helper}</p>
     </div>
   );
+}
+
+/**
+ * The detail page is reached from several places — the ambitions list, the dashboard's
+ * next-moves queue, the revive-missed card, the motivation banner. Each passes a `ref`
+ * query param naming where it came from, so "Back" returns the user there instead of
+ * always dumping them on the ambitions list. Validated against an allowlist: a bare
+ * `/${ref}` would let a crafted value (e.g. `//evil.com`) become a protocol-relative
+ * off-site link.
+ */
+const BACK_TARGETS = {
+  dashboard: { href: "/dashboard", label: "Back to dashboard" },
+  ambitions: { href: "/ambitions", label: "Back to ambitions" },
+} as const;
+
+function resolveBackTarget(ref: string | undefined) {
+  if (ref && ref in BACK_TARGETS) {
+    return BACK_TARGETS[ref as keyof typeof BACK_TARGETS];
+  }
+  return BACK_TARGETS.ambitions;
 }
 
 function formatDate(dateValue: Date | string) {

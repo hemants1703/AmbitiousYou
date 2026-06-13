@@ -3,12 +3,14 @@
 import { MoveKindSelector } from "@/components/(app)/ambitions/move-kind-selector";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { MOVE_TITLE_MAX_LENGTH, toDateInputValue, toSelectedDate, type DraftState } from "@/lib/(app)/tracked-item";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useRef, useState } from "react";
 import type { Matcher } from "react-day-picker";
 
 interface TrackedItemDraftEditorProps {
@@ -28,6 +30,21 @@ export function TrackedItemDraftEditor(props: TrackedItemDraftEditorProps) {
   const { draft, onChange } = props;
   const canSave = Boolean(draft.title.trim()) && Boolean(draft.date);
   const isTask = draft.kind === "task";
+
+  // Description is opt-in: hidden behind a checkbox, revealed by default only when an
+  // existing move already has one (editing). Unchecking clears the text so a hidden
+  // field can never quietly submit stale content.
+  const [showDescription, setShowDescription] = useState(() => Boolean(draft.description.trim()));
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  function toggleDescription(checked: boolean) {
+    setShowDescription(checked);
+    if (checked) {
+      requestAnimationFrame(() => descriptionRef.current?.focus());
+    } else if (draft.description) {
+      onChange({ ...draft, description: "" });
+    }
+  }
 
   return (
     <div className="space-y-3 rounded-2xl border border-primary/30 dark:border-chart-1/30 bg-background/50 p-4">
@@ -65,7 +82,15 @@ export function TrackedItemDraftEditor(props: TrackedItemDraftEditorProps) {
         </PopoverContent>
       </Popover>
 
-      <Textarea value={draft.description} onChange={(event) => onChange({ ...draft, description: event.target.value })} placeholder="Optional description…" rows={3} />
+      <div className="space-y-2">
+        <label className="flex w-fit cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground">
+          <Checkbox checked={showDescription} onCheckedChange={(checked) => toggleDescription(checked === true)} aria-label={`Add a ${isTask ? "task" : "milestone"} description`} />
+          Add a description
+        </label>
+        {showDescription ? (
+          <Textarea ref={descriptionRef} value={draft.description} onChange={(event) => onChange({ ...draft, description: event.target.value })} placeholder="Optional description…" rows={3} />
+        ) : null}
+      </div>
 
       <div className="flex items-center gap-2">
         <Button type="button" size="sm" disabled={props.isPending || !canSave} onClick={props.onSubmit}>

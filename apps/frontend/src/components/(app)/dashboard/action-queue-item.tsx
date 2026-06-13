@@ -125,7 +125,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <MoveKindBadge kind={props.kind} />
           <span aria-hidden="true">·</span>
-          <Link href={`/ambitions/${props.ambitionId}`} prefetch className="min-w-0 truncate transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none" translate="no">
+          <Link href={`/ambitions/${props.ambitionId}?ref=dashboard`} prefetch className="min-w-0 truncate transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none" translate="no">
             {props.ambitionName}
           </Link>
         </div>

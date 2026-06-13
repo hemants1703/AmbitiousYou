@@ -22,7 +22,7 @@ interface MotivationBannerProps {
 export function MotivationBanner(props: MotivationBannerProps) {
   return (
     <Link
-      href={`/ambitions/${props.ambitionId}`}
+      href={`/ambitions/${props.ambitionId}?ref=dashboard`}
       prefetch
       aria-label={`Open ${props.ambitionName} and revisit why you started it`}
       className="group block rounded-3xl border border-primary/20 dark:border-chart-1/20 bg-linear-to-br from-primary/10 dark:from-chart-1/10 via-primary/5 dark:via-chart-1/5 to-transparent p-6 shadow-sm transition-colors hover:border-primary/40 dark:hover:border-chart-1/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-7">

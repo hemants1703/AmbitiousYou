@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -14,7 +15,7 @@ import { MOVE_TITLE_MAX_LENGTH, toDateInputValue, toSelectedDate } from "@/lib/(
 import { format } from "date-fns";
 import { CalendarIcon, FlagIcon, ListTodoIcon, Loader2Icon, StickyNoteIcon, ZapIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import type { Matcher } from "react-day-picker";
 import { toast } from "sonner";
 
@@ -60,6 +61,10 @@ export function QuickAdd(props: QuickAddProps) {
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
+  // Optional description for tasks/milestones — opt-in via a checkbox so the default capture stays quick.
+  const [description, setDescription] = useState("");
+  const [showDescription, setShowDescription] = useState(false);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   if (props.ambitions.length === 0) return null;
 
@@ -78,8 +83,19 @@ export function QuickAdd(props: QuickAddProps) {
   function resetAndClose() {
     setText("");
     setDate("");
+    setDescription("");
+    setShowDescription(false);
     setShowCalendar(false);
     setOpen(false);
+  }
+
+  function toggleDescription(checked: boolean) {
+    setShowDescription(checked);
+    if (checked) {
+      requestAnimationFrame(() => descriptionRef.current?.focus());
+    } else if (description) {
+      setDescription("");
+    }
   }
 
   function handleAmbitionChange(nextId: string) {
@@ -97,9 +113,9 @@ export function QuickAdd(props: QuickAddProps) {
       let error: string | null = null;
 
       if (mode === "task") {
-        error = (await createTaskAction({ ambitionId, task: value, taskDeadline: date })).error;
+        error = (await createTaskAction({ ambitionId, task: value, taskDescription: description.trim(), taskDeadline: date })).error;
       } else if (mode === "milestone") {
-        error = (await createMilestoneAction({ ambitionId, milestone: value, milestoneTargetDate: date })).error;
+        error = (await createMilestoneAction({ ambitionId, milestone: value, milestoneDescription: description.trim(), milestoneTargetDate: date })).error;
       } else {
         error = (await createNoteAction(ambitionId, value)).error;
       }
@@ -210,6 +226,23 @@ export function QuickAdd(props: QuickAddProps) {
                   className="mx-auto"
                 />
               </div>
+            ) : null}
+
+            <label className="flex w-fit cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground">
+              <Checkbox checked={showDescription} onCheckedChange={(checked) => toggleDescription(checked === true)} aria-label={`Add a ${mode === "task" ? "task" : "milestone"} description`} />
+              Add a description
+            </label>
+            {showDescription ? (
+              <Textarea
+                ref={descriptionRef}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                placeholder="Optional description…"
+                rows={3}
+                onKeyDown={(event) => {
+                  if ((event.metaKey || event.ctrlKey) && event.key === "Enter") handleSubmit();
+                }}
+              />
             ) : null}
           </>
         )}

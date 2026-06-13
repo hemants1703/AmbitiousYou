@@ -67,7 +67,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
         {filteredAmbitions.length > 0 ? (
           filteredAmbitions.map((ambition, index) => (
             <MotionWrapper key={ambition.id} transition={{ duration: 0.3, delay: 0.05 * index }}>
-              <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
+              <Link prefetch={true} href={`/ambitions/${ambition.id}?ref=ambitions`}>
                 <AmbitionCard ambition={ambition} index={index} completedTasksOrMilestones={0} totalTasksOrMilestones={0} />
               </Link>
             </MotionWrapper>

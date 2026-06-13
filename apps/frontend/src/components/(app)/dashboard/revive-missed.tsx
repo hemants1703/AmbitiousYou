@@ -40,7 +40,7 @@ export function ReviveMissed(props: ReviveMissedProps) {
           return (
             <Link
               key={ambition.id}
-              href={`/ambitions/${ambition.id}`}
+              href={`/ambitions/${ambition.id}?ref=dashboard`}
               prefetch
               className="flex items-center gap-3 rounded-2xl border border-amber-500/20 p-3 transition-colors hover:bg-amber-500/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
               <div className="min-w-0 flex-1">

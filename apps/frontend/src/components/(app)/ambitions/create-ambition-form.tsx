@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -113,6 +114,11 @@ export default function CreateAmbitionForm() {
   const [moves, setMoves] = useState<MoveDraft[]>([createMoveDraft()]);
   const [restored, setRestored] = useState(false);
 
+  // Per-move opt-in for the optional description field, keyed by move id. A move whose
+  // description already holds text counts as open too, so restored drafts surface their
+  // descriptions without needing an entry here.
+  const [descriptionOpenIds, setDescriptionOpenIds] = useState<Set<string>>(new Set());
+
   // Gates the save effect so the pre-hydration render can't clobber a stored draft.
   const hydratedRef = useRef(false);
 
@@ -189,6 +195,19 @@ export default function CreateAmbitionForm() {
 
   const removeMove = (id: string) => {
     setMoves((current) => (current.length > 1 ? current.filter((move) => move.id !== id) : current));
+  };
+
+  const isDescriptionOpen = (move: MoveDraft) => descriptionOpenIds.has(move.id) || Boolean(move.description);
+
+  const toggleMoveDescription = (move: MoveDraft, open: boolean) => {
+    setDescriptionOpenIds((current) => {
+      const next = new Set(current);
+      if (open) next.add(move.id);
+      else next.delete(move.id);
+      return next;
+    });
+    // Clear the text when collapsing so a hidden description isn't silently submitted.
+    if (!open && move.description) updateMove(move.id, "description", "");
   };
 
   const handleDateRangeSelect = (range: DateRange | undefined) => {
@@ -416,10 +435,30 @@ export default function CreateAmbitionForm() {
                         </div>
 
                         <div className="space-y-2">
-                          <FieldLabel htmlFor={descriptionName} tooltip="Optional context, acceptance criteria, or extra notes for this move.">
-                            {isTask ? "Task description" : "Milestone description"}
-                          </FieldLabel>
-                          <Textarea id={descriptionName} name={descriptionName} value={move.description} onChange={(event) => updateMove(move.id, "description", event.target.value)} placeholder="Optional context, acceptance criteria, or notes…" rows={3} />
+                          <div className="flex items-center gap-1.5">
+                            <label className="flex w-fit cursor-pointer items-center gap-2 text-sm font-medium">
+                              <Checkbox
+                                checked={isDescriptionOpen(move)}
+                                onCheckedChange={(checked) => toggleMoveDescription(move, checked === true)}
+                                aria-label={`Add a ${isTask ? "task" : "milestone"} description`}
+                              />
+                              Add a description
+                            </label>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button
+                                  type="button"
+                                  aria-label="Description help"
+                                  className="inline-flex size-4 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                                  <CircleHelpIcon className="size-3.5" />
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent>Optional context, acceptance criteria, or extra notes for this move.</TooltipContent>
+                            </Tooltip>
+                          </div>
+                          {isDescriptionOpen(move) ? (
+                            <Textarea id={descriptionName} name={descriptionName} value={move.description} onChange={(event) => updateMove(move.id, "description", event.target.value)} placeholder="Optional context, acceptance criteria, or notes…" rows={3} />
+                          ) : null}
                         </div>
                       </div>
                     </div>
