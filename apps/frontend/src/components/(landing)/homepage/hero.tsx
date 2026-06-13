@@ -4,7 +4,7 @@ import Link from "next/link";
 import DashboardPreview from "./dashboard-preview";
 import PrimaryCta from "../primary-cta";
 
-const proofPoints = ["Organized Life", "Clutter-free Goals", "Cumulative Progress"];
+const proofPoints = ["Organized Life", "Clutter-free Goals", "Visible Momentum", "Year-long Streaks"];
 
 export default function Hero() {
   return (

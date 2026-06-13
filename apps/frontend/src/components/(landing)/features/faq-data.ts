@@ -13,6 +13,11 @@ export const featuresFaq: readonly FaqItem[] = [
       "Task managers are built for chores. AmbitiousYou is built for long-term goals: each ambition is made of moves — a free mix of checkable tasks and one-time milestones — plus notes, a deadline, a priority, and a colour of its own. As you complete moves, the ambition’s progress recalculates, and your dashboard turns everything into stats and insights that keep the big picture in view.",
   },
   {
+    question: "How does AmbitiousYou track my momentum and streaks?",
+    answer:
+      "Every move is timestamped the moment you complete it, so your dashboard shows real momentum — a chart of how many tasks and milestones you finished each day over the last 7, 14, or 30 days, a contribution calendar of the whole year, and a day-streak that only counts days you actually completed something. Nothing is estimated or inflated.",
+  },
+  {
     question: "Is there a free plan available?",
     answer: "AmbitiousYou is free to use. There are no billing tiers, no credit card, and no cap on how many ambitions you create — sign up and start.",
   },

@@ -1,7 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, type LucideIcon } from "lucide-react";
+import { CalendarDaysIcon, CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, TrendingUpIcon, type LucideIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import PrimaryCta from "@/components/(landing)/primary-cta";
@@ -15,7 +15,7 @@ import { absoluteUrl, siteConfig } from "@/lib/site";
 
 export const dynamic = "force-static";
 
-const description = "Discover the powerful features of AmbitiousYou, designed to help you achieve your most ambitious goals with ease and efficiency.";
+const description = "Discover the powerful features of AmbitiousYou — momentum tracking, honest day-streaks, a year-long contribution calendar, and a dashboard that turns every completed move into visible progress.";
 
 export const metadata: Metadata = {
   title: "Features - AmbitiousYou",
@@ -66,6 +66,16 @@ const coreFeatures: { icon: LucideIcon; title: string; description: string; core
     icon: PlusCircleIcon,
     title: "Quick Ambition Creation",
     description: "Our streamlined ambition creation process gets you from idea to execution in minutes, not hours.",
+  },
+  {
+    icon: TrendingUpIcon,
+    title: "Momentum & Honest Streaks",
+    description: "See exactly how many moves you complete each day over the last week, two weeks, or month — with a day-streak that only counts real completions, never busywork.",
+  },
+  {
+    icon: CalendarDaysIcon,
+    title: "A Year of Progress at a Glance",
+    description: "A GitHub-style contribution calendar turns every completed move into a square, so your consistency across the whole year is visible in a single look.",
   },
 ];
 

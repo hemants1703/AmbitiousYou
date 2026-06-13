@@ -75,10 +75,13 @@ export function ContributionGrid(props: ContributionGridProps) {
 
   return (
     <div className="space-y-3">
-      <div className="overflow-x-auto">
+      {/* Scroll only when genuinely too narrow. On xl the calendar is contained to its exact grid width
+          (xl:shrink-0 in the parent), so a sub-pixel rounding diff would otherwise trip a phantom
+          scrollbar in production builds — overflow-x-visible there avoids it (the Card clips any bleed). */}
+      <div className="overflow-x-auto xl:overflow-x-visible">
         <div className="flex w-max gap-2" style={cellVars}>
           {/* Spacer (height of the month row) + weekday labels aligned to grid rows. */}
-          <div className="flex flex-col gap-[var(--gap)]">
+          <div className="flex flex-col gap-(--gap)">
             <div className="h-4" aria-hidden="true" />
             <div className="grid text-[10px] text-muted-foreground" style={rowsStyle} aria-hidden="true">
               {props.weekdayLabels.map((label, index) => (
@@ -90,7 +93,7 @@ export function ContributionGrid(props: ContributionGridProps) {
           </div>
 
           {/* Month labels above the day grid, sharing one column template. */}
-          <div className="flex flex-col gap-[var(--gap)]">
+          <div className="flex flex-col gap-(--gap)">
             <div className="grid h-4 items-end text-[10px] text-muted-foreground" style={columnsStyle} aria-hidden="true">
               {props.monthLabels.map((month) => (
                 <span key={`${month.weekIndex}-${month.label}`} className="whitespace-nowrap leading-none" style={{ gridColumnStart: month.weekIndex + 1 }}>
@@ -109,7 +112,7 @@ export function ContributionGrid(props: ContributionGridProps) {
       <div className="flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground" aria-label="Activity level legend">
         <span>Less</span>
         {LEVELS.map((level) => (
-          <span key={level} className={cn("size-[11px] rounded-[3px] ring-1 ring-inset ring-foreground/5", LEVEL_CLASS[level])} aria-hidden="true" />
+          <span key={level} className={cn("size-2.75 rounded-[3px] ring-1 ring-inset ring-foreground/5", LEVEL_CLASS[level])} aria-hidden="true" />
         ))}
         <span>More</span>
       </div>

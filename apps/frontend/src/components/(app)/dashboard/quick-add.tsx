@@ -123,7 +123,7 @@ export function QuickAdd(props: QuickAddProps) {
         if (!next) setShowCalendar(false);
       }}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full shrink-0 sm:w-auto">
+        <Button variant="outline" className="min-w-0 flex-1 sm:w-auto sm:flex-none">
           <ZapIcon className="size-4" />
           Quick add
         </Button>

@@ -46,7 +46,7 @@ export function ContributionGraph(props: ContributionGraphProps) {
             </div>
 
             {/* Right: year-scoped insight tiles that put the leftover width to use. */}
-            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:flex-1 xl:grid-cols-2">
+            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:min-w-0 xl:flex-1 xl:grid-cols-2">
               <InsightTile icon={<ActivityIcon className="size-4" />} value={String(stats.totalCompleted)} label="moves this year" />
               <InsightTile icon={<FlameIcon className="size-4" />} value={String(stats.currentStreak)} label="day current streak" />
               <InsightTile icon={<TrophyIcon className="size-4" />} value={String(stats.longestStreak)} label="day longest streak" />
