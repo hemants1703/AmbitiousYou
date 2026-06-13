@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import type { Ambition, User } from "@ambitiousyou/shared/types";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
+import { QuickAdd } from "./quick-add";
 import { TimeOfDayGreeting } from "./time-of-day-greeting";
 
 interface WelcomeHeaderProps {
@@ -33,6 +34,14 @@ export function WelcomeHeader(props: WelcomeHeaderProps) {
   const momentumLine = buildMomentumLine({ activeCount: active.length, completedCount: completed.length, averageProgress });
   const todayLabel = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
 
+  // Trimmed, serialisable shape for the client Quick add popover (active ambitions only).
+  const quickAddAmbitions = active.map((ambition) => ({
+    id: ambition.id,
+    name: ambition.ambitionName,
+    startDate: new Date(ambition.ambitionStartDate).toISOString(),
+    endDate: new Date(ambition.ambitionEndDate).toISOString(),
+  }));
+
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0 space-y-1.5">
@@ -44,12 +53,15 @@ export function WelcomeHeader(props: WelcomeHeaderProps) {
         <p className="max-w-2xl text-balance text-muted-foreground">{momentumLine}</p>
       </div>
 
-      <Button asChild className="w-full shrink-0 sm:w-auto">
-        <Link href="/ambitions/create" prefetch>
-          <PlusCircleIcon className="size-4" />
-          New ambition
-        </Link>
-      </Button>
+      <div className="flex w-full shrink-0 gap-2 sm:w-auto">
+        {quickAddAmbitions.length > 0 ? <QuickAdd ambitions={quickAddAmbitions} /> : null}
+        <Button asChild className="w-full sm:w-auto">
+          <Link href="/ambitions/create" prefetch>
+            <PlusCircleIcon className="size-4" />
+            New ambition
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

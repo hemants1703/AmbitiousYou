@@ -1,14 +1,10 @@
 import { getActiveAmbitionDetails } from "@/lib/api/ambitions/get-active-ambition-details";
-import { bucketByDeadline, computeAttentionFlags, flattenOpenItems, groupUpcomingByDay, pickLeadMotivation } from "@/lib/dashboard/tracked-items";
+import { flattenOpenItems, groupUpcomingByDay, pickLeadMotivation } from "@/lib/dashboard/tracked-items";
 import type { Ambition } from "@ambitiousyou/shared/types";
 import { InfoIcon } from "lucide-react";
-import { ActionQueue } from "./action-queue";
-import { AttentionList } from "./attention-list";
-import { DeadlinePressure } from "./deadline-pressure";
 import { MotivationBanner } from "./motivation-banner";
+import { TodayFocus } from "./today-focus";
 import { WeeklyPreview } from "./weekly-preview";
-
-const QUEUE_LIMIT = 7;
 
 interface DashboardInsightsProps {
   sessionToken: string;
@@ -16,19 +12,17 @@ interface DashboardInsightsProps {
 }
 
 /**
- * Async server child streamed behind a single <Suspense> boundary. Fetches
- * per-ambition details for all active ambitions in parallel (errors isolated),
- * builds every derived view once, and renders the working cluster.
+ * Async server child streamed behind a single <Suspense> boundary. Fetches per-ambition
+ * details for all active ambitions in parallel (errors isolated), derives the open-move
+ * views once, and renders the working cluster: the user's "why" then Today alongside the
+ * immediate next two days.
  */
 export async function DashboardInsights(props: DashboardInsightsProps) {
   const activeAmbitions = props.ambitions.filter((ambition) => ambition.ambitionStatus === "active");
   const { details, hadErrors } = await getActiveAmbitionDetails(props.sessionToken, activeAmbitions);
 
   const openItems = flattenOpenItems(details);
-  const queue = openItems.slice(0, QUEUE_LIMIT);
-  const buckets = bucketByDeadline(openItems);
-  const upcoming = groupUpcomingByDay(openItems);
-  const flags = computeAttentionFlags(details);
+  const upcoming = groupUpcomingByDay(openItems, 2, 1); // tomorrow + day after; today belongs to the Today panel
   const leadMotivation = pickLeadMotivation(openItems, details);
 
   // Distinguish "genuinely nothing open" from "every detail call failed".
@@ -45,15 +39,9 @@ export async function DashboardInsights(props: DashboardInsightsProps) {
         </p>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,1fr)]">
-        <div className="flex min-w-0 flex-col gap-6">
-          <AttentionList flags={flags} />
-          <ActionQueue items={queue} totalOpen={openItems.length} loadFailed={loadFailed} />
-        </div>
-        <div className="flex min-w-0 flex-col gap-6">
-          <DeadlinePressure buckets={buckets} />
-          <WeeklyPreview groups={upcoming} />
-        </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <TodayFocus openItems={openItems} loadFailed={loadFailed} />
+        <WeeklyPreview groups={upcoming} />
       </div>
     </section>
   );

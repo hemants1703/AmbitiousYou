@@ -9,8 +9,8 @@ import { Ambition } from "@ambitiousyou/shared/types";
 interface AmbitionCardProps {
   ambition: Ambition;
   index: number;
-  completedTasksOrMilestones: number;
-  totalTasksOrMilestones: number;
+  completedTasksOrMilestones?: number;
+  totalTasksOrMilestones?: number;
 }
 
 export default function AmbitionCard(props: AmbitionCardProps) {

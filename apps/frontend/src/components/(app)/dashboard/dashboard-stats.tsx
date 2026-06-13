@@ -14,6 +14,7 @@ export function DashboardStats(props: DashboardStatsProps) {
 
   const averageProgress = active.length > 0 ? Math.round(active.reduce((sum, ambition) => sum + (ambition.ambitionPercentageCompleted ?? 0), 0) / active.length) : 0;
 
+  // Attention = active ambitions past their deadline, or due within a week and not yet done.
   const overdueCount = active.filter((ambition) => getDaysUntil(ambition.ambitionEndDate) < 0).length;
   const needsAttentionCount = active.filter((ambition) => {
     const daysToDeadline = getDaysUntil(ambition.ambitionEndDate);

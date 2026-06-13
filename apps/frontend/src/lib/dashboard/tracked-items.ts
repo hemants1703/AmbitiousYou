@@ -157,6 +157,7 @@ const WEEKDAY_FORMATTER = new Intl.DateTimeFormat("en-US", { weekday: "long" });
 function dayLabel(item: QueueItem): string {
   if (item.daysUntil === 0) return "Today";
   if (item.daysUntil === 1) return "Tomorrow";
+  if (item.daysUntil === 2) return "Day after Tomorrow";
   return WEEKDAY_FORMATTER.format(item.date);
 }
 
@@ -168,15 +169,16 @@ function dayKey(date: Date): string {
 }
 
 /**
- * Upcoming open items (due today through `withinDays`) grouped by calendar day,
- * earliest first. Overdue items are intentionally excluded — they belong to the
- * action queue / attention surfaces, not the "coming up" preview.
+ * Upcoming open items grouped by calendar day, earliest first. Bounded to
+ * [`fromDays`, `withinDays`] days from today (defaults to today-through-7). The dashboard
+ * passes `fromDays = 1` so the weekly preview starts at tomorrow — today's work belongs to
+ * the Today panel — and overdue items (negative) are always excluded.
  */
-export function groupUpcomingByDay(items: QueueItem[], withinDays = 7): DayGroup[] {
+export function groupUpcomingByDay(items: QueueItem[], withinDays = 7, fromDays = 0): DayGroup[] {
   const groups = new Map<string, DayGroup>();
 
   for (const item of items) {
-    if (item.daysUntil < 0 || item.daysUntil > withinDays) continue;
+    if (item.daysUntil < fromDays || item.daysUntil > withinDays) continue;
 
     const key = dayKey(item.date);
     const existing = groups.get(key);
