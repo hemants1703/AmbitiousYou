@@ -38,6 +38,13 @@ export interface ContributionStats {
   longestStreak: number;
   /** Consecutive days ending today, each with at least one completion. */
   currentStreak: number;
+  /** Year totals by move kind. */
+  taskCount: number;
+  milestoneCount: number;
+  /** The single busiest day in range. */
+  bestDay: { dateKey: string; label: string; count: number } | null;
+  /** The weekday the user completes the most moves on. */
+  busiestWeekday: { index: number; label: string; count: number } | null;
   hasAnyCompletionEver: boolean;
 }
 
@@ -54,6 +61,7 @@ export interface ContributionCalendar {
 
 const FULL_LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
 const MONTH_FORMATTER = new Intl.DateTimeFormat("en-US", { month: "short" });
+const WEEKDAY_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const WEEKS_BACK = 52;
 
 function toLocalMidnight(value: Date | string): Date | null {
@@ -108,6 +116,8 @@ export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Dat
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
   const weeks: ContributionWeek[] = [];
   const monthLabels: ContributionMonthLabel[] = [];
+  const weekdayTotals = [0, 0, 0, 0, 0, 0, 0];
+  let bestDay: ContributionStats["bestDay"] = null;
   let lastMonth = -1;
 
   for (let w = 0; w * 7 < allDays.length; w += 1) {
@@ -128,14 +138,19 @@ export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Dat
       }
       const bucket = counts.get(key);
       const count = bucket?.total ?? 0;
+      const label = FULL_LABEL_FORMATTER.format(dn);
       week.push({
         dateKey: key,
-        label: FULL_LABEL_FORMATTER.format(dn),
+        label,
         taskCount: bucket?.task ?? 0,
         milestoneCount: bucket?.milestone ?? 0,
         count,
         level: levelFor(count),
       });
+      if (count > 0) {
+        weekdayTotals[dn.getDay()] += count;
+        if (bestDay === null || count > bestDay.count) bestDay = { dateKey: key, label, count };
+      }
       // Mark the month at the first real day of the week whose month differs from the previous column.
       if (!monthMarked) {
         const month = dn.getMonth();
@@ -151,8 +166,12 @@ export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Dat
 
   let totalCompleted = 0;
   let activeDays = 0;
+  let taskCount = 0;
+  let milestoneCount = 0;
   for (const bucket of counts.values()) {
     totalCompleted += bucket.total;
+    taskCount += bucket.task;
+    milestoneCount += bucket.milestone;
     if (bucket.total > 0) activeDays += 1;
   }
 
@@ -181,12 +200,19 @@ export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Dat
     else break;
   }
 
+  let busiestWeekday: ContributionStats["busiestWeekday"] = null;
+  for (let i = 0; i < 7; i += 1) {
+    if (weekdayTotals[i] > 0 && (busiestWeekday === null || weekdayTotals[i] > busiestWeekday.count)) {
+      busiestWeekday = { index: i, label: WEEKDAY_LONG[i], count: weekdayTotals[i] };
+    }
+  }
+
   return {
     weeks,
     numWeeks: weeks.length,
     monthLabels,
     weekdayLabels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    stats: { totalCompleted, activeDays, longestStreak, currentStreak, hasAnyCompletionEver },
+    stats: { totalCompleted, activeDays, longestStreak, currentStreak, taskCount, milestoneCount, bestDay, busiestWeekday, hasAnyCompletionEver },
     rangeStartKey,
     rangeEndKey: todayKey,
   };

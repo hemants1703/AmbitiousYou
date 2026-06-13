@@ -1,8 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ContributionCalendar } from "@/lib/dashboard/contribution";
-import { cn } from "@/lib/utils";
-import { ActivityIcon, CalendarDaysIcon, InfoIcon } from "lucide-react";
-import type { CSSProperties } from "react";
+import { ActivityIcon, CalendarCheckIcon, CalendarDaysIcon, FlameIcon, InfoIcon, SparklesIcon, TrophyIcon, ZapIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { ContributionGrid } from "./contribution-grid";
 
 interface ContributionGraphProps {
   calendar: ContributionCalendar;
@@ -11,32 +11,15 @@ interface ContributionGraphProps {
   backfillEstimated?: boolean;
 }
 
-const LEVEL_CLASS: Record<0 | 1 | 2 | 3 | 4, string> = {
-  0: "bg-muted",
-  1: "bg-emerald-500/25",
-  2: "bg-emerald-500/45",
-  3: "bg-emerald-500/70",
-  4: "bg-emerald-500",
-};
-
-const LEVELS: (0 | 1 | 2 | 3 | 4)[] = [0, 1, 2, 3, 4];
-
-/** Weekday rows to label on the left (Mon/Wed/Fri), GitHub-style. */
-const LABELLED_WEEKDAYS = new Set([1, 3, 5]);
-
 /**
- * A GitHub-style contribution heatmap of moves completed per day over the last ~year. Pure server
- * component — ~371 plain cells with native `title` + `aria-label` tooltips, so there's zero client JS
- * and no per-cell Radix tooltip. The month-label row and the day grid share one `gridTemplateColumns`
- * (and the weekday column shares the row template + a spacer) so everything aligns without pixel math.
+ * GitHub-style contribution calendar of moves completed per day over the last ~year. The interactive
+ * grid (with per-cell tooltips) is a small client island ({@link ContributionGrid}); this server shell
+ * owns the card, the empty state, and — on large screens — a contained-width layout where the calendar
+ * keeps its natural size and the leftover space is filled with year-scoped insight tiles.
  */
 export function ContributionGraph(props: ContributionGraphProps) {
   const { calendar } = props;
   const { stats } = calendar;
-
-  const cellVars = { "--cell": "11px", "--gap": "3px" } as CSSProperties;
-  const columnsStyle: CSSProperties = { gridTemplateColumns: `repeat(${calendar.numWeeks}, var(--cell))`, columnGap: "var(--gap)" };
-  const rowsStyle: CSSProperties = { gridTemplateRows: "repeat(7, var(--cell))", rowGap: "var(--gap)" };
 
   return (
     <Card>
@@ -56,68 +39,22 @@ export function ContributionGraph(props: ContributionGraphProps) {
             <p className="max-w-sm text-xs text-muted-foreground">Complete a task or milestone and it&apos;ll light up here — a year of momentum, one square at a time.</p>
           </div>
         ) : (
-          <>
-            <p className="text-xs text-muted-foreground">
-              <span className="font-medium tabular-nums text-foreground">{stats.totalCompleted}</span> moves in the last year
-              <span aria-hidden="true"> · </span>
-              <span className="font-medium tabular-nums text-foreground">{stats.activeDays}</span> active days
-              <span aria-hidden="true"> · </span>
-              <span className="font-medium tabular-nums text-foreground">{stats.longestStreak}</span>-day longest streak
-            </p>
-
-            <div className="overflow-x-auto">
-              <div className="flex w-max gap-2" style={cellVars}>
-                {/* Left: a spacer the height of the month row, then the weekday labels aligned to grid rows. */}
-                <div className="flex flex-col gap-[var(--gap)]">
-                  <div className="h-4" aria-hidden="true" />
-                  <div className="grid text-[10px] text-muted-foreground" style={rowsStyle} aria-hidden="true">
-                    {calendar.weekdayLabels.map((label, index) => (
-                      <span key={label} className="flex items-center leading-none">
-                        {LABELLED_WEEKDAYS.has(index) ? label : ""}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right: month labels above the day grid, sharing one column template. */}
-                <div className="flex flex-col gap-[var(--gap)]">
-                  <div className="grid h-4 items-end text-[10px] text-muted-foreground" style={columnsStyle} aria-hidden="true">
-                    {calendar.monthLabels.map((month) => (
-                      <span key={`${month.weekIndex}-${month.label}`} className="whitespace-nowrap leading-none" style={{ gridColumnStart: month.weekIndex + 1 }}>
-                        {month.label}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div role="grid" aria-label="Moves completed per day over the last year" className="grid grid-flow-col" style={{ gridTemplateRows: "repeat(7, var(--cell))", gridAutoColumns: "var(--cell)", gap: "var(--gap)" }}>
-                    {calendar.weeks.map((week, weekIndex) =>
-                      week.map((day, dayIndex) =>
-                        day === null ? (
-                          <div key={`pad-${weekIndex}-${dayIndex}`} aria-hidden="true" />
-                        ) : (
-                          <div
-                            key={day.dateKey}
-                            role="gridcell"
-                            title={`${day.label}: ${day.count} ${day.count === 1 ? "move" : "moves"}`}
-                            aria-label={`${day.label}, ${day.count} ${day.count === 1 ? "move" : "moves"} completed`}
-                            className={cn("rounded-[3px] ring-1 ring-inset ring-foreground/5", LEVEL_CLASS[day.level])}
-                          />
-                        ),
-                      ),
-                    )}
-                  </div>
-                </div>
-              </div>
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:gap-8">
+            {/* Left: the calendar, contained at its natural width on large screens. */}
+            <div className="xl:shrink-0">
+              <ContributionGrid weeks={calendar.weeks} numWeeks={calendar.numWeeks} monthLabels={calendar.monthLabels} weekdayLabels={calendar.weekdayLabels} />
             </div>
 
-            <div className="flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground" aria-label="Activity level legend">
-              <span>Less</span>
-              {LEVELS.map((level) => (
-                <span key={level} className={cn("size-[11px] rounded-[3px] ring-1 ring-inset ring-foreground/5", LEVEL_CLASS[level])} aria-hidden="true" />
-              ))}
-              <span>More</span>
-            </div>
-          </>
+            {/* Right: year-scoped insight tiles that put the leftover width to use. */}
+            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:flex-1 xl:grid-cols-2">
+              <InsightTile icon={<ActivityIcon className="size-4" />} value={String(stats.totalCompleted)} label="moves this year" />
+              <InsightTile icon={<FlameIcon className="size-4" />} value={String(stats.currentStreak)} label="day current streak" />
+              <InsightTile icon={<TrophyIcon className="size-4" />} value={String(stats.longestStreak)} label="day longest streak" />
+              <InsightTile icon={<CalendarCheckIcon className="size-4" />} value={String(stats.activeDays)} label="active days" />
+              <InsightTile icon={<SparklesIcon className="size-4" />} value={stats.bestDay ? String(stats.bestDay.count) : "—"} label={stats.bestDay ? `best day · ${stats.bestDay.label}` : "best day"} />
+              <InsightTile icon={<ZapIcon className="size-4" />} value={stats.busiestWeekday ? `${stats.busiestWeekday.label}s` : "—"} label="busiest day" />
+            </dl>
+          </div>
         )}
 
         {props.hadErrors ? (
@@ -131,5 +68,25 @@ export function ContributionGraph(props: ContributionGraphProps) {
         ) : null}
       </CardContent>
     </Card>
+  );
+}
+
+interface InsightTileProps {
+  icon: ReactNode;
+  value: string;
+  label: string;
+}
+
+function InsightTile(props: InsightTileProps) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-2xl border border-border/60 bg-muted/20 p-3">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-chart-1/10 dark:text-chart-1" aria-hidden="true">
+        {props.icon}
+      </span>
+      <div className="min-w-0">
+        <p className="truncate text-base font-semibold leading-none tabular-nums">{props.value}</p>
+        <p className="mt-1 truncate text-xs text-muted-foreground">{props.label}</p>
+      </div>
+    </div>
   );
 }
