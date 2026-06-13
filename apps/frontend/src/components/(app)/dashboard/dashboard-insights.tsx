@@ -23,6 +23,7 @@ export async function DashboardInsights(props: DashboardInsightsProps) {
 
   const openItems = flattenOpenItems(details);
   const upcoming = groupUpcomingByDay(openItems, 2, 1); // tomorrow + day after; today belongs to the Today panel
+  const weekAhead = groupUpcomingByDay(openItems, 7, 1); // full next-7-days window for the "This week" drawer
   const leadMotivation = pickLeadMotivation(openItems, details);
 
   // Distinguish "genuinely nothing open" from "every detail call failed".
@@ -41,7 +42,7 @@ export async function DashboardInsights(props: DashboardInsightsProps) {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <TodayFocus openItems={openItems} loadFailed={loadFailed} />
-        <WeeklyPreview groups={upcoming} />
+        <WeeklyPreview groups={upcoming} weekGroups={weekAhead} />
       </div>
     </section>
   );
