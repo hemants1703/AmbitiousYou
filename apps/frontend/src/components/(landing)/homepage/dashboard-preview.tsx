@@ -9,7 +9,7 @@ import PreviewAmbitionCard, { type PreviewAmbition } from "./preview-ambition-ca
 type StatTone = "default" | "positive" | "warning";
 
 const chipByTone: Record<StatTone, string> = {
-  default: "bg-primary/10 text-primary",
+  default: "bg-primary/10 dark:bg-chart-1/10 text-primary dark:text-chart-1",
   positive: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
   warning: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
 };
@@ -141,7 +141,7 @@ export default function DashboardPreview() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                          <ListChecksIcon className="size-4 text-primary" />
+                          <ListChecksIcon className="size-4 text-primary dark:text-chart-1" />
                           Your next moves
                         </CardTitle>
                         <CardDescription>The most urgent open work across every ambition.</CardDescription>
@@ -154,13 +154,13 @@ export default function DashboardPreview() {
                       </CardHeader>
                       <CardContent className="space-y-2.5">
                         {nextMoves.map((move) => (
-                          <div key={move.title} className={cn("flex items-start gap-3 rounded-2xl border p-3", move.isNext ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60")}>
+                          <div key={move.title} className={cn("flex items-start gap-3 rounded-2xl border p-3", move.isNext ? "border-primary/30 dark:border-chart-1/30 bg-primary/5 dark:bg-chart-1/5" : "border-border/60 bg-background/60")}>
                             <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-muted-foreground/40 text-transparent">
                               <CheckIcon className="size-3.5" />
                             </span>
                             <div className="min-w-0 flex-1 space-y-1">
                               {move.isNext ? (
-                                <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary">
+                                <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary dark:text-chart-1">
                                   <SparklesIcon className="size-3" />
                                   Your next move
                                 </p>
@@ -180,7 +180,7 @@ export default function DashboardPreview() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                          <CalendarRangeIcon className="size-4 text-primary" />
+                          <CalendarRangeIcon className="size-4 text-primary dark:text-chart-1" />
                           Coming up this week
                         </CardTitle>
                         <CardDescription>What’s due over the next 7 days.</CardDescription>
@@ -203,7 +203,7 @@ export default function DashboardPreview() {
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between gap-2">
                       <h3 className="flex items-center gap-2 text-lg font-semibold tracking-tight">
-                        <TargetIcon className="size-5 text-primary" />
+                        <TargetIcon className="size-5 text-primary dark:text-chart-1" />
                         Your active ambitions
                       </h3>
                       <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">

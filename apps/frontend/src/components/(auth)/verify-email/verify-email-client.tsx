@@ -54,7 +54,7 @@ export function VerifyEmailClient(props: { token: string }) {
   if (status === "success") {
     return (
       <div className="flex flex-col items-center gap-3 text-center">
-        <CircleCheckBigIcon className="size-6 text-primary" />
+        <CircleCheckBigIcon className="size-6 text-primary dark:text-chart-1" />
         <h1 className="font-brand text-2xl font-semibold tracking-[-0.02em]">Email verified</h1>
         <p className="text-sm text-muted-foreground">Your email address has been confirmed. Welcome aboard!</p>
         <Button asChild className="mt-2">

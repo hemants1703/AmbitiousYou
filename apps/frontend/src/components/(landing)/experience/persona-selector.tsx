@@ -43,7 +43,7 @@ export default function PersonaSelector(props: PersonaSelectorProps) {
             return (
               <Card.Card
                 key={persona.id}
-                className={cn("lp-reveal group relative h-full overflow-hidden", "focus-within:ring-2 focus-within:ring-primary/40", isSelected ? "shadow-lg shadow-primary/20 ring-2 ring-primary" : "hover:shadow-lg hover:ring-1 hover:ring-primary/30")}
+                className={cn("lp-reveal group relative h-full overflow-hidden", "focus-within:ring-2 focus-within:ring-primary/40 dark:focus-within:ring-chart-1/40", isSelected ? "shadow-lg shadow-primary/20 dark:shadow-chart-1/20 ring-2 ring-primary dark:ring-chart-1" : "hover:shadow-lg hover:ring-1 hover:ring-primary/30 dark:hover:ring-chart-1/30")}
                 style={
                   {
                     "--persona-color": persona.color,
@@ -65,7 +65,7 @@ export default function PersonaSelector(props: PersonaSelectorProps) {
                     </div>
                     {isSelected && <span className="rounded-full bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground">Selected</span>}
                   </div>
-                  <Card.CardTitle className="mt-3 text-lg transition-colors group-hover:text-primary">{persona.name}</Card.CardTitle>
+                  <Card.CardTitle className="mt-3 text-lg transition-colors group-hover:text-primary dark:group-hover:text-chart-1">{persona.name}</Card.CardTitle>
                   <Card.CardDescription className="text-sm">{persona.tagline}</Card.CardDescription>
                 </Card.CardHeader>
 

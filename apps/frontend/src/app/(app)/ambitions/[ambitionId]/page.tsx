@@ -171,7 +171,7 @@ function AmbitionMotivationCallout(props: { ambitionId: string; motivation: stri
   }
 
   return (
-    <figure className="rounded-2xl border-l-2 border-primary/40 bg-primary/5 px-4 py-3">
+    <figure className="rounded-2xl border-l-2 border-primary/40 dark:border-chart-1/40 bg-primary/5 dark:bg-chart-1/5 px-4 py-3">
       <figcaption className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
         <QuoteIcon className="size-3.5" aria-hidden="true" />
         Your motivation

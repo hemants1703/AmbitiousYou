@@ -151,7 +151,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
             <Card.CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <Card.CardTitle className="flex items-center gap-2 text-lg">
-                  <CircleCheckIcon aria-hidden="true" className="size-5 text-primary" />
+                  <CircleCheckIcon aria-hidden="true" className="size-5 text-primary dark:text-chart-1" />
                   Moves
                 </Card.CardTitle>
                 <Badge variant="secondary" className="text-xs">
@@ -175,7 +175,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                     /* One label = one shared hit target for the row and its checkbox (no dead zones) */
                     <label
                       key={item.id}
-                      className={cn("flex cursor-pointer items-start gap-3 rounded-lg border border-l-4 p-3 transition-colors", "hover:border-primary/30 hover:bg-muted/50", isCompleted && "border-green-500/20 bg-green-500/5", MOVE_KIND_STYLE[itemKind].stripe)}>
+                      className={cn("flex cursor-pointer items-start gap-3 rounded-lg border border-l-4 p-3 transition-colors", "hover:border-primary/30 dark:hover:border-chart-1/30 hover:bg-muted/50", isCompleted && "border-green-500/20 bg-green-500/5", MOVE_KIND_STYLE[itemKind].stripe)}>
                       <Checkbox checked={isCompleted} onCheckedChange={() => props.onToggleItem(item.id)} aria-label={`${itemKind === "task" ? "Task" : "Milestone"}: ${itemName}`} className={cn("mt-0.5", isCompleted && "data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500")} />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-2">

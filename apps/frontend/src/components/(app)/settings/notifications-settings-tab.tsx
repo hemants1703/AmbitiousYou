@@ -55,7 +55,7 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <BellIcon className="size-4 text-primary" />
+          <BellIcon className="size-4 text-primary dark:text-chart-1" />
           Notification preferences
         </CardTitle>
         <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>

@@ -7,9 +7,9 @@ export default function CTA() {
   return (
     <section className="w-full overflow-hidden py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <div className="lp-reveal relative overflow-hidden rounded-3xl border border-primary/20 bg-card/80 p-10 shadow-xl backdrop-blur-sm md:p-14">
+        <div className="lp-reveal relative overflow-hidden rounded-3xl border border-primary/20 dark:border-chart-1/20 bg-card/80 p-10 shadow-xl backdrop-blur-sm md:p-14">
           {/* Gradient hairline along the top edge */}
-          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
+          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 dark:via-chart-1/50 to-transparent" />
           {/* Local aurora bloom */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-24 h-48" style={{ background: "radial-gradient(28rem 12rem at 50% 0%, color-mix(in oklch, oklch(0.56 0.24 300) 20%, transparent) 0%, transparent 70%)" }} />
 

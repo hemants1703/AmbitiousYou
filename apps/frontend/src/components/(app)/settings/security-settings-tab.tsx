@@ -83,7 +83,7 @@ export async function SecuritySettingsTab(props: SecuritySettingsTabProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <LockKeyholeIcon className="size-4 text-primary" />
+            <LockKeyholeIcon className="size-4 text-primary dark:text-chart-1" />
             Authentication
           </CardTitle>
           <CardDescription>Manage how you sign in to your account.</CardDescription>
@@ -107,7 +107,7 @@ export async function SecuritySettingsTab(props: SecuritySettingsTabProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <MonitorIcon className="size-4 text-primary" />
+            <MonitorIcon className="size-4 text-primary dark:text-chart-1" />
             Active sessions
           </CardTitle>
           <CardDescription>

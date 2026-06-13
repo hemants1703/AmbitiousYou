@@ -160,7 +160,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
               return (
                 <article
                   key={note.id}
-                  className={["group mb-3 break-inside-avoid rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-yellow-400/40 bg-yellow-100/70 dark:border-yellow-400/15 dark:bg-yellow-400/10"].join(" ")}>
+                  className={["group mb-3 break-inside-avoid rounded-2xl border p-4 transition-colors", isEditing ? "border-primary/30 dark:border-chart-1/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-yellow-400/40 bg-yellow-100/70 dark:border-yellow-400/15 dark:bg-yellow-400/10"].join(" ")}>
                   {isEditing ? (
                     <div className="space-y-3">
                       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Editing</p>

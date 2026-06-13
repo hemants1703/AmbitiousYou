@@ -16,7 +16,7 @@ function Step(props: StepProps) {
   return (
     <div className="lp-reveal relative grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:gap-14">
       {/* Marker on the desktop guide line */}
-      <span aria-hidden="true" className="absolute left-1/2 top-1/2 hidden size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background bg-primary/60 md:block" />
+      <span aria-hidden="true" className="absolute left-1/2 top-1/2 hidden size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background bg-primary/60 dark:bg-chart-1/60 md:block" />
 
       <div className={cn(props.reverse && "md:order-2")}>
         <Eyebrow>{`Step ${props.number}`}</Eyebrow>
@@ -24,7 +24,7 @@ function Step(props: StepProps) {
         <p className="mt-3 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">{props.description}</p>
       </div>
       <div aria-hidden="true" className={cn(props.reverse && "md:order-1")}>
-        <div className="rounded-2xl bg-linear-to-tr from-primary/15 to-secondary/10 p-1.5 shadow-lg">
+        <div className="rounded-2xl bg-linear-to-tr from-primary/15 dark:from-chart-1/15 to-secondary/10 p-1.5 shadow-lg">
           <MockFrame url={props.url} className="shadow-none">
             {props.mock}
           </MockFrame>
@@ -79,7 +79,7 @@ function DailyActionsMock() {
       <div className="mb-4 flex items-center justify-between">
         <span className="text-sm font-bold">Today’s actions</span>
         <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
-          <CheckIcon className="size-3.5 text-primary" />
+          <CheckIcon className="size-3.5 text-primary dark:text-chart-1" />
           {doneCount} of {actions.length} done
         </span>
       </div>

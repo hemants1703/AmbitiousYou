@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  */
 export const LANDING_CARD = cn(
   "relative rounded-2xl border border-border/60 bg-card/60 shadow-sm",
-  "transition-colors duration-300 hover:border-primary/40",
+  "transition-colors duration-300 hover:border-primary/40 dark:hover:border-chart-1/40",
   "after:pointer-events-none after:absolute after:inset-0 after:rounded-2xl after:shadow-lg after:opacity-0 after:transition-opacity after:duration-300 hover:after:opacity-100",
 );
 

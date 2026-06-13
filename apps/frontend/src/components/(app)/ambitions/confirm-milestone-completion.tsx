@@ -22,7 +22,7 @@ export function ConfirmMilestoneCompletion(props: ConfirmMilestoneCompletionProp
       <AlertDialogTrigger asChild>{props.children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-primary/10 text-primary">
+          <AlertDialogMedia className="bg-primary/10 dark:bg-chart-1/10 text-primary dark:text-chart-1">
             <FlagIcon aria-hidden="true" />
           </AlertDialogMedia>
           <AlertDialogTitle>Mark this milestone as reached?</AlertDialogTitle>

@@ -88,20 +88,20 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
       className={cn(
         // Visual circle is 24px; the ::before expands the touch target to ~44px for mobile (AGENTS.md).
         "relative mt-0.5 flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-full border transition-colors before:absolute before:-inset-2.5 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        done ? "border-emerald-500 bg-emerald-500 text-white" : "border-muted-foreground/40 text-transparent hover:border-primary dark:hover:border-chart-1 hover:text-primary/50 disabled:opacity-50",
+        done ? "border-emerald-500 bg-emerald-500 text-white" : "border-muted-foreground/40 text-transparent hover:border-primary dark:hover:border-chart-1 hover:text-primary/50 dark:hover:text-chart-1/50 disabled:opacity-50",
       )}>
       {isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : <CheckIcon className="size-3.5" />}
     </button>
   );
 
   return (
-    <div className={cn("flex items-start gap-3 rounded-2xl border border-l-4 p-3 transition-colors", props.isNextMove ? "border-primary/30 bg-primary/5" : "border-border/60 bg-background/60", MOVE_KIND_STYLE[props.kind].stripe, done && "opacity-60")}>
+    <div className={cn("flex items-start gap-3 rounded-2xl border border-l-4 p-3 transition-colors", props.isNextMove ? "border-primary/30 dark:border-chart-1/30 bg-primary/5 dark:bg-chart-1/5" : "border-border/60 bg-background/60", MOVE_KIND_STYLE[props.kind].stripe, done && "opacity-60")}>
       {/* Completing a milestone is irreversible, so it goes through a confirm dialog; tasks toggle directly. */}
       {isMilestone ? <ConfirmMilestoneCompletion title={props.title} onConfirm={handleComplete}>{completeButton}</ConfirmMilestoneCompletion> : completeButton}
 
       <div className="min-w-0 flex-1 space-y-1">
         {props.isNextMove ? (
-          <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary">
+          <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary dark:text-chart-1">
             <SparklesIcon className="size-3" />
             Your next move
           </p>

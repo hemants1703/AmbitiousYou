@@ -159,7 +159,7 @@ function CompletionControl(props: CompletionControlProps) {
         checked={props.completed}
         disabled={props.isPending}
         onCheckedChange={props.onToggle}
-        className="mt-0.5 rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+        className="mt-0.5 rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary dark:hover:border-chart-1 hover:text-primary dark:hover:text-chart-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
         aria-label={props.completed ? "Mark task as not completed" : "Mark task as completed"}
       />
     );
@@ -182,7 +182,7 @@ function CompletionControl(props: CompletionControlProps) {
         type="button"
         disabled={props.isPending}
         aria-label={`Mark milestone "${getTitle(props.item)}" as reached`}
-        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary dark:hover:border-chart-1 hover:text-primary dark:hover:text-chart-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
         <FlagIcon className="size-3" />
       </button>
     </ConfirmMilestoneCompletion>

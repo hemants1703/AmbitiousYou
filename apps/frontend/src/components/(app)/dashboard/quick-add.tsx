@@ -160,7 +160,7 @@ export function QuickAdd(props: QuickAddProps) {
           {MODES.map((option) => {
             const Icon = option.icon;
             return (
-              <ToggleGroupItem key={option.value} value={option.value} variant="outline" aria-label={option.label} className="gap-1.5 data-[state=on]:border-primary data-[state=on]:bg-primary/5">
+              <ToggleGroupItem key={option.value} value={option.value} variant="outline" aria-label={option.label} className="gap-1.5 data-[state=on]:border-primary dark:data-[state=on]:border-chart-1 data-[state=on]:bg-primary/5 dark:data-[state=on]:bg-chart-1/5">
                 <Icon className="size-3.5" />
                 <span className="text-xs">{option.label}</span>
               </ToggleGroupItem>

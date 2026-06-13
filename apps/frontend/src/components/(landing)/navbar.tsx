@@ -46,7 +46,7 @@ export default function Navbar() {
               return (
                 <Link prefetch={true} key={link.href} href={link.href} className={cn("relative px-1 py-2 text-sm font-medium transition-colors", isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
                   {link.label}
-                  {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary" />}
+                  {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary dark:bg-chart-1" />}
                 </Link>
               );
             })}
@@ -100,7 +100,7 @@ export default function Navbar() {
                     return (
                       <li key={link.href}>
                         <SheetClose asChild>
-                          <Link prefetch={true} href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-primary" : "text-foreground")}>
+                          <Link prefetch={true} href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-primary dark:text-chart-1" : "text-foreground")}>
                             <span>{link.label}</span>
                             <ChevronRightIcon aria-hidden="true" className="size-5 opacity-70" />
                           </Link>
