@@ -12,7 +12,7 @@ export function ActivitySkeleton() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Skeleton className="h-4 w-72 max-w-full" />
-          <Skeleton className="h-[120px] w-full rounded-2xl" />
+          <Skeleton className="h-30 w-full rounded-2xl" />
           <Skeleton className="ml-auto h-4 w-28" />
         </CardContent>
       </Card>
@@ -31,7 +31,7 @@ export function ActivitySkeleton() {
               <Skeleton key={index} className="h-16 w-full rounded-2xl" />
             ))}
           </div>
-          <Skeleton className="aspect-[16/5] w-full rounded-2xl" />
+          <Skeleton className="aspect-16/5 w-full rounded-2xl" />
         </CardContent>
       </Card>
     </div>

@@ -1,7 +1,27 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { ActivityIcon, ArrowRightIcon, CalendarCheckIcon, CalendarDaysIcon, CalendarRangeIcon, CheckIcon, FlameIcon, GaugeIcon, LayoutDashboardIcon, ListChecksIcon, MoonIcon, PlusCircleIcon, SettingsIcon, SparklesIcon, TargetIcon, TrendingUpIcon, TriangleAlertIcon, TrophyIcon, type LucideIcon } from "lucide-react";
+import {
+  ActivityIcon,
+  ArrowRightIcon,
+  CalendarCheckIcon,
+  CalendarDaysIcon,
+  CalendarRangeIcon,
+  CheckIcon,
+  FlameIcon,
+  GaugeIcon,
+  LayoutDashboardIcon,
+  ListChecksIcon,
+  MoonIcon,
+  PlusCircleIcon,
+  SettingsIcon,
+  SparklesIcon,
+  TargetIcon,
+  TrendingUpIcon,
+  TriangleAlertIcon,
+  TrophyIcon,
+  type LucideIcon,
+} from "lucide-react";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import MockFrame from "../mock-frame";
@@ -74,7 +94,8 @@ export default function DashboardPreview() {
   return (
     <>
       <p className="sr-only">
-        A preview of the AmbitiousYou dashboard: stat cards for active and completed ambitions, the promise behind your top ambition, today&rsquo;s moves and what&rsquo;s coming up, a year-long contribution calendar of completed moves, and a momentum chart of how much you finished each day.
+        A preview of the AmbitiousYou dashboard: stat cards for active and completed ambitions, the promise behind your top ambition, today&rsquo;s moves and what&rsquo;s coming up, a year-long contribution calendar of completed moves, and a momentum
+        chart of how much you finished each day.
       </p>
 
       {/* Decorative product illustration — fake affordances inside are hidden from AT */}
@@ -183,7 +204,7 @@ export default function DashboardPreview() {
                       <CardDescription>Every move you&rsquo;ve completed over the last year.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:gap-6">
+                      <div className="flex flex-col gap-4 2xl:flex-row 2xl:items-start 2xl:gap-6">
                         <div className="space-y-2">
                           <div className="grid grid-flow-col" style={{ gridTemplateRows: "repeat(7, 10px)", gridAutoColumns: "10px", gap: "3px" }}>
                             {heatWeeks.map((week, weekIndex) => week.map((level, dayIndex) => <div key={`${weekIndex}-${dayIndex}`} className={cn("rounded-xs ring-1 ring-inset ring-foreground/5", heatClass[level])} />))}
@@ -196,7 +217,7 @@ export default function DashboardPreview() {
                             <span>More</span>
                           </div>
                         </div>
-                        <dl className="grid grid-cols-2 gap-2 xl:flex-1">
+                        <dl className="grid grid-cols-2 gap-2 2xl:flex-1">
                           <PreviewTile icon={<ActivityIcon className="size-3.5" />} value="248" label="moves this year" />
                           <PreviewTile icon={<FlameIcon className="size-3.5" />} value="12" label="day current streak" />
                           <PreviewTile icon={<TrophyIcon className="size-3.5" />} value="41" label="day longest streak" />
@@ -273,7 +294,9 @@ export default function DashboardPreview() {
                               ) : null}
                               <div className="flex items-start justify-between gap-2">
                                 <p className="line-clamp-2 min-w-0 font-medium">{move.title}</p>
-                                <Badge variant="outline" className="shrink-0 tabular-nums">{move.due}</Badge>
+                                <Badge variant="outline" className="shrink-0 tabular-nums">
+                                  {move.due}
+                                </Badge>
                               </div>
                               <p className="truncate text-xs text-muted-foreground">{move.ambition}</p>
                             </div>
@@ -298,7 +321,9 @@ export default function DashboardPreview() {
                               <p className="text-sm font-medium">{group.label}</p>
                               <p className="truncate text-xs text-muted-foreground">{group.item}</p>
                             </div>
-                            <Badge variant="secondary" className="shrink-0 tabular-nums">{group.count}</Badge>
+                            <Badge variant="secondary" className="shrink-0 tabular-nums">
+                              {group.count}
+                            </Badge>
                           </div>
                         ))}
                       </CardContent>

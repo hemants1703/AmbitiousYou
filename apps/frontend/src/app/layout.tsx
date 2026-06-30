@@ -119,6 +119,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const showTelemetry = process.env.NODE_ENV === "production";
+
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
@@ -136,8 +138,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <ThemeColorSync />
-          <Analytics />
-          <SpeedInsights />
+          {showTelemetry ? <Analytics /> : null}
+          {showTelemetry ? <SpeedInsights /> : null}
           <TooltipProvider>
             {children}
             <Toaster richColors theme="system" />
