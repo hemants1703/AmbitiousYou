@@ -3,7 +3,7 @@
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { MovementWindow, MovementSeries } from "@/lib/dashboard/movement";
+import { formatAmbitionsCompletedFootnote, type MovementSeries, type MovementWindow } from "@/lib/dashboard/movement";
 import { ActivityIcon, FlameIcon, InfoIcon, TrendingUpIcon, TrophyIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -96,9 +96,7 @@ export function MovementChart(props: MovementChartProps) {
         )}
 
         {stats.ambitionsCompletedInWindow > 0 ? (
-          <p className="text-xs text-muted-foreground">
-            <span className="font-medium text-foreground">{stats.ambitionsCompletedInWindow}</span> ambition{stats.ambitionsCompletedInWindow === 1 ? "" : "s"} completed in this window — that&apos;s real progress.
-          </p>
+          <p className="text-xs text-muted-foreground">{formatAmbitionsCompletedFootnote(stats.ambitionsCompletedInWindow)}</p>
         ) : null}
         {props.hadErrors ? (
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">

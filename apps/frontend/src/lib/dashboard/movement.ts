@@ -144,3 +144,8 @@ export function buildAllMovementSeries(ambitions: AmbitionDetails[], now: Date =
     30: buildMovementSeries(ambitions, 30, now),
   };
 }
+
+export function formatAmbitionsCompletedFootnote(count: number): string {
+  const noun = count === 1 ? "ambition" : "ambitions";
+  return `${count} ${noun} completed in this window — that's real progress.`;
+}

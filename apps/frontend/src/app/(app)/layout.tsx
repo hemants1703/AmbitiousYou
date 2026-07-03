@@ -2,9 +2,11 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { parseSidebarOpen, SIDEBAR_STORAGE_KEY } from "@/lib/(app)/sidebar-state";
 import { requireUser } from "@/lib/auth";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
@@ -17,11 +19,14 @@ export const metadata: Metadata = {
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { user: userDetails } = await requireUser();
+  const cookieStore = await cookies();
+  const defaultOpen = parseSidebarOpen(cookieStore.get(SIDEBAR_STORAGE_KEY)?.value);
 
   return (
     <TooltipProvider>
       <main>
         <SidebarProvider
+          defaultOpen={defaultOpen}
         style={
           {
             "--sidebar-width": "calc(var(--spacing) * 72)",
