@@ -2,25 +2,54 @@ import Link from "next/link";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
 import { ThemeToggle } from "../theme-toggle";
 import FooterAuthLinks from "./footer-auth-links";
+import { brandCopy } from "@/lib/brand";
+
+interface FooterLinkGroupProps {
+  title: string;
+  links: readonly { title: string; href: string }[];
+}
+
+function FooterLinkGroup(props: FooterLinkGroupProps) {
+  return (
+    <div className="space-y-4">
+      <h4 className="font-brand text-base font-semibold">{props.title}</h4>
+      <ul className="space-y-2 text-sm">
+        {props.links.map((link) => (
+          <li key={link.href}>
+            <Link prefetch={true} href={link.href} className="text-muted-foreground transition-colors hover:text-foreground">
+              {link.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function Footer() {
-  // Login/Sign Up live in <FooterAuthLinks> (auth-aware); the rest are static.
-  const exploreLinks = [
-    { title: "Home", href: "/" },
+  const productLinks = [
     { title: "Features", href: "/features" },
     { title: "Experience", href: "/experience" },
     { title: "Pricing", href: "/pricing" },
+    { title: "Templates", href: "/templates" },
+  ] as const;
+
+  const resourceLinks = [
     { title: "Use Cases", href: "/use-cases" },
     { title: "Compare", href: "/compare" },
-    { title: "About", href: "/about" },
-  ];
+  ] as const;
 
-  const contactLink = { title: "Contact Us", href: "mailto:support@ambitiousyou.pro" };
+  const companyLinks = [
+    { title: "About", href: "/about" },
+    { title: "Manifesto", href: "/manifesto" },
+    { title: "The Ambitious Brief", href: "/brief" },
+    { title: "Contact", href: "mailto:support@ambitiousyou.pro" },
+  ] as const;
 
   const legalLinks = [
     { title: "Privacy Policy", href: "/privacy-policy" },
     { title: "Terms & Conditions", href: "/terms-and-conditions" },
-  ];
+  ] as const;
 
   const socialLinks = [
     {
@@ -64,14 +93,13 @@ export default function Footer() {
   return (
     <footer className="z-10 w-full border-t border-border/40 pb-8 pt-14">
       <div className="mx-auto w-full max-w-screen-2xl px-4 md:px-6">
-        {/* Main Footer Content */}
-        <div className="mb-12 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12">
-          {/* Brand Section */}
-          <div className="space-y-4 lg:col-span-5">
+        <div className="mb-12 grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-12">
+          {/* Brand */}
+          <div className="col-span-2 space-y-4 md:col-span-4 lg:col-span-4">
             <Link prefetch={true} href="/" className="mb-4 flex items-center gap-2">
               <AmbitiousYouLogo />
             </Link>
-            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">Helping you become superhuman by managing your ambitions and achieving your goals.</p>
+            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">{brandCopy.footerBlurb}</p>
             <div className="flex items-center gap-2 pt-2">
               {socialLinks.map((social) => (
                 <Link key={social.label} prefetch={true} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
@@ -81,51 +109,42 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Explore */}
-          <div className="space-y-4 lg:col-span-3">
-            <h4 className="font-brand text-base font-semibold">Explore</h4>
-            <ul className="space-y-2 text-sm">
-              {exploreLinks.map(({ title, href }) => (
-                <li key={href}>
-                  <Link prefetch={true} href={href} className="text-muted-foreground transition-colors hover:text-foreground">
-                    {title}
-                  </Link>
-                </li>
-              ))}
-              <FooterAuthLinks />
-              <li key={contactLink.href}>
-                <Link prefetch={true} href={contactLink.href} className="text-muted-foreground transition-colors hover:text-foreground">
-                  {contactLink.title}
-                </Link>
-              </li>
-            </ul>
+          {/* Product */}
+          <div className="lg:col-span-2">
+            <FooterLinkGroup title="Product" links={productLinks} />
           </div>
 
-          {/* Legal */}
-          <div className="space-y-4 lg:col-span-2">
-            <h4 className="font-brand text-base font-semibold">Legal</h4>
-            <ul className="space-y-2 text-sm">
-              {legalLinks.map(({ title, href }) => (
-                <li key={href}>
-                  <Link prefetch={true} href={href} className="text-muted-foreground transition-colors hover:text-foreground">
-                    {title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Resources */}
+          <div className="lg:col-span-2">
+            <FooterLinkGroup title="Resources" links={resourceLinks} />
           </div>
 
-          {/* Preferences */}
-          <div className="space-y-4 lg:col-span-2">
-            <h4 className="font-brand text-base font-semibold">Preferences</h4>
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">Theme:</span>
-              <ThemeToggle />
+          {/* Company */}
+          <div className="lg:col-span-2">
+            <FooterLinkGroup title="Company" links={companyLinks} />
+          </div>
+
+          {/* Account + legal + preferences */}
+          <div className="col-span-2 space-y-8 md:col-span-4 lg:col-span-2">
+            <div className="space-y-4">
+              <h4 className="font-brand text-base font-semibold">Account</h4>
+              <ul className="space-y-2 text-sm">
+                <FooterAuthLinks />
+              </ul>
+            </div>
+
+            <FooterLinkGroup title="Legal" links={legalLinks} />
+
+            <div className="space-y-4">
+              <h4 className="font-brand text-base font-semibold">Preferences</h4>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border/40 pt-8 md:flex-row">
           <p className="text-center text-sm text-muted-foreground md:text-left">
             &copy; {new Date().getFullYear()} <span translate="no">AmbitiousYou</span>. All rights reserved.

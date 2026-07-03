@@ -1,3 +1,4 @@
+import { brandCopy } from "@/lib/brand";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import LandingSection from "@/components/(landing)/landing-section";
 import JsonLd from "@/components/seo/json-ld";
@@ -70,7 +71,7 @@ export default function AboutPage() {
           . The product exists because generic task managers never captured how it feels to pursue something ambitious over months — and building a custom Notion setup shouldn&apos;t be a prerequisite for progress.
         </p>
         <div className="mt-10 flex justify-center">
-          <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" />
+          <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" />
         </div>
       </LandingSection>
     </>

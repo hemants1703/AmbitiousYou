@@ -1,3 +1,4 @@
+import { brandCopy } from "@/lib/brand";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import LandingSection from "@/components/(landing)/landing-section";
 import JsonLd from "@/components/seo/json-ld";
@@ -64,7 +65,7 @@ export default async function UseCaseDetailPage(props: UseCasePageProps) {
               </ul>
             </section>
             <div className="flex flex-wrap gap-4 pt-4">
-              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" />
+              <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" />
               <Link href="/experience" className="inline-flex items-center text-sm underline underline-offset-4 text-muted-foreground hover:text-foreground">
                 Try the interactive demo
               </Link>

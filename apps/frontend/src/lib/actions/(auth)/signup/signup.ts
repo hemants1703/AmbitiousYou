@@ -64,5 +64,5 @@ export async function signupAction(_: SignupState, formData: FormData): Promise<
     maxAge: 60 * 60 * 24 * 7,
   });
 
-  redirect("/dashboard");
+  redirect("/ambitions/create?initiation=1");
 }

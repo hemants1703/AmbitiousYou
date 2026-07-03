@@ -14,6 +14,8 @@ import { revalidatePath } from "next/cache";
 export type CreateAmbitionState = {
   error: string | null;
   success?: boolean;
+  ambitionId?: string;
+  ambitionName?: string;
 };
 
 export async function createAmbitionAction(_: CreateAmbitionState, formData: FormData): Promise<CreateAmbitionState> {
@@ -85,16 +87,21 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
         error: errorMessage,
       };
     }
+
+    const created = (await response.json()) as { id: string; ambitionName: string };
+
+    revalidatePath("/ambitions");
+    revalidatePath("/dashboard");
+
+    return {
+      error: null,
+      success: true,
+      ambitionId: created.id,
+      ambitionName: created.ambitionName,
+    };
   } catch {
     return {
       error: "Unable to reach the ambitions server.",
     };
   }
-
-  // Mark the list stale so the client navigation lands on a freshly-rendered page.
-  // We return success (instead of redirecting) so the form can clear its saved draft.
-  revalidatePath("/ambitions");
-  revalidatePath("/dashboard");
-
-  return { error: null, success: true };
 }

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { CalendarDaysIcon, CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, TrendingUpIcon, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import PrimaryCta from "@/components/(landing)/primary-cta";
+import { brandCopy } from "@/lib/brand";
 import ComparisonLedger from "@/components/(landing)/comparison-ledger";
 import LandingSection, { Eyebrow, LANDING_CARD } from "@/components/(landing)/landing-section";
 import MockFrame from "@/components/(landing)/mock-frame";
@@ -157,9 +158,9 @@ export default function Features() {
         {/* <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80" style={{ background: "radial-gradient(32rem 14rem at 50% 0%, color-mix(in oklch, oklch(0.56 0.24 300) 9%, transparent) 0%, transparent 70%)" }} /> */}
         <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
           <h1 className="lp-hero-enter font-brand text-4xl font-semibold leading-[1.08] tracking-[-0.03em] text-balance sm:text-5xl md:text-6xl">Features Built for the Ambitious</h1>
-          <p className="lp-hero-enter-2 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">Tools designed to elevate your performance, streamline your workflow, and help you achieve your most ambitious goals.</p>
+          <p className="lp-hero-enter-2 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">Honest momentum, ambition-level structure, and a private place to run goals that take months — not errands that take minutes.</p>
           <div className="lp-hero-enter-3 mt-8 flex flex-col gap-3 min-[400px]:flex-row">
-            <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" />
+            <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" size="lg" />
             <Button asChild size="lg" variant="outline">
               <Link prefetch={true} href="/experience">
                 Try It Now
@@ -170,7 +171,7 @@ export default function Features() {
       </section>
 
       {/* Core Features */}
-      <LandingSection eyebrow="Core features" title="Core Features" lede="Everything you need to take your productivity to the next level." className="pb-12 md:pb-16">
+      <LandingSection eyebrow="Core features" title="Core Features" lede="Everything ambitious people need to run multi-month goals — without gamification theatre." className="pb-12 md:pb-16">
         <div className="lp-reveal grid grid-cols-1 gap-5 md:grid-cols-2">
           {coreFeatures.map((feature) => (
             <div key={feature.title} className={cn(LANDING_CARD, "p-6", feature.coreIdea && "border-primary/30 dark:border-chart-1/30")}>
@@ -206,8 +207,8 @@ export default function Features() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="lp-reveal">
               <Eyebrow>Why ambitious people choose us</Eyebrow>
-              <h2 className="mt-4 font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Transform your potential into exceptional results</h2>
-              <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted-foreground md:text-lg">It’s built for people who refuse to settle — one calm, private place where every goal actually moves.</p>
+              <h2 className="mt-4 font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Built for people who finish what matters</h2>
+              <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted-foreground md:text-lg">One calm, private place where ambitions — not errands — actually move forward, day after day.</p>
 
               <ul className="mt-7 space-y-4">
                 {benefits.map((benefit) => (
@@ -219,7 +220,7 @@ export default function Features() {
               </ul>
 
               <div className="mt-8">
-                <PrimaryCta loggedOutLabel="Start Your Journey" loggedOutHref="/signup" />
+                <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" />
               </div>
             </div>
 
@@ -256,7 +257,7 @@ export default function Features() {
             <h2 className="font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Ready to achieve your most ambitious goals?</h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">Start for free today — your first ambition takes about a minute to set up. No credit card required.</p>
             <div className="mt-8 flex justify-center">
-              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="px-8" />
+              <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" size="lg" className="px-8" />
             </div>
           </div>
         </div>

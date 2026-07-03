@@ -1,4 +1,5 @@
 import AuthShell from "@/components/(auth)/auth-shell";
+import { brandCopy } from "@/lib/brand";
 import { SignupForm } from "@/components/(auth)/signup/signup-form";
 import { redirectIfAuthenticated } from "@/lib/auth";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
@@ -12,7 +13,7 @@ export default async function SignupPage() {
   await redirectIfAuthenticated();
 
   return (
-    <AuthShell mood="dawn" tagline="Your first ambition takes about a minute." vignette="moves">
+    <AuthShell mood="dawn" tagline={brandCopy.signup.tagline} vignette="moves">
       <SignupForm action={signupAction} initialState={signupInitialState} />
     </AuthShell>
   );

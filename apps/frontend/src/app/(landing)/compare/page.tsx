@@ -1,4 +1,5 @@
 import MarketingHubCard from "@/components/(landing)/marketing/marketing-hub-card";
+import { brandCopy } from "@/lib/brand";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import LandingSection from "@/components/(landing)/landing-section";
 import JsonLd from "@/components/seo/json-ld";
@@ -42,7 +43,7 @@ export default function CompareHubPage() {
           ))}
         </div>
         <div className="mt-12 flex justify-center">
-          <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" />
+          <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" />
         </div>
       </LandingSection>
     </>

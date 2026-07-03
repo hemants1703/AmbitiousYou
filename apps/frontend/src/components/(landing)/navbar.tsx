@@ -8,15 +8,17 @@ import { Button } from "../ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { ThemeToggle } from "../theme-toggle";
 import AmbitiousYouLogo from "./ambitiousyou-logo";
+import { brandCopy } from "@/lib/brand";
 import { useAuthStatus } from "@/hooks/use-auth-status";
 import { cn } from "@/lib/utils";
 
+/** Top nav — keep lean (≤5). Depth lives in the footer. */
 const navLinks = [
-  { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/experience", label: "Experience" },
-];
+  { href: "/manifesto", label: "Manifesto" },
+  { href: "/pricing", label: "Pricing" },
+] as const;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -56,7 +58,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             {/* Reserve the logged-out width (justify-end) so the post-hydration swap to a single button doesn't shift the nav links (CLS). */}
-            <div className="flex min-w-44 items-center justify-end gap-3">
+            <div className="flex min-w-52 items-center justify-end gap-3">
               {isLoggedIn ? (
                 <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
                   <Link href="/dashboard">Go to Dashboard</Link>
@@ -70,7 +72,7 @@ export default function Navbar() {
                   </Button>
                   <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
                     <Link prefetch={true} href="/signup">
-                      Sign up
+                      {brandCopy.cta.join}
                     </Link>
                   </Button>
                 </>
@@ -136,7 +138,7 @@ export default function Navbar() {
                     <SheetClose asChild>
                       <Button className="w-full" asChild>
                         <Link prefetch={true} href="/signup">
-                          Sign up
+                          {brandCopy.cta.join}
                         </Link>
                       </Button>
                     </SheetClose>

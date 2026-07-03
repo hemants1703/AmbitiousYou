@@ -25,6 +25,11 @@ export const compareSlugs = ["todoist", "notion", "asana"] as const;
 
 export type CompareSlug = (typeof compareSlugs)[number];
 
+/** Template slugs exposed as /templates/[slug] marketing pages. */
+export const templateSlugs = ["student-semester", "career-switch"] as const;
+
+export type TemplateSlug = (typeof templateSlugs)[number];
+
 const corePages: IndexablePage[] = [
   {
     path: "/",
@@ -49,6 +54,24 @@ const corePages: IndexablePage[] = [
     changeFrequency: "monthly",
     priority: 0.7,
     summary: "About AmbitiousYou — mission, values, and who built the platform.",
+  },
+  {
+    path: "/manifesto",
+    changeFrequency: "monthly",
+    priority: 0.8,
+    summary: "The Ambitious Ones — manifesto for people who think in ambitions, not errands.",
+  },
+  {
+    path: "/brief",
+    changeFrequency: "weekly",
+    priority: 0.75,
+    summary: "The Ambitious Brief — biweekly newsletter on ambitions, honest momentum, and ambition stories.",
+  },
+  {
+    path: "/templates",
+    changeFrequency: "monthly",
+    priority: 0.72,
+    summary: "Ambition templates — ready-made structures for students, career switchers, and more.",
   },
   {
     path: "/pricing",
@@ -96,8 +119,15 @@ const comparePages: IndexablePage[] = compareSlugs.map((slug) => ({
   summary: `Comparison — AmbitiousYou vs ${slug.charAt(0).toUpperCase() + slug.slice(1)}.`,
 }));
 
+const templatePages: IndexablePage[] = templateSlugs.map((slug) => ({
+  path: `/templates/${slug}`,
+  changeFrequency: "monthly" as const,
+  priority: 0.68,
+  summary: `Ambition template — structured goal plan for ${slug.replace(/-/g, " ")}.`,
+}));
+
 /** All public, indexable routes. Drives sitemap.xml and llms.txt. */
-export const indexablePages: readonly IndexablePage[] = [...corePages, ...useCasePages, ...comparePages];
+export const indexablePages: readonly IndexablePage[] = [...corePages, ...useCasePages, ...comparePages, ...templatePages];
 
 export function getIndexablePage(path: string): IndexablePage | undefined {
   return indexablePages.find((page) => page.path === path);

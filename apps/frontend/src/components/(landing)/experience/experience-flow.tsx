@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, BriefcaseIcon, ChartLineIcon, ChevronDownIcon, HeartIcon, PaletteIcon, RefreshCwIcon, RocketIcon, SchoolIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import PrimaryCta from "@/components/(landing)/primary-cta";
+import { brandCopy } from "@/lib/brand";
 import { Eyebrow } from "@/components/(landing)/landing-section";
 import DemoAmbitionShowcase from "./demo-ambition-showcase";
 import { Persona, personas } from "./persona-data";
@@ -93,7 +94,7 @@ export default function ExperienceFlow() {
               Start Your Journey
               <ArrowRightIcon aria-hidden="true" className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <PrimaryCta loggedOutLabel="Skip to Sign Up" loggedOutHref="/signup" size="lg" variant="outline" className="h-12 px-8" />
+            <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" size="lg" variant="outline" className="h-12 px-8" />
           </div>
         </div>
 
@@ -128,7 +129,7 @@ export default function ExperienceFlow() {
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">Everything you just tried works exactly like this in the app — plus notes, insights, and a dashboard of your own. Your journey starts now.</p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" size="lg" className="h-12 px-10 shadow-lg shadow-primary/20" />
+              <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" size="lg" className="h-12 px-10 shadow-lg shadow-primary/20" />
             </div>
 
             {/* Trust indicators */}

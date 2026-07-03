@@ -1,4 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { brandCopy } from "@/lib/brand";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import LandingSection from "@/components/(landing)/landing-section";
 import JsonLd from "@/components/seo/json-ld";
@@ -51,7 +52,7 @@ export default function PricingPage() {
             ))}
           </ul>
           <div className="mt-8">
-            <PrimaryCta loggedOutLabel="Get Started Free" loggedOutHref="/signup" />
+            <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" />
           </div>
         </div>
       </LandingSection>

@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import type { ContributionCalendar } from "@/lib/dashboard/contribution";
 import { ActivityIcon, CalendarCheckIcon, CalendarDaysIcon, FlameIcon, InfoIcon, SparklesIcon, TrophyIcon, ZapIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { ContributionExportButton } from "./contribution-export-button";
 import { ContributionGrid } from "./contribution-grid";
 
 interface ContributionGraphProps {
@@ -23,12 +24,15 @@ export function ContributionGraph(props: ContributionGraphProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CalendarDaysIcon className="size-4 text-foreground" />
-          Contribution calendar
-        </CardTitle>
-        <CardDescription>Every move you&apos;ve completed over the last year.</CardDescription>
+      <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3 space-y-0">
+        <div className="space-y-1.5">
+          <CardTitle className="flex items-center gap-2">
+            <CalendarDaysIcon className="size-4 text-foreground" />
+            Contribution calendar
+          </CardTitle>
+          <CardDescription>Every move you&apos;ve completed over the last year.</CardDescription>
+        </div>
+        <ContributionExportButton calendar={calendar} />
       </CardHeader>
 
       <CardContent className="space-y-4">

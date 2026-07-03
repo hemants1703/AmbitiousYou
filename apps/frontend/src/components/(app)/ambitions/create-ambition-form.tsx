@@ -11,6 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { MoveKindSelector } from "@/components/(app)/ambitions/move-kind-selector";
+import { AmbitionWelcomeDialog } from "@/components/(app)/ambitions/ambition-welcome-dialog";
+import { brandCopy } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, CalendarIcon, CalendarRangeIcon, CircleHelpIcon, FlameIcon, PlusIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
 import { useActionState, useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
@@ -20,6 +22,7 @@ import { format, parseISO } from "date-fns";
 import { createAmbitionAction } from "@/lib/actions/(app)/ambitions/create-ambition";
 import { createAmbitionInitialState } from "@/lib/actions/(app)/ambitions/create-ambition-state";
 import { clearDraft, draftHasContent, loadDraft, saveDraft, type MoveDraft, type MoveKind } from "@/lib/(app)/create-ambition-draft";
+import { downloadCanvas, renderAmbitionShareCard } from "@/lib/(app)/share-card";
 import { MOVE_TITLE_MAX_LENGTH } from "@/lib/(app)/tracked-item";
 
 const AMBITION_NAME_MAX_LENGTH = 80;
@@ -99,9 +102,10 @@ function SectionHeading({ title, tooltip, action }: SectionHeadingProps) {
   );
 }
 
-export default function CreateAmbitionForm() {
+export default function CreateAmbitionForm(props: { isInitiation?: boolean }) {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(createAmbitionAction, createAmbitionInitialState);
+  const [welcomeDismissed, setWelcomeDismissed] = useState(false);
   const [ambitionName, setAmbitionName] = useState("");
   const [ambitionDefinition, setAmbitionDefinition] = useState("");
   const [ambitionMotivation, setAmbitionMotivation] = useState("");
@@ -163,14 +167,16 @@ export default function CreateAmbitionForm() {
     }
   }, [ambitionName, ambitionDefinition, ambitionMotivation, priority, startDate, endDate, moves]);
 
-  // The action returns success instead of redirecting, so we clear the draft and
-  // navigate here — keeping draft removal tied to a real creation, not plain navigation.
+  // Clear draft on success; non-initiation flows navigate to the ambitions list.
   useEffect(() => {
-    if (state.success) {
-      clearDraft();
+    if (!state.success) return;
+    clearDraft();
+    if (!props.isInitiation) {
       router.push("/ambitions");
     }
-  }, [state.success, router]);
+  }, [state.success, props.isInitiation, router]);
+
+  const showWelcome = Boolean(state.success && props.isInitiation && state.ambitionId && state.ambitionName && !welcomeDismissed);
 
   const resetForm = () => {
     clearDraft();
@@ -274,8 +280,8 @@ export default function CreateAmbitionForm() {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <FieldLabel htmlFor="ambitionName" tooltip="Use a short outcome-focused title. This is what appears in lists and cards.">
-                  Ambition name
+                <FieldLabel htmlFor="ambitionName" tooltip={props.isInitiation ? "Name the outcome you're building toward — a promotion, degree, launch, or race." : "Use a short outcome-focused title. This is what appears in lists and cards."}>
+                  {props.isInitiation ? "What ambition are you building toward?" : "Ambition name"}
                 </FieldLabel>
                 {ambitionName.length >= AMBITION_NAME_MAX_LENGTH - 20 ? (
                   <span className="text-xs tabular-nums text-muted-foreground" aria-live="polite">
@@ -486,17 +492,35 @@ export default function CreateAmbitionForm() {
             {isPending ? (
               <>
                 <ArrowRightIcon className="size-4 animate-pulse" />
-                Creating ambition…
+                {props.isInitiation ? brandCopy.initiation.pending : "Creating ambition…"}
               </>
             ) : (
               <>
                 <FlameIcon className="size-4" />
-                Create ambition
+                {props.isInitiation ? brandCopy.initiation.submit : "Create ambition"}
               </>
             )}
           </Button>
         </div>
       </form>
+
+      {showWelcome && state.ambitionId && state.ambitionName ? (
+        <AmbitionWelcomeDialog
+          open={showWelcome}
+          ambitionId={state.ambitionId}
+          ambitionName={state.ambitionName}
+          onOpenChange={(open) => {
+            if (!open) {
+              setWelcomeDismissed(true);
+              router.push(`/ambitions/${state.ambitionId}`);
+            }
+          }}
+          onShare={() => {
+            const canvas = renderAmbitionShareCard({ ambitionName: state.ambitionName!, progressPercent: 0 });
+            downloadCanvas(canvas, "ambitiousyou-declaration.png");
+          }}
+        />
+      ) : null}
     </div>
   );
 }

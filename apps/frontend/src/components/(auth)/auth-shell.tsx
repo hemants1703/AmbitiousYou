@@ -28,11 +28,11 @@ function StatsVignette() {
 
 /** Translucent mini checklist card for the signup panel. */
 function MovesVignette() {
-  const moves = ["Name the ambition", "Add your first moves", "Check one off today"];
+  const moves = ["Declare your ambition", "Add your first moves", "Prove you're serious"];
 
   return (
     <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-      <p className="text-xs font-medium uppercase tracking-wide text-white/60">Your first moves</p>
+      <p className="text-xs font-medium uppercase tracking-wide text-white/60">Your initiation</p>
       <ul className="mt-3 space-y-2">
         {moves.map((label, i) => (
           <li key={label} className="flex items-center gap-2.5 text-sm text-white/85">

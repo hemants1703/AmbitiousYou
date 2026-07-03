@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { brandCopy } from "@/lib/brand";
 import type { SignupState } from "@/lib/actions/(auth)/signup/signup";
 import { cn } from "@/lib/utils";
 import { LoaderCircleIcon, TriangleAlertIcon } from "lucide-react";
@@ -24,8 +25,8 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
     <form className={cn("flex flex-col gap-6", className)} action={formAction} {...props}>
       <FieldGroup>
         <div className="flex flex-col gap-1">
-          <h1 className="font-brand text-2xl font-semibold tracking-[-0.02em]">Create your account</h1>
-          <p className="text-balance text-sm text-muted-foreground">Fill in the form below to create your account</p>
+          <h1 className="font-brand text-2xl font-semibold tracking-[-0.02em]">{brandCopy.signup.heading}</h1>
+          <p className="text-balance text-sm text-muted-foreground">{brandCopy.signup.subheading}</p>
         </div>
 
         <Field>
@@ -57,10 +58,10 @@ export function SignupForm({ action, initialState, className, ...props }: Signup
             {isPending ? (
               <>
                 <LoaderCircleIcon aria-hidden="true" className="size-4 animate-spin" />
-                Creating account…
+                {brandCopy.signup.pending}
               </>
             ) : (
-              "Create Account"
+              brandCopy.signup.submit
             )}
           </Button>
         </Field>

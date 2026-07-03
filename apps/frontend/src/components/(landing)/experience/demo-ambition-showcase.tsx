@@ -3,6 +3,7 @@
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { brandCopy } from "@/lib/brand";
 import * as Card from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
@@ -198,9 +199,9 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
 
         {/* Continue CTA */}
         <div className="mt-12 text-center">
-          <p className="mb-4 text-muted-foreground">Like what you see? Start your journey today.</p>
+          <p className="mb-4 text-muted-foreground">Ready to declare your own ambition?</p>
           <Button size="lg" asChild>
-            <Link href="/signup">Get Started Free</Link>
+            <Link href="/signup">{brandCopy.cta.claimFirst}</Link>
           </Button>
         </div>
       </div>
