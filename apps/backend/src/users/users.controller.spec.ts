@@ -46,8 +46,8 @@ describe('UsersController', () => {
     expect(usersController).toBeDefined();
   });
 
-  describe('findUserFromSessionToken', () => {
-    it('should call usersService.findUserBySessionToken with the bearer token stripped', async () => {
+  describe('findUser', () => {
+    it('should call usersService.findUser with the user id', async () => {
       const user = buildUser({ id: '1', name: 'John Doe', email: 'john@example.com', emailVerified: true });
 
       mockUsersService.findUser.mockResolvedValue(user);
@@ -61,9 +61,9 @@ describe('UsersController', () => {
     it('should return null if user is not found', async () => {
       mockUsersService.findUser.mockResolvedValue(null);
 
-      const result = await usersController.findUser('Bearer non-existent-token');
+      const result = await usersController.findUser('non-existent-id');
 
-      expect(mockUsersService.findUser).toHaveBeenCalledWith('non-existent-token');
+      expect(mockUsersService.findUser).toHaveBeenCalledWith('non-existent-id');
       expect(result).toBeNull();
     });
   });
