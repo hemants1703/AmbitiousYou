@@ -1,39 +1,13 @@
 "use server";
 
+import { getErrorMessage, parseDate, readString } from "@/lib/actions/(app)/ambitions/form-data-parsers";
 import { getSessionToken } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export type UpdateAmbitionState = {
   error: string | null;
 };
-
-function readString(formData: FormData, name: string): string {
-  const value = formData.get(name);
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function parseDate(value: string): Date | null {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function getErrorMessage(responseBody: unknown, fallbackMessage: string): string {
-  if (!responseBody || typeof responseBody !== "object") {
-    return fallbackMessage;
-  }
-
-  const message = (responseBody as { message?: string | string[] }).message;
-
-  if (Array.isArray(message)) {
-    return message[0] ?? fallbackMessage;
-  }
-
-  if (typeof message === "string") {
-    return message;
-  }
-
-  return fallbackMessage;
-}
 
 export async function updateAmbitionAction(_: UpdateAmbitionState, formData: FormData): Promise<UpdateAmbitionState> {
   const sessionToken = await getSessionToken();
@@ -105,6 +79,10 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
       error: "Unable to reach the ambitions server.",
     };
   }
+
+  revalidatePath(`/ambitions/${ambitionId}`);
+  revalidatePath("/ambitions");
+  revalidatePath("/dashboard");
 
   redirect(`/ambitions/${ambitionId}`);
 }

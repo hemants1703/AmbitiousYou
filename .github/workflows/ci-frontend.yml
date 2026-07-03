@@ -1,0 +1,57 @@
+name: ci-frontend
+
+# Lint, unit/component tests, and production build for the Next.js frontend.
+# Vercel auto-deploys on push to main/dev — this workflow is the quality gate
+# when paired with GitHub branch protection:
+#
+#   Settings → Branches → Add rule for `main` and `dev`
+#   → Require status checks → select the `ci` job from this workflow
+#
+# That blocks merges (and therefore Vercel deploys via PR workflow) when lint,
+# tests, or build fail. Direct pushes to protected branches should be disabled.
+on:
+  pull_request:
+    paths:
+      - "apps/frontend/**"
+      - "packages/shared/**"
+      - ".github/workflows/ci-frontend.yml"
+  push:
+    branches: [main, dev]
+    paths:
+      - "apps/frontend/**"
+      - "packages/shared/**"
+      - ".github/workflows/ci-frontend.yml"
+
+concurrency:
+  group: ci-frontend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install (frontend + workspace deps)
+        run: pnpm install --frozen-lockfile --filter frontend...
+
+      - name: Lint
+        run: pnpm --filter frontend lint
+
+      - name: Run unit and component tests
+        run: pnpm --filter frontend test
+
+      - name: Production build
+        run: pnpm --filter frontend build

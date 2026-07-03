@@ -1,124 +1,20 @@
 "use server";
 
 import { getSessionToken } from "@/lib/auth";
+import {
+  getErrorMessage,
+  parseDate,
+  parseMilestones,
+  parseNotes,
+  parseTasks,
+  readString,
+} from "@/lib/actions/(app)/ambitions/form-data-parsers";
 import { revalidatePath } from "next/cache";
 
 export type CreateAmbitionState = {
   error: string | null;
   success?: boolean;
 };
-
-type ParsedItem = Record<string, string>;
-
-type CreateTaskPayload = {
-  task: string;
-  taskDescription: string;
-  taskDeadline: string;
-};
-
-type CreateMilestonePayload = {
-  milestone: string;
-  milestoneDescription: string;
-  milestoneTargetDate: string;
-};
-
-type CreateNotePayload = {
-  note: string;
-};
-
-function readString(formData: FormData, name: string): string {
-  const value = formData.get(name);
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function parseDate(value: string): Date | null {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function collectIndexedRecords(formData: FormData, prefix: string): ParsedItem[] {
-  const records = new Map<number, ParsedItem>();
-
-  for (const [key, value] of formData.entries()) {
-    if (typeof value !== "string" || !key.startsWith(`${prefix}.`)) {
-      continue;
-    }
-
-    const [collection, index, ...fieldParts] = key.split(".");
-
-    if (collection !== prefix || !index || fieldParts.length === 0) {
-      continue;
-    }
-
-    const parsedIndex = Number(index);
-
-    if (Number.isNaN(parsedIndex)) {
-      continue;
-    }
-
-    const currentRecord = records.get(parsedIndex) ?? {};
-    currentRecord[fieldParts.join(".")] = value.trim();
-    records.set(parsedIndex, currentRecord);
-  }
-
-  return [...records.entries()].sort(([leftIndex], [rightIndex]) => leftIndex - rightIndex).map(([, record]) => record);
-}
-
-function getErrorMessage(responseBody: unknown, fallbackMessage: string): string {
-  if (!responseBody || typeof responseBody !== "object") {
-    return fallbackMessage;
-  }
-
-  const message = (responseBody as { message?: string | string[] }).message;
-
-  if (Array.isArray(message)) {
-    return message[0] ?? fallbackMessage;
-  }
-
-  if (typeof message === "string") {
-    return message;
-  }
-
-  return fallbackMessage;
-}
-
-function parseTasks(formData: FormData): CreateTaskPayload[] {
-  return collectIndexedRecords(formData, "tasks")
-    .map((record) => ({
-      task: record.task ?? "",
-      taskDescription: record.taskDescription ?? "",
-      taskDeadline: record.taskDeadline ?? "",
-    }))
-    .filter((task) => task.task.length > 0)
-    .filter((task) => Boolean(parseDate(task.taskDeadline)))
-    .map((task) => ({
-      ...task,
-      taskDeadline: parseDate(task.taskDeadline)?.toISOString() ?? "",
-    }));
-}
-
-function parseMilestones(formData: FormData): CreateMilestonePayload[] {
-  return collectIndexedRecords(formData, "milestones")
-    .map((record) => ({
-      milestone: record.milestone ?? "",
-      milestoneDescription: record.milestoneDescription ?? "",
-      milestoneTargetDate: record.milestoneTargetDate ?? "",
-    }))
-    .filter((milestone) => milestone.milestone.length > 0)
-    .filter((milestone) => Boolean(parseDate(milestone.milestoneTargetDate)))
-    .map((milestone) => ({
-      ...milestone,
-      milestoneTargetDate: parseDate(milestone.milestoneTargetDate)?.toISOString() ?? "",
-    }));
-}
-
-function parseNotes(formData: FormData): CreateNotePayload[] {
-  return collectIndexedRecords(formData, "notes")
-    .map((record) => ({
-      note: record.note ?? "",
-    }))
-    .filter((note) => note.note.length > 0);
-}
 
 export async function createAmbitionAction(_: CreateAmbitionState, formData: FormData): Promise<CreateAmbitionState> {
   const sessionToken = await getSessionToken();
@@ -198,6 +94,7 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
   // Mark the list stale so the client navigation lands on a freshly-rendered page.
   // We return success (instead of redirecting) so the form can clear its saved draft.
   revalidatePath("/ambitions");
+  revalidatePath("/dashboard");
 
   return { error: null, success: true };
 }
