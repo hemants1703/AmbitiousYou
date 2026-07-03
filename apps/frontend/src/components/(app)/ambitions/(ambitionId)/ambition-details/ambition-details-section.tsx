@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import type { Ambition, Milestone, Note, Task, User } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CheckCircle2Icon, CircleDotIcon, NotebookPenIcon, TimerResetIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -25,7 +24,6 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
   const prioritizedOpenItems = [...openItems].sort(sortByPriority);
   const nextActions = prioritizedOpenItems.slice(0, 3);
 
-  const clampedProgress = Math.min(Math.max(props.ambition.ambitionPercentageCompleted ?? 0, 0), 100);
   const overdueCount = openItems.filter((item) => getDaysUntil(getItemDate(item)) < 0).length;
 
   return (

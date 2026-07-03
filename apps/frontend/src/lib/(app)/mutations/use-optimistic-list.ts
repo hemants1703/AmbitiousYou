@@ -29,20 +29,21 @@ export interface UseOptimisticListResult<T> {
  * server action, roll back on failure, and re-sync when `sourceItems` changes.
  */
 export function useOptimisticList<T>(params: UseOptimisticListParams<T>): UseOptimisticListResult<T> {
+  const { sourceItems, getId } = params;
   const [isPending, startTransition] = useTransition();
-  const [optimisticItems, setOptimisticItems] = useOptimistic(params.sourceItems, (_current, next: T[]) => next);
-  const syncedRef = useRef(params.sourceItems);
+  const [optimisticItems, setOptimisticItems] = useOptimistic(sourceItems, (_current, next: T[]) => next);
+  const syncedRef = useRef(sourceItems);
 
   useEffect(() => {
-    if (syncedRef.current !== params.sourceItems) {
-      syncedRef.current = params.sourceItems;
-      setOptimisticItems(params.sourceItems);
+    if (syncedRef.current !== sourceItems) {
+      syncedRef.current = sourceItems;
+      setOptimisticItems(sourceItems);
     }
-  }, [params.sourceItems, setOptimisticItems]);
+  }, [sourceItems, setOptimisticItems]);
 
   const mutate = useCallback(
     (options: OptimisticListMutationOptions<T>, action: () => Promise<{ error: string | null }>) => {
-      const snapshot = options.rollback ?? params.sourceItems;
+      const snapshot = options.rollback ?? sourceItems;
       const next = options.apply([...optimisticItems]);
 
       startTransition(async () => {
@@ -57,14 +58,14 @@ export function useOptimisticList<T>(params: UseOptimisticListParams<T>): UseOpt
         }
       });
     },
-    [optimisticItems, params.sourceItems, setOptimisticItems],
+    [optimisticItems, sourceItems, setOptimisticItems],
   );
 
   const replaceTempId = useCallback(
     (tempId: string, item: T) => {
-      setOptimisticItems(optimisticItems.map((current) => (params.getId(current) === tempId ? item : current)));
+      setOptimisticItems(optimisticItems.map((current) => (getId(current) === tempId ? item : current)));
     },
-    [optimisticItems, params.getId, setOptimisticItems],
+    [optimisticItems, getId, setOptimisticItems],
   );
 
   const setItems = useCallback(

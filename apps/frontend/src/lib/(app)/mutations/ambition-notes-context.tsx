@@ -5,7 +5,11 @@ import { deleteNoteAction } from "@/lib/actions/(app)/notes/delete-note";
 import { updateNoteAction } from "@/lib/actions/(app)/notes/update-note";
 import { usePendingMap } from "@/lib/(app)/mutations/use-pending-map";
 import type { Note } from "@ambitiousyou/shared/types";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useTransition, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, useTransition, type ReactNode } from "react";
+
+function notesKey(notes: Note[]): string {
+  return notes.map((note) => `${note.id}:${note.updatedAt}`).join(",");
+}
 
 interface AmbitionNotesContextValue {
   notes: Note[];
@@ -27,14 +31,17 @@ interface AmbitionNotesProviderProps {
 }
 
 export function AmbitionNotesProvider(props: AmbitionNotesProviderProps) {
+  const initialNotesKey = notesKey(props.initialNotes);
   const [notes, setNotes] = useState<Note[]>(props.initialNotes);
+  const [prevInitialNotesKey, setPrevInitialNotesKey] = useState(initialNotesKey);
   const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
   const pending = usePendingMap();
 
-  useEffect(() => {
+  if (initialNotesKey !== prevInitialNotesKey) {
+    setPrevInitialNotesKey(initialNotesKey);
     setNotes(props.initialNotes);
-  }, [props.initialNotes]);
+  }
 
   const create = useCallback(
     (text: string) => {

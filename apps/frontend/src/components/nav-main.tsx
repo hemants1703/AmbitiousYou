@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { CirclePlusIcon, SparklesIcon } from "lucide-react";
+import { CirclePlusIcon } from "lucide-react";
 import Link from "next/link";
 
 interface NavMainProps {

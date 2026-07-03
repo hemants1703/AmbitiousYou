@@ -1,15 +1,12 @@
 "use client";
 
 import { BellIcon, MailIcon } from "lucide-react";
-import { useState } from "react";
 import type { ReactNode } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Settings } from "@ambitiousyou/shared";
-import { togglePushAmbitionRemindersSetting } from "@/lib/actions/(app)/settings/update-settings";
-import { toast } from "sonner";
 
 interface NotificationRowProps {
   id: string;
@@ -49,8 +46,6 @@ interface NotificationsSettingsTabProps {
 }
 
 export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
-  const [pushAmbitionReminders, setPushAmbitionReminders] = useState(props.userSettings.pushAmbitionReminders);
-
   return (
     <Card>
       <CardHeader>

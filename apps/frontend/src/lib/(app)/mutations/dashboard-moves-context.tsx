@@ -4,7 +4,11 @@ import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import type { QueueItem } from "@/lib/dashboard/tracked-items";
 import { getDaysUntil, getItemDate, getItemDescription, getItemKind, getItemTitle, sortByUrgency } from "@/lib/dashboard/tracked-items";
 import type { QuickAddAmbition } from "@/components/(app)/dashboard/quick-add";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+
+function queueItemsKey(items: QueueItem[]): string {
+  return items.map((item) => `${item.id}:${item.kind}`).join(",");
+}
 
 interface DashboardMovesContextValue {
   openItems: QueueItem[];
@@ -36,11 +40,14 @@ function toQueueItem(item: Task | Milestone, ambition: QuickAddAmbition): QueueI
 }
 
 export function DashboardMovesProvider(props: DashboardMovesProviderProps) {
+  const initialOpenItemsKey = queueItemsKey(props.initialOpenItems);
   const [openItems, setOpenItems] = useState<QueueItem[]>(props.initialOpenItems);
+  const [prevInitialOpenItemsKey, setPrevInitialOpenItemsKey] = useState(initialOpenItemsKey);
 
-  useEffect(() => {
+  if (initialOpenItemsKey !== prevInitialOpenItemsKey) {
+    setPrevInitialOpenItemsKey(initialOpenItemsKey);
     setOpenItems(props.initialOpenItems);
-  }, [props.initialOpenItems]);
+  }
 
   const removeOpenItem = useCallback((id: string, kind: QueueItem["kind"]) => {
     setOpenItems((prev) => prev.filter((item) => !(item.id === id && item.kind === kind)));
