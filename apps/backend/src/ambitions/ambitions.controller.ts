@@ -27,6 +27,8 @@ export class AmbitionsController {
     return await this.ambitionsService.findMovesBatch(userId, openOnly === 'true');
   }
 
+  // Static segments (`moves`) and suffixed paths (`:id/full`, `:id/favourite`) must stay
+  // before bare `:ambitionId` so single-segment params do not capture reserved names.
   @Get(':ambitionId/full')
   async findAmbitionFull(@CurrentUserId() userId: string, @Param('ambitionId') ambitionId: string): Promise<AmbitionFull | null> {
     return await this.ambitionsService.findAmbitionFullByUserIdAndId(userId, ambitionId);

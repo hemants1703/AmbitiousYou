@@ -11,8 +11,12 @@ import { usePendingMap } from "@/lib/(app)/mutations/use-pending-map";
 import { getCompletedVerb, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { parseISO } from "date-fns";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
+
+function trackedItemsKey(items: TrackedItem[]): string {
+  return items.map((item) => `${item.id}:${isCompleted(item)}`).join(",");
+}
 
 export interface UseTrackedItemsParams {
   ambitionId: string;
@@ -40,13 +44,12 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
   const pending = usePendingMap();
 
   const [items, setItems] = useState<TrackedItem[]>(params.sourceItems);
-  const [syncedSource, setSyncedSource] = useState<TrackedItem[]>(params.sourceItems);
   const [error, setError] = useState<string | null>(null);
+  const sourceKey = trackedItemsKey(params.sourceItems);
 
-  if (syncedSource !== params.sourceItems) {
-    setSyncedSource(params.sourceItems);
+  useEffect(() => {
     setItems(params.sourceItems);
-  }
+  }, [sourceKey]);
 
   function buildOptimisticItem(draft: DraftState): TrackedItem {
     const base = {

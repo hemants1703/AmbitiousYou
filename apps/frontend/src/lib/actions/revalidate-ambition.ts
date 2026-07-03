@@ -1,8 +1,6 @@
 import { revalidatePath } from "next/cache";
 
-export type RevalidateScope = "detail" | "list" | "dashboard";
-
-export function revalidateAmbition(ambitionId: string, scopes: RevalidateScope[]) {
+export function revalidateAmbition(ambitionId: string, scopes: Array<"detail" | "list" | "dashboard">) {
   if (scopes.includes("detail")) {
     revalidatePath(`/ambitions/${ambitionId}`);
   }

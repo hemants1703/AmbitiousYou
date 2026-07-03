@@ -1,17 +1,13 @@
-"use server";
-
 import { getSessionToken } from "@/lib/auth";
-import { revalidateAmbition, type RevalidateScope } from "@/lib/actions/revalidate-ambition";
-
-export type { RevalidateScope };
+import { revalidateAmbition } from "@/lib/actions/revalidate-ambition";
 
 export interface MutateApiOptions<T> {
   path: string;
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   body?: unknown;
   ambitionId?: string;
-  revalidate?: RevalidateScope[];
-  revalidateFromResponse?: (data: T) => { ambitionId: string; scopes: RevalidateScope[] };
+  revalidate?: Array<"detail" | "list" | "dashboard">;
+  revalidateFromResponse?: (data: T) => { ambitionId: string; scopes: Array<"detail" | "list" | "dashboard"> };
   errorMessage?: string;
 }
 

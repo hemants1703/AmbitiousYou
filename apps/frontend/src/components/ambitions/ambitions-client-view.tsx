@@ -1,7 +1,6 @@
 "use client";
 
 import AmbitionCard from "@/components/(app)/ambitions/ambition-card";
-import { AmbitionFavouriteButton } from "@/components/(app)/ambitions/ambition-favourite-button";
 import AmbitionFilters, { AmbitionFiltersState } from "@/components/(app)/ambitions/ambition-filters";
 import { FadeIn } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
@@ -16,19 +15,11 @@ interface AmbitionsClientViewProps {
 
 export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
   const [filters, setFilters] = useState<AmbitionFiltersState>({});
-  const [favourites, setFavourites] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(props.ambitions.map((ambition) => [ambition.id, ambition.isFavourited ?? false])),
-  );
-
-  const ambitions = useMemo(
-    () => props.ambitions.map((ambition) => ({ ...ambition, isFavourited: favourites[ambition.id] ?? ambition.isFavourited })),
-    [props.ambitions, favourites],
-  );
 
   const filteredAmbitions = useMemo(() => {
     const searchValue = filters.search?.trim().toLowerCase();
 
-    return ambitions.filter((ambition) => {
+    return props.ambitions.filter((ambition) => {
       if (filters.status && ambition.ambitionStatus !== filters.status) return false;
       if (filters.priority && ambition.ambitionPriority !== filters.priority) return false;
       if (filters.favouritesOnly && !ambition.isFavourited) return false;
@@ -40,7 +31,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
 
       return true;
     });
-  }, [filters.favouritesOnly, filters.priority, filters.search, filters.status, ambitions]);
+  }, [filters.favouritesOnly, filters.priority, filters.search, filters.status, props.ambitions]);
 
   return (
     <div className="mx-auto flex max-w-screen-2xl w-full flex-col gap-6">
@@ -64,15 +55,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredAmbitions.length > 0 ? (
           filteredAmbitions.map((ambition, index) => (
-            <FadeIn key={ambition.id} delayMs={120 + index * 40} className="relative">
-              <div className="absolute top-3 right-3 z-10">
-                <AmbitionFavouriteButton
-                  ambitionId={ambition.id}
-                  isFavourited={ambition.isFavourited ?? false}
-                  className="bg-background/80 backdrop-blur-sm"
-                  onChange={(isFavourited) => setFavourites((prev) => ({ ...prev, [ambition.id]: isFavourited }))}
-                />
-              </div>
+            <FadeIn key={ambition.id} delayMs={120 + index * 40}>
               <Link prefetch href={`/ambitions/${ambition.id}?ref=ambitions`}>
                 <AmbitionCard ambition={ambition} index={index} completedTasksOrMilestones={0} totalTasksOrMilestones={0} />
               </Link>

@@ -7,7 +7,7 @@ import { emptyDraft, sortByPriority, type DraftState, type TrackedItem } from "@
 import { useTrackedItems } from "@/lib/(app)/use-tracked-items";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { CheckCircle2Icon, ListChecksIcon } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Matcher } from "react-day-picker";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,7 +31,7 @@ interface ExecutionBoardProps {
 }
 
 export default function ExecutionBoard(props: ExecutionBoardProps) {
-  const sourceItems: TrackedItem[] = [...props.tasks, ...props.milestones];
+  const sourceItems = useMemo(() => [...props.tasks, ...props.milestones] as TrackedItem[], [props.tasks, props.milestones]);
   const board = useTrackedItems({ ambitionId: props.ambitionId, sourceItems });
 
   const [adding, setAdding] = useState(false);
@@ -112,7 +112,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
 
           {board.openItems.length > PREVIEW_LIMIT ? (
             <p className="text-xs text-muted-foreground">
-              Showing the {PREVIEW_LIMIT} most urgent · {board.openItems.length - PREVIEW_LIMIT} more in &ldquo;View all&rdquo;.
+              {`Showing the ${PREVIEW_LIMIT} most urgent · ${board.openItems.length - PREVIEW_LIMIT} more in "View all".`}
             </p>
           ) : null}
         </div>
