@@ -11,3 +11,4 @@ export type { Ambition, NewAmbition } from '../db/schema/ambitions';
 export type { Task, NewTask } from '../db/schema/tasks';
 export type { Milestone, NewMilestone } from '../db/schema/milestones';
 export type { Note, NewNote } from '../db/schema/notes';
+export type { AmbitionMovesBatch, AmbitionFull, ToggleFavouriteResult } from './api';

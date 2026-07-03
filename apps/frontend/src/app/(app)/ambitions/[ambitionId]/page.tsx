@@ -3,15 +3,12 @@ import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/a
 
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
-import { MotionWrapper } from "@/components/motion-wrapper";
+import { FadeIn } from "@/components/motion-wrapper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { getAmbitionDetails, type AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
-import { getNotes } from "@/lib/api/notes/get-notes";
-import { getTasks } from "@/lib/api/tasks/get-tasks";
-import { getMilestones } from "@/lib/api/milestones/get-milestones";
+import { getAmbitionFull } from "@/lib/api/ambitions/get-ambition-full";
 import { requireUser } from "@/lib/auth";
 import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon, QuoteIcon } from "lucide-react";
@@ -27,8 +24,8 @@ interface AmbitionDetailsPageProps {
   }>;
 }
 
-const getAmbitionData = cache(async (sessionToken: string, ambitionId: string): Promise<AmbitionDetails | null> => {
-  return await getAmbitionDetails(sessionToken, ambitionId);
+const getAmbitionData = cache(async (sessionToken: string, ambitionId: string) => {
+  return await getAmbitionFull(sessionToken, ambitionId);
 });
 
 export async function generateMetadata(props: AmbitionDetailsPageProps): Promise<Metadata> {
@@ -41,7 +38,7 @@ export async function generateMetadata(props: AmbitionDetailsPageProps): Promise
     throw new Error(`Failed to fetch ambition ${ambitionId}`);
   }
 
-  return createPrivateMetadata(ambition.ambitionName);
+  return createPrivateMetadata(ambition.ambition.ambitionName);
 }
 
 export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProps) {
@@ -51,23 +48,15 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   const searchParams = await props.searchParams;
   const backTarget = resolveBackTarget(searchParams.ref);
 
-  const [ambition, fetchedNotes, fetchedTasks, fetchedMilestones] = await Promise.all([
-    getAmbitionData(sessionToken, ambitionId),
-    getNotes(sessionToken, ambitionId),
-    getTasks(sessionToken, ambitionId),
-    getMilestones(sessionToken, ambitionId),
-  ]);
-
-  if (!ambition) {
+  const ambitionData = await getAmbitionData(sessionToken, ambitionId);
+  if (!ambitionData) {
     throw new Error(`Failed to fetch ambition ${ambitionId}`);
   }
 
-  // The `/ambitions/:id/details` endpoint does not return tasks/milestones, so we read each
-  // collection from its dedicated list endpoint (mirroring how notes are fetched above). An
-  // ambition can hold BOTH kinds now ("moves"), so we keep both and merge for the overview.
-  const tasks: Task[] = fetchedTasks;
-  const milestones: Milestone[] = fetchedMilestones;
-  const notes: Note[] = fetchedNotes;
+  const ambition = ambitionData.ambition;
+  const tasks: Task[] = ambitionData.tasks;
+  const milestones: Milestone[] = ambitionData.milestones;
+  const notes: Note[] = ambitionData.notes;
   const trackedItems = [...tasks, ...milestones];
 
   const completedItems = trackedItems.filter((item) => ("taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted)).length;
@@ -98,7 +87,7 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
         </div>
 
         {/* AMBITION DETAILS */}
-        <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
+        <FadeIn>
           <Card>
             <CardContent className="space-y-6 px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -145,11 +134,11 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
               </div>
             </CardContent>
           </Card>
-        </MotionWrapper>
+        </FadeIn>
 
-        <MotionWrapper initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.24 }}>
+        <FadeIn delayMs={80}>
           <AmbitionDetailsSection user={userDetails} ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
-        </MotionWrapper>
+        </FadeIn>
 
       </div>
     </section>

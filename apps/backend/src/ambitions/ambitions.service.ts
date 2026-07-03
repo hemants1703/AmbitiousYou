@@ -3,6 +3,7 @@ import { and, desc, eq } from 'drizzle-orm';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
 import { db, ambitions, milestones, notes, tasks, type Ambition } from 'src/db';
+import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
 
 @Injectable()
 export class AmbitionsService {
@@ -80,5 +81,73 @@ export class AmbitionsService {
 
     const [deleted] = await db.delete(ambitions).where(eq(ambitions.id, ambition.id)).returning();
     return deleted;
+  }
+
+  /**
+   * All tasks + milestones for the user in two queries. When `openOnly` is true, returns only
+   * incomplete moves on active ambitions (dashboard Today/Weekly). Otherwise returns every move
+   * (dashboard activity charts).
+   */
+  async findMovesBatch(userId: string, openOnly: boolean): Promise<AmbitionMovesBatch> {
+    if (openOnly) {
+      const [taskRows, milestoneRows] = await Promise.all([
+        db
+          .select({ task: tasks })
+          .from(tasks)
+          .innerJoin(ambitions, eq(tasks.ambitionId, ambitions.id))
+          .where(and(eq(tasks.userId, userId), eq(tasks.taskCompleted, false), eq(ambitions.ambitionStatus, 'active'))),
+        db
+          .select({ milestone: milestones })
+          .from(milestones)
+          .innerJoin(ambitions, eq(milestones.ambitionId, ambitions.id))
+          .where(and(eq(milestones.userId, userId), eq(milestones.milestoneCompleted, false), eq(ambitions.ambitionStatus, 'active'))),
+      ]);
+
+      return {
+        tasks: taskRows.map((row) => row.task),
+        milestones: milestoneRows.map((row) => row.milestone),
+      };
+    }
+
+    const [taskRows, milestoneRows] = await Promise.all([
+      db.select().from(tasks).where(eq(tasks.userId, userId)),
+      db.select().from(milestones).where(eq(milestones.userId, userId)),
+    ]);
+
+    return { tasks: taskRows, milestones: milestoneRows };
+  }
+
+  async findAmbitionFullByUserIdAndId(userId: string, ambitionId: string): Promise<AmbitionFull | null> {
+    const ambition = await this.findAmbitionDetailsByUserIdAndId(userId, ambitionId);
+    if (!ambition) {
+      return null;
+    }
+
+    const [taskRows, milestoneRows, noteRows] = await Promise.all([
+      db.select().from(tasks).where(and(eq(tasks.ambitionId, ambitionId), eq(tasks.userId, userId))),
+      db.select().from(milestones).where(and(eq(milestones.ambitionId, ambitionId), eq(milestones.userId, userId))),
+      db.select().from(notes).where(and(eq(notes.ambitionId, ambitionId), eq(notes.userId, userId))),
+    ]);
+
+    return {
+      ambition,
+      tasks: taskRows,
+      milestones: milestoneRows,
+      notes: noteRows,
+    };
+  }
+
+  async toggleFavourite(userId: string, ambitionId: string): Promise<Ambition> {
+    const ambition = await this.findOneAmbitionById(userId, ambitionId);
+    if (!ambition) {
+      throw new BadRequestException(`Ambition with id ${ambitionId} not found`);
+    }
+
+    const [updated] = await db
+      .update(ambitions)
+      .set({ isFavourited: !(ambition.isFavourited ?? false) })
+      .where(eq(ambitions.id, ambition.id))
+      .returning();
+    return updated;
   }
 }

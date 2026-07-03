@@ -1,14 +1,13 @@
+"use client";
+
 import { MoveDetailProvider } from "@/components/(app)/ambitions/move-detail-context";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { QueueItem } from "@/lib/dashboard/tracked-items";
+import { useDashboardMoves } from "@/lib/(app)/mutations/dashboard-moves-context";
 import { CheckCircle2Icon, RefreshCwIcon, SunriseIcon } from "lucide-react";
 import { ActionQueueItem } from "./action-queue-item";
 
 interface TodayFocusProps {
-  /** Every open move across active ambitions, already urgency-sorted (most overdue first). */
-  openItems: QueueItem[];
-  /** True when every ambition's details failed to load (vs genuinely empty). */
   loadFailed: boolean;
 }
 
@@ -17,19 +16,12 @@ function nextUpLabel(daysUntil: number): string {
   return `due in ${daysUntil} days`;
 }
 
-/**
- * The interactive heart of the dashboard: a tickable checklist of exactly the moves due
- * today or already overdue — the work to actually do *now*, not an arbitrary top-N. Rows
- * reuse {@link ActionQueueItem} verbatim (optimistic complete → toast → router.refresh),
- * so as the user ticks items off the panel updates and, once the last one clears, flips to
- * the "Cleared for today" state on its own. Honest momentum, no fabricated streak.
- */
 export function TodayFocus(props: TodayFocusProps) {
-  const dueNow = props.openItems.filter((item) => item.daysUntil <= 0);
-  const nextUp = props.openItems.find((item) => item.daysUntil > 0);
-  const upcomingCount = props.openItems.filter((item) => item.daysUntil > 0).length;
+  const { openItems } = useDashboardMoves();
+  const dueNow = openItems.filter((item) => item.daysUntil <= 0);
+  const nextUp = openItems.find((item) => item.daysUntil > 0);
+  const upcomingCount = openItems.filter((item) => item.daysUntil > 0).length;
 
-  // Server-rendered so the date is consistent and never hydration-mismatches.
   const todayLabel = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
 
   return (

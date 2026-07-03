@@ -7,6 +7,7 @@ import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-detail
 import ExecutionBoard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board";
 import { FocusNextCard } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/focus-next-card";
 import { MoveDetailProvider } from "@/components/(app)/ambitions/move-detail-context";
+import { AmbitionNotesProvider } from "@/lib/(app)/mutations/ambition-notes-context";
 import { getDate as getItemDate, getDaysUntil, isCompleted as isItemCompleted, sortByPriority } from "@/lib/(app)/tracked-item";
 
 type AmbitionDetailsSectionProps = {
@@ -28,7 +29,8 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
   const overdueCount = openItems.filter((item) => getDaysUntil(getItemDate(item)) < 0).length;
 
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,1fr)]">
+    <AmbitionNotesProvider ambitionId={props.ambition.id} initialNotes={props.notes}>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,1fr)]">
       <MoveDetailProvider>
         <div className="min-w-0 space-y-6">
           <Card>
@@ -80,10 +82,11 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
         </Card>
 
         <Card>
-          <NotesCard notes={props.notes} ambitionId={props.ambition.id} ambitionName={props.ambition.ambitionName} />
+          <NotesCard ambitionName={props.ambition.ambitionName} />
         </Card>
       </div>
     </div>
+    </AmbitionNotesProvider>
   );
 }
 

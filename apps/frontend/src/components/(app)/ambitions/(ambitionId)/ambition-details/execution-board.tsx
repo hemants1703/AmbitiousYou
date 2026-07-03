@@ -9,12 +9,17 @@ import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { CheckCircle2Icon, ListChecksIcon } from "lucide-react";
 import { useState } from "react";
 import type { Matcher } from "react-day-picker";
-import { ExecutionBoardDrawer } from "./execution-board-drawer";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 import { HoverExpandButton } from "./hover-expand-button";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 import { TrackedItemList } from "./tracked-item-list";
 
 const PREVIEW_LIMIT = 3;
+
+const ExecutionBoardDrawer = dynamic(() => import("./execution-board-drawer").then((mod) => mod.ExecutionBoardDrawer), {
+  loading: () => <Skeleton className="h-10 w-full rounded-2xl" />,
+});
 
 interface ExecutionBoardProps {
   ambitionId: string;
@@ -54,7 +59,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
           {!adding ? (
             <HoverExpandButton
               label="Add move"
-              disabled={board.isPending}
+              disabled={board.isAnyPending}
               onClick={() => {
                 board.clearError();
                 setAdding(true);
@@ -77,7 +82,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
             label="New move"
             draft={newDraft}
             dateDisabled={dateDisabled}
-            isPending={board.isPending}
+            isPending={board.isAnyPending}
             onChange={setNewDraft}
             onSubmit={handleCreate}
             onCancel={() => {
@@ -97,7 +102,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
 
           <TrackedItemList
             items={previewOpen}
-            isPending={board.isPending}
+            isItemPending={board.isPending}
             dateDisabled={dateDisabled}
             onToggle={board.toggle}
             onUpdate={board.update}

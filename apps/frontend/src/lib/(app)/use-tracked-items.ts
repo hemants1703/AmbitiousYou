@@ -6,16 +6,16 @@ import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
 import { deleteTaskAction } from "@/lib/actions/(app)/tasks/delete-task";
 import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-task-completion";
 import { updateTaskAction } from "@/lib/actions/(app)/tasks/update-task";
+import { useBackgroundRefresh } from "@/lib/(app)/mutations/background-refresh";
+import { usePendingMap } from "@/lib/(app)/mutations/use-pending-map";
 import { getCompletedVerb, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { parseISO } from "date-fns";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 export interface UseTrackedItemsParams {
   ambitionId: string;
-  /** The merged list of moves (tasks + milestones) for this ambition. */
   sourceItems: TrackedItem[];
 }
 
@@ -23,10 +23,10 @@ export interface UseTrackedItemsResult {
   items: TrackedItem[];
   openItems: TrackedItem[];
   completedItems: TrackedItem[];
-  isPending: boolean;
+  isPending: (itemId: string) => boolean;
+  isAnyPending: boolean;
   error: string | null;
   clearError: () => void;
-  /** Umbrella noun for an item — always "move" (each move is a task or a milestone). */
   noun: "move";
   create: (draft: DraftState) => void;
   update: (item: TrackedItem, draft: DraftState) => void;
@@ -34,25 +34,15 @@ export interface UseTrackedItemsResult {
   remove: (itemId: string) => void;
 }
 
-/**
- * Single source of truth for an ambition's moves (tasks + milestones): optimistic
- * local state + the create/update/toggle/remove server-action handlers. Instantiate
- * ONCE in the Execution Board and pass the result into the management drawer — never
- * call it twice, or the inline preview and the drawer would diverge.
- *
- * Each move's sub-type is derived PER ITEM (duck-typing) so a mixed list dispatches to
- * the right task/milestone action. The one exception is `create`, where the kind comes
- * from `draft.kind` (the optimistic item doesn't exist yet to duck-type).
- */
 export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsResult {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const refreshInBackground = useBackgroundRefresh();
+  const [, startTransition] = useTransition();
+  const pending = usePendingMap();
 
   const [items, setItems] = useState<TrackedItem[]>(params.sourceItems);
   const [syncedSource, setSyncedSource] = useState<TrackedItem[]>(params.sourceItems);
   const [error, setError] = useState<string | null>(null);
 
-  // Re-sync with fresh server data whenever a router.refresh() (or navigation) hands us a new list.
   if (syncedSource !== params.sourceItems) {
     setSyncedSource(params.sourceItems);
     setItems(params.sourceItems);
@@ -79,14 +69,13 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     setError(null);
 
     const optimistic = buildOptimisticItem({ ...draft, title });
-    // Send the calendar day ("YYYY-MM-DD") as-is so the backend stores UTC midnight of that day — the
-    // move's day is then preserved on any server timezone. (parseISO(...).toISOString() would send the
-    // user's local-midnight-as-UTC instant, which lands on the previous day on a UTC server → off-by-one.)
     const dateValue = draft.date;
     const description = draft.description.trim();
     const snapshot = items;
+    const tempId = optimistic.id;
 
     startTransition(async () => {
+      pending.setPending(tempId, "creating");
       setItems((prev) => [optimistic, ...prev]);
 
       const result =
@@ -94,13 +83,14 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
           ? await createTaskAction({ ambitionId: params.ambitionId, task: title, taskDescription: description, taskDeadline: dateValue })
           : await createMilestoneAction({ ambitionId: params.ambitionId, milestone: title, milestoneDescription: description, milestoneTargetDate: dateValue });
 
+      pending.clearPending(tempId);
       const created = "task" in result ? result.task : result.milestone;
       if (result.error || !created) {
         setError(result.error ?? "Failed to add move. Please try again.");
         setItems(snapshot);
       } else {
-        setItems((prev) => prev.map((item) => (item.id === optimistic.id ? created : item)));
-        router.refresh();
+        setItems((prev) => prev.map((item) => (item.id === tempId ? created : item)));
+        refreshInBackground();
       }
     });
   }
@@ -110,15 +100,13 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     if (!title || !draft.date) return;
     setError(null);
 
-    // Send the calendar day ("YYYY-MM-DD") as-is so the backend stores UTC midnight of that day — the
-    // move's day is then preserved on any server timezone. (parseISO(...).toISOString() would send the
-    // user's local-midnight-as-UTC instant, which lands on the previous day on a UTC server → off-by-one.)
     const dateValue = draft.date;
     const description = draft.description.trim();
     const completed = isCompleted(item);
     const snapshot = items;
 
     startTransition(async () => {
+      pending.setPending(item.id, "updating");
       setItems((prev) =>
         prev.map((current) => {
           if (current.id !== item.id) return current;
@@ -132,13 +120,13 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
         ? await updateMilestoneAction(item.id, { milestone: title, milestoneDescription: description, milestoneCompleted: completed, milestoneTargetDate: dateValue })
         : await updateTaskAction(item.id, { task: title, taskDescription: description, taskCompleted: completed, taskDeadline: dateValue });
 
+      pending.clearPending(item.id);
       const updated = "task" in result ? result.task : result.milestone;
       if (result.error || !updated) {
         setError(result.error ?? "Failed to update move. Please try again.");
         setItems(snapshot);
       } else {
         setItems((prev) => prev.map((current) => (current.id === item.id ? updated : current)));
-        router.refresh();
       }
     });
   }
@@ -151,6 +139,7 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     const verb = getCompletedVerb(item);
 
     startTransition(async () => {
+      pending.setPending(item.id, "toggling");
       setItems((prev) =>
         prev.map((current) => {
           if (current.id !== item.id) return current;
@@ -161,12 +150,14 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
       );
 
       const result = isMilestone(item) ? await toggleMilestoneCompletionAction(item.id) : await toggleTaskCompletionAction(item.id);
+      pending.clearPending(item.id);
+
       if (result.error) {
         setError(result.error);
         setItems(snapshot);
         toast.error("Failed to update move. Please try again.");
       } else {
-        router.refresh();
+        refreshInBackground();
         toast.success(wasCompleted ? `${kindLabel} marked as not ${verb}.` : `${kindLabel} marked as ${verb}.`);
       }
     });
@@ -179,14 +170,17 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     const snapshot = items;
 
     startTransition(async () => {
+      pending.setPending(itemId, "deleting");
       setItems((prev) => prev.filter((current) => current.id !== itemId));
 
       const result = isMilestone(target) ? await deleteMilestoneAction(itemId) : await deleteTaskAction(itemId);
+      pending.clearPending(itemId);
+
       if (result.error) {
         setError(result.error);
         setItems(snapshot);
       } else {
-        router.refresh();
+        refreshInBackground();
       }
     });
   }
@@ -198,7 +192,8 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
     items,
     openItems,
     completedItems,
-    isPending,
+    isPending: pending.isPending,
+    isAnyPending: pending.isAnyPending,
     error,
     clearError: () => setError(null),
     noun: "move",

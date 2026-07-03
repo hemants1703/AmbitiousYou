@@ -1,6 +1,7 @@
 import type { Milestone } from "@ambitiousyou/shared/types";
+import { cache } from "react";
 
-export async function getMilestones(sessionToken: string, ambitionId: string): Promise<Milestone[]> {
+export const getMilestones = cache(async (sessionToken: string, ambitionId: string): Promise<Milestone[]> => {
   const response = await fetch(`${process.env.API_URL}/milestones?ambitionId=${ambitionId}`, {
     method: "GET",
     headers: {
@@ -16,4 +17,4 @@ export async function getMilestones(sessionToken: string, ambitionId: string): P
   const text = await response.text();
   if (!text.trim()) return [];
   return JSON.parse(text) as Milestone[];
-}
+});

@@ -35,7 +35,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", { weekday: "long", month
  * Right-side drawer that reveals the full set of upcoming moves hiding behind the "Coming up"
  * card — either every move for one day or all of the next seven days, grouped by day. Rows reuse
  * {@link ActionQueueItem} (inside their own {@link MoveDetailProvider}), so moves stay tickable and
- * openable exactly like the Today panel; completing one calls `router.refresh()` while the
+ * openable exactly like the Today panel; completing one refreshes aggregates in the background while the
  * uncontrolled sheet stays open. ~45% width on desktop, full width below `lg`.
  */
 export function MovesDrawer(props: MovesDrawerProps) {

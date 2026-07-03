@@ -1,14 +1,14 @@
 "use client";
 
+import { OptimisticRow } from "@/components/(app)/mutations/optimistic-row";
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, toMoveDetail, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
-import { CheckIcon, EyeIcon, FlagIcon, MoreVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { CheckIcon, EyeIcon, FlagIcon, Loader2Icon, MoreVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
 import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
@@ -72,7 +72,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
   }
 
   return (
-    <div className={cn("group rounded-2xl bg-background border border-border/60 border-l-4 p-3", MOVE_KIND_STYLE[kind].stripe)}>
+    <OptimisticRow isPending={props.isPending} className={cn("group rounded-2xl bg-background border border-border/60 border-l-4 p-3", MOVE_KIND_STYLE[kind].stripe)}>
       <div className="flex items-start gap-3">
         <CompletionControl item={item} isMilestone={isMs} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
 
@@ -135,7 +135,7 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </div>
+    </OptimisticRow>
   );
 }
 
@@ -155,13 +155,17 @@ interface CompletionControlProps {
 function CompletionControl(props: CompletionControlProps) {
   if (!props.isMilestone) {
     return (
-      <Checkbox
-        checked={props.completed}
+      <button
+        type="button"
         disabled={props.isPending}
-        onCheckedChange={props.onToggle}
-        className="mt-0.5 rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary dark:hover:border-chart-1 hover:text-primary dark:hover:text-chart-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+        onClick={props.onToggle}
         aria-label={props.completed ? "Mark task as not completed" : "Mark task as completed"}
-      />
+        className={cn(
+          "mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none",
+          props.completed ? "border-primary bg-primary text-primary-foreground dark:border-chart-1 dark:bg-chart-1" : "border-muted-foreground/40 hover:border-primary dark:hover:border-chart-1",
+        )}>
+        {props.isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : props.completed ? <CheckIcon className="size-3.5" /> : null}
+      </button>
     );
   }
 
@@ -182,8 +186,8 @@ function CompletionControl(props: CompletionControlProps) {
         type="button"
         disabled={props.isPending}
         aria-label={`Mark milestone "${getTitle(props.item)}" as reached`}
-        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary dark:hover:border-chart-1 hover:text-primary dark:hover:text-chart-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-        <FlagIcon className="size-3" />
+        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary dark:hover:border-chart-1 hover:text-primary dark:hover:text-chart-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none">
+        {props.isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : <FlagIcon className="size-3" />}
       </button>
     </ConfirmMilestoneCompletion>
   );

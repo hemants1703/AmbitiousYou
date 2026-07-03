@@ -98,7 +98,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
             <TabsContent value="open" className="mt-3 min-h-0 space-y-3 overflow-y-auto overscroll-contain pr-1">
               <TrackedItemList
                 items={filteredOpen.slice(0, visibleOpen)}
-                isPending={board.isPending}
+                isItemPending={board.isPending}
                 dateDisabled={props.dateDisabled}
                 onToggle={board.toggle}
                 onUpdate={board.update}
@@ -115,7 +115,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
             <TabsContent value="completed" className="mt-3 min-h-0 space-y-3 overflow-y-auto overscroll-contain pr-1">
               <TrackedItemList
                 items={filteredCompleted.slice(0, visibleCompleted)}
-                isPending={board.isPending}
+                isItemPending={board.isPending}
                 dateDisabled={props.dateDisabled}
                 onToggle={board.toggle}
                 onUpdate={board.update}

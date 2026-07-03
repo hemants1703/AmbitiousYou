@@ -1,5 +1,6 @@
 "use client";
 
+import { PendingButton } from "@/components/(app)/mutations/pending-button";
 import { MoveKindSelector } from "@/components/(app)/ambitions/move-kind-selector";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -93,9 +94,9 @@ export function TrackedItemDraftEditor(props: TrackedItemDraftEditorProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button type="button" size="sm" disabled={props.isPending || !canSave} onClick={props.onSubmit}>
+        <PendingButton type="button" size="sm" isPending={props.isPending} disabled={!canSave} onClick={props.onSubmit}>
           Save move
-        </Button>
+        </PendingButton>
         <Button type="button" variant="outline" size="sm" disabled={props.isPending} onClick={props.onCancel}>
           Cancel
         </Button>

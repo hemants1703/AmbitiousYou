@@ -1,41 +1,47 @@
+import type { Ambition, Milestone, Task } from "@ambitiousyou/shared/types";
 import type { AmbitionDetails } from "./get-ambition-details";
-import { getTasks } from "@/lib/api/tasks/get-tasks";
-import { getMilestones } from "@/lib/api/milestones/get-milestones";
-import type { Ambition } from "@ambitiousyou/shared/types";
+import { getAmbitionMovesBatch } from "./get-ambition-moves-batch";
 
 export interface AllAmbitionMovesResult {
   details: AmbitionDetails[];
-  /** True when at least one ambition's moves failed to load (thrown/network error). */
   hadErrors: boolean;
 }
 
-/**
- * Fetches the tracked moves (tasks + milestones) for EVERY supplied ambition — regardless of status
- * (active, completed, missed) — in parallel and merges them onto each ambition. Unlike
- * {@link getActiveAmbitionDetails} (which the dashboard insights feed with active-only ambitions), the
- * movement chart needs completed moves from completed/missed ambitions too, so the caller passes the
- * full list. This is heavier (N×2 requests) — keep it behind its own Suspense boundary.
- * `Promise.allSettled` isolates per-ambition failures; `getTasks`/`getMilestones` already return `[]`
- * on a non-ok response, so `hadErrors` reflects only thrown/network failures.
- */
-export async function getAllAmbitionMoves(sessionToken: string, ambitions: Ambition[]): Promise<AllAmbitionMovesResult> {
-  const settled = await Promise.allSettled(
-    ambitions.map(async (ambition): Promise<AmbitionDetails> => {
-      const [tasks, milestones] = await Promise.all([getTasks(sessionToken, ambition.id), getMilestones(sessionToken, ambition.id)]);
-      return { ...ambition, tasks, milestones };
-    }),
-  );
+function mergeMovesOntoAmbitions(ambitions: Ambition[], tasks: Task[], milestones: Milestone[]): AmbitionDetails[] {
+  const tasksByAmbition = new Map<string, Task[]>();
+  const milestonesByAmbition = new Map<string, Milestone[]>();
 
-  const details: AmbitionDetails[] = [];
-  let hadErrors = false;
-
-  for (const result of settled) {
-    if (result.status === "fulfilled") {
-      details.push(result.value);
-    } else {
-      hadErrors = true;
-    }
+  for (const task of tasks) {
+    const list = tasksByAmbition.get(task.ambitionId) ?? [];
+    list.push(task);
+    tasksByAmbition.set(task.ambitionId, list);
   }
 
-  return { details, hadErrors };
+  for (const milestone of milestones) {
+    const list = milestonesByAmbition.get(milestone.ambitionId) ?? [];
+    list.push(milestone);
+    milestonesByAmbition.set(milestone.ambitionId, list);
+  }
+
+  return ambitions.map((ambition) => ({
+    ...ambition,
+    tasks: tasksByAmbition.get(ambition.id) ?? [],
+    milestones: milestonesByAmbition.get(ambition.id) ?? [],
+  }));
+}
+
+/**
+ * All moves for every ambition via one batch API call (replaces N×2 fetches).
+ */
+export async function getAllAmbitionMoves(sessionToken: string, ambitions: Ambition[]): Promise<AllAmbitionMovesResult> {
+  if (ambitions.length === 0) {
+    return { details: [], hadErrors: false };
+  }
+
+  try {
+    const { tasks, milestones } = await getAmbitionMovesBatch(sessionToken, false);
+    return { details: mergeMovesOntoAmbitions(ambitions, tasks, milestones), hadErrors: false };
+  } catch {
+    return { details: [], hadErrors: true };
+  }
 }

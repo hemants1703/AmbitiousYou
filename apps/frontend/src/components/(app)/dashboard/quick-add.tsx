@@ -1,5 +1,17 @@
 "use client";
 
+import { createMilestoneAction } from "@/lib/actions/(app)/milestones/create-milestone";
+import { createNoteAction } from "@/lib/actions/(app)/notes/create-note";
+import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
+import { useBackgroundRefresh } from "@/lib/(app)/mutations/background-refresh";
+import { useOptionalDashboardMoves } from "@/lib/(app)/mutations/dashboard-moves-context";
+import { MOVE_TITLE_MAX_LENGTH, toDateInputValue, toSelectedDate } from "@/lib/(app)/tracked-item";
+import { format } from "date-fns";
+import { CalendarIcon, FlagIcon, ListTodoIcon, StickyNoteIcon, ZapIcon } from "lucide-react";
+import { useRef, useState, useTransition } from "react";
+import type { Matcher } from "react-day-picker";
+import { toast } from "sonner";
+import { PendingButton } from "@/components/(app)/mutations/pending-button";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,16 +20,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { createMilestoneAction } from "@/lib/actions/(app)/milestones/create-milestone";
-import { createNoteAction } from "@/lib/actions/(app)/notes/create-note";
-import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
-import { MOVE_TITLE_MAX_LENGTH, toDateInputValue, toSelectedDate } from "@/lib/(app)/tracked-item";
-import { format } from "date-fns";
-import { CalendarIcon, FlagIcon, ListTodoIcon, Loader2Icon, StickyNoteIcon, ZapIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
-import type { Matcher } from "react-day-picker";
-import { toast } from "sonner";
 
 /** Minimal active-ambition shape needed to add a move/note and bound its date to the window. */
 export interface QuickAddAmbition {
@@ -45,14 +47,9 @@ function atMidnight(value: Date | string): Date {
   return date;
 }
 
-/**
- * One-stop capture from the dashboard: drop a task, milestone, or note onto any active
- * ambition without navigating away. Reuses the existing create server actions verbatim and,
- * like every other dashboard mutation, refreshes the route on success so Today / health /
- * the status line immediately reflect the new work.
- */
 export function QuickAdd(props: QuickAddProps) {
-  const router = useRouter();
+  const dashboardMoves = useOptionalDashboardMoves();
+  const refreshInBackground = useBackgroundRefresh();
   const [isPending, startTransition] = useTransition();
 
   const [open, setOpen] = useState(false);
@@ -61,7 +58,6 @@ export function QuickAdd(props: QuickAddProps) {
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
-  // Optional description for tasks/milestones — opt-in via a checkbox so the default capture stays quick.
   const [description, setDescription] = useState("");
   const [showDescription, setShowDescription] = useState(false);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -72,7 +68,6 @@ export function QuickAdd(props: QuickAddProps) {
   const isNote = mode === "note";
   const needsDate = !isNote;
 
-  // Bound the date to the ambition's window, and never let it land in the past.
   const today = atMidnight(new Date());
   const windowStart = atMidnight(selected.startDate);
   const startBound = windowStart > today ? windowStart : today;
@@ -100,7 +95,6 @@ export function QuickAdd(props: QuickAddProps) {
 
   function handleAmbitionChange(nextId: string) {
     setAmbitionId(nextId);
-    // The new ambition has a different window, so any picked date may no longer be valid.
     setDate("");
     setShowCalendar(false);
   }
@@ -108,14 +102,26 @@ export function QuickAdd(props: QuickAddProps) {
   function handleSubmit() {
     if (!canSubmit || isPending) return;
 
+    const value = text.trim();
+    const ambition = selected;
+
+    resetAndClose();
+
     startTransition(async () => {
-      const value = text.trim();
       let error: string | null = null;
 
       if (mode === "task") {
-        error = (await createTaskAction({ ambitionId, task: value, taskDescription: description.trim(), taskDeadline: date })).error;
+        const result = await createTaskAction({ ambitionId, task: value, taskDescription: description.trim(), taskDeadline: date });
+        error = result.error;
+        if (result.task) {
+          dashboardMoves?.addOpenItem(result.task, ambition);
+        }
       } else if (mode === "milestone") {
-        error = (await createMilestoneAction({ ambitionId, milestone: value, milestoneDescription: description.trim(), milestoneTargetDate: date })).error;
+        const result = await createMilestoneAction({ ambitionId, milestone: value, milestoneDescription: description.trim(), milestoneTargetDate: date });
+        error = result.error;
+        if (result.milestone) {
+          dashboardMoves?.addOpenItem(result.milestone, ambition);
+        }
       } else {
         error = (await createNoteAction(ambitionId, value)).error;
       }
@@ -126,8 +132,7 @@ export function QuickAdd(props: QuickAddProps) {
       }
 
       toast.success(mode === "note" ? "Note added" : `Added “${value}”`);
-      resetAndClose();
-      router.refresh();
+      refreshInBackground();
     });
   }
 
@@ -154,13 +159,13 @@ export function QuickAdd(props: QuickAddProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-              {props.ambitions.map((ambition) => (
-                <SelectItem key={ambition.id} value={ambition.id}>
-                  <span className="truncate" translate="no">
-                    {ambition.name}
-                  </span>
-                </SelectItem>
-              ))}
+                {props.ambitions.map((ambition) => (
+                  <SelectItem key={ambition.id} value={ambition.id}>
+                    <span className="truncate" translate="no">
+                      {ambition.name}
+                    </span>
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -247,10 +252,9 @@ export function QuickAdd(props: QuickAddProps) {
           </>
         )}
 
-        <Button type="button" className="w-full" disabled={!canSubmit || isPending} onClick={handleSubmit}>
-          {isPending ? <Loader2Icon className="size-4 animate-spin" /> : null}
+        <PendingButton type="button" className="w-full" isPending={isPending} disabled={!canSubmit} onClick={handleSubmit}>
           {mode === "note" ? "Save note" : mode === "task" ? "Add task" : "Add milestone"}
-        </Button>
+        </PendingButton>
       </PopoverContent>
     </Popover>
   );

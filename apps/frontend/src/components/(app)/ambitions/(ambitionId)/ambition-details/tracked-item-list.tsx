@@ -7,7 +7,7 @@ import { TrackedItemRow } from "./tracked-item-row";
 
 interface TrackedItemListProps {
   items: TrackedItem[];
-  isPending: boolean;
+  isItemPending: (itemId: string) => boolean;
   dateDisabled: Matcher[];
   onToggle: (item: TrackedItem) => void;
   onUpdate: (item: TrackedItem, draft: DraftState) => void;
@@ -56,7 +56,7 @@ export function TrackedItemList(props: TrackedItemListProps) {
           isConfirmingDelete={confirmDeleteId === item.id}
           editDraft={editDraft}
           dateDisabled={props.dateDisabled}
-          isPending={props.isPending}
+          isPending={props.isItemPending(item.id)}
           onToggle={() => props.onToggle(item)}
           onStartEdit={() => startEdit(item)}
           onEditChange={setEditDraft}

@@ -23,6 +23,9 @@ vi.mock("sonner", () => ({
     success: vi.fn(),
   },
 }));
+vi.mock("@/lib/(app)/mutations/background-refresh", () => ({
+  useBackgroundRefresh: () => vi.fn(),
+}));
 
 function buildTask(overrides: Partial<Task> = {}): Task {
   return {
@@ -100,7 +103,7 @@ describe("useTrackedItems", () => {
 
   it("rolls back optimistic toggle when the server action fails", async () => {
     const sourceItems = [buildTask()];
-    vi.mocked(toggleTaskCompletionAction).mockResolvedValue({ error: "Cannot toggle" });
+    vi.mocked(toggleTaskCompletionAction).mockResolvedValue({ task: null, error: "Cannot toggle" });
 
     const { result } = renderTrackedItems({ ambitionId: "amb-1", sourceItems });
 

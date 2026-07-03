@@ -21,7 +21,7 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 
 - MUST: Hydration-safe inputs (no lost focus/value)
 - NEVER: Block paste in `<input>`/`<textarea>`
-- MUST: Loading buttons show spinner and keep original label
+- MUST: Loading buttons show spinner and keep original label — use `<PendingButton>` from `src/components/(app)/mutations/`
 - MUST: Enter submits focused input; in `<textarea>`, ⌘/Ctrl+Enter submits
 - MUST: Keep submit enabled until request starts; then disable with spinner
 - MUST: Accept free text, validate after—don't block typing
@@ -39,15 +39,19 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 
 - MUST: URL reflects state (deep-link filters/tabs/pagination/expanded panels)
 - MUST: Back/Forward restores scroll position
-- MUST: Links use `<a>`/`<Link>` for navigation (support Cmd/Ctrl/middle-click)
+- MUST: Links use `<a>`/`<Link>` for navigation (support Cmd/Ctrl/middle-click); `prefetch` on in-app routes
 - NEVER: Use `<div onClick>` for navigation
+- MUST: Add `loading.tsx` shells for routes where navigation should feel instant (mirror final layout to avoid CLS)
 
 ### Feedback
 
-- SHOULD: Optimistic UI; reconcile on response; on failure rollback or offer Undo
+- MUST: Optimistic UI for mutations — update local state immediately, reconcile from the action response, rollback on failure
+- MUST: Per-item pending (`usePendingMap`) — one row's save must not disable the whole list
+- SHOULD: In-place pending affordance on rows (`<OptimisticRow>`, spinner in the control that was clicked)
 - MUST: Confirm destructive actions or provide Undo window
 - MUST: Use polite `aria-live` for toasts/inline validation
 - SHOULD: Ellipsis (`…`) for options opening follow-ups ("Rename…") and loading states ("Loading…")
+- NEVER: Block the UI waiting for `router.refresh()` when local state + the action response fully reconcile the view
 
 ### Touch & Drag
 
@@ -64,6 +68,7 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 ## Animation
 
 - MUST: Honor `prefers-reduced-motion` (provide reduced variant or disable)
+- SHOULD: Prefer CSS (`FadeIn`, `animate-in`) on hot routes over framer-motion
 - SHOULD: Prefer CSS > Web Animations API > JS libraries
 - MUST: Animate compositor-friendly props (`transform`, `opacity`) only
 - NEVER: Animate layout props (`top`, `left`, `width`, `height`)
@@ -118,10 +123,10 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - MUST: Track and minimize re-renders (React DevTools/React Scan)
 - MUST: Profile with CPU/network throttling
 - MUST: Batch layout reads/writes; avoid reflows/repaints
-- MUST: Mutations (`POST`/`PATCH`/`DELETE`) target <500ms
+- MUST: Mutations feel instant via optimistic UI; network target <500ms
 - SHOULD: Prefer uncontrolled inputs; controlled inputs cheap per keystroke
-- MUST: Virtualize large lists (>50 items)
-- MUST: Preload above-fold images; lazy-load the rest
+- MUST: Paginate or virtualize large lists (>50 items)
+- MUST: Preload above-fold images; lazy-load the rest; `dynamic()` for heavy drawers
 - MUST: Prevent CLS (explicit image dimensions)
 - SHOULD: `<link rel="preconnect">` for CDN domains
 - SHOULD: Critical fonts: `<link rel="preload" as="font">` with `font-display: swap`
@@ -150,20 +155,26 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - SHOULD: Avoid dark color gradient banding (use background images when needed)
 
 ## Component Architecture
-- **Default:** Server Components (SSR/ISG)
-- **"use client" policy:** Only use when ABSOLUTELY necessary (state, interactivity) and separate out the client component into a new component by keeping the core page SSR/ISG/SSG
-- **Server Components:** All page routes, layouts, metadata generation
-- **File Structure:** When creating new components, use PascalCase for the components function (UserProfile(props) {}) themselves and kebab-case for file naming (user-profile.tsx) and camelCase for any variables, uppercase for constants etc.
-- **Props Handling:** Each props should not be destructuring things manually, create a TS interface for that file and name it *Props and infer the type. Eg - UserProfile(props: UserProfileProps) {}. Of course only when props are present otherwise not and use as props.key only.
-- **Using Lucide:** When importing icons from 'lucide-react', make sure to import the icons in *Icon pattern, so it is distinguishable of being an icon, lucide already exports those such as SunIcon not Sun as SunIcon.
-- **Supporting Components:** for example (ambitionId) details page should have it's supporting components placed under `src/components/(app)/(ambitions)/(ambitionId)` and nowhere else, follow similar structure always for any page's supporting components.
 
-## Performance Targets
-- **TypeScript/JavaScript bloat:** Minimal, server-first
-- **Load Time:** Users should feel the webapp to be super fast.
-- **Backend:** Use the data fetched from backend as efficiently you can, no need to ping and disturb the backend for every single thing or even the things that can be handled from the already existing data.
-- **Caching:** Heavily use caching as much as possible to make sure we are not hitting backend all the time, memoize the calculated data, use Next.js advanced caching techniques for it, only purge caches when there is any kind of update to the relevant related data.
-- **Navigation:** should always feel natural, fast and instant, figure out all the ways that is suggested by Vercel & Next.js to keep things fast for users. Navigation speed is a priority.
+- **Default:** Server Components (pages, layouts, metadata)
+- **"use client":** Only for state/interactivity; split into a client island, keep the route server-rendered
+- **File naming:** PascalCase components, kebab-case files, camelCase variables
+- **Props:** `ComponentNameProps` interface; access as `props.key` (no destructuring in signature)
+- **Lucide:** `*Icon` suffix (`SunIcon`, not `Sun`)
+- **Colocation:** Supporting components mirror the route under `src/components/(app)/…`
 
-## Cost Optimisation
-- **Vercel:** The frontend Next.js app is deployed on Vercel free tier. Cost optimisation to make sure the free tier resources are used as less as possible to make sure we never hit the free tier limits.
+## Data & Mutations (server-first)
+
+- **Reads:** `src/lib/api/` — wrap helpers in React `cache()` for request-scoped dedup; prefer batch/composite backend endpoints (`getAmbitionFull`, `getAmbitionMovesBatch`) over N×per-resource fetches
+- **Writes:** `src/lib/actions/` — all mutations via `mutateApi()`; scoped invalidation via `revalidateAmbition(id, scopes)` where scopes are `detail` | `list` | `dashboard` (never blanket triple-revalidate when unnecessary)
+- **Client sync:** Optimistic local state reconciles from action responses; `useBackgroundRefresh()` only when server-derived aggregates change (progress %, dashboard buckets) — not after every click
+- **Shared optimistic primitives:** `src/lib/(app)/mutations/` (`usePendingMap`, `useOptimisticList`, `useBackgroundRefresh`, `AmbitionNotesProvider`, `DashboardMovesProvider`)
+- **NEVER:** SWR/React Query — fights the server-first model and adds bundle cost
+- **Streaming:** `Suspense` + skeleton fallbacks for heavy server children (dashboard insights, activity)
+
+## Performance & Cost (Vercel Hobby)
+
+- **Perceived speed first:** Optimistic UI + in-place spinners; user actions should feel instant
+- **Actual speed:** Minimize HTTP round-trips (batch APIs, one fetch per page where possible); overlap independent server work with `Promise.all`
+- **Serverless cost:** Fewer `router.refresh()` calls and narrower `revalidatePath` scopes = fewer full RSC re-renders; keep landing pages `force-static` and CSP nonce-free
+- **Navigation:** `loading.tsx` + `Link prefetch` on app routes; ambition detail and list are the hot paths
