@@ -1,6 +1,6 @@
 "use server";
 
-import { mutateApi } from "@/lib/actions/mutate-api";
+import { getSessionToken } from "@/lib/auth";
 import type { Task } from "@ambitiousyou/shared/types";
 
 export type UpdateTaskInput = {
@@ -11,18 +11,28 @@ export type UpdateTaskInput = {
 };
 
 export async function updateTaskAction(taskId: string, input: UpdateTaskInput): Promise<{ task: Task | null; error: string | null }> {
-  const result = await mutateApi<Task>({
-    path: `/tasks/${taskId}`,
+  const sessionToken = await getSessionToken();
+
+  const response = await fetch(`${process.env.API_URL}/tasks/${taskId}`, {
     method: "PATCH",
-    body: {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionToken}`,
+    },
+    body: JSON.stringify({
       task: input.task,
       taskDescription: input.taskDescription ?? "",
       taskCompleted: input.taskCompleted,
       taskDeadline: input.taskDeadline,
-    },
-    revalidateFromResponse: (task) => ({ ambitionId: task.ambitionId, scopes: ["detail", "dashboard"] }),
-    errorMessage: "Failed to update task. Please try again.",
+    }),
   });
 
-  return { task: result.data, error: result.error };
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    console.error(`[updateTaskAction] ${response.status} ${response.statusText}`, body);
+    return { task: null, error: `Failed to update task (${response.status}). Please try again.` };
+  }
+
+  const updated: Task = await response.json();
+  return { task: updated, error: null };
 }

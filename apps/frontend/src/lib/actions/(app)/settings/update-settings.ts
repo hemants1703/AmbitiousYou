@@ -2,7 +2,6 @@
 
 import { getSessionToken } from "@/lib/auth";
 import { Settings } from "@ambitiousyou/shared";
-import { revalidatePath } from "next/cache";
 
 export async function togglePushAmbitionRemindersSetting(updatedValue: boolean): Promise<Settings> {
     const sessionToken = await getSessionToken();
@@ -23,8 +22,6 @@ export async function togglePushAmbitionRemindersSetting(updatedValue: boolean):
     if (!response.ok) {
         throw new Error(`(${response.status}) ${response.statusText}`);
     }
-
-    revalidatePath("/settings");
 
     return await response.json() as Settings;
 }

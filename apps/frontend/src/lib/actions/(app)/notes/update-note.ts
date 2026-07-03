@@ -1,16 +1,26 @@
 "use server";
 
-import { mutateApi } from "@/lib/actions/mutate-api";
-import type { Note } from "@ambitiousyou/shared/types";
+import { getSessionToken } from "@/lib/auth";
 
-export async function updateNoteAction(noteId: string, noteText: string): Promise<{ note: Note | null; error: string | null }> {
-  const result = await mutateApi<Note>({
-    path: `/notes/${noteId}`,
+export async function updateNoteAction(noteId: string, noteText: string): Promise<{ error: string | null }> {
+  const sessionToken = await getSessionToken();
+
+  // Only `note` is whitelisted by the backend UpdateNoteDto; sending `ambitionId`
+  // trips the global forbidNonWhitelisted ValidationPipe and 400s every edit.
+  const response = await fetch(`${process.env.API_URL}/notes/${noteId}`, {
     method: "PATCH",
-    body: { note: noteText },
-    revalidateFromResponse: (note) => ({ ambitionId: note.ambitionId, scopes: ["detail"] }),
-    errorMessage: "Failed to update note. Please try again.",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionToken}`,
+    },
+    body: JSON.stringify({ note: noteText }),
   });
 
-  return { note: result.data, error: result.error };
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    console.error(`[updateNoteAction] ${response.status} ${response.statusText}`, body);
+    return { error: `Failed to update note (${response.status}). Please try again.` };
+  }
+
+  return { error: null };
 }

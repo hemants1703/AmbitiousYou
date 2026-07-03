@@ -1,15 +1,20 @@
 "use server";
 
-import { mutateApi } from "@/lib/actions/mutate-api";
-import type { Task } from "@ambitiousyou/shared/types";
+import { getSessionToken } from "@/lib/auth";
 
 export async function deleteTaskAction(taskId: string): Promise<{ error: string | null }> {
-  const result = await mutateApi<Task>({
-    path: `/tasks/${taskId}`,
+  const sessionToken = await getSessionToken();
+
+  const response = await fetch(`${process.env.API_URL}/tasks/${taskId}`, {
     method: "DELETE",
-    revalidateFromResponse: (task) => ({ ambitionId: task.ambitionId, scopes: ["detail", "dashboard"] }),
-    errorMessage: "Failed to delete task. Please try again.",
+    headers: {
+      Authorization: `Bearer ${sessionToken}`,
+    },
   });
 
-  return { error: result.error };
+  if (!response.ok) {
+    return { error: "Failed to delete task. Please try again." };
+  }
+
+  return { error: null };
 }
