@@ -85,7 +85,7 @@ export function groupOpenMovesByUrgency(items: TrackedItem[]): OpenMoveGroup[] {
     { id: "overdue", label: "Overdue", headerClass: "text-destructive", items: sort(overdue) },
     { id: "dueSoon", label: "Due within a week", headerClass: "text-amber-700 dark:text-amber-300", items: sort(dueSoon) },
     { id: "later", label: "Coming up", headerClass: "text-muted-foreground", items: sort(later) },
-  ].filter((group) => group.items.length > 0);
+  ].filter((group): group is OpenMoveGroup => group.items.length > 0);
 }
 
 /** Slice open moves in urgency order, then re-bucket for display. */
