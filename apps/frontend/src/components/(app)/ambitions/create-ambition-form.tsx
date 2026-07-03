@@ -150,10 +150,30 @@ export default function CreateAmbitionForm(props: { isInitiation?: boolean }) {
 
       if (draftHasContent(draft)) setRestored(true);
       /* eslint-enable react-hooks/set-state-in-effect */
+    } else if (props.isInitiation) {
+      const base = new Date();
+      base.setHours(0, 0, 0, 0);
+      const end = new Date(base);
+      end.setDate(end.getDate() + 90);
+      const moveDate = new Date(base);
+      moveDate.setDate(moveDate.getDate() + 7);
+
+      const nextStart = toDateInputValue(base);
+      const nextEnd = toDateInputValue(end);
+
+      setStartDate(nextStart);
+      setEndDate(nextEnd);
+      setDateRange({ from: base, to: end });
+      setMoves([{ ...createMoveDraft(), date: toDateInputValue(moveDate) }]);
     }
 
     hydratedRef.current = true; // release the save effect (even when there was no draft)
-  }, []);
+  }, [props.isInitiation]);
+
+  useEffect(() => {
+    if (!props.isInitiation || restored) return;
+    document.getElementById("ambitionName")?.focus();
+  }, [props.isInitiation, restored]);
 
   // Persist on every change once hydration has completed. An empty form clears the key
   // instead of storing noise, so an untouched page (and "Start fresh") leaves nothing behind.

@@ -2,14 +2,13 @@
 
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import PrimaryCta from "@/components/(landing)/primary-cta";
 import { brandCopy } from "@/lib/brand";
 import * as Card from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { MOVE_KIND_STYLE } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { CalendarDaysIcon, CheckIcon, CircleCheckIcon, FlagIcon, TargetIcon } from "lucide-react";
 import { Persona, PersonaAmbition } from "./persona-data";
 
@@ -200,9 +199,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
         {/* Continue CTA */}
         <div className="mt-12 text-center">
           <p className="mb-4 text-muted-foreground">Ready to declare your own ambition?</p>
-          <Button size="lg" asChild>
-            <Link href="/signup">{brandCopy.cta.claimFirst}</Link>
-          </Button>
+          <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" size="lg" />
         </div>
       </div>
     </section>

@@ -12,31 +12,37 @@ import { useAuthHint } from "@/hooks/use-auth-hint";
  * clears the dead cookies on its way out, so the next load is correct with no
  * further network call.
  *
- * A validated "true" answer is memoised in sessionStorage for a short TTL so we
+ * A validated answer is memoised in sessionStorage for a short TTL so we
  * don't hit the backend on every public navigation within a tab, and re-checked
  * when the tab regains focus so a logout/revocation elsewhere is reflected.
  */
 
-const CACHE_KEY = "ay_auth_valid";
+const CACHE_KEY = "ay_auth_session";
 const TTL_MS = 60_000;
 
-type Cached = { valid: boolean; at: number };
+type Cached = { valid: boolean; hasAmbitions: boolean | null; at: number };
 
-function readCache(): boolean | null {
+export type AuthSession = {
+  isLoggedIn: boolean;
+  /** null while unknown or logged out */
+  hasAmbitions: boolean | null;
+};
+
+function readCache(): Cached | null {
   try {
     const raw = sessionStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Cached;
     if (Date.now() - parsed.at > TTL_MS) return null;
-    return parsed.valid;
+    return parsed;
   } catch {
     return null;
   }
 }
 
-function writeCache(valid: boolean): void {
+function writeCache(valid: boolean, hasAmbitions: boolean | null): void {
   try {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ valid, at: Date.now() }));
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ valid, hasAmbitions, at: Date.now() }));
   } catch {
     // sessionStorage unavailable (e.g. privacy mode) — caching is best-effort.
   }
@@ -50,10 +56,13 @@ function clearCache(): void {
   }
 }
 
-export function useAuthStatus(): boolean {
+export function useAuthSession(): AuthSession {
   const hint = useAuthHint();
   const [validated, setValidated] = React.useState<boolean | null>(null);
+  const [hasAmbitions, setHasAmbitions] = React.useState<boolean | null>(null);
   const [revalidateAt, setRevalidateAt] = React.useState(0);
+
+  const cached = hint ? readCache() : null;
 
   // Re-validate when the tab becomes visible/focused so a session revoked or a
   // logout in another tab is reflected without a manual reload.
@@ -78,9 +87,9 @@ export function useAuthStatus(): boolean {
       return;
     }
 
-    // Fresh "valid" cache: the optimistic state already renders as logged-in, so
+    // Fresh valid cache: the optimistic state already renders as logged-in, so
     // skip both the network call and any synchronous setState.
-    if (readCache() === true) return;
+    if (cached?.valid === true) return;
 
     const controller = new AbortController();
     let ignore = false;
@@ -89,10 +98,11 @@ export function useAuthStatus(): boolean {
       try {
         const res = await fetch("/api/auth/status", { cache: "no-store", signal: controller.signal });
         if (!res.ok || ignore) return;
-        const data = (await res.json()) as { authenticated: boolean };
+        const data = (await res.json()) as { authenticated: boolean; hasAmbitions?: boolean };
         if (ignore) return;
         setValidated(data.authenticated);
-        writeCache(data.authenticated);
+        setHasAmbitions(data.authenticated ? (data.hasAmbitions ?? false) : null);
+        writeCache(data.authenticated, data.authenticated ? (data.hasAmbitions ?? false) : null);
       } catch {
         // Network/abort error: keep the optimistic state rather than falsely
         // logging the user out on a transient failure.
@@ -103,9 +113,18 @@ export function useAuthStatus(): boolean {
       ignore = true;
       controller.abort();
     };
-  }, [hint, revalidateAt]);
+  }, [hint, revalidateAt, cached?.valid]);
 
-  // Optimistic while unknown (`null`); only hide the dashboard affordance when
-  // the backend explicitly reports an invalid session.
-  return hint && validated !== false;
+  const isLoggedIn = hint && (cached?.valid === true || validated !== false);
+  const resolvedHasAmbitions = isLoggedIn ? (cached?.valid === true ? cached.hasAmbitions : hasAmbitions) : null;
+
+  return {
+    isLoggedIn,
+    hasAmbitions: resolvedHasAmbitions,
+  };
+}
+
+/** @deprecated Prefer `useAuthSession` when ambition count affects routing. */
+export function useAuthStatus(): boolean {
+  return useAuthSession().isLoggedIn;
 }

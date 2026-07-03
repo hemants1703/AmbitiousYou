@@ -12,6 +12,7 @@ export const brandCopy = {
     claimAmbitions: "Claim your ambitions",
     createAccount: "Join the ambitious ones",
     goDashboard: "Go to Dashboard",
+    declareAmbition: "Declare your ambition",
   },
   signup: {
     tagline: "You're joining people who finish what matters.",

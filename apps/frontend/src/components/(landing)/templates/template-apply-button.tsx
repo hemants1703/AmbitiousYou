@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { saveDraft } from "@/lib/(app)/create-ambition-draft";
+import { brandCopy } from "@/lib/brand";
 import { hydrateTemplateDraft, type AmbitionTemplate } from "@/lib/seo/template-content";
-import { useAuthStatus } from "@/hooks/use-auth-status";
+import { useAuthSession } from "@/hooks/use-auth-status";
 import { ArrowRightIcon } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface TemplateApplyButtonProps {
@@ -13,13 +13,18 @@ interface TemplateApplyButtonProps {
 }
 
 export function TemplateApplyButton(props: TemplateApplyButtonProps) {
-  const isLoggedIn = useAuthStatus();
+  const session = useAuthSession();
   const router = useRouter();
 
-  if (!isLoggedIn) {
+  if (!session.isLoggedIn) {
+    const handleSignupWithTemplate = () => {
+      saveDraft(hydrateTemplateDraft(props.template));
+      router.push("/signup");
+    };
+
     return (
-      <Button asChild size="lg">
-        <Link href="/signup">Join to use this template</Link>
+      <Button type="button" size="lg" onClick={handleSignupWithTemplate}>
+        {brandCopy.cta.join}
       </Button>
     );
   }

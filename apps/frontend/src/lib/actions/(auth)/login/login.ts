@@ -1,5 +1,6 @@
 "use server";
 
+import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -94,6 +95,11 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
   });
+
+  const ambitions = await getAmbitions(sessionToken);
+  if (!ambitions || ambitions.length === 0) {
+    redirect("/ambitions/create?initiation=1");
+  }
 
   redirect("/dashboard");
 }

@@ -3,6 +3,7 @@ import BeforeAfter from "@/components/(landing)/homepage/before-after";
 import CTA from "@/components/(landing)/homepage/cta";
 import Features from "@/components/(landing)/homepage/features";
 import HowItWorks from "@/components/(landing)/homepage/how-it-works";
+import HomepageMidCta from "@/components/(landing)/homepage/homepage-mid-cta";
 import Outcomes from "@/components/(landing)/homepage/outcomes";
 import ProblemAgitation from "@/components/(landing)/homepage/problem-agitation";
 import WhatIsAmbitiousYou from "@/components/(landing)/marketing/what-is-ambitiousyou";
@@ -21,6 +22,7 @@ export default function Home() {
       <Hero />
       <ProblemAgitation />
       <HowItWorks />
+      <HomepageMidCta />
       <Features />
       <BeforeAfter />
       <Outcomes />

@@ -125,8 +125,14 @@ export default function ExperienceFlow() {
           <div className="lp-reveal relative overflow-hidden rounded-3xl border border-primary/20 dark:border-chart-1/20 bg-card/80 p-10 text-center shadow-xl backdrop-blur-sm">
             <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 dark:via-chart-1/50 to-transparent" />
 
-            <h2 className="font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">Ready to make it real?</h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">Everything you just tried works exactly like this in the app — plus notes, insights, and a dashboard of your own. Your journey starts now.</p>
+            <h2 className="font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">
+              {state.ambition ? `Ready to run “${state.ambition.ambition.ambitionName}” for real?` : "Ready to make it real?"}
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              {state.ambition
+                ? "Everything you just tried works exactly like this in the app — your ambition, your moves, your momentum."
+                : "Everything you just tried works exactly like this in the app — plus notes, insights, and a dashboard of your own. Your journey starts now."}
+            </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" size="lg" className="h-12 px-10 shadow-lg shadow-primary/20" />

@@ -1,4 +1,3 @@
-import { DashboardEmptyState } from "@/components/(app)/dashboard/dashboard-empty-state";
 import { DashboardInsights } from "@/components/(app)/dashboard/dashboard-insights";
 import { DashboardActivity } from "@/components/(app)/dashboard/dashboard-activity";
 import { DashboardSkeleton } from "@/components/(app)/dashboard/dashboard-skeleton";
@@ -9,6 +8,7 @@ import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
 import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
 import { getSessionToken, requireUser } from "@/lib/auth";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -25,10 +25,8 @@ export default async function DashboardPage() {
   const sessionToken = await getSessionToken();
   const [{ user: userDetails }, ambitions] = await Promise.all([requireUser(), getAmbitions(sessionToken)]);
 
-  const firstName = userDetails.name.trim().split(/\s+/)[0] || userDetails.name;
-
   if (!ambitions || ambitions.length === 0) {
-    return <DashboardEmptyState firstName={firstName} />;
+    redirect("/ambitions/create?initiation=1");
   }
 
   const missed = ambitions.filter((ambition) => ambition.ambitionStatus === "missed");

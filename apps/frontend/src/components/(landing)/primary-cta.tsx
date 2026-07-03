@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useAuthStatus } from "@/hooks/use-auth-status";
+import { useAuthSession } from "@/hooks/use-auth-status";
+import { brandCopy } from "@/lib/brand";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -15,20 +16,31 @@ interface PrimaryCtaProps {
 }
 
 /**
- * A public "Sign up"-style CTA that swaps to "Go to Dashboard" → /dashboard once
- * the user is logged in (detected client-side via the readable hint cookie). The
- * logged-out copy is what the static HTML / first paint render, so SEO and the
- * anonymous-visitor experience are unaffected.
+ * A public signup-style CTA that swaps once the user is logged in:
+ * - zero ambitions → initiation create
+ * - has ambitions → dashboard
+ * Logged-out copy is what static HTML / first paint render (SEO-safe).
  */
 export default function PrimaryCta(props: PrimaryCtaProps) {
-  const isLoggedIn = useAuthStatus();
-  const href = isLoggedIn ? "/dashboard" : props.loggedOutHref;
-  const label = isLoggedIn ? "Go to Dashboard" : props.loggedOutLabel;
+  const session = useAuthSession();
+
+  let href = props.loggedOutHref;
+  let label = props.loggedOutLabel;
+
+  if (session.isLoggedIn) {
+    if (session.hasAmbitions === false) {
+      href = "/ambitions/create?initiation=1";
+      label = brandCopy.cta.declareAmbition;
+    } else {
+      href = "/dashboard";
+      label = brandCopy.cta.goDashboard;
+    }
+  }
 
   return (
     <Button asChild size={props.size} variant={props.variant} className={props.className}>
-      {/* Only prefetch the public route; /dashboard renders only after the hint flips. */}
-      <Link href={href} prefetch={isLoggedIn ? undefined : true} className="flex items-center gap-2">
+      {/* Only prefetch the public route; app routes render after the hint flips. */}
+      <Link href={href} prefetch={session.isLoggedIn ? undefined : true} className="flex items-center gap-2">
         {label}
         {props.icon}
       </Link>

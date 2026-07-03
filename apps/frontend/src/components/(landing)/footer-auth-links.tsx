@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useAuthStatus } from "@/hooks/use-auth-status";
+import { brandCopy } from "@/lib/brand";
+import { useAuthSession } from "@/hooks/use-auth-status";
 
 /**
  * Footer "Explore" list items that depend on auth: logged-out shows Login +
@@ -10,13 +11,16 @@ import { useAuthStatus } from "@/hooks/use-auth-status";
  * logged-out branch is what prerenders statically (SEO-safe — see useAuthHint).
  */
 export default function FooterAuthLinks() {
-  const isLoggedIn = useAuthStatus();
+  const session = useAuthSession();
 
-  if (isLoggedIn) {
+  if (session.isLoggedIn) {
+    const href = session.hasAmbitions === false ? "/ambitions/create?initiation=1" : "/dashboard";
+    const label = session.hasAmbitions === false ? brandCopy.cta.declareAmbition : "Dashboard";
+
     return (
       <li>
-        <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
-          Dashboard
+        <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
+          {label}
         </Link>
       </li>
     );
@@ -31,7 +35,7 @@ export default function FooterAuthLinks() {
       </li>
       <li>
         <Link prefetch={true} href="/signup" className="text-muted-foreground hover:text-foreground transition-colors">
-          Sign Up
+          {brandCopy.cta.join}
         </Link>
       </li>
     </>

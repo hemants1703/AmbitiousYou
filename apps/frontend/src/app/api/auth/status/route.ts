@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
 import { getUser } from "@/lib/api/sidebar/get-user";
 
 /**
@@ -31,5 +32,8 @@ export async function GET() {
     return Response.json({ authenticated: false }, { headers: NO_STORE });
   }
 
-  return Response.json({ authenticated: true }, { headers: NO_STORE });
+  const ambitions = await getAmbitions(sessionToken);
+  const hasAmbitions = Array.isArray(ambitions) && ambitions.length > 0;
+
+  return Response.json({ authenticated: true, hasAmbitions }, { headers: NO_STORE });
 }
