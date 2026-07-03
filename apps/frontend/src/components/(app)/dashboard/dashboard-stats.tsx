@@ -20,10 +20,10 @@ export function DashboardStats(props: DashboardStatsProps) {
   const totalLabel = `${props.ambitions.length} total ${props.ambitions.length === 1 ? "ambition" : "ambitions"}`;
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <StatCard icon={<TargetIcon className="size-5" />} label="Active" value={`${active.length}`} helper={totalLabel} tone="default" />
+    <div className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-4">
+      <StatCard icon={<TargetIcon className="size-5" />} label="Active" value={`${active.length}`} helper={totalLabel} tone="default" className="h-full" />
 
-      <StatCard icon={<GaugeIcon className="size-5" />} label="Avg progress" value={`${averageProgress}%`} helper={active.length > 0 ? "across active ambitions" : "no active ambitions"} tone={averageProgress === 100 ? "positive" : "default"}>
+      <StatCard icon={<GaugeIcon className="size-5" />} label="Avg progress" value={`${averageProgress}%`} helper={active.length > 0 ? "across active ambitions" : "no active ambitions"} tone={averageProgress === 100 ? "positive" : "default"} className="h-full">
         <Progress value={averageProgress} className="h-1.5" aria-label={`Average progress ${averageProgress} percent`} />
       </StatCard>
 
@@ -33,6 +33,7 @@ export function DashboardStats(props: DashboardStatsProps) {
         value={`${completed.length}`}
         helper={completed.length > 0 ? `${completed.length === 1 ? "ambition" : "ambitions"} achieved` : "your first win awaits"}
         tone={completed.length > 0 ? "positive" : "default"}
+        className="h-full"
       />
 
       <NeedsAttentionStat initialSummary={props.attentionSummary} loadFailed={props.loadFailed} />

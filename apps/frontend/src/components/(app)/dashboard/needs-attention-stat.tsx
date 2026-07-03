@@ -79,21 +79,22 @@ export function NeedsAttentionStat(props: NeedsAttentionStatProps) {
       value={`${summary.totalCount}`}
       helper={helper}
       tone={tone}
-      className={cn(isInteractive && "transition-shadow hover:shadow-lg")}
+      className={cn("h-full", isInteractive && "transition-shadow hover:shadow-lg")}
     />
   );
 
   if (!isInteractive) {
-    return card;
+    return <div className="h-full w-full">{card}</div>;
   }
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button type="button" className="rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" aria-label={`${summary.totalCount} items need attention. Open details.`}>
-          {card}
-        </button>
-      </PopoverTrigger>
+    <div className="h-full w-full">
+      <Popover>
+        <PopoverTrigger asChild>
+          <button type="button" className="flex h-full w-full rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" aria-label={`${summary.totalCount} items need attention. Open details.`}>
+            {card}
+          </button>
+        </PopoverTrigger>
       <PopoverContent align="end" className="w-80 max-w-[calc(100vw-2rem)]">
         <PopoverHeader>
           <PopoverTitle>Needs attention</PopoverTitle>
@@ -129,6 +130,7 @@ export function NeedsAttentionStat(props: NeedsAttentionStatProps) {
           </button>
         ) : null}
       </PopoverContent>
-    </Popover>
+      </Popover>
+    </div>
   );
 }
