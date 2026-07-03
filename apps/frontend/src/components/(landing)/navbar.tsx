@@ -44,7 +44,7 @@ export default function Navbar() {
         <div className="hidden items-center gap-8 md:flex">
           <div className="flex items-center gap-6">
             {navLinks.map((link) => {
-              const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
+              const isActive = pagePathname === link.href || pagePathname?.startsWith(`${link.href}/`);
 
               return (
                 <Link prefetch={true} key={link.href} href={link.href} className={cn("relative px-1 py-2 text-sm font-medium transition-colors", isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
@@ -98,7 +98,7 @@ export default function Navbar() {
               <div className="flex-1 overflow-y-auto overscroll-contain px-6">
                 <ul>
                   {navLinks.map((link) => {
-                    const isActive = pagePathname === link.href || (link.href !== "/" && pagePathname?.startsWith(link.href));
+                    const isActive = pagePathname === link.href || pagePathname?.startsWith(`${link.href}/`);
 
                     return (
                       <li key={link.href}>

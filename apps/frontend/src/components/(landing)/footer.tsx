@@ -110,22 +110,22 @@ export default function Footer() {
           </div>
 
           {/* Product */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             <FooterLinkGroup title="Product" links={productLinks} />
           </div>
 
           {/* Resources */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             <FooterLinkGroup title="Resources" links={resourceLinks} />
           </div>
 
           {/* Company */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             <FooterLinkGroup title="Company" links={companyLinks} />
           </div>
 
           {/* Account + legal + preferences */}
-          <div className="col-span-2 space-y-8 md:col-span-4 lg:col-span-2">
+          <div className="col-span-2 space-y-8 md:col-span-2">
             <div className="space-y-4">
               <h4 className="font-brand text-base font-semibold">Account</h4>
               <ul className="space-y-2 text-sm">

@@ -6,14 +6,6 @@
 // www apex (configure an apex -> www redirect at the host/DNS level); override
 // per environment via NEXT_PUBLIC_SITE_URL (e.g. preview deployments).
 
-// Single source of truth for the public site's identity and canonical origin.
-//
-// Imported by the root layout metadata, the generated sitemap/robots/manifest
-// routes, every public page's `metadata`, and the JSON-LD schemas — so the
-// domain and brand copy live in exactly one place. The canonical host is the
-// www apex (configure an apex -> www redirect at the host/DNS level); override
-// per environment via NEXT_PUBLIC_SITE_URL (e.g. preview deployments).
-
 import { brandCopy } from "@/lib/brand";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ambitiousyou.pro";

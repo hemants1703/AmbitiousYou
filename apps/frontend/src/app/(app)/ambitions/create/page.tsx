@@ -24,7 +24,7 @@ export default async function CreateAmbitionPage(props: CreateAmbitionPageProps)
         <div className="flex flex-col gap-3 pb-10">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">{isInitiation ? brandCopy.initiation.heading : "Create a new ambition"}</h1>
-            <p className="maxtext-balance text-muted-foreground">
+            <p className="text-balance text-muted-foreground">
               {isInitiation ? brandCopy.initiation.subheading : "Capture the goal, choose how progress will be tracked, and add the first tasks or milestones that will keep it moving."}
             </p>
           </div>
