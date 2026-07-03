@@ -260,6 +260,34 @@ export function computeAttentionFlags(ambitions: AmbitionDetails[]): AttentionFl
   return flags.sort((first, second) => severityRank[first.severity] - severityRank[second.severity] || priorityWeight(second.priority) - priorityWeight(first.priority));
 }
 
+export interface AttentionSummary {
+  totalCount: number;
+  overdueCount: number;
+  dueTodayCount: number;
+  flags: AttentionFlag[];
+  urgentItems: QueueItem[];
+  otherFlags: AttentionFlag[];
+}
+
+/** Counts every move due today or overdue, plus stalled/ready ambitions without overdue moves. */
+export function summarizeAttention(ambitions: AmbitionDetails[], openItems?: QueueItem[]): AttentionSummary {
+  const items = openItems ?? flattenOpenItems(ambitions);
+  const flags = computeAttentionFlags(ambitions);
+  const urgentItems = items.filter((item) => item.daysUntil <= 0);
+  const overdueCount = items.filter((item) => item.daysUntil < 0).length;
+  const dueTodayCount = items.filter((item) => item.daysUntil === 0).length;
+  const otherFlags = flags.filter((flag) => flag.severity !== "overdue");
+
+  return {
+    totalCount: urgentItems.length + otherFlags.length,
+    overdueCount,
+    dueTodayCount,
+    flags,
+    urgentItems,
+    otherFlags,
+  };
+}
+
 export interface LeadMotivation {
   ambitionId: string;
   ambitionName: string;

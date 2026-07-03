@@ -1,20 +1,24 @@
-import { getActiveAmbitionDetails } from "@/lib/api/ambitions/get-active-ambition-details";
-import type { Ambition } from "@ambitiousyou/shared/types";
-import { DashboardInsightsClient } from "./dashboard-insights-client";
+import { DashboardInsightsPanels } from "@/components/(app)/dashboard/dashboard-insights-panels";
+import type { DayGroup, LeadMotivation, QueueItem } from "@/lib/dashboard/tracked-items";
 
 interface DashboardInsightsProps {
-  sessionToken: string;
-  ambitions: Ambition[];
+  hadErrors: boolean;
+  loadFailed: boolean;
+  openItems: QueueItem[];
+  upcoming: DayGroup[];
+  weekGroups: DayGroup[];
+  leadMotivation: LeadMotivation | null;
 }
 
-/**
- * Async server child streamed behind a single <Suspense> boundary. Fetches open moves
- * in one batch call, then hands off to the client provider for optimistic updates.
- */
-export async function DashboardInsights(props: DashboardInsightsProps) {
-  const activeAmbitions = props.ambitions.filter((ambition) => ambition.ambitionStatus === "active");
-  const { details, hadErrors } = await getActiveAmbitionDetails(props.sessionToken, activeAmbitions);
-  const loadFailed = activeAmbitions.length > 0 && details.length === 0;
-
-  return <DashboardInsightsClient details={details} hadErrors={hadErrors} loadFailed={loadFailed} />;
+export function DashboardInsights(props: DashboardInsightsProps) {
+  return (
+    <DashboardInsightsPanels
+      openItems={props.openItems}
+      upcoming={props.upcoming}
+      weekGroups={props.weekGroups}
+      leadMotivation={props.leadMotivation}
+      hadErrors={props.hadErrors}
+      loadFailed={props.loadFailed}
+    />
+  );
 }

@@ -25,7 +25,7 @@ export function TodayFocus(props: TodayFocusProps) {
   const todayLabel = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
 
   return (
-    <Card>
+    <Card id="today-focus">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <SunriseIcon className="size-4 text-foreground" />

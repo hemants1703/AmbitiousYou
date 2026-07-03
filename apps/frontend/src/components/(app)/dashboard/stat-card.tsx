@@ -24,7 +24,7 @@ const chipByTone: Record<StatTone, string> = {
 
 export function StatCard(props: StatCardProps) {
   return (
-    <Card size="sm" className="gap-3">
+    <Card size="sm" className={cn("gap-3", props.className)}>
       <div className="flex items-start justify-between gap-3 px-4">
         <div className="min-w-0 space-y-1">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{props.label}</p>

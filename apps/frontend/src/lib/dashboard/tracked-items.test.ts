@@ -3,6 +3,7 @@ import type { QueueItem } from "@/lib/dashboard/tracked-items";
 import {
   bucketByDeadline,
   computeAttentionFlags,
+  summarizeAttention,
   dayKey,
   getDaysUntil,
   pickLeadMotivation,
@@ -119,6 +120,35 @@ describe("bucketByDeadline", () => {
 describe("dayKey", () => {
   it("formats dates as yyyy-mm-dd", () => {
     expect(dayKey(new Date("2026-06-05"))).toBe("2026-06-05");
+  });
+});
+
+describe("summarizeAttention", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(FIXED_NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("counts overdue moves instead of ambition end dates", () => {
+    const ambitions = [
+      buildAmbition({
+        ambitionEndDate: new Date("2026-12-31"),
+        tasks: [
+          buildTask({ id: "task-1", taskDeadline: new Date("2026-06-01"), taskCompleted: false }),
+          buildTask({ id: "task-2", taskDeadline: new Date("2026-06-10"), taskCompleted: false }),
+        ],
+      }),
+    ];
+
+    const summary = summarizeAttention(ambitions);
+
+    expect(summary.totalCount).toBe(2);
+    expect(summary.overdueCount).toBe(2);
+    expect(summary.dueTodayCount).toBe(0);
   });
 });
 
