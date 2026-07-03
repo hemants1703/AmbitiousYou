@@ -3,16 +3,9 @@ import { CheckIcon, CreditCardIcon, SparklesIcon, ZapIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-const FREE_PLAN_FEATURES = [
-  "Up to 5 active ambitions",
-  "Task & milestone tracking",
-  "Progress analytics",
-  "Notes per ambition",
-];
+import { freePlan } from "@/lib/pricing/free-plan";
 
 const PRO_PLAN_FEATURES = [
-  "Unlimited ambitions",
   "Advanced analytics & insights",
   "Priority reminders",
   "Export data (CSV / PDF)",
@@ -28,19 +21,19 @@ export function BillingSettingsTab() {
             <CreditCardIcon className="size-4 text-primary dark:text-chart-1" />
             Current plan
           </CardTitle>
-          <CardDescription>You are on the Free plan. Upgrade any time.</CardDescription>
+          <CardDescription>You are on the {freePlan.name} plan. Upgrade any time.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-muted/30 p-4">
             <div className="space-y-0.5">
-              <p className="font-semibold text-foreground">Free</p>
-              <p className="text-sm text-muted-foreground">No credit card required</p>
+              <p className="font-brand text-2xl font-semibold tracking-[-0.03em] text-foreground">{freePlan.price}</p>
+              <p className="text-sm text-muted-foreground">{freePlan.tagline}</p>
             </div>
             <Badge variant="outline">Current plan</Badge>
           </div>
 
           <ul className="space-y-2">
-            {FREE_PLAN_FEATURES.map((feature) => (
+            {freePlan.features.map((feature) => (
               <li key={feature} className="flex items-center gap-2.5 text-sm text-muted-foreground">
                 <CheckIcon className="size-4 shrink-0 text-emerald-500" />
                 {feature}
