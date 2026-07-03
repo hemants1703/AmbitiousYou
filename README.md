@@ -154,9 +154,90 @@ flowchart LR
     SCHEMA -. "tables + types" .-> BE
 ```
 
-**Request lifecycle (a typical mutation):** a client component calls a typed **Server Action** → the action attaches the session token and `POST`/`PATCH`es the NestJS API → `SessionGuard` validates the token → the feature service runs the write inside a **transaction**, recalculating derived state atomically → the action `revalidatePath()`s the affected routes and the UI reconciles.
+### Request lifecycle (mutation path)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as Browser
+    participant CC as Client Component
+    participant SA as Server Action
+    participant API as NestJS API
+    participant G as SessionGuard
+    participant S as Feature Service
+    participant DB as PostgreSQL
+
+    U->>CC: toggle task / save note
+    CC->>SA: typed mutation(payload)
+    SA->>SA: getSessionToken()
+    SA->>API: HTTP PATCH/POST + Bearer token
+    API->>G: validate session
+    G->>DB: lookup + expire stale sessions
+    DB-->>G: user id
+    G-->>API: authorized
+    API->>S: business logic
+    S->>DB: transaction: write + recalc progress
+    DB-->>S: committed row
+    S-->>API: response DTO
+    API-->>SA: 200 + body
+    SA->>SA: revalidatePath()
+    SA-->>CC: result
+    CC-->>U: optimistic UI reconciles
+```
+
+A client component calls a typed **Server Action** → the action attaches the session token and `POST`/`PATCH`es the NestJS API → `SessionGuard` validates the token → the feature service runs the write inside a **transaction**, recalculating derived state atomically → the action `revalidatePath()`s the affected routes and the UI reconciles.
 
 **Why Drizzle, SQL-first:** services import a process-wide `db` client and write queries that read like SQL (`db.select().from().innerJoin().where()`), use explicit transactions for multi-entity creates, and prefer a single filtered aggregate over multiple count queries. No relational-builder magic, no hidden N+1s — the data access is exactly what you'd expect from the SQL.
+
+---
+
+## 🔄 CI/CD Pipelines
+
+Path-filtered workflows: frontend-only changes never redeploy the backend, and vice versa.
+
+```mermaid
+flowchart TB
+    subgraph PUSH["git push"]
+        DEV["dev branch"]
+        MAIN["main branch"]
+    end
+
+    subgraph FE_CI["ci-frontend.yml"]
+        direction TB
+        FE1["checkout + pnpm install"]
+        FE2["lint"]
+        FE3["unit & component tests"]
+        FE4["production build"]
+        FE5["Lighthouse CI"]
+        FE1 --> FE2 --> FE3 --> FE4 --> FE5
+    end
+
+    subgraph BE_CI["deploy-backend.yml"]
+        direction TB
+        BE1["unit tests"]
+        BE2["verify DB connectivity"]
+        BE3["drizzle-kit migrate"]
+        BE4["build & push Docker → GHCR"]
+        BE5["scp deploy.sh → VPS"]
+        BE6["SSH blue-green swap"]
+        BE1 --> BE2 --> BE3 --> BE4 --> BE5 --> BE6
+    end
+
+    subgraph DEPLOY["Live environments"]
+        VERCEL["Vercel — frontend"]
+        VPS["DigitalOcean VPS — API"]
+        SUPA[("Supabase PostgreSQL")]
+    end
+
+    PUSH --> FE_CI
+    PUSH --> BE_CI
+    FE5 --> VERCEL
+    BE6 --> VPS
+    BE3 -.-> SUPA
+    VPS --> SUPA
+```
+
+> **Portfolio tip:** for LinkedIn or talks, screenshot a green **Actions** run of `deploy-backend` on `main` — it reads more credibly than a diagram alone.
 
 ---
 

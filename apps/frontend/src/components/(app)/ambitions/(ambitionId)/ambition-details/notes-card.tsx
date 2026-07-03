@@ -9,6 +9,10 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HoverExpandButton } from "./hover-expand-button";
+import { NoteDetailDialog } from "./note-detail-dialog";
+import { NotePreviewCard } from "./note-preview-card";
+import { NotesCountIndicator } from "./notes-count-indicator";
+import { NotebookPenIcon } from "lucide-react";
 
 const NotesDrawer = dynamic(() => import("./notes-drawer"), {
   loading: () => <Skeleton className="h-10 w-full rounded-2xl" />,
@@ -18,17 +22,11 @@ interface NotesCardProps {
   ambitionName: string;
 }
 
-const NOTE_TINT = "border-yellow-400/40 bg-yellow-100/70 dark:border-yellow-400/15 dark:bg-yellow-400/10";
-
-function formatNoteDate(dateValue: Date | string | null) {
-  if (!dateValue) return "";
-  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(dateValue));
-}
-
 export default function NotesCard(props: NotesCardProps) {
   const notes = useAmbitionNotes();
   const [addingNote, setAddingNote] = useState(false);
   const [newNoteText, setNewNoteText] = useState("");
+  const [viewingNoteId, setViewingNoteId] = useState<string | null>(null);
   const newNoteRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -45,12 +43,19 @@ export default function NotesCard(props: NotesCardProps) {
   }
 
   const previewNotes = notes.notes.slice(0, 5);
+  const viewingNote = notes.notes.find((note) => note.id === viewingNoteId) ?? null;
+  const hasNotes = notes.notes.length > 0;
+  const showContent = addingNote || Boolean(notes.error) || hasNotes;
 
   return (
     <>
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
-          <CardTitle>Notes</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <NotebookPenIcon className="size-4 text-foreground" />
+            Notes
+            <NotesCountIndicator count={notes.notes.length} />
+          </CardTitle>
           <HoverExpandButton
             label="Add note"
             disabled={notes.isAnyPending}
@@ -61,67 +66,70 @@ export default function NotesCard(props: NotesCardProps) {
             }}
           />
         </div>
-        <CardDescription>Keep detailed context available without crowding the main execution view.</CardDescription>
+        <CardDescription>
+          {notes.notes.length > 0
+            ? "Open a note for full context, or add another when something’s worth keeping."
+            : "Capture context when you need it, without crowding your moves."}
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-3">
-        {addingNote ? (
-          <div className="space-y-3 rounded-2xl border border-primary/30 dark:border-chart-1/30 bg-background/50 p-4">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">New note</p>
-            <Textarea
-              ref={newNoteRef}
-              value={newNoteText}
-              onChange={(event) => setNewNoteText(event.target.value)}
-              placeholder="Capture context, reflections, or reminders…"
-              rows={3}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) handleCreate();
-                if (event.key === "Escape") {
-                  setAddingNote(false);
-                  setNewNoteText("");
-                }
-              }}
-            />
-            <div className="flex items-center gap-2">
-              <PendingButton type="button" size="sm" isPending={notes.isAnyPending} disabled={!newNoteText.trim()} onClick={handleCreate}>
-                Save
-              </PendingButton>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={notes.isAnyPending}
-                onClick={() => {
-                  setAddingNote(false);
-                  setNewNoteText("");
-                }}>
-                Cancel
-              </Button>
+      {showContent ? (
+        <CardContent className="space-y-3">
+          {addingNote ? (
+            <div className="space-y-3 rounded-2xl border border-primary/30 dark:border-chart-1/30 bg-background/50 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">New note</p>
+              <Textarea
+                ref={newNoteRef}
+                value={newNoteText}
+                onChange={(event) => setNewNoteText(event.target.value)}
+                placeholder="Capture context, reflections, or reminders…"
+                rows={3}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) handleCreate();
+                  if (event.key === "Escape") {
+                    setAddingNote(false);
+                    setNewNoteText("");
+                  }
+                }}
+              />
+              <div className="flex items-center gap-2">
+                <PendingButton type="button" size="sm" isPending={notes.isAnyPending} disabled={!newNoteText.trim()} onClick={handleCreate}>
+                  Save
+                </PendingButton>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={notes.isAnyPending}
+                  onClick={() => {
+                    setAddingNote(false);
+                    setNewNoteText("");
+                  }}>
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        {notes.error ? (
-          <div role="alert" aria-live="polite" className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            {notes.error}
-          </div>
-        ) : null}
+          {notes.error ? (
+            <div role="alert" aria-live="polite" className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              {notes.error}
+            </div>
+          ) : null}
 
-        {previewNotes.length > 0 ? (
-          <div className="space-y-2">
-            {previewNotes.map((note) => (
-              <article key={note.id} className={`rounded-2xl border p-3 ${NOTE_TINT}`}>
-                <p className="line-clamp-3 text-sm whitespace-pre-wrap wrap-anywhere">{note.note}</p>
-                {note.createdAt ? <p className="mt-1 text-xs text-muted-foreground">Added {formatNoteDate(note.createdAt)}</p> : null}
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">No notes yet. Add one when you need to capture extra context.</p>
-        )}
+          {hasNotes ? (
+            <div className="space-y-2">
+              {previewNotes.map((note) => (
+                <NotePreviewCard key={note.id} note={note} onOpen={() => setViewingNoteId(note.id)} />
+              ))}
+            </div>
+          ) : null}
 
-        <NotesDrawer ambitionName={props.ambitionName} />
-      </CardContent>
+          {hasNotes ? <NotesDrawer ambitionName={props.ambitionName} onViewNote={setViewingNoteId} /> : null}
+        </CardContent>
+      ) : null}
+
+      <NoteDetailDialog note={viewingNote} ambitionName={props.ambitionName} onOpenChange={(open) => !open && setViewingNoteId(null)} />
     </>
   );
 }

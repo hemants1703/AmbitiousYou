@@ -33,16 +33,19 @@ export const MOVE_TITLE_MAX_LENGTH = 255;
  * are optional, so a surface that genuinely lacks them simply omits those lines.
  */
 export interface MoveDetail {
+  id?: string;
   kind: MoveKind;
   title: string;
   description: string;
   /** Deadline (task) or target date (milestone). */
   date: Date | string;
   completed: boolean;
+  completedAt?: Date | string | null;
   createdAt?: Date | string | null;
   updatedAt?: Date | string | null;
   /** Parent ambition, shown for cross-ambition surfaces (e.g. the dashboard queue). */
   ambitionName?: string;
+  ambitionId?: string;
 }
 
 /**
@@ -104,16 +107,31 @@ export function isCompleted(item: TrackedItem): boolean {
   return "taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted;
 }
 
+export function getCompletedAt(item: TrackedItem): Date | string | null {
+  return "taskCompletedAt" in item ? item.taskCompletedAt : item.milestoneCompletedAt;
+}
+
+/** e.g. "Completed Jul 3, 2026" or "Reached Jul 3, 2026". */
+export function formatCompletedLabel(item: TrackedItem): string {
+  const verb = getCompletedVerb(item);
+  const label = verb === "completed" ? "Completed" : "Reached";
+  const completedAt = getCompletedAt(item);
+  return completedAt ? `${label} ${formatDate(completedAt)}` : label;
+}
+
 /** Project a persisted move into the normalized {@link MoveDetail} the detail dialog reads. */
 export function toMoveDetail(item: TrackedItem): MoveDetail {
   return {
+    id: item.id,
     kind: getKind(item),
     title: getTitle(item),
     description: getDescription(item),
     date: getDate(item),
     completed: isCompleted(item),
+    completedAt: getCompletedAt(item),
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
+    ambitionId: item.ambitionId,
   };
 }
 

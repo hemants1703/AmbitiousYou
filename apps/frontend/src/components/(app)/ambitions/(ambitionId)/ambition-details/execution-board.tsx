@@ -1,17 +1,17 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { countOverdueMoves } from "@/components/(app)/ambitions/move-display";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { emptyDraft, sortByPriority, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { useTrackedItems } from "@/lib/(app)/use-tracked-items";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
-import { CheckCircle2Icon, ListChecksIcon } from "lucide-react";
+import { ListChecksIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import type { Matcher } from "react-day-picker";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HoverExpandButton } from "./hover-expand-button";
+import { MoveTelemetry } from "./move-telemetry";
 import { TrackedItemDraftEditor } from "./tracked-item-draft-editor";
 import { TrackedItemList } from "./tracked-item-list";
 
@@ -41,6 +41,11 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
   const dateDisabled: Matcher[] = [{ before: new Date(props.ambitionStartDate) }, { after: new Date(props.ambitionEndDate) }];
 
   const previewOpen = [...board.openItems].sort(sortByPriority).slice(0, PREVIEW_LIMIT);
+  const overdueCount = countOverdueMoves(board.openItems);
+  const emptyOpenMessage =
+    board.completedItems.length > 0
+      ? "No open moves right now — this ambition is in a strong position."
+      : "No open moves yet. Add one to get moving.";
 
   function handleCreate() {
     board.create(newDraft);
@@ -67,7 +72,8 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
             />
           ) : null}
         </div>
-        <CardDescription>Your moves toward this ambition — check off tasks and reach milestones as you go.</CardDescription>
+        <CardDescription>Work through what matters first — tick moves off and open the workspace for everything else.</CardDescription>
+        <MoveTelemetry open={board.openItems.length} completed={board.completedItems.length} overdue={overdueCount} className="pt-1" />
       </CardHeader>
 
       <CardContent className="space-y-5">
@@ -93,12 +99,7 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
         ) : null}
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Up next</p>
-            <Badge variant="outline" className="tabular-nums">
-              {board.openItems.length} open
-            </Badge>
-          </div>
+          {board.openItems.length > 0 ? <p className="text-sm font-medium">Up next</p> : null}
 
           <TrackedItemList
             items={previewOpen}
@@ -107,22 +108,15 @@ export default function ExecutionBoard(props: ExecutionBoardProps) {
             onToggle={board.toggle}
             onUpdate={board.update}
             onDelete={board.remove}
-            emptyMessage="No open moves right now. Add one to get moving."
+            emptyMessage={emptyOpenMessage}
+            emptyClassName={board.completedItems.length > 0 ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300" : undefined}
           />
 
           {board.openItems.length > PREVIEW_LIMIT ? (
             <p className="text-xs text-muted-foreground">
-              {`Showing the ${PREVIEW_LIMIT} most urgent · ${board.openItems.length - PREVIEW_LIMIT} more in "View all".`}
+              {`Showing the ${PREVIEW_LIMIT} most urgent · ${board.openItems.length - PREVIEW_LIMIT} more in the workspace.`}
             </p>
           ) : null}
-        </div>
-
-        <Separator />
-
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CheckCircle2Icon className="size-4" />
-          <span className="font-medium tabular-nums text-foreground">{board.completedItems.length}</span>
-          completed
         </div>
 
         <ExecutionBoardDrawer board={board} ambitionName={props.ambitionName} dateDisabled={dateDisabled} />

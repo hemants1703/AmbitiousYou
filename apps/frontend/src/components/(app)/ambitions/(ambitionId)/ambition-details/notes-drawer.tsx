@@ -7,16 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Textarea } from "@/components/ui/textarea";
 import { useAmbitionNotes } from "@/lib/(app)/mutations/ambition-notes-context";
-import { BookOpenTextIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { BookOpenTextIcon, ExpandIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { NOTE_SURFACE, noteNeedsExpandPreview, noteTimestamp, splitNoteHeadline } from "./note-display";
 
 interface NotesDrawerProps {
   ambitionName: string;
-}
-
-function formatNoteDate(dateValue: Date | string | null) {
-  if (!dateValue) return "";
-  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(dateValue));
+  onViewNote: (noteId: string) => void;
 }
 
 export default function NotesDrawer(props: NotesDrawerProps) {
@@ -91,6 +89,8 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                 const isEditing = editingId === note.id;
                 const isConfirmingDelete = confirmDeleteId === note.id;
                 const isPending = notes.isPending(note.id);
+                const { headline, body } = splitNoteHeadline(note.note);
+                const showExpandHint = noteNeedsExpandPreview(note.note);
 
                 return (
                   <OptimisticRow
@@ -98,7 +98,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                     isPending={isPending}
                     className={[
                       "group mb-3 break-inside-avoid rounded-2xl border p-4 transition-colors",
-                      isEditing ? "border-primary/30 dark:border-chart-1/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : "border-yellow-400/40 bg-yellow-100/70 dark:border-yellow-400/15 dark:bg-yellow-400/10",
+                      isEditing ? "border-primary/30 dark:border-chart-1/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : NOTE_SURFACE,
                     ].join(" ")}>
                     {isEditing ? (
                       <div className="space-y-3">
@@ -141,11 +141,21 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <p className="text-sm whitespace-pre-wrap wrap-anywhere">{note.note}</p>
+                        <button
+                          type="button"
+                          onClick={() => props.onViewNote(note.id)}
+                          className="w-full rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                          {headline ? <p className="mb-1 line-clamp-2 text-sm font-medium wrap-anywhere">{headline}</p> : null}
+                          <p className={cn("text-sm whitespace-pre-wrap wrap-anywhere", showExpandHint && "line-clamp-4")}>{headline ? body : note.note}</p>
+                          {showExpandHint ? (
+                            <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-yellow-800/80 dark:text-yellow-200/80">
+                              Read full note
+                              <ExpandIcon className="size-3.5" aria-hidden="true" />
+                            </span>
+                          ) : null}
+                        </button>
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-xs text-muted-foreground">
-                            {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime() ? `Updated ${formatNoteDate(note.updatedAt)}` : note.createdAt ? `Added ${formatNoteDate(note.createdAt)}` : ""}
-                          </p>
+                          <p className="text-xs text-muted-foreground">{noteTimestamp(note)}</p>
                           <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">
                             <Button type="button" variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground hover:text-foreground" aria-label="Edit note" disabled={isPending} onClick={() => handleStartEdit(note.id, note.note)}>
                               <PencilIcon className="size-3.5" />

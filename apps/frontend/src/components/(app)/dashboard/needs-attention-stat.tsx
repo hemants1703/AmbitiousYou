@@ -79,19 +79,24 @@ export function NeedsAttentionStat(props: NeedsAttentionStatProps) {
       value={`${summary.totalCount}`}
       helper={helper}
       tone={tone}
-      className={cn("h-full", isInteractive && "transition-shadow hover:shadow-lg")}
-    />
+      className={cn("h-full w-full min-h-0", isInteractive && "transition-shadow hover:shadow-lg")}>
+      {/* Matches Avg progress stat row height so all four cards align. */}
+      <div className="invisible h-1.5" aria-hidden="true" />
+    </StatCard>
   );
 
   if (!isInteractive) {
-    return <div className="h-full w-full">{card}</div>;
+    return card;
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="contents">
       <Popover>
         <PopoverTrigger asChild>
-          <button type="button" className="flex h-full w-full rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" aria-label={`${summary.totalCount} items need attention. Open details.`}>
+          <button
+            type="button"
+            className="flex h-full min-h-0 w-full flex-col items-stretch rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-label={`${summary.totalCount} items need attention. Open details.`}>
             {card}
           </button>
         </PopoverTrigger>

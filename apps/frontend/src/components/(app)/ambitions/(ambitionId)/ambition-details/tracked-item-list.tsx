@@ -1,6 +1,7 @@
 "use client";
 
 import { emptyDraft, getDate, getDescription, getKind, getTitle, toDateInputValue, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import type { Matcher } from "react-day-picker";
 import { TrackedItemRow } from "./tracked-item-row";
@@ -13,6 +14,7 @@ interface TrackedItemListProps {
   onUpdate: (item: TrackedItem, draft: DraftState) => void;
   onDelete: (itemId: string) => void;
   emptyMessage: string;
+  emptyClassName?: string;
 }
 
 /**
@@ -43,7 +45,7 @@ export function TrackedItemList(props: TrackedItemListProps) {
   }
 
   if (props.items.length === 0) {
-    return <p className="rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground">{props.emptyMessage}</p>;
+    return <p className={cn("rounded-2xl border border-border/60 p-3 text-sm text-muted-foreground", props.emptyClassName)}>{props.emptyMessage}</p>;
   }
 
   return (

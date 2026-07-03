@@ -45,12 +45,14 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
 
   function openDetail() {
     moveDetail.open({
+      id: props.id,
       kind: props.kind,
       title: props.title,
       description: props.description ?? "",
       date: props.date,
       completed: false,
       ambitionName: props.ambitionName,
+      ambitionId: props.ambitionId,
     });
   }
 
@@ -105,7 +107,7 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
             ) : null}
           </div>
 
-          {props.description ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-anywhere">{props.description}</p> : null}
+          {props.description ? <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{props.description}</p> : null}
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <MoveKindBadge kind={props.kind} />

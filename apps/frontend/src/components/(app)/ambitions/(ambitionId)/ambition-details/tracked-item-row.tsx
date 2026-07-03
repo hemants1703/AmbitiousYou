@@ -2,11 +2,12 @@
 
 import { OptimisticRow } from "@/components/(app)/mutations/optimistic-row";
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
+import { ConfirmTaskReopen } from "@/components/(app)/ambitions/confirm-task-reopen";
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { formatDate, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, toMoveDetail, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
+import { formatCompletedLabel, formatDate, getCompletedAt, getDate, getDateLabel, getDaysUntil, getDescription, getKind, getTitle, isCompleted, isMilestone, MOVE_KIND_STYLE, toMoveDetail, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { cn } from "@/lib/utils";
 import { CheckIcon, EyeIcon, FlagIcon, Loader2Icon, MoreVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
@@ -83,23 +84,21 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
             aria-label={`View details of ${kind}: ${getTitle(item)}`}
             className="block min-h-6 w-full cursor-pointer rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <p className={cn("font-medium wrap-anywhere", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
-            {getDescription(item) ? <p className="line-clamp-2 text-sm text-muted-foreground wrap-anywhere">{getDescription(item)}</p> : null}
+            {getDescription(item) ? <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{getDescription(item)}</p> : null}
           </button>
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <MoveKindBadge kind={kind} />
-            {isMs && completed ? (
-              <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Reached</span>
+            {completed ? (
+              <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">{formatCompletedLabel(item)}</span>
             ) : (
               <>
                 <p className="text-xs text-muted-foreground">
                   {getDateLabel(item)} {formatDate(getDate(item))}
                 </p>
-                {!completed && (
-                  <Badge variant="outline" className={cn("hidden sm:inline-flex", daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
-                    {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
-                  </Badge>
-                )}
+                <Badge variant="outline" className={cn(daysUntil < 0 && "border-destructive/30 bg-destructive/10 text-destructive")}>
+                  {daysUntil < 0 ? `${Math.abs(daysUntil)}d overdue` : `${daysUntil}d left`}
+                </Badge>
               </>
             )}
           </div>
@@ -148,17 +147,15 @@ interface CompletionControlProps {
 }
 
 /**
- * Tasks use a normal checkbox (toggle freely). Milestones are one-way: completing
- * one requires confirmation (it's permanent), and once reached it shows a locked
- * indicator with no way to reopen.
+ * Tasks toggle both ways (reopening asks for confirmation). Milestones are one-way.
  */
 function CompletionControl(props: CompletionControlProps) {
   if (!props.isMilestone) {
-    return (
+    const button = (
       <button
         type="button"
         disabled={props.isPending}
-        onClick={props.onToggle}
+        onClick={props.completed ? undefined : props.onToggle}
         aria-label={props.completed ? "Mark task as not completed" : "Mark task as completed"}
         className={cn(
           "mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none",
@@ -167,6 +164,16 @@ function CompletionControl(props: CompletionControlProps) {
         {props.isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : props.completed ? <CheckIcon className="size-3.5" /> : null}
       </button>
     );
+
+    if (props.completed) {
+      return (
+        <ConfirmTaskReopen title={getTitle(props.item)} completedAt={getCompletedAt(props.item)} onConfirm={props.onToggle}>
+          {button}
+        </ConfirmTaskReopen>
+      );
+    }
+
+    return button;
   }
 
   if (props.completed) {

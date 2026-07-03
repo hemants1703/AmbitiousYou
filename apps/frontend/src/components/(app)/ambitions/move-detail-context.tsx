@@ -8,12 +8,16 @@ interface MoveDetailContextValue {
   selectedDetail: MoveDetail | null;
   open: (detail: MoveDetail) => void;
   close: () => void;
+  /** Replace the open snapshot after a successful mutation (same id only). */
+  syncDetail: (detail: MoveDetail) => void;
 }
 
 const MoveDetailContext = createContext<MoveDetailContextValue | null>(null);
 
 interface MoveDetailProviderProps {
   children: ReactNode;
+  ambitionStartDate?: Date | string;
+  ambitionEndDate?: Date | string;
 }
 
 /**
@@ -29,6 +33,9 @@ export function MoveDetailProvider(props: MoveDetailProviderProps) {
     selectedDetail,
     open: (detail) => setSelectedDetail(detail),
     close: () => setSelectedDetail(null),
+    syncDetail: (detail) => {
+      setSelectedDetail((current) => (current?.id === detail.id ? detail : current));
+    },
   };
 
   return (
@@ -36,6 +43,8 @@ export function MoveDetailProvider(props: MoveDetailProviderProps) {
       {props.children}
       <MoveDetailDialog
         detail={selectedDetail}
+        ambitionStartDate={props.ambitionStartDate}
+        ambitionEndDate={props.ambitionEndDate}
         onOpenChange={(open) => {
           if (!open) setSelectedDetail(null);
         }}

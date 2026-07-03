@@ -1,5 +1,6 @@
 import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
+import { AmbitionTracking } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-tracking";
 
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
@@ -7,15 +8,14 @@ import { FadeIn } from "@/components/motion-wrapper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { getAmbitionFull } from "@/lib/api/ambitions/get-ambition-full";
 import { requireUser } from "@/lib/auth";
 import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon, QuoteIcon } from "lucide-react";
+import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon, QuoteIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cache, type ReactNode } from "react";
+import { cache } from "react";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ ambitionId: string }>;
@@ -60,9 +60,6 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
   const trackedItems = [...tasks, ...milestones];
 
   const completedItems = trackedItems.filter((item) => ("taskCompleted" in item ? item.taskCompleted : item.milestoneCompleted)).length;
-  const activeDays = Math.max(1, getDaysBetween(ambition.ambitionStartDate, ambition.ambitionEndDate));
-  const today = new Date();
-  const daysRemaining = getDaysBetween(today, ambition.ambitionEndDate);
   const progress = Math.min(Math.max(ambition.ambitionPercentageCompleted ?? 0, 0), 100);
 
   return (
@@ -113,31 +110,18 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
               <AmbitionMotivationCallout ambitionId={ambition.id} motivation={ambition.ambitionMotivation} />
 
-              <div className="space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="text-sm font-medium">Ambition progress</p>
-                  <p className="text-sm font-semibold tabular-nums">{progress}%</p>
-                </div>
-                <Progress value={progress} className="h-1" />
-
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  <QuickStatCard icon={<CalendarDaysIcon className="size-4" />} label="Start" value={formatDate(ambition.ambitionStartDate)} helper={`${activeDays} day window`} />
-                  <QuickStatCard icon={<FlagIcon className="size-4" />} label="Target" value={formatDate(ambition.ambitionEndDate)} helper={daysRemaining < 0 ? `${Math.abs(daysRemaining)} days overdue` : `${daysRemaining} days left`} />
-                  <QuickStatCard
-                    icon={<CalendarClockIcon className="size-4" />}
-                    label="Completion"
-                    value={ambition.ambitionCompletionDate ? formatDate(ambition.ambitionCompletionDate) : "In progress"}
-                    helper={ambition.ambitionCompletionDate ? "Completed date" : "Not completed yet"}
-                  />
-                  <QuickStatCard icon={<CheckCircle2Icon className="size-4" />} label="Moves" value={`${trackedItems.length}`} helper={`${tasks.length} ${tasks.length === 1 ? "task" : "tasks"} · ${milestones.length} ${milestones.length === 1 ? "milestone" : "milestones"}`} />
-                </div>
-              </div>
+              <AmbitionTracking
+                progressPercent={progress}
+                startDate={ambition.ambitionStartDate}
+                endDate={ambition.ambitionEndDate}
+                ambitionStatus={ambition.ambitionStatus}
+              />
             </CardContent>
           </Card>
         </FadeIn>
 
         <FadeIn delayMs={80}>
-          <AmbitionDetailsSection user={userDetails} ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
+          <AmbitionDetailsSection ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
         </FadeIn>
 
       </div>
@@ -170,19 +154,6 @@ function AmbitionMotivationCallout(props: { ambitionId: string; motivation: stri
   );
 }
 
-function QuickStatCard(props: { icon: ReactNode; label: string; value: string; helper: string }) {
-  return (
-    <div className="rounded-2xl border border-border/60 bg-background/75 p-3">
-      <div className="mb-2 flex items-center gap-2 text-muted-foreground">
-        {props.icon}
-        <p className="text-xs font-medium uppercase tracking-wide">{props.label}</p>
-      </div>
-      <p className="line-clamp-1 text-base font-semibold sm:text-lg">{props.value}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground">{props.helper}</p>
-    </div>
-  );
-}
-
 /**
  * The detail page is reached from several places — the ambitions list, the dashboard's
  * next-moves queue, the revive-missed card, the motivation banner. Each passes a `ref`
@@ -201,18 +172,4 @@ function resolveBackTarget(ref: string | undefined) {
     return BACK_TARGETS[ref as keyof typeof BACK_TARGETS];
   }
   return BACK_TARGETS.ambitions;
-}
-
-function formatDate(dateValue: Date | string) {
-  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(dateValue));
-}
-
-function getDaysBetween(startDate: Date | string, endDate: Date | string) {
-  const dayInMs = 1000 * 60 * 60 * 24;
-  const from = new Date(startDate);
-  const to = new Date(endDate);
-  from.setHours(0, 0, 0, 0);
-  to.setHours(0, 0, 0, 0);
-
-  return Math.ceil((to.getTime() - from.getTime()) / dayInMs);
 }

@@ -148,9 +148,15 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
       setItems((prev) =>
         prev.map((current) => {
           if (current.id !== item.id) return current;
-          return isMilestone(current)
-            ? ({ ...current, milestoneCompleted: !current.milestoneCompleted } as Milestone)
-            : ({ ...(current as Task), taskCompleted: !(current as Task).taskCompleted } as Task);
+          if (isMilestone(current)) {
+            return { ...current, milestoneCompleted: true, milestoneCompletedAt: current.milestoneCompletedAt ?? new Date() } as Milestone;
+          }
+          const nextCompleted = !(current as Task).taskCompleted;
+          return {
+            ...(current as Task),
+            taskCompleted: nextCompleted,
+            taskCompletedAt: nextCompleted ? ((current as Task).taskCompletedAt ?? new Date()) : null,
+          } as Task;
         }),
       );
 

@@ -1,4 +1,5 @@
 import {
+  formatCompletedLabel,
   getCompletedVerb,
   getDaysUntil,
   getKind,
@@ -109,11 +110,14 @@ describe("toMoveDetail", () => {
     const milestone = buildMilestone({ milestoneCompleted: true });
 
     expect(toMoveDetail(task)).toEqual({
+      id: task.id,
       kind: "task",
+      ambitionId: task.ambitionId,
       title: "Ship feature",
       description: "Details",
       date: task.taskDeadline,
       completed: false,
+      completedAt: null,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
     });
@@ -138,5 +142,14 @@ describe("structural helpers", () => {
     expect(isCompleted(task)).toBe(false);
     expect(getCompletedVerb(task)).toBe("completed");
     expect(getCompletedVerb(milestone)).toBe("reached");
+  });
+
+  it("formats completion labels with dates", () => {
+    const completedAt = new Date("2026-07-03");
+    const task = buildTask({ taskCompleted: true, taskCompletedAt: completedAt });
+    const milestone = buildMilestone({ milestoneCompleted: true, milestoneCompletedAt: completedAt });
+
+    expect(formatCompletedLabel(task)).toBe("Completed Jul 3, 2026");
+    expect(formatCompletedLabel(milestone)).toBe("Reached Jul 3, 2026");
   });
 });
