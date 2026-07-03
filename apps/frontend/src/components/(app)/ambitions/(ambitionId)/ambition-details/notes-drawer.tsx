@@ -128,7 +128,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                     ) : isConfirmingDelete ? (
                       <div className="space-y-3">
                         <p className="text-sm font-medium text-destructive">Delete this note?</p>
-                        <p className="line-clamp-2 text-sm text-muted-foreground wrap-anywhere">{note.note}</p>
+                        <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{note.note}</p>
                         <div className="flex items-center gap-2">
                           <PendingButton type="button" variant="destructive" size="sm" isPending={isPending} onClick={() => notes.remove(note.id)}>
                             <Trash2Icon className="size-3.5" />
@@ -141,7 +141,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <p className="text-sm wrap-anywhere">{note.note}</p>
+                        <p className="text-sm whitespace-pre-wrap wrap-anywhere">{note.note}</p>
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-xs text-muted-foreground">
                             {note.updatedAt && note.createdAt && new Date(note.updatedAt).getTime() !== new Date(note.createdAt).getTime() ? `Updated ${formatNoteDate(note.updatedAt)}` : note.createdAt ? `Added ${formatNoteDate(note.createdAt)}` : ""}
