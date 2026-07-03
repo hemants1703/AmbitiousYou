@@ -1,15 +1,13 @@
 import AuthShell from "@/components/(auth)/auth-shell";
 import { VerifyEmailClient } from "@/components/(auth)/verify-email/verify-email-client";
-import { Metadata } from "next";
+import { createPrivateMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 // Verification mutates state, so never serve a cached render.
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Verify Email",
-  description: "Verify your AmbitiousYou email address",
-};
+export const metadata: Metadata = createPrivateMetadata("Verify Email", "Verify your AmbitiousYou email address");
 
 type VerifyEmailPageProps = {
   searchParams: Promise<{ token?: string }>;

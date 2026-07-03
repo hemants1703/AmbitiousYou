@@ -1,4 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm build"
+  "buildCommand": "pnpm build",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "ambitiousyou.pro" }],
+      "destination": "https://www.ambitiousyou.pro/:path*",
+      "permanent": true
+    }
+  ]
 }

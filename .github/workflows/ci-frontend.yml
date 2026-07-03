@@ -55,3 +55,10 @@ jobs:
 
       - name: Production build
         run: pnpm --filter frontend build
+
+      - name: Lighthouse CI (SEO & performance budgets)
+        working-directory: apps/frontend
+        run: |
+          npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -7,8 +7,12 @@ export default function Footer() {
   // Login/Sign Up live in <FooterAuthLinks> (auth-aware); the rest are static.
   const exploreLinks = [
     { title: "Home", href: "/" },
-    { title: "Experience", href: "/experience" },
     { title: "Features", href: "/features" },
+    { title: "Experience", href: "/experience" },
+    { title: "Pricing", href: "/pricing" },
+    { title: "Use Cases", href: "/use-cases" },
+    { title: "Compare", href: "/compare" },
+    { title: "About", href: "/about" },
   ];
 
   const contactLink = { title: "Contact Us", href: "mailto:support@ambitiousyou.pro" };

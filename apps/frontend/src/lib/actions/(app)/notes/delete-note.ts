@@ -1,20 +1,15 @@
 "use server";
 
-import { getSessionToken } from "@/lib/auth";
+import { mutateApi } from "@/lib/actions/mutate-api";
+import type { Note } from "@ambitiousyou/shared/types";
 
 export async function deleteNoteAction(noteId: string): Promise<{ error: string | null }> {
-  const sessionToken = await getSessionToken();
-
-  const response = await fetch(`${process.env.API_URL}/notes/${noteId}`, {
+  const result = await mutateApi<Note>({
+    path: `/notes/${noteId}`,
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${sessionToken}`,
-    },
+    revalidateFromResponse: (note) => ({ ambitionId: note.ambitionId, scopes: ["detail"] }),
+    errorMessage: "Failed to delete note. Please try again.",
   });
 
-  if (!response.ok) {
-    return { error: "Failed to delete note. Please try again." };
-  }
-
-  return { error: null };
+  return { error: result.error };
 }

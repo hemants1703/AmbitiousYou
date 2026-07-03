@@ -16,6 +16,17 @@ export interface BreadcrumbItem {
   path: string;
 }
 
+export const softwareFeatureList = [
+  "Ambition-based goal structure with tasks and milestones",
+  "Automatic progress recalculation",
+  "Momentum charts over 7, 14, and 30 days",
+  "Year-long contribution calendar",
+  "Honest day-streak tracking",
+  "Priority management and colour coding",
+  "Private notes per ambition",
+  "Dashboard insights and activity feed",
+] as const;
+
 export function organizationSchema(): JsonLdSchema {
   return {
     "@context": "https://schema.org",
@@ -55,11 +66,36 @@ export function softwareApplicationSchema(): JsonLdSchema {
     url: siteConfig.url,
     applicationCategory: "ProductivityApplication",
     operatingSystem: "Web",
+    isAccessibleForFree: true,
+    featureList: [...softwareFeatureList],
+    screenshot: siteConfig.ogImage,
+    author: { "@id": absoluteUrl("/#organization") },
+    creator: { "@id": absoluteUrl("/#organization") },
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
     },
+  };
+}
+
+export interface WebPageSchemaOptions {
+  title: string;
+  description: string;
+  path: string;
+}
+
+export function webPageSchema(options: WebPageSchemaOptions): JsonLdSchema {
+  const url = absoluteUrl(options.path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    name: options.title,
+    description: options.description,
+    url,
+    isPartOf: { "@id": absoluteUrl("/#website") },
+    about: { "@id": absoluteUrl("/#organization") },
   };
 }
 
@@ -87,6 +123,24 @@ export function breadcrumbSchema(items: readonly BreadcrumbItem[]): JsonLdSchema
       position: index + 1,
       name: item.name,
       item: absoluteUrl(item.path),
+    })),
+  };
+}
+
+export interface ItemListSchemaOptions {
+  name: string;
+  items: readonly string[];
+}
+
+export function itemListSchema(options: ItemListSchemaOptions): JsonLdSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: options.name,
+    itemListElement: options.items.map((name, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name,
     })),
   };
 }

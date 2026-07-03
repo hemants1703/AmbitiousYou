@@ -5,7 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AmbitionDetails, getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { requireUser } from "@/lib/auth";
 import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon } from "lucide-react";
-import { Metadata } from "next";
+import { createPrivateMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { cache, type ReactNode } from "react";
 
@@ -22,9 +23,7 @@ export async function generateMetadata(props: EditAmbitionPageProps): Promise<Me
   const { ambitionId } = await props.params;
   const ambition = await getAmbitionData(sessionToken, ambitionId);
 
-  return {
-    title: ambition ? `Edit · ${ambition.ambitionName}` : "Edit ambition",
-  };
+  return createPrivateMetadata(ambition ? `Edit · ${ambition.ambitionName}` : "Edit ambition");
 }
 
 function formatDate(value: Date | string) {

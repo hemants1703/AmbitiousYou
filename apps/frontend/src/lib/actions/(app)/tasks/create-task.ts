@@ -1,6 +1,6 @@
 "use server";
 
-import { getSessionToken } from "@/lib/auth";
+import { mutateApi } from "@/lib/actions/mutate-api";
 import type { Task } from "@ambitiousyou/shared/types";
 
 export type CreateTaskInput = {
@@ -11,27 +11,19 @@ export type CreateTaskInput = {
 };
 
 export async function createTaskAction(input: CreateTaskInput): Promise<{ task: Task | null; error: string | null }> {
-  const sessionToken = await getSessionToken();
-
-  const response = await fetch(`${process.env.API_URL}/tasks`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionToken}`,
-    },
-    body: JSON.stringify({
+  const result = await mutateApi<Task>({
+    path: "/tasks",
+    body: {
       ambitionId: input.ambitionId,
       task: input.task,
       taskDescription: input.taskDescription ?? "",
       taskCompleted: false,
       taskDeadline: input.taskDeadline,
-    }),
+    },
+    ambitionId: input.ambitionId,
+    revalidate: ["detail", "dashboard"],
+    errorMessage: "Failed to create task. Please try again.",
   });
 
-  if (!response.ok) {
-    return { task: null, error: "Failed to create task. Please try again." };
-  }
-
-  const created: Task = await response.json();
-  return { task: created, error: null };
+  return { task: result.data, error: result.error };
 }

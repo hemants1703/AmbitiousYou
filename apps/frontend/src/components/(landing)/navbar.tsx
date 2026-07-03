@@ -13,8 +13,9 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/experience", label: "Experience" },
   { href: "/features", label: "Features" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/experience", label: "Experience" },
 ];
 
 export default function Navbar() {

@@ -3,12 +3,10 @@ import { ForgotPasswordForm } from "@/components/(auth)/forgot-password/forgot-p
 import { forgotPasswordAction } from "@/lib/actions/(auth)/forgot-password/forgot-password";
 import { forgotPasswordInitialState } from "@/lib/actions/(auth)/forgot-password/forgot-password-state";
 import { redirectIfAuthenticated } from "@/lib/auth";
-import { Metadata } from "next";
+import { createPrivateMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Forgot Password",
-  description: "Reset your AmbitiousYou password",
-};
+export const metadata: Metadata = createPrivateMetadata("Forgot Password", "Reset your AmbitiousYou password");
 
 export default async function ForgotPasswordPage() {
   await redirectIfAuthenticated();

@@ -2,13 +2,11 @@ import AuthShell from "@/components/(auth)/auth-shell";
 import { ResetPasswordForm } from "@/components/(auth)/reset-password/reset-password-form";
 import { resetPasswordWithTokenAction } from "@/lib/actions/(auth)/reset-password/reset-password";
 import { resetPasswordInitialState } from "@/lib/actions/(auth)/reset-password/reset-password-state";
-import { Metadata } from "next";
+import { createPrivateMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Reset Password",
-  description: "Choose a new AmbitiousYou password",
-};
+export const metadata: Metadata = createPrivateMetadata("Reset Password", "Choose a new AmbitiousYou password");
 
 type ResetPasswordPageProps = {
   searchParams: Promise<{ token?: string }>;

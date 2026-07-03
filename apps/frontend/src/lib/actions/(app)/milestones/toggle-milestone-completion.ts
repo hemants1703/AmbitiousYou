@@ -1,21 +1,15 @@
 "use server";
 
-import { getSessionToken } from "@/lib/auth";
+import { mutateApi } from "@/lib/actions/mutate-api";
+import type { Milestone } from "@ambitiousyou/shared/types";
 
-export async function toggleMilestoneCompletionAction(milestoneId: string): Promise<{ error: string | null }> {
-  const sessionToken = await getSessionToken();
-
-  const response = await fetch(`${process.env.API_URL}/milestones/${milestoneId}/toggle-completion`, {
+export async function toggleMilestoneCompletionAction(milestoneId: string): Promise<{ milestone: Milestone | null; error: string | null }> {
+  const result = await mutateApi<Milestone>({
+    path: `/milestones/${milestoneId}/toggle-completion`,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionToken}`,
-    },
+    revalidateFromResponse: (milestone) => ({ ambitionId: milestone.ambitionId, scopes: ["detail", "dashboard"] }),
+    errorMessage: "Couldn't update that milestone. Please try again.",
   });
 
-  if (!response.ok) {
-    return { error: "Couldn't update that milestone. Please try again." };
-  }
-
-  return { error: null };
+  return { milestone: result.data, error: result.error };
 }

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeColorSync } from "@/components/theme-color-sync";
 import { ThemeProvider } from "@/components/theme-provider";
-import { siteConfig } from "@/lib/site";
+import { createRootMetadata } from "@/lib/seo/metadata";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -19,104 +17,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  // Base metadata
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    template: `%s | ${siteConfig.name}`,
-    default: siteConfig.title,
-  },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  creator: siteConfig.name,
-  publisher: siteConfig.name,
-
-  // Robots & indexing
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-
-  // Canonical
-  alternates: {
-    canonical: "/",
-  },
-
-  // OpenGraph - Facebook, LinkedIn, Discord, etc.
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 675,
-        alt: "AmbitiousYou — Where ambitious goals become inevitable outcomes",
-        type: "image/png",
-      },
-    ],
-  },
-
-  // Twitter Card - X/Twitter
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: siteConfig.creator,
-    site: siteConfig.creator,
-  },
-
-  // Icons & Favicon — reference only assets that exist on disk
-  // (src/app/favicon.ico is served at /favicon.ico).
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/svg_logos/favicon_32px.svg", type: "image/svg+xml" },
-      { url: "/svg_logos/favicon_16px.svg", type: "image/svg+xml" },
-      { url: "/svg_logos/logo_150px.svg", type: "image/svg+xml" },
-      { url: "/svg_logos/logo_250px.svg", type: "image/svg+xml" },
-      { url: "/png_logos/favicon_32px.png", type: "image/png" },
-      { url: "/png_logos/favicon_16px.png", type: "image/png" },
-      { url: "/png_logos/logo_150px.png", type: "image/png" },
-      { url: "/png_logos/logo_250px.png", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
-  },
-
-  // Apple-specific
-  appleWebApp: {
-    capable: true,
-    title: siteConfig.name,
-    statusBarStyle: "default",
-  },
-
-  // Format detection
-  formatDetection: {
-    telephone: false,
-  },
-
-  // Category
-  category: "productivity",
-
-  // Verification (add your verification codes when ready)
-  // verification: {
-  //   google: "your-google-verification-code",
-  //   yandex: "your-yandex-verification-code",
-  // },
-};
+export const metadata: Metadata = createRootMetadata();
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const showTelemetry = process.env.NODE_ENV === "production";
@@ -140,10 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <ThemeColorSync />
           {showTelemetry ? <Analytics /> : null}
           {showTelemetry ? <SpeedInsights /> : null}
-          <TooltipProvider>
-            {children}
-            <Toaster richColors theme="system" />
-          </TooltipProvider>
+          {children}
         </ThemeProvider>
       </body>
     </html>

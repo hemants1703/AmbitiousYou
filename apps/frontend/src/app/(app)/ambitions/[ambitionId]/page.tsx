@@ -15,7 +15,8 @@ import { getMilestones } from "@/lib/api/milestones/get-milestones";
 import { requireUser } from "@/lib/auth";
 import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CalendarClockIcon, CalendarDaysIcon, CheckCircle2Icon, ChevronLeftIcon, FlagIcon, HeartIcon, QuoteIcon } from "lucide-react";
-import { Metadata } from "next";
+import { createPrivateMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { cache, type ReactNode } from "react";
 
@@ -40,9 +41,7 @@ export async function generateMetadata(props: AmbitionDetailsPageProps): Promise
     throw new Error(`Failed to fetch ambition ${ambitionId}`);
   }
 
-  return {
-    title: ambition.ambitionName,
-  };
+  return createPrivateMetadata(ambition.ambitionName);
 }
 
 export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProps) {

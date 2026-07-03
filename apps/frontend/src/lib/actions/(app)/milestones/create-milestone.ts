@@ -1,6 +1,6 @@
 "use server";
 
-import { getSessionToken } from "@/lib/auth";
+import { mutateApi } from "@/lib/actions/mutate-api";
 import type { Milestone } from "@ambitiousyou/shared/types";
 
 export type CreateMilestoneInput = {
@@ -11,27 +11,19 @@ export type CreateMilestoneInput = {
 };
 
 export async function createMilestoneAction(input: CreateMilestoneInput): Promise<{ milestone: Milestone | null; error: string | null }> {
-  const sessionToken = await getSessionToken();
-
-  const response = await fetch(`${process.env.API_URL}/milestones`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionToken}`,
-    },
-    body: JSON.stringify({
+  const result = await mutateApi<Milestone>({
+    path: "/milestones",
+    body: {
       ambitionId: input.ambitionId,
       milestone: input.milestone,
       milestoneDescription: input.milestoneDescription ?? "",
       milestoneCompleted: false,
       milestoneTargetDate: input.milestoneTargetDate,
-    }),
+    },
+    ambitionId: input.ambitionId,
+    revalidate: ["detail", "dashboard"],
+    errorMessage: "Failed to create milestone. Please try again.",
   });
 
-  if (!response.ok) {
-    return { milestone: null, error: "Failed to create milestone. Please try again." };
-  }
-
-  const created: Milestone = await response.json();
-  return { milestone: created, error: null };
+  return { milestone: result.data, error: result.error };
 }

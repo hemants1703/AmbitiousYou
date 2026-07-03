@@ -1,28 +1,31 @@
-import { Metadata } from "next";
-import { absoluteUrl, siteConfig } from "@/lib/site";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema, webPageSchema } from "@/lib/seo/schemas";
+import JsonLd from "@/components/seo/json-ld";
+import type { Metadata } from "next";
 
 export const dynamic = "force-static";
 
-const title = "Terms & Conditions - AmbitiousYou";
+const title = "Terms & Conditions";
 const description = "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title,
   description,
-  alternates: { canonical: "/terms-and-conditions" },
-  openGraph: {
-    title,
-    description,
-    url: absoluteUrl("/terms-and-conditions"),
-    siteName: siteConfig.name,
-    images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: title }],
-    locale: "en_US",
-    type: "website",
-  },
-};
+  path: "/terms-and-conditions",
+});
 
 export default function TermsAndConditions() {
   return (
+    <>
+      <JsonLd
+        data={[
+          webPageSchema({ title, description, path: "/terms-and-conditions" }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Terms & Conditions", path: "/terms-and-conditions" },
+          ]),
+        ]}
+      />
     <article className="mx-auto w-full max-w-3xl px-4 py-16 md:px-6 md:py-20">
       <h1 className="font-brand text-3xl md:text-4xl font-semibold tracking-[-0.02em] mb-4">Terms & Conditions</h1>
       <p className="mb-4 text-muted-foreground">Welcome to AmbitiousYou! These terms and conditions outline the rules and regulations for the use of our application.</p>
@@ -74,5 +77,6 @@ export default function TermsAndConditions() {
         <code>support@ambitiousyou.pro</code>
       </p>
     </article>
+    </>
   );
 }

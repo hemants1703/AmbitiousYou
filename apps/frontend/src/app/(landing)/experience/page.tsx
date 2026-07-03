@@ -1,50 +1,38 @@
-import ExperienceFlow from "@/components/(landing)/experience/experience-flow";
-import { Metadata } from "next";
+import nextDynamic from "next/dynamic";
+import ExperienceSkeleton from "@/components/(landing)/experience/experience-skeleton";
 import JsonLd from "@/components/seo/json-ld";
-import { breadcrumbSchema } from "@/lib/seo/schemas";
-import { absoluteUrl, siteConfig } from "@/lib/site";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema, webPageSchema } from "@/lib/seo/schemas";
+import type { Metadata } from "next";
+
+const ExperienceFlow = nextDynamic(() => import("@/components/(landing)/experience/experience-flow"), {
+  loading: () => <ExperienceSkeleton />,
+});
 
 export const dynamic = "force-static";
 
-const title = "Experience - AmbitiousYou | Interactive Demo";
-const description = "Discover how AmbitiousYou transforms your goals into reality. Choose your journey, interact with real features, and create an ambition that's waiting for you.";
+const title = "Experience";
+const description =
+  "Discover how AmbitiousYou transforms your goals into reality. Choose your journey, interact with real features, and create an ambition that's waiting for you.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title,
   description,
-  alternates: { canonical: "/experience" },
-  openGraph: {
-    title,
-    description,
-    url: absoluteUrl("/experience"),
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: "Experience AmbitiousYou - Interactive Demo",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: [siteConfig.ogImage],
-  },
-};
+  path: "/experience",
+  ogImageAlt: "Experience AmbitiousYou - Interactive Demo",
+});
 
 export default function ExperiencePage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Experience", path: "/experience" },
-        ])}
+        data={[
+          webPageSchema({ title, description, path: "/experience" }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Experience", path: "/experience" },
+          ]),
+        ]}
       />
       <ExperienceFlow />
     </>

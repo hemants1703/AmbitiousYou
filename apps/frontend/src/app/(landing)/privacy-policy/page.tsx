@@ -1,28 +1,31 @@
-import { Metadata } from "next";
-import { absoluteUrl, siteConfig } from "@/lib/site";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema, webPageSchema } from "@/lib/seo/schemas";
+import JsonLd from "@/components/seo/json-ld";
+import type { Metadata } from "next";
 
 export const dynamic = "force-static";
 
-const title = "Privacy Policy - AmbitiousYou";
+const title = "Privacy Policy";
 const description = "Read the privacy policy for AmbitiousYou, your go-to platform for personal growth and development.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title,
   description,
-  alternates: { canonical: "/privacy-policy" },
-  openGraph: {
-    title,
-    description,
-    url: absoluteUrl("/privacy-policy"),
-    siteName: siteConfig.name,
-    images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: title }],
-    locale: "en_US",
-    type: "website",
-  },
-};
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicy() {
   return (
+    <>
+      <JsonLd
+        data={[
+          webPageSchema({ title, description, path: "/privacy-policy" }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Privacy Policy", path: "/privacy-policy" },
+          ]),
+        ]}
+      />
     <article className="mx-auto w-full max-w-3xl px-4 py-16 md:px-6 md:py-20">
       <h1 className="font-brand text-3xl md:text-4xl font-semibold tracking-[-0.02em] mb-4">Privacy Policy</h1>
       <p className="mb-4 text-muted-foreground">Welcome to AmbitiousYou! Your privacy is important to us. This privacy policy explains how we collect, use, and protect your personal information.</p>
@@ -70,5 +73,6 @@ export default function PrivacyPolicy() {
         <code>support@ambitiousyou.pro</code>
       </p>
     </article>
+    </>
   );
 }

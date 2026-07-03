@@ -2,48 +2,29 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarDaysIcon, CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, TrendingUpIcon, type LucideIcon } from "lucide-react";
-import { Metadata } from "next";
 import Link from "next/link";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import ComparisonLedger from "@/components/(landing)/comparison-ledger";
 import LandingSection, { Eyebrow, LANDING_CARD } from "@/components/(landing)/landing-section";
 import MockFrame from "@/components/(landing)/mock-frame";
 import JsonLd from "@/components/seo/json-ld";
+import WhatIsAmbitiousYou from "@/components/(landing)/marketing/what-is-ambitiousyou";
 import { featuresFaq } from "@/components/(landing)/features/faq-data";
 import { breadcrumbSchema, faqPageSchema } from "@/lib/seo/schemas";
-import { absoluteUrl, siteConfig } from "@/lib/site";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 
 export const dynamic = "force-static";
 
-const description = "Discover the powerful features of AmbitiousYou — momentum tracking, honest day-streaks, a year-long contribution calendar, and a dashboard that turns every completed move into visible progress.";
+const description =
+  "Discover the powerful features of AmbitiousYou — momentum tracking, honest day-streaks, a year-long contribution calendar, and a dashboard that turns every completed move into visible progress.";
 
-export const metadata: Metadata = {
-  title: "Features - AmbitiousYou",
+export const metadata: Metadata = createPageMetadata({
+  title: "Features",
   description,
-  alternates: { canonical: "/features" },
-  openGraph: {
-    title: "Features - AmbitiousYou",
-    description,
-    url: absoluteUrl("/features"),
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: "AmbitiousYou Features",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Features - AmbitiousYou",
-    description,
-    images: [siteConfig.ogImage],
-  },
-};
+  path: "/features",
+  ogImageAlt: "AmbitiousYou Features",
+});
 
 const coreFeatures: { icon: LucideIcon; title: string; description: string; coreIdea?: boolean }[] = [
   {
@@ -168,6 +149,8 @@ export default function Features() {
           ]),
         ]}
       />
+
+      <WhatIsAmbitiousYou />
 
       {/* Hero */}
       <section className="relative w-full px-4 pt-16 md:px-6 md:pt-20">
