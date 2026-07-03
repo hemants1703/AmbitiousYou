@@ -1,5 +1,5 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
-import { buildMovementSeries, formatAmbitionsCompletedFootnote } from "@/lib/dashboard/movement";
+import { buildMovementSeries } from "@/lib/dashboard/movement";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { describe, expect, it } from "vitest";
 
@@ -116,12 +116,5 @@ describe("buildMovementSeries", () => {
 
     expect(series.stats.totalCompleted).toBe(0);
     expect(series.stats.hasAnyCompletionEver).toBe(true);
-  });
-});
-
-describe("formatAmbitionsCompletedFootnote", () => {
-  it("pluralizes ambition correctly", () => {
-    expect(formatAmbitionsCompletedFootnote(1)).toBe("1 ambition completed in this window — that's real progress.");
-    expect(formatAmbitionsCompletedFootnote(2)).toBe("2 ambitions completed in this window — that's real progress.");
   });
 });

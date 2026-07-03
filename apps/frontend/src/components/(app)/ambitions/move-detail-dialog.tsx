@@ -1,6 +1,7 @@
 "use client";
 
 import { DetailActionsMenu } from "@/components/(app)/detail-actions-menu";
+import { LinkifiedText } from "@/components/linkified-text";
 import { TrackedItemDraftEditor } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/tracked-item-draft-editor";
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { MOVE_KIND_HEADER_STRIPE, MOVE_KIND_SURFACE, moveCompletionLabel, moveDateLabel, moveTimestamp, moveUrgency, URGENCY_BADGE } from "@/components/(app)/ambitions/move-display";
@@ -254,7 +255,9 @@ function MoveDetailContent(props: { detail: MoveDetail; ambitionStartDate?: Date
               <div className="space-y-2">
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">About this move</p>
                 <div className="max-h-[min(40vh,18rem)] overflow-y-auto overscroll-contain rounded-2xl border border-border/60 bg-muted/15 p-4">
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground wrap-anywhere">{detail.description}</p>
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground wrap-anywhere">
+                    <LinkifiedText text={detail.description} />
+                  </p>
                 </div>
               </div>
             ) : null}
@@ -279,7 +282,11 @@ function MoveDetailContent(props: { detail: MoveDetail; ambitionStartDate?: Date
         {mode === "delete" ? (
           <div className={cn("rounded-2xl border p-4", MOVE_KIND_SURFACE[detail.kind])}>
             <p className="font-medium wrap-anywhere">{detail.title}</p>
-            {hasDescription ? <p className="mt-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{detail.description}</p> : null}
+            {hasDescription ? (
+              <p className="mt-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">
+                <LinkifiedText text={detail.description} />
+              </p>
+            ) : null}
           </div>
         ) : null}
       </div>

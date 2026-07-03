@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkifiedText } from "@/components/linkified-text";
 import { OptimisticRow } from "@/components/(app)/mutations/optimistic-row";
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
 import { ConfirmTaskReopen } from "@/components/(app)/ambitions/confirm-task-reopen";
@@ -84,8 +85,12 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
             aria-label={`View details of ${kind}: ${getTitle(item)}`}
             className="block min-h-6 w-full cursor-pointer rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <p className={cn("font-medium wrap-anywhere", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
-            {getDescription(item) ? <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{getDescription(item)}</p> : null}
           </button>
+          {getDescription(item) ? (
+            <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">
+              <LinkifiedText text={getDescription(item)} />
+            </p>
+          ) : null}
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <MoveKindBadge kind={kind} />

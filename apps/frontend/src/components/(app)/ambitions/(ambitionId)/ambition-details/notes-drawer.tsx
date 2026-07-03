@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkifiedText } from "@/components/linkified-text";
 import { PendingButton } from "@/components/(app)/mutations/pending-button";
 import { OptimisticRow } from "@/components/(app)/mutations/optimistic-row";
 import { Badge } from "@/components/ui/badge";
@@ -128,7 +129,9 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                     ) : isConfirmingDelete ? (
                       <div className="space-y-3">
                         <p className="text-sm font-medium text-destructive">Delete this note?</p>
-                        <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{note.note}</p>
+                        <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">
+                          <LinkifiedText text={note.note} />
+                        </p>
                         <div className="flex items-center gap-2">
                           <PendingButton type="button" variant="destructive" size="sm" isPending={isPending} onClick={() => notes.remove(note.id)}>
                             <Trash2Icon className="size-3.5" />
@@ -141,19 +144,28 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <button
-                          type="button"
+                        <div
+                          role="button"
+                          tabIndex={0}
                           onClick={() => props.onViewNote(note.id)}
-                          className="w-full rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              props.onViewNote(note.id);
+                            }
+                          }}
+                          className="w-full cursor-pointer rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                           {headline ? <p className="mb-1 line-clamp-2 text-sm font-medium wrap-anywhere">{headline}</p> : null}
-                          <p className={cn("text-sm whitespace-pre-wrap wrap-anywhere", showExpandHint && "line-clamp-4")}>{headline ? body : note.note}</p>
+                          <p className={cn("text-sm whitespace-pre-wrap wrap-anywhere", showExpandHint && "line-clamp-4")}>
+                            <LinkifiedText text={headline ? body : note.note} />
+                          </p>
                           {showExpandHint ? (
                             <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-yellow-800/80 dark:text-yellow-200/80">
                               Read full note
                               <ExpandIcon className="size-3.5" aria-hidden="true" />
                             </span>
                           ) : null}
-                        </button>
+                        </div>
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-xs text-muted-foreground">{noteTimestamp(note)}</p>
                           <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 pointer-coarse:opacity-100">

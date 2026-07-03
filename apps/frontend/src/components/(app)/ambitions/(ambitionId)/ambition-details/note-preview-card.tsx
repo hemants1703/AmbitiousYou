@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkifiedText } from "@/components/linkified-text";
 import type { Note } from "@ambitiousyou/shared/types";
 import { cn } from "@/lib/utils";
 import { ExpandIcon } from "lucide-react";
@@ -16,11 +17,18 @@ export function NotePreviewCard(props: NotePreviewCardProps) {
   const previewText = headline ? body : props.note.note;
 
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={props.onOpen}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          props.onOpen();
+        }
+      }}
       className={cn(
-        "group/note w-full rounded-2xl border p-3 text-left transition-colors",
+        "group/note w-full cursor-pointer rounded-2xl border p-3 text-left transition-colors",
         "hover:border-yellow-500/50 hover:bg-yellow-100 dark:hover:bg-yellow-400/15",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         NOTE_SURFACE,
@@ -28,7 +36,9 @@ export function NotePreviewCard(props: NotePreviewCardProps) {
       aria-label={showExpandHint ? `Read full note${headline ? `: ${headline}` : ""}` : `Read note${headline ? `: ${headline}` : ""}`}>
       <div className="space-y-1">
         {headline ? <p className="line-clamp-1 text-sm font-medium wrap-anywhere">{headline}</p> : null}
-        <p className={cn("text-sm whitespace-pre-wrap wrap-anywhere", headline ? "line-clamp-2 text-muted-foreground" : "line-clamp-3")}>{previewText}</p>
+        <p className={cn("text-sm whitespace-pre-wrap wrap-anywhere", headline ? "line-clamp-2 text-muted-foreground" : "line-clamp-3")}>
+          <LinkifiedText text={previewText} />
+        </p>
       </div>
 
       <div className="mt-2 flex items-center justify-between gap-2">
@@ -42,6 +52,6 @@ export function NotePreviewCard(props: NotePreviewCardProps) {
           <ExpandIcon className="size-3.5" aria-hidden="true" />
         </span>
       </div>
-    </button>
+    </div>
   );
 }

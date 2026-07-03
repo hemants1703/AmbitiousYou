@@ -1,6 +1,7 @@
 "use client";
 
 import { DetailActionsMenu } from "@/components/(app)/detail-actions-menu";
+import { LinkifiedText } from "@/components/linkified-text";
 import { PendingButton } from "@/components/(app)/mutations/pending-button";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -123,7 +124,9 @@ function NoteDetailContent(props: { note: Note; ambitionName: string; onOpenChan
 
         {mode === "read" ? (
           <div className="max-h-[min(50vh,24rem)] overflow-y-auto overscroll-contain pr-1">
-            <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground wrap-anywhere">{headline ? body : note.note}</p>
+            <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground wrap-anywhere">
+              <LinkifiedText text={headline ? body : note.note} />
+            </p>
           </div>
         ) : null}
 
@@ -143,7 +146,9 @@ function NoteDetailContent(props: { note: Note; ambitionName: string; onOpenChan
 
         {mode === "delete" ? (
           <div className={cn("rounded-2xl border p-4", NOTE_SURFACE)}>
-            <p className="text-sm whitespace-pre-wrap wrap-anywhere">{note.note}</p>
+            <p className="text-sm whitespace-pre-wrap wrap-anywhere">
+              <LinkifiedText text={note.note} />
+            </p>
           </div>
         ) : null}
 

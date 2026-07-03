@@ -3,7 +3,7 @@
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { formatAmbitionsCompletedFootnote, type MovementSeries, type MovementWindow } from "@/lib/dashboard/movement";
+import { type MovementSeries, type MovementWindow } from "@/lib/dashboard/movement";
 import { ActivityIcon, FlameIcon, InfoIcon, TrendingUpIcon, TrophyIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -96,7 +96,9 @@ export function MovementChart(props: MovementChartProps) {
         )}
 
         {stats.ambitionsCompletedInWindow > 0 ? (
-          <p className="text-xs text-muted-foreground">{formatAmbitionsCompletedFootnote(stats.ambitionsCompletedInWindow)}</p>
+          <p className="text-xs text-muted-foreground">
+            <AmbitionsCompletedFootnote count={stats.ambitionsCompletedInWindow} />
+          </p>
         ) : null}
         {props.hadErrors ? (
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -139,5 +141,19 @@ function MovementEmptyState() {
       <p className="text-sm font-medium">No movement yet</p>
       <p className="max-w-sm text-xs text-muted-foreground">Complete a task or milestone and it&apos;ll show up here — momentum builds one move at a time.</p>
     </div>
+  );
+}
+
+function AmbitionsCompletedFootnote(props: { count: number }) {
+  const tail =
+    props.count === 1
+      ? " ambition completed in this window — that's real progress."
+      : " ambitions completed in this window — that's real progress.";
+
+  return (
+    <>
+      <span className="font-medium text-foreground tabular-nums">{props.count}</span>
+      {tail}
+    </>
   );
 }

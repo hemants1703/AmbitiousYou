@@ -1,6 +1,7 @@
 "use client";
 
 import { ConfirmMilestoneCompletion } from "@/components/(app)/ambitions/confirm-milestone-completion";
+import { LinkifiedText } from "@/components/linkified-text";
 import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 import { MoveKindBadge } from "@/components/(app)/ambitions/move-kind-badge";
 import { Badge } from "@/components/ui/badge";
@@ -107,7 +108,11 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
             ) : null}
           </div>
 
-          {props.description ? <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">{props.description}</p> : null}
+          {props.description ? (
+            <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">
+              <LinkifiedText text={props.description} />
+            </p>
+          ) : null}
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <MoveKindBadge kind={props.kind} />
