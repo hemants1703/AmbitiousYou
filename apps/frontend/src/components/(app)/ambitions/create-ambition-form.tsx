@@ -22,7 +22,6 @@ import { format, parseISO } from "date-fns";
 import { createAmbitionAction } from "@/lib/actions/(app)/ambitions/create-ambition";
 import { createAmbitionInitialState } from "@/lib/actions/(app)/ambitions/create-ambition-state";
 import { clearDraft, draftHasContent, loadDraft, saveDraft, type MoveDraft, type MoveKind } from "@/lib/(app)/create-ambition-draft";
-import { downloadCanvas, renderAmbitionShareCard } from "@/lib/(app)/share-card";
 import { MOVE_TITLE_MAX_LENGTH } from "@/lib/(app)/tracked-item";
 
 const AMBITION_NAME_MAX_LENGTH = 80;
@@ -534,10 +533,6 @@ export default function CreateAmbitionForm(props: { isInitiation?: boolean }) {
               setWelcomeDismissed(true);
               router.push(`/ambitions/${state.ambitionId}`);
             }
-          }}
-          onShare={() => {
-            const canvas = renderAmbitionShareCard({ ambitionName: state.ambitionName!, progressPercent: 0 });
-            downloadCanvas(canvas, "ambitiousyou-declaration.png");
           }}
         />
       ) : null}

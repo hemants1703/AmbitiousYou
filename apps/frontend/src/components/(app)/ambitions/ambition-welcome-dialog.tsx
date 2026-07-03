@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { brandCopy } from "@/lib/brand";
-import { Share2Icon, SparklesIcon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import Link from "next/link";
 
 interface AmbitionWelcomeDialogProps {
@@ -11,7 +11,6 @@ interface AmbitionWelcomeDialogProps {
   ambitionId: string;
   ambitionName: string;
   onOpenChange: (open: boolean) => void;
-  onShare?: () => void;
 }
 
 /** Shown once after a user's first ambition is created — the initiation welcome artifact. */
@@ -30,12 +29,6 @@ export function AmbitionWelcomeDialog(props: AmbitionWelcomeDialogProps) {
           <Button asChild className="w-full">
             <Link href={`/ambitions/${props.ambitionId}`}>{brandCopy.initiation.welcomeCta}</Link>
           </Button>
-          {props.onShare ? (
-            <Button type="button" variant="outline" className="w-full" onClick={props.onShare}>
-              <Share2Icon className="size-4" aria-hidden="true" />
-              {brandCopy.initiation.welcomeShare}
-            </Button>
-          ) : null}
         </DialogFooter>
       </DialogContent>
     </Dialog>

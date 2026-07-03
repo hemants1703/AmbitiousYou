@@ -1,4 +1,3 @@
-import { AmbitionShareButton } from "@/components/(app)/ambitions/ambition-share-button";
 import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
 
@@ -78,13 +77,11 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
             </Link>
           </Button>
 
-          <div className="ml-auto hidden items-center gap-2 sm:flex">
-            <AmbitionShareButton ambitionName={ambition.ambitionName} progressPercent={progress} />
+          <div className="ml-auto hidden sm:block">
             <AmbitionOptionsDropdown ambitionId={ambition.id} ambitionName={ambition.ambitionName} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
           </div>
 
-          <div className="flex items-center gap-2 sm:hidden">
-            <AmbitionShareButton ambitionName={ambition.ambitionName} progressPercent={progress} />
+          <div className="sm:hidden">
             <AmbitionOptionsDropdown ambitionId={ambition.id} ambitionName={ambition.ambitionName} userId={userDetails.id} isFavourited={ambition.isFavourited ?? false} />
           </div>
         </div>

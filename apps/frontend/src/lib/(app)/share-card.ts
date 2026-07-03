@@ -1,44 +1,6 @@
-/** Canvas helpers for identity share cards — ambition declarations and momentum exports. */
+/** Canvas helpers for momentum export cards. */
 
 const LEVEL_COLORS = ["#e5e7eb", "#a7f3d0", "#6ee7b7", "#34d399", "#10b981"] as const;
-
-export interface AmbitionShareCardInput {
-  ambitionName: string;
-  progressPercent: number;
-}
-
-export function renderAmbitionShareCard(input: AmbitionShareCardInput): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1200;
-  canvas.height = 630;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return canvas;
-
-  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  gradient.addColorStop(0, "#001a33");
-  gradient.addColorStop(0.45, "#003366");
-  gradient.addColorStop(1, "#005699");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "#64ccc5";
-  ctx.font = "600 28px system-ui, sans-serif";
-  ctx.fillText("AmbitiousYou", 72, 100);
-
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "700 56px system-ui, sans-serif";
-  wrapText(ctx, input.ambitionName, 72, 200, 1000, 64);
-
-  ctx.fillStyle = "rgba(255,255,255,0.85)";
-  ctx.font = "500 32px system-ui, sans-serif";
-  ctx.fillText(`${input.progressPercent}% complete`, 72, 420);
-
-  ctx.fillStyle = "rgba(255,255,255,0.7)";
-  ctx.font = "500 24px system-ui, sans-serif";
-  ctx.fillText("Built with AmbitiousYou · The ambitious ones", 72, 540);
-
-  return canvas;
-}
 
 export interface ContributionExportInput {
   weeks: { count: number; level: 0 | 1 | 2 | 3 | 4 }[][];
@@ -97,22 +59,4 @@ export function downloadCanvas(canvas: HTMLCanvasElement, filename: string): voi
   link.download = filename;
   link.href = canvas.toDataURL("image/png");
   link.click();
-}
-
-function wrapText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number): void {
-  const words = text.split(" ");
-  let line = "";
-  let offsetY = y;
-
-  for (const word of words) {
-    const test = line ? `${line} ${word}` : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      ctx.fillText(line, x, offsetY);
-      line = word;
-      offsetY += lineHeight;
-    } else {
-      line = test;
-    }
-  }
-  if (line) ctx.fillText(line, x, offsetY);
 }

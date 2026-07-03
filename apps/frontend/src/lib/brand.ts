@@ -30,6 +30,5 @@ export const brandCopy = {
     welcomeTitle: "You're in.",
     welcomeBody: (ambitionName: string) => `${ambitionName} is live. You're one of the ambitious ones now.`,
     welcomeCta: "Open your ambition",
-    welcomeShare: "Share your declaration",
   },
 } as const;
