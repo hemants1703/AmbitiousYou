@@ -79,18 +79,25 @@ export function TrackedItemRow(props: TrackedItemRowProps) {
         <CompletionControl item={item} isMilestone={isMs} completed={completed} isPending={props.isPending} onToggle={props.onToggle} />
 
         <div className="min-w-0 flex-1">
-          <button
-            type="button"
+          <div
+            role="button"
+            tabIndex={0}
             onClick={() => moveDetail.open(toMoveDetail(item))}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                moveDetail.open(toMoveDetail(item));
+              }
+            }}
             aria-label={`View details of ${kind}: ${getTitle(item)}`}
             className="block min-h-6 w-full cursor-pointer rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <p className={cn("font-medium wrap-anywhere", completed && "text-muted-foreground line-through")}>{getTitle(item)}</p>
-          </button>
-          {getDescription(item) ? (
-            <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">
-              <LinkifiedText text={getDescription(item)} />
-            </p>
-          ) : null}
+            {getDescription(item) ? (
+              <p className="line-clamp-2 text-sm whitespace-pre-wrap text-muted-foreground wrap-anywhere">
+                <LinkifiedText text={getDescription(item)} />
+              </p>
+            ) : null}
+          </div>
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <MoveKindBadge kind={kind} />
