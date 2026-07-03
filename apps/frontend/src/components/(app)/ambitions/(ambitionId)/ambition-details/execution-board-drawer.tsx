@@ -62,7 +62,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
   const filteredOpen = filterItems(board.openItems, query);
   const filteredCompleted = filterItems(board.completedItems, query);
   const openGroups = paginateOpenMoveGroups(filteredOpen, visibleOpen);
-  const overdueCount = countOverdueMoves(board.openItems);
+  const overdueCount = countOverdueMoves(filteredOpen);
   const total = board.items.length;
   const triggerLabel = total > 0 ? `Open move workspace · ${total}` : "Open move workspace";
 
@@ -102,11 +102,11 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
               <div className="flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-3 py-1 text-xs font-medium">
                   <CircleDotIcon className="size-3.5 text-primary" aria-hidden="true" />
-                  <span className="tabular-nums">{board.openItems.length}</span> open
+                  <span className="tabular-nums">{filteredOpen.length}</span> open
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-800 dark:text-emerald-200">
                   <CheckCircle2Icon className="size-3.5" aria-hidden="true" />
-                  <span className="tabular-nums">{board.completedItems.length}</span> done
+                  <span className="tabular-nums">{filteredCompleted.length}</span> done
                 </span>
                 {overdueCount > 0 ? (
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-destructive/25 bg-destructive/10 px-3 py-1 text-xs font-medium text-destructive">
