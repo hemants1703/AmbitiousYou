@@ -13,7 +13,7 @@ interface AmbitionTrackingProps {
   startDate: Date | string;
   endDate: Date | string;
   ambitionStatus?: "active" | "completed" | "missed";
-  /** When true, omits the outer region wrapper — parent groups Why + Work + Time. */
+  /** When true, renders tracks as siblings — parent supplies divide-y and the landmark region. */
   embedded?: boolean;
 }
 
@@ -80,7 +80,7 @@ export function AmbitionTracking(props: AmbitionTrackingProps) {
   );
 
   if (props.embedded) {
-    return <div className="divide-y divide-border/50">{tracks}</div>;
+    return tracks;
   }
 
   return (

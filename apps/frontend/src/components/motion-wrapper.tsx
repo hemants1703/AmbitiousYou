@@ -9,16 +9,19 @@ interface FadeInProps {
 
 /** Lightweight CSS entrance — avoids framer-motion on hot routes. */
 export function FadeIn(props: FadeInProps) {
+  const delayMs = props.delayMs ?? 0;
+
   return (
     <div
       className={cn(
         "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300",
-        // Hold the "from" keyframe during animation-delay (tw-animate-css #66). Important when
-        // delay is set because animate-in's shorthand can override fill-mode (#34).
-        props.delayMs ? "motion-safe:!fill-mode-both" : "motion-safe:fill-mode-both",
         props.className,
       )}
-      style={props.delayMs ? { animationDelay: `${props.delayMs}ms` } : undefined}>
+      style={{
+        animationDelay: `${delayMs}ms`,
+        // Inline fill-mode beats tw-animate-css shorthand without !important (#34, #66).
+        ...(delayMs > 0 ? { animationFillMode: "both" as const } : {}),
+      }}>
       {props.children}
     </div>
   );
