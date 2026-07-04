@@ -171,7 +171,7 @@ function CompletionControl(props: CompletionControlProps) {
         aria-label={props.completed ? "Mark task as not completed" : "Mark task as completed"}
         className={cn(
           "mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none",
-          props.completed ? "border-primary bg-primary text-primary-foreground dark:border-chart-1 dark:bg-chart-1" : "border-muted-foreground/40 hover:border-primary dark:hover:border-chart-1",
+          props.completed ? "border-accent-brand bg-accent-brand text-primary-foreground" : "border-muted-foreground/40 hover:border-accent-brand",
         )}>
         {props.isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : props.completed ? <CheckIcon className="size-3.5" /> : null}
       </button>
@@ -205,7 +205,7 @@ function CompletionControl(props: CompletionControlProps) {
         type="button"
         disabled={props.isPending}
         aria-label={`Mark milestone "${getTitle(props.item)}" as reached`}
-        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-primary dark:hover:border-chart-1 hover:text-primary dark:hover:text-chart-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none">
+        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/40 text-transparent transition-colors hover:border-accent-brand hover:text-accent-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none">
         {props.isPending ? <Loader2Icon className="size-3.5 animate-spin text-muted-foreground" /> : <FlagIcon className="size-3" />}
       </button>
     </ConfirmMilestoneCompletion>

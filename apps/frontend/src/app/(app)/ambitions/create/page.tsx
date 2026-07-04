@@ -1,5 +1,5 @@
 import CreateAmbitionForm from "@/components/(app)/ambitions/create-ambition-form";
-import { MotionWrapper } from "@/components/motion-wrapper";
+import { FadeIn } from "@/components/motion-wrapper";
 import { brandCopy } from "@/lib/brand";
 import { requireUser } from "@/lib/auth";
 import { Metadata } from "next";
@@ -20,7 +20,7 @@ export default async function CreateAmbitionPage(props: CreateAmbitionPageProps)
 
   return (
     <div className="mx-auto flex w-full max-w-screen-2xl flex-col">
-      <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="flex flex-col md:flex-row md:items-end md:justify-between">
+      <FadeIn className="flex flex-col md:flex-row md:items-end md:justify-between">
         <div className="flex flex-col gap-3 pb-10">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">{isInitiation ? brandCopy.initiation.heading : "Create a new ambition"}</h1>
@@ -29,11 +29,11 @@ export default async function CreateAmbitionPage(props: CreateAmbitionPageProps)
             </p>
           </div>
         </div>
-      </MotionWrapper>
+      </FadeIn>
 
-      <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="flex flex-col md:flex-row md:items-end md:justify-between">
+      <FadeIn delayMs={100} className="flex flex-col md:flex-row md:items-end md:justify-between">
         <CreateAmbitionForm isInitiation={isInitiation} />
-      </MotionWrapper>
+      </FadeIn>
     </div>
   );
 }

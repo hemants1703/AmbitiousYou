@@ -45,7 +45,7 @@ export function HeaderNav() {
             <Icon className="size-4" />
             {item.label}
             {isActive && (
-              <span className="absolute bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-primary dark:bg-chart-1" />
+              <span className="absolute bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-accent-brand" />
             )}
           </Link>
         );

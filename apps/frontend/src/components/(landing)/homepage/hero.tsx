@@ -29,7 +29,7 @@ export default function Hero() {
         <ul className="lp-hero-enter-3 mt-9 flex flex-wrap justify-center gap-x-7 gap-y-2 text-sm text-muted-foreground">
           {proofPoints.map((label) => (
             <li key={label} className="flex items-center gap-2">
-              <CheckIcon aria-hidden="true" className="size-4 text-primary dark:text-chart-1" />
+              <CheckIcon aria-hidden="true" className="size-4 text-accent-brand" />
               <span>{label}</span>
             </li>
           ))}
@@ -37,7 +37,11 @@ export default function Hero() {
       </div>
 
       <div className="lp-hero-enter-4 relative z-10 mx-auto mt-14 w-full max-w-5xl">
-        <div className="rounded-xl bg-linear-to-tr from-primary/20 dark:from-chart-1/20 to-secondary/10 p-1 shadow-xl mask-[linear-gradient(to_bottom,black_72%,transparent)]">
+        {/* Momentum arc — signature curved accent behind the product preview */}
+        <svg aria-hidden="true" className="pointer-events-none absolute -top-6 left-1/2 z-0 h-16 w-3/4 max-w-2xl -translate-x-1/2 text-accent-brand/25" viewBox="0 0 800 64" fill="none">
+          <path d="M0 56 Q400 0 800 56" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+        <div className="relative rounded-xl bg-linear-to-tr from-accent-brand/20 to-secondary/10 p-1 shadow-elevated mask-[linear-gradient(to_bottom,black_72%,transparent)]">
           <DashboardPreview />
         </div>
         <p className="relative -mt-10 text-center text-sm text-muted-foreground">

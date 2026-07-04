@@ -15,7 +15,7 @@ interface AuthShellProps {
 /** Translucent mini stat card for the login panel. */
 function StatsVignette() {
   return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+    <div className="rounded-2xl border border-white/15 bg-white/10 p-4 shadow-elevated backdrop-blur-md">
       <p className="text-xs font-medium uppercase tracking-wide text-white/60">Active ambitions</p>
       <p className="mt-1 text-3xl font-semibold tabular-nums text-white">3</p>
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/15">
@@ -31,7 +31,7 @@ function MovesVignette() {
   const moves = ["Declare your ambition", "Add your first moves", "Prove you're serious"];
 
   return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+    <div className="rounded-2xl border border-white/15 bg-white/10 p-4 shadow-elevated backdrop-blur-md">
       <p className="text-xs font-medium uppercase tracking-wide text-white/60">Your initiation</p>
       <ul className="mt-3 space-y-2">
         {moves.map((label, i) => (

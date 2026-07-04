@@ -33,7 +33,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={cn("fixed left-0 right-0 top-0 z-50 w-full py-4 transition-colors duration-300", scrolled ? "border-b border-border/40 bg-background/50 backdrop-blur-sm" : "border-b border-transparent")}>
+    <nav className={cn("fixed left-0 right-0 top-0 z-50 w-full py-4 transition-[background-color,box-shadow,border-color] duration-300", scrolled ? "border-b border-border/40 bg-background/50 shadow-sm backdrop-blur-md backdrop-saturate-150" : "border-b border-transparent")}>
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4">
         {/* Logo */}
         <Link prefetch={true} href="/">
@@ -49,7 +49,7 @@ export default function Navbar() {
               return (
                 <Link prefetch={true} key={link.href} href={link.href} className={cn("relative px-1 py-2 text-sm font-medium transition-colors", isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
                   {link.label}
-                  {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary dark:bg-chart-1" />}
+                  {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent-brand" />}
                 </Link>
               );
             })}
@@ -103,7 +103,7 @@ export default function Navbar() {
                     return (
                       <li key={link.href}>
                         <SheetClose asChild>
-                          <Link prefetch={true} href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-primary dark:text-chart-1" : "text-foreground")}>
+                          <Link prefetch={true} href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-accent-brand" : "text-foreground")}>
                             <span>{link.label}</span>
                             <ChevronRightIcon aria-hidden="true" className="size-5 opacity-70" />
                           </Link>

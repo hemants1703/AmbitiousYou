@@ -16,7 +16,7 @@ function FeatureCard(props: FeatureCardProps) {
   return (
     <div className={cn(LANDING_CARD, "flex flex-col p-6", props.className)}>
       <div className="flex items-center gap-2.5">
-        <props.icon aria-hidden="true" className="size-5 shrink-0 text-primary dark:text-chart-1" />
+        <props.icon aria-hidden="true" className="size-5 shrink-0 text-accent-brand" />
         <h3 className="font-brand text-lg font-semibold tracking-[-0.01em] md:text-xl">{props.title}</h3>
         {props.comingSoon ? (
           <Badge variant="secondary" className="ml-auto shrink-0 text-xs">

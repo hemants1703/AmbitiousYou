@@ -58,7 +58,7 @@ export default async function TemplateDetailPage(props: TemplatePageProps) {
               <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
                 {template.moves.map((move) => (
                   <li key={move.title} className="flex gap-2">
-                    <span className="shrink-0 font-mono text-xs uppercase text-primary dark:text-chart-1">{move.kind}</span>
+                    <span className="shrink-0 font-mono text-xs uppercase text-accent-brand">{move.kind}</span>
                     <span>{move.title}</span>
                   </li>
                 ))}

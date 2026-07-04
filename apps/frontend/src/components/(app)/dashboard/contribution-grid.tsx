@@ -121,7 +121,7 @@ export function ContributionGrid(props: ContributionGridProps) {
         ? createPortal(
             <div
               role="tooltip"
-              className="pointer-events-none fixed z-50 rounded-xl bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
+              className="pointer-events-none fixed z-50 rounded-xl bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-elevated ring-1 ring-foreground/5 dark:ring-foreground/10"
               style={{ left: active.left, top: active.top - 6, transform: "translate(-50%, -100%)" }}>
               <p className="font-medium">{active.day.label}</p>
               <p className="text-muted-foreground">{active.day.count === 0 ? "No moves completed" : `${active.day.count} ${active.day.count === 1 ? "move" : "moves"} completed`}</p>

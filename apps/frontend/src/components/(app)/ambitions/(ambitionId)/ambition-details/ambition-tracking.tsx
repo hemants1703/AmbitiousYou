@@ -3,11 +3,18 @@ import { formatAmbitionDate, summarizeAmbitionWindow, type AmbitionWindowSummary
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
+/** Shared rhythm for Why / Work / Time rows on the ambition detail hero. */
+export const AMBITION_DIMENSION_ROW = "grid gap-2 pb-4 last:pb-0 sm:grid-cols-[4.25rem_1fr] sm:gap-4 first:pt-0 [&:not(:first-child)]:pt-4";
+
+export const AMBITION_DIMENSION_LABEL = "text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground";
+
 interface AmbitionTrackingProps {
   progressPercent: number;
   startDate: Date | string;
   endDate: Date | string;
   ambitionStatus?: "active" | "completed" | "missed";
+  /** When true, omits the outer region wrapper — parent groups Why + Work + Time. */
+  embedded?: boolean;
 }
 
 /**
@@ -18,8 +25,8 @@ export function AmbitionTracking(props: AmbitionTrackingProps) {
   const summary = summarizeAmbitionWindow(props.startDate, props.endDate, { ambitionStatus: props.ambitionStatus });
   const progress = Math.min(Math.max(props.progressPercent, 0), 100);
 
-  return (
-    <div className="divide-y divide-border/50" role="region" aria-label="Ambition tracking">
+  const tracks = (
+    <>
       <TrackingTrack dimension="Work">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-sm font-medium">Ambition progress</p>
@@ -38,7 +45,7 @@ export function AmbitionTracking(props: AmbitionTrackingProps) {
                   ? "bg-destructive/70"
                   : summary.phase === "completed"
                     ? "bg-emerald-500"
-                    : "bg-primary/80 dark:bg-chart-1/80",
+                    : "bg-accent-brand/80",
               )}
               style={{ width: `${summary.elapsedPercent}%` }}
               role="progressbar"
@@ -49,7 +56,7 @@ export function AmbitionTracking(props: AmbitionTrackingProps) {
             />
             {summary.phase === "in_progress" ? (
               <span
-                className="absolute top-1/2 size-2.5 -translate-y-1/2 rounded-full border-2 border-background bg-foreground dark:bg-chart-1"
+                className="absolute top-1/2 size-2.5 -translate-y-1/2 rounded-full border-2 border-background bg-accent-brand"
                 style={{ left: `calc(${summary.elapsedPercent}% - 5px)` }}
                 aria-hidden="true"
               />
@@ -69,14 +76,24 @@ export function AmbitionTracking(props: AmbitionTrackingProps) {
 
         <p className="mt-1 text-xs text-muted-foreground">{summary.encouragement}</p>
       </TrackingTrack>
+    </>
+  );
+
+  if (props.embedded) {
+    return <div className="divide-y divide-border/50">{tracks}</div>;
+  }
+
+  return (
+    <div className="divide-y divide-border/50" role="region" aria-label="Ambition tracking">
+      {tracks}
     </div>
   );
 }
 
 function TrackingTrack(props: { dimension: "Work" | "Time"; children: ReactNode }) {
   return (
-    <div className="grid gap-2 pb-4 last:pb-0 sm:grid-cols-[4.25rem_1fr] sm:gap-4 first:pt-0 [&:not(:first-child)]:pt-4">
-      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:pt-0.5">{props.dimension}</p>
+    <div className={AMBITION_DIMENSION_ROW}>
+      <p className={cn(AMBITION_DIMENSION_LABEL, "sm:pt-0.5")}>{props.dimension}</p>
       <div className="min-w-0">{props.children}</div>
     </div>
   );

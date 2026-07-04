@@ -1,4 +1,5 @@
 import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section";
+import { AmbitionMotivationCallout } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-motivation-callout";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
 import { AmbitionTracking } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-tracking";
 
@@ -11,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getAmbitionFull } from "@/lib/api/ambitions/get-ambition-full";
 import { requireUser } from "@/lib/auth";
 import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon, QuoteIcon } from "lucide-react";
+import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -108,14 +109,16 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
                 </div>
               </div>
 
-              <AmbitionMotivationCallout ambitionId={ambition.id} motivation={ambition.ambitionMotivation} />
-
-              <AmbitionTracking
-                progressPercent={progress}
-                startDate={ambition.ambitionStartDate}
-                endDate={ambition.ambitionEndDate}
-                ambitionStatus={ambition.ambitionStatus}
-              />
+              <div className="divide-y divide-border/50" role="region" aria-label="Ambition anchor">
+                <AmbitionMotivationCallout ambitionId={ambition.id} motivation={ambition.ambitionMotivation} />
+                <AmbitionTracking
+                  progressPercent={progress}
+                  startDate={ambition.ambitionStartDate}
+                  endDate={ambition.ambitionEndDate}
+                  ambitionStatus={ambition.ambitionStatus}
+                  embedded
+                />
+              </div>
             </CardContent>
           </Card>
         </FadeIn>
@@ -126,31 +129,6 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
       </div>
     </section>
-  );
-}
-
-function AmbitionMotivationCallout(props: { ambitionId: string; motivation: string | null }) {
-  const motivation = props.motivation?.trim();
-
-  if (!motivation) {
-    return (
-      <Link
-        href={`/ambitions/${props.ambitionId}/edit`}
-        className="flex items-center gap-2 rounded-2xl border border-dashed border-border/60 px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-        <QuoteIcon className="size-4 shrink-0" aria-hidden="true" />
-        Add your motivation — remember why you started.
-      </Link>
-    );
-  }
-
-  return (
-    <figure className="rounded-2xl border-l-2 border-primary/40 dark:border-chart-1/40 bg-primary/5 dark:bg-chart-1/5 px-4 py-3">
-      <figcaption className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        <QuoteIcon className="size-3.5" aria-hidden="true" />
-        Your motivation
-      </figcaption>
-      <blockquote className="wrap-anywhere text-sm italic text-foreground/90 sm:text-base">{motivation}</blockquote>
-    </figure>
   );
 }
 

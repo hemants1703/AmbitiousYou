@@ -29,7 +29,7 @@ export function LinkifiedText(props: LinkifiedTextProps) {
             href={part.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium text-primary underline underline-offset-4 hover:text-primary/80 dark:text-chart-1 dark:hover:text-chart-1/80"
+            className="font-medium text-accent-brand underline underline-offset-4 hover:text-accent-brand/80"
             onClick={(event) => event.stopPropagation()}>
             {part.text}
           </a>

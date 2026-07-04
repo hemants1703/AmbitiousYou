@@ -48,7 +48,7 @@ export function TrackedItemDraftEditor(props: TrackedItemDraftEditorProps) {
   }
 
   return (
-    <div className="space-y-3 rounded-2xl border border-primary/30 dark:border-chart-1/30 bg-background/50 p-4">
+    <div className="space-y-3 rounded-2xl border border-accent-brand/30 bg-background/50 p-4">
       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{props.label}</p>
 
       {/* Editing keeps the kind fixed — the label ("Editing task/milestone") already states it,

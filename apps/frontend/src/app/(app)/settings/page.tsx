@@ -1,4 +1,4 @@
-import { MotionWrapper } from "@/components/motion-wrapper";
+import { FadeIn } from "@/components/motion-wrapper";
 import { requireUser } from "@/lib/auth";
 import type { Metadata } from "next";
 import { SettingsTabs, type SettingsTabValue } from "../../../components/(app)/settings/settings-tabs";
@@ -32,31 +32,23 @@ export default async function SettingsPage(props: SettingsPageProps) {
   return (
     <section className="w-full pb-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
-        <MotionWrapper
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.1 }}
-        >
+        <FadeIn>
           <div className="space-y-1.5">
             <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
             <p className="text-muted-foreground">
               Manage your account, billing, notifications, and security.
             </p>
           </div>
-        </MotionWrapper>
+        </FadeIn>
 
-        <MotionWrapper
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-        >
+        <FadeIn delayMs={100}>
           <SettingsTabs
             activeTab={activeTab}
             userDetails={userDetails}
             userSettings={userSettings}
             sessionToken={sessionToken}
           />
-        </MotionWrapper>
+        </FadeIn>
       </div>
     </section>
   );
@@ -65,28 +57,20 @@ export default async function SettingsPage(props: SettingsPageProps) {
 function FailedToLoadSettings() {
   return <section className="w-full pb-8">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
-          <MotionWrapper
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.1 }}
-          >
+          <FadeIn>
             <div className="space-y-1.5">
               <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
               <p className="text-muted-foreground">
                 Manage your account, billing, notifications, and security.
               </p>
             </div>
-          </MotionWrapper>
+          </FadeIn>
 
-          <MotionWrapper
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-          >
+          <FadeIn delayMs={100}>
             <div className="rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
               Failed to load your settings. Please try refreshing the page.
             </div>
-          </MotionWrapper>
+          </FadeIn>
         </div>
       </section>
 }

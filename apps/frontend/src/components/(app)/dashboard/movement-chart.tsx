@@ -59,7 +59,7 @@ export function MovementChart(props: MovementChartProps) {
               <ToggleGroupItem
                 key={option}
                 value={String(option)}
-                className="px-3 tabular-nums data-[state=on]:border-primary data-[state=on]:bg-primary/5 dark:data-[state=on]:border-chart-1 dark:data-[state=on]:bg-chart-1/5">
+                className="px-3 tabular-nums data-[state=on]:border-accent-brand data-[state=on]:bg-accent-brand/5">
                 {option}D
               </ToggleGroupItem>
             ))}
@@ -123,7 +123,7 @@ interface MovementStatProps {
 function MovementStat(props: MovementStatProps) {
   return (
     <div className="flex items-center gap-2.5 rounded-2xl border border-border/60 bg-muted/20 p-3">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-chart-1/10 dark:text-chart-1" aria-hidden="true">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-accent-brand/10 text-accent-brand" aria-hidden="true">
         {props.icon}
       </span>
       <div className="min-w-0">

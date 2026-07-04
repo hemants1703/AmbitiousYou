@@ -129,7 +129,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
           </div>
 
           <div className="grid min-h-0 flex-1 gap-4 pb-2 lg:grid-cols-2 lg:gap-6">
-            <MoveColumn title="In progress" icon={<CircleDotIcon className="size-4" />} count={filteredOpen.length} surfaceClassName="border-primary/15 bg-primary/5 dark:border-chart-1/15 dark:bg-chart-1/5">
+            <MoveColumn title="In progress" icon={<CircleDotIcon className="size-4" />} count={filteredOpen.length} surfaceClassName="border-accent-brand/15 bg-accent-brand/5">
               {filteredOpen.length === 0 ? (
                 <p className="rounded-2xl border border-border/60 bg-background/60 p-4 text-sm text-muted-foreground">
                   {query ? `No open moves match “${query}”.` : "Nothing open — add a move from the execution board to get started."}

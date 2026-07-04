@@ -61,8 +61,17 @@
   filter: blur(42px);
   opacity: 0.72;
   transform: scale(1.08);
-  animation: auth-drift-login 26s ease-in-out infinite;
   will-change: transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .auth-background-login::before {
+    animation: auth-drift-login 26s ease-in-out infinite;
+  }
+
+  .auth-background-signup::before {
+    animation: auth-drift-signup 22s ease-in-out infinite;
+  }
 }
 
 .auth-background-login::after {
@@ -97,7 +106,6 @@
   filter: blur(46px);
   opacity: 0.8;
   transform: scale(1.1);
-  animation: auth-drift-signup 22s ease-in-out infinite;
   will-change: transform;
 }
 

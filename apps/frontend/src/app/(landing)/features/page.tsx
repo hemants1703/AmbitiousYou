@@ -96,7 +96,7 @@ function AmbitionVignette() {
   ];
 
   return (
-    <div aria-hidden="true" className="rounded-2xl bg-linear-to-tr from-primary/15 dark:from-chart-1/15 to-secondary/10 p-1.5 shadow-lg">
+    <div aria-hidden="true" className="rounded-2xl bg-linear-to-tr from-accent-brand/15 to-secondary/10 p-1.5 shadow-lg">
       <MockFrame url="ambitiousyou.pro/ambitions" className="shadow-none">
         <div className="bg-card/90 p-5">
           <div className="flex items-center justify-between gap-2">
@@ -174,12 +174,12 @@ export default function Features() {
       <LandingSection eyebrow="Core features" title="Core Features" lede="Everything ambitious people need to run multi-month goals — without gamification theatre." className="pb-12 md:pb-16">
         <div className="lp-reveal grid grid-cols-1 gap-5 md:grid-cols-2">
           {coreFeatures.map((feature) => (
-            <div key={feature.title} className={cn(LANDING_CARD, "p-6", feature.coreIdea && "border-primary/30 dark:border-chart-1/30")}>
+            <div key={feature.title} className={cn(LANDING_CARD, "p-6", feature.coreIdea && "border-accent-brand/30")}>
               {feature.coreIdea ? (
                 <p className="lp-eyebrow mb-3 font-mono text-xs font-medium uppercase tracking-[0.18em]">The core idea</p>
               ) : null}
               <div className="flex items-center gap-2.5">
-                <feature.icon aria-hidden="true" className="size-5 shrink-0 text-primary dark:text-chart-1" />
+                <feature.icon aria-hidden="true" className="size-5 shrink-0 text-accent-brand" />
                 <h3 className="font-brand text-lg font-semibold tracking-[-0.01em] md:text-xl">{feature.title}</h3>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{feature.description}</p>

@@ -16,7 +16,7 @@ const HINTS: { icon: ComponentType<{ className?: string }>; title: string; body:
 export function DashboardEmptyState(props: DashboardEmptyStateProps) {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 py-10 text-center duration-500 animate-in fade-in sm:py-16">
-      <span className="flex size-16 items-center justify-center rounded-4xl bg-primary/10 dark:bg-chart-1/10 text-primary dark:text-chart-1" aria-hidden="true">
+      <span className="flex size-16 items-center justify-center rounded-4xl bg-accent-brand/10 text-accent-brand" aria-hidden="true">
         <FlagIcon className="size-7" />
       </span>
 
@@ -39,7 +39,7 @@ export function DashboardEmptyState(props: DashboardEmptyStateProps) {
           const Icon = hint.icon;
           return (
             <div key={hint.title} className="flex flex-col gap-2 rounded-3xl border border-border/60 bg-card/40 p-4">
-              <span className="flex size-9 items-center justify-center rounded-2xl bg-primary/10 dark:bg-chart-1/10 text-primary dark:text-chart-1" aria-hidden="true">
+              <span className="flex size-9 items-center justify-center rounded-2xl bg-accent-brand/10 text-accent-brand" aria-hidden="true">
                 <Icon className="size-4" />
               </span>
               <p className="font-medium">{hint.title}</p>

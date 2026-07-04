@@ -47,10 +47,10 @@ export default function TemplatesPage() {
 function TemplateCard(props: { template: AmbitionTemplate }) {
   return (
     <li>
-      <Link href={`/templates/${props.template.slug}`} className={LANDING_CARD + " block p-6 transition-colors hover:border-primary/40 dark:hover:border-chart-1/40"}>
+      <Link href={`/templates/${props.template.slug}`} className={LANDING_CARD + " block p-6 transition-colors hover:border-accent-brand/40"}>
         <h2 className="font-brand text-xl font-semibold tracking-[-0.02em]">{props.template.headline}</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{props.template.description}</p>
-        <p className="mt-4 text-sm font-medium text-primary dark:text-chart-1">View template →</p>
+        <p className="mt-4 text-sm font-medium text-accent-brand">View template →</p>
       </Link>
     </li>
   );

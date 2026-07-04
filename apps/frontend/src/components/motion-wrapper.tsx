@@ -1,16 +1,5 @@
-"use client";
-
 import { cn } from "@/lib/utils";
-import { HTMLMotionProps, motion, MotionConfig } from "framer-motion";
 import type { ReactNode } from "react";
-
-export function MotionWrapper({ children, ...props }: HTMLMotionProps<"div"> & { children: ReactNode }) {
-  return (
-    <MotionConfig reducedMotion="user">
-      <motion.div {...props}>{children}</motion.div>
-    </MotionConfig>
-  );
-}
 
 interface FadeInProps {
   children: ReactNode;

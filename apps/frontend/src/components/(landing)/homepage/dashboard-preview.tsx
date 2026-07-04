@@ -29,7 +29,7 @@ import MockFrame from "../mock-frame";
 type StatTone = "default" | "positive" | "warning";
 
 const chipByTone: Record<StatTone, string> = {
-  default: "bg-primary/10 dark:bg-chart-1/10 text-primary dark:text-chart-1",
+  default: "bg-accent-brand/10 text-accent-brand",
   positive: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
   warning: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
 };
@@ -185,20 +185,20 @@ export default function DashboardPreview() {
                   </div>
 
                   {/* Motivation banner — your "why" */}
-                  <div className="rounded-3xl border border-primary/20 dark:border-chart-1/20 bg-linear-to-br from-primary/10 via-primary/5 to-transparent p-4 dark:from-chart-1/10 dark:via-chart-1/5">
-                    <p className="flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-wide text-primary/80 dark:text-chart-1/80">
+                  <div className="rounded-3xl border border-accent-brand/20 bg-linear-to-br from-accent-brand/10 via-accent-brand/5 to-transparent p-4">
+                    <p className="flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-wide text-accent-brand/80">
                       <SparklesIcon className="size-3" />
                       You promised yourself
                     </p>
                     <p className="mt-1.5 text-lg font-semibold tracking-tight">Become a Staff Engineer</p>
-                    <p className="mt-1.5 border-l-2 border-primary/30 pl-3 text-sm text-foreground/80 dark:border-chart-1/30">Because the version of me who almost quit doesn&rsquo;t get the final say.</p>
+                    <p className="mt-1.5 border-l-2 border-accent-brand/30 pl-3 text-sm text-foreground/80">Because the version of me who almost quit doesn&rsquo;t get the final say.</p>
                   </div>
 
                   {/* Contribution calendar — a year of completed moves */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <CalendarDaysIcon className="size-4 text-primary dark:text-chart-1" />
+                        <CalendarDaysIcon className="size-4 text-accent-brand" />
                         Contribution calendar
                       </CardTitle>
                       <CardDescription>Every move you&rsquo;ve completed over the last year.</CardDescription>
@@ -268,7 +268,7 @@ export default function DashboardPreview() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                          <ListChecksIcon className="size-4 text-primary dark:text-chart-1" />
+                          <ListChecksIcon className="size-4 text-accent-brand" />
                           Your next moves
                         </CardTitle>
                         <CardDescription>The most urgent open work across every ambition.</CardDescription>
@@ -281,13 +281,13 @@ export default function DashboardPreview() {
                       </CardHeader>
                       <CardContent className="space-y-2.5">
                         {nextMoves.map((move) => (
-                          <div key={move.title} className={cn("flex items-start gap-3 rounded-2xl border p-3", move.isNext ? "border-primary/30 bg-primary/5 dark:border-chart-1/30 dark:bg-chart-1/5" : "border-border/60 bg-background/60")}>
+                          <div key={move.title} className={cn("flex items-start gap-3 rounded-2xl border p-3", move.isNext ? "border-accent-brand/30 bg-accent-brand/5" : "border-border/60 bg-background/60")}>
                             <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-muted-foreground/40 text-transparent">
                               <CheckIcon className="size-3.5" />
                             </span>
                             <div className="min-w-0 flex-1 space-y-1">
                               {move.isNext ? (
-                                <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary dark:text-chart-1">
+                                <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wider text-accent-brand">
                                   <SparklesIcon className="size-3" />
                                   Your next move
                                 </p>
@@ -309,7 +309,7 @@ export default function DashboardPreview() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                          <CalendarRangeIcon className="size-4 text-primary dark:text-chart-1" />
+                          <CalendarRangeIcon className="size-4 text-accent-brand" />
                           Coming up this week
                         </CardTitle>
                         <CardDescription>What&rsquo;s due over the next 7 days.</CardDescription>
@@ -348,7 +348,7 @@ interface PreviewTileProps {
 function PreviewTile(props: PreviewTileProps) {
   return (
     <div className="flex items-center gap-2 rounded-xl border border-border/60 bg-muted/20 p-2.5">
-      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-chart-1/10 dark:text-chart-1">{props.icon}</span>
+      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent-brand/10 text-accent-brand">{props.icon}</span>
       <div className="min-w-0">
         <p className="text-sm font-semibold leading-none tabular-nums">{props.value}</p>
         <p className="mt-0.5 truncate text-[10px] text-muted-foreground">{props.label}</p>

@@ -81,7 +81,7 @@ export default function ExperienceFlow() {
               const IconComponent = iconComponents[persona.icon] || RocketIcon;
               return (
                 <li key={persona.id}>
-                  <button type="button" onClick={scrollToPersonas} aria-label={`${persona.name} — jump to persona selection`} className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card/50 transition-colors hover:border-primary/40 dark:hover:border-chart-1/40 hover:bg-card">
+                  <button type="button" onClick={scrollToPersonas} aria-label={`${persona.name} — jump to persona selection`} className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card/50 transition-colors hover:border-accent-brand/40 hover:bg-card">
                     <IconComponent aria-hidden="true" className="size-5" style={{ color: persona.color }} />
                   </button>
                 </li>
@@ -122,8 +122,8 @@ export default function ExperienceFlow() {
       {/* Final CTA Section */}
       <section className="w-full py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-4 md:px-6">
-          <div className="lp-reveal relative overflow-hidden rounded-3xl border border-primary/20 dark:border-chart-1/20 bg-card/80 p-10 text-center shadow-xl backdrop-blur-sm">
-            <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 dark:via-chart-1/50 to-transparent" />
+          <div className="lp-reveal relative overflow-hidden rounded-3xl border border-accent-brand/20 bg-card/80 p-10 text-center shadow-xl backdrop-blur-sm">
+            <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent-brand/50 to-transparent" />
 
             <h2 className="font-brand text-3xl font-semibold tracking-[-0.02em] text-balance md:text-4xl">
               {state.ambition ? `Ready to run “${state.ambition.ambition.ambitionName}” for real?` : "Ready to make it real?"}

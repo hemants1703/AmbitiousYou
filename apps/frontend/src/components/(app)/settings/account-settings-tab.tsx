@@ -29,7 +29,7 @@ export function AccountSettingsTab(props: AccountSettingsTabProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <UserRoundIcon className="size-4 text-primary dark:text-chart-1" />
+            <UserRoundIcon className="size-4 text-accent-brand" />
             Profile
           </CardTitle>
           <CardDescription>Your identity on AmbitiousYou.</CardDescription>

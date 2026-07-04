@@ -1,5 +1,5 @@
 import EditAmbitionForm from "@/components/(app)/ambitions/(ambitionId)/edit-ambition/edit-ambition-form";
-import { MotionWrapper } from "@/components/motion-wrapper";
+import { FadeIn } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AmbitionDetails, getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
@@ -44,7 +44,7 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
 
   return (
     <div className="mx-auto flex w-full max-w-350 flex-col">
-      <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="flex flex-col gap-4 pb-8">
+      <FadeIn className="flex flex-col gap-4 pb-8">
         <Button asChild variant="outline" size="sm" className="w-fit rounded-full bg-background/80">
           <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
             <ChevronLeftIcon className="size-4" />
@@ -58,9 +58,9 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
             Update the name, definition, motivation, and priority for <span className="font-medium text-foreground">{ambition.ambitionName}</span>.
           </p>
         </div>
-      </MotionWrapper>
+      </FadeIn>
 
-      <MotionWrapper initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="grid items-start gap-6 lg:grid-cols-3">
+      <FadeIn delayMs={100} className="grid items-start gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardContent className="py-2">
             <EditAmbitionForm
@@ -102,7 +102,7 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
             </CardContent>
           </Card>
         </aside>
-      </MotionWrapper>
+      </FadeIn>
     </div>
   );
 }

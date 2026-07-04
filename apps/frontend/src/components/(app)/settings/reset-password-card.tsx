@@ -89,7 +89,7 @@ export function ResetPasswordCard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <KeyRoundIcon className="size-4 text-primary dark:text-chart-1" />
+            <KeyRoundIcon className="size-4 text-accent-brand" />
             Password
           </CardTitle>
           <CardDescription>Update the password you use to sign in.</CardDescription>

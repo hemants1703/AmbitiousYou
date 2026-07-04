@@ -82,7 +82,7 @@ interface InsightTileProps {
 function InsightTile(props: InsightTileProps) {
   return (
     <div className="flex items-center gap-2.5 rounded-2xl border border-border/60 bg-muted/20 p-3">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-chart-1/10 dark:text-chart-1" aria-hidden="true">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-accent-brand/10 text-accent-brand" aria-hidden="true">
         {props.icon}
       </span>
       <div className="min-w-0">

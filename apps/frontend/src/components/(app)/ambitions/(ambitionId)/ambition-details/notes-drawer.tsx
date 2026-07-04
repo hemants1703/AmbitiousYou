@@ -99,7 +99,7 @@ export default function NotesDrawer(props: NotesDrawerProps) {
                     isPending={isPending}
                     className={[
                       "group mb-3 break-inside-avoid rounded-2xl border p-4 transition-colors",
-                      isEditing ? "border-primary/30 dark:border-chart-1/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : NOTE_SURFACE,
+                      isEditing ? "border-accent-brand/30 bg-background/50" : isConfirmingDelete ? "border-destructive/30 bg-destructive/5" : NOTE_SURFACE,
                     ].join(" ")}>
                     {isEditing ? (
                       <div className="space-y-3">

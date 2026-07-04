@@ -19,7 +19,7 @@ export function AmbitionWelcomeDialog(props: AmbitionWelcomeDialogProps) {
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="items-center text-center">
-          <span className="mb-2 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-chart-1/10 dark:text-chart-1" aria-hidden="true">
+          <span className="mb-2 flex size-12 items-center justify-center rounded-2xl bg-accent-brand/10 text-accent-brand" aria-hidden="true">
             <SparklesIcon className="size-6" />
           </span>
           <DialogTitle className="font-brand text-2xl tracking-[-0.02em]">{brandCopy.initiation.welcomeTitle}</DialogTitle>

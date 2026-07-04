@@ -18,7 +18,7 @@ export function BillingSettingsTab() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CreditCardIcon className="size-4 text-primary dark:text-chart-1" />
+            <CreditCardIcon className="size-4 text-accent-brand" />
             Current plan
           </CardTitle>
           <CardDescription>You are on the {freePlan.name} plan. Upgrade any time.</CardDescription>
@@ -43,14 +43,14 @@ export function BillingSettingsTab() {
         </CardContent>
       </Card>
 
-      <Card className="border-primary/20 dark:border-chart-1/20">
+      <Card className="border-accent-brand/20">
         <CardHeader>
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="flex items-center gap-2">
-              <SparklesIcon className="size-4 text-primary dark:text-chart-1" />
+              <SparklesIcon className="size-4 text-accent-brand" />
               AmbitiousYou Pro
             </CardTitle>
-            <Badge variant="outline" className="shrink-0 border-primary/30 dark:border-chart-1/30 text-primary dark:text-chart-1">
+            <Badge variant="outline" className="shrink-0 border-accent-brand/30 text-accent-brand">
               Coming soon
             </Badge>
           </div>
@@ -62,7 +62,7 @@ export function BillingSettingsTab() {
           <ul className="space-y-2">
             {PRO_PLAN_FEATURES.map((feature) => (
               <li key={feature} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                <ZapIcon className="size-4 shrink-0 text-primary/60 dark:text-chart-1/60" />
+                <ZapIcon className="size-4 shrink-0 text-accent-brand/60" />
                 {feature}
               </li>
             ))}

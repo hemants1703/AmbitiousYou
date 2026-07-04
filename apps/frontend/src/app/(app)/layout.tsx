@@ -24,6 +24,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <TooltipProvider>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-md">
+        Skip to content
+      </a>
       <main>
         <SidebarProvider
           defaultOpen={defaultOpen}
@@ -36,11 +39,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <AppSidebar variant="inset" userDetails={userDetails} />
         <SidebarInset className="min-w-0">
           <SiteHeader />
-          <div className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">{children}</div>
+          <div id="main-content" className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">{children}</div>
         </SidebarInset>
       </SidebarProvider>
       <Toaster richColors theme="system" />
-    </main>
+      </main>
     </TooltipProvider>
   );
 }
