@@ -295,7 +295,7 @@ flowchart LR
 
 **The VPS pipeline** ([`.github/workflows/deploy-backend.yml`](.github/workflows/deploy-backend.yml)): `git push` → verify DB → migrate → build & push image to GHCR → `scp` deploy script → SSH blue-green swap. Branch picks env — `dev` → dev, `main` → prod — each with its own Supabase project.
 
-**Dual entry points.** Docker runs `node dist/main` (tsc emits relative imports). Vercel transpiles `src/` and keeps `src/*` path aliases — `main.ts` registers `tsconfig-paths` at bootstrap so both targets work without separate branches.
+**Dual entry points.** Docker runs `node dist/main` (tsc emits relative imports). Vercel transpiles `src/` and keeps `src/*` path aliases — [`register-paths.cjs`](apps/backend/register-paths.cjs) is preloaded via `NODE_OPTIONS` in `vercel.json` (the serverless bundle does not include `dist/`).
 
 **Hardened VPS host.** Provisioned by [`infra/setup-vps.sh`](infra/setup-vps.sh): Docker, nginx, Certbot, `ufw`, fail2ban, key-only SSH, least-privilege deploy user. Runtime secrets in host env files — never in the image.
 
@@ -424,6 +424,7 @@ AmbitiousYou/
 │   │   │   ├── tasks/ milestones/ notes/ settings/ users/
 │   │   │   └── db/             # pg.Pool client + drizzle wiring + migrations
 │   │   ├── vercel.json         # monorepo install/build for Vercel serverless
+│   │   ├── register-paths.cjs  # Vercel NODE_OPTIONS preload for src/* imports
 │   │   └── drizzle.config.ts
 │   └── frontend/                # Next.js 16 App Router (React 19, RSC, Turbopack)
 │       └── src/

@@ -4,6 +4,6 @@
   "buildCommand": "cd ../.. && pnpm --filter backend build",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/backend packages/shared .github/workflows/deploy-backend.yml",
   "env": {
-    "NODE_OPTIONS": "--require ./dist/register-paths.js"
+    "NODE_OPTIONS": "--require ./register-paths.cjs"
   }
 }
