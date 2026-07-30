@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm build",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/frontend packages/shared .github/workflows/ci-frontend.yml",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../../packages/shared",
   "redirects": [
     {
       "source": "/:path*",
