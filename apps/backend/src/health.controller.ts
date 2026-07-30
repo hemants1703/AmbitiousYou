@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
@@ -17,13 +18,17 @@ import { db } from './db';
  */
 @Controller('health')
 export class HealthController {
+  private readonly logger = new Logger(HealthController.name);
+
   @Get()
   @HttpCode(200)
   async check(): Promise<{ status: string; db: string }> {
     try {
       await db.execute(sql`select 1`);
       return { status: 'ok', db: 'up' };
-    } catch {
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.error(`DB health check failed: ${message}`);
       throw new ServiceUnavailableException({ status: 'error', db: 'down' });
     }
   }

@@ -2,13 +2,17 @@
 // by services, which run before NestJS's `ConfigModule.forRoot()` loads env
 // files. Mirror ConfigModule's precedence (first wins): `.env` is gitignored
 // and usually absent, so we must also load the committed `.env.development`.
-// dotenv won't override vars already set (e.g. by Docker / k8s in prod), and
-// missing files are skipped — safe everywhere.
+// dotenv won't override vars already set (e.g. by Docker / k8s / Vercel), and
+// missing files are skipped — safe everywhere. Skip file load on Vercel; the
+// platform injects env and a bundled `.env.*` must never win accidentally.
 import { config } from 'dotenv';
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+import { Pool, type PoolConfig } from 'pg';
 
-config({ path: ['.env.local', '.env.development', '.env.production', '.env'] });
+const isVercel = Boolean(process.env.VERCEL);
+if (!isVercel) {
+  config({ path: ['.env.local', '.env.development', '.env.production', '.env'] });
+}
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -16,14 +20,24 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
+const connectionString = process.env.DATABASE_URL.trim();
+const isSupabase = /supabase\.com|supabase\.co/i.test(connectionString);
+
 // Vercel Fluid isolates can multiply; keep a single client per instance so we
 // don't exhaust the Supabase pooler. Long-running Docker keeps the default.
-const isVercel = Boolean(process.env.VERCEL);
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+// Supabase needs TLS; Node's default CA checks often fail in serverless — match
+// the CI probe (`rejectUnauthorized: false`) used in deploy-backend.yml.
+const poolConfig: PoolConfig = {
+  connectionString,
   max: isVercel ? 1 : 10,
   idleTimeoutMillis: isVercel ? 5_000 : 30_000,
-});
+  connectionTimeoutMillis: 10_000,
+};
+if (isSupabase) {
+  poolConfig.ssl = { rejectUnauthorized: false };
+}
+
+const pool = new Pool(poolConfig);
 
 // node-postgres emits 'error' on IDLE clients when the connection drops out from
 // under us (network blip, Supabase restart / idle timeout). Without a listener
