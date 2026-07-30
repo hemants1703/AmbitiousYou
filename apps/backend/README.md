@@ -85,6 +85,8 @@ Used **for the time being** to reduce infra cost. Separate Vercel project, Root 
 3. [`vercel.json`](vercel.json) runs monorepo install/build (`@ambitiousyou/shared` prebuild).
 4. Push or `vercel --prod` to deploy.
 
+`ignoreCommand` in `vercel.json` skips the build when a push only touches other workspaces (same idea as path filters in GitHub Actions).
+
 **Migrations** are not run by Vercel — apply manually before or after deploy:
 
 ```bash
