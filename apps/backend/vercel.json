@@ -2,8 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile --filter backend...",
   "buildCommand": "cd ../.. && pnpm --filter backend build",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../../packages/shared",
-  "env": {
-    "NODE_OPTIONS": "--require ./register-paths.cjs"
-  }
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../../packages/shared"
 }
