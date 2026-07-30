@@ -107,8 +107,8 @@ The parts I'm most proud of — each one is a deliberate decision, not an accide
 - **pnpm** workspace monorepo · ESLint 9 + Prettier
 - **Docker** (multi-stage) · **GitHub Actions** CI/CD
 - **nginx** blue-green · **Let's Encrypt** · DigitalOcean VPS
-- **Vercel** (frontend) · **Supabase** Postgres
-- Graceful shutdown (SIGTERM → pool drain)
+- **Vercel** (frontend + backend serverless) · **Supabase** Postgres
+- Graceful shutdown on VPS (SIGTERM → pool drain)
 
 </td></tr>
 </table>
@@ -224,17 +224,19 @@ flowchart TB
     end
 
     subgraph DEPLOY["Live environments"]
-        VERCEL["Vercel — frontend"]
-        VPS["DigitalOcean VPS — API"]
+        VERCEL_FE["Vercel — frontend"]
+        VERCEL_BE["Vercel — backend (serverless)"]
+        VPS["DigitalOcean VPS — API (Docker)"]
         SUPA[("Supabase PostgreSQL")]
     end
 
     PUSH --> FE_CI
     PUSH --> BE_CI
-    FE5 --> VERCEL
+    FE5 --> VERCEL_FE
     BE6 --> VPS
     BE3 -.-> SUPA
     VPS --> SUPA
+    VERCEL_BE -.->|"optional parallel target"| SUPA
 ```
 
 > **Portfolio tip:** for LinkedIn or talks, screenshot a green **Actions** run of `deploy-backend` on `main` — it reads more credibly than a diagram alone.
@@ -243,13 +245,18 @@ flowchart TB
 
 ## 🚢 Deployment & Infrastructure
 
-Two environments, fully automated, **zero-downtime** — every `git push` ships. The frontend rides Vercel's git integration; the backend runs as a Docker container on a self-managed Linux VPS, deployed by a hand-built CI/CD pipeline with a blue-green swap behind nginx.
+Two environments ship on every `git push`. The **frontend** always deploys via Vercel. The **backend** is **platform-agnostic** — the same NestJS app runs on **Vercel serverless** (current choice for cost management) or on a **Docker container on a self-managed VPS** with zero-downtime blue-green swaps. Both paths share one codebase, one `nest build`, and env vars injected by the host (never committed).
 
 ```mermaid
 flowchart LR
     PUSH["git push<br/>(dev / main)"]
 
-    subgraph GHA["GitHub Actions"]
+    subgraph VERCEL["Vercel"]
+        FE["Next.js frontend"]
+        BE_SLS["NestJS backend<br/>serverless · Fluid compute"]
+    end
+
+    subgraph GHA["GitHub Actions — VPS path"]
         direction TB
         MIG["migrate Supabase<br/>(drizzle-kit)"]
         BUILD["build multi-stage<br/>Docker image"]
@@ -265,29 +272,32 @@ flowchart LR
         NGINX --> SWAP --> CTR
     end
 
-    VERCEL["Vercel — frontend"]
     SUPA[("Supabase<br/>PostgreSQL")]
 
-    PUSH --> GHA
     PUSH --> VERCEL
+    PUSH --> GHA
     GHCR -->|"scp + SSH"| NGINX
     CTR --> SUPA
+    BE_SLS --> SUPA
     MIG -.-> SUPA
 ```
 
 | Surface | Production | Development |
 |---|---|---|
 | Frontend (Vercel) | `www.ambitiousyou.pro` | `dev.ambitiousyou.pro` |
-| Backend (VPS) | `api.ambitiousyou.pro` | `api.dev.ambitiousyou.pro` |
+| Backend (Vercel serverless) | Vercel project URL or custom domain | Preview deployments |
+| Backend (VPS + Docker) | `api.ambitiousyou.pro` | `api.dev.ambitiousyou.pro` |
 | Database (Supabase) | prod project | dev project |
 
-**Zero-downtime blue-green swap.** On deploy, the new image starts on an *idle* port (prod `3001`↔`3002`, dev `3101`↔`3102`) while the current container keeps serving. Only after the new one passes a **DB-aware `/health` check** does nginx's upstream get rewritten and gracefully reloaded — then the old container is drained (`SIGTERM`, 30s grace) and removed. A failed health check **aborts the deploy and leaves production untouched**.
+**Vercel backend (current).** Separate Vercel project, Root Directory `apps/backend`. Set `DATABASE_URL`, `APP_BASE_URL`, and optional `AZURE_CONNECTION_STRING` in the Vercel dashboard. [`apps/backend/vercel.json`](apps/backend/vercel.json) installs the monorepo workspace and runs `nest build`. Run `drizzle-kit migrate` manually against the target DB — Vercel does not migrate on deploy. See [`apps/backend/README.md`](apps/backend/README.md).
 
-**Multi-stage Docker image.** A `node:22-bookworm-slim` build stage compiles the shared package + backend and prunes to production-only dependencies (`pnpm deploy`); the runtime stage ships only `dist/` + pruned `node_modules`, runs as a **non-root user**, and declares a container `HEALTHCHECK`.
+**VPS backend (supported).** Zero-downtime blue-green swap: new container on an idle port (prod `3001`↔`3002`, dev `3101`↔`3102`) while the old one serves. Only after **DB-aware `/health`** passes does nginx rewrite upstream and reload; failed health **aborts the deploy**. Multi-stage Docker image (`node:22-bookworm-slim`), non-root runtime, `pnpm deploy` prod closure, `HEALTHCHECK` on `/health`.
 
-**The pipeline** (`.github/workflows/deploy-backend.yml`): `git push` → verify DB connectivity → run migrations → build & push the image to GHCR → `scp` the deploy script → SSH-trigger the blue-green swap. The branch picks the target — `dev` → dev, `main` → prod — each against its own Supabase project and env file.
+**The VPS pipeline** ([`.github/workflows/deploy-backend.yml`](.github/workflows/deploy-backend.yml)): `git push` → verify DB → migrate → build & push image to GHCR → `scp` deploy script → SSH blue-green swap. Branch picks env — `dev` → dev, `main` → prod — each with its own Supabase project.
 
-**Hardened host.** The Ubuntu VPS is provisioned by one idempotent script (`infra/setup-vps.sh`): Docker, nginx, Certbot, a `ufw` firewall (22/80/443 only), fail2ban, swap, **key-only SSH**, and a least-privilege deploy user whose `sudo` is scoped to *just* the nginx reload. Runtime secrets are injected from host env files — never baked into the image or committed.
+**Dual entry points.** Docker runs `node dist/main` (tsc emits relative imports). Vercel transpiles `src/` and keeps `src/*` path aliases — `main.ts` registers `tsconfig-paths` at bootstrap so both targets work without separate branches.
+
+**Hardened VPS host.** Provisioned by [`infra/setup-vps.sh`](infra/setup-vps.sh): Docker, nginx, Certbot, `ufw`, fail2ban, key-only SSH, least-privilege deploy user. Runtime secrets in host env files — never in the image.
 
 ---
 
@@ -413,6 +423,7 @@ AmbitiousYou/
 │   │   │   ├── ambitions/      # incl. ambition-progress.util.ts (atomic recalc)
 │   │   │   ├── tasks/ milestones/ notes/ settings/ users/
 │   │   │   └── db/             # pg.Pool client + drizzle wiring + migrations
+│   │   ├── vercel.json         # monorepo install/build for Vercel serverless
 │   │   └── drizzle.config.ts
 │   └── frontend/                # Next.js 16 App Router (React 19, RSC, Turbopack)
 │       └── src/

@@ -13,9 +13,11 @@ into the Docker image** (`.dockerignore` excludes `infra/`).
 ## Architecture
 
 ```
-push dev  -> Vercel (dev.ambitiousyou.pro)  + GH Actions -> VPS api.dev -> Supabase DEV
-push main -> Vercel (www.ambitiousyou.pro)  + GH Actions -> VPS api     -> Supabase PROD
+push dev  -> Vercel (dev.ambitiousyou.pro + optional API on Vercel)  + GH Actions -> VPS api.dev -> Supabase DEV
+push main -> Vercel (www.ambitiousyou.pro + optional API on Vercel)  + GH Actions -> VPS api     -> Supabase PROD
 ```
+
+The API can run on **Vercel serverless** (current, for cost) or on the **VPS Docker** path below — same codebase, platform-injected env vars. See `apps/backend/README.md`.
 
 Backend zero-downtime = host nginx + Docker, blue-green swap: new container
 starts on the idle port (prod 3001/3002, dev 3101/3102), `/health` gate, nginx
@@ -25,8 +27,8 @@ starts on the idle port (prod 3001/3002, dev 3101/3102), `/health` gate, nginx
 
 Think of it as **two independent robots** that wake up every time you `git push`:
 
-- **Robot A — Vercel** rebuilds your **frontend** (the website).
-- **Robot B — GitHub Actions** rebuilds your **backend** (the API server) and ships it to your VPS.
+- **Robot A — Vercel** rebuilds your **frontend** (and optionally the **backend** on serverless — see `apps/backend/README.md`).
+- **Robot B — GitHub Actions** rebuilds your **backend** for the VPS (Docker image) and ships it over SSH.
 
 They run in parallel and don't talk to each other. The branch you push to decides
 which environment gets updated:
@@ -203,14 +205,23 @@ Then issue certs: `certbot --nginx -d api.ambitiousyou.pro -d api.dev.ambitiousy
 - GHCR push uses the built-in `GITHUB_TOKEN` (workflow already has `packages: write`).
 
 ### 5. Vercel
-- Import repo, **Root Directory = `apps/frontend`**, Node 22.
+
+**Frontend** — import repo, **Root Directory = `apps/frontend`**, Node 22.
+
 - Production branch `main` -> `www.ambitiousyou.pro` (+ apex redirect to www).
 - Add `dev.ambitiousyou.pro`, assign to the `dev` branch.
 - Env vars (scoped):
   | Var | Production | Preview/dev |
   |---|---|---|
-  | `API_URL` | `https://api.ambitiousyou.pro` | `https://api.dev.ambitiousyou.pro` |
+  | `API_URL` | `https://api.ambitiousyou.pro` or Vercel backend URL | `https://api.dev.ambitiousyou.pro` or Vercel preview URL |
   | `NEXT_PUBLIC_SITE_URL` | `https://www.ambitiousyou.pro` | `https://dev.ambitiousyou.pro` |
+
+**Backend (optional — serverless, current for cost)** — separate project, **Root Directory = `apps/backend`**.
+
+- Set `DATABASE_URL`, `APP_BASE_URL`, optional `AZURE_CONNECTION_STRING` in **Environment Variables** (Production / Preview).
+- [`apps/backend/vercel.json`](../../apps/backend/vercel.json) handles monorepo install/build.
+- Run `drizzle-kit migrate` manually against the target DB; Vercel does not migrate on deploy.
+- Point frontend `API_URL` at the Vercel backend URL if not using the VPS API hostnames.
 
 ### 6. Deploy
 Push to `dev` -> watch GitHub Actions (migrate -> build -> push -> SSH deploy).

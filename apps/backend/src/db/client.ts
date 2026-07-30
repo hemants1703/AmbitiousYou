@@ -11,7 +11,9 @@ import { Pool } from 'pg';
 config({ path: ['.env.local', '.env.development', '.env.production', '.env'] });
 
 if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL must be set (check apps/backend/.env.local)');
+  throw new Error(
+    'DATABASE_URL must be set (local: apps/backend/.env.local; Vercel/Docker: platform env vars)',
+  );
 }
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });

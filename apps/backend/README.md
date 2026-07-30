@@ -1,98 +1,130 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# AmbitiousYou — Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS 11 REST API for [AmbitiousYou](https://www.ambitiousyou.pro). PostgreSQL via Drizzle ORM (SQL-first), opaque session auth, and server-derived ambition progress.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Stack
 
-## Description
+- **NestJS 11** · **Drizzle ORM** · **PostgreSQL** (`pg`)
+- **bcrypt** sessions · **Helmet** · **@nestjs/throttler**
+- Transactional email via **Azure Communication Services**
+- Schema + domain types from `@ambitiousyou/shared`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Local development
 
-## Project setup
+From the **repo root**:
 
 ```bash
-$ pnpm install
+pnpm install
+pnpm start:backend          # nest start --watch (:3001)
 ```
 
-## Compile and run the project
+Or from this directory:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cp .env.example .env.local   # then fill DATABASE_URL, etc.
+pnpm start:dev
 ```
 
-## Run tests
+### Environment variables
+
+See [`.env.example`](.env.example). Copy to `.env.local` for local dev.
+
+| Variable | Required | Notes |
+|---|---|---|
+| `DATABASE_URL` | Yes | Local Postgres or Supabase session pooler (`?sslmode=require`) |
+| `APP_BASE_URL` | Yes | Frontend origin for links in emails |
+| `PORT` | No | Defaults to `3001` |
+| `AZURE_CONNECTION_STRING` | No | If unset, outbound email is skipped (logged warning) |
+
+**Deployed environments** inject vars from the platform — not from committed files:
+
+| Target | Where secrets live |
+|---|---|
+| Local | `apps/backend/.env.local` |
+| Vercel | Project **Settings → Environment Variables** |
+| VPS / Docker | `/opt/ambitiousyou/<env>/backend.env` (see `infra/`) |
+
+## Commands
 
 ```bash
-# unit tests
-$ pnpm run test
+pnpm build              # prebuilds shared, then nest build → dist/
+pnpm start:prod         # node dist/main
+pnpm test               # Jest unit tests
+pnpm lint
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm db:generate        # drizzle-kit generate (after schema changes)
+pnpm db:migrate         # apply migrations
+pnpm db:studio          # browse DB
 ```
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+The backend is **platform-agnostic**: the same codebase deploys to **Vercel serverless** (current choice for cost) or a **long-running Docker container on a VPS** (zero-downtime blue-green). No forked config — only where env vars are injected and which entry artifact runs.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+```mermaid
+flowchart LR
+    subgraph targets [Deploy targets — pick one or both]
+        V["Vercel serverless<br/>Fluid compute"]
+        D["Docker on VPS<br/>node dist/main"]
+    end
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+    SRC["apps/backend<br/>nest build"]
+    SRC --> V
+    SRC --> D
+
+    V --> ENV_V["Vercel env vars"]
+    D --> ENV_D["backend.env + GH Actions"]
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Vercel (serverless)
 
-## Resources
+Used **for the time being** to reduce infra cost. Separate Vercel project, Root Directory **`apps/backend`**.
 
-Check out a few resources that may come in handy when working with NestJS:
+1. Import the repo (or `vercel link` from `apps/backend`).
+2. Set **Environment Variables** for Production / Preview: `DATABASE_URL`, `APP_BASE_URL`, optional `AZURE_CONNECTION_STRING`.
+3. [`vercel.json`](vercel.json) runs monorepo install/build (`@ambitiousyou/shared` prebuild).
+4. Push or `vercel --prod` to deploy.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**Migrations** are not run by Vercel — apply manually before or after deploy:
 
-## Support
+```bash
+cd apps/backend
+DATABASE_URL="<target-db>" pnpm exec drizzle-kit migrate
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Verify:** `GET /health` → `200` with `{ status: "ok", db: "up" }`.
 
-## Stay in touch
+**Why `tsconfig-paths` in `main.ts`:** Vercel’s NestJS handler transpiles `src/` in place and keeps `src/*` import paths. Docker runs `dist/` where `tsc` already emitted relative `require()` paths. Bootstrap registers aliases so both entry points resolve the same modules.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### VPS + Docker (production pipeline)
 
-## License
+Full **zero-downtime** path: GitHub Actions → GHCR → SSH blue-green swap behind nginx. See root [README — Deployment](../../README.md#-deployment--infrastructure) and [`infra/README.md`](../../infra/README.md).
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+# Build context is the REPO ROOT
+docker build -f apps/backend/Dockerfile -t ambitiousyou-backend .
+docker run --env-file backend.env -p 3001:3001 ambitiousyou-backend
+```
+
+Runtime: `node dist/main` as non-root user, `HEALTHCHECK` on `/health`, graceful shutdown on `SIGTERM`.
+
+## Project layout
+
+```
+src/
+├── auth/           SessionGuard, login/register, verify-email, password reset
+├── ambitions/      CRUD + ambition-progress.util (atomic recalc in transactions)
+├── tasks/ milestones/ notes/ settings/ users/
+├── notifications/  Azure email + HTML templates (copied to dist via nest-cli assets)
+├── db/             pg.Pool client, Drizzle wiring, migrations
+└── main.ts         bootstrap + path aliases for dual deploy
+```
+
+## Tests
+
+```bash
+pnpm test
+pnpm test:e2e
+```
+
+Specs use `jest.mock('src/db')` and the auto-mock at `src/db/__mocks__/index.ts`.
