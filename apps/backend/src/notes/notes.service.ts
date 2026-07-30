@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { and, eq } from 'drizzle-orm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { db, ambitions, notes, type Note } from 'src/db';
+import { db, ambitions, notes, type Note } from '../db';
 
 @Injectable()
 export class NotesService {

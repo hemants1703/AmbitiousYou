@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
-import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
-import { SessionGuard } from 'src/auth/guards/session.guard';
+import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
+import { SessionGuard } from '../auth/guards/session.guard';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingsService } from './settings.service';
-import type { Settings } from 'src/db';
+import type { Settings } from '../db';
 
 @Controller('settings')
 @UseGuards(SessionGuard)

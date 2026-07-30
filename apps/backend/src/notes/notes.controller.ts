@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
-import { SessionGuard } from 'src/auth/guards/session.guard';
-import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
+import { SessionGuard } from '../auth/guards/session.guard';
+import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import type { Note } from 'src/db';
+import type { Note } from '../db';
 import { NotesService } from './notes.service';
 
 @Controller('notes')

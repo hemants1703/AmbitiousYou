@@ -1,6 +1,3 @@
-// Vercel Nest runtime keeps `src/*` path aliases; register before other imports.
-// Resolved relative to this file (not CWD) — NODE_OPTIONS --require ./… fails on Vercel.
-import '../register-paths.cjs';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';

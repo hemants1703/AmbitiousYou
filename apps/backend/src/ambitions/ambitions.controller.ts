@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
-import { SessionGuard } from 'src/auth/guards/session.guard';
+import { SessionGuard } from '../auth/guards/session.guard';
 import { AmbitionsService } from './ambitions.service';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
-import type { Ambition } from 'src/db';
-import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
+import type { Ambition } from '../db';
+import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
 import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
 
 @Controller('ambitions')

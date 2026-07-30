@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { and, desc, eq } from 'drizzle-orm';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
-import { db, ambitions, milestones, notes, tasks, type Ambition } from 'src/db';
+import { db, ambitions, milestones, notes, tasks, type Ambition } from '../db';
 import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
 
 @Injectable()

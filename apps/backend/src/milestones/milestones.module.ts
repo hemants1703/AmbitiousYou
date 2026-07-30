@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SessionGuard } from 'src/auth/guards/session.guard';
+import { SessionGuard } from '../auth/guards/session.guard';
 import { MilestonesController } from './milestones.controller';
 import { MilestonesService } from './milestones.service';
 

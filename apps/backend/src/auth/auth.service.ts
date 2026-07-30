@@ -1,11 +1,11 @@
 import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 import { and, desc, eq } from 'drizzle-orm';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
-import { EmailService } from 'src/notifications/email.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UsersService } from '../users/users.service';
+import { EmailService } from '../notifications/email.service';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { db, sessions, users, verifications, type Session, type User } from 'src/db';
+import { db, sessions, users, verifications, type Session, type User } from '../db';
 
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const VERIFICATION_TTL_MS = 60 * 60 * 1000; // 1 hour

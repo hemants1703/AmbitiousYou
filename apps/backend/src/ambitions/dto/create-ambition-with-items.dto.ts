@@ -1,9 +1,9 @@
 import { IsArray, IsOptional, Validate, ValidateNested, ValidatorConstraint, ValidatorConstraintInterface, type ValidationArguments } from 'class-validator';
 import { OmitType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
-import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
-import { CreateNoteDto } from 'src/notes/dto/create-note.dto';
-import { CreateMilestoneDto } from 'src/milestones/dto/create-milestone.dto';
+import { CreateTaskDto } from '../../tasks/dto/create-task.dto';
+import { CreateNoteDto } from '../../notes/dto/create-note.dto';
+import { CreateMilestoneDto } from '../../milestones/dto/create-milestone.dto';
 import { CreateAmbitionDto } from './create-ambition.dto';
 
 export class CreateAmbitionTaskDto extends OmitType(CreateTaskDto, ['ambitionId'] as const) {}

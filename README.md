@@ -295,7 +295,7 @@ flowchart LR
 
 **The VPS pipeline** ([`.github/workflows/deploy-backend.yml`](.github/workflows/deploy-backend.yml)): `git push` → verify DB → migrate → build & push image to GHCR → `scp` deploy script → SSH blue-green swap. Branch picks env — `dev` → dev, `main` → prod — each with its own Supabase project.
 
-**Dual entry points.** Docker runs `node dist/main`. Vercel transpiles `src/` and keeps bare `src/*` requires — [`register-paths.cjs`](apps/backend/register-paths.cjs) is imported from [`src/main.ts`](apps/backend/src/main.ts) and maps aliases to nest-built `dist/`, while [`vercel.json`](apps/backend/vercel.json) `includeFiles` ships `dist/**` (+ `src/**`) because NFT does not follow path aliases.
+**Dual entry points.** Docker runs `node dist/main`. Vercel Nest zero-config uses [`src/main.ts`](apps/backend/src/main.ts). Backend app code uses **relative imports** so NFT includes the full module graph (bare `src/*` aliases are not traced and fail at runtime).
 
 **Hardened VPS host.** Provisioned by [`infra/setup-vps.sh`](infra/setup-vps.sh): Docker, nginx, Certbot, `ufw`, fail2ban, key-only SSH, least-privilege deploy user. Runtime secrets in host env files — never in the image.
 
@@ -424,7 +424,6 @@ AmbitiousYou/
 │   │   │   ├── tasks/ milestones/ notes/ settings/ users/
 │   │   │   └── db/             # pg.Pool client + drizzle wiring + migrations
 │   │   ├── vercel.json         # monorepo install/build for Vercel serverless
-│   │   ├── register-paths.cjs  # Vercel: imported from main.ts for src/* aliases
 │   │   └── drizzle.config.ts
 │   └── frontend/                # Next.js 16 App Router (React 19, RSC, Turbopack)
 │       └── src/

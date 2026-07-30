@@ -2,9 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } f
 import { MilestonesService } from './milestones.service';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
-import { SessionGuard } from 'src/auth/guards/session.guard';
-import type { Milestone } from 'src/db';
-import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
+import { SessionGuard } from '../auth/guards/session.guard';
+import type { Milestone } from '../db';
+import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
 
 @Controller('milestones')
 @UseGuards(SessionGuard)

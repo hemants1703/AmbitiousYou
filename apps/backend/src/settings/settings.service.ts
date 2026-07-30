@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { UpdateSettingDto } from './dto/update-setting.dto';
-import { db, settings, type Settings } from 'src/db';
+import { db, settings, type Settings } from '../db';
 
 @Injectable()
 export class SettingsService {

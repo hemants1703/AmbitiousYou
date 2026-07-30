@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import { eq, getTableColumns } from 'drizzle-orm';
 import type { User } from '@ambitiousyou/shared/types';
 import { CreateUserDto } from './dto/create-user.dto';
-import { SettingsService } from 'src/settings/settings.service';
-import { db, users } from 'src/db';
+import { SettingsService } from '../settings/settings.service';
+import { db, users } from '../db';
 
 // Default-deny projection on every public user read — the destructure drops
 // `passwordHash` from `getTableColumns(users)`. The single login escape hatch

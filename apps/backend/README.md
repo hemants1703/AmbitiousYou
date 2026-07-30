@@ -96,7 +96,7 @@ DATABASE_URL="<target-db>" pnpm exec drizzle-kit migrate
 
 **Verify:** `GET /health` → `200` with `{ status: "ok", db: "up" }`.
 
-**Path aliases on Vercel:** The NestJS handler transpiles `src/` in place and keeps bare `src/*` requires. NFT does not follow those aliases, so [`vercel.json`](vercel.json) `includeFiles` ships `dist/**` (nest-built `.js`) and `src/**`. [`register-paths.cjs`](register-paths.cjs) is imported at the top of [`src/main.ts`](src/main.ts) and maps `src/*` → `dist/*` (then `src/*`) via `tsconfig-paths`. Docker runs `node dist/main` without this preload.
+**Imports on Vercel:** App code uses relative imports (not `src/*` path aliases). Vercel’s Nest builder + NFT only follow relative `require()`s — bare aliases are omitted from the function bundle and crash at boot. Specs may still use `src/` via Jest’s `moduleNameMapper`. Set Function max duration in the Vercel project **Settings → Functions** if needed (`functions` in `vercel.json` only matches `api/` and breaks Nest zero-config).
 
 ### VPS + Docker (production pipeline)
 
@@ -119,8 +119,7 @@ src/
 ├── tasks/ milestones/ notes/ settings/ users/
 ├── notifications/  Azure email + HTML templates (copied to dist via nest-cli assets)
 ├── db/             pg.Pool client, Drizzle wiring, migrations
-└── main.ts         Nest bootstrap
-register-paths.cjs  Vercel-only: imported from main.ts for `src/*` aliases
+└── main.ts         Nest bootstrap (Vercel Nest entrypoint)
 ```
 
 ## Tests

@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import type { Request } from 'express';
-import { db, sessions } from 'src/db';
+import { db, sessions } from '../../db';
 
 @Injectable()
 export class SessionGuard implements CanActivate {

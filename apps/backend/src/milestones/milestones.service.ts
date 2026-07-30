@@ -2,8 +2,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { and, desc, eq } from 'drizzle-orm';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
-import { recalculateAmbitionProgress } from 'src/ambitions/ambition-progress.util';
-import { db, ambitions, milestones, type Milestone } from 'src/db';
+import { recalculateAmbitionProgress } from '../ambitions/ambition-progress.util';
+import { db, ambitions, milestones, type Milestone } from '../db';
 
 @Injectable()
 export class MilestonesService {

@@ -2,9 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } f
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { SessionGuard } from 'src/auth/guards/session.guard';
-import type { Task } from 'src/db';
-import { CurrentUserId } from 'src/auth/decorators/current-user-id.decorator';
+import { SessionGuard } from '../auth/guards/session.guard';
+import type { Task } from '../db';
+import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
 
 @Controller('tasks')
 @UseGuards(SessionGuard)

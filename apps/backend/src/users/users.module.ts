@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SessionGuard } from 'src/auth/guards/session.guard';
+import { SessionGuard } from '../auth/guards/session.guard';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { SettingsService } from 'src/settings/settings.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Module({
   controllers: [UsersController],

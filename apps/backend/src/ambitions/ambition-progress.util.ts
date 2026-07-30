@@ -1,6 +1,6 @@
 import { and, eq, sql } from 'drizzle-orm';
-import type { Tx } from 'src/db';
-import { ambitions, milestones, tasks } from 'src/db';
+import type { Tx } from '../db';
+import { ambitions, milestones, tasks } from '../db';
 
 /**
  * Recompute and persist an ambition's completion percentage (and derived status)
