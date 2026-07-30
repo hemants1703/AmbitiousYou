@@ -94,7 +94,7 @@ DATABASE_URL="<target-db>" pnpm exec drizzle-kit migrate
 
 **Verify:** `GET /health` → `200` with `{ status: "ok", db: "up" }`.
 
-**Why `tsconfig-paths` in `main.ts`:** Vercel’s NestJS handler transpiles `src/` in place and keeps `src/*` import paths. Docker runs `dist/` where `tsc` already emitted relative `require()` paths. Bootstrap registers aliases so both entry points resolve the same modules.
+**Why `register-paths.ts`:** Vercel’s NestJS handler transpiles `src/` in place and keeps `src/*` import paths. Docker runs `dist/` where `tsc` already emitted relative `require()` paths. [`register-paths.ts`](src/register-paths.ts) loads aliases from `tsconfig.json` before any app module loads; `vercel.json` also preloads `dist/register-paths.js` via `NODE_OPTIONS`.
 
 ### VPS + Docker (production pipeline)
 
@@ -117,7 +117,7 @@ src/
 ├── tasks/ milestones/ notes/ settings/ users/
 ├── notifications/  Azure email + HTML templates (copied to dist via nest-cli assets)
 ├── db/             pg.Pool client, Drizzle wiring, migrations
-└── main.ts         bootstrap + path aliases for dual deploy
+└── main.ts         bootstrap + register-paths (dual deploy entry)
 ```
 
 ## Tests

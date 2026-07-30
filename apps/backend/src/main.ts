@@ -1,14 +1,7 @@
-import { join } from 'node:path';
-import { register } from 'tsconfig-paths';
-import { NestFactory } from '@nestjs/core';
+// Must run before any module that imports via `src/*` (Vercel transpiles src/ in place).
+import './register-paths';
 
-// Vercel's NestJS handler transpiles src/ without rewriting `src/*` imports; Docker
-// runs dist/ where tsc already emitted relative paths. Register aliases so both
-// entry points resolve the same modules at runtime.
-register({
-  baseUrl: join(__dirname, '..'),
-  paths: { 'src/*': ['src/*'] },
-});
+import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';

@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile --filter backend...",
-  "buildCommand": "cd ../.. && pnpm --filter backend build"
+  "buildCommand": "cd ../.. && pnpm --filter backend build",
+  "env": {
+    "NODE_OPTIONS": "--require ./dist/register-paths.js"
+  }
 }
