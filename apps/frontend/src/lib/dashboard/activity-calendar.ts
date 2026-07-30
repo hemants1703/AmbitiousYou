@@ -3,15 +3,15 @@ import { eachDayOfInterval, startOfWeek, subWeeks } from "date-fns";
 import { dayKey, getItemCompletedAt, getItemKind, getTrackedItems, isItemCompleted } from "./tracked-items";
 
 /**
- * Pure, server-side aggregation for the GitHub-style contribution calendar. Buckets completed moves by
- * their completion day across a rolling ~52 weeks (Sunday-aligned, so columns are full weeks) and emits
- * a serializable week × weekday grid. Mirrors {@link buildMovementSeries} conventions: local-midnight
+ * Pure, server-side aggregation for the year-long activity calendar. Buckets completed moves by their
+ * completion day across a rolling ~52 weeks (Sunday-aligned, so columns are full weeks) and emits a
+ * serializable week × weekday grid. Mirrors {@link buildMovementSeries} conventions: local-midnight
  * bucketing, `now` injectable, only strings/numbers cross to the client (no Date objects), and the same
  * "currently-completed move with a non-null completion timestamp" rule so the calendar and the bar chart
  * never disagree about a day.
  */
 
-export interface ContributionDay {
+export interface ActivityDay {
   /** Local calendar day, yyyy-mm-dd. */
   dateKey: string;
   /** Full tooltip label, e.g. "Jun 12, 2026". */
@@ -24,15 +24,15 @@ export interface ContributionDay {
 }
 
 /** Seven slots, Sunday → Saturday. `null` = a day outside the range (future days in the current week). */
-export type ContributionWeek = (ContributionDay | null)[];
+export type ActivityWeek = (ActivityDay | null)[];
 
-export interface ContributionMonthLabel {
+export interface ActivityMonthLabel {
   /** Column (week) index the month's first appearance aligns to. */
   weekIndex: number;
   label: string;
 }
 
-export interface ContributionStats {
+export interface ActivityStats {
   totalCompleted: number;
   activeDays: number;
   longestStreak: number;
@@ -48,13 +48,13 @@ export interface ContributionStats {
   hasAnyCompletionEver: boolean;
 }
 
-export interface ContributionCalendar {
-  weeks: ContributionWeek[];
+export interface ActivityCalendar {
+  weeks: ActivityWeek[];
   numWeeks: number;
-  monthLabels: ContributionMonthLabel[];
+  monthLabels: ActivityMonthLabel[];
   /** "Sun".."Sat", index 0..6 → grid rows. */
   weekdayLabels: string[];
-  stats: ContributionStats;
+  stats: ActivityStats;
   rangeStartKey: string;
   rangeEndKey: string;
 }
@@ -71,7 +71,7 @@ function toLocalMidnight(value: Date | string): Date | null {
   return date;
 }
 
-export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Date = new Date()): ContributionCalendar {
+export function buildActivityCalendar(ambitions: AmbitionDetails[], now: Date = new Date()): ActivityCalendar {
   const today = new Date(now);
   today.setHours(0, 0, 0, 0);
   const todayKey = dayKey(today);
@@ -107,21 +107,21 @@ export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Dat
 
   let maxCount = 0;
   for (const bucket of counts.values()) if (bucket.total > maxCount) maxCount = bucket.total;
-  const levelFor = (count: number): ContributionDay["level"] => {
+  const levelFor = (count: number): ActivityDay["level"] => {
     if (count <= 0) return 0;
     if (maxCount <= 0) return 1; // unreachable for count > 0, but keeps the divide safe
-    return Math.min(4, Math.ceil((count / maxCount) * 4)) as ContributionDay["level"];
+    return Math.min(4, Math.ceil((count / maxCount) * 4)) as ActivityDay["level"];
   };
 
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
-  const weeks: ContributionWeek[] = [];
-  const monthLabels: ContributionMonthLabel[] = [];
+  const weeks: ActivityWeek[] = [];
+  const monthLabels: ActivityMonthLabel[] = [];
   const weekdayTotals = [0, 0, 0, 0, 0, 0, 0];
-  let bestDay: ContributionStats["bestDay"] = null;
+  let bestDay: ActivityStats["bestDay"] = null;
   let lastMonth = -1;
 
   for (let w = 0; w * 7 < allDays.length; w += 1) {
-    const week: ContributionWeek = [];
+    const week: ActivityWeek = [];
     let monthMarked = false;
     for (let d = 0; d < 7; d += 1) {
       const date = allDays[w * 7 + d];
@@ -200,7 +200,7 @@ export function buildContributionCalendar(ambitions: AmbitionDetails[], now: Dat
     else break;
   }
 
-  let busiestWeekday: ContributionStats["busiestWeekday"] = null;
+  let busiestWeekday: ActivityStats["busiestWeekday"] = null;
   for (let i = 0; i < 7; i += 1) {
     if (weekdayTotals[i] > 0 && (busiestWeekday === null || weekdayTotals[i] > busiestWeekday.count)) {
       busiestWeekday = { index: i, label: WEEKDAY_LONG[i], count: weekdayTotals[i] };

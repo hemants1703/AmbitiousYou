@@ -41,7 +41,7 @@ const corePages: IndexablePage[] = [
     path: "/features",
     changeFrequency: "monthly",
     priority: 0.9,
-    summary: "Product features — momentum tracking, streaks, contribution calendar, and dashboard insights.",
+    summary: "Product features — momentum tracking, streaks, activity calendar, and dashboard insights.",
   },
   {
     path: "/experience",

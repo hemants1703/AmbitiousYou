@@ -1,5 +1,5 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
-import { buildContributionCalendar } from "@/lib/dashboard/contribution";
+import { buildActivityCalendar } from "@/lib/dashboard/activity-calendar";
 import type { Task } from "@ambitiousyou/shared/types";
 import { describe, expect, it } from "vitest";
 
@@ -43,9 +43,9 @@ function buildTask(overrides: Partial<Task> = {}): Task {
   };
 }
 
-describe("buildContributionCalendar", () => {
+describe("buildActivityCalendar", () => {
   it("builds a Sunday-aligned week grid with weekday labels", () => {
-    const calendar = buildContributionCalendar([], FIXED_NOW);
+    const calendar = buildActivityCalendar([], FIXED_NOW);
 
     expect(calendar.weekdayLabels).toEqual(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
     expect(calendar.numWeeks).toBeGreaterThan(50);
@@ -63,7 +63,7 @@ describe("buildContributionCalendar", () => {
       }),
     ];
 
-    const calendar = buildContributionCalendar(ambitions, FIXED_NOW);
+    const calendar = buildActivityCalendar(ambitions, FIXED_NOW);
 
     expect(calendar.stats.totalCompleted).toBe(3);
     expect(calendar.stats.activeDays).toBe(2);
@@ -74,7 +74,7 @@ describe("buildContributionCalendar", () => {
   });
 
   it("returns zero stats when there are no completions", () => {
-    const calendar = buildContributionCalendar([], FIXED_NOW);
+    const calendar = buildActivityCalendar([], FIXED_NOW);
 
     expect(calendar.stats.totalCompleted).toBe(0);
     expect(calendar.stats.activeDays).toBe(0);

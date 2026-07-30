@@ -13,7 +13,7 @@ export const featuresFaq: readonly FaqItem[] = [
   {
     question: "How does AmbitiousYou track my momentum and streaks?",
     answer:
-      "Every move is timestamped the moment you complete it, so your dashboard shows real momentum — a chart of how many tasks and milestones you finished each day over the last 7, 14, or 30 days, a contribution calendar of the whole year, and a day-streak that only counts days you actually completed something. Nothing is estimated or inflated.",
+      "Every move is timestamped the moment you complete it, so your dashboard shows real momentum — a chart of how many tasks and milestones you finished each day over the last 7, 14, or 30 days, a activity calendar of the whole year, and a day-streak that only counts days you actually completed something. Nothing is estimated or inflated.",
   },
   {
     question: "Is there a free plan available?",

@@ -18,7 +18,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-static";
 
 const description =
-  "Discover the powerful features of AmbitiousYou — momentum tracking, honest day-streaks, a year-long contribution calendar, and a dashboard that turns every completed move into visible progress.";
+  "Discover the powerful features of AmbitiousYou — momentum tracking, honest day-streaks, a year-long activity calendar, and a dashboard that turns every completed move into visible progress.";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Features",
@@ -57,7 +57,7 @@ const coreFeatures: { icon: LucideIcon; title: string; description: string; core
   {
     icon: CalendarDaysIcon,
     title: "A Year of Progress at a Glance",
-    description: "A GitHub-style contribution calendar turns every completed move into a square, so your consistency across the whole year is visible in a single look.",
+    description: "An activity calendar turns every completed move into a square, so your consistency across the whole year is visible in a single look.",
   },
 ];
 

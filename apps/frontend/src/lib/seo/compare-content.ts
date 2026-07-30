@@ -84,7 +84,7 @@ export const compareContent: Record<CompareSlug, CompareContent> = {
       { label: "Primary audience", ambitiousyou: "Individuals pursuing personal ambitions", competitor: "Teams managing shared projects" },
       { label: "Goal structure", ambitiousyou: "Ambitions with mixed tasks and milestones", competitor: "Projects, sections, and tasks" },
       { label: "Collaboration", ambitiousyou: "Private by default, no sharing", competitor: "Team workspaces, assignments, comments" },
-      { label: "Personal insights", ambitiousyou: "Streaks, contribution calendar, momentum", competitor: "Workload and project status views" },
+      { label: "Personal insights", ambitiousyou: "Streaks, activity calendar, momentum", competitor: "Workload and project status views" },
       { label: "Pricing", ambitiousyou: "Free", competitor: "Free tier with paid Premium/Business" },
       { label: "Best for", ambitiousyou: "Personal career, academic, and life goals", competitor: "Cross-functional team delivery" },
     ],

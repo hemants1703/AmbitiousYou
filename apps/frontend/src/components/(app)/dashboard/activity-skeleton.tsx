@@ -1,7 +1,7 @@
 import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-/** Mirrors {@link DashboardActivity}'s layout (contribution calendar above the movement chart) to avoid layout shift. */
+/** Mirrors {@link DashboardActivity}'s layout (activity calendar above the movement chart) to avoid layout shift. */
 export function ActivitySkeleton() {
   return (
     <div className="flex flex-col gap-6" aria-hidden="true">

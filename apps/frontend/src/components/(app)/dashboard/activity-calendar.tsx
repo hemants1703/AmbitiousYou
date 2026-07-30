@@ -1,38 +1,36 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { ContributionCalendar } from "@/lib/dashboard/contribution";
+import type { ActivityCalendar } from "@/lib/dashboard/activity-calendar";
 import { ActivityIcon, CalendarCheckIcon, CalendarDaysIcon, FlameIcon, InfoIcon, SparklesIcon, TrophyIcon, ZapIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { ContributionExportButton } from "./contribution-export-button";
-import { ContributionGrid } from "./contribution-grid";
+import { ActivityHeatmap } from "./activity-heatmap";
 
-interface ContributionGraphProps {
-  calendar: ContributionCalendar;
+interface ActivityCalendarCardProps {
+  calendar: ActivityCalendar;
   hadErrors?: boolean;
   /** When true, completions before today were seeded from last-edit time (approximate). */
   backfillEstimated?: boolean;
 }
 
 /**
- * GitHub-style contribution calendar of moves completed per day over the last ~year. The interactive
- * grid (with per-cell tooltips) is a small client island ({@link ContributionGrid}); this server shell
- * owns the card, the empty state, and — on large screens — a contained-width layout where the calendar
- * keeps its natural size and the leftover space is filled with year-scoped insight tiles.
+ * Year-long activity calendar of moves completed per day. The interactive heatmap (with per-cell tooltips)
+ * is a small client island ({@link ActivityHeatmap}); this server shell owns the card, the empty state,
+ * and — on large screens — a contained-width layout where the calendar keeps its natural size and the
+ * leftover space is filled with year-scoped insight tiles.
  */
-export function ContributionGraph(props: ContributionGraphProps) {
+export function ActivityCalendarCard(props: ActivityCalendarCardProps) {
   const { calendar } = props;
   const { stats } = calendar;
 
   return (
     <Card>
-      <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3 space-y-0">
+      <CardHeader>
         <div className="space-y-1.5">
           <CardTitle className="flex items-center gap-2">
             <CalendarDaysIcon className="size-4 text-foreground" />
-            Contribution calendar
+            Activity calendar
           </CardTitle>
           <CardDescription>Every move you&apos;ve completed over the last year.</CardDescription>
         </div>
-        <ContributionExportButton calendar={calendar} />
       </CardHeader>
 
       <CardContent className="space-y-4">
@@ -46,7 +44,7 @@ export function ContributionGraph(props: ContributionGraphProps) {
           <div className="flex flex-col gap-6 2xl:flex-row 2xl:items-start 2xl:gap-8">
             {/* Left: the calendar, contained at its natural width on extra-wide screens. */}
             <div className="2xl:shrink-0">
-              <ContributionGrid weeks={calendar.weeks} numWeeks={calendar.numWeeks} monthLabels={calendar.monthLabels} weekdayLabels={calendar.weekdayLabels} />
+              <ActivityHeatmap weeks={calendar.weeks} numWeeks={calendar.numWeeks} monthLabels={calendar.monthLabels} weekdayLabels={calendar.weekdayLabels} />
             </div>
 
             {/* Right: year-scoped insight tiles that put the leftover width to use. */}

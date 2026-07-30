@@ -66,7 +66,7 @@ export const useCaseContent: Record<UseCaseSlug, UseCaseContent> = {
     benefits: [
       "Structure long-term pursuits like marathons or language fluency",
       "Milestones mark real progress — first 5K, conversational level, recital",
-      "Contribution calendar visualises consistency over the whole year",
+      "Activity calendar visualises consistency over the whole year",
       "Private by default — your personal goals stay yours",
     ],
   },

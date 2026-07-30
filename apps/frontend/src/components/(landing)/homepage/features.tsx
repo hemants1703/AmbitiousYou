@@ -126,7 +126,7 @@ const miniHeatWeeks: number[][] = Array.from({ length: 20 }, (_, week) =>
   }),
 );
 
-function ContributionVignette() {
+function ActivityVignette() {
   return (
     <div aria-hidden="true" className="mt-6 rounded-xl border border-border/60 bg-background/60 p-4">
       <div className="overflow-x-auto">
@@ -156,8 +156,8 @@ export default function Features() {
         <FeatureCard icon={TrendingUpIcon} title="Momentum & Streaks" description="Watch how many moves you complete each day over the last week, two weeks, or month — with a streak that only counts real progress." className="lg:col-span-2">
           <MomentumVignette />
         </FeatureCard>
-        <FeatureCard icon={CalendarDaysIcon} title="Your Year at a Glance" description="A contribution calendar turns every completed move into a square, so a whole year of consistency is visible in one look." className="lg:col-span-4">
-          <ContributionVignette />
+        <FeatureCard icon={CalendarDaysIcon} title="Your Year at a Glance" description="An activity calendar turns every completed move into a square, so a whole year of consistency is visible in one look." className="lg:col-span-4">
+          <ActivityVignette />
         </FeatureCard>
         <FeatureCard icon={GaugeIcon} title="Progress Tracking" description="Visualize your journey with beautiful charts and analytics that keep you motivated." className="lg:col-span-4">
           <ProgressVignette />

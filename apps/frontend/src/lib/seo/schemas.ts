@@ -20,7 +20,7 @@ export const softwareFeatureList = [
   "Ambition-based goal structure with tasks and milestones",
   "Automatic progress recalculation",
   "Momentum charts over 7, 14, and 30 days",
-  "Year-long contribution calendar",
+  "Year-long activity calendar",
   "Honest day-streak tracking",
   "Priority management and colour coding",
   "Private notes per ambition",

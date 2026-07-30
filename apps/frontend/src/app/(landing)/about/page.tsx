@@ -39,7 +39,7 @@ export default function AboutPage() {
             Most productivity tools optimise for what&apos;s due today. <span translate="no">AmbitiousYou</span> is different — it&apos;s designed for goals that take weeks or months: a promotion, a degree, a product launch, a half marathon. Each ambition holds tasks, milestones, notes, deadlines, and priorities in one place, with progress that recalculates as you move.
           </p>
           <p>
-            We believe momentum should be honest. Your dashboard shows real completion data — charts of moves finished each day, a year-long contribution calendar, and streaks that only count days you actually did something. No inflated scores, no gamification theatre.
+            We believe momentum should be honest. Your dashboard shows real completion data — charts of moves finished each day, a year-long activity calendar, and streaks that only count days you actually did something. No inflated scores, no gamification theatre.
           </p>
           <p>
             Privacy is non-negotiable. Your ambitions are yours alone — no social feeds, no sharing features, no data sold to advertisers. Session-based authentication and encrypted traffic protect your account.

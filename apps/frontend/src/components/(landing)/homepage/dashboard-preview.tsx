@@ -57,7 +57,7 @@ const sidebarNav: { title: string; icon: LucideIcon; active: boolean }[] = [
   { title: "Create Ambition", icon: PlusCircleIcon, active: false },
 ];
 
-// Contribution heatmap mock. Levels are derived deterministically (no Math.random → identical on server
+// Activity heatmap mock. Levels are derived deterministically (no Math.random → identical on server
 // and client, so no hydration drift) to look organic: denser recently, lighter on weekends.
 const HEAT_WEEKS = 30;
 const heatClass: Record<number, string> = {
@@ -94,7 +94,7 @@ export default function DashboardPreview() {
   return (
     <>
       <p className="sr-only">
-        A preview of the AmbitiousYou dashboard: stat cards for active and completed ambitions, the promise behind your top ambition, today&rsquo;s moves and what&rsquo;s coming up, a year-long contribution calendar of completed moves, and a momentum
+        A preview of the AmbitiousYou dashboard: stat cards for active and completed ambitions, the promise behind your top ambition, today&rsquo;s moves and what&rsquo;s coming up, a year-long activity calendar of completed moves, and a momentum
         chart of how much you finished each day.
       </p>
 
@@ -194,12 +194,12 @@ export default function DashboardPreview() {
                     <p className="mt-1.5 border-l-2 border-accent-brand/30 pl-3 text-sm text-foreground/80">Because the version of me who almost quit doesn&rsquo;t get the final say.</p>
                   </div>
 
-                  {/* Contribution calendar — a year of completed moves */}
+                  {/* Activity calendar — a year of completed moves */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <CalendarDaysIcon className="size-4 text-accent-brand" />
-                        Contribution calendar
+                        Activity calendar
                       </CardTitle>
                       <CardDescription>Every move you&rsquo;ve completed over the last year.</CardDescription>
                     </CardHeader>

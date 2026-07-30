@@ -1,15 +1,15 @@
 "use client";
 
-import type { ContributionDay, ContributionMonthLabel, ContributionWeek } from "@/lib/dashboard/contribution";
+import type { ActivityDay, ActivityMonthLabel, ActivityWeek } from "@/lib/dashboard/activity-calendar";
 import { cn } from "@/lib/utils";
 import type { CSSProperties } from "react";
 import { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
-interface ContributionGridProps {
-  weeks: ContributionWeek[];
+interface ActivityHeatmapProps {
+  weeks: ActivityWeek[];
   numWeeks: number;
-  monthLabels: ContributionMonthLabel[];
+  monthLabels: ActivityMonthLabel[];
   weekdayLabels: string[];
 }
 
@@ -26,22 +26,22 @@ const LEVELS: (0 | 1 | 2 | 3 | 4)[] = [0, 1, 2, 3, 4];
 const LABELLED_WEEKDAYS = new Set([1, 3, 5]);
 
 interface ActiveTip {
-  day: ContributionDay;
+  day: ActivityDay;
   left: number;
   top: number;
 }
 
 /**
- * The interactive heatmap grid for the contribution calendar. Client-only so each cell can drive a
- * single shared, styled tooltip (one portal element, not ~371 Radix tooltips) showing that day's full
- * data — date, total, task/milestone split. The month-label row and day grid share one
- * `gridTemplateColumns` (and the weekday column shares the row template + a spacer) so everything aligns
- * with no pixel math; the grid scrolls horizontally on narrow screens.
+ * The interactive heatmap grid for the activity calendar. Client-only so each cell can drive a single
+ * shared, styled tooltip (one portal element, not ~371 Radix tooltips) showing that day's full data —
+ * date, total, task/milestone split. The month-label row and day grid share one `gridTemplateColumns`
+ * (and the weekday column shares the row template + a spacer) so everything aligns with no pixel math;
+ * the grid scrolls horizontally on narrow screens.
  */
-export function ContributionGrid(props: ContributionGridProps) {
+export function ActivityHeatmap(props: ActivityHeatmapProps) {
   const [active, setActive] = useState<ActiveTip | null>(null);
 
-  const showTip = useCallback((element: HTMLElement, day: ContributionDay) => {
+  const showTip = useCallback((element: HTMLElement, day: ActivityDay) => {
     const rect = element.getBoundingClientRect();
     setActive({ day, left: rect.left + rect.width / 2, top: rect.top });
   }, []);
