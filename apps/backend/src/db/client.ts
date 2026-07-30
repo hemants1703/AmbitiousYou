@@ -16,7 +16,14 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Vercel Fluid isolates can multiply; keep a single client per instance so we
+// don't exhaust the Supabase pooler. Long-running Docker keeps the default.
+const isVercel = Boolean(process.env.VERCEL);
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: isVercel ? 1 : 10,
+  idleTimeoutMillis: isVercel ? 5_000 : 30_000,
+});
 
 // node-postgres emits 'error' on IDLE clients when the connection drops out from
 // under us (network blip, Supabase restart / idle timeout). Without a listener

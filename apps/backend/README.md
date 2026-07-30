@@ -96,7 +96,7 @@ DATABASE_URL="<target-db>" pnpm exec drizzle-kit migrate
 
 **Verify:** `GET /health` → `200` with `{ status: "ok", db: "up" }`.
 
-**Path aliases on Vercel:** The NestJS handler transpiles `src/` in place and keeps `src/*` import paths. Docker runs `dist/` where `tsc` already emitted relative `require()` paths. [`register-paths.cjs`](register-paths.cjs) is preloaded via `NODE_OPTIONS` in `vercel.json` before any app module loads (the runtime bundle does not ship `dist/`).
+**Path aliases on Vercel:** The NestJS handler transpiles `src/` in place and keeps bare `src/*` requires. NFT does not follow those aliases, so [`vercel.json`](vercel.json) `includeFiles` ships `dist/**` (nest-built `.js`) and `src/**`. [`register-paths.cjs`](register-paths.cjs) is imported at the top of [`src/main.ts`](src/main.ts) and maps `src/*` → `dist/*` (then `src/*`) via `tsconfig-paths`. Docker runs `node dist/main` without this preload.
 
 ### VPS + Docker (production pipeline)
 
@@ -120,7 +120,7 @@ src/
 ├── notifications/  Azure email + HTML templates (copied to dist via nest-cli assets)
 ├── db/             pg.Pool client, Drizzle wiring, migrations
 └── main.ts         Nest bootstrap
-register-paths.cjs  Vercel-only preload for `src/*` imports (NODE_OPTIONS)
+register-paths.cjs  Vercel-only: imported from main.ts for `src/*` aliases
 ```
 
 ## Tests

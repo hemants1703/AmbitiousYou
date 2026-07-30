@@ -5,7 +5,8 @@
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../../packages/shared",
   "functions": {
     "src/main.ts": {
-      "includeFiles": "dist/**"
+      "includeFiles": "{src/**,dist/**,register-paths.cjs}",
+      "maxDuration": 30
     }
   }
 }
