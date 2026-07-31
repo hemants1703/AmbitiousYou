@@ -108,7 +108,11 @@ jobs:
 
           IMAGE_URL="${IMAGE}:${GITHUB_SHA}"
           ENCODED_IMAGE_URL="$(node -p "encodeURIComponent(process.argv[1])" "$IMAGE_URL")"
-          DEPLOY_URL="${PROD_HOOK}?imgURL=${ENCODED_IMAGE_URL}"
+          QUERY_JOINER='?'
+          if [[ "$PROD_HOOK" == *\?* ]]; then
+            QUERY_JOINER='&'
+          fi
+          DEPLOY_URL="${PROD_HOOK}${QUERY_JOINER}imgURL=${ENCODED_IMAGE_URL}"
 
           curl --silent --show-error --fail --request POST "$DEPLOY_URL"
           echo "Render production deploy triggered for $IMAGE_URL."
