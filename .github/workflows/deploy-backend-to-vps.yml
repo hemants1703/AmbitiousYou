@@ -1,7 +1,7 @@
-name: deploy-backend
+name: deploy-backend-to-vps
 
-# Push to dev  -> deploys the DEV backend  (api.dev.ambitiousyou.pro, Supabase dev)
-# Push to main -> deploys the PROD backend (api.ambitiousyou.pro,    Supabase prod)
+# Push to dev -> deploys the DEV backend (api.dev.ambitiousyou.pro, Supabase dev)
+# Push to main -> deploys the PROD backend (api.ambitiousyou.pro, Supabase prod)
 # Path-filtered so frontend-only changes don't redeploy the backend.
 on:
   # push:
@@ -9,7 +9,7 @@ on:
   #   paths:
   #     - 'apps/backend/**'
   #     - 'packages/shared/**'
-  #     - '.github/workflows/deploy-backend.yml'
+  #     - '.github/workflows/deploy-backend-to-vps.yml'
   workflow_dispatch: {}
 
 concurrency:
@@ -102,11 +102,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Ship the latest deploy.sh to the VPS so it's always present and in sync
+      # Ship the latest deploy.sh to the VPS, so it's always present and in sync
       # with the repo — no manual copy step. Lands at /opt/ambitiousyou/deploy.sh
       # (strip_components drops the infra/ prefix). Needs /opt/ambitiousyou to
       # exist + be writable by VPS_USER (created by setup-vps.sh); if this step
-      # fails with "no such directory", CI is hitting a wrong/un-provisioned host.
+      # fails with "no such directory", CI is hitting a wrong/unprovisioned host.
       - name: Ship deploy.sh to the VPS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -118,7 +118,7 @@ jobs:
           strip_components: 1
 
       # Zero-downtime blue-green swap on the VPS (see infra/deploy.sh). Prints
-      # hostname/whoami/ls first so a wrong-host VPS_HOST is obvious in the log.
+      # hostname/whoami/ls first, so a wrong-host VPS_HOST is obvious in the log.
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1
         with:

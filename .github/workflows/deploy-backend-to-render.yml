@@ -41,7 +41,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    environment: Production
+    environment: production-backend
     env:
       IMAGE: ghcr.io/${{ github.repository_owner }}/ambitiousyou-backend
     steps:
@@ -95,11 +95,11 @@ jobs:
 
       - name: Trigger Render deploy
         env:
-          # Prefer Production Environment Variable, fallback to Secret.
-          PROD_HOOK: ${{ vars.RENDER_DEPLOY_HOOK_URL_PROD || secrets.RENDER_DEPLOY_HOOK_URL_PROD }}
+          # Read from the Production environment secret used in this repo.
+          PROD_HOOK: ${{ secrets.RENDER_BACKEND_PROD_DEPLOY_HOOK_URL }}
         run: |
           if [ -z "$PROD_HOOK" ]; then
-            echo "Missing RENDER_DEPLOY_HOOK_URL_PROD in Production environment variables/secrets."
+            echo "Missing RENDER_BACKEND_PROD_DEPLOY_HOOK_URL in environment: production-backend."
             exit 1
           fi
 
