@@ -14,7 +14,24 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL must be set (check apps/backend/.env.local)');
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const databaseUrl = process.env.DATABASE_URL.trim();
+const databaseHost = (() => {
+  try {
+    return new URL(databaseUrl).hostname;
+  } catch {
+    return '';
+  }
+})();
+
+// Render + Supabase connections should always negotiate TLS. Keep this explicit
+// so runtime behavior stays correct even if the driver URL parser changes.
+const shouldUseSsl =
+  databaseUrl.includes('sslmode=require') || databaseHost.endsWith('.supabase.co');
+
+const pool = new Pool({
+  connectionString: databaseUrl,
+  ...(shouldUseSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+});
 
 // node-postgres emits 'error' on IDLE clients when the connection drops out from
 // under us (network blip, Supabase restart / idle timeout). Without a listener
