@@ -64,7 +64,7 @@ jobs:
       - name: Verify DB connectivity
         working-directory: apps/backend
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.SUPABASE_POOLER_DATABASE_URL || secrets.DATABASE_URL }}
         run: |
           node -e "const v=process.env.DATABASE_URL||''; if(v!==v.trim())console.log('WARNING: DATABASE_URL has leading/trailing whitespace (len '+v.length+' vs trimmed '+v.trim().length+')'); try{const u=new URL(v.trim()); console.log('Target -> host='+u.hostname+' port='+(u.port||'5432')+' user='+decodeURIComponent(u.username)+' params='+(u.search||'(none)'));}catch(e){console.log('URL parse error: '+e.message+' (password may contain unescaped special characters)');}"
           node -e "const {Client}=require('pg'); const c=new Client({connectionString:process.env.DATABASE_URL, connectionTimeoutMillis:10000}); c.connect().then(()=>c.query('select 1')).then(()=>{console.log('DB connection OK');return c.end();}).then(()=>process.exit(0)).catch(e=>{console.error('DB connection FAILED:', e.message);process.exit(1);});"
@@ -73,7 +73,7 @@ jobs:
       - name: Run DB migrations
         working-directory: apps/backend
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.SUPABASE_POOLER_DATABASE_URL || secrets.DATABASE_URL }}
         run: pnpm exec drizzle-kit migrate
 
       - uses: docker/setup-buildx-action@v3

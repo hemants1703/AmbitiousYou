@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-render.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-render.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-vps.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-vps.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +85,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "dev",
     "javascript.preferred.runtime.type.id": "node",
     "node.js.selected.package.tslint": "(autodetect)"
   }
