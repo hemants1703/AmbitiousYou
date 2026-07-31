@@ -4,12 +4,12 @@ name: deploy-backend
 # Push to main -> deploys the PROD backend (api.ambitiousyou.pro,    Supabase prod)
 # Path-filtered so frontend-only changes don't redeploy the backend.
 on:
-  push:
-    branches: [main, dev]
-    paths:
-      - 'apps/backend/**'
-      - 'packages/shared/**'
-      - '.github/workflows/deploy-backend.yml'
+  # push:
+  #   branches: [main, dev]
+  #   paths:
+  #     - 'apps/backend/**'
+  #     - 'packages/shared/**'
+  #     - '.github/workflows/deploy-backend.yml'
   workflow_dispatch: {}
 
 concurrency:
