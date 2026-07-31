@@ -95,10 +95,11 @@ jobs:
 
       - name: Trigger Render deploy
         env:
-          PROD_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL_PROD }}
+          # Prefer Production Environment Variable, fallback to Secret.
+          PROD_HOOK: ${{ vars.RENDER_DEPLOY_HOOK_URL_PROD || secrets.RENDER_DEPLOY_HOOK_URL_PROD }}
         run: |
           if [ -z "$PROD_HOOK" ]; then
-            echo "Missing RENDER_DEPLOY_HOOK_URL_PROD secret."
+            echo "Missing RENDER_DEPLOY_HOOK_URL_PROD in Production environment variables/secrets."
             exit 1
           fi
 
