@@ -4,41 +4,74 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="" />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/migrations/meta/_journal.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/migrations/meta/_journal.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/notifications.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/notifications.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/settings/dto/update-setting.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/settings/dto/update-setting.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/settings/settings.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/settings/settings.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/site-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/site-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-settings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/shared/db/schema/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou" value="3HUbUUnbPS2AOD68cj2AoHTeGwa" />
+    </persistenceIdMap>
+  </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="476" />
+    <option name="cachedIndexableFilesCount" value="503" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "hemants1703"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/hemants1703/AmbitiousYou.git",
+    "accountId": "70a6988e-1960-433c-8323-15b5975f0dcb"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0" />
-      <entry key="S10" value="1.0" />
-      <entry key="S30" value="1.0" />
-      <entry key="S60" value="1.0" />
-      <entry key="M2" value="1.0" />
-      <entry key="M5" value="1.0" />
-      <entry key="M10" value="1.0" />
-      <entry key="M15" value="1.0000000000000009" />
-      <entry key="M30" value="1.000000080653105" />
-      <entry key="H1" value="1.0007499769040524" />
-      <entry key="H2" value="1.0724237831534233" />
-      <entry key="H4" value="1.7119394360983737" />
-      <entry key="D1" value="5.782436228629436" />
-      <entry key="W1" value="7.6292185287586065" />
+      <entry key="MS100" value="1.0000000470901356" />
+      <entry key="MS500" value="1.035549055462777" />
+      <entry key="S2" value="1.6977045350472673" />
+      <entry key="S5" value="2.905670676812891" />
+      <entry key="S10" value="3.9818071151725367" />
+      <entry key="S30" value="5.176222971524865" />
+      <entry key="S60" value="5.56522780795914" />
+      <entry key="M2" value="5.776538050163473" />
+      <entry key="M5" value="5.9091089336344655" />
+      <entry key="M10" value="5.954299296338921" />
+      <entry key="M15" value="5.9694758500506895" />
+      <entry key="M30" value="5.9847094204077464" />
+      <entry key="H1" value="5.9930957888616625" />
+      <entry key="H2" value="6.0685137494645565" />
+      <entry key="H4" value="6.709621835732213" />
+      <entry key="D1" value="10.781665642161727" />
+      <entry key="W1" value="12.629083535518271" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -60,33 +93,101 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.8467453123625271" />
-      <entry key="MS500" value="0.9672763296139321" />
-      <entry key="S2" value="0.9917167307382933" />
-      <entry key="S5" value="0.9966784222188245" />
-      <entry key="S10" value="0.9983378297043665" />
-      <entry key="S30" value="0.9994456359721023" />
-      <entry key="S60" value="0.9997227795604651" />
-      <entry key="M2" value="0.9998613801725043" />
-      <entry key="M5" value="0.9999445497629764" />
-      <entry key="M10" value="0.9999722744971364" />
-      <entry key="M15" value="0.9999815162460126" />
-      <entry key="M30" value="0.999990838732548" />
-      <entry key="H1" value="1.0007453522133736" />
-      <entry key="H2" value="1.0724212988497703" />
-      <entry key="H4" value="1.7119374402090066" />
-      <entry key="D1" value="5.782435107344377" />
-      <entry key="W1" value="7.6292183177560435" />
+      <entry key="MS100" value="0.9395227937639946" />
+      <entry key="MS500" value="1.0227559989268447" />
+      <entry key="S2" value="1.692271814857834" />
+      <entry key="S5" value="2.9011156704748386" />
+      <entry key="S10" value="3.978301196253013" />
+      <entry key="S30" value="5.174575149443674" />
+      <entry key="S60" value="5.564324156448704" />
+      <entry key="M2" value="5.7760644323703465" />
+      <entry key="M5" value="5.908914000253554" />
+      <entry key="M10" value="5.954200893104759" />
+      <entry key="M15" value="5.969410038101719" />
+      <entry key="M30" value="5.984676409115031" />
+      <entry key="H1" value="5.993079253095448" />
+      <entry key="H2" value="6.068505303206323" />
+      <entry key="H4" value="6.709616857589584" />
+      <entry key="D1" value="10.781664023613024" />
+      <entry key="W1" value="12.629083253462365" />
     </decayedShown>
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="3HUbUZWjHSwnrc6KAHM00JkafuI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.start:backend.executor": "Run",
+    "npm.start:frontend.executor": "Run"
   }
-}</component>
+}]]></component>
+  <component name="RunManager">
+    <configuration name="start:backend" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start:backend" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start:frontend" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start:frontend" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start:frontend" />
+        <item itemvalue="npm.start:backend" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.8665.341" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="" />
+      <created>1785925610909</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1785925610909</updated>
+      <workItem from="1785925612014" duration="1706000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
