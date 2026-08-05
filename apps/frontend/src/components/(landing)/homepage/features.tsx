@@ -163,7 +163,12 @@ export default function Features() {
           <ProgressVignette />
         </FeatureCard>
         <FeatureCard icon={LockIcon} title="Private & Secure" description="Your ambitions are personal. We keep them private and secure and never share them with anyone." className="lg:col-span-2" />
-        <FeatureCard icon={BellIcon} title="Smart Notifications" description="Get personalized reminders at the right time to keep you on track with your goals." comingSoon className="lg:col-span-3" />
+        <FeatureCard
+          icon={BellIcon}
+          title="Smart Notifications"
+          description="Get reminded at 9 AM and 6 PM when ambitions, tasks, or milestones are due or overdue — in your inbox and as device notifications."
+          className="lg:col-span-3"
+        />
         <FeatureCard icon={SparklesIcon} title="AI Assistance" description="Receive intelligent suggestions to overcome obstacles and optimize your approach." comingSoon className="lg:col-span-3" />
       </div>
     </LandingSection>

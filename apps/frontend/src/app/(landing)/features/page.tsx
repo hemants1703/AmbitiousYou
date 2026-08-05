@@ -1,7 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CalendarDaysIcon, CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, TrendingUpIcon, type LucideIcon } from "lucide-react";
+import { BellIcon, CalendarDaysIcon, CheckIcon, FilterIcon, LayoutDashboardIcon, PlusCircleIcon, TargetIcon, TrendingUpIcon, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import { brandCopy } from "@/lib/brand";
@@ -58,6 +58,11 @@ const coreFeatures: { icon: LucideIcon; title: string; description: string; core
     icon: CalendarDaysIcon,
     title: "A Year of Progress at a Glance",
     description: "An activity calendar turns every completed move into a square, so your consistency across the whole year is visible in a single look.",
+  },
+  {
+    icon: BellIcon,
+    title: "Smart Notifications",
+    description: "Morning and evening reminders for due or overdue work — in your in-app inbox and as device notifications, even when AmbitiousYou is closed.",
   },
 ];
 
