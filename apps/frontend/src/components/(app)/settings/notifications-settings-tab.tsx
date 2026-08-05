@@ -10,12 +10,12 @@ import {
   isStandaloneDisplayMode,
   unsubscribeFromWebPush,
 } from "@/lib/(app)/push/web-push-client";
+import { EnableRemindersDialog } from "@/components/(app)/settings/enable-reminders-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { Settings } from "@ambitiousyou/shared";
 import { BellIcon, MailIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -59,8 +59,8 @@ interface NotificationsSettingsTabProps {
 }
 
 export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
-  const router = useRouter();
   const [pushAmbitionReminders, setPushAmbitionReminders] = useState(props.userSettings.pushAmbitionReminders);
+  const [enableDialogOpen, setEnableDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const showIosInstallHint = isIosDevice() && !isStandaloneDisplayMode();
 
@@ -78,8 +78,8 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
         return;
       }
 
-      // Keep the switch off until permission + subscribe succeed on the enable screen.
-      router.push("/settings/enable-reminders");
+      // Keep the switch off until the modal flow succeeds.
+      setEnableDialogOpen(true);
       return;
     }
 
@@ -104,38 +104,46 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BellIcon className="size-4 text-accent-brand" />
-          Notification preferences
-        </CardTitle>
-        <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <NotificationRow
-          id="email-activity"
-          icon={<MailIcon className="size-4" />}
-          label="Email account activity"
-          description="Receive emails about sign-ins, profile changes, and security events."
-          checked={props.userSettings.emailAccountActivity}
-        />
-        <NotificationRow
-          id="ambition-reminders"
-          icon={<BellIcon className="size-4" />}
-          label="Ambition reminders"
-          description="Get reminded at 9 AM and 6 PM (your time) for tasks, milestones, and ambitions that are due today or overdue. Evening only if they’re still open."
-          checked={pushAmbitionReminders}
-          disabled={isPending}
-          onCheckedChange={handlePushToggle}
-        />
-        {showIosInstallHint ? (
-          <p className="rounded-2xl border border-border/60 bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
-            On iOS, install the app first: open Safari → Share → Add to Home Screen, then launch AmbitiousYou from
-            the icon before enabling reminders.
-          </p>
-        ) : null}
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BellIcon className="size-4 text-accent-brand" />
+            Notification preferences
+          </CardTitle>
+          <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <NotificationRow
+            id="email-activity"
+            icon={<MailIcon className="size-4" />}
+            label="Email account activity"
+            description="Receive emails about sign-ins, profile changes, and security events."
+            checked={props.userSettings.emailAccountActivity}
+          />
+          <NotificationRow
+            id="ambition-reminders"
+            icon={<BellIcon className="size-4" />}
+            label="Ambition reminders"
+            description="Get reminded at 9 AM and 6 PM (your time) for tasks, milestones, and ambitions that are due today or overdue. Evening only if they’re still open."
+            checked={pushAmbitionReminders}
+            disabled={isPending}
+            onCheckedChange={handlePushToggle}
+          />
+          {showIosInstallHint ? (
+            <p className="rounded-2xl border border-border/60 bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
+              On iOS, install the app first: open Safari → Share → Add to Home Screen, then launch AmbitiousYou from
+              the icon before enabling reminders.
+            </p>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      <EnableRemindersDialog
+        open={enableDialogOpen}
+        onOpenChange={setEnableDialogOpen}
+        onEnabled={() => setPushAmbitionReminders(true)}
+      />
+    </>
   );
 }
