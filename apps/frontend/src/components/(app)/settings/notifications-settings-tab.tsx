@@ -2,16 +2,12 @@
 
 import {
   removePushSubscriptionAction,
-  savePushSubscriptionAction,
-  syncDueTodayRemindersAction,
   togglePushAmbitionRemindersSetting,
 } from "@/lib/actions/(app)/notifications/notification-actions";
 import {
   canUseWebPush,
   isIosDevice,
   isStandaloneDisplayMode,
-  subscribeToWebPush,
-  subscriptionToJson,
   unsubscribeFromWebPush,
 } from "@/lib/(app)/push/web-push-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { Settings } from "@ambitiousyou/shared";
 import { BellIcon, MailIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -62,62 +59,31 @@ interface NotificationsSettingsTabProps {
 }
 
 export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
+  const router = useRouter();
   const [pushAmbitionReminders, setPushAmbitionReminders] = useState(props.userSettings.pushAmbitionReminders);
   const [isPending, startTransition] = useTransition();
   const showIosInstallHint = isIosDevice() && !isStandaloneDisplayMode();
 
   function handlePushToggle(checked: boolean) {
-    startTransition(async () => {
-      if (checked) {
-        if (showIosInstallHint) {
-          toast.message("Install AmbitiousYou on your Home Screen first", {
-            description: "On iPhone/iPad: Share → Add to Home Screen, open the app icon, then enable reminders.",
-          });
-          return;
-        }
-
-        if (!canUseWebPush()) {
-          toast.error("This browser does not support push notifications.");
-          return;
-        }
-
-        const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-        if (!vapidPublicKey) {
-          toast.error("Push is not configured yet. Ask your admin to set VAPID keys.");
-          return;
-        }
-
-        try {
-          const permission = await Notification.requestPermission();
-          if (permission !== "granted") {
-            toast.error("Notification permission was not granted.");
-            return;
-          }
-
-          const subscription = await subscribeToWebPush(vapidPublicKey);
-          const saveResult = await savePushSubscriptionAction(subscriptionToJson(subscription));
-          if (saveResult.error) {
-            toast.error(saveResult.error);
-            return;
-          }
-
-          const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          const settingsResult = await togglePushAmbitionRemindersSetting(true, timeZone);
-          if (settingsResult.error || !settingsResult.data) {
-            toast.error(settingsResult.error ?? "Failed to update notification settings.");
-            return;
-          }
-
-          setPushAmbitionReminders(settingsResult.data.pushAmbitionReminders);
-          await syncDueTodayRemindersAction();
-          toast.success("Ambition reminders enabled.");
-        } catch (error) {
-          console.error(error);
-          toast.error("Could not enable device notifications. Please try again.");
-        }
+    if (checked) {
+      if (showIosInstallHint) {
+        toast.message("Install AmbitiousYou on your Home Screen first", {
+          description: "On iPhone/iPad: Share → Add to Home Screen, open the app icon, then enable reminders.",
+        });
         return;
       }
 
+      if (!canUseWebPush()) {
+        toast.error("This browser does not support push notifications.");
+        return;
+      }
+
+      // Keep the switch off until permission + subscribe succeed on the enable screen.
+      router.push("/settings/enable-reminders");
+      return;
+    }
+
+    startTransition(async () => {
       try {
         const endpoint = await unsubscribeFromWebPush();
         if (endpoint) {
