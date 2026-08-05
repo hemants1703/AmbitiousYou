@@ -1,5 +1,20 @@
 import type { Settings } from "@ambitiousyou/shared";
 
+export type SettingsTabValue = "account" | "billing" | "notifications" | "security";
+
+export const SETTINGS_TAB_VALUES: SettingsTabValue[] = ["account", "billing", "notifications", "security"];
+
+export function parseSettingsTab(tab: string | undefined | null): SettingsTabValue {
+  if (tab && SETTINGS_TAB_VALUES.includes(tab as SettingsTabValue)) {
+    return tab as SettingsTabValue;
+  }
+  return "account";
+}
+
+export function hrefForSettingsTab(tab: SettingsTabValue) {
+  return tab === "account" ? "/settings" : `/settings?tab=${tab}`;
+}
+
 export function DetailItem(props: { label: string; value: string }) {
   return (
     <div className="space-y-1 rounded-3xl border border-border/60 bg-muted/30 p-4">

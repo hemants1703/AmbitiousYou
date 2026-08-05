@@ -1,4 +1,3 @@
-import { getSessions } from "@/lib/api/auth/get-sessions";
 import type { Session } from "@ambitiousyou/shared";
 import { KeyRoundIcon, LockKeyholeIcon, MonitorIcon } from "lucide-react";
 
@@ -7,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ResetPasswordCard } from "./reset-password-card";
 
 interface SecuritySettingsTabProps {
-  sessionToken: string;
+  sessions: Session[] | null;
 }
 
 function formatSessionDate(value: Date | string | null) {
@@ -75,9 +74,7 @@ function SessionRow(props: { session: Session }) {
   );
 }
 
-export async function SecuritySettingsTab(props: SecuritySettingsTabProps) {
-  const sessions = await getSessions(props.sessionToken);
-
+export function SecuritySettingsTab(props: SecuritySettingsTabProps) {
   return (
     <div className="space-y-4">
       <Card>
@@ -115,18 +112,18 @@ export async function SecuritySettingsTab(props: SecuritySettingsTabProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {sessions === null ? (
+          {props.sessions === null ? (
             <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
               <p className="text-xs text-muted-foreground">
                 Could not load sessions. Try refreshing the page.
               </p>
             </div>
-          ) : sessions.length === 0 ? (
+          ) : props.sessions.length === 0 ? (
             <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
               <p className="text-xs text-muted-foreground">No active sessions found.</p>
             </div>
           ) : (
-            sessions.map((session) => <SessionRow key={session.id} session={session} />)
+            props.sessions.map((session) => <SessionRow key={session.id} session={session} />)
           )}
         </CardContent>
       </Card>

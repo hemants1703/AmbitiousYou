@@ -1,19 +1,27 @@
-import type { Settings, User } from "@ambitiousyou/shared";
+"use client";
+
+import type { Session, Settings, User } from "@ambitiousyou/shared";
 import { BellIcon, CreditCardIcon, LockKeyholeIcon, UserRoundIcon } from "lucide-react";
 import Link from "next/link";
-import type { ComponentType } from "react";
+import type { ComponentType, MouseEvent } from "react";
+import { useEffect, useState } from "react";
 import { AccountSettingsTab } from "./account-settings-tab";
 import { BillingSettingsTab } from "./billing-settings-tab";
 import { NotificationsSettingsTab } from "./notifications-settings-tab";
 import { SecuritySettingsTab } from "./security-settings-tab";
+import {
+  hrefForSettingsTab,
+  parseSettingsTab,
+  type SettingsTabValue,
+} from "./settings-shared";
 
-export type SettingsTabValue = "account" | "billing" | "notifications" | "security";
+export type { SettingsTabValue };
 
 interface SettingsTabsProps {
-  activeTab: SettingsTabValue;
+  initialTab: SettingsTabValue;
   userDetails: User;
   userSettings: Settings;
-  sessionToken: string;
+  sessions: Session[] | null;
 }
 
 const tabItems: Array<{
@@ -29,11 +37,40 @@ const tabItems: Array<{
 ];
 
 export function SettingsTabs(props: SettingsTabsProps) {
+  const [activeTab, setActiveTab] = useState<SettingsTabValue>(props.initialTab);
+
+  useEffect(() => {
+    setActiveTab(props.initialTab);
+  }, [props.initialTab]);
+
+  useEffect(() => {
+    function onPopState() {
+      const tab = new URLSearchParams(window.location.search).get("tab");
+      setActiveTab(parseSettingsTab(tab));
+    }
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  function selectTab(tab: SettingsTabValue) {
+    setActiveTab(tab);
+    window.history.pushState(null, "", hrefForSettingsTab(tab));
+  }
+
+  function handleTabClick(event: MouseEvent<HTMLAnchorElement>, tab: SettingsTabValue) {
+    // Keep real <Link> hrefs for middle-click / modifier open-in-new-tab.
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+      return;
+    }
+    event.preventDefault();
+    if (tab !== activeTab) selectTab(tab);
+  }
+
   const activePanels = {
     account: <AccountSettingsTab userDetails={props.userDetails} />,
     billing: <BillingSettingsTab />,
     notifications: <NotificationsSettingsTab userSettings={props.userSettings} />,
-    security: <SecuritySettingsTab sessionToken={props.sessionToken} />,
+    security: <SecuritySettingsTab sessions={props.sessions} />,
   } satisfies Record<SettingsTabValue, React.ReactNode>;
 
   return (
@@ -44,14 +81,16 @@ export function SettingsTabs(props: SettingsTabsProps) {
           role="tablist"
         >
           {tabItems.map((tab) => {
-            const isActive = props.activeTab === tab.value;
+            const isActive = activeTab === tab.value;
             return (
               <Link
                 key={tab.value}
-                href={tab.value === "account" ? "/settings" : `/settings?tab=${tab.value}`}
+                href={hrefForSettingsTab(tab.value)}
                 role="tab"
                 aria-selected={isActive}
                 aria-current={isActive ? "page" : undefined}
+                scroll={false}
+                onClick={(event) => handleTabClick(event, tab.value)}
                 className={[
                   "group flex min-w-fit items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:w-full",
                   isActive
@@ -80,7 +119,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
         </div>
       </nav>
 
-      <div className="min-w-0 flex-1">{activePanels[props.activeTab]}</div>
+      <div className="min-w-0 flex-1">{activePanels[activeTab]}</div>
     </div>
   );
 }
