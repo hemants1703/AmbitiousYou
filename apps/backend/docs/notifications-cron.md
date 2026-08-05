@@ -1,18 +1,18 @@
 # Ambition reminders (due today)
 
-AmbitiousYou notifies users about **incomplete tasks and milestones due today**, twice per local day:
+AmbitiousYou notifies opted-in users about **incomplete tasks and milestones due today**, using each user’s stored timezone.
 
-| Slot | Local time | When it fires |
+| Slot | Local time | What happens |
 |---|---|---|
-| **Morning** | **09:00** | Every incomplete task/milestone due today |
-| **Evening** | **18:00** | Same items **only if still incomplete** (user did not finish them after the morning ping) |
+| **Morning** | **09:00** | Notify every incomplete task/milestone due today. Title: “Task due today” / “Milestone due today”. |
+| **Evening** | **18:00** | Notify again **only if still incomplete** (user did not finish the item after the morning ping). Title: “Still due today” / “Milestone still due today”. |
 
 Delivery channels:
 
 1. **In-app inbox** — bell in the authenticated app header  
-2. **On-device OS notification** — Web Push via the installed PWA (Windows / macOS / Android / iOS Home Screen)
+2. **On-device OS notification** — Web Push via the PWA (Windows / macOS / Android / iOS Home Screen)
 
-No native apps. No Supabase Cron. Scheduling is **GitHub Actions** → Nest on Render.
+No native apps. Scheduling is **GitHub Actions → Nest on Render**. Supabase Cron is not used.
 
 ---
 
@@ -43,7 +43,7 @@ flowchart TB
   end
 
   subgraph schedule [GitHub Actions]
-    GA["reminders-cron.yml\ncron: 0 * * * *"]
+    GA["reminders-cron.yml\nschedule: 0 * * * *\n+ workflow_dispatch"]
   end
 
   Settings -->|enable + permission| SubAPI
@@ -63,11 +63,17 @@ flowchart TB
   InboxAPI --> Notifs
 ```
 
-### Why hourly Actions, not “two crons at 9 and 6”?
+### Why hourly Actions, not two fixed UTC crons?
 
-Users live in many timezones. A single UTC clock cannot be “9 AM for everyone.”
+Users live in many timezones. “9 AM” and “6 PM” must be **local**.
 
-GitHub Actions runs **every hour UTC**. Nest loads opted-in users, reads `settings.user_timezone`, and only acts when that user’s **local hour is 9 or 18**. Everyone gets morning/evening in *their* timezone without per-user cron jobs.
+1. GitHub Actions runs **every hour UTC** (`0 * * * *`).
+2. Nest loads users with `push_ambition_reminders = true`.
+3. For each user, Nest reads `user_timezone` and computes the **local hour**.
+4. Only **local hour 9** (morning) or **18** (evening) creates/sends notifications.
+5. Queries only **incomplete** items due on that user’s local calendar day — so evening naturally skips finished work.
+
+Constants live in `RemindersService.MORNING_HOUR` / `EVENING_HOUR`.
 
 ---
 
@@ -85,8 +91,10 @@ flowchart TD
   E -->|granted| G[Subscribe Web Push\nsave endpoint to push_subscriptions]
   G --> H[PATCH settings\npushAmbitionReminders=true\nuserTimezone=browser TZ]
   H --> I[POST /notifications/reminders/sync]
-  I --> J[Inbox + optional push\nfor current slot]
+  I --> J[Inbox + optional push\nfor current manual slot]
 ```
+
+**Manual sync slot (on enable):** before 18:00 local → morning key; at/after 18:00 → evening key. So enabling mid-day still fills the inbox without waiting for the next cron hour.
 
 ### Scheduled day (after opt-in)
 
@@ -103,7 +111,7 @@ sequenceDiagram
     API->>DB: Users with pushAmbitionReminders
     alt User local hour is 9 or 18
       API->>DB: Incomplete tasks/milestones due today in user TZ
-      API->>DB: Insert notification if new dedupeKey
+      API->>DB: Insert notification if new dedupeKey for that slot
       API->>Push: web-push payload
       Push->>Device: OS notification
     else Other local hour
@@ -114,12 +122,12 @@ sequenceDiagram
 
 ### Morning vs evening (“took action”)
 
-“Took action” means **completed the task or milestone** (not merely opening the notification).
+“Took action” means **completed the task or milestone** — not merely opening or dismissing the notification.
 
 ```mermaid
 flowchart TD
   M[09:00 local] --> M1[Due today + incomplete?]
-  M1 -->|yes| M2[Create morning notification\n+ push]
+  M1 -->|yes| M2[Create morning notification + push]
   M1 -->|no| M3[Nothing]
   M2 --> Day[User works through the day]
   Day --> E[18:00 local]
@@ -128,14 +136,48 @@ flowchart TD
   E1 -->|no| E3[No evening reminder]
 ```
 
-Dedupe keys (per user):
+Dedupe keys (unique per user):
 
 - Morning: `task_due_today:{taskId}:{YYYY-MM-DD}:morning`
 - Evening: `task_due_today:{taskId}:{YYYY-MM-DD}:evening`
+- Same pattern for milestones: `milestone_due_today:…`
 
-(and the same pattern for milestones)
+Max **two** notifications per item per local day. Completing before 18:00 removes the item from the evening query.
 
-So the same item can notify **at most twice per local day**. Completing it before 18:00 drops it out of the evening query.
+---
+
+## Managing the GitHub Actions cron
+
+Workflow file: [`.github/workflows/reminders-cron.yml`](../../../.github/workflows/reminders-cron.yml)
+
+Triggers today:
+
+| Trigger | Behavior |
+|---|---|
+| `schedule: '0 * * * *'` | Automatic hourly UTC tick |
+| `workflow_dispatch` | Manual **Run workflow** from the Actions UI |
+
+### Common control actions
+
+| Goal | What to do |
+|---|---|
+| **Run now** | GitHub → Actions → **reminders-cron** → **Run workflow** |
+| **Manual-only (stop automatic)** | Edit the workflow: remove the `schedule:` block; keep only `workflow_dispatch` |
+| **Change frequency** | Edit the cron expression in the YAML and push |
+| **Pause without deleting file** | Remove or rotate `CRON_SECRET` / `REMINDERS_API_URL` so the job fails closed; or comment out `schedule` |
+| **Delete the cron entirely** | Delete `.github/workflows/reminders-cron.yml` and push |
+| **Disable all Actions** | Repo Settings → Actions → disable (affects every workflow) |
+
+There is no separate “cron dashboard” — **the workflow YAML is the schedule**. Change the file = change the job.
+
+### Required GitHub secrets
+
+Environment: **`production-backend`**
+
+| Secret | Purpose |
+|---|---|
+| `REMINDERS_API_URL` | Render API base, e.g. `https://api.ambitiousyou.pro` |
+| `CRON_SECRET` | Same value as Render `CRON_SECRET` |
 
 ---
 
@@ -147,7 +189,7 @@ So the same item can notify **at most twice per local day**. Completing it befor
 | Android Chrome (and similar) | After permission; install optional |
 | **iOS / iPadOS 16.4+** | Only after **Add to Home Screen**, open the standalone icon, then allow notifications |
 
-Silent push is not used (`userVisibleOnly: true`). Tapping a notification opens the ambition deep link.
+Silent push is not used (`userVisibleOnly: true`). Tapping a notification opens the ambition deep link via `public/sw.js`.
 
 ---
 
@@ -184,15 +226,6 @@ Generate keys: `npx web-push generate-vapid-keys`
 |---|---|
 | `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Same as backend public key (safe to expose) |
 
-### GitHub Actions (`production-backend` environment)
-
-| Secret | Purpose |
-|---|---|
-| `REMINDERS_API_URL` | Render API base, e.g. `https://api.ambitiousyou.pro` |
-| `CRON_SECRET` | Same value as Render `CRON_SECRET` |
-
-Workflow: [`.github/workflows/reminders-cron.yml`](../../../.github/workflows/reminders-cron.yml)
-
 ---
 
 ## Database
@@ -209,7 +242,7 @@ Apply: `cd apps/backend && pnpm db:migrate`
 
 ## Operations
 
-### Manual cron test
+### Manual API test
 
 ```bash
 curl -X POST "$API_URL/internal/reminders/run" \
@@ -230,24 +263,24 @@ Example response:
 }
 ```
 
-Or run **Actions → reminders-cron → Run workflow**.
+`usersInSlot` counts users whose **local** hour is currently 9 or 18. At other UTC hours this is often `0` even when many users are opted in — that is expected.
 
-### GitHub schedule caveats
+### Schedule caveats
 
-- `0 * * * *` is hourly UTC; delivery is when Nest sees local hour 9 or 18.
-- GitHub can delay scheduled workflows by several minutes under load — acceptable for day-level reminders.
-- Repo must be active (GitHub may disable schedules on stale public repos); use `workflow_dispatch` to verify.
+- Delivery is tied to **local** 9 / 18, not “9 UTC”.
+- GitHub can delay scheduled workflows by several minutes — fine for day-level reminders.
+- Use **Run workflow** to verify secrets after deploy.
 
 ### Troubleshooting
 
 | Symptom | Check |
 |---|---|
-| No OS notification | Permission granted? VAPID set on Render + Vercel? SW registered (`/sw.js`)? |
-| iOS silent | App opened from Home Screen icon (standalone)? |
-| Cron 401 | `CRON_SECRET` matches Render and GitHub environment secret |
-| Cron 0 created at 9 UTC | User timezone — local hour may not be 9 yet |
-| Evening always empty | Items completed already, or morning dedupe only — evening uses `:evening` key |
-| Inbox empty after enable | Migration applied? `pushAmbitionReminders` true? Due dates today in user TZ? |
+| No OS notification | Permission? VAPID on Render + Vercel? `/sw.js` registered? |
+| iOS silent | Opened from Home Screen icon (standalone)? |
+| Cron 401 | `CRON_SECRET` matches Render and GitHub `production-backend` |
+| Cron `usersInSlot: 0` | Not currently 9 or 18 in any opted-in user’s timezone |
+| Evening empty | Item already completed, or evening dedupe already inserted |
+| Inbox empty after enable | Migration applied? Opt-in true? Due dates today in user TZ? |
 
 ---
 
@@ -256,7 +289,7 @@ Or run **Actions → reminders-cron → Run workflow**.
 | Area | Path |
 |---|---|
 | Schema | `packages/shared/db/schema/notifications.ts`, `push-subscriptions.ts` |
-| Sweep + slots | `apps/backend/src/notifications/reminders.service.ts` |
+| Sweep + 9/18 slots | `apps/backend/src/notifications/reminders.service.ts` |
 | Push send | `apps/backend/src/notifications/push.service.ts` |
 | HTTP | `apps/backend/src/notifications/notifications.controller.ts`, `reminders.controller.ts` |
 | Service worker | `apps/frontend/public/sw.js` |
