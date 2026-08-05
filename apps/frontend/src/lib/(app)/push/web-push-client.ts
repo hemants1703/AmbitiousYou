@@ -25,6 +25,34 @@ export function canUseWebPush(): boolean {
   return typeof window !== "undefined" && "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
 }
 
+/** One-shot local device state for push — no polling; call when Settings → Notifications mounts or after connect. */
+export type LocalPushDeviceStatus =
+  | "unsupported"
+  | "ios-install-required"
+  | "denied"
+  | "ready"
+  | "subscribed";
+
+export async function getLocalPushDeviceStatus(): Promise<LocalPushDeviceStatus> {
+  if (typeof window === "undefined") return "unsupported";
+  if (isIosDevice() && !isStandaloneDisplayMode()) return "ios-install-required";
+  if (!canUseWebPush()) return "unsupported";
+
+  if (typeof Notification !== "undefined" && Notification.permission === "denied") {
+    return "denied";
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.getRegistration();
+    const subscription = registration ? await registration.pushManager.getSubscription() : null;
+    if (subscription) return "subscribed";
+  } catch {
+    // Treat as not subscribed yet; user can still try connecting.
+  }
+
+  return "ready";
+}
+
 export async function ensurePushServiceWorker(): Promise<ServiceWorkerRegistration> {
   return navigator.serviceWorker.register("/sw.js", { scope: "/" });
 }

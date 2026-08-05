@@ -27,10 +27,14 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
+export type EnableRemindersIntent = "enable" | "connect";
+
 interface EnableRemindersDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEnabled: () => void;
+  /** `enable` = first-time account preference; `connect` = account already on, wire this device. */
+  intent?: EnableRemindersIntent;
 }
 
 export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
@@ -38,6 +42,8 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const showIosInstallHint = isIosDevice() && !isStandaloneDisplayMode();
+  const intent = props.intent ?? "enable";
+  const isConnect = intent === "connect";
 
   function handleOpenChange(open: boolean) {
     if (isPending) return;
@@ -96,11 +102,15 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
 
         const syncResult = await syncDueTodayRemindersAction();
         if (syncResult.error) {
-          toast.message("Reminders saved", {
-            description: "Preference is on. You’ll get the next scheduled nudge for due or overdue moves.",
+          toast.message(isConnect ? "This device is connected" : "Reminders saved", {
+            description: "You’ll get the next scheduled nudge for due or overdue moves.",
           });
         } else {
-          toast.success("Ambition reminders are on. Check for a confirmation on this device.");
+          toast.success(
+            isConnect
+              ? "This device will receive ambition reminders."
+              : "Ambition reminders are on. Check for a confirmation on this device.",
+          );
         }
 
         props.onEnabled();
@@ -121,32 +131,43 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
             <BellRingIcon className="size-6" />
           </span>
           <DialogTitle className="font-brand text-xl tracking-[-0.02em] md:text-2xl">
-            Stay on top of your ambitions
+            {isConnect ? "Enable reminders on this device" : "Stay on top of your ambitions"}
           </DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
-            Your browser will ask next. Allow notifications so we can nudge you at{" "}
-            <span className="text-foreground">9 AM</span> and{" "}
-            <span className="text-foreground">6 PM</span> when something is due today or overdue —
-            even when AmbitiousYou is closed.
+            {isConnect ? (
+              <>
+                Reminders are already on for your account. Allow notifications here so this Mac, phone, or browser can
+                receive the 9 AM and 6 PM nudges too.
+              </>
+            ) : (
+              <>
+                Your browser will ask next. Allow notifications so we can nudge you at{" "}
+                <span className="text-foreground">9 AM</span> and{" "}
+                <span className="text-foreground">6 PM</span> when something is due today or overdue — even when
+                AmbitiousYou is closed.
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
 
-        <ul className="space-y-2 text-left">
-          <li className="flex gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3">
-            <SunriseIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="text-sm font-medium">Morning — start with what’s due</p>
-              <p className="text-xs text-muted-foreground">Open moves land before the day gets noisy.</p>
-            </div>
-          </li>
-          <li className="flex gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3">
-            <AlarmClockIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="text-sm font-medium">Evening — only if still open</p>
-              <p className="text-xs text-muted-foreground">A second nudge if you haven’t finished yet. No spam.</p>
-            </div>
-          </li>
-        </ul>
+        {!isConnect ? (
+          <ul className="space-y-2 text-left">
+            <li className="flex gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3">
+              <SunriseIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
+              <div className="min-w-0">
+                <p className="text-sm font-medium">Morning — start with what’s due</p>
+                <p className="text-xs text-muted-foreground">Open moves land before the day gets noisy.</p>
+              </div>
+            </li>
+            <li className="flex gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3">
+              <AlarmClockIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
+              <div className="min-w-0">
+                <p className="text-sm font-medium">Evening — only if still open</p>
+                <p className="text-xs text-muted-foreground">A second nudge if you haven’t finished yet. No spam.</p>
+              </div>
+            </li>
+          </ul>
+        ) : null}
 
         {showIosInstallHint ? (
           <p role="status" className="rounded-2xl border border-border/60 bg-muted/40 px-3.5 py-2.5 text-xs text-muted-foreground">
