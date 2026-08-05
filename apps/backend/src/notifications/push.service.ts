@@ -81,6 +81,7 @@ export class PushService implements OnModuleInit {
 
   async sendToUser(userId: string, payload: PushPayload): Promise<void> {
     if (!this.configured) {
+      this.logger.warn(`Skipping push for user ${userId}: VAPID is not configured`);
       return;
     }
 
@@ -90,6 +91,7 @@ export class PushService implements OnModuleInit {
       .where(and(eq(pushSubscriptions.userId, userId), isNull(pushSubscriptions.revokedAt)));
 
     if (rows.length === 0) {
+      this.logger.warn(`Skipping push for user ${userId}: no active push subscriptions`);
       return;
     }
 

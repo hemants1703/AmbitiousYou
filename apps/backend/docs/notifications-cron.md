@@ -1,11 +1,13 @@
 # Ambition reminders (due today)
 
-AmbitiousYou notifies opted-in users about **incomplete tasks and milestones due today**, using each user’s stored timezone.
+AmbitiousYou notifies opted-in users about **incomplete tasks, milestones, and ambitions that are due today or overdue**, using each user’s stored timezone.
 
-| Slot | Local time | What happens |
+| Slot | Local window | What happens |
 |---|---|---|
-| **Morning** | **09:00** | Notify every incomplete task/milestone due today. Title: “Task due today” / “Milestone due today”. |
-| **Evening** | **18:00** | Notify again **only if still incomplete** (user did not finish the item after the morning ping). Title: “Still due today” / “Milestone still due today”. |
+| **Morning** | Local hour **≥ 9 and &lt; 18** | Notify open due/overdue moves once (deduped). |
+| **Evening** | Local hour **≥ 18** | Notify again only if still open. |
+
+Hourly GitHub Actions ticks are enough — Nest picks the slot from the user’s local hour, and dedupe keys prevent repeats inside the window.
 
 Delivery channels:
 
@@ -70,8 +72,8 @@ Users live in many timezones. “9 AM” and “6 PM” must be **local**.
 1. GitHub Actions runs **every hour UTC** (`0 * * * *`).
 2. Nest loads users with `push_ambition_reminders = true`.
 3. For each user, Nest reads `user_timezone` and computes the **local hour**.
-4. Only **local hour 9** (morning) or **18** (evening) creates/sends notifications.
-5. Queries only **incomplete** items due on that user’s local calendar day — so evening naturally skips finished work.
+4. **Morning window** (hour ≥ 9 and &lt; 18) or **evening window** (hour ≥ 18) creates/sends once per slot (deduped).
+5. Queries **incomplete** tasks/milestones/ambitions with due/end date **≤ local today** (includes overdue).
 
 Constants live in `RemindersService.MORNING_HOUR` / `EVENING_HOUR`.
 
@@ -109,12 +111,12 @@ sequenceDiagram
   loop Every hour UTC
     GA->>API: POST + CRON_SECRET
     API->>DB: Users with pushAmbitionReminders
-    alt User local hour is 9 or 18
-      API->>DB: Incomplete tasks/milestones due today in user TZ
+    alt User local hour in morning or evening window
+      API->>DB: Incomplete tasks/milestones/ambitions due today or overdue
       API->>DB: Insert notification if new dedupeKey for that slot
       API->>Push: web-push payload
       Push->>Device: OS notification
-    else Other local hour
+    else Before 9 AM local
       API-->>GA: Skip user
     end
   end

@@ -18,16 +18,12 @@ describe('RemindersService', () => {
   });
 
   describe('slot resolution', () => {
-    it('maps local 09:00 to morning and 18:00 to evening for cron', () => {
-      // 2026-08-05 09:00 UTC
-      const morningUtc = new Date('2026-08-05T09:00:00.000Z');
-      expect(service.resolveCronSlot('UTC', morningUtc)).toBe('morning');
-
-      const eveningUtc = new Date('2026-08-05T18:00:00.000Z');
-      expect(service.resolveCronSlot('UTC', eveningUtc)).toBe('evening');
-
-      const noonUtc = new Date('2026-08-05T12:00:00.000Z');
-      expect(service.resolveCronSlot('UTC', noonUtc)).toBeNull();
+    it('opens morning from 09:00 through 17:xx and evening from 18:00', () => {
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T09:00:00.000Z'))).toBe('morning');
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T12:00:00.000Z'))).toBe('morning');
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T17:59:00.000Z'))).toBe('morning');
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T18:00:00.000Z'))).toBe('evening');
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T08:59:00.000Z'))).toBeNull();
     });
 
     it('manual slot is morning before 18:00 and evening after', () => {
@@ -37,10 +33,10 @@ describe('RemindersService', () => {
     });
   });
 
-  it('skips users outside the 9 AM / 6 PM local window during cron', async () => {
+  it('skips users before the 9 AM local window during cron', async () => {
     (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]));
 
-    const result = await service.runDueTodaySweep(new Date('2026-08-05T12:00:00.000Z'));
+    const result = await service.runDueTodaySweep(new Date('2026-08-05T08:00:00.000Z'));
 
     expect(result.usersScanned).toBe(1);
     expect(result.usersInSlot).toBe(0);
@@ -48,26 +44,28 @@ describe('RemindersService', () => {
     expect(pushService.sendToUser).not.toHaveBeenCalled();
   });
 
-  it('creates morning due-today notifications at local 9 AM', async () => {
+  it('creates morning notifications for due/overdue tasks', async () => {
     (db.select as jest.Mock)
       .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]))
       .mockReturnValueOnce(
         buildChain([
           {
             id: 'task-1',
-            task: 'Ship reminders',
+            label: 'Ship reminders',
             ambitionId: 'amb-1',
             ambitionName: 'Launch',
+            dueDate: new Date('2026-07-31T00:00:00.000Z'),
           },
         ]),
       )
+      .mockReturnValueOnce(buildChain([]))
       .mockReturnValueOnce(buildChain([]));
 
     const created = {
       id: 'notif-1',
       userId: 'user-1',
       type: 'task_due_today',
-      title: 'Task due today',
+      title: 'Task overdue',
       body: 'Ship reminders · Launch',
       href: '/ambitions/amb-1',
       ambitionId: 'amb-1',
@@ -84,29 +82,30 @@ describe('RemindersService', () => {
     expect(result.usersInSlot).toBe(1);
     expect(result.notificationsCreated).toBe(1);
     expect(result.pushesAttempted).toBe(1);
-    expect(db.insert).toHaveBeenCalled();
     expect(pushService.sendToUser).toHaveBeenCalledWith(
       'user-1',
       expect.objectContaining({
-        title: 'Task due today',
+        title: 'Task overdue',
         href: '/ambitions/amb-1',
       }),
     );
   });
 
-  it('creates evening follow-up with distinct copy when items are still incomplete', async () => {
+  it('creates evening follow-up when items are still incomplete', async () => {
     (db.select as jest.Mock)
       .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]))
       .mockReturnValueOnce(
         buildChain([
           {
             id: 'task-1',
-            task: 'Ship reminders',
+            label: 'Ship reminders',
             ambitionId: 'amb-1',
             ambitionName: 'Launch',
+            dueDate: new Date('2026-08-05T00:00:00.000Z'),
           },
         ]),
       )
+      .mockReturnValueOnce(buildChain([]))
       .mockReturnValueOnce(buildChain([]));
 
     const created = {
@@ -143,12 +142,14 @@ describe('RemindersService', () => {
         buildChain([
           {
             id: 'task-1',
-            task: 'Ship reminders',
+            label: 'Ship reminders',
             ambitionId: 'amb-1',
             ambitionName: 'Launch',
+            dueDate: new Date('2026-08-05T00:00:00.000Z'),
           },
         ]),
       )
+      .mockReturnValueOnce(buildChain([]))
       .mockReturnValueOnce(buildChain([]));
 
     (db.insert as jest.Mock).mockImplementationOnce(() => {

@@ -33,9 +33,30 @@ export async function subscribeToWebPush(vapidPublicKey: string): Promise<PushSu
   const registration = await ensurePushServiceWorker();
   await navigator.serviceWorker.ready;
 
+  // Wait until the worker is actually controlling the page when possible.
+  if (navigator.serviceWorker.controller == null) {
+    await new Promise<void>((resolve) => {
+      const onControllerChange = () => {
+        navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+        resolve();
+      };
+      navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+      // Don't hang forever if the SW was already active without a controller change.
+      window.setTimeout(() => {
+        navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+        resolve();
+      }, 1500);
+    });
+  }
+
   const existing = await registration.pushManager.getSubscription();
   if (existing) {
-    return existing;
+    // Re-subscribe if the endpoint looks stale after VAPID key rotation.
+    try {
+      await existing.unsubscribe();
+    } catch {
+      // continue to a fresh subscribe
+    }
   }
 
   return registration.pushManager.subscribe({

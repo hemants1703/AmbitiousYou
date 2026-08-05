@@ -124,7 +124,7 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
           id="ambition-reminders"
           icon={<BellIcon className="size-4" />}
           label="Ambition reminders"
-          description="Get reminded at 9 AM and 6 PM (your time) for tasks and milestones due today. Evening only if you haven’t finished them yet."
+          description="Get reminded at 9 AM and 6 PM (your time) for tasks, milestones, and ambitions that are due today or overdue. Evening only if they’re still open."
           checked={pushAmbitionReminders}
           disabled={isPending}
           onCheckedChange={handlePushToggle}

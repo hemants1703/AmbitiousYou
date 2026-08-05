@@ -71,7 +71,9 @@ export class NotificationsController {
   }
 
   @Post('reminders/sync')
-  async syncDueToday(@CurrentUserId() userId: string): Promise<{ notificationsCreated: number; pushesAttempted: number }> {
+  async syncDueToday(
+    @CurrentUserId() userId: string,
+  ): Promise<{ notificationsCreated: number; pushesAttempted: number; confirmationSent: boolean }> {
     const [row] = await db
       .select({ userTimezone: settings.userTimezone, pushAmbitionReminders: settings.pushAmbitionReminders })
       .from(settings)
@@ -79,9 +81,22 @@ export class NotificationsController {
       .limit(1);
 
     if (!row?.pushAmbitionReminders) {
-      return { notificationsCreated: 0, pushesAttempted: 0 };
+      return { notificationsCreated: 0, pushesAttempted: 0, confirmationSent: false };
     }
 
-    return await this.remindersService.syncDueTodayForUser(userId, row.userTimezone, true);
+    const synced = await this.remindersService.syncDueTodayForUser(userId, row.userTimezone, true);
+
+    // Always send a one-shot confirmation so the user can verify device delivery immediately.
+    await this.pushService.sendToUser(userId, {
+      title: 'Ambition reminders are on',
+      body:
+        synced.notificationsCreated > 0
+          ? 'You have open due or overdue moves — we just sent those too.'
+          : 'We’ll nudge you at 9 AM and 6 PM when something is due or overdue.',
+      href: '/dashboard',
+      tag: `reminders-enabled:${userId}`,
+    });
+
+    return { ...synced, confirmationSent: true };
   }
 }

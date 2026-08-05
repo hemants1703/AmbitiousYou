@@ -93,8 +93,14 @@ export function EnableRemindersScreen() {
           return;
         }
 
-        await syncDueTodayRemindersAction();
-        toast.success("Ambition reminders are on. We’ll nudge you when something’s due today.");
+        const syncResult = await syncDueTodayRemindersAction();
+        if (syncResult.error) {
+          toast.message("Reminders saved", {
+            description: "Preference is on, but we couldn’t sync open moves yet. You’ll still get the next scheduled nudge.",
+          });
+        } else {
+          toast.success("Ambition reminders are on. Check for a confirmation notification on this device.");
+        }
         router.replace("/settings?tab=notifications");
         router.refresh();
       } catch (err) {
@@ -123,7 +129,8 @@ export function EnableRemindersScreen() {
           <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
             Your browser will ask permission next. Allow notifications so AmbitiousYou can remind you at{" "}
             <span className="text-foreground">9 AM</span> and again at <span className="text-foreground">6 PM</span>{" "}
-            only if today’s moves are still open — on this device, even when the app is closed.
+            for tasks, milestones, and ambitions that are <span className="text-foreground">due today or overdue</span> —
+            on this device, even when the app is closed.
           </p>
         </div>
       </header>
