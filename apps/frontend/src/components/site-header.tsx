@@ -1,9 +1,16 @@
+import { NotificationsInbox } from "@/components/(app)/notifications/notifications-inbox";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { HeaderNav } from "@/components/header-nav";
+import type { Notification } from "@ambitiousyou/shared";
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  notifications?: Notification[];
+  unreadCount?: number;
+}
+
+export function SiteHeader(props: SiteHeaderProps) {
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-px border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="relative flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -11,6 +18,10 @@ export function SiteHeader() {
         <Separator orientation="vertical" className="mx-2" />
         <HeaderNav />
         <div className="ml-auto flex items-center gap-2">
+          <NotificationsInbox
+            initialNotifications={props.notifications ?? []}
+            initialUnreadCount={props.unreadCount ?? 0}
+          />
           <ThemeToggle />
         </div>
       </div>

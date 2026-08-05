@@ -12,3 +12,5 @@ export * from './tasks';
 export * from './milestones';
 export * from './notes';
 export * from './settings';
+export * from './notifications';
+export * from './push-subscriptions';

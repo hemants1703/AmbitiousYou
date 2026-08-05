@@ -32,11 +32,9 @@ export class SettingsService {
       throw new BadRequestException('Setting not found');
     }
 
-    const [updated] = await db
-      .update(settings)
-      .set({ ...updateSettingDto })
-      .where(eq(settings.userId, userId))
-      .returning();
+    const patch = Object.fromEntries(Object.entries(updateSettingDto).filter(([, value]) => value !== undefined));
+
+    const [updated] = await db.update(settings).set(patch).where(eq(settings.userId, userId)).returning();
     return updated;
   }
 }

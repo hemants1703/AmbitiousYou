@@ -1,0 +1,41 @@
+name: reminders-cron
+
+# Hourly UTC tick. Nest resolves each user's local timezone and only sends at
+# 09:00 (morning) or 18:00 (evening) local time for due-today incomplete moves.
+# Evening is skipped automatically once the task/milestone is completed.
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: reminders-cron
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  production:
+    name: production due-today reminders
+    runs-on: ubuntu-latest
+    environment: production-backend
+    steps:
+      - name: Trigger reminders sweep
+        env:
+          API_URL: ${{ secrets.REMINDERS_API_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${API_URL:-}" ] || [ -z "${CRON_SECRET:-}" ]; then
+            echo "REMINDERS_API_URL and CRON_SECRET must be set on the production-backend environment."
+            exit 1
+          fi
+          # Trim trailing slash from base URL
+          BASE_URL="${API_URL%/}"
+          echo "POST ${BASE_URL}/internal/reminders/run"
+          curl -fsS -X POST "${BASE_URL}/internal/reminders/run" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            -w "\nHTTP %{http_code}\n"

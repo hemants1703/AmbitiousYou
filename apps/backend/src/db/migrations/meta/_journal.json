@@ -36,6 +36,13 @@
       "when": 1781379256750,
       "tag": "0004_normalize_move_deadlines",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785925092274,
+      "tag": "0005_sticky_spirit",
+      "breakpoints": true
     }
   ]
 }

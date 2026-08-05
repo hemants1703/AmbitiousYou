@@ -31,6 +31,7 @@ const csp = [
   "form-action 'self'", // Server Actions POST same-origin
   "object-src 'none'",
   "manifest-src 'self'",
+  "worker-src 'self'",
 ].join("; ");
 
 const cspHeaderKey = process.env.CSP_REPORT_ONLY === "1" ? "Content-Security-Policy-Report-Only" : "Content-Security-Policy";

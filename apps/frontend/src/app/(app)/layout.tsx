@@ -1,8 +1,10 @@
+import { RegisterPushSw } from "@/components/(app)/notifications/register-push-sw";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { parseSidebarOpen, SIDEBAR_STORAGE_KEY } from "@/lib/(app)/sidebar-state";
+import { getNotifications } from "@/lib/api/notifications/get-notifications";
 import { requireUser } from "@/lib/auth";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
@@ -18,9 +20,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user: userDetails } = await requireUser();
+  const { user: userDetails, sessionToken } = await requireUser();
   const cookieStore = await cookies();
   const defaultOpen = parseSidebarOpen(cookieStore.get(SIDEBAR_STORAGE_KEY)?.value);
+  const inbox = await getNotifications(sessionToken, 20);
 
   return (
     <TooltipProvider>
@@ -38,10 +41,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         }>
         <AppSidebar variant="inset" userDetails={userDetails} />
         <SidebarInset className="min-w-0">
-          <SiteHeader />
+          <SiteHeader
+            notifications={inbox?.notifications ?? []}
+            unreadCount={inbox?.unreadCount ?? 0}
+          />
           <div id="main-content" className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">{children}</div>
         </SidebarInset>
       </SidebarProvider>
+      <RegisterPushSw />
       <Toaster richColors theme="system" />
       </main>
     </TooltipProvider>
