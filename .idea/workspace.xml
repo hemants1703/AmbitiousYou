@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/features/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/features/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/features.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/features.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
