@@ -1,9 +1,17 @@
-import type { Session } from "@ambitiousyou/shared";
-import { KeyRoundIcon, LockKeyholeIcon, MonitorIcon } from "lucide-react";
+"use client";
 
+import type { Session } from "@ambitiousyou/shared";
+import { ChevronDownIcon, KeyRoundIcon, LockKeyholeIcon, MonitorIcon } from "lucide-react";
+import { useState } from "react";
+
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { ResetPasswordCard } from "./reset-password-card";
+
+const EXPIRED_PAGE_SIZE = 5;
 
 interface SecuritySettingsTabProps {
   sessions: Session[] | null;
@@ -47,15 +55,29 @@ function parseUserAgent(ua: string | null) {
   return parts.length ? parts.join(" on ") : "Unknown browser";
 }
 
-function SessionRow(props: { session: Session }) {
-  const isExpired = new Date(props.session.expiresAt) < new Date();
+function isSessionExpired(session: Session) {
+  return new Date(session.expiresAt) < new Date();
+}
+
+function SessionRow(props: { session: Session; muted?: boolean }) {
+  const expired = isSessionExpired(props.session);
 
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl border border-border/60 bg-background/50 p-4">
+    <div
+      className={cn(
+        "flex items-start justify-between gap-4 rounded-2xl border border-border/60 bg-background/50 p-4",
+        props.muted && "border-border/40 bg-muted/15 opacity-80",
+      )}
+    >
       <div className="flex min-w-0 items-start gap-3">
         <MonitorIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
         <div className="min-w-0 space-y-1">
-          <p className="truncate text-sm font-medium text-foreground">
+          <p
+            className={cn(
+              "truncate text-sm font-medium",
+              props.muted ? "text-muted-foreground" : "text-foreground",
+            )}
+          >
             {parseUserAgent(props.session.userAgent)}
           </p>
           <p className="text-xs text-muted-foreground">
@@ -63,18 +85,63 @@ function SessionRow(props: { session: Session }) {
             {formatSessionDate(props.session.createdAt)}
           </p>
           <p className="text-xs text-muted-foreground">
-            Expires {formatSessionDate(props.session.expiresAt)}
+            {expired ? "Expired" : "Expires"} {formatSessionDate(props.session.expiresAt)}
           </p>
         </div>
       </div>
-      <Badge variant={isExpired ? "outline" : "default"} className="mt-0.5 shrink-0">
-        {isExpired ? "Expired" : "Active"}
+      <Badge variant={expired ? "outline" : "default"} className="mt-0.5 shrink-0">
+        {expired ? "Expired" : "Active"}
       </Badge>
     </div>
   );
 }
 
+function ExpiredSessionsSection(props: { sessions: Session[] }) {
+  const [visibleCount, setVisibleCount] = useState(EXPIRED_PAGE_SIZE);
+  const visible = props.sessions.slice(0, visibleCount);
+  const remaining = props.sessions.length - visibleCount;
+  const showMoreCount = Math.min(EXPIRED_PAGE_SIZE, Math.max(remaining, 0));
+
+  return (
+    <Accordion type="single" collapsible className="rounded-2xl border-border/60 bg-muted/10">
+      <AccordionItem value="expired" className="border-0">
+        <AccordionTrigger className="px-4 py-3 hover:no-underline">
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="text-sm font-medium text-foreground">Expired sessions</span>
+            <Badge variant="secondary" className="font-variant-numeric tabular-nums">
+              {props.sessions.length}
+            </Badge>
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="pb-0">
+          <div className="space-y-3 pt-1">
+            {visible.map((session) => (
+              <SessionRow key={session.id} session={session} muted />
+            ))}
+            {remaining > 0 ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full text-muted-foreground"
+                onClick={() => setVisibleCount((count) => count + EXPIRED_PAGE_SIZE)}
+                aria-label={`Show ${showMoreCount} more expired sessions`}
+              >
+                Show {showMoreCount} more
+                <ChevronDownIcon data-icon="inline-end" />
+              </Button>
+            ) : null}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+
 export function SecuritySettingsTab(props: SecuritySettingsTabProps) {
+  const activeSessions = props.sessions?.filter((session) => !isSessionExpired(session)) ?? [];
+  const expiredSessions = props.sessions?.filter((session) => isSessionExpired(session)) ?? [];
+
   return (
     <div className="space-y-4">
       <Card>
@@ -108,7 +175,7 @@ export function SecuritySettingsTab(props: SecuritySettingsTabProps) {
             Active sessions
           </CardTitle>
           <CardDescription>
-            Devices and browsers currently signed in to your account.
+            Devices currently signed in. Expired sessions stay collapsed below.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -123,7 +190,16 @@ export function SecuritySettingsTab(props: SecuritySettingsTabProps) {
               <p className="text-xs text-muted-foreground">No active sessions found.</p>
             </div>
           ) : (
-            props.sessions.map((session) => <SessionRow key={session.id} session={session} />)
+            <>
+              {activeSessions.length === 0 ? (
+                <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+                  <p className="text-xs text-muted-foreground">No active sessions found.</p>
+                </div>
+              ) : (
+                activeSessions.map((session) => <SessionRow key={session.id} session={session} />)
+              )}
+              {expiredSessions.length > 0 ? <ExpiredSessionsSection sessions={expiredSessions} /> : null}
+            </>
           )}
         </CardContent>
       </Card>

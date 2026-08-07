@@ -72,9 +72,13 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
   const [isPending, startTransition] = useTransition();
   const showIosInstallHint = isIosDevice() && !isStandaloneDisplayMode();
 
-  useEffect(() => {
+  // Re-sync when the server preference changes, adjusting during render rather than
+  // in an effect so the switch never paints the stale value first.
+  const [lastServerPreference, setLastServerPreference] = useState(props.userSettings.pushAmbitionReminders);
+  if (props.userSettings.pushAmbitionReminders !== lastServerPreference) {
+    setLastServerPreference(props.userSettings.pushAmbitionReminders);
     setPushAmbitionReminders(props.userSettings.pushAmbitionReminders);
-  }, [props.userSettings.pushAmbitionReminders]);
+  }
 
   // One-shot check when this tab mounts (and after preference flips). No background polling.
   useEffect(() => {

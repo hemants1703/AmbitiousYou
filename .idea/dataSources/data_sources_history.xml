@@ -24,8 +24,8 @@
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </DataSourceFromHistory>
-  <DataSourceFromHistory isRemovedFromProject="true">
-    <data-source source="LOCAL" name="ambitiousyou_dev_db@localhost" uuid="ca684cbb-ff18-4a7f-8a06-177b7ba07477">
+  <DataSourceFromHistory isRemovedFromProject="false">
+    <data-source source="LOCAL" name="ambitiousyou_dev@localhost" uuid="ca684cbb-ff18-4a7f-8a06-177b7ba07477">
       <database-info product="PostgreSQL" version="18.4" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="18.4" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
@@ -33,7 +33,7 @@
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/ambitiousyou_dev_db</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/ambitiousyou_dev</jdbc-url>
       <secret-storage>master_key</secret-storage>
       <user-name>postgres</user-name>
       <schema-mapping>

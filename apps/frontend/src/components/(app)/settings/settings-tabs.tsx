@@ -39,9 +39,13 @@ const tabItems: Array<{
 export function SettingsTabs(props: SettingsTabsProps) {
   const [activeTab, setActiveTab] = useState<SettingsTabValue>(props.initialTab);
 
-  useEffect(() => {
+  // Re-sync when the server-resolved tab changes, adjusting during render rather
+  // than in an effect so the panel never paints the stale tab first.
+  const [lastInitialTab, setLastInitialTab] = useState(props.initialTab);
+  if (props.initialTab !== lastInitialTab) {
+    setLastInitialTab(props.initialTab);
     setActiveTab(props.initialTab);
-  }, [props.initialTab]);
+  }
 
   useEffect(() => {
     function onPopState() {

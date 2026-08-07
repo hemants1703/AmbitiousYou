@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="" />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/security-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/security-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tabs.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,8 +23,13 @@
       <entry key="_C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou" value="3HUbUUnbPS2AOD68cj2AoHTeGwa" />
     </persistenceIdMap>
   </component>
+  <component name="DatabaseLocalColorSettings">
+    <colors>
+      <entry key="ca684cbb-ff18-4a7f-8a06-177b7ba07477" value="" />
+    </colors>
+  </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="503" />
+    <option name="cachedIndexableFilesCount" value="507" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,61 +52,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000000470901356" />
-      <entry key="MS500" value="1.035549055462777" />
-      <entry key="S2" value="1.6977045350472673" />
-      <entry key="S5" value="2.905670676812891" />
-      <entry key="S10" value="3.9818071151725367" />
-      <entry key="S30" value="5.176222971524865" />
-      <entry key="S60" value="5.56522780795914" />
-      <entry key="M2" value="5.776538050163473" />
-      <entry key="M5" value="5.9091089336344655" />
-      <entry key="M10" value="5.954299296338921" />
-      <entry key="M15" value="5.9694758500506895" />
-      <entry key="M30" value="5.9847094204077464" />
-      <entry key="H1" value="5.9930957888616625" />
-      <entry key="H2" value="6.0685137494645565" />
-      <entry key="H4" value="6.709621835732213" />
-      <entry key="D1" value="10.781665642161727" />
-      <entry key="W1" value="12.629083535518271" />
+      <entry key="MS100" value="1.6082428316951654" />
+      <entry key="MS500" value="3.674547497310569" />
+      <entry key="S2" value="8.721731057064881" />
+      <entry key="S5" value="14.133955752384976" />
+      <entry key="S10" value="19.159990424169052" />
+      <entry key="S30" value="25.331729780604093" />
+      <entry key="S60" value="27.528557815850203" />
+      <entry key="M2" value="30.518229201285084" />
+      <entry key="M5" value="63.00632031676912" />
+      <entry key="M10" value="128.82716804733855" />
+      <entry key="M15" value="173.39598120590773" />
+      <entry key="M30" value="238.7863818378585" />
+      <entry key="H1" value="282.24870516962983" />
+      <entry key="H2" value="307.4108598473191" />
+      <entry key="H4" value="321.5126426331709" />
+      <entry key="D1" value="337.3320691312462" />
+      <entry key="W1" value="341.27562835106437" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="0.0" />
-      <entry key="S60" value="0.0" />
-      <entry key="M2" value="0.0" />
-      <entry key="M5" value="0.0" />
-      <entry key="M10" value="0.0" />
-      <entry key="M15" value="0.0" />
-      <entry key="M30" value="0.0" />
-      <entry key="H1" value="0.0" />
-      <entry key="H2" value="0.0" />
-      <entry key="H4" value="0.0" />
-      <entry key="D1" value="0.0" />
-      <entry key="W1" value="0.0" />
+      <entry key="S2" value="8.070776935025948E-164" />
+      <entry key="S5" value="5.791167650740017E-66" />
+      <entry key="S10" value="2.4064845004154958E-33" />
+      <entry key="S30" value="1.340070631981852E-11" />
+      <entry key="S60" value="3.6606975182085912E-6" />
+      <entry key="M2" value="0.001913294937590277" />
+      <entry key="M5" value="0.08179236558443047" />
+      <entry key="M10" value="0.2859936460560458" />
+      <entry key="M15" value="0.43408114600482" />
+      <entry key="M30" value="0.6588483482599148" />
+      <entry key="H1" value="0.8116947383468244" />
+      <entry key="H2" value="0.9009410293392256" />
+      <entry key="H4" value="0.9491791344836957" />
+      <entry key="D1" value="0.991344718350848" />
+      <entry key="W1" value="0.9987589198997396" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9395227937639946" />
-      <entry key="MS500" value="1.0227559989268447" />
-      <entry key="S2" value="1.692271814857834" />
-      <entry key="S5" value="2.9011156704748386" />
-      <entry key="S10" value="3.978301196253013" />
-      <entry key="S30" value="5.174575149443674" />
-      <entry key="S60" value="5.564324156448704" />
-      <entry key="M2" value="5.7760644323703465" />
-      <entry key="M5" value="5.908914000253554" />
-      <entry key="M10" value="5.954200893104759" />
-      <entry key="M15" value="5.969410038101719" />
-      <entry key="M30" value="5.984676409115031" />
-      <entry key="H1" value="5.993079253095448" />
-      <entry key="H2" value="6.068505303206323" />
-      <entry key="H4" value="6.709616857589584" />
-      <entry key="D1" value="10.781664023613024" />
-      <entry key="W1" value="12.629083253462365" />
+      <entry key="MS100" value="1.557455049002757" />
+      <entry key="MS500" value="3.645201222889354" />
+      <entry key="S2" value="8.526263910467472" />
+      <entry key="S5" value="13.891973843919223" />
+      <entry key="S10" value="18.973732403981817" />
+      <entry key="S30" value="25.24701923804606" />
+      <entry key="S60" value="27.482620741101915" />
+      <entry key="M2" value="30.496073706053412" />
+      <entry key="M5" value="63.07722532869581" />
+      <entry key="M10" value="129.10658586439718" />
+      <entry key="M15" value="173.82516846105364" />
+      <entry key="M30" value="239.44240799598848" />
+      <entry key="H1" value="283.0588637214082" />
+      <entry key="H2" value="308.3109964457373" />
+      <entry key="H4" value="322.46140909825135" />
+      <entry key="D1" value="338.3233428692728" />
+      <entry key="W1" value="342.27437704368896" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -105,27 +118,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.backend > db:migrate.executor": "Run",
+    "npm.start:backend.executor": "Run",
+    "npm.start:frontend.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="npm.start:backend">
+    <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="db:migrate" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="start:backend" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -150,13 +174,14 @@
       <list>
         <item itemvalue="npm.start:frontend" />
         <item itemvalue="npm.start:backend" />
+        <item itemvalue="npm.backend &gt; db:migrate" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.8665.341" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.9437.145" />
       </set>
     </attachedChunks>
   </component>
@@ -168,6 +193,7 @@
       <option name="presentableId" value="Default" />
       <updated>1785925610909</updated>
       <workItem from="1785925612014" duration="1706000" />
+      <workItem from="1786109082020" duration="2182000" />
     </task>
     <servers />
   </component>
