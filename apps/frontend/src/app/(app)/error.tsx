@@ -4,9 +4,9 @@ import { ErrorFallback } from "@/components/error-fallback";
 
 interface ErrorProps {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }
 
 export default function Error(props: ErrorProps) {
-  return <ErrorFallback error={props.error} reset={props.reset} layout="inset" />;
+  return <ErrorFallback error={props.error} retry={props.retry} layout="inset" />;
 }

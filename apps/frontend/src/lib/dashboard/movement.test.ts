@@ -31,6 +31,7 @@ function buildAmbition(overrides: Partial<AmbitionDetails> = {}): AmbitionDetail
 function buildTask(overrides: Partial<Task> = {}): Task {
   return {
     id: "task-1",
+    userId: "user-1",
     ambitionId: "amb-1",
     task: "Ship feature",
     taskDescription: null,
@@ -46,6 +47,7 @@ function buildTask(overrides: Partial<Task> = {}): Task {
 function buildMilestone(overrides: Partial<Milestone> = {}): Milestone {
   return {
     id: "ms-1",
+    userId: "user-1",
     ambitionId: "amb-1",
     milestone: "Launch",
     milestoneDescription: null,

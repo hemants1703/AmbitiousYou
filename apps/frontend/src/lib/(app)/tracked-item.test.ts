@@ -18,6 +18,7 @@ const FIXED_NOW = new Date("2026-06-15T12:00:00");
 function buildTask(overrides: Partial<Task> = {}): Task {
   return {
     id: "task-1",
+    userId: "user-1",
     ambitionId: "amb-1",
     task: "Ship feature",
     taskDescription: "Details",
@@ -33,6 +34,7 @@ function buildTask(overrides: Partial<Task> = {}): Task {
 function buildMilestone(overrides: Partial<Milestone> = {}): Milestone {
   return {
     id: "ms-1",
+    userId: "user-1",
     ambitionId: "amb-1",
     milestone: "Launch",
     milestoneDescription: "",

@@ -51,6 +51,17 @@ jobs:
       - name: Run unit and component tests
         run: pnpm --filter frontend test
 
+      # Next.js 16.3 writes a Turbopack FileSystem build cache to .next/cache.
+      # CI starts from a clean checkout, so without restoring it the cache is
+      # written and thrown away every run.
+      - name: Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: apps/frontend/.next/cache
+          key: nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/frontend/src/**', 'packages/shared/**') }}
+          restore-keys: |
+            nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+
       - name: Production build
         run: pnpm --filter frontend build
 

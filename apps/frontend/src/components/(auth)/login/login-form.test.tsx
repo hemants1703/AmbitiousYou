@@ -53,7 +53,7 @@ describe("LoginForm", () => {
   });
 
   it("submits when Enter is pressed in the password field", async () => {
-    const action = vi.fn(async (): Promise<LoginState> => ({ error: null }));
+    const action = vi.fn<(state: LoginState, formData: FormData) => Promise<LoginState>>(async () => ({ error: null }));
     const user = userEvent.setup();
 
     renderLoginForm(action);
@@ -69,7 +69,7 @@ describe("LoginForm", () => {
       expect(action).toHaveBeenCalledTimes(1);
     });
 
-    const formData = action.mock.calls[0]?.[1] as FormData;
+    const formData = action.mock.calls[0]![1];
     expect(formData.get("email")).toBe("user@example.com");
     expect(formData.get("password")).toBe("secret");
   });

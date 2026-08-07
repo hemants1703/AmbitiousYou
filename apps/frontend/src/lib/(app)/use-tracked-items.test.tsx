@@ -1,6 +1,7 @@
 import { deleteTaskAction } from "@/lib/actions/(app)/tasks/delete-task";
 import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-task-completion";
 import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
+import { isCompleted } from "@/lib/(app)/tracked-item";
 import { useTrackedItems, type UseTrackedItemsParams } from "@/lib/(app)/use-tracked-items";
 import type { Task } from "@ambitiousyou/shared/types";
 import { act, renderHook, waitFor } from "@testing-library/react";
@@ -30,6 +31,7 @@ vi.mock("@/lib/(app)/mutations/background-refresh", () => ({
 function buildTask(overrides: Partial<Task> = {}): Task {
   return {
     id: "task-1",
+    userId: "user-1",
     ambitionId: "amb-1",
     task: "Existing task",
     taskDescription: "",
@@ -103,7 +105,7 @@ describe("useTrackedItems", () => {
 
   it("rolls back optimistic toggle when the server action fails", async () => {
     const sourceItems = [buildTask()];
-    vi.mocked(toggleTaskCompletionAction).mockResolvedValue({ task: null, error: "Cannot toggle" });
+    vi.mocked(toggleTaskCompletionAction).mockResolvedValue({ error: "Cannot toggle" });
 
     const { result } = renderTrackedItems({ ambitionId: "amb-1", sourceItems });
 
@@ -112,7 +114,7 @@ describe("useTrackedItems", () => {
     });
 
     await waitFor(() => {
-      expect(result.current.items[0]?.taskCompleted).toBe(false);
+      expect(isCompleted(result.current.items[0]!)).toBe(false);
       expect(result.current.error).toBe("Cannot toggle");
       expect(toast.error).toHaveBeenCalled();
     });

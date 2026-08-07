@@ -40,6 +40,7 @@ function buildAmbition(overrides: Partial<AmbitionDetails> = {}): AmbitionDetail
 function buildTask(overrides: Partial<Task> = {}): Task {
   return {
     id: "task-1",
+    userId: "user-1",
     ambitionId: "amb-1",
     task: "Ship feature",
     taskDescription: null,

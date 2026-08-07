@@ -25,7 +25,8 @@ function hashString(value: string) {
 
 interface ErrorFallbackProps {
   error: Error & { digest?: string };
-  reset: () => void;
+  /** Re-fetches and re-renders the boundary's children, including failed Server Components. */
+  retry: () => void;
   /** Full viewport centering for root-level boundaries; inset fits inside the app shell. */
   layout?: "full" | "inset";
 }
@@ -88,7 +89,7 @@ export function ErrorFallback(props: ErrorFallbackProps) {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-2.5 px-6 pb-8 pt-2">
-            <Button ref={tryAgainRef} onClick={props.reset} size="lg" className="w-full">
+            <Button ref={tryAgainRef} onClick={() => props.retry()} size="lg" className="w-full">
               <RefreshCwIcon aria-hidden="true" />
               Try again
             </Button>

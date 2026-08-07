@@ -563,6 +563,9 @@ Signup fires a fire-and-forget **Azure Communication Services** verification ema
 - 📱 Native mobile apps
 - 🤝 Public ambition sharing & accountability
 
+**Platform** — evaluated with a scoped cost/risk assessment in [`docs/NEXT-CACHE-COMPONENTS-MIGRATION.md`](docs/NEXT-CACHE-COMPONENTS-MIGRATION.md):
+- ⚡ **Cache Components + Partial Prefetching** — SPA-feeling navigation and a shared App Shell per route (fewer prefetch round-trips). Deferred deliberately: the flag is global and reshapes the static/dynamic model the landing surface depends on.
+
 ---
 
 ## 👤 About the Author
