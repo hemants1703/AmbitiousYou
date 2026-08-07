@@ -1,10 +1,12 @@
 import { brandCopy } from "@/lib/brand";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import LandingSection from "@/components/(landing)/landing-section";
+import LastUpdated from "@/components/(landing)/marketing/last-updated";
 import JsonLd from "@/components/seo/json-ld";
 import { productDefinition } from "@/lib/seo/faqs";
+import { marketingContentUpdated } from "@/lib/seo/content-dates";
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { breadcrumbSchema, organizationSchema, webPageSchema } from "@/lib/seo/schemas";
+import { breadcrumbSchema, organizationSchema, personSchema, webPageSchema } from "@/lib/seo/schemas";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -25,8 +27,9 @@ export default function AboutPage() {
     <>
       <JsonLd
         data={[
-          webPageSchema({ title, description, path: "/about" }),
+          webPageSchema({ title, description, path: "/about", dateModified: marketingContentUpdated }),
           organizationSchema(),
+          personSchema(),
           breadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },
@@ -44,6 +47,7 @@ export default function AboutPage() {
           <p>
             Privacy is non-negotiable. Your ambitions are yours alone — no social feeds, no sharing features, no data sold to advertisers. Session-based authentication and encrypted traffic protect your account.
           </p>
+          <LastUpdated />
         </div>
       </LandingSection>
 
@@ -63,13 +67,18 @@ export default function AboutPage() {
       </LandingSection>
 
       <LandingSection eyebrow="Creator" title="Made by a builder who needed it" align="center" className="pb-16 md:pb-24">
-        <p className="mx-auto max-w-2xl text-center text-base leading-relaxed text-muted-foreground">
-          AmbitiousYou is developed by{" "}
-          <Link href="https://hemantsharma.tech" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-foreground">
-            Hemant Sharma
-          </Link>
-          . The product exists because generic task managers never captured how it feels to pursue something ambitious over months — and building a custom Notion setup shouldn&apos;t be a prerequisite for progress.
-        </p>
+        <div className="mx-auto max-w-2xl space-y-4 text-center text-base leading-relaxed text-muted-foreground">
+          <p>
+            AmbitiousYou is developed by{" "}
+            <Link href="https://hemantsharma.tech" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-foreground">
+              Hemant Sharma
+            </Link>
+            , founder and builder. The product exists because generic task managers never captured how it feels to pursue something ambitious over months — and building a custom Notion setup shouldn&apos;t be a prerequisite for progress.
+          </p>
+          <p className="text-sm">
+            Expertise: shipping personal productivity software, ambition-based goal structure, and privacy-first web apps. First-hand experience designing for outcomes that take months, not minutes.
+          </p>
+        </div>
         <div className="mt-10 flex justify-center">
           <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" />
         </div>

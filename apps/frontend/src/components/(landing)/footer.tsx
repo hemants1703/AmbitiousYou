@@ -35,6 +35,7 @@ export default function Footer() {
   ] as const;
 
   const resourceLinks = [
+    { title: "Guides", href: "/guides" },
     { title: "Use Cases", href: "/use-cases" },
     { title: "Compare", href: "/compare" },
   ] as const;

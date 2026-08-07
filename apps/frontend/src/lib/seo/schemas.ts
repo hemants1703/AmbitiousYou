@@ -27,6 +27,19 @@ export const softwareFeatureList = [
   "Dashboard insights and activity feed",
 ] as const;
 
+export function personSchema(): JsonLdSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": absoluteUrl("/#founder"),
+    name: "Hemant Sharma",
+    url: "https://hemantsharma.tech",
+    jobTitle: "Founder",
+    worksFor: { "@id": absoluteUrl("/#organization") },
+    sameAs: ["https://github.com/hemants1703", "https://linkedin.com/in/hemants1703", "https://bsky.app/profile/hemantsharma.tech"],
+  };
+}
+
 export function organizationSchema(): JsonLdSchema {
   return {
     "@context": "https://schema.org",
@@ -34,8 +47,14 @@ export function organizationSchema(): JsonLdSchema {
     "@id": absoluteUrl("/#organization"),
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: siteConfig.ogImage,
+    logo: {
+      "@type": "ImageObject",
+      url: siteConfig.logo,
+      width: 512,
+      height: 512,
+    },
     description: siteConfig.description,
+    founder: { "@id": absoluteUrl("/#founder") },
     sameAs: [
       "https://x.com/AmbitiousYouHQ",
       "https://github.com/hemants1703/AmbitiousYou",
@@ -83,6 +102,8 @@ export interface WebPageSchemaOptions {
   title: string;
   description: string;
   path: string;
+  dateModified?: string;
+  datePublished?: string;
 }
 
 export function webPageSchema(options: WebPageSchemaOptions): JsonLdSchema {
@@ -96,6 +117,8 @@ export function webPageSchema(options: WebPageSchemaOptions): JsonLdSchema {
     url,
     isPartOf: { "@id": absoluteUrl("/#website") },
     about: { "@id": absoluteUrl("/#organization") },
+    ...(options.dateModified ? { dateModified: options.dateModified } : {}),
+    ...(options.datePublished ? { datePublished: options.datePublished } : {}),
   };
 }
 
@@ -141,6 +164,58 @@ export function itemListSchema(options: ItemListSchemaOptions): JsonLdSchema {
       "@type": "ListItem",
       position: index + 1,
       name,
+    })),
+  };
+}
+
+export interface ArticleSchemaOptions {
+  title: string;
+  description: string;
+  path: string;
+  datePublished: string;
+  dateModified: string;
+}
+
+export function articleSchema(options: ArticleSchemaOptions): JsonLdSchema {
+  const url = absoluteUrl(options.path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${url}#article`,
+    headline: options.title,
+    description: options.description,
+    url,
+    datePublished: options.datePublished,
+    dateModified: options.dateModified,
+    author: { "@id": absoluteUrl("/#founder") },
+    publisher: { "@id": absoluteUrl("/#organization") },
+    mainEntityOfPage: { "@id": `${url}#webpage` },
+    isPartOf: { "@id": absoluteUrl("/#website") },
+  };
+}
+
+export interface HowToStep {
+  name: string;
+  text: string;
+}
+
+export interface HowToSchemaOptions {
+  name: string;
+  description: string;
+  steps: readonly HowToStep[];
+}
+
+export function howToSchema(options: HowToSchemaOptions): JsonLdSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: options.name,
+    description: options.description,
+    step: options.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
     })),
   };
 }

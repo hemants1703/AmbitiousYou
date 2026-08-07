@@ -13,7 +13,7 @@ export const dynamic = "force-static";
 
 const title = "Compare";
 const description =
-  "See how AmbitiousYou compares to Todoist, Notion, and Asana for long-term goal tracking versus daily tasks and team project management.";
+  "See how AmbitiousYou compares to Todoist, Notion, Asana, and Habitica for long-term goal tracking versus daily tasks, team PM, and gamified habits.";
 
 export const metadata: Metadata = createPageMetadata({
   title,
@@ -37,7 +37,7 @@ export default function CompareHubPage() {
         ]}
       />
       <LandingSection eyebrow="Compare" title="Purpose-built for ambitions, not inboxes" lede={description} className="pt-16 md:pt-24" align="center">
-        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((comparison) => (
             <MarketingHubCard key={comparison.slug} href={`/compare/${comparison.slug}`} title={comparison.title} description={comparison.summary} />
           ))}

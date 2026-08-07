@@ -99,6 +99,33 @@ export const compareContent: Record<CompareSlug, CompareContent> = {
       "You want integrations with Slack, Google, and enterprise tools",
     ],
   },
+  habitica: {
+    slug: "habitica",
+    name: "Habitica",
+    title: "AmbitiousYou vs Habitica",
+    description:
+      "Compare AmbitiousYou's honest ambition tracking with Habitica's RPG-style habit and task gamification.",
+    summary:
+      "Habitica turns habits and todos into an RPG. AmbitiousYou tracks long-term ambitions with milestones, automatic progress, and streaks that refuse to inflate.",
+    features: [
+      { label: "Primary focus", ambitiousyou: "Long-term ambitions and outcomes", competitor: "Habits and daily todos as a game" },
+      { label: "Motivation style", ambitiousyou: "Honest momentum and real completions", competitor: "XP, avatars, parties, and rewards" },
+      { label: "Milestones", ambitiousyou: "Built-in with tasks in one ambition", competitor: "Habits, dailies, and to-dos" },
+      { label: "Progress tracking", ambitiousyou: "Auto-recalculates per ambition", competitor: "Character levels and streaks in-game" },
+      { label: "Privacy / social", ambitiousyou: "Private by default, no sharing", competitor: "Optional parties and guilds" },
+      { label: "Best for", ambitiousyou: "Multi-month career, academic, and life goals", competitor: "Habit building with game mechanics" },
+    ],
+    whenAmbitiousYou: [
+      "You want structure for outcomes that take months, not daily habit XP",
+      "You prefer honest streaks over gamified rewards",
+      "You need milestones and progress % without building a character",
+    ],
+    whenCompetitor: [
+      "Game mechanics (XP, pets, parties) keep you showing up for habits",
+      "You mainly need recurring dailies and habit checklists",
+      "Social accountability inside an RPG community helps you",
+    ],
+  },
 };
 
 export function getCompareContent(slug: string): CompareContent | undefined {

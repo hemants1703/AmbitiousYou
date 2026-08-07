@@ -15,7 +15,10 @@ export const siteConfig = {
   title: `${brandCopy.name} — ${brandCopy.tagline}`,
   description: brandCopy.description,
   url: SITE_URL,
+  /** Fallback social preview — prefer per-route `opengraph-image.tsx` via metadata (no hardcoded images). */
   ogImage: "https://res.cloudinary.com/dej4ks4wd/image/upload/v1781083117/OG_IMAGE_AY.png",
+  /** Square logo for Organization schema / Knowledge Graph (not the wide OG PNG). */
+  logo: `${SITE_URL}/png_logos/icon_512.png`,
   creator: "@AmbitiousYouHQ",
   keywords: [
     "goal tracking",

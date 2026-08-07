@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { guideSlugs } from "@/lib/seo/guide-content";
 
 export type ChangeFrequency = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
@@ -21,12 +22,12 @@ export const useCaseSlugs = [
 export type UseCaseSlug = (typeof useCaseSlugs)[number];
 
 /** Competitor slugs exposed as /compare/[competitor] pages. */
-export const compareSlugs = ["todoist", "notion", "asana"] as const;
+export const compareSlugs = ["todoist", "notion", "asana", "habitica"] as const;
 
 export type CompareSlug = (typeof compareSlugs)[number];
 
 /** Template slugs exposed as /templates/[slug] marketing pages. */
-export const templateSlugs = ["student-semester", "career-switch"] as const;
+export const templateSlugs = ["student-semester", "career-switch", "founder-launch", "personal-growth"] as const;
 
 export type TemplateSlug = (typeof templateSlugs)[number];
 
@@ -71,7 +72,7 @@ const corePages: IndexablePage[] = [
     path: "/templates",
     changeFrequency: "monthly",
     priority: 0.72,
-    summary: "Ambition templates — ready-made structures for students, career switchers, and more.",
+    summary: "Ambition templates — ready-made structures for students, career switchers, founders, and personal growth.",
   },
   {
     path: "/pricing",
@@ -90,6 +91,12 @@ const corePages: IndexablePage[] = [
     changeFrequency: "monthly",
     priority: 0.75,
     summary: "Comparisons — how AmbitiousYou differs from task managers and note apps.",
+  },
+  {
+    path: "/guides",
+    changeFrequency: "weekly",
+    priority: 0.85,
+    summary: "Guides — ambition management, long-term goal tracking, and honest progress.",
   },
   {
     path: "/privacy-policy",
@@ -126,8 +133,21 @@ const templatePages: IndexablePage[] = templateSlugs.map((slug) => ({
   summary: `Ambition template — structured goal plan for ${slug.replace(/-/g, " ")}.`,
 }));
 
+const guidePages: IndexablePage[] = guideSlugs.map((slug) => ({
+  path: `/guides/${slug}`,
+  changeFrequency: "monthly" as const,
+  priority: 0.78,
+  summary: `Guide — ${slug.replace(/-/g, " ")}.`,
+}));
+
 /** All public, indexable routes. Drives sitemap.xml and llms.txt. */
-export const indexablePages: readonly IndexablePage[] = [...corePages, ...useCasePages, ...comparePages, ...templatePages];
+export const indexablePages: readonly IndexablePage[] = [
+  ...corePages,
+  ...useCasePages,
+  ...comparePages,
+  ...templatePages,
+  ...guidePages,
+];
 
 export function getIndexablePage(path: string): IndexablePage | undefined {
   return indexablePages.find((page) => page.path === path);

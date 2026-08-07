@@ -10,7 +10,8 @@ import Link from "next/link";
 export const dynamic = "force-static";
 
 const title = "Ambition Templates";
-const description = "Ready-made ambition structures for students, career switchers, and other ambitious goals — use as-is or adapt to your path.";
+const description =
+  "Ready-made ambition structures for students, career switchers, founders, and personal growth — use as-is or adapt to your path.";
 
 export const metadata: Metadata = createPageMetadata({
   title,

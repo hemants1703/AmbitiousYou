@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
   // Vercel triggers it by running `pnpm build` (see vercel.json) rather
   // than bare `next build`.
   transpilePackages: ["@ambitiousyou/shared"],
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
   turbopack: {
     root: path.join(__dirname, "../.."),
   },

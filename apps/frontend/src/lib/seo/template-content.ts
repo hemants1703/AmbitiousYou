@@ -60,6 +60,22 @@ const careerSwitchMoves = [
   { kind: "milestone" as const, title: "Accept PM offer", description: "Negotiate and accept role at aligned company", daysOffset: 120 },
 ];
 
+const founderLaunchMoves = [
+  { kind: "milestone" as const, title: "Validate problem with 15 customer interviews", description: "Confirm pain and willingness to pay", daysOffset: 21 },
+  { kind: "milestone" as const, title: "Ship private beta to first 10 users", description: "Core loop working end-to-end", daysOffset: 45 },
+  { kind: "task" as const, title: "Write landing page and waitlist copy", description: "Positioning, pricing honesty, CTA", daysOffset: 30 },
+  { kind: "milestone" as const, title: "Reach 100 waitlist signups", description: "Organic + founder outreach", daysOffset: 60 },
+  { kind: "milestone" as const, title: "Public launch", description: "Announce, support early users, measure activation", daysOffset: 90 },
+];
+
+const personalGrowthMoves = [
+  { kind: "milestone" as const, title: "Complete a 12-week strength block", description: "Follow a written program without skipping deloads", daysOffset: 84 },
+  { kind: "task" as const, title: "Schedule three weekly training sessions", description: "Block calendar and protect the slots", daysOffset: 7 },
+  { kind: "task" as const, title: "Log sleep and energy for two weeks", description: "Baseline recovery before intensity climbs", daysOffset: 14 },
+  { kind: "milestone" as const, title: "Hit intermediate strength benchmarks", description: "Measurable lifts or race time as proof", daysOffset: 90 },
+  { kind: "milestone" as const, title: "Sustain 8 weeks of honest training streaks", description: "Only days with real sessions count", daysOffset: 120 },
+];
+
 export const ambitionTemplates: Record<TemplateSlug, AmbitionTemplate> = {
   "student-semester": {
     slug: "student-semester",
@@ -99,6 +115,46 @@ export const ambitionTemplates: Record<TemplateSlug, AmbitionTemplate> = {
         endDate: daysFromNow(120),
       },
       careerSwitchMoves,
+    ),
+  },
+  "founder-launch": {
+    slug: "founder-launch",
+    title: "Founder Launch Template",
+    headline: "Ship from interviews to public launch",
+    description: "A founder ambition spanning validation, beta, waitlist, and launch — milestones for irreversible wins.",
+    story:
+      "Launching is a sequence of proofs, not a single heroic week. This template keeps interviews, beta, waitlist, and launch as one ambition with honest progress.",
+    moves: founderLaunchMoves,
+    draft: buildDraft(
+      {
+        ambitionName: "Launch the product publicly",
+        ambitionDefinition: "Validate the problem, ship a private beta, grow a waitlist, and launch with early activation measured",
+        ambitionMotivation: "I'm building something people need — and I will ship it on purpose.",
+        priority: "high",
+        startDate: daysAgo(7),
+        endDate: daysFromNow(90),
+      },
+      founderLaunchMoves,
+    ),
+  },
+  "personal-growth": {
+    slug: "personal-growth",
+    title: "Personal Growth Training Arc",
+    headline: "Build a body of work on yourself",
+    description: "A personal growth ambition for training consistency — sessions, recovery logging, and milestone benchmarks.",
+    story:
+      "Personal growth stalls when it stays vibes-only. This template turns training into dated moves with honest streaks and clear strength or endurance milestones.",
+    moves: personalGrowthMoves,
+    draft: buildDraft(
+      {
+        ambitionName: "Complete a 12-week strength transformation",
+        ambitionDefinition: "Train consistently, protect recovery, and hit intermediate benchmarks without inflated streaks",
+        ambitionMotivation: "I show up for the person I'm becoming — especially on ordinary days.",
+        priority: "medium",
+        startDate: daysAgo(3),
+        endDate: daysFromNow(120),
+      },
+      personalGrowthMoves,
     ),
   },
 };

@@ -2,12 +2,15 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { brandCopy } from "@/lib/brand";
 import PrimaryCta from "@/components/(landing)/primary-cta";
 import LandingSection from "@/components/(landing)/landing-section";
+import LastUpdated from "@/components/(landing)/marketing/last-updated";
 import JsonLd from "@/components/seo/json-ld";
 import { pricingFaq } from "@/lib/seo/faqs";
+import { marketingContentUpdated } from "@/lib/seo/content-dates";
 import { freePlan } from "@/lib/pricing/free-plan";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { breadcrumbSchema, faqPageSchema, webPageSchema } from "@/lib/seo/schemas";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const dynamic = "force-static";
 
@@ -26,7 +29,7 @@ export default function PricingPage() {
     <>
       <JsonLd
         data={[
-          webPageSchema({ title, description, path: "/pricing" }),
+          webPageSchema({ title, description, path: "/pricing", dateModified: marketingContentUpdated }),
           breadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "Pricing", path: "/pricing" },
@@ -49,6 +52,12 @@ export default function PricingPage() {
           <div className="mt-8">
             <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" />
           </div>
+          <p className="mt-6 text-xs text-muted-foreground">
+            Machine-readable pricing:{" "}
+            <Link prefetch={true} href="/pricing.md" className="underline underline-offset-2 hover:text-foreground">
+              /pricing.md
+            </Link>
+          </p>
         </div>
       </LandingSection>
 
@@ -61,6 +70,9 @@ export default function PricingPage() {
             </AccordionItem>
           ))}
         </Accordion>
+        <div className="mt-6 flex justify-center">
+          <LastUpdated />
+        </div>
       </LandingSection>
     </>
   );

@@ -4,6 +4,28 @@ import type { FaqItem } from "@/lib/seo/schemas";
 export const productDefinition =
   "AmbitiousYou is a free web app for long-term goal tracking. Each ambition combines tasks, milestones, notes, deadlines, and priorities — with a dashboard that recalculates progress, tracks momentum, and shows honest day-streaks. Private by default, no credit card required.";
 
+/** Homepage FAQ — visible + FAQPage schema for AI/search extractability. */
+export const homepageFaq: readonly FaqItem[] = [
+  {
+    question: "What is AmbitiousYou?",
+    answer: productDefinition,
+  },
+  {
+    question: "Who is AmbitiousYou for?",
+    answer:
+      "People who think in ambitions, not errands — students, professionals, founders, and anyone pursuing outcomes that take weeks or months. If you need a daily todo inbox for chores, keep that tool; use AmbitiousYou for the goals that matter over time.",
+  },
+  {
+    question: "Is AmbitiousYou free?",
+    answer: "Yes. AmbitiousYou is free to use with no billing tiers, no trial period, and no credit card required at signup. There is no cap on how many ambitions you create.",
+  },
+  {
+    question: "How is AmbitiousYou different from Todoist or Notion?",
+    answer:
+      "Todoist excels at daily tasks; Notion is a flexible workspace you configure yourself. AmbitiousYou is purpose-built for long-term ambitions: mixed tasks and milestones, automatic progress, momentum charts, and honest streaks — without building your own system.",
+  },
+];
+
 export const featuresFaq: readonly FaqItem[] = [
   {
     question: "How is AmbitiousYou different from regular task managers?",

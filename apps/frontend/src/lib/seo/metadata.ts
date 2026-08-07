@@ -8,6 +8,11 @@ export interface CreatePageMetadataOptions {
   keywords?: string[];
   noIndex?: boolean;
   ogImageAlt?: string;
+  /**
+   * When true, set explicit Cloudinary OG/Twitter images.
+   * Default false so Next.js file-based `opengraph-image.tsx` / `twitter-image.tsx` win.
+   */
+  forceStaticOgImage?: boolean;
 }
 
 const googleBotIndexable = {
@@ -31,9 +36,21 @@ const googleBotNoIndex = {
   },
 };
 
+function staticOgImages(alt: string): NonNullable<Metadata["openGraph"]>["images"] {
+  return [
+    {
+      url: siteConfig.ogImage,
+      width: 1200,
+      height: 630,
+      alt,
+      type: "image/png",
+    },
+  ];
+}
+
 /** Build consistent page metadata from `siteConfig` — canonical, OG, Twitter, robots. */
 export function createPageMetadata(options: CreatePageMetadataOptions): Metadata {
-  const { title, description, path, keywords, noIndex = false, ogImageAlt } = options;
+  const { title, description, path, keywords, noIndex = false, ogImageAlt, forceStaticOgImage = false } = options;
   const url = absoluteUrl(path);
   const imageAlt = ogImageAlt ?? title;
 
@@ -50,21 +67,13 @@ export function createPageMetadata(options: CreatePageMetadataOptions): Metadata
       siteName: siteConfig.name,
       locale: "en_US",
       type: "website",
-      images: [
-        {
-          url: siteConfig.ogImage,
-          width: 1200,
-          height: 630,
-          alt: imageAlt,
-          type: "image/png",
-        },
-      ],
+      ...(forceStaticOgImage ? { images: staticOgImages(imageAlt) } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [siteConfig.ogImage],
+      ...(forceStaticOgImage ? { images: [siteConfig.ogImage] } : {}),
       creator: siteConfig.creator,
       site: siteConfig.creator,
     },
@@ -105,6 +114,8 @@ export function createRootMetadata(): Metadata {
     publisher: siteConfig.name,
     robots: googleBotIndexable,
     alternates: { canonical: "/" },
+    // Omit openGraph/twitter images so `src/app/opengraph-image.tsx` and
+    // `twitter-image.tsx` are the source of truth (1200×630), not Cloudinary.
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -112,21 +123,11 @@ export function createRootMetadata(): Metadata {
       siteName: siteConfig.name,
       title: siteConfig.title,
       description: siteConfig.description,
-      images: [
-        {
-          url: siteConfig.ogImage,
-          width: 1200,
-          height: 675,
-          alt: siteConfig.title,
-          type: "image/png",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: siteConfig.title,
       description: siteConfig.description,
-      images: [siteConfig.ogImage],
       creator: siteConfig.creator,
       site: siteConfig.creator,
     },
