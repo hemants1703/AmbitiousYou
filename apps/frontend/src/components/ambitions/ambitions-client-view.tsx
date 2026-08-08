@@ -3,9 +3,8 @@
 import AmbitionCard from "@/components/(app)/ambitions/ambition-card";
 import AmbitionFilters, { AmbitionFiltersState } from "@/components/(app)/ambitions/ambition-filters";
 import { FadeIn } from "@/components/motion-wrapper";
-import { Button } from "@/components/ui/button";
 import { Ambition } from "@ambitiousyou/shared/types";
-import { FilterIcon, PlusCircleIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -34,20 +33,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
   }, [filters.favouritesOnly, filters.priority, filters.search, filters.status, props.ambitions]);
 
   return (
-    <div className="app-page flex flex-col gap-6">
-      <FadeIn className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Your Ambitions</h1>
-          <p className="text-muted-foreground">View and manage all your ambitions in one place</p>
-        </div>
-        <Button asChild size="sm" className="w-full md:w-auto">
-          <Link prefetch href="/ambitions/create" className="flex items-center justify-center gap-1 md:ml-0">
-            <PlusCircleIcon className="h-4 w-4" />
-            Create New Ambition
-          </Link>
-        </Button>
-      </FadeIn>
-
+    <>
       <FadeIn delayMs={80}>
         <AmbitionFilters value={filters} onChange={setFilters} onClear={() => setFilters({})} />
       </FadeIn>
@@ -69,6 +55,6 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
           </FadeIn>
         )}
       </div>
-    </div>
+    </>
   );
 }

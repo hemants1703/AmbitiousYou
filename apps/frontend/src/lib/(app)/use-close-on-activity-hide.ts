@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffectEvent, useLayoutEffect } from "react";
 
 /**
  * When Cache Components hides a route via React Activity, effect cleanups run.
@@ -8,12 +8,11 @@ import { useLayoutEffect, useRef } from "react";
  * with a modal still open.
  */
 export function useCloseOnActivityHide(onClose: () => void) {
-  const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+  const onCloseEvent = useEffectEvent(onClose);
 
   useLayoutEffect(() => {
     return () => {
-      onCloseRef.current();
+      onCloseEvent();
     };
   }, []);
 }

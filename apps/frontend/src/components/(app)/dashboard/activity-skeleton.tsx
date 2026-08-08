@@ -1,26 +1,38 @@
-import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CalendarDaysIcon, TrendingUpIcon } from "lucide-react";
 
-/** Mirrors {@link DashboardActivity}'s layout (activity calendar above the movement chart) to avoid layout shift. */
+/** Mirrors DashboardActivity layout with real card titles; heatmap/chart stay skeleton. */
 export function ActivitySkeleton() {
   return (
     <div className="flex flex-col gap-6" aria-hidden="true">
       <Card>
-        <CardHeader className="gap-2">
-          <Skeleton className="h-5 w-44" />
-          <Skeleton className="h-4 w-56 max-w-full" />
+        <CardHeader>
+          <div className="space-y-1.5">
+            <CardTitle className="flex items-center gap-2">
+              <CalendarDaysIcon className="size-4 text-foreground" />
+              Activity calendar
+            </CardTitle>
+            <CardDescription>Every move you&apos;ve completed over the last year.</CardDescription>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Skeleton className="h-4 w-72 max-w-full" />
           <Skeleton className="h-30 w-full rounded-2xl" />
-          <Skeleton className="ml-auto h-4 w-28" />
+          <div className="hidden gap-3 lg:grid lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} className="h-16 w-full rounded-2xl" />
+            ))}
+          </div>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader className="gap-2">
-          <Skeleton className="h-5 w-36" />
-          <Skeleton className="h-4 w-48 max-w-full" />
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUpIcon className="size-4 text-foreground" />
+            Your movement
+          </CardTitle>
+          <CardDescription>Moves you&apos;ve completed, day by day.</CardDescription>
           <CardAction>
             <Skeleton className="h-8 w-32 rounded-3xl" />
           </CardAction>

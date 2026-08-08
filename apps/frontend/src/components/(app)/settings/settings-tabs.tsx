@@ -1,14 +1,14 @@
 "use client";
 
 import type { Session, Settings, User } from "@ambitiousyou/shared";
-import { BellIcon, CreditCardIcon, LockKeyholeIcon, UserRoundIcon } from "lucide-react";
 import Link from "next/link";
-import type { ComponentType, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { useEffect, useState } from "react";
 import { AccountSettingsTab } from "./account-settings-tab";
 import { BillingSettingsTab } from "./billing-settings-tab";
 import { NotificationsSettingsTab } from "./notifications-settings-tab";
 import { SecuritySettingsTab } from "./security-settings-tab";
+import { SETTINGS_TAB_ITEMS } from "./settings-tab-items";
 import {
   hrefForSettingsTab,
   parseSettingsTab,
@@ -23,18 +23,6 @@ interface SettingsTabsProps {
   userSettings: Settings;
   sessions: Session[] | null;
 }
-
-const tabItems: Array<{
-  value: SettingsTabValue;
-  label: string;
-  description: string;
-  icon: ComponentType<{ className?: string }>;
-}> = [
-  { value: "account", label: "Account", description: "Profile & identity", icon: UserRoundIcon },
-  { value: "billing", label: "Billing", description: "Plans & payments", icon: CreditCardIcon },
-  { value: "notifications", label: "Notifications", description: "Alerts & reminders", icon: BellIcon },
-  { value: "security", label: "Security", description: "Password & sessions", icon: LockKeyholeIcon },
-];
 
 export function SettingsTabs(props: SettingsTabsProps) {
   const [activeTab, setActiveTab] = useState<SettingsTabValue>(props.initialTab);
@@ -84,7 +72,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
           className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-x-visible lg:pb-0"
           role="tablist"
         >
-          {tabItems.map((tab) => {
+          {SETTINGS_TAB_ITEMS.map((tab) => {
             const isActive = activeTab === tab.value;
             return (
               <Link

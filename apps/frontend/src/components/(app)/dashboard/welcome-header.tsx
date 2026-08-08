@@ -56,7 +56,7 @@ export function WelcomeHeader(props: WelcomeHeaderProps) {
       <div className="flex w-full shrink-0 gap-2 sm:w-auto">
         {quickAddAmbitions.length > 0 ? <QuickAdd ambitions={quickAddAmbitions} /> : null}
         <Button asChild className="min-w-0 flex-1 sm:w-auto sm:flex-none">
-          <Link href="/ambitions/create" prefetch>
+          <Link href="/ambitions/create">
             <PlusCircleIcon className="size-4" />
             New ambition
           </Link>

@@ -1,14 +1,14 @@
+import { AmbitionCardsSkeleton } from "@/components/(app)/ambitions/ambition-cards-skeleton";
+import { AmbitionsFiltersFallback } from "@/components/(app)/ambitions/ambitions-filters-fallback";
+import { AmbitionsPageHeader } from "@/components/(app)/ambitions/ambitions-page-header";
 import AmbitionsClientView from "@/components/ambitions/ambitions-client-view";
 import { FadeIn } from "@/components/motion-wrapper";
-import { Button } from "@/components/ui/button";
 import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
 import { getSessionToken, requireUser } from "@/lib/auth";
 import { Ambition } from "@ambitiousyou/shared/types";
-import { FilterIcon, PlusCircleIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
-import AmbitionsLoading from "./loading";
 
 export const metadata: Metadata = {
   title: "All Ambitions",
@@ -16,9 +16,19 @@ export const metadata: Metadata = {
 
 export default function AmbitionsPage() {
   return (
-    <Suspense fallback={<AmbitionsLoading />}>
-      <AmbitionsContent />
-    </Suspense>
+    <div className="app-page flex flex-col gap-6">
+      <AmbitionsPageHeader />
+      <Suspense
+        fallback={
+          <>
+            <AmbitionsFiltersFallback />
+            <AmbitionCardsSkeleton />
+          </>
+        }
+      >
+        <AmbitionsContent />
+      </Suspense>
+    </div>
   );
 }
 
@@ -32,32 +42,17 @@ async function AmbitionsContent() {
   const [, ambitions]: [unknown, Ambition[] | null] = await Promise.all([requireUser(), getAmbitions(sessionToken)]);
 
   if (!ambitions || ambitions.length === 0) {
-    return <NoAmbitionsFoundPage />;
+    return <NoAmbitionsFound />;
   }
 
   return <AmbitionsClientView ambitions={ambitions} />;
 }
 
-function NoAmbitionsFoundPage() {
+function NoAmbitionsFound() {
   return (
-    <div className="app-page flex flex-col gap-6 p-6 md:p-8">
-      <FadeIn className="flex flex-col md:flex-row gap-2 justify-between items-center">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Your Ambitions</h1>
-          <p className="text-muted-foreground">View and manage all your ambitions in one place</p>
-        </div>
-        <Button asChild size="sm" className="w-full md:w-auto">
-          <Link href="/ambitions/create" className="md:ml-0 flex justify-center items-center gap-1">
-            <PlusCircleIcon className="h-4 w-4" />
-            Create New Ambition
-          </Link>
-        </Button>
-      </FadeIn>
-
-      <FadeIn delayMs={100} className="col-span-full text-center py-10 text-muted-foreground">
-        <FilterIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
-        <p>You haven&apos;t created any ambitions yet</p>
-      </FadeIn>
-    </div>
+    <FadeIn className="col-span-full text-center py-10 text-muted-foreground">
+      <FilterIcon className="mx-auto mb-3 h-12 w-12 opacity-20" />
+      <p>You haven&apos;t created any ambitions yet</p>
+    </FadeIn>
   );
 }
