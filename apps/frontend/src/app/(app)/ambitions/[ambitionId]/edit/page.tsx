@@ -1,4 +1,5 @@
 import EditAmbitionForm from "@/components/(app)/ambitions/(ambitionId)/edit-ambition/edit-ambition-form";
+import { EndDateHistory } from "@/components/(app)/ambitions/(ambitionId)/edit-ambition/end-date-history";
 import { FadeIn } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,6 +50,7 @@ async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string
   }
 
   const dateWindowLabel = `${formatDate(ambition.ambitionStartDate)} – ${formatDate(ambition.ambitionEndDate)}`;
+  const endDateHistory = ambition.ambitionEndDateHistory ?? [];
 
   return (
     <div className="app-page flex flex-col">
@@ -63,7 +65,7 @@ async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight text-balance">Edit ambition</h1>
           <p className="text-muted-foreground">
-            Update the name, definition, motivation, and priority for <span className="font-medium text-foreground">{ambition.ambitionName}</span>.
+            Update the name, definition, motivation, priority, and end date for <span className="font-medium text-foreground">{ambition.ambitionName}</span>.
           </p>
         </div>
       </FadeIn>
@@ -80,21 +82,30 @@ async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string
               isFavourited={ambition.isFavourited ?? false}
               ambitionStartDate={new Date(ambition.ambitionStartDate).toISOString()}
               ambitionEndDate={new Date(ambition.ambitionEndDate).toISOString()}
+              endDateExtensionCount={endDateHistory.length}
             />
           </CardContent>
         </Card>
 
-        <aside aria-label="Fixed at creation" className="lg:col-span-1">
+        <aside aria-label="Date window rules" className="lg:col-span-1">
           <Card className="bg-muted/30">
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-2">
-                <LockIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-                <h2 className="text-sm font-semibold tracking-tight">Fixed at creation</h2>
-              </div>
-              <p className="text-sm text-muted-foreground">A few things lock in when an ambition is created and can&rsquo;t be changed here.</p>
+            <CardContent className="space-y-5">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <LockIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                  <h2 className="text-sm font-semibold tracking-tight">Date window</h2>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  The start date is fixed. The end date can only move later — once you save a later date, you can&rsquo;t go back.
+                </p>
 
-              <div className="space-y-3">
-                <LockedDetail icon={<CalendarRangeIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />} label="Active window" value={dateWindowLabel} />
+                <div className="space-y-3">
+                  <LockedDetail icon={<CalendarRangeIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />} label="Current window" value={dateWindowLabel} />
+                </div>
+              </div>
+
+              <div className="border-t border-border/60 pt-5">
+                <EndDateHistory history={endDateHistory} currentEndDate={ambition.ambitionEndDate} />
               </div>
 
               <p className="flex items-start gap-1.5 text-xs text-muted-foreground">

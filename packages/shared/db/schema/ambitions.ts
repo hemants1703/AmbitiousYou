@@ -1,6 +1,13 @@
-import { boolean, integer, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { boolean, integer, jsonb, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { users } from './users';
 import { ambitionPriorityEnum, ambitionStatusEnum } from './enums';
+
+/** One forward end-date extension, stored in `ambitionEndDateHistory`. */
+export type AmbitionEndDateChange = {
+  previousEndDate: string;
+  newEndDate: string;
+  changedAt: string;
+};
 
 export const ambitions = pgTable('ambitions', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -12,6 +19,8 @@ export const ambitions = pgTable('ambitions', {
   ambitionMotivation: text('ambition_motivation'),
   ambitionStartDate: timestamp('ambition_start_date', { precision: 3 }).notNull(),
   ambitionEndDate: timestamp('ambition_end_date', { precision: 3 }).notNull(),
+  /** Append-only log of forward end-date extensions (oldest → newest). */
+  ambitionEndDateHistory: jsonb('ambition_end_date_history').$type<AmbitionEndDateChange[]>().notNull().default([]),
   ambitionCompletionDate: timestamp('ambition_completion_date', { precision: 3 }),
   ambitionStatus: ambitionStatusEnum('ambition_status').notNull().default('active'),
   ambitionPriority: ambitionPriorityEnum('ambition_priority').notNull().default('medium'),
@@ -28,6 +37,13 @@ export type NewAmbition = Pick<Ambition, 'ambitionName' | 'ambitionStartDate' | 
   Partial<
     Pick<
       Ambition,
-      'ambitionDefinition' | 'ambitionMotivation' | 'ambitionCompletionDate' | 'ambitionStatus' | 'ambitionPriority' | 'ambitionPercentageCompleted' | 'isFavourited'
+      | 'ambitionDefinition'
+      | 'ambitionMotivation'
+      | 'ambitionCompletionDate'
+      | 'ambitionStatus'
+      | 'ambitionPriority'
+      | 'ambitionPercentageCompleted'
+      | 'isFavourited'
+      | 'ambitionEndDateHistory'
     >
   >;

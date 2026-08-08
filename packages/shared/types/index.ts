@@ -7,7 +7,7 @@ export type { User, NewUser } from '../db/schema/users';
 export type { Session, NewSession } from '../db/schema/sessions';
 export type { Verification, NewVerification } from '../db/schema/verifications';
 export type { Settings } from '../db/schema/settings';
-export type { Ambition, NewAmbition } from '../db/schema/ambitions';
+export type { Ambition, NewAmbition, AmbitionEndDateChange } from '../db/schema/ambitions';
 export type { Task, NewTask } from '../db/schema/tasks';
 export type { Milestone, NewMilestone } from '../db/schema/milestones';
 export type { Note, NewNote } from '../db/schema/notes';

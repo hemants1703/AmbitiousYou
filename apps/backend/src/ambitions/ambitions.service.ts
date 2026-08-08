@@ -2,8 +2,18 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { and, desc, eq } from 'drizzle-orm';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
-import { db, ambitions, milestones, notes, tasks, type Ambition } from '../db';
+import { db, ambitions, milestones, notes, tasks, type Ambition, type AmbitionEndDateChange } from '../db';
 import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
+
+function startOfDay(value: Date): Date {
+  const date = new Date(value);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function toIsoDate(value: Date): string {
+  return new Date(value).toISOString();
+}
 
 @Injectable()
 export class AmbitionsService {
@@ -59,6 +69,40 @@ export class AmbitionsService {
       throw new BadRequestException(`Ambition with id ${ambitionId} not found`);
     }
 
+    // Start date is immutable after creation; only the end date may move, and only forward.
+    const nextEndDay = startOfDay(updateAmbitionDto.ambitionEndDate);
+    const currentEndDay = startOfDay(ambition.ambitionEndDate);
+    const startDay = startOfDay(ambition.ambitionStartDate);
+
+    if (nextEndDay.getTime() < currentEndDay.getTime()) {
+      throw new BadRequestException('ambitionEndDate can only be moved later, never earlier');
+    }
+
+    if (nextEndDay.getTime() < startDay.getTime()) {
+      throw new BadRequestException('ambitionEndDate must be on or after ambitionStartDate');
+    }
+
+    const endDateExtended = nextEndDay.getTime() > currentEndDay.getTime();
+
+    // Extending a missed window past today reopens the ambition as active.
+    let ambitionStatus = ambition.ambitionStatus;
+    if (ambitionStatus !== 'completed') {
+      const today = startOfDay(new Date());
+      ambitionStatus = nextEndDay.getTime() < today.getTime() ? 'missed' : 'active';
+    }
+
+    const history = ambition.ambitionEndDateHistory ?? [];
+    const ambitionEndDateHistory: AmbitionEndDateChange[] = endDateExtended
+      ? [
+          ...history,
+          {
+            previousEndDate: toIsoDate(ambition.ambitionEndDate),
+            newEndDate: toIsoDate(updateAmbitionDto.ambitionEndDate),
+            changedAt: new Date().toISOString(),
+          },
+        ]
+      : history;
+
     const [updated] = await db
       .update(ambitions)
       .set({
@@ -67,6 +111,9 @@ export class AmbitionsService {
         ambitionMotivation: updateAmbitionDto.ambitionMotivation,
         ambitionPriority: updateAmbitionDto.ambitionPriority,
         isFavourited: updateAmbitionDto.isFavourited,
+        ambitionEndDate: updateAmbitionDto.ambitionEndDate,
+        ambitionEndDateHistory,
+        ambitionStatus,
       })
       .where(eq(ambitions.id, ambition.id))
       .returning();

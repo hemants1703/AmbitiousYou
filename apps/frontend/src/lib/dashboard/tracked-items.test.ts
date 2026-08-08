@@ -23,6 +23,7 @@ function buildAmbition(overrides: Partial<AmbitionDetails> = {}): AmbitionDetail
     ambitionMotivation: "Stay focused",
     ambitionStartDate: new Date("2026-01-01"),
     ambitionEndDate: new Date("2026-12-31"),
+    ambitionEndDateHistory: [],
     ambitionPriority: "medium",
     ambitionStatus: "active",
     ambitionPercentageCompleted: 25,

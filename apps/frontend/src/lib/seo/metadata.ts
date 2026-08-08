@@ -141,6 +141,7 @@ export function createRootMetadata(): Metadata {
         { url: "/png_logos/icon_192.png", type: "image/png", sizes: "192x192" },
         { url: "/png_logos/icon_512.png", type: "image/png", sizes: "512x512" },
       ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
       shortcut: "/favicon.ico",
     },
     appleWebApp: {

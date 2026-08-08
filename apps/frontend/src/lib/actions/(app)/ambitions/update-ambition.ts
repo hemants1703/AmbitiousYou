@@ -19,10 +19,11 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
   const ambitionPriority = readString(formData, "ambitionPriority") as "low" | "medium" | "high" | "";
   const isFavourited = readString(formData, "isFavourited") === "true";
 
-  // The date window can't change after creation, but the backend DTO still validates it,
-  // so we round-trip the original values straight from the hidden form fields.
+  // Start date is immutable; end date may only move later. Round-trip start and
+  // validate the new end against the original so a forged earlier date never ships.
   const ambitionStartDate = parseDate(readString(formData, "ambitionStartDate"));
   const ambitionEndDate = parseDate(readString(formData, "ambitionEndDate"));
+  const originalAmbitionEndDate = parseDate(readString(formData, "originalAmbitionEndDate"));
 
   if (!ambitionId) {
     return { error: "We couldn't tell which ambition to update. Refresh the page and try again." };
@@ -36,8 +37,17 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
     return { error: "Choose a priority before saving." };
   }
 
-  if (!ambitionStartDate || !ambitionEndDate) {
+  if (!ambitionStartDate || !ambitionEndDate || !originalAmbitionEndDate) {
     return { error: "Something went wrong reading this ambition. Refresh the page and try again." };
+  }
+
+  const nextEndDay = new Date(ambitionEndDate);
+  nextEndDay.setHours(0, 0, 0, 0);
+  const originalEndDay = new Date(originalAmbitionEndDate);
+  originalEndDay.setHours(0, 0, 0, 0);
+
+  if (nextEndDay.getTime() < originalEndDay.getTime()) {
+    return { error: "The end date can only be moved later — you can't go back to an earlier date." };
   }
 
   const payload = {

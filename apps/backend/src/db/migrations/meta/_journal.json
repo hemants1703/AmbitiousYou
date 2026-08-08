@@ -43,6 +43,13 @@
       "when": 1785925092274,
       "tag": "0005_sticky_spirit",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786188270149,
+      "tag": "0006_simple_mandarin",
+      "breakpoints": true
     }
   ]
 }
