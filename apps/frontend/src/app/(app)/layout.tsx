@@ -40,6 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             } as React.CSSProperties
           }>
           <AppSidebar
+            variant="inset"
             userSlot={
               <Suspense fallback={<NavUserSkeleton />}>
                 <AuthenticatedNavUser />

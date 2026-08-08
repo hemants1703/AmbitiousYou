@@ -88,7 +88,7 @@ export default function DemoAmbitionShowcase(props: DemoAmbitionShowcaseProps) {
                   <span className="font-medium">Overall Progress</span>
                   <span className="text-lg font-bold tabular-nums">{props.progress}%</span>
                 </div>
-                <Progress value={props.progress} className="h-1 *:transition-all *:duration-500" />
+                <Progress value={props.progress} className="h-1" />
                 <p aria-live="polite" className="sr-only">
                   Progress: {props.progress}%. {completedCount} of {totalItems} moves complete.
                 </p>

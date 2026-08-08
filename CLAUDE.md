@@ -8,7 +8,7 @@ pnpm workspace monorepo. Three workspaces — order from least to most code:
 
 - `packages/shared` — **single source of truth for the database schema AND derived API types.** Contains the Drizzle `pgTable` definitions under `db/schema/*` plus the inferred TS types (`User`, `Ambition`, `Task`, etc.). Backend imports the schema for runtime queries + migration generation; frontend imports types-only for API response shapes. Buildable via `pnpm --filter @ambitiousyou/shared build` → `dist/` (CJS). The backend's `prebuild` / `prestart:dev` scripts trigger this automatically; the frontend uses `transpilePackages: ['@ambitiousyou/shared']` in `next.config.ts` so no build is required to consume from there.
 - `apps/backend` — NestJS 11 + Drizzle ORM + PostgreSQL. REST API on port `3001`. Feature modules: `auth`, `users`, `ambitions`, `tasks`, `milestones`, `notes`, `settings`, plus a shared global `db` module (`DatabaseModule.forRoot()`).
-- `apps/frontend` — Next.js 16 (App Router, React 19, React Compiler on, Turbopack). Talks to the backend over HTTP using `process.env.API_URL` and a Bearer token.
+- `apps/frontend` — Next.js 16.3 (App Router, React 19, React Compiler on, Turbopack). **Cache Components + Partial Prefetching are enabled** (`cacheComponents` / `partialPrefetching` in `next.config.ts`) — see Frontend § below and `docs/NEXT-CACHE-COMPONENTS-MIGRATION.md`. Talks to the backend over HTTP using `process.env.API_URL` and a Bearer token.
 
 ## Commands
 
@@ -76,10 +76,10 @@ Drizzle is used in **raw SQL-style** — no DI ceremony, no `db.query.*` relatio
 - Route groups under `src/app/`:
   - `(landing)/` — public marketing pages (`/`, `/features`, `/experience`, `/privacy-policy`, `/terms-and-conditions`).
   - `(auth)/` — `/login`, `/signup`. Use `redirectIfAuthenticated()` to bounce signed-in visitors to `/dashboard`.
-  - `(app)/` — authenticated app (`/dashboard`, `/ambitions`, `/ambitions/[ambitionId]`, `/ambitions/create`, `/settings`). The layout calls `requireUser()`.
+  - `(app)/` — authenticated app (`/dashboard`, `/ambitions`, `/ambitions/[ambitionId]`, `/ambitions/create`, `/settings`). Layout chrome is static; auth user + inbox stream behind Suspense (do not block `{children}` with `requireUser()` at layout top).
   - `api/logout/` and `api/auth/status/` — the only Route Handlers (`logout` clears the session cookies; `auth/status` validates the session against the backend so the static public pages can show a correct logged-in affordance, and self-heals stale cookies); everything else goes through Server Actions.
 - Auth gate (`src/lib/auth.ts`): three functions with distinct contracts. **Use the right one** — the file documents why.
-  - `requireUser()` — mandatory gate for protected pages. Reads the cookie *and* calls the backend to validate; redirects to `/login` on missing OR forged/expired. Wrapped by React `cache()` so layout + page in the same request = one backend call.
+  - `requireUser()` — mandatory gate for protected **page content** (inside Suspense). Reads the cookie *and* calls the backend to validate; redirects to `/login` on missing OR forged/expired. Wrapped by React `cache()` so layout islands + page in the same request = one backend call.
   - `getSessionToken()` — returns the raw cookie value without validating it. Only safe to use when the downstream backend call is itself behind `SessionGuard` (a forged token will be rejected there with a 401). Never use this to gate a render.
   - `redirectIfAuthenticated()` — for `(auth)` pages.
 - Data layer split:
@@ -91,7 +91,23 @@ Drizzle is used in **raw SQL-style** — no DI ceremony, no `db.query.*` relatio
   - Per-page supporting components live under `src/components/(app)/(<resource>)/(<routeParam>)/...` mirroring the route. E.g. components for `/ambitions/[ambitionId]` go under `src/components/(app)/(ambitions)/(ambitionId)/`.
   - Props always typed as a `*Props` interface in the same file; consume as `props.thing` (no destructuring).
   - Lucide icons imported with the `*Icon` suffix (`SunIcon`, not `Sun`).
-- `next.config.ts` sets `turbopack.root` to the monorepo root and enables `reactCompiler: true`. UI uses shadcn (style: `radix-luma`, baseColor: `neutral`) under `src/components/ui/`. Theming via `next-themes` + `ThemeColorSync`; toasts via `sonner`.
+- `next.config.ts` sets `turbopack.root` to the monorepo root, `reactCompiler: true`, **`cacheComponents: true`**, and **`partialPrefetching: true`**. UI uses shadcn (style: `radix-luma`, baseColor: `neutral`) under `src/components/ui/`. Theming via `next-themes` + `ThemeColorSync`; toasts via `sonner`.
+
+#### Cache Components & Partial Prefetching (CRITICAL — preserve on every frontend change)
+
+**Product intent:** Partial Prefetching gives a shared App Shell per route (Hobby cost + SPA-feeling nav). It requires Cache Components. This is a **composition model** (early shells + Suspense + Soft Nav), **not** “cache all user data.”
+
+Adopted decisions (detail in `docs/NEXT-CACHE-COMPONENTS-MIGRATION.md`; day-to-day MUST/NEVER in `apps/frontend/AGENTS.md`):
+
+1. **`(app)/layout`** — static chrome; stream nav user + inbox behind `<Suspense>`; never let auth/inbox awaits block `{children}`.
+2. **Pages** — runtime awaits (`cookies`, `params`, `searchParams`, domain fetches) live inside Suspense children; keep `loading.tsx` shells.
+3. **No `'use cache'` on personal ambitions / moves / notes / inbox** — optimistic UI + scoped `revalidatePath` / `revalidateAmbition` stay the source of truth. Never key a server cache on the opaque `sessionToken` (cache keys are plain text).
+4. **Activity** — Soft Nav may hide routes without unmounting; close dialogs/menus/drawers with `useCloseOnActivityHide` (`apps/frontend/src/lib/(app)/use-close-on-activity-hide.ts`).
+5. **Prefetch** — do not blanket `prefetch={true}`; keep it only where URL-bound runtime data still needs it (`/ambitions/[id]`, edit).
+6. **Landing** — no `dynamic = "force-static"` (obsolete under Cache Components); marketing still prerenders Static. `"use cache"` + `cacheLife` only for non-personal prerender helpers (e.g. year/sitemap).
+7. **NEVER** disable `cacheComponents` / `partialPrefetching` to work around UI/animation issues; fix the client pattern instead (e.g. Progress uses WAAPI + Activity effect lifecycle, not `usePathname` restart loops).
+
+When adding a new `(app)` feature/route: Suspense the awaits, ship a loading shell, Activity-safe overlays, preserve inset app shell, follow prefetch policy above.
 
 ### Cross-cutting
 
@@ -100,4 +116,4 @@ Drizzle is used in **raw SQL-style** — no DI ceremony, no `db.query.*` relatio
 
 ### Frontend UI/UX guidelines
 
-`apps/frontend/AGENTS.md` is a detailed UI rule set (MUST/SHOULD/NEVER) covering keyboard, focus, forms, animation, layout, accessibility, performance, dark mode, hydration. Read it before non-trivial UI work.
+`apps/frontend/AGENTS.md` is the detailed UI + **Cache Components** rule set (MUST/SHOULD/NEVER) covering keyboard, focus, forms, animation, layout, accessibility, performance, dark mode, hydration, and Partial Prefetching. Read it before non-trivial frontend work.

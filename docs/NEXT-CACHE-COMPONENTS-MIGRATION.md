@@ -5,6 +5,10 @@ Adopted on branch `feat/cache-components-partial-prefetch` against **Next.js 16.
 > **Status: adopted (composition model).** Cache Components + Partial Prefetching are
 > enabled for PPR shells, Suspense streaming, and shared App Shell prefetches — **not**
 > for caching personal ambition/move payloads or ISR on `(app)` routes.
+>
+> **Day-to-day rules for agents:** `apps/frontend/AGENTS.md` (Cache Components section) and
+> `CLAUDE.md` (Frontend § Cache Components). Prefer those for new features; this doc is the
+> adoption record.
 
 ## Why this is one decision, not two
 

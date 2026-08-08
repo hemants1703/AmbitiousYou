@@ -39,9 +39,11 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 
 - MUST: URL reflects state (deep-link filters/tabs/pagination/expanded panels)
 - MUST: Back/Forward restores scroll position
-- MUST: Links use `<a>`/`<Link>` for navigation (support Cmd/Ctrl/middle-click); `prefetch` on in-app routes
+- MUST: Links use `<a>`/`<Link>` for navigation (support Cmd/Ctrl/middle-click)
 - NEVER: Use `<div onClick>` for navigation
 - MUST: Add `loading.tsx` shells for routes where navigation should feel instant (mirror final layout to avoid CLS)
+- SHOULD: Rely on Partial Prefetching’s shared App Shell for most `<Link>`s — do not blanket `prefetch={true}`
+- MUST: Keep `prefetch` only where URL-bound runtime data still needs a full prefetch (today: `/ambitions/[id]`, `/ambitions/[id]/edit`)
 
 ### Feedback
 
@@ -78,6 +80,8 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - MUST: Animations interruptible and input-driven (no autoplay)
 - MUST: Correct `transform-origin` (motion starts where it "physically" should)
 - MUST: SVG transforms on `<g>` wrapper with `transform-box: fill-box`
+- MUST: Progress bars use shared `<Progress>` (`src/components/ui/progress.tsx`) — entrance fill is WAAPI; do not reintroduce React-state + `usePathname` loops that fight Soft Nav
+- SHOULD: Entrance animations may replay when Activity reveals a route (effect teardown/setup) — that is expected, not a Cache Components bug
 
 ## Layout
 
@@ -173,12 +177,54 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - **NEVER:** SWR/React Query — fights the server-first model and adds bundle cost
 - **Streaming:** `Suspense` + skeleton fallbacks for heavy server children (dashboard insights, activity)
 
+## Cache Components & Partial Prefetching (CRITICAL)
+
+**Status: adopted.** `cacheComponents: true` + `partialPrefetching: true` in `next.config.ts`. Full rationale: [`docs/NEXT-CACHE-COMPONENTS-MIGRATION.md`](../../docs/NEXT-CACHE-COMPONENTS-MIGRATION.md).
+
+**Why this matters:** Partial Prefetching is the product win (shared App Shell per route → cheaper Hobby prefetches + SPA-feeling nav on dashboard ↔ ambitions ↔ detail). It **only works when Cache Components is enabled**. New features MUST preserve this composition model — do not “simplify” back to blocking layouts or per-link full prefetches.
+
+### What we optimize for
+
+| Lever | Intent |
+| --- | --- |
+| Static / early shell | Chrome and fallbacks paint before personal data |
+| Suspense islands | Runtime awaits (`cookies`, `params`, `searchParams`, domain fetches) never block the whole route |
+| Partial Prefetch | Shared App Shell; avoid redundant full RSC prefetches |
+| Activity Soft Nav | Routes may stay mounted while hidden — client UI must tolerate hide/reveal |
+
+### MUST
+
+- Keep `(app)/layout` chrome static: nav links/frames render without awaiting auth; stream `AuthenticatedNavUser` / `HeaderInbox` (or successors) behind `<Suspense>` so they do not block `{children}`
+- Put page-level runtime work inside Suspense children (or `loading.tsx` siblings); do not `await` cookies/session/domain data at the top of a layout/page that should contribute to the shell
+- Close transient UI on Activity hide via `useCloseOnActivityHide` (`src/lib/(app)/use-close-on-activity-hide.ts`) for dialogs, menus, drawers, popovers
+- Preserve `AppSidebar` `variant="inset"` (and other shell chrome) when touching layout — Soft Nav gains must not regress the visual shell
+- Prefer optimistic UI + scoped `revalidatePath` / `revalidateAmbition` for personal data freshness
+
+### NEVER
+
+- Disable `cacheComponents` or `partialPrefetching` to “fix” an animation, dialog, or fetch issue
+- Add `'use cache'` (or ISR / `generateStaticParams`) for ambitions, moves, notes, inbox, or any payload keyed by `sessionToken` — cache keys are plain text; optimistic mutations are the source of truth
+- Reintroduce `export const dynamic = "force-static" | "force-dynamic"` — invalid / obsolete under Cache Components; landing still prerenders as Static without it
+- Await `requireUser()` / inbox / heavy fetches in `(app)/layout` in a way that blocks `{children}`
+- Blanket `prefetch={true}` on marketing or static links (fights Partial Prefetching cost model)
+- Tie entrance animations to `usePathname()` in a way that restarts mid Soft Nav (causes stutter; use mount/Activity effect lifecycle instead)
+
+### SHOULD
+
+- Use `"use cache"` + `cacheLife` only for **non-personal** bits that would otherwise block prerender (e.g. copyright year, sitemap helpers)
+- Measure before adding `'use cache: private'` for the current user or tagged inbox caches
+- When adding a new `(app)` route: ship `loading.tsx`, Suspense around awaits, Activity-safe overlays, and Link prefetch policy consistent with above
+
+### Not the goal
+
+Cache Components here is **composition + prefetch shells**, not “cache all user data.” Personal ambition/move payloads stay request-time by design.
+
 ## Performance & Cost (Vercel Hobby)
 
 - **Perceived speed first:** Optimistic UI + in-place spinners; user actions should feel instant
 - **Actual speed:** Minimize HTTP round-trips (batch APIs, one fetch per page where possible); overlap independent server work with `Promise.all`
-- **Serverless cost:** Fewer `router.refresh()` calls and narrower `revalidatePath` scopes = fewer full RSC re-renders; keep landing pages `force-static` and CSP nonce-free
-- **Navigation:** `loading.tsx` + `Link prefetch` on app routes; ambition detail and list are the hot paths
+- **Serverless cost:** Fewer `router.refresh()` calls and narrower `revalidatePath` scopes = fewer full RSC re-renders; Partial Prefetching shared shells + static landing prerender; keep CSP nonce-free on marketing where applicable
+- **Navigation:** Cache Components shells + `loading.tsx` + selective Link prefetch; ambition detail and list are the hot paths
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -1,7 +1,7 @@
 import { FadeIn } from "@/components/motion-wrapper";
 import * as Card from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { CalendarIcon, ChevronRightIcon, HeartIcon, ListChecksIcon } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
 import { Ambition } from "@ambitiousyou/shared/types";
@@ -15,6 +15,7 @@ interface AmbitionCardProps {
 
 export default function AmbitionCard(props: AmbitionCardProps) {
   const progressPercentage = Math.min(Math.max(props.ambition.ambitionPercentageCompleted, 0), 100);
+  const progressDelayMs = 300 + props.index * 100;
 
   return (
     <Card.Card className="group ambition-card cursor-pointer bg-linear-to-t from-foreground/5 via-foreground/2.5 transition-transform duration-75 ease-in-out hover:-translate-y-1 active:translate-y-px active:scale-[0.99] active:brightness-80 dark:bg-linear-to-b">
@@ -35,8 +36,8 @@ export default function AmbitionCard(props: AmbitionCardProps) {
               <span>Progress</span>
               <span className="tabular-nums">{progressPercentage.toFixed(0)}%</span>
             </div>
-            <FadeIn delayMs={300 + props.index * 100}>
-              <Progress value={progressPercentage} className="h-1" />
+            <FadeIn delayMs={progressDelayMs}>
+              <Progress value={progressPercentage} delayMs={progressDelayMs} className="h-1" />
             </FadeIn>
           </div>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">

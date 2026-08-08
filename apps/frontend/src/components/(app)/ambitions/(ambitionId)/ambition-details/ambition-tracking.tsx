@@ -32,7 +32,7 @@ export function AmbitionTracking(props: AmbitionTrackingProps) {
           <p className="text-sm font-medium">Ambition progress</p>
           <p className="text-sm font-semibold tabular-nums">{progress}%</p>
         </div>
-        <Progress value={progress} className="mt-1.5 h-1.5" aria-label="Ambition progress" />
+        <Progress value={progress} delayMs={200} className="mt-1.5 h-1.5" aria-label="Ambition progress" />
       </TrackingTrack>
 
       <TrackingTrack dimension="Time">

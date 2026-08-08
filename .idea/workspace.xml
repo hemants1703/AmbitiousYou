@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/apps/frontend/DEPLOYMENT_SEO.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/DEPLOYMENT_SEO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/about/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/about/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/compare/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/compare/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/templates/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/templates/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/llms.txt/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/llms.txt/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/robots.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/robots.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/marketing/what-is-ambitiousyou.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/marketing/what-is-ambitiousyou.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/compare-content.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/compare-content.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/faqs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/faqs.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/metadata.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/metadata.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/pages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/pages.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/schemas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/template-content.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/template-content.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/site.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/site.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +24,8 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="636" />
+    <option name="cachedIndexableFilesCount" value="659" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -205,6 +190,7 @@
       <updated>1785925610909</updated>
       <workItem from="1785925612014" duration="1706000" />
       <workItem from="1786109082020" duration="3896000" />
+      <workItem from="1786171353695" duration="599000" />
     </task>
     <servers />
   </component>
