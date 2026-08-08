@@ -1,13 +1,11 @@
-import { NotificationsInbox } from "@/components/(app)/notifications/notifications-inbox";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { HeaderNav } from "@/components/header-nav";
-import type { Notification } from "@ambitiousyou/shared";
+import { Suspense } from "react";
 
 interface SiteHeaderProps {
-  notifications?: Notification[];
-  unreadCount?: number;
+  inboxSlot: React.ReactNode;
 }
 
 export function SiteHeader(props: SiteHeaderProps) {
@@ -16,12 +14,11 @@ export function SiteHeader(props: SiteHeaderProps) {
       <div className="relative flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mx-2" />
-        <HeaderNav />
+        <Suspense fallback={null}>
+          <HeaderNav />
+        </Suspense>
         <div className="ml-auto flex items-center gap-2">
-          <NotificationsInbox
-            initialNotifications={props.notifications ?? []}
-            initialUnreadCount={props.unreadCount ?? 0}
-          />
+          {props.inboxSlot}
           <ThemeToggle />
         </div>
       </div>

@@ -8,7 +8,6 @@ import { breadcrumbSchema, webPageSchema } from "@/lib/seo/schemas";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-static";
 
 const title = briefConfig.title;
 const description = briefConfig.tagline;

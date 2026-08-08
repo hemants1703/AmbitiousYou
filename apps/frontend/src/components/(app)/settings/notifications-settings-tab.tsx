@@ -170,7 +170,7 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
             id="ambition-reminders"
             icon={<BellIcon className="size-4" />}
             label="Ambition reminders"
-            description="Account preference: 9 AM and 6 PM for due or overdue work. Each device still needs its own permission."
+            description="Account preference: twice-a-day nudges for due or overdue work — enough to keep ambitions in check, not enough to nag. Each device still needs its own permission."
             checked={pushAmbitionReminders}
             disabled={isPending}
             onCheckedChange={handlePushToggle}

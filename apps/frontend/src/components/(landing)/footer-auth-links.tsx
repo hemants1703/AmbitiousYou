@@ -29,12 +29,12 @@ export default function FooterAuthLinks() {
   return (
     <>
       <li>
-        <Link prefetch={true} href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
+        <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
           Login
         </Link>
       </li>
       <li>
-        <Link prefetch={true} href="/signup" className="text-muted-foreground hover:text-foreground transition-colors">
+        <Link href="/signup" className="text-muted-foreground hover:text-foreground transition-colors">
           {brandCopy.cta.join}
         </Link>
       </li>

@@ -36,7 +36,7 @@ export default function Navbar() {
     <nav className={cn("fixed left-0 right-0 top-0 z-50 w-full py-4 transition-[background-color,box-shadow,border-color] duration-300", scrolled ? "border-b border-border/40 bg-background/50 shadow-sm backdrop-blur-md backdrop-saturate-150" : "border-b border-transparent")}>
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4">
         {/* Logo */}
-        <Link prefetch={true} href="/">
+        <Link href="/">
           <AmbitiousYouLogo />
         </Link>
 
@@ -47,7 +47,7 @@ export default function Navbar() {
               const isActive = pagePathname === link.href || pagePathname?.startsWith(`${link.href}/`);
 
               return (
-                <Link prefetch={true} key={link.href} href={link.href} className={cn("relative px-1 py-2 text-sm font-medium transition-colors", isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                <Link key={link.href} href={link.href} className={cn("relative px-1 py-2 text-sm font-medium transition-colors", isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
                   {link.label}
                   {isActive && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent-brand" />}
                 </Link>
@@ -66,12 +66,12 @@ export default function Navbar() {
               ) : (
                 <>
                   <Button variant="outline" size="sm" className="h-9 px-4" asChild>
-                    <Link prefetch={true} href="/login">
+                    <Link href="/login">
                       Log in
                     </Link>
                   </Button>
                   <Button size="sm" className="h-9 px-4 shadow-sm" asChild>
-                    <Link prefetch={true} href="/signup">
+                    <Link href="/signup">
                       {brandCopy.cta.join}
                     </Link>
                   </Button>
@@ -103,7 +103,7 @@ export default function Navbar() {
                     return (
                       <li key={link.href}>
                         <SheetClose asChild>
-                          <Link prefetch={true} href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-accent-brand" : "text-foreground")}>
+                          <Link href={link.href} className={cn("flex items-center justify-between border-b border-border py-3 text-base", isActive ? "font-medium text-accent-brand" : "text-foreground")}>
                             <span>{link.label}</span>
                             <ChevronRightIcon aria-hidden="true" className="size-5 opacity-70" />
                           </Link>
@@ -130,14 +130,14 @@ export default function Navbar() {
                   <>
                     <SheetClose asChild>
                       <Button variant="outline" className="w-full" asChild>
-                        <Link prefetch={true} href="/login">
+                        <Link href="/login">
                           Log in
                         </Link>
                       </Button>
                     </SheetClose>
                     <SheetClose asChild>
                       <Button className="w-full" asChild>
-                        <Link prefetch={true} href="/signup">
+                        <Link href="/signup">
                           {brandCopy.cta.join}
                         </Link>
                       </Button>

@@ -4,18 +4,11 @@ import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { CircleHelpIcon, LayoutDashboardIcon, Settings2Icon, TargetIcon } from "lucide-react";
 import AmbitiousYouLogo from "./(landing)/ambitiousyou-logo";
-import { User } from "@ambitiousyou/shared";
 
 const data = {
-  user: {
-    name: "Hemant Sharma",
-    email: "hemant@hemantsharma.tech",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -42,9 +35,15 @@ const data = {
   ],
 };
 
-export function AppSidebar({ userDetails, ...props }: React.ComponentProps<typeof Sidebar> & { userDetails: User }) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  userSlot: React.ReactNode;
+}
+
+export function AppSidebar(props: AppSidebarProps) {
+  const { userSlot, ...sidebarProps } = props;
+
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas" {...sidebarProps}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -58,9 +57,7 @@ export function AppSidebar({ userDetails, ...props }: React.ComponentProps<typeo
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser userDetails={userDetails} />
-      </SidebarFooter>
+      <SidebarFooter>{userSlot}</SidebarFooter>
     </Sidebar>
   );
 }

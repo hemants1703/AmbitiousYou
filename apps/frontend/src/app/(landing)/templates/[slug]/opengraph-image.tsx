@@ -4,7 +4,6 @@ import { getAmbitionTemplate } from "@/lib/seo/template-content";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const dynamic = "force-static";
 
 export function generateStaticParams() {
   return templateSlugs.map((slug) => ({ slug }));

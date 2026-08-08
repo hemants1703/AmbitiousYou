@@ -9,7 +9,6 @@ const ExperienceFlow = nextDynamic(() => import("@/components/(landing)/experien
   loading: () => <ExperienceSkeleton />,
 });
 
-export const dynamic = "force-static";
 
 const title = "Experience";
 const description =

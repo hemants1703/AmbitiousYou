@@ -10,7 +10,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-static";
 
 interface UseCasePageProps {
   params: Promise<{ slug: string }>;

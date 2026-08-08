@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
  */
 export default function AmbitionsLoading() {
   return (
-    <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-6" aria-hidden="true">
+    <div className="app-page flex flex-col gap-6" aria-hidden="true">
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-2">

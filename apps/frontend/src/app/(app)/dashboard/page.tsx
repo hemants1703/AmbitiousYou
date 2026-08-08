@@ -12,12 +12,21 @@ import { getSessionToken, requireUser } from "@/lib/auth";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import DashboardLoading from "./loading";
 
 export const metadata: Metadata = {
   title: "Dashboard",
 };
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardLoading />}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+async function DashboardContent() {
   const sessionToken = await getSessionToken();
   const [{ user: userDetails }, ambitions] = await Promise.all([requireUser(), getAmbitions(sessionToken)]);
 
@@ -34,7 +43,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardMovesProvider initialOpenItems={openItems}>
-      <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
+      <div className="app-page flex flex-col gap-6">
         <WelcomeHeader user={userDetails} ambitions={ambitions} />
         <DashboardStats ambitions={ambitions} attentionSummary={attentionSummary} loadFailed={loadFailed} />
 

@@ -15,7 +15,6 @@ import { homepageFaq } from "@/lib/seo/faqs";
 import { marketingContentUpdated } from "@/lib/seo/content-dates";
 import { faqPageSchema, organizationSchema, personSchema, softwareApplicationSchema, webSiteSchema } from "@/lib/seo/schemas";
 
-export const dynamic = "force-static";
 
 // Canonical and OpenGraph are inherited from the root layout (canonical "/" and
 // file-based opengraph-image); structured data + extractable blocks are page-specific.

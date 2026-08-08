@@ -82,7 +82,7 @@ export function ExecutionBoardDrawer(props: ExecutionBoardDrawerProps) {
       </DrawerTrigger>
 
       <DrawerContent className="max-h-[92vh]">
-        <div className="mx-auto flex w-full max-w-350 min-h-0 flex-1 flex-col px-4 pb-2">
+        <div className="app-page flex min-h-0 flex-1 flex-col px-4 pb-2">
           <DrawerHeader className="gap-4 px-0 pt-2 text-left">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">

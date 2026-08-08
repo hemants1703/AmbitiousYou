@@ -9,7 +9,6 @@ import { breadcrumbSchema, itemListSchema, webPageSchema } from "@/lib/seo/schem
 import { useCaseContent } from "@/lib/seo/use-case-content";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
 
 const title = "Use Cases";
 const description =

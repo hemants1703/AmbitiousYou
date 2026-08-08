@@ -23,7 +23,7 @@ export default function NotFound() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-3 pb-6">
           <Button asChild size="lg" className="group w-full sm:w-auto">
-            <Link prefetch={true} href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <ArrowLeftIcon className="h-4 w-4 translate-x-0.5 group-hover:translate-x-0 transition-transform duration-200" /> Return to homepage
             </Link>
           </Button>

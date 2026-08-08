@@ -3,8 +3,10 @@ import { getSessions } from "@/lib/api/auth/get-sessions";
 import { getUserSettings } from "@/lib/api/settings/get-user-settings";
 import { requireUser } from "@/lib/auth";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SettingsTabs } from "../../../components/(app)/settings/settings-tabs";
 import { parseSettingsTab } from "../../../components/(app)/settings/settings-shared";
+import SettingsLoading from "./loading";
 
 type SettingsPageProps = {
   searchParams: Promise<{ tab?: string }>;
@@ -14,7 +16,15 @@ export const metadata: Metadata = {
   title: "Settings",
 };
 
-export default async function SettingsPage(props: SettingsPageProps) {
+export default function SettingsPage(props: SettingsPageProps) {
+  return (
+    <Suspense fallback={<SettingsLoading />}>
+      <SettingsContent searchParams={props.searchParams} />
+    </Suspense>
+  );
+}
+
+async function SettingsContent(props: { searchParams: Promise<{ tab?: string }> }) {
   const { user: userDetails, sessionToken } = await requireUser();
   const { tab } = await props.searchParams;
   const initialTab = parseSettingsTab(tab);
@@ -30,7 +40,7 @@ export default async function SettingsPage(props: SettingsPageProps) {
 
   return (
     <section className="w-full pb-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+      <div className="app-page flex flex-col gap-6">
         <FadeIn>
           <div className="space-y-1.5">
             <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
@@ -56,7 +66,7 @@ export default async function SettingsPage(props: SettingsPageProps) {
 function FailedToLoadSettings() {
   return (
     <section className="w-full pb-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+      <div className="app-page flex flex-col gap-6">
         <FadeIn>
           <div className="space-y-1.5">
             <h1 className="text-3xl font-bold tracking-tight">Settings</h1>

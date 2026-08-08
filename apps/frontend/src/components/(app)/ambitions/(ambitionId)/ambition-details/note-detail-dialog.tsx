@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAmbitionNotes } from "@/lib/(app)/mutations/ambition-notes-context";
 import type { Note } from "@ambitiousyou/shared/types";
 import { cn } from "@/lib/utils";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { NotebookPenIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +24,10 @@ interface NoteDetailDialogProps {
 type DialogMode = "read" | "edit" | "delete";
 
 export function NoteDetailDialog(props: NoteDetailDialogProps) {
+  useCloseOnActivityHide(() => {
+    if (props.note !== null) props.onOpenChange(false);
+  });
+
   return (
     <Dialog open={props.note !== null} onOpenChange={props.onOpenChange}>
       {props.note ? (

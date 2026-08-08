@@ -13,7 +13,6 @@ interface MarketingHubCardProps {
 export default function MarketingHubCard(props: MarketingHubCardProps) {
   return (
     <Link
-      prefetch={true}
       href={props.href}
       className={cn(LANDING_CARD, "group flex flex-col gap-3 p-6 transition-transform hover:-translate-y-0.5", props.className)}>
       <div className="flex items-start justify-between gap-4">

@@ -11,7 +11,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-static";
 
 interface GuidePageProps {
   params: Promise<{ slug: string }>;
@@ -120,7 +119,7 @@ export default async function GuideDetailPage(props: GuidePageProps) {
                 <ul className="mt-4 space-y-2 text-sm">
                   {content.relatedPaths.map((link) => (
                     <li key={link.href}>
-                      <Link prefetch={true} href={link.href} className="text-accent-brand underline-offset-4 hover:underline">
+                      <Link href={link.href} className="text-accent-brand underline-offset-4 hover:underline">
                         {link.title}
                       </Link>
                     </li>

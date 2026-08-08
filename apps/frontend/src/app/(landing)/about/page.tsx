@@ -10,7 +10,6 @@ import { breadcrumbSchema, organizationSchema, personSchema, webPageSchema } fro
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-static";
 
 const title = "About";
 const description =

@@ -92,7 +92,7 @@ export class NotificationsController {
       body:
         synced.notificationsCreated > 0
           ? 'You have open due or overdue moves — we just sent those too.'
-          : 'We’ll nudge you at 9 AM and 6 PM when something is due or overdue.',
+          : 'We’ll remind you twice a day when something is due or overdue — enough to stay in check, not enough to nag.',
       href: '/dashboard',
       tag: `reminders-enabled:${userId}`,
     });

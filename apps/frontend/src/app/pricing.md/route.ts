@@ -1,7 +1,6 @@
 import { freePlan } from "@/lib/pricing/free-plan";
 import { siteConfig } from "@/lib/site";
 
-export const dynamic = "force-static";
 
 /** Machine-readable pricing for AI agents and buyers — mirrors the free plan. */
 export async function GET() {

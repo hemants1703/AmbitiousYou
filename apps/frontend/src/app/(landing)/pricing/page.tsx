@@ -12,7 +12,6 @@ import { breadcrumbSchema, faqPageSchema, webPageSchema } from "@/lib/seo/schema
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-static";
 
 const title = "Pricing";
 const description = "AmbitiousYou is free to use — no credit card, no billing tiers, and no cap on ambitions. Start tracking your goals today.";
@@ -54,7 +53,7 @@ export default function PricingPage() {
           </div>
           <p className="mt-6 text-xs text-muted-foreground">
             Machine-readable pricing:{" "}
-            <Link prefetch={true} href="/pricing.md" className="underline underline-offset-2 hover:text-foreground">
+            <Link href="/pricing.md" className="underline underline-offset-2 hover:text-foreground">
               /pricing.md
             </Link>
           </p>

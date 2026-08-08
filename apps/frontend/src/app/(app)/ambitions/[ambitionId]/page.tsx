@@ -16,7 +16,8 @@ import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cache } from "react";
+import { cache, Suspense } from "react";
+import AmbitionDetailsLoading from "./loading";
 
 interface AmbitionDetailsPageProps {
   params: Promise<{ ambitionId: string }>;
@@ -31,18 +32,26 @@ const getAmbitionData = cache(async (sessionToken: string, ambitionId: string) =
 
 export async function generateMetadata(props: AmbitionDetailsPageProps): Promise<Metadata> {
   const { sessionToken } = await requireUser();
-
   const { ambitionId } = await props.params;
-
   const ambition = await getAmbitionData(sessionToken, ambitionId);
   if (!ambition) {
-    throw new Error(`Failed to fetch ambition ${ambitionId}`);
+    return createPrivateMetadata("Ambition");
   }
-
   return createPrivateMetadata(ambition.ambition.ambitionName);
 }
 
-export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProps) {
+export default function AmbitionDetailsPage(props: AmbitionDetailsPageProps) {
+  return (
+    <Suspense fallback={<AmbitionDetailsLoading />}>
+      <AmbitionDetailsContent params={props.params} searchParams={props.searchParams} />
+    </Suspense>
+  );
+}
+
+async function AmbitionDetailsContent(props: {
+  params: Promise<{ ambitionId: string }>;
+  searchParams: Promise<{ ref?: string | undefined }>;
+}) {
   const { user: userDetails, sessionToken } = await requireUser();
 
   const { ambitionId } = await props.params;
@@ -65,11 +74,10 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
 
   return (
     <section className="w-full pb-8">
-      <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
-        {/* HEADER */}
+      <div className="app-page flex flex-col gap-6">
         <div className="flex flex-wrap items-center gap-2 max-sm:justify-between">
           <Button asChild variant="outline" size="sm" className="rounded-full bg-background/80">
-            <Link prefetch={true} href={backTarget.href}>
+            <Link href={backTarget.href}>
               <ChevronLeftIcon className="size-4" />
               {backTarget.label}
             </Link>
@@ -84,7 +92,6 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
           </div>
         </div>
 
-        {/* AMBITION DETAILS */}
         <FadeIn>
           <Card>
             <CardContent className="space-y-6 px-4 sm:px-6 lg:px-8">
@@ -126,7 +133,6 @@ export default async function AmbitionDetailsPage(props: AmbitionDetailsPageProp
         <FadeIn delayMs={80}>
           <AmbitionDetailsSection ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
         </FadeIn>
-
       </div>
     </section>
   );

@@ -34,7 +34,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
   }, [filters.favouritesOnly, filters.priority, filters.search, filters.status, props.ambitions]);
 
   return (
-    <div className="mx-auto flex max-w-screen-2xl w-full flex-col gap-6">
+    <div className="app-page flex flex-col gap-6">
       <FadeIn className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Your Ambitions</h1>

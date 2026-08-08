@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
  */
 export default function DashboardLoading() {
   return (
-    <div className="mx-auto flex w-full max-w-350 flex-col gap-6" aria-hidden="true">
+    <div className="app-page flex flex-col gap-6" aria-hidden="true">
       {/* Welcome header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0 space-y-2">

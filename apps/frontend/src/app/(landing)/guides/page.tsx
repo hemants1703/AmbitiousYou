@@ -8,7 +8,6 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { breadcrumbSchema, itemListSchema, webPageSchema } from "@/lib/seo/schemas";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
 
 const title = "Guides";
 const description =

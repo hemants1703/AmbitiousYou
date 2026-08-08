@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function SettingsLoading() {
   return (
     <section className="w-full pb-8" aria-hidden="true">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+      <div className="app-page flex flex-col gap-6">
         <div className="space-y-1.5">
           <Skeleton className="h-9 w-36" />
           <Skeleton className="h-4 w-80 max-w-full" />

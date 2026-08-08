@@ -2,7 +2,6 @@ import { indexablePages } from "@/lib/seo/pages";
 import { productDefinition } from "@/lib/seo/faqs";
 import { absoluteUrl, siteConfig } from "@/lib/site";
 
-export const dynamic = "force-static";
 
 /** Machine-readable site summary for AI crawlers and LLM discovery (llms.txt). */
 export async function GET() {

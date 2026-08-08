@@ -4,7 +4,6 @@ import { compareSlugs } from "@/lib/seo/pages";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const dynamic = "force-static";
 
 export function generateStaticParams() {
   return compareSlugs.map((competitor) => ({ competitor }));

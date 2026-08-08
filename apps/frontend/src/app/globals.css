@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Canonical content width for every authenticated page. Use `app-page` instead of
+   ad-hoc max-w-* so dashboard / ambitions / detail / settings stay aligned. */
+@utility app-page {
+  @apply mx-auto w-full max-w-350;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

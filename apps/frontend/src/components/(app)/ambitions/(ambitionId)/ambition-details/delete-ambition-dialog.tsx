@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DialogStateProps } from "./ambition-options-dropdown";
 import { deleteAmbitionAction } from "@/lib/actions/(app)/ambitions/delete-ambition";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 
 type DeleteAmbitionDialogProps = {
   ambitionId: string;
@@ -18,6 +19,10 @@ export function DeleteAmbitionDialog(props: DeleteAmbitionDialogProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+
+  useCloseOnActivityHide(() => {
+    if (!isPending) props.toggleDeleteDialog(undefined);
+  });
 
   const handleDelete = () => {
     setError(null);

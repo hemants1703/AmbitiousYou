@@ -3,7 +3,6 @@ import { breadcrumbSchema, webPageSchema } from "@/lib/seo/schemas";
 import JsonLd from "@/components/seo/json-ld";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
 
 const title = "Terms & Conditions";
 const description = "Read the terms and conditions for using AmbitiousYou, your go-to platform for personal growth and development.";

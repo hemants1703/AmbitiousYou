@@ -3,7 +3,6 @@ import { getGuideContent, guideSlugs } from "@/lib/seo/guide-content";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const dynamic = "force-static";
 
 export function generateStaticParams() {
   return guideSlugs.map((slug) => ({ slug }));

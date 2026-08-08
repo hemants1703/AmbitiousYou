@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function AmbitionDetailLoading() {
   return (
     <section className="w-full pb-8" aria-hidden="true">
-      <div className="mx-auto flex w-full max-w-350 flex-col gap-6">
+      <div className="app-page flex flex-col gap-6">
         <Skeleton className="h-9 w-44 rounded-full" />
 
         <Card.Card>

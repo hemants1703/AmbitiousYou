@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 
 interface NotificationsInboxProps {
   initialNotifications: Notification[];
@@ -30,8 +31,12 @@ export function NotificationsInbox(props: NotificationsInboxProps) {
   const [isPending, startTransition] = useTransition();
   const [notifications, setNotifications] = useState(props.initialNotifications);
   const [unreadCount, setUnreadCount] = useState(props.initialUnreadCount);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useCloseOnActivityHide(() => setMenuOpen(false));
 
   function handleOpenChange(open: boolean) {
+    setMenuOpen(open);
     if (open) {
       setNotifications(props.initialNotifications);
       setUnreadCount(props.initialUnreadCount);
@@ -74,7 +79,7 @@ export function NotificationsInbox(props: NotificationsInboxProps) {
   }
 
   return (
-    <DropdownMenu onOpenChange={handleOpenChange}>
+    <DropdownMenu open={menuOpen} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -105,7 +110,7 @@ export function NotificationsInbox(props: NotificationsInboxProps) {
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
           <div className="px-2 py-6 text-center text-sm text-muted-foreground">
-            No reminders yet. Due-today tasks and milestones appear here at 9 AM and 6 PM.
+            No reminders yet. When something is due or overdue, we&apos;ll nudge you here twice a day — enough to stay on track, not enough to nag.
           </div>
         ) : (
           notifications.map((notification) => (

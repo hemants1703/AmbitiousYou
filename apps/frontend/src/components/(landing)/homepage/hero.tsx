@@ -20,7 +20,7 @@ export default function Hero() {
         <div className="lp-hero-enter-3 mt-8 flex flex-col justify-center gap-4 sm:flex-row">
           <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" size="lg" />
           <Button asChild size="lg" variant="outline">
-            <Link prefetch={true} href="/experience" className="flex items-center gap-2">
+            <Link href="/experience" className="flex items-center gap-2">
               Experience For Free <ArrowRightIcon aria-hidden="true" className="size-4" />
             </Link>
           </Button>

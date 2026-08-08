@@ -2,13 +2,14 @@ import EditAmbitionForm from "@/components/(app)/ambitions/(ambitionId)/edit-amb
 import { FadeIn } from "@/components/motion-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { AmbitionDetails, getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { requireUser } from "@/lib/auth";
 import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cache, type ReactNode } from "react";
+import { cache, Suspense, type ReactNode } from "react";
 
 interface EditAmbitionPageProps {
   params: Promise<{ ambitionId: string }>;
@@ -30,9 +31,16 @@ function formatDate(value: Date | string) {
   return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(value));
 }
 
-export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
-  const { sessionToken } = await requireUser();
+export default function EditAmbitionPage(props: EditAmbitionPageProps) {
+  return (
+    <Suspense fallback={<EditAmbitionFallback />}>
+      <EditAmbitionContent params={props.params} />
+    </Suspense>
+  );
+}
 
+async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string }> }) {
+  const { sessionToken } = await requireUser();
   const { ambitionId } = await props.params;
 
   const ambition = await getAmbitionData(sessionToken, ambitionId);
@@ -43,7 +51,7 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
   const dateWindowLabel = `${formatDate(ambition.ambitionStartDate)} – ${formatDate(ambition.ambitionEndDate)}`;
 
   return (
-    <div className="mx-auto flex w-full max-w-350 flex-col">
+    <div className="app-page flex flex-col">
       <FadeIn className="flex flex-col gap-4 pb-8">
         <Button asChild variant="outline" size="sm" className="w-fit rounded-full bg-background/80">
           <Link prefetch={true} href={`/ambitions/${ambition.id}`}>
@@ -103,6 +111,22 @@ export default async function EditAmbitionPage(props: EditAmbitionPageProps) {
           </Card>
         </aside>
       </FadeIn>
+    </div>
+  );
+}
+
+function EditAmbitionFallback() {
+  return (
+    <div className="app-page flex flex-col gap-8" aria-hidden="true">
+      <div className="space-y-3">
+        <Skeleton className="h-9 w-40" />
+        <Skeleton className="h-9 w-56" />
+        <Skeleton className="h-4 w-full max-w-md" />
+      </div>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Skeleton className="h-80 rounded-xl lg:col-span-2" />
+        <Skeleton className="h-56 rounded-xl" />
+      </div>
     </div>
   );
 }

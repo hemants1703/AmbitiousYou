@@ -3,8 +3,8 @@ import Footer from "@/components/(landing)/footer";
 import LandingBackground from "@/components/(landing)/landing-background";
 import { bricolage } from "@/lib/fonts";
 import "@/styles/landing.css";
+import { Suspense } from "react";
 
-export const dynamic = "force-static";
 
 export default async function LandingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -15,7 +15,9 @@ export default async function LandingLayout({ children }: Readonly<{ children: R
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-md">
           Skip to content
         </a>
-        <Navbar />
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>
         <main id="main-content" className="mt-16 w-full flex-1">
             {children}
         </main>

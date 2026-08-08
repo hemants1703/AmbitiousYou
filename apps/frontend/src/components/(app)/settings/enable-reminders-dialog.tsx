@@ -22,10 +22,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AlarmClockIcon, BellRingIcon, SunriseIcon } from "lucide-react";
+import { AlarmClockIcon, BellRingIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 
 export type EnableRemindersIntent = "enable" | "connect";
 
@@ -44,6 +45,10 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
   const showIosInstallHint = isIosDevice() && !isStandaloneDisplayMode();
   const intent = props.intent ?? "enable";
   const isConnect = intent === "connect";
+
+  useCloseOnActivityHide(() => {
+    if (props.open && !isPending) props.onOpenChange(false);
+  });
 
   function handleOpenChange(open: boolean) {
     if (isPending) return;
@@ -137,14 +142,13 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
             {isConnect ? (
               <>
                 Reminders are already on for your account. Allow notifications here so this Mac, phone, or browser can
-                receive the 9 AM and 6 PM nudges too.
+                receive those twice-a-day nudges too.
               </>
             ) : (
               <>
-                Your browser will ask next. Allow notifications so we can nudge you at{" "}
-                <span className="text-foreground">9 AM</span> and{" "}
-                <span className="text-foreground">6 PM</span> when something is due today or overdue — even when
-                AmbitiousYou is closed.
+                Your browser will ask next. Allow notifications so we can remind you{" "}
+                <span className="text-foreground">twice a day</span> when something is due today or overdue — not too
+                much, not too little — to keep your dreams and ambitions in check, even when AmbitiousYou is closed.
               </>
             )}
           </DialogDescription>
@@ -153,17 +157,19 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
         {!isConnect ? (
           <ul className="space-y-2 text-left">
             <li className="flex gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3">
-              <SunriseIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
+              <BellRingIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
               <div className="min-w-0">
-                <p className="text-sm font-medium">Morning — start with what’s due</p>
-                <p className="text-xs text-muted-foreground">Open moves land before the day gets noisy.</p>
+                <p className="text-sm font-medium">Twice a day, on purpose</p>
+                <p className="text-xs text-muted-foreground">
+                  Two check-ins keep you honest about open moves without flooding your day.
+                </p>
               </div>
             </li>
             <li className="flex gap-3 rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3">
               <AlarmClockIcon className="mt-0.5 size-4 shrink-0 text-accent-brand" aria-hidden="true" />
               <div className="min-w-0">
-                <p className="text-sm font-medium">Evening — only if still open</p>
-                <p className="text-xs text-muted-foreground">A second nudge if you haven’t finished yet. No spam.</p>
+                <p className="text-sm font-medium">Only when it matters</p>
+                <p className="text-xs text-muted-foreground">We nudge for due or overdue work — finish early and we stay quiet.</p>
               </div>
             </li>
           </ul>

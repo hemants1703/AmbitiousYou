@@ -4,7 +4,6 @@ import { getUseCaseContent } from "@/lib/seo/use-case-content";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const dynamic = "force-static";
 
 export function generateStaticParams() {
   return useCaseSlugs.map((slug) => ({ slug }));

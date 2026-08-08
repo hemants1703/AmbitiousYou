@@ -3,6 +3,13 @@ import AmbitiousYouLogo from "./ambitiousyou-logo";
 import { ThemeToggle } from "../theme-toggle";
 import FooterAuthLinks from "./footer-auth-links";
 import { brandCopy } from "@/lib/brand";
+import { cacheLife } from "next/cache";
+
+async function CopyrightYear() {
+  "use cache";
+  cacheLife("max");
+  return new Date().getFullYear();
+}
 
 interface FooterLinkGroupProps {
   title: string;
@@ -16,7 +23,7 @@ function FooterLinkGroup(props: FooterLinkGroupProps) {
       <ul className="space-y-2 text-sm">
         {props.links.map((link) => (
           <li key={link.href}>
-            <Link prefetch={true} href={link.href} className="text-muted-foreground transition-colors hover:text-foreground">
+            <Link href={link.href} className="text-muted-foreground transition-colors hover:text-foreground">
               {link.title}
             </Link>
           </li>
@@ -97,13 +104,13 @@ export default function Footer() {
         <div className="mb-12 grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-12">
           {/* Brand */}
           <div className="col-span-2 space-y-4 md:col-span-4 lg:col-span-4">
-            <Link prefetch={true} href="/" className="mb-4 flex items-center gap-2">
+            <Link href="/" className="mb-4 flex items-center gap-2">
               <AmbitiousYouLogo />
             </Link>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">{brandCopy.footerBlurb}</p>
             <div className="flex items-center gap-2 pt-2">
               {socialLinks.map((social) => (
-                <Link key={social.label} prefetch={true} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                <Link key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
                   {social.icon}
                 </Link>
               ))}
@@ -148,9 +155,9 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border/40 pt-8 md:flex-row">
           <p className="text-center text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} <span translate="no">AmbitiousYou</span>. All rights reserved.
+            &copy; <CopyrightYear /> <span translate="no">AmbitiousYou</span>. All rights reserved.
           </p>
-          <Link prefetch={true} href="https://hemantsharma.tech" target="_blank" className="text-sm italic text-muted-foreground transition-colors hover:text-foreground">
+          <Link href="https://hemantsharma.tech" target="_blank" className="text-sm italic text-muted-foreground transition-colors hover:text-foreground">
             Developed by Hemant Sharma
           </Link>
         </div>

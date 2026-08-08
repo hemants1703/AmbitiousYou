@@ -20,7 +20,7 @@ export default function CTA() {
           <div className="relative flex flex-col items-center justify-center gap-4 sm:flex-row">
             <PrimaryCta loggedOutLabel={brandCopy.cta.claimFirst} loggedOutHref="/signup" size="lg" className="h-12 px-8 shadow-lg shadow-primary/20" />
             <Button asChild size="lg" variant="outline" className="h-12 px-8">
-              <Link prefetch={true} href="/manifesto" className="flex items-center gap-2">
+              <Link href="/manifesto" className="flex items-center gap-2">
                 Read the manifesto <ArrowRightIcon aria-hidden="true" className="size-4" />
               </Link>
             </Button>

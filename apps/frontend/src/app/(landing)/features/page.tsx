@@ -15,7 +15,6 @@ import { breadcrumbSchema, faqPageSchema } from "@/lib/seo/schemas";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
 
 const description =
   "Discover the powerful features of AmbitiousYou — momentum tracking, honest day-streaks, a year-long activity calendar, and a dashboard that turns every completed move into visible progress.";
@@ -62,7 +61,7 @@ const coreFeatures: { icon: LucideIcon; title: string; description: string; core
   {
     icon: BellIcon,
     title: "Smart Notifications",
-    description: "Morning and evening reminders for due or overdue work — in your in-app inbox and as device notifications, even when AmbitiousYou is closed.",
+    description: "Twice-a-day reminders for due or overdue work — enough to keep ambitions in check, not enough to nag — in your in-app inbox and as device notifications, even when AmbitiousYou is closed.",
   },
 ];
 
@@ -167,7 +166,7 @@ export default function Features() {
           <div className="lp-hero-enter-3 mt-8 flex flex-col gap-3 min-[400px]:flex-row">
             <PrimaryCta loggedOutLabel={brandCopy.cta.join} loggedOutHref="/signup" size="lg" />
             <Button asChild size="lg" variant="outline">
-              <Link prefetch={true} href="/experience">
+              <Link href="/experience">
                 Try It Now
               </Link>
             </Button>

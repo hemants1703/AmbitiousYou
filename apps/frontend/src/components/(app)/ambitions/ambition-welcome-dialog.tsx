@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { brandCopy } from "@/lib/brand";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { SparklesIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -15,6 +16,10 @@ interface AmbitionWelcomeDialogProps {
 
 /** Shown once after a user's first ambition is created — the initiation welcome artifact. */
 export function AmbitionWelcomeDialog(props: AmbitionWelcomeDialogProps) {
+  useCloseOnActivityHide(() => {
+    if (props.open) props.onOpenChange(false);
+  });
+
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent className="sm:max-w-md">

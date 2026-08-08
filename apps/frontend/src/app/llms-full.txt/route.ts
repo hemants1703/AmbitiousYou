@@ -6,7 +6,6 @@ import { freePlan } from "@/lib/pricing/free-plan";
 import { absoluteUrl, siteConfig } from "@/lib/site";
 import { ambitionTemplates } from "@/lib/seo/template-content";
 
-export const dynamic = "force-static";
 
 /** Expanded corpus for AI systems that want more than llms.txt. */
 export async function GET() {

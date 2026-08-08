@@ -5,8 +5,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { User } from "@ambitiousyou/shared";
 import { logoutAction } from "@/lib/actions/(auth)/logout/logout";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface NavUserProps {
   userDetails: User;
@@ -14,11 +16,14 @@ interface NavUserProps {
 
 export function NavUser(props: NavUserProps) {
   const { isMobile, setOpenMobile } = useSidebar();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useCloseOnActivityHide(() => setMenuOpen(false));
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
               <Avatar className="h-8 w-8 rounded-full grayscale">

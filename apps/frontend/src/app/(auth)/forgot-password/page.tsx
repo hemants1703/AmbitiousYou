@@ -5,15 +5,21 @@ import { forgotPasswordInitialState } from "@/lib/actions/(auth)/forgot-password
 import { redirectIfAuthenticated } from "@/lib/auth";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = createPrivateMetadata("Forgot Password", "Reset your AmbitiousYou password");
 
-export default async function ForgotPasswordPage() {
-  await redirectIfAuthenticated();
-
+export default function ForgotPasswordPage() {
   return (
     <AuthShell mood="midnight" tagline="We’ll get you back in.">
-      <ForgotPasswordForm action={forgotPasswordAction} initialState={forgotPasswordInitialState} />
+      <Suspense fallback={<ForgotPasswordForm action={forgotPasswordAction} initialState={forgotPasswordInitialState} />}>
+        <ForgotPasswordContent />
+      </Suspense>
     </AuthShell>
   );
+}
+
+async function ForgotPasswordContent() {
+  await redirectIfAuthenticated();
+  return <ForgotPasswordForm action={forgotPasswordAction} initialState={forgotPasswordInitialState} />;
 }

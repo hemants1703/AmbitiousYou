@@ -11,7 +11,6 @@ import { getCompareContent } from "@/lib/seo/compare-content";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-static";
 
 interface ComparePageProps {
   params: Promise<{ competitor: string }>;

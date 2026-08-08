@@ -162,6 +162,7 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - **Props:** `ComponentNameProps` interface; access as `props.key` (no destructuring in signature)
 - **Lucide:** `*Icon` suffix (`SunIcon`, not `Sun`)
 - **Colocation:** Supporting components mirror the route under `src/components/(app)/…`
+- **Page width:** Every authenticated page uses the `app-page` utility (`max-w-350`) — never ad-hoc `max-w-screen-2xl` / `max-w-6xl` on `(app)` content
 
 ## Data & Mutations (server-first)
 

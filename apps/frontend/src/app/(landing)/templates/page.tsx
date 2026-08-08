@@ -7,7 +7,6 @@ import { templateSlugs } from "@/lib/seo/pages";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-static";
 
 const title = "Ambition Templates";
 const description =

@@ -17,6 +17,7 @@ import { emptyDraft, formatDate, getDaysUntil, MOVE_KIND_STYLE, toDateInputValue
 import { cn } from "@/lib/utils";
 import { CalendarDaysIcon, CheckCircle2Icon, FlagIcon, ListTodoIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { useMemo, useState, useTransition } from "react";
 import type { Matcher } from "react-day-picker";
 import { toast } from "sonner";
@@ -32,6 +33,10 @@ interface MoveDetailDialogProps {
 type DialogMode = "read" | "edit" | "delete";
 
 export function MoveDetailDialog(props: MoveDetailDialogProps) {
+  useCloseOnActivityHide(() => {
+    if (props.detail !== null) props.onOpenChange(false);
+  });
+
   return (
     <Dialog open={props.detail !== null} onOpenChange={props.onOpenChange}>
       {props.detail ? (

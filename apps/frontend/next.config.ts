@@ -38,6 +38,12 @@ const cspHeaderKey = process.env.CSP_REPORT_ONLY === "1" ? "Content-Security-Pol
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // PPR shells + Suspense streaming; Partial Prefetching shares an App Shell
+  // per route (Hobby-friendly vs per-link full prefetches). Do NOT use this to
+  // cache personal ambition/move payloads — see
+  // docs/NEXT-CACHE-COMPONENTS-MIGRATION.md.
+  cacheComponents: true,
+  partialPrefetching: true,
   reactCompiler: true,
   // Transpile the workspace `@ambitiousyou/shared` package's TS source
   // directly. NOTE: this only handles transpilation — module resolution

@@ -12,7 +12,6 @@ import { getUser } from "@/lib/api/sidebar/get-user";
  *
  * Must stay dynamic and uncached — it reads cookies and reflects live state.
  */
-export const dynamic = "force-dynamic";
 
 const NO_STORE = { "Cache-Control": "no-store" } as const;
 

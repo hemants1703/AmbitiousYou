@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { HeartIcon, Loader2Icon, MoreVertical, PencilIcon, Trash2Icon } from "lucide-react";
+import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -22,9 +23,15 @@ export type DialogStateProps = {
 };
 
 export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [openDeleteAmbitionDialog, setOpenDeleteAmbitionDialog] = useState<DialogStateProps>();
   const [isFavourited, setIsFavourited] = useState(props.isFavourited);
   const [isTogglingFavourite, startToggleFavourite] = useTransition();
+
+  useCloseOnActivityHide(() => {
+    setMenuOpen(false);
+    setOpenDeleteAmbitionDialog(undefined);
+  });
 
   const handleToggleFavourite = () => {
     // Optimistically flip so the menu item reflects the new state immediately.
@@ -51,7 +58,7 @@ export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownPr
       {/* Delete Dialog */}
       {openDeleteAmbitionDialog?.open && <DeleteAmbitionDialog ambitionId={openDeleteAmbitionDialog.ambitionId} ambitionName={props.ambitionName} toggleDeleteDialog={setOpenDeleteAmbitionDialog} />}
 
-      <DropdownMenu>
+      <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon-sm" aria-label="Open ambition actions">
             <MoreVertical className="size-4" />

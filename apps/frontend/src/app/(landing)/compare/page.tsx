@@ -9,7 +9,6 @@ import { breadcrumbSchema, itemListSchema, webPageSchema } from "@/lib/seo/schem
 import { compareContent } from "@/lib/seo/compare-content";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
 
 const title = "Compare";
 const description =
