@@ -4,6 +4,7 @@ import { HistoryIcon } from "lucide-react";
 interface EndDateHistoryProps {
   history: AmbitionEndDateChange[];
   currentEndDate: Date | string;
+  ambitionStatus?: "active" | "completed" | "missed";
 }
 
 function formatDay(value: Date | string) {
@@ -32,6 +33,7 @@ export function EndDateHistory(props: EndDateHistoryProps) {
   const history = props.history ?? [];
   const count = history.length;
   const newestFirst = [...history].reverse();
+  const isMissed = props.ambitionStatus === "missed";
 
   return (
     <div className="space-y-3">
@@ -40,11 +42,23 @@ export function EndDateHistory(props: EndDateHistoryProps) {
           <HistoryIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
           <h3 className="text-sm font-semibold tracking-tight">End date log</h3>
         </div>
-        <p className="text-xs font-medium tabular-nums text-muted-foreground">{extensionLabel(count)}</p>
+        <p className={`text-xs font-medium tabular-nums ${count > 0 ? "text-amber-700 dark:text-amber-300" : "text-muted-foreground"}`}>
+          {extensionLabel(count)}
+        </p>
       </div>
 
+      {isMissed ? (
+        <p className="rounded-2xl border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100">
+          This ambition missed its window. Extending the end date reopens it and leaves a permanent mark here.
+        </p>
+      ) : null}
+
       {count === 0 ? (
-        <p className="text-sm text-muted-foreground">No extensions yet. The current end date is still the original target.</p>
+        <p className="text-sm text-muted-foreground">
+          {isMissed
+            ? "No extensions yet — move the end date later to reopen moves and start the accountability log."
+            : "No extensions yet. The current end date is still the original target."}
+        </p>
       ) : (
         <ol className="relative space-y-0 border-l border-border/70 pl-4" aria-label="End date change history">
           <li className="relative pb-4">

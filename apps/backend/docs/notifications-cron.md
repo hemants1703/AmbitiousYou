@@ -261,11 +261,14 @@ Example response:
   "usersInSlot": 3,
   "notificationsCreated": 5,
   "pushesAttempted": 5,
+  "ambitionsMarkedMissed": 2,
   "slot": "cron"
 }
 ```
 
 `usersInSlot` counts users whose **local** hour is currently 9 or 18. At other UTC hours this is often `0` even when many users are opted in — that is expected.
+
+`ambitionsMarkedMissed` is the count of overdue `active` ambitions flipped to `missed` at the start of the sweep (end date before today, progress &lt; 100%).
 
 ### Schedule caveats
 

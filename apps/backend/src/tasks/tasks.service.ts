@@ -3,6 +3,7 @@ import { and, eq } from 'drizzle-orm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { recalculateAmbitionProgress } from '../ambitions/ambition-progress.util';
+import { assertAmbitionAcceptsNewMoves } from '../ambitions/ambition-status.util';
 import { db, ambitions, tasks, type Task } from '../db';
 
 @Injectable()
@@ -10,13 +11,18 @@ export class TasksService {
   async createTask(userId: string, createTaskDto: CreateTaskDto): Promise<Task> {
     return await db.transaction(async (tx) => {
       const [ambition] = await tx
-        .select({ id: ambitions.id })
+        .select({
+          id: ambitions.id,
+          ambitionStatus: ambitions.ambitionStatus,
+          ambitionEndDate: ambitions.ambitionEndDate,
+        })
         .from(ambitions)
         .where(and(eq(ambitions.id, createTaskDto.ambitionId), eq(ambitions.userId, userId)))
         .limit(1);
       if (!ambition) {
         throw new NotFoundException('Ambition not found');
       }
+      await assertAmbitionAcceptsNewMoves(tx, ambition);
 
       const [saved] = await tx
         .insert(tasks)

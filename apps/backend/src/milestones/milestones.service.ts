@@ -3,6 +3,7 @@ import { and, desc, eq } from 'drizzle-orm';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
 import { recalculateAmbitionProgress } from '../ambitions/ambition-progress.util';
+import { assertAmbitionAcceptsNewMoves } from '../ambitions/ambition-status.util';
 import { db, ambitions, milestones, type Milestone } from '../db';
 
 @Injectable()
@@ -10,13 +11,18 @@ export class MilestonesService {
   async createMilestone(userId: string, createMilestoneDto: CreateMilestoneDto): Promise<Milestone> {
     return await db.transaction(async (tx) => {
       const [ambition] = await tx
-        .select({ id: ambitions.id })
+        .select({
+          id: ambitions.id,
+          ambitionStatus: ambitions.ambitionStatus,
+          ambitionEndDate: ambitions.ambitionEndDate,
+        })
         .from(ambitions)
         .where(and(eq(ambitions.id, createMilestoneDto.ambitionId), eq(ambitions.userId, userId)))
         .limit(1);
       if (!ambition) {
         throw new NotFoundException('Ambition not found');
       }
+      await assertAmbitionAcceptsNewMoves(tx, ambition);
 
       const [saved] = await tx
         .insert(milestones)
@@ -90,11 +96,7 @@ export class MilestonesService {
         throw new BadRequestException('Milestones cannot be reopened once completed');
       }
 
-      const [saved] = await tx
-        .update(milestones)
-        .set({ milestoneCompleted: true, milestoneCompletedAt: new Date() })
-        .where(eq(milestones.id, milestone.id))
-        .returning();
+      const [saved] = await tx.update(milestones).set({ milestoneCompleted: true, milestoneCompletedAt: new Date() }).where(eq(milestones.id, milestone.id)).returning();
       await recalculateAmbitionProgress(tx, { userId, ambitionId: milestone.ambitionId });
       return saved;
     });

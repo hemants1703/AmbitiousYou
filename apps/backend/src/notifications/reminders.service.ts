@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { and, eq, ne, sql } from 'drizzle-orm';
+import { markOverdueAmbitionsMissed } from '../ambitions/ambition-status.util';
 import { ambitions, db, milestones, notifications, settings, tasks, type Notification } from '../db';
 import { PushService } from './push.service';
 
@@ -10,6 +11,7 @@ export interface ReminderSweepResult {
   usersInSlot: number;
   notificationsCreated: number;
   pushesAttempted: number;
+  ambitionsMarkedMissed: number;
   slot: 'cron' | 'manual';
 }
 
@@ -38,6 +40,10 @@ export class RemindersService {
    * Evening window: local hour >= 18 (again once; only still-incomplete / overdue items).
    */
   async runDueTodaySweep(now = new Date()): Promise<ReminderSweepResult> {
+    // Global status hygiene first so overdue ambitions become `missed` even when
+    // the owner has push reminders off (and before due-today queries run).
+    const ambitionsMarkedMissed = await markOverdueAmbitionsMissed({ now });
+
     const eligibleUsers = await db
       .select({
         userId: settings.userId,
@@ -68,6 +74,7 @@ export class RemindersService {
       usersInSlot,
       notificationsCreated,
       pushesAttempted,
+      ambitionsMarkedMissed,
       slot: 'cron',
     };
     this.logger.log(`Due/overdue sweep: ${JSON.stringify(result)}`);
@@ -124,12 +131,7 @@ export class RemindersService {
     return 'morning';
   }
 
-  private async createDueOrOverdueForUser(
-    userId: string,
-    timezone: string,
-    slot: ReminderSlot,
-    now: Date,
-  ): Promise<Notification[]> {
+  private async createDueOrOverdueForUser(userId: string, timezone: string, slot: ReminderSlot, now: Date): Promise<Notification[]> {
     const dayKey = this.localDayKey(timezone, now);
     const todayKey = dayKey;
 
@@ -162,13 +164,7 @@ export class RemindersService {
       })
       .from(milestones)
       .innerJoin(ambitions, eq(ambitions.id, milestones.ambitionId))
-      .where(
-        and(
-          eq(milestones.userId, userId),
-          eq(milestones.milestoneCompleted, false),
-          sql`((${milestones.milestoneTargetDate})::date <= (timezone(${timezone}, now()))::date)`,
-        ),
-      );
+      .where(and(eq(milestones.userId, userId), eq(milestones.milestoneCompleted, false), sql`((${milestones.milestoneTargetDate})::date <= (timezone(${timezone}, now()))::date)`));
 
     const dueAmbitions = await db
       .select({
@@ -199,8 +195,7 @@ export class RemindersService {
     for (const move of moves) {
       const overdue = this.isOverdue(move.dueDate, todayKey);
       const copy = this.copyForMove(move.kind, slot, overdue);
-      const type =
-        move.kind === 'task' ? 'task_due_today' : move.kind === 'milestone' ? 'milestone_due_today' : 'ambition_due';
+      const type = move.kind === 'task' ? 'task_due_today' : move.kind === 'milestone' ? 'milestone_due_today' : 'ambition_due';
       const dedupeKind = move.kind === 'ambition' ? 'ambition_due' : `${move.kind}_due_today`;
 
       const row = await this.insertIfNew({
@@ -219,11 +214,7 @@ export class RemindersService {
     return created;
   }
 
-  private copyForMove(
-    kind: DueMove['kind'],
-    slot: ReminderSlot,
-    overdue: boolean,
-  ): { title: string } {
+  private copyForMove(kind: DueMove['kind'], slot: ReminderSlot, overdue: boolean): { title: string } {
     if (slot === 'evening') {
       if (kind === 'ambition') {
         return { title: overdue ? 'Ambition still overdue' : 'Ambition still due today' };

@@ -21,6 +21,7 @@ export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProp
             <ExecutionBoard
               ambitionId={props.ambition.id}
               ambitionName={props.ambition.ambitionName}
+              ambitionStatus={props.ambition.ambitionStatus}
               ambitionStartDate={props.ambition.ambitionStartDate}
               ambitionEndDate={props.ambition.ambitionEndDate}
               tasks={props.tasks}

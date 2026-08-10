@@ -2,14 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { and, desc, eq } from 'drizzle-orm';
 import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto';
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
+import { markOverdueAmbitionsMissed, startOfDay, syncAmbitionMissedStatus } from './ambition-status.util';
 import { db, ambitions, milestones, notes, tasks, type Ambition, type AmbitionEndDateChange } from '../db';
 import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
-
-function startOfDay(value: Date): Date {
-  const date = new Date(value);
-  date.setHours(0, 0, 0, 0);
-  return date;
-}
 
 function toIsoDate(value: Date): string {
   return new Date(value).toISOString();
@@ -41,6 +36,8 @@ export class AmbitionsService {
   }
 
   async findAllAmbitionsByUserId(userId: string): Promise<Ambition[] | null> {
+    // Keep list filters / ReviveMissed accurate without waiting for the hourly cron.
+    await markOverdueAmbitionsMissed({ userId });
     const rows = await db.select().from(ambitions).where(eq(ambitions.userId, userId)).orderBy(desc(ambitions.createdAt));
     return rows.length ? rows : null;
   }
@@ -51,7 +48,10 @@ export class AmbitionsService {
       .from(ambitions)
       .where(and(eq(ambitions.id, ambitionId), eq(ambitions.userId, userId)))
       .limit(1);
-    return ambition ?? null;
+    if (!ambition) {
+      return null;
+    }
+    return await syncAmbitionMissedStatus(ambition);
   }
 
   async findOneAmbitionById(userId: string, ambitionId: string): Promise<Ambition | null> {
@@ -137,6 +137,7 @@ export class AmbitionsService {
    */
   async findMovesBatch(userId: string, openOnly: boolean): Promise<AmbitionMovesBatch> {
     if (openOnly) {
+      await markOverdueAmbitionsMissed({ userId });
       const [taskRows, milestoneRows] = await Promise.all([
         db
           .select({ task: tasks })
@@ -156,10 +157,7 @@ export class AmbitionsService {
       };
     }
 
-    const [taskRows, milestoneRows] = await Promise.all([
-      db.select().from(tasks).where(eq(tasks.userId, userId)),
-      db.select().from(milestones).where(eq(milestones.userId, userId)),
-    ]);
+    const [taskRows, milestoneRows] = await Promise.all([db.select().from(tasks).where(eq(tasks.userId, userId)), db.select().from(milestones).where(eq(milestones.userId, userId))]);
 
     return { tasks: taskRows, milestones: milestoneRows };
   }
@@ -171,9 +169,18 @@ export class AmbitionsService {
     }
 
     const [taskRows, milestoneRows, noteRows] = await Promise.all([
-      db.select().from(tasks).where(and(eq(tasks.ambitionId, ambitionId), eq(tasks.userId, userId))),
-      db.select().from(milestones).where(and(eq(milestones.ambitionId, ambitionId), eq(milestones.userId, userId))),
-      db.select().from(notes).where(and(eq(notes.ambitionId, ambitionId), eq(notes.userId, userId))),
+      db
+        .select()
+        .from(tasks)
+        .where(and(eq(tasks.ambitionId, ambitionId), eq(tasks.userId, userId))),
+      db
+        .select()
+        .from(milestones)
+        .where(and(eq(milestones.ambitionId, ambitionId), eq(milestones.userId, userId))),
+      db
+        .select()
+        .from(notes)
+        .where(and(eq(notes.ambitionId, ambitionId), eq(notes.userId, userId))),
     ]);
 
     return {

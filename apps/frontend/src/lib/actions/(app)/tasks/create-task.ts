@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/actions/(app)/ambitions/form-data-parsers";
 import { getSessionToken } from "@/lib/auth";
 import type { Task } from "@ambitiousyou/shared/types";
 
@@ -29,7 +30,13 @@ export async function createTaskAction(input: CreateTaskInput): Promise<{ task: 
   });
 
   if (!response.ok) {
-    return { task: null, error: "Failed to create task. Please try again." };
+    let error = "Failed to create task. Please try again.";
+    try {
+      error = getErrorMessage(await response.json(), error);
+    } catch {
+      // Keep the default message when the backend response is not JSON.
+    }
+    return { task: null, error };
   }
 
   const created: Task = await response.json();

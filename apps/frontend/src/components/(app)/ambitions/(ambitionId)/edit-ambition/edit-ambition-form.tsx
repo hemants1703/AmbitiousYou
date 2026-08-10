@@ -43,6 +43,7 @@ interface EditAmbitionFormProps {
   ambitionStartDate: string;
   ambitionEndDate: string;
   endDateExtensionCount: number;
+  ambitionStatus?: "active" | "completed" | "missed";
 }
 
 type FieldLabelProps = Omit<ComponentProps<typeof Label>, "children"> & {
@@ -300,11 +301,23 @@ export default function EditAmbitionForm(props: EditAmbitionFormProps) {
             <AlertDialogMedia className="bg-accent-brand/10 text-accent-brand">
               <CalendarIcon aria-hidden="true" />
             </AlertDialogMedia>
-            <AlertDialogTitle>Extend the end date?</AlertDialogTitle>
+            <AlertDialogTitle>{props.ambitionStatus === "missed" ? "Extend to reopen this ambition?" : "Extend the end date?"}</AlertDialogTitle>
             <AlertDialogDescription>
-              After you save, the end date moves to <span className="font-medium text-foreground">{selectedEndDate ? format(selectedEndDate, "LLL dd, y") : "the new date"}</span> and can
-              only move further ahead — you won&rsquo;t be able to return to {formatDate(props.ambitionEndDate)}. This will be logged as extension #
-              {props.endDateExtensionCount + 1}.
+              {props.ambitionStatus === "missed" ? (
+                <>
+                  This ambition is missed. Extending the end date past today reopens new moves and permanently logs the extension. After you save, the end
+                  date moves to <span className="font-medium text-foreground">{selectedEndDate ? format(selectedEndDate, "LLL dd, y") : "the new date"}</span>{" "}
+                  and can only move further ahead — you won&rsquo;t be able to return to {formatDate(props.ambitionEndDate)}. This will be logged as
+                  extension #{props.endDateExtensionCount + 1}.
+                </>
+              ) : (
+                <>
+                  After you save, the end date moves to{" "}
+                  <span className="font-medium text-foreground">{selectedEndDate ? format(selectedEndDate, "LLL dd, y") : "the new date"}</span> and can only
+                  move further ahead — you won&rsquo;t be able to return to {formatDate(props.ambitionEndDate)}. This will be logged as extension #
+                  {props.endDateExtensionCount + 1}.
+                </>
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

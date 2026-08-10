@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/actions/(app)/ambitions/form-data-parsers";
 import { getSessionToken } from "@/lib/auth";
 import type { Milestone } from "@ambitiousyou/shared/types";
 
@@ -29,7 +30,13 @@ export async function createMilestoneAction(input: CreateMilestoneInput): Promis
   });
 
   if (!response.ok) {
-    return { milestone: null, error: "Failed to create milestone. Please try again." };
+    let error = "Failed to create milestone. Please try again.";
+    try {
+      error = getErrorMessage(await response.json(), error);
+    } catch {
+      // Keep the default message when the backend response is not JSON.
+    }
+    return { milestone: null, error };
   }
 
   const created: Milestone = await response.json();

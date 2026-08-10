@@ -67,6 +67,11 @@ async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string
           <p className="text-muted-foreground">
             Update the name, definition, motivation, priority, and end date for <span className="font-medium text-foreground">{ambition.ambitionName}</span>.
           </p>
+          {ambition.ambitionStatus === "missed" ? (
+            <p className="rounded-2xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:text-amber-100">
+              This ambition is marked missed. Extend the end date past today to reopen new moves — the change is recorded in the end date log.
+            </p>
+          ) : null}
         </div>
       </FadeIn>
 
@@ -83,6 +88,7 @@ async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string
               ambitionStartDate={new Date(ambition.ambitionStartDate).toISOString()}
               ambitionEndDate={new Date(ambition.ambitionEndDate).toISOString()}
               endDateExtensionCount={endDateHistory.length}
+              ambitionStatus={ambition.ambitionStatus}
             />
           </CardContent>
         </Card>
@@ -105,7 +111,7 @@ async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string
               </div>
 
               <div className="border-t border-border/60 pt-5">
-                <EndDateHistory history={endDateHistory} currentEndDate={ambition.ambitionEndDate} />
+                <EndDateHistory history={endDateHistory} currentEndDate={ambition.ambitionEndDate} ambitionStatus={ambition.ambitionStatus} />
               </div>
 
               <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
