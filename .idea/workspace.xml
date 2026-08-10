@@ -5,21 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477/storage_v2/_src_/database/ambitiousyou_dev.MLnBsQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477/storage_v2/_src_/database/ambitiousyou_dev.MLnBsQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/docs/notifications-cron.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/docs/notifications-cron.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/milestones/milestones.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/milestones/milestones.service.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/milestones/milestones.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/milestones/milestones.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/tasks/tasks.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/tasks/tasks.service.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/tasks/tasks.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/tasks/tasks.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/edit/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/edit/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/edit-ambition/edit-ambition-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/edit-ambition/edit-ambition-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/edit-ambition/end-date-history.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/edit-ambition/end-date-history.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/milestones/create-milestone.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/milestones/create-milestone.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/tasks/create-task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/tasks/create-task.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board-drawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board-drawer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-cards-skeleton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-cards-skeleton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-status-badge.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-status-badge.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/ambitions/ambitions-client-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/ambitions/ambitions-client-view.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +200,7 @@
       <workItem from="1786109082020" duration="3896000" />
       <workItem from="1786171353695" duration="599000" />
       <workItem from="1786374790018" duration="45000" />
-      <workItem from="1786374848352" duration="1022000" />
+      <workItem from="1786374848352" duration="1340000" />
     </task>
     <servers />
   </component>

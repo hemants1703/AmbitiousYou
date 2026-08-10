@@ -43,7 +43,7 @@ export default function AmbitionsClientView(props: AmbitionsClientViewProps) {
           filteredAmbitions.map((ambition, index) => (
             <FadeIn key={ambition.id} delayMs={120 + index * 40}>
               <Link prefetch href={`/ambitions/${ambition.id}?ref=ambitions`}>
-                <AmbitionCard ambition={ambition} index={index} completedTasksOrMilestones={0} totalTasksOrMilestones={0} />
+                <AmbitionCard ambition={ambition} index={index} />
               </Link>
             </FadeIn>
           ))

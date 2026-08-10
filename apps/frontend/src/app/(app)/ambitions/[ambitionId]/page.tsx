@@ -94,7 +94,7 @@ async function AmbitionDetailsContent(props: {
 
         <FadeIn>
           <Card>
-            <CardContent className="space-y-6 px-4 sm:px-6 lg:px-8">
+            <CardContent className="space-y-5 px-4 sm:space-y-6 sm:px-6 lg:px-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex min-w-0 flex-1 flex-col gap-4">
                   <div className="space-y-2">

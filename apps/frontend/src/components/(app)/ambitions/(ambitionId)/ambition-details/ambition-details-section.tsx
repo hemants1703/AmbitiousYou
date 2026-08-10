@@ -15,7 +15,7 @@ type AmbitionDetailsSectionProps = {
 export default function AmbitionDetailsSection(props: AmbitionDetailsSectionProps) {
   return (
     <AmbitionNotesProvider ambitionId={props.ambition.id} initialNotes={props.notes}>
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(280px,1fr)]">
         <MoveDetailProvider ambitionStartDate={props.ambition.ambitionStartDate} ambitionEndDate={props.ambition.ambitionEndDate}>
           <div className="min-w-0">
             <ExecutionBoard
