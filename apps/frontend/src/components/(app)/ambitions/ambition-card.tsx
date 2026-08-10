@@ -18,7 +18,7 @@ export default function AmbitionCard(props: AmbitionCardProps) {
 
   return (
     <Card.Card
-      className="@container/ambition-card group ambition-card cursor-pointer gap-2 bg-linear-to-t from-foreground/5 via-foreground/2.5 transition-transform duration-75 ease-in-out hover:-translate-y-1 active:translate-y-px active:scale-[0.99] active:brightness-80 dark:bg-linear-to-b">
+      className="group cursor-pointer shadow-sm hover:shadow-md active:shadow-none gap-2 bg-linear-to-t from-foreground/5 via-foreground/2.5 transition-transform duration-75 ease-in-out hover:-translate-y-px active:translate-y-px active:scale-[0.99] active:brightness-80 dark:bg-linear-to-b">
       <Card.CardHeader className={definition ? "gap-1" : "gap-0"}>
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-1.5">
