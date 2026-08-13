@@ -24,15 +24,9 @@ export class NotificationsController {
   }
 
   @Get()
-  async list(
-    @CurrentUserId() userId: string,
-    @Query('limit') limit?: string,
-  ): Promise<{ notifications: Notification[]; unreadCount: number }> {
+  async list(@CurrentUserId() userId: string, @Query('limit') limit?: string): Promise<{ notifications: Notification[]; unreadCount: number }> {
     const parsedLimit = limit ? Number.parseInt(limit, 10) : 30;
-    const [items, unreadCount] = await Promise.all([
-      this.inboxService.listForUser(userId, Number.isFinite(parsedLimit) ? parsedLimit : 30),
-      this.inboxService.unreadCount(userId),
-    ]);
+    const [items, unreadCount] = await Promise.all([this.inboxService.listForUser(userId, Number.isFinite(parsedLimit) ? parsedLimit : 30), this.inboxService.unreadCount(userId)]);
     return { notifications: items, unreadCount };
   }
 
@@ -52,11 +46,7 @@ export class NotificationsController {
   }
 
   @Post('push/subscribe')
-  async subscribe(
-    @CurrentUserId() userId: string,
-    @Body() body: SubscribePushDto,
-    @Headers('user-agent') userAgent?: string,
-  ): Promise<{ ok: true }> {
+  async subscribe(@CurrentUserId() userId: string, @Body() body: SubscribePushDto, @Headers('user-agent') userAgent?: string): Promise<{ ok: true }> {
     await this.pushService.upsertSubscription(userId, {
       ...body,
       userAgent: body.userAgent ?? userAgent,
@@ -71,14 +61,8 @@ export class NotificationsController {
   }
 
   @Post('reminders/sync')
-  async syncDueToday(
-    @CurrentUserId() userId: string,
-  ): Promise<{ notificationsCreated: number; pushesAttempted: number; confirmationSent: boolean }> {
-    const [row] = await db
-      .select({ userTimezone: settings.userTimezone, pushAmbitionReminders: settings.pushAmbitionReminders })
-      .from(settings)
-      .where(eq(settings.userId, userId))
-      .limit(1);
+  async syncDueToday(@CurrentUserId() userId: string): Promise<{ notificationsCreated: number; pushesAttempted: number; confirmationSent: boolean }> {
+    const [row] = await db.select({ userTimezone: settings.userTimezone, pushAmbitionReminders: settings.pushAmbitionReminders }).from(settings).where(eq(settings.userId, userId)).limit(1);
 
     if (!row?.pushAmbitionReminders) {
       return { notificationsCreated: 0, pushesAttempted: 0, confirmationSent: false };

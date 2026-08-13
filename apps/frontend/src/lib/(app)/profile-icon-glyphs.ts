@@ -1,0 +1,40 @@
+import type { ProfileGlyphKey } from "@ambitiousyou/shared";
+import {
+  AwardIcon,
+  CompassIcon,
+  CrownIcon,
+  FlagIcon,
+  FlameIcon,
+  FocusIcon,
+  GemIcon,
+  MilestoneIcon,
+  MountainIcon,
+  RocketIcon,
+  SparklesIcon,
+  StarIcon,
+  TargetIcon,
+  TrendingUpIcon,
+  TrophyIcon,
+  ZapIcon,
+  type LucideIcon,
+} from "lucide-react";
+
+/** Lucide components for catalog `glyph` keys — keep in sync with shared PROFILE_ICONS. */
+export const PROFILE_GLYPH_ICON: Record<ProfileGlyphKey, LucideIcon> = {
+  target: TargetIcon,
+  rocket: RocketIcon,
+  flame: FlameIcon,
+  sparkles: SparklesIcon,
+  trophy: TrophyIcon,
+  mountain: MountainIcon,
+  compass: CompassIcon,
+  zap: ZapIcon,
+  crown: CrownIcon,
+  star: StarIcon,
+  gem: GemIcon,
+  flag: FlagIcon,
+  "trending-up": TrendingUpIcon,
+  focus: FocusIcon,
+  award: AwardIcon,
+  milestone: MilestoneIcon,
+};

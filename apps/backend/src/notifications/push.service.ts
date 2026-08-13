@@ -41,11 +41,7 @@ export class PushService implements OnModuleInit {
   async upsertSubscription(userId: string, dto: SubscribePushDto): Promise<void> {
     const expirationTime = typeof dto.expirationTime === 'number' ? new Date(dto.expirationTime) : null;
 
-    const [existing] = await db
-      .select({ id: pushSubscriptions.id })
-      .from(pushSubscriptions)
-      .where(eq(pushSubscriptions.endpoint, dto.endpoint))
-      .limit(1);
+    const [existing] = await db.select({ id: pushSubscriptions.id }).from(pushSubscriptions).where(eq(pushSubscriptions.endpoint, dto.endpoint)).limit(1);
 
     if (existing) {
       await db

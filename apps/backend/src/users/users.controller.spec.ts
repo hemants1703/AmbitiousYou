@@ -8,7 +8,7 @@ jest.mock('src/db');
 
 describe('UsersController', () => {
   let usersController: UsersController;
-  let mockUsersService: jest.Mocked<Pick<UsersService, 'findUser'>>;
+  let mockUsersService: jest.Mocked<Pick<UsersService, 'findUser' | 'updateUser'>>;
 
   const buildUser = (overrides: Partial<User> = {}): User => ({
     id: 'user-id',
@@ -24,6 +24,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     mockUsersService = {
       findUser: jest.fn(),
+      updateUser: jest.fn(),
     };
 
     const testingModule: TestingModule = await Test.createTestingModule({
@@ -65,6 +66,18 @@ describe('UsersController', () => {
 
       expect(mockUsersService.findUser).toHaveBeenCalledWith('non-existent-id');
       expect(result).toBeNull();
+    });
+  });
+
+  describe('updateUser', () => {
+    it('should call usersService.updateUser with the user id and dto', async () => {
+      const user = buildUser({ image: 'icon:panda:rose' });
+      mockUsersService.updateUser.mockResolvedValue(user);
+
+      const result = await usersController.updateUser('123', { image: 'icon:panda:rose' });
+
+      expect(mockUsersService.updateUser).toHaveBeenCalledWith('123', { image: 'icon:panda:rose' });
+      expect(result).toEqual(user);
     });
   });
 });

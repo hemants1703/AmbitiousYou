@@ -1,8 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 import { eq, getTableColumns } from 'drizzle-orm';
 import type { User } from '@ambitiousyou/shared/types';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { SettingsService } from '../settings/settings.service';
 import { db, users } from '../db';
 
@@ -72,5 +73,16 @@ export class UsersService {
   async updatePassword(userId: string, newPassword: string): Promise<void> {
     const passwordHash = await bcrypt.hash(newPassword, 10);
     await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
+  }
+
+  /** Updates the public avatar field (`icon:<id>` or `null` for initials). */
+  async updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const [updated] = await db.update(users).set({ image: updateUserDto.image }).where(eq(users.id, userId)).returning(publicUserColumns);
+
+    if (!updated) {
+      throw new NotFoundException('User not found');
+    }
+
+    return updated;
   }
 }

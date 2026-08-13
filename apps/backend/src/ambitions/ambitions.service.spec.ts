@@ -35,7 +35,7 @@ function updateDto(overrides: Partial<UpdateAmbitionDto> = {}): UpdateAmbitionDt
     ambitionPriority: 'medium',
     isFavourited: false,
     ...overrides,
-  } as UpdateAmbitionDto;
+  };
 }
 
 describe('AmbitionsService.updateAmbitionById', () => {
@@ -54,9 +54,7 @@ describe('AmbitionsService.updateAmbitionById', () => {
   it('rejects an end date earlier than the current end date', async () => {
     (db.select as jest.Mock).mockReturnValueOnce(buildChain([baseAmbition]));
 
-    await expect(
-      service.updateAmbitionById('user-1', 'ambition-1', updateDto({ ambitionEndDate: new Date('2026-06-01T00:00:00') })),
-    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.updateAmbitionById('user-1', 'ambition-1', updateDto({ ambitionEndDate: new Date('2026-06-01T00:00:00') }))).rejects.toBeInstanceOf(BadRequestException);
 
     expect(db.update).not.toHaveBeenCalled();
   });

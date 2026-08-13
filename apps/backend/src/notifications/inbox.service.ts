@@ -6,12 +6,7 @@ import { db, notifications, type Notification } from '../db';
 export class InboxService {
   async listForUser(userId: string, limit = 30): Promise<Notification[]> {
     const safeLimit = Math.min(Math.max(limit, 1), 100);
-    return await db
-      .select()
-      .from(notifications)
-      .where(eq(notifications.userId, userId))
-      .orderBy(desc(notifications.createdAt))
-      .limit(safeLimit);
+    return await db.select().from(notifications).where(eq(notifications.userId, userId)).orderBy(desc(notifications.createdAt)).limit(safeLimit);
   }
 
   async unreadCount(userId: string): Promise<number> {

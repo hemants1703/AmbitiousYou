@@ -47,9 +47,7 @@ describe('MilestonesService.createMilestone', () => {
   });
 
   it('rejects create when the ambition is missed', async () => {
-    (db.select as jest.Mock).mockReturnValueOnce(
-      buildChain([{ ...activeAmbition, ambitionStatus: 'missed' as const, ambitionEndDate: new Date('2020-01-01T00:00:00.000Z') }]),
-    );
+    (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ ...activeAmbition, ambitionStatus: 'missed' as const, ambitionEndDate: new Date('2020-01-01T00:00:00.000Z') }]));
 
     await expect(service.createMilestone('user-1', createDto as never)).rejects.toBeInstanceOf(BadRequestException);
     expect(db.insert).not.toHaveBeenCalled();

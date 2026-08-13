@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
+import { IsIn, ValidateIf } from 'class-validator';
+import { PROFILE_ICON_VALUES } from '@ambitiousyou/shared';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+/**
+ * Profile avatar update. `image` is a catalog value
+ * (`icon:<mark>:<tone>` / `icon:none:<tone>`) or `null` for plain initials.
+ */
+export class UpdateUserDto {
+  @ValidateIf((_object, value) => value !== null)
+  @IsIn([...PROFILE_ICON_VALUES])
+  image!: string | null;
+}

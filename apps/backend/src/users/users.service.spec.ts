@@ -113,4 +113,26 @@ describe('UsersService', () => {
       expect(result).toEqual(user);
     });
   });
+
+  describe('updateUser', () => {
+    it('should update the user image and return the public row', async () => {
+      const updatedUser = {
+        id: '1',
+        name: 'Hemant Sharma',
+        email: 'hemant@hemantsharma.tech',
+        emailVerified: true,
+        image: 'icon:fire:orange',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      (db.update as jest.Mock).mockReturnValueOnce(buildChain([updatedUser]));
+
+      const result = await userService.updateUser('1', { image: 'icon:fire:orange' });
+
+      expect(db.update).toHaveBeenCalled();
+      expect(result).toEqual(updatedUser);
+      expect(result).not.toHaveProperty('passwordHash');
+    });
+  });
 });

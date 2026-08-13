@@ -6,6 +6,7 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique('users_email_key'),
   emailVerified: boolean('email_verified').notNull().default(false),
   passwordHash: text('password_hash').notNull(),
+  /** Avatar: catalog value `icon:<id>` (see profile-icons), remote URL, or null for initials. */
   image: text('image'),
   createdAt: timestamp('created_at', { precision: 3 }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3 })

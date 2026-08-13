@@ -47,18 +47,14 @@ describe('TasksService.createTask', () => {
   });
 
   it('rejects create when the ambition is missed', async () => {
-    (db.select as jest.Mock).mockReturnValueOnce(
-      buildChain([{ ...activeAmbition, ambitionStatus: 'missed' as const, ambitionEndDate: new Date('2020-01-01T00:00:00.000Z') }]),
-    );
+    (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ ...activeAmbition, ambitionStatus: 'missed' as const, ambitionEndDate: new Date('2020-01-01T00:00:00.000Z') }]));
 
     await expect(service.createTask('user-1', createDto as never)).rejects.toBeInstanceOf(BadRequestException);
     expect(db.insert).not.toHaveBeenCalled();
   });
 
   it('marks overdue active ambitions missed and rejects create', async () => {
-    (db.select as jest.Mock).mockReturnValueOnce(
-      buildChain([{ ...activeAmbition, ambitionEndDate: new Date('2020-01-01T00:00:00.000Z') }]),
-    );
+    (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ ...activeAmbition, ambitionEndDate: new Date('2020-01-01T00:00:00.000Z') }]));
     (db.update as jest.Mock).mockReturnValueOnce(buildChain([{ id: 'ambition-1', ambitionStatus: 'missed' }]));
 
     await expect(service.createTask('user-1', createDto as never)).rejects.toBeInstanceOf(BadRequestException);

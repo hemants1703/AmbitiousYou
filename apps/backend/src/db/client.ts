@@ -25,8 +25,7 @@ const databaseHost = (() => {
 
 // Render + Supabase connections should always negotiate TLS. Keep this explicit
 // so runtime behavior stays correct even if the driver URL parser changes.
-const shouldUseSsl =
-  databaseUrl.includes('sslmode=require') || databaseHost.endsWith('.supabase.co');
+const shouldUseSsl = databaseUrl.includes('sslmode=require') || databaseHost.endsWith('.supabase.co');
 
 const pool = new Pool({
   connectionString: databaseUrl,
