@@ -33,13 +33,13 @@ function mergeMovesOntoAmbitions(ambitions: Ambition[], tasks: Task[], milestone
 /**
  * Open moves for active ambitions via a single batch API call (replaces N×2 fetches).
  */
-export async function getActiveAmbitionDetails(sessionToken: string, ambitions: Ambition[]): Promise<ActiveAmbitionDetailsResult> {
+export async function getActiveAmbitionDetails(ambitions: Ambition[]): Promise<ActiveAmbitionDetailsResult> {
   if (ambitions.length === 0) {
     return { details: [], hadErrors: false };
   }
 
   try {
-    const { tasks, milestones } = await getAmbitionMovesBatch(sessionToken, true);
+    const { tasks, milestones } = await getAmbitionMovesBatch("", true);
     return { details: mergeMovesOntoAmbitions(ambitions, tasks, milestones), hadErrors: false };
   } catch {
     return { details: [], hadErrors: true };

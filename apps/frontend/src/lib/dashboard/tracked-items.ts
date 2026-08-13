@@ -66,15 +66,21 @@ export function getTrackedItems(ambition: AmbitionDetails): TrackedItem[] {
   return [...(ambition.tasks ?? []), ...(ambition.milestones ?? [])];
 }
 
+/** Local midnight for the given instant (defaults to now). Pass an explicit `referenceDate` on the server after `connection()`. */
+export function startOfDay(dateValue: Date = new Date()): Date {
+  const day = new Date(dateValue);
+  day.setHours(0, 0, 0, 0);
+  return day;
+}
+
 /**
  * Whole calendar days from today to the given date. Both endpoints are
  * normalized to local midnight so the result is an exact integer of days
  * (negative = in the past). Mirrors the logic already used on the ambition
  * detail page so urgency reads identically across the app.
  */
-export function getDaysUntil(dateValue: Date | string): number {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+export function getDaysUntil(dateValue: Date | string, referenceDate?: Date): number {
+  const today = startOfDay(referenceDate);
 
   const target = new Date(dateValue);
   target.setHours(0, 0, 0, 0);
@@ -97,7 +103,7 @@ export function sortByUrgency(first: QueueItem, second: QueueItem): number {
   return priorityWeight(second.ambitionPriority) - priorityWeight(first.ambitionPriority);
 }
 
-function toQueueItem(item: TrackedItem, ambition: AmbitionDetails): QueueItem {
+function toQueueItem(item: TrackedItem, ambition: AmbitionDetails, referenceDate?: Date): QueueItem {
   const date = new Date(getItemDate(item));
 
   return {
@@ -106,7 +112,7 @@ function toQueueItem(item: TrackedItem, ambition: AmbitionDetails): QueueItem {
     title: getItemTitle(item),
     description: getItemDescription(item),
     date,
-    daysUntil: getDaysUntil(date),
+    daysUntil: getDaysUntil(date, referenceDate),
     ambitionId: ambition.id,
     ambitionName: ambition.ambitionName,
     ambitionPriority: ambition.ambitionPriority,
@@ -117,7 +123,7 @@ function toQueueItem(item: TrackedItem, ambition: AmbitionDetails): QueueItem {
 /**
  * Every open item across the supplied (active) ambitions, sorted by urgency.
  */
-export function flattenOpenItems(ambitions: AmbitionDetails[]): QueueItem[] {
+export function flattenOpenItems(ambitions: AmbitionDetails[], referenceDate?: Date): QueueItem[] {
   const openItems: QueueItem[] = [];
 
   for (const ambition of ambitions) {
@@ -125,7 +131,7 @@ export function flattenOpenItems(ambitions: AmbitionDetails[]): QueueItem[] {
 
     for (const item of getTrackedItems(ambition)) {
       if (isItemCompleted(item)) continue;
-      openItems.push(toQueueItem(item, ambition));
+      openItems.push(toQueueItem(item, ambition, referenceDate));
     }
   }
 
@@ -198,7 +204,7 @@ export interface AttentionFlag {
  *  - stalled: target date is within a week and progress is still under half
  * At most one flag per ambition, most severe first.
  */
-export function computeAttentionFlags(ambitions: AmbitionDetails[]): AttentionFlag[] {
+export function computeAttentionFlags(ambitions: AmbitionDetails[], referenceDate?: Date): AttentionFlag[] {
   const flags: AttentionFlag[] = [];
 
   for (const ambition of ambitions) {
@@ -206,8 +212,8 @@ export function computeAttentionFlags(ambitions: AmbitionDetails[]): AttentionFl
 
     const trackedItems = getTrackedItems(ambition);
     const openItems = trackedItems.filter((item) => !isItemCompleted(item));
-    const overdueOpen = openItems.filter((item) => getDaysUntil(getItemDate(item)) < 0);
-    const daysToDeadline = getDaysUntil(ambition.ambitionEndDate);
+    const overdueOpen = openItems.filter((item) => getDaysUntil(getItemDate(item), referenceDate) < 0);
+    const daysToDeadline = getDaysUntil(ambition.ambitionEndDate, referenceDate);
     const progress = ambition.ambitionPercentageCompleted ?? 0;
 
     const base = {
@@ -249,9 +255,9 @@ export interface AttentionSummary {
 }
 
 /** Counts every move due today or overdue, plus stalled/ready ambitions without overdue moves. */
-export function summarizeAttention(ambitions: AmbitionDetails[], openItems?: QueueItem[]): AttentionSummary {
-  const items = openItems ?? flattenOpenItems(ambitions);
-  const flags = computeAttentionFlags(ambitions);
+export function summarizeAttention(ambitions: AmbitionDetails[], openItems?: QueueItem[], referenceDate?: Date): AttentionSummary {
+  const items = openItems ?? flattenOpenItems(ambitions, referenceDate);
+  const flags = computeAttentionFlags(ambitions, referenceDate);
   const urgentItems = items.filter((item) => item.daysUntil <= 0);
   const overdueCount = items.filter((item) => item.daysUntil < 0).length;
   const dueTodayCount = items.filter((item) => item.daysUntil === 0).length;

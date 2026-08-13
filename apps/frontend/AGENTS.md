@@ -234,7 +234,7 @@ Monorepo overview, shared schema, and backend conventions: root [`AGENTS.md`](..
 - Domain types from `@ambitiousyou/shared` only — never import from `apps/backend`
 - Commands: `pnpm dev` / `pnpm build` / `pnpm lint` / `pnpm test` (vitest) / `pnpm test:watch`
 - Route groups: `(landing)/`, `(auth)/` (`redirectIfAuthenticated()`), `(app)/` (static chrome; stream auth + inbox behind Suspense — never block `{children}` with `requireUser()` at layout top); Route Handlers only for `api/logout/` and `api/auth/status/`
-- Auth helpers in `src/lib/auth.ts`: `requireUser()` (page content gate, cached), `getSessionToken()` (raw cookie for SessionGuard-backed calls — never gate renders), `redirectIfAuthenticated()`
+- Auth helpers in `src/lib/auth.ts`: `requireUser()` (uncached page gate), `getCachedUser()` in `session-data.ts` (display-only private cache), `getSessionToken()` (raw cookie for SessionGuard-backed calls — never gate renders), `redirectIfAuthenticated()`
 - Reads: `src/lib/api/`; writes: `src/lib/actions/(app)/` via `mutateApi()` + scoped revalidation; backend `ValidationPipe` is strict
 - Config: `cacheComponents` + `partialPrefetching` + `transpilePackages: ['@ambitiousyou/shared']`; theme tokens in `src/app/globals.css`
 

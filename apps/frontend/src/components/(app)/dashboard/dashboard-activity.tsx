@@ -2,11 +2,11 @@ import { getAllAmbitionMoves } from "@/lib/api/ambitions/get-all-ambition-moves"
 import { buildActivityCalendar } from "@/lib/dashboard/activity-calendar";
 import { buildAllMovementSeries } from "@/lib/dashboard/movement";
 import type { Ambition } from "@ambitiousyou/shared/types";
+import { connection } from "next/server";
 import { ActivityCalendarCard } from "./activity-calendar";
 import { MovementChart } from "./movement-chart";
 
 interface DashboardActivityProps {
-  sessionToken: string;
   ambitions: Ambition[];
 }
 
@@ -19,9 +19,12 @@ interface DashboardActivityProps {
  * sits above the recent-window detail (bar chart).
  */
 export async function DashboardActivity(props: DashboardActivityProps) {
-  const { details, hadErrors } = await getAllAmbitionMoves(props.sessionToken, props.ambitions);
-  const calendar = buildActivityCalendar(details);
-  const series = buildAllMovementSeries(details);
+  await connection();
+
+  const { details, hadErrors } = await getAllAmbitionMoves(props.ambitions);
+  const now = new Date();
+  const calendar = buildActivityCalendar(details, now);
+  const series = buildAllMovementSeries(details, now);
 
   // The 0003 migration backfilled pre-existing completions from `updated_at`, so history is approximate.
   return (

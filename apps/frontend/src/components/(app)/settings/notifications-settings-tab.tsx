@@ -17,7 +17,7 @@ import {
   type EnableRemindersIntent,
 } from "@/components/(app)/settings/enable-reminders-dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { Settings } from "@ambitiousyou/shared";
@@ -157,42 +157,33 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BellIcon className="size-4 text-accent-brand" />
-            Notification preferences
-          </CardTitle>
-          <CardDescription>Control how and when AmbitiousYou reaches you.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <NotificationRow
-            id="email-activity"
-            icon={<MailIcon className="size-4" />}
-            label="Email account activity"
-            description="Receive emails about sign-ins, profile changes, and security events."
-            checked={props.userSettings.emailAccountActivity}
-          />
-          <NotificationRow
-            id="ambition-reminders"
-            icon={<BellIcon className="size-4" />}
-            label="Ambition reminders"
-            description="Account preference: twice-a-day nudges for due or overdue work — enough to keep ambitions in check, not enough to nag. Each device still needs its own permission."
-            checked={pushAmbitionReminders}
-            disabled={isPending}
-            onCheckedChange={handlePushToggle}
-          />
+      <CardContent className="space-y-3">
+        <NotificationRow
+          id="email-activity"
+          icon={<MailIcon className="size-4" />}
+          label="Email account activity"
+          description="Receive emails about sign-ins, profile changes, and security events."
+          checked={props.userSettings.emailAccountActivity}
+        />
+        <NotificationRow
+          id="ambition-reminders"
+          icon={<BellIcon className="size-4" />}
+          label="Ambition reminders"
+          description="Account preference: twice-a-day nudges for due or overdue work — enough to keep ambitions in check, not enough to nag. Each device still needs its own permission."
+          checked={pushAmbitionReminders}
+          disabled={isPending}
+          onCheckedChange={handlePushToggle}
+        />
 
-          {pushAmbitionReminders ? <ThisDeviceStatus status={deviceStatus} onConnect={() => openEnableDialog("connect")} /> : null}
+        {pushAmbitionReminders ? <ThisDeviceStatus status={deviceStatus} onConnect={() => openEnableDialog("connect")} /> : null}
 
-          {showIosInstallHint ? (
-            <p className="rounded-2xl border border-border/60 bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
-              On iOS, install the app first: open Safari → Share → Add to Home Screen, then launch AmbitiousYou from
-              the icon before enabling reminders on this device.
-            </p>
-          ) : null}
-        </CardContent>
-      </Card>
+        {showIosInstallHint ? (
+          <p className="rounded-2xl border border-border/60 bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
+            On iOS, install the app first: open Safari → Share → Add to Home Screen, then launch AmbitiousYou from
+            the icon before enabling reminders on this device.
+          </p>
+        ) : null}
+      </CardContent>
 
       <EnableRemindersDialog
         open={enableDialogOpen}

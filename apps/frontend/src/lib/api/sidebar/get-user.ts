@@ -1,14 +1,9 @@
 import { User } from "@ambitiousyou/shared";
 import { cache } from "react";
 
+import { fetchUserFromApi } from "@/lib/cache/fetch-session-data";
+
+/** Uncached per-request dedup — for auth probes that must not reuse browser cache. */
 export const getUser = cache(async (sessionToken: string): Promise<User | null> => {
-  const getUser = await fetch(`${process.env.API_URL}/users`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${sessionToken}` },
-  });
-
-  if (!getUser.ok) return null;
-
-  const user: User | null = await getUser.json();
-  return user;
+  return fetchUserFromApi(sessionToken);
 });

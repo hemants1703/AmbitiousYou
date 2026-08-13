@@ -6,10 +6,11 @@ import { ReviveMissed } from "@/components/(app)/dashboard/revive-missed";
 import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
 import { DashboardMovesProvider } from "@/lib/(app)/mutations/dashboard-moves-context";
 import { getActiveAmbitionDetails } from "@/lib/api/ambitions/get-active-ambition-details";
-import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
-import { flattenOpenItems, groupUpcomingByDay, pickLeadMotivation, summarizeAttention } from "@/lib/dashboard/tracked-items";
-import { getSessionToken, requireUser } from "@/lib/auth";
+import { getCachedAmbitions } from "@/lib/cache/session-data";
+import { flattenOpenItems, groupUpcomingByDay, pickLeadMotivation, startOfDay, summarizeAttention } from "@/lib/dashboard/tracked-items";
+import { requireUser } from "@/lib/auth";
 import { Metadata } from "next";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import DashboardLoading from "./loading";
@@ -27,18 +28,20 @@ export default function DashboardPage() {
 }
 
 async function DashboardContent() {
-  const sessionToken = await getSessionToken();
-  const [{ user: userDetails }, ambitions] = await Promise.all([requireUser(), getAmbitions(sessionToken)]);
+  await connection();
+
+  const [{ user: userDetails }, ambitions] = await Promise.all([requireUser(), getCachedAmbitions()]);
+  const today = startOfDay();
 
   if (!ambitions || ambitions.length === 0) {
     redirect("/ambitions/create?initiation=1");
   }
 
   const activeAmbitions = ambitions.filter((ambition) => ambition.ambitionStatus === "active");
-  const { details, hadErrors } = await getActiveAmbitionDetails(sessionToken, activeAmbitions);
-  const openItems = flattenOpenItems(details);
+  const { details, hadErrors } = await getActiveAmbitionDetails(activeAmbitions);
+  const openItems = flattenOpenItems(details, today);
   const loadFailed = activeAmbitions.length > 0 && details.length === 0;
-  const attentionSummary = summarizeAttention(details, openItems);
+  const attentionSummary = summarizeAttention(details, openItems, today);
   const missed = ambitions.filter((ambition) => ambition.ambitionStatus === "missed");
 
   return (
@@ -56,10 +59,10 @@ async function DashboardContent() {
           leadMotivation={pickLeadMotivation(openItems, details)}
         />
 
-        <ReviveMissed ambitions={missed} />
+        <ReviveMissed ambitions={missed} referenceDate={today} />
 
         <Suspense fallback={<ActivitySkeleton />}>
-          <DashboardActivity sessionToken={sessionToken} ambitions={ambitions} />
+          <DashboardActivity ambitions={ambitions} />
         </Suspense>
       </div>
     </DashboardMovesProvider>

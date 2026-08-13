@@ -1,5 +1,6 @@
 import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
-import { cache } from "react";
+
+import { getCachedAmbitionDetails } from "@/lib/cache/session-data";
 
 export type AmbitionDetails = Ambition & {
   tasks?: Task[];
@@ -7,18 +8,6 @@ export type AmbitionDetails = Ambition & {
   notes?: Note[];
 };
 
-export const getAmbitionDetails = cache(async (sessionToken: string, ambitionId: string): Promise<AmbitionDetails | null> => {
-  const response = await fetch(`${process.env.API_URL}/ambitions/${ambitionId}/details`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionToken}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ambition details: ${response.statusText}`);
-  }
-
-  return response.json() as Promise<AmbitionDetails | null>;
-});
+export async function getAmbitionDetails(_sessionToken: string, ambitionId: string): Promise<AmbitionDetails | null> {
+  return getCachedAmbitionDetails(ambitionId);
+}

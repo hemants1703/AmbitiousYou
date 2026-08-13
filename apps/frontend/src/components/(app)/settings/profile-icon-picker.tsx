@@ -23,7 +23,6 @@ import {
   type ProfileToneId,
 } from "@ambitiousyou/shared";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -58,7 +57,6 @@ function ProfileMarkVisual(props: ProfileMarkVisualProps) {
 }
 
 export function ProfileIconPicker(props: ProfileIconPickerProps) {
-  const router = useRouter();
   const [committedImage, setCommittedImage] = useState(props.image);
   const [prevPropsImage, setPrevPropsImage] = useState(props.image);
   const [open, setOpen] = useState(false);
@@ -152,8 +150,6 @@ export function ProfileIconPicker(props: ProfileIconPickerProps) {
       }
 
       setCommittedImage(result.data?.image ?? nextImage);
-      // Sidebar chip lives in the layout Suspense island — refresh in the background.
-      router.refresh();
     });
   }
 

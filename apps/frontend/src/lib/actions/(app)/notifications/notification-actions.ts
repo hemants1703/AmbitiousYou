@@ -1,6 +1,11 @@
 "use server";
 
 import { mutateApi } from "@/lib/actions/mutate-api";
+import { getCachedUser } from "@/lib/cache/session-data";
+import {
+  invalidateInboxCache,
+  invalidateSettingsCache,
+} from "@/lib/cache/invalidate-session-data";
 import type { Notification, Settings } from "@ambitiousyou/shared";
 import { revalidatePath } from "next/cache";
 
@@ -11,6 +16,8 @@ export async function markNotificationReadAction(notificationId: string) {
     errorMessage: "Could not mark notification as read.",
   });
   if (!result.error) {
+    const user = await getCachedUser();
+    invalidateInboxCache(user.id);
     revalidatePath("/dashboard");
     revalidatePath("/settings");
   }
@@ -24,6 +31,8 @@ export async function markAllNotificationsReadAction() {
     errorMessage: "Could not mark notifications as read.",
   });
   if (!result.error) {
+    const user = await getCachedUser();
+    invalidateInboxCache(user.id);
     revalidatePath("/dashboard");
     revalidatePath("/settings");
   }
@@ -40,7 +49,8 @@ export async function togglePushAmbitionRemindersSetting(updatedValue: boolean, 
     },
     errorMessage: "Failed to update notification settings. Please try again.",
   });
-  if (!result.error) {
+  if (!result.error && result.data) {
+    invalidateSettingsCache(result.data.userId);
     revalidatePath("/settings");
   }
   return result;
@@ -75,6 +85,8 @@ export async function syncDueTodayRemindersAction() {
     errorMessage: "Could not sync due-today reminders.",
   });
   if (!result.error) {
+    const user = await getCachedUser();
+    invalidateInboxCache(user.id);
     revalidatePath("/dashboard");
     revalidatePath("/settings");
     revalidatePath("/ambitions");

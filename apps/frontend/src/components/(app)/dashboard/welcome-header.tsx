@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import type { Ambition, User } from "@ambitiousyou/shared/types";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
+import { LocalTodayLabel } from "./local-today-label";
 import { QuickAdd } from "./quick-add";
 import { TimeOfDayGreeting } from "./time-of-day-greeting";
 
@@ -32,7 +33,6 @@ export function WelcomeHeader(props: WelcomeHeaderProps) {
   const averageProgress = active.length > 0 ? Math.round(active.reduce((sum, ambition) => sum + (ambition.ambitionPercentageCompleted ?? 0), 0) / active.length) : 0;
 
   const momentumLine = buildMomentumLine({ activeCount: active.length, completedCount: completed.length, averageProgress });
-  const todayLabel = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
 
   // Trimmed, serialisable shape for the client Quick add popover (active ambitions only).
   const quickAddAmbitions = active.map((ambition) => ({
@@ -45,7 +45,9 @@ export function WelcomeHeader(props: WelcomeHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0 space-y-1.5">
-        <p className="text-sm text-muted-foreground">{todayLabel}</p>
+        <p className="text-sm text-muted-foreground">
+          <LocalTodayLabel />
+        </p>
         <h1 className="text-2xl font-bold tracking-tight text-balance sm:text-3xl">
           <TimeOfDayGreeting />,{" "}
           <span translate="no">{firstName}</span>

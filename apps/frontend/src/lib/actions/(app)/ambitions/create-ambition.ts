@@ -1,6 +1,5 @@
 "use server";
 
-import { getSessionToken } from "@/lib/auth";
 import {
   getErrorMessage,
   parseDate,
@@ -9,7 +8,9 @@ import {
   parseTasks,
   readString,
 } from "@/lib/actions/(app)/ambitions/form-data-parsers";
-import { revalidatePath } from "next/cache";
+import { revalidateAmbitionFull } from "@/lib/actions/revalidate-ambition";
+import { getCachedUser } from "@/lib/cache/session-data";
+import { getSessionToken } from "@/lib/auth";
 
 export type CreateAmbitionState = {
   error: string | null;
@@ -90,8 +91,8 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
 
     const created = (await response.json()) as { id: string; ambitionName: string };
 
-    revalidatePath("/ambitions");
-    revalidatePath("/dashboard");
+    const user = await getCachedUser();
+    revalidateAmbitionFull(user.id, created.id);
 
     return {
       error: null,

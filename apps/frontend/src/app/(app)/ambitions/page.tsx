@@ -3,9 +3,8 @@ import { AmbitionsFiltersFallback } from "@/components/(app)/ambitions/ambitions
 import { AmbitionsPageHeader } from "@/components/(app)/ambitions/ambitions-page-header";
 import AmbitionsClientView from "@/components/ambitions/ambitions-client-view";
 import { FadeIn } from "@/components/motion-wrapper";
-import { getAmbitions } from "@/lib/api/ambitions/get-ambitions";
-import { getSessionToken, requireUser } from "@/lib/auth";
-import { Ambition } from "@ambitiousyou/shared/types";
+import { getCachedAmbitions } from "@/lib/cache/session-data";
+import { requireUser } from "@/lib/auth";
 import { FilterIcon } from "lucide-react";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -33,13 +32,7 @@ export default function AmbitionsPage() {
 }
 
 async function AmbitionsContent() {
-  // Validate the session and load the ambitions concurrently. getAmbitions only
-  // needs the raw cookie, and its endpoint enforces auth itself (SessionGuard),
-  // so overlapping the fetch with requireUser's validation removes a backend
-  // round-trip without weakening the gate — requireUser still redirects on an
-  // invalid session before this content streams.
-  const sessionToken = await getSessionToken();
-  const [, ambitions]: [unknown, Ambition[] | null] = await Promise.all([requireUser(), getAmbitions(sessionToken)]);
+  const [, ambitions] = await Promise.all([requireUser(), getCachedAmbitions()]);
 
   if (!ambitions || ambitions.length === 0) {
     return <NoAmbitionsFound />;

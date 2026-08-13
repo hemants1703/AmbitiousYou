@@ -1,8 +1,9 @@
 "use server";
 
 import { getErrorMessage, parseDate, readString } from "@/lib/actions/(app)/ambitions/form-data-parsers";
+import { revalidateAmbitionFull } from "@/lib/actions/revalidate-ambition";
+import { getCachedUser } from "@/lib/cache/session-data";
 import { getSessionToken } from "@/lib/auth";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export type UpdateAmbitionState = {
@@ -90,9 +91,8 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
     };
   }
 
-  revalidatePath(`/ambitions/${ambitionId}`);
-  revalidatePath("/ambitions");
-  revalidatePath("/dashboard");
+  const user = await getCachedUser();
+  revalidateAmbitionFull(user.id, ambitionId);
 
   redirect(`/ambitions/${ambitionId}`);
 }

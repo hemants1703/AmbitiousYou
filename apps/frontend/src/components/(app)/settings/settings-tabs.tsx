@@ -1,53 +1,21 @@
 "use client";
 
-import type { Session, Settings, User } from "@ambitiousyou/shared";
 import Link from "next/link";
-import type { MouseEvent } from "react";
-import { useEffect, useState } from "react";
-import { AccountSettingsTab } from "./account-settings-tab";
-import { BillingSettingsTab } from "./billing-settings-tab";
-import { NotificationsSettingsTab } from "./notifications-settings-tab";
-import { SecuritySettingsTab } from "./security-settings-tab";
+import { useRouter } from "next/navigation";
+import type { MouseEvent, ReactNode } from "react";
+
 import { SETTINGS_TAB_ITEMS } from "./settings-tab-items";
-import {
-  hrefForSettingsTab,
-  parseSettingsTab,
-  type SettingsTabValue,
-} from "./settings-shared";
+import { hrefForSettingsTab, type SettingsTabValue } from "./settings-shared";
 
 export type { SettingsTabValue };
 
 interface SettingsTabsProps {
   initialTab: SettingsTabValue;
-  userDetails: User;
-  userSettings: Settings;
-  sessions: Session[] | null;
+  children: ReactNode;
 }
 
 export function SettingsTabs(props: SettingsTabsProps) {
-  const [activeTab, setActiveTab] = useState<SettingsTabValue>(props.initialTab);
-
-  // Re-sync when the server-resolved tab changes, adjusting during render rather
-  // than in an effect so the panel never paints the stale tab first.
-  const [lastInitialTab, setLastInitialTab] = useState(props.initialTab);
-  if (props.initialTab !== lastInitialTab) {
-    setLastInitialTab(props.initialTab);
-    setActiveTab(props.initialTab);
-  }
-
-  useEffect(() => {
-    function onPopState() {
-      const tab = new URLSearchParams(window.location.search).get("tab");
-      setActiveTab(parseSettingsTab(tab));
-    }
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, []);
-
-  function selectTab(tab: SettingsTabValue) {
-    setActiveTab(tab);
-    window.history.pushState(null, "", hrefForSettingsTab(tab));
-  }
+  const router = useRouter();
 
   function handleTabClick(event: MouseEvent<HTMLAnchorElement>, tab: SettingsTabValue) {
     // Keep real <Link> hrefs for middle-click / modifier open-in-new-tab.
@@ -55,15 +23,10 @@ export function SettingsTabs(props: SettingsTabsProps) {
       return;
     }
     event.preventDefault();
-    if (tab !== activeTab) selectTab(tab);
+    if (tab !== props.initialTab) {
+      router.push(hrefForSettingsTab(tab), { scroll: false });
+    }
   }
-
-  const activePanels = {
-    account: <AccountSettingsTab userDetails={props.userDetails} />,
-    billing: <BillingSettingsTab />,
-    notifications: <NotificationsSettingsTab userSettings={props.userSettings} />,
-    security: <SecuritySettingsTab sessions={props.sessions} />,
-  } satisfies Record<SettingsTabValue, React.ReactNode>;
 
   return (
     <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-8">
@@ -73,7 +36,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
           role="tablist"
         >
           {SETTINGS_TAB_ITEMS.map((tab) => {
-            const isActive = activeTab === tab.value;
+            const isActive = props.initialTab === tab.value;
             return (
               <Link
                 key={tab.value}
@@ -111,7 +74,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
         </div>
       </nav>
 
-      <div className="min-w-0 flex-1">{activePanels[activeTab]}</div>
+      <div className="min-w-0 flex-1">{props.children}</div>
     </div>
   );
 }

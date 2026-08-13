@@ -6,6 +6,7 @@ import Link from "next/link";
 
 interface ReviveMissedProps {
   ambitions: Ambition[];
+  referenceDate?: Date;
 }
 
 const MAX_VISIBLE = 4;
@@ -34,7 +35,7 @@ export function ReviveMissed(props: ReviveMissedProps) {
 
       <CardContent className="grid gap-2.5 sm:grid-cols-2">
         {visible.map((ambition) => {
-          const daysOver = Math.abs(getDaysUntil(ambition.ambitionEndDate));
+          const daysOver = Math.abs(getDaysUntil(ambition.ambitionEndDate, props.referenceDate));
           const progress = ambition.ambitionPercentageCompleted ?? 0;
 
           return (

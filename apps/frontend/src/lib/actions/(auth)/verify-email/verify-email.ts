@@ -1,5 +1,7 @@
 "use server";
 
+import { invalidateUserCache } from "@/lib/cache/invalidate-session-data";
+import { getCachedUser } from "@/lib/cache/session-data";
 import { revalidatePath } from "next/cache";
 
 export async function verifyEmailAction(token: string): Promise<{ error: string | null }> {
@@ -30,7 +32,13 @@ export async function verifyEmailAction(token: string): Promise<{ error: string 
     return { error };
   }
 
-  // Refresh the settings page so the "Unverified" badge updates for a logged-in user.
+  try {
+    const user = await getCachedUser();
+    invalidateUserCache(user.id);
+  } catch {
+    // Visitor may verify while logged out — path revalidation still updates UI on next login.
+  }
+
   revalidatePath("/settings");
   return { error: null };
 }

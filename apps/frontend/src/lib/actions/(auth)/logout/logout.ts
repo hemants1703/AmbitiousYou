@@ -1,5 +1,7 @@
 "use server";
 
+import { fetchUserFromApi } from "@/lib/cache/fetch-session-data";
+import { invalidateAllSessionCaches } from "@/lib/cache/invalidate-session-data";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -13,6 +15,11 @@ export async function logoutAction(): Promise<void> {
   const sessionToken = cookieStore.get("sessionToken")?.value;
 
   if (sessionToken) {
+    const user = await fetchUserFromApi(sessionToken);
+    if (user) {
+      invalidateAllSessionCaches(user.id);
+    }
+
     try {
       await fetch(`${process.env.API_URL}/auth/logout`, {
         method: "POST",

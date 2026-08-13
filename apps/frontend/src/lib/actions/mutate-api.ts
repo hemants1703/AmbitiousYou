@@ -1,4 +1,5 @@
 import { getSessionToken } from "@/lib/auth";
+import { getCachedUser } from "@/lib/cache/session-data";
 import { revalidateAmbition } from "@/lib/actions/revalidate-ambition";
 
 export interface MutateApiOptions<T> {
@@ -47,9 +48,11 @@ export async function mutateApi<T>(options: MutateApiOptions<T>): Promise<Mutate
 
     if (revalidateFromResponse && data) {
       const { ambitionId: id, scopes } = revalidateFromResponse(data);
-      revalidateAmbition(id, scopes);
+      const user = await getCachedUser();
+      revalidateAmbition(id, scopes, user.id);
     } else if (ambitionId && revalidate?.length) {
-      revalidateAmbition(ambitionId, revalidate);
+      const user = await getCachedUser();
+      revalidateAmbition(ambitionId, revalidate, user.id);
     }
 
     return { data, error: null };

@@ -1,8 +1,9 @@
 "use server";
 
 import { getAmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
+import { revalidateAmbitionFull } from "@/lib/actions/revalidate-ambition";
+import { getCachedUser } from "@/lib/cache/session-data";
 import { getSessionToken } from "@/lib/auth";
-import { revalidatePath } from "next/cache";
 
 export async function toggleAmbitionFavouriteAction(ambitionId: string): Promise<{ error: string | null; isFavourited: boolean }> {
   const sessionToken = await getSessionToken();
@@ -52,9 +53,8 @@ export async function toggleAmbitionFavouriteAction(ambitionId: string): Promise
     return { error: "Unable to reach the ambitions server.", isFavourited: !nextIsFavourited };
   }
 
-  revalidatePath(`/ambitions/${ambitionId}`);
-  revalidatePath("/ambitions");
-  revalidatePath("/dashboard");
+  const user = await getCachedUser();
+  revalidateAmbitionFull(user.id, ambitionId);
 
   return { error: null, isFavourited: nextIsFavourited };
 }

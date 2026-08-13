@@ -1,16 +1,7 @@
 import type { Session } from "@ambitiousyou/shared";
-import { cache } from "react";
 
-export const getSessions = cache(async (sessionToken: string): Promise<Session[] | null> => {
-  const response = await fetch(`${process.env.API_URL}/auth/sessions`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${sessionToken}` },
-  });
+import { getCachedSessions } from "@/lib/cache/session-data";
 
-  if (!response.ok) {
-    return null;
-  }
-
-  const data: Session[] | null = await response.json();
-  return data;
-});
+export async function getSessions(_sessionToken?: string): Promise<Session[] | null> {
+  return getCachedSessions();
+}

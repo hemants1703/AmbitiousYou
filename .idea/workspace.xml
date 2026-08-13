@@ -4,7 +4,46 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="clarity: Update StatCard and AGENTS.md to refine emphasis styles&#10;&#10;Revised `solid` emphasis description in `StatCard` and `AGENTS.md` to specify themed icon disc (`bg-card`) usage for improved visual consistency. Updated associated component logic for better tone handling.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/settings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/settings/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-tracking.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-tracking.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-activity.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-activity.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/revive-missed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/revive-missed.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/welcome-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/welcome-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/authenticated-nav-user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/authenticated-nav-user.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/header-inbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/header-inbox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/create-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/create-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/delete-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/delete-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/toggle-ambition-favourite.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/toggle-ambition-favourite.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/update-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/update-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notifications/notification-actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notifications/notification-actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-profile-icon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-profile-icon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(auth)/logout/logout.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(auth)/logout/logout.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(auth)/verify-email/verify-email.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(auth)/verify-email/verify-email.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/mutate-api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/mutate-api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/revalidate-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/revalidate-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-active-ambition-details.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-active-ambition-details.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-all-ambition-moves.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-all-ambition-moves.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-details.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-details.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-full.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-full.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-moves-batch.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-moves-batch.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambitions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/auth/get-sessions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/auth/get-sessions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/notifications/get-notifications.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/notifications/get-notifications.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/settings/get-user-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/settings/get-user-settings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/sidebar/get-user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/sidebar/get-user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/NEXT-CACHE-COMPONENTS-MIGRATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/NEXT-CACHE-COMPONENTS-MIGRATION.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +60,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="677" />
+    <option name="cachedIndexableFilesCount" value="678" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -48,61 +87,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.2299024428716416" />
-      <entry key="MS500" value="5.8633293104937305" />
-      <entry key="S2" value="12.260861032790077" />
-      <entry key="S5" value="15.29213051616749" />
-      <entry key="S10" value="16.564677762580892" />
-      <entry key="S30" value="17.510415374496926" />
-      <entry key="S60" value="19.25826295413524" />
-      <entry key="M2" value="42.88507340340126" />
-      <entry key="M5" value="230.57130792761652" />
-      <entry key="M10" value="620.453270174829" />
-      <entry key="M15" value="968.0585069578013" />
-      <entry key="M30" value="1747.1587769241098" />
-      <entry key="H1" value="2643.1787775277157" />
-      <entry key="H2" value="3425.4843233326837" />
-      <entry key="H4" value="3966.314038645574" />
-      <entry key="D1" value="4528.582621522912" />
-      <entry key="W1" value="4638.2627195109635" />
+      <entry key="MS100" value="1.6783021637238358" />
+      <entry key="MS500" value="1.9253044280378524" />
+      <entry key="S2" value="1.9807790039885513" />
+      <entry key="S5" value="1.9922668078249692" />
+      <entry key="S10" value="1.9962102802537407" />
+      <entry key="S30" value="3.4098031741606776" />
+      <entry key="S60" value="19.08427201800118" />
+      <entry key="M2" value="63.0102730800288" />
+      <entry key="M5" value="169.06652389599049" />
+      <entry key="M10" value="364.0453022388313" />
+      <entry key="M15" value="603.3182150786492" />
+      <entry key="M30" value="1344.6693230199114" />
+      <entry key="H1" value="2418.962483373338" />
+      <entry key="H2" value="3482.385267868398" />
+      <entry key="H4" value="4270.66284698518" />
+      <entry key="D1" value="5127.9089189951055" />
+      <entry key="W1" value="5298.72605750978" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="3.192612778146153E-101" />
-      <entry key="S5" value="6.333744153786402E-41" />
-      <entry key="S10" value="7.975616712656748E-21" />
-      <entry key="S30" value="2.2564752121394575E-7" />
-      <entry key="S60" value="6.217219078947697E-4" />
-      <entry key="M2" value="0.03760422472876539" />
-      <entry key="M5" value="0.5183702065679241" />
-      <entry key="M10" value="1.5687597642733544" />
-      <entry key="M15" value="2.612639965984802" />
-      <entry key="M30" value="5.2353301377386225" />
-      <entry key="H1" value="8.474448171057393" />
-      <entry key="H2" value="11.381115775793322" />
-      <entry key="H4" value="13.411737323016272" />
-      <entry key="D1" value="15.522555984655884" />
-      <entry key="W1" value="15.930553843333346" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="6.369610785784779E-153" />
+      <entry key="S10" value="7.998166935185635E-77" />
+      <entry key="S30" value="4.866005889823871E-26" />
+      <entry key="S60" value="2.887135738372328E-13" />
+      <entry key="M2" value="8.10349102082381E-7" />
+      <entry key="M5" value="0.007047161733450217" />
+      <entry key="M10" value="0.18291256718695895" />
+      <entry key="M15" value="0.6235495471319824" />
+      <entry key="M30" value="2.557642113814027" />
+      <entry key="H1" value="5.923239298367881" />
+      <entry key="H2" value="9.514999428582003" />
+      <entry key="H4" value="12.263007716755238" />
+      <entry key="D1" value="15.29261993858307" />
+      <entry key="W1" value="15.896626455144851" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.155826556982344" />
-      <entry key="MS500" value="5.8242914978663" />
-      <entry key="S2" value="12.241124039524076" />
-      <entry key="S5" value="15.28233241331015" />
-      <entry key="S10" value="16.559377781500658" />
-      <entry key="S30" value="17.508549473743916" />
-      <entry key="S60" value="19.257852201278553" />
-      <entry key="M2" value="42.921258275835925" />
-      <entry key="M5" value="231.08468181192276" />
-      <entry key="M10" value="622.0095303927438" />
-      <entry key="M15" value="970.6611657642748" />
-      <entry key="M30" value="1752.4676884248777" />
-      <entry key="H1" value="2651.945396581277" />
-      <entry key="H2" value="3437.4108413558624" />
-      <entry key="H4" value="3980.465491825258" />
-      <entry key="D1" value="4545.056347991865" />
-      <entry key="W1" value="4655.186151214398" />
+      <entry key="MS100" value="1.6099352610719166" />
+      <entry key="MS500" value="1.9083016189026152" />
+      <entry key="S2" value="1.9763392273112617" />
+      <entry key="S5" value="1.9904751992985117" />
+      <entry key="S10" value="1.9953118024960714" />
+      <entry key="S30" value="3.4091738379982384" />
+      <entry key="S60" value="19.08168782374025" />
+      <entry key="M2" value="63.00541291165313" />
+      <entry key="M5" value="169.06874893992187" />
+      <entry key="M10" value="364.223213806825" />
+      <entry key="M15" value="603.9365995111536" />
+      <entry key="M30" value="1347.2612350781562" />
+      <entry key="H1" value="2425.089006163557" />
+      <entry key="H2" value="3492.3557508554095" />
+      <entry key="H4" value="4283.601960473559" />
+      <entry key="D1" value="5144.1385765819705" />
+      <entry key="W1" value="5315.613441101923" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -114,28 +153,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "javascript.preferred.runtime.type.id": "node",
-    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "npm.backend > db:migrate.executor": "Run",
-    "npm.start:backend.executor": "Run",
-    "npm.start:frontend.executor": "Run",
-    "settings.editor.selected.configurable": "SQL Dialects"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="npm.start:backend">
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
@@ -199,6 +238,7 @@
       <workItem from="1786600490839" duration="276000" />
       <workItem from="1786600784810" duration="2203000" />
       <workItem from="1786603033167" duration="2783000" />
+      <workItem from="1786614993983" duration="2381000" />
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />
@@ -232,7 +272,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786608473060</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="clarity: Update StatCard and AGENTS.md to refine emphasis styles&#10;&#10;Revised `solid` emphasis description in `StatCard` and `AGENTS.md` to specify themed icon disc (`bg-card`) usage for improved visual consistency. Updated associated component logic for better tone handling.">
+      <option name="closed" value="true" />
+      <created>1786608633442</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1786608633442</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,6 +294,7 @@
     <MESSAGE value="feat: Refactor and unify activity intensity logic with reusable scale system&#10;&#10;Introduce `activityLevelFor` utility and standardized activity level scales for dashboard and heatmap components. Replace duplicated intensity mapping across the app with shared constants and helper functions for better maintainability and consistency. Update visuals for charts and heatmaps to match new scale." />
     <MESSAGE value="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience." />
     <MESSAGE value="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
+    <MESSAGE value="clarity: Update StatCard and AGENTS.md to refine emphasis styles&#10;&#10;Revised `solid` emphasis description in `StatCard` and `AGENTS.md` to specify themed icon disc (`bg-card`) usage for improved visual consistency. Updated associated component logic for better tone handling." />
+    <option name="LAST_COMMIT_MESSAGE" value="clarity: Update StatCard and AGENTS.md to refine emphasis styles&#10;&#10;Revised `solid` emphasis description in `StatCard` and `AGENTS.md` to specify themed icon disc (`bg-card`) usage for improved visual consistency. Updated associated component logic for better tone handling." />
   </component>
 </project>

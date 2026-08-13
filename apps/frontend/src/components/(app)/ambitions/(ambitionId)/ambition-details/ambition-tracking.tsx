@@ -13,6 +13,8 @@ interface AmbitionTrackingProps {
   startDate: Date | string;
   endDate: Date | string;
   ambitionStatus?: "active" | "completed" | "missed";
+  /** Local midnight for today — pass from a request-time parent after `connection()`. */
+  today?: Date;
   /** When true, renders tracks as siblings — parent supplies divide-y and the landmark region. */
   embedded?: boolean;
 }
@@ -22,7 +24,10 @@ interface AmbitionTrackingProps {
  * two progress bars never read as the same metric.
  */
 export function AmbitionTracking(props: AmbitionTrackingProps) {
-  const summary = summarizeAmbitionWindow(props.startDate, props.endDate, { ambitionStatus: props.ambitionStatus });
+  const summary = summarizeAmbitionWindow(props.startDate, props.endDate, {
+    ambitionStatus: props.ambitionStatus,
+    today: props.today,
+  });
   const progress = Math.min(Math.max(props.progressPercent, 0), 100);
 
   const tracks = (

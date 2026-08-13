@@ -2,6 +2,7 @@
 
 import { mutateApi } from "@/lib/actions/mutate-api";
 import { revalidateAmbition } from "@/lib/actions/revalidate-ambition";
+import { getCachedUser } from "@/lib/cache/session-data";
 
 export async function deleteAmbitionAction(ambitionId: string): Promise<{ error: string | null }> {
   if (!ambitionId) {
@@ -15,7 +16,8 @@ export async function deleteAmbitionAction(ambitionId: string): Promise<{ error:
   });
 
   if (!result.error) {
-    revalidateAmbition(ambitionId, ["detail", "list", "dashboard"]);
+    const user = await getCachedUser();
+    revalidateAmbition(ambitionId, ["detail", "list", "dashboard"], user.id);
   }
 
   return { error: result.error };

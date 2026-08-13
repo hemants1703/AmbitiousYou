@@ -10,12 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getAmbitionFull } from "@/lib/api/ambitions/get-ambition-full";
+import { startOfDay } from "@/lib/(app)/ambition-window";
 import { requireUser } from "@/lib/auth";
 import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
 import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 import { cache, Suspense } from "react";
 import AmbitionDetailsLoading from "./loading";
 
@@ -52,7 +54,10 @@ async function AmbitionDetailsContent(props: {
   params: Promise<{ ambitionId: string }>;
   searchParams: Promise<{ ref?: string | undefined }>;
 }) {
+  await connection();
+
   const { user: userDetails, sessionToken } = await requireUser();
+  const today = startOfDay(new Date());
 
   const { ambitionId } = await props.params;
   const searchParams = await props.searchParams;
@@ -123,6 +128,7 @@ async function AmbitionDetailsContent(props: {
                   startDate={ambition.ambitionStartDate}
                   endDate={ambition.ambitionEndDate}
                   ambitionStatus={ambition.ambitionStatus}
+                  today={today}
                   embedded
                 />
               </div>

@@ -1,13 +1,14 @@
 import { NavUser } from "@/components/nav-user";
 import { Skeleton } from "@/components/ui/skeleton";
-import { requireUser } from "@/lib/auth";
+import { getCachedUser } from "@/lib/cache/session-data";
 
 /**
- * Request-time user chip for the app sidebar. Kept outside any `use cache`
- * scope so `redirect()` on an invalid session is never cached.
+ * Request-time user chip for the app sidebar. Served from `'use cache: private'`
+ * when fresh; kept outside any plain `use cache` scope so `redirect()` on an
+ * invalid session is never cached.
  */
 export async function AuthenticatedNavUser() {
-  const { user } = await requireUser();
+  const user = await getCachedUser();
   return <NavUser userDetails={user} />;
 }
 

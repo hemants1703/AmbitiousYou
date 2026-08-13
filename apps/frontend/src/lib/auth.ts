@@ -1,7 +1,11 @@
-import { getUser } from "@/lib/api/sidebar/get-user";
+import { fetchUserFromApi } from "@/lib/cache/fetch-session-data";
 import type { User } from "@ambitiousyou/shared";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { cache } from "react";
+
+/** Per-request dedup only — not a cross-navigation cache. */
+const fetchValidatedUser = cache(fetchUserFromApi);
 
 /**
  * Reads the raw session token from cookies, redirecting to /login when it is
@@ -30,16 +34,15 @@ export async function getSessionToken(): Promise<string> {
  * /login. Returns the authenticated user together with the validated token so
  * callers can fetch further data without a second cookie read.
  *
- * `getUser` is wrapped in React `cache()`, so calling this in the (app) layout
- * and again inside a page within the same request issues a single backend call.
+ * Validation is intentionally uncached so revoked or expired sessions are
+ * rejected on every full page render. Display-only reads (nav, inbox) use
+ * `getCachedUser()` separately.
  */
 export async function requireUser(): Promise<{ user: User; sessionToken: string }> {
   const sessionToken = (await cookies()).get("sessionToken")?.value;
   if (!sessionToken) redirect("/login");
 
-  // The backend validates the opaque token (sent via the Authorization header)
-  // and checks expiry; getUser returns null on a 401, i.e. an invalid session.
-  const user = await getUser(sessionToken);
+  const user = await fetchValidatedUser(sessionToken);
   if (!user) redirect("/login");
 
   return { user, sessionToken };
@@ -56,6 +59,6 @@ export async function redirectIfAuthenticated(): Promise<void> {
   const token = (await cookies()).get("sessionToken")?.value;
   if (!token) return;
 
-  const user = await getUser(token);
+  const user = await fetchUserFromApi(token);
   if (user) redirect("/dashboard");
 }

@@ -57,9 +57,24 @@ prerender as `○` Static in `next build` (Hobby lever intact). Copyright year /
 
 ## Optional follow-ups
 
-- `'use cache: private'` for current user (official auth pattern) if prefetch metrics warrant
-- Short `userId`-keyed inbox cache with `updateTag` — only if measured
+- ~~`'use cache: private'` for current user~~ **Adopted** — see `apps/frontend/src/lib/cache/session-data.ts` (user, settings, sessions, ambitions, inbox)
+- ~~Short `userId`-keyed inbox cache with `updateTag`~~ **Adopted** — see `apps/frontend/src/lib/cache/invalidate-session-data.ts`
 - Playwright `instant()` coverage on hot paths (net-new e2e)
+
+## Security invariants (post-auth caching)
+
+Personal data uses `'use cache: private'` (browser-scoped prefetch cache) with `userId`-keyed
+`cacheTag`s — never the opaque `sessionToken`.
+
+| Layer | Rule |
+| --- | --- |
+| **Authorization** | Backend `SessionGuard` validates every API call; services scope reads/writes by `userId`. |
+| **Page gate** | `requireUser()` always hits `/users` via uncached `fetchUserFromApi` (React `cache()` dedupes within one request only). |
+| **Display cache** | Nav, inbox, settings tabs use `getCachedUser()` / siblings with `cacheLife('minutes')` for soft-nav perf — not an auth gate. |
+| **Mutations** | Server actions use `getSessionToken()` + SessionGuard-backed endpoints; invalid tokens get 401. |
+| **Logout** | `logoutAction` calls `invalidateAllSessionCaches(userId)` then deletes cookies. |
+| **Ambition detail tags** | `ambition:${id}` within private scope; cross-user access blocked by backend (`userId` + `ambitionId`). |
+| **Date-relative UI** | Dashboard / ambition detail call `await connection()` before `new Date()`-relative server work so PPR shells stay static. |
 
 ## Historical notes
 

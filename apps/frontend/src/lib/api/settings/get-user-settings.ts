@@ -1,18 +1,7 @@
 import { Settings } from "@ambitiousyou/shared";
-import { cache } from "react";
 
-export const getUserSettings = cache(async (sessionToken: string): Promise<Settings | null> => {
-  const response = await fetch(`${process.env.API_URL}/settings`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionToken}`,
-    },
-  });
+import { getCachedUserSettings } from "@/lib/cache/session-data";
 
-  if (!response.ok) {
-    return null;
-  }
-
-  return (await response.json()) as Settings;
-});
+export async function getUserSettings(_sessionToken?: string): Promise<Settings | null> {
+  return getCachedUserSettings();
+}
