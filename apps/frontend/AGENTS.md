@@ -226,6 +226,34 @@ Cache Components here is **composition + prefetch shells**, not “cache all use
 - **Serverless cost:** Fewer `router.refresh()` calls and narrower `revalidatePath` scopes = fewer full RSC re-renders; Partial Prefetching shared shells + static landing prerender; keep CSP nonce-free on marketing where applicable
 - **Navigation:** Cache Components shells + `loading.tsx` + selective Link prefetch; ambition detail and list are the hot paths
 
+## App context (from former CLAUDE.md)
+
+Monorepo overview, shared schema, and backend conventions: root [`AGENTS.md`](../../AGENTS.md). This file is the single frontend instruction source — there is no `CLAUDE.md`.
+
+- Next.js App Router (React 19, React Compiler, Turbopack); API via `process.env.API_URL` + Bearer session token
+- Domain types from `@ambitiousyou/shared` only — never import from `apps/backend`
+- Commands: `pnpm dev` / `pnpm build` / `pnpm lint` / `pnpm test` (vitest) / `pnpm test:watch`
+- Route groups: `(landing)/`, `(auth)/` (`redirectIfAuthenticated()`), `(app)/` (static chrome; stream auth + inbox behind Suspense — never block `{children}` with `requireUser()` at layout top); Route Handlers only for `api/logout/` and `api/auth/status/`
+- Auth helpers in `src/lib/auth.ts`: `requireUser()` (page content gate, cached), `getSessionToken()` (raw cookie for SessionGuard-backed calls — never gate renders), `redirectIfAuthenticated()`
+- Reads: `src/lib/api/`; writes: `src/lib/actions/(app)/` via `mutateApi()` + scoped revalidation; backend `ValidationPipe` is strict
+- Config: `cacheComponents` + `partialPrefetching` + `transpilePackages: ['@ambitiousyou/shared']`; theme tokens in `src/app/globals.css`
+
+## Theme & dashboard viz (additive)
+
+- MUST: Prefer theme tokens from `globals.css` (`bg-primary`, `text-destructive`, `bg-chart-*`, etc.) over one-off palette colors for product chrome and data viz
+- NEVER: Invent parallel color ramps (e.g. custom emerald activity scales) when `--chart-1`…`--chart-5` already encode the sequential blue scale
+- MUST: Heatmap cells and movement bars share one sequential intensity scale via `src/lib/dashboard/activity-intensity.ts`
+- MUST: Active levels map to theme chart blues — `muted` (0) → `chart-1`…`chart-4` (1–4, light → dark). Use `ACTIVITY_LEVEL_CLASS` / `ACTIVITY_LEVEL_FILL`
+- MUST: Keep activity charts secondary — readable on inspection, not the visual hero of the dashboard
+- SHOULD: Insight / movement stat tiles use muted icon chips (`bg-muted text-muted-foreground`) so accent blue stays for primary actions
+- SHOULD: Landing heatmap mocks (`dashboard-preview`, `features`) stay in sync with the same `chart-*` levels
+- MUST: Tooltips still expose task vs milestone counts even when the bar encodes total intensity only
+- MUST: Binary Needs Attention surface on `NeedsAttentionStat` / `StatCard` `emphasis`:
+  - **0 items (or load failed):** calm default card + soft tone chip (`subtle`)
+  - **1+ items needing action:** soft destructive wash + stronger ring + destructive type + white icon disc (`emphasis="solid"`) — accountable, never a solid saturated red block
+- NEVER: Paint the whole Needs Attention card opaque `bg-destructive` with white body text
+- SHOULD: Keep the card interactive (popover) only when `totalCount > 0` and load succeeded
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

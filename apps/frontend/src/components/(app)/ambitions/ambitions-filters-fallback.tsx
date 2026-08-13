@@ -12,8 +12,8 @@ export function AmbitionsFiltersFallback() {
       aria-busy="true"
       aria-label="Loading ambition filters"
     >
-      <div className="flex w-full gap-2 justify-between lg:min-w-176">
-        <div className="flex h-9 min-w-0 flex-1 items-center rounded-3xl border border-transparent bg-input/50 px-3 text-base text-muted-foreground md:text-sm lg:max-w-md">
+      <div className="flex gap-2 justify-between lg:min-w-176">
+        <div className="flex h-9 w-full min-w-0 items-center rounded-3xl border border-transparent bg-input/50 px-3 text-base text-muted-foreground md:text-sm">
           Search ambitions…
         </div>
         <div className="flex gap-2">

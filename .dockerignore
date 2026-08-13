@@ -33,4 +33,5 @@ infra
 .idea
 **/*.tsbuildinfo
 README.md
-CLAUDE.md
+AGENTS.md
+**/AGENTS.md

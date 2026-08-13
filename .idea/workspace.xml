@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Add customizable profile avatar picker with emoji, glyph, and color options">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-calendar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-calendar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-heatmap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-heatmap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/movement-chart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/movement-chart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/needs-attention-stat.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/needs-attention-stat.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/stat-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/stat-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/dashboard-preview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/dashboard-preview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/features.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/features.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/activity-calendar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/activity-calendar.ts" afterDir="false" />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience.">
+      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/CLAUDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambitions-filters-fallback.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambitions-filters-fallback.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/NEXT-CACHE-COMPONENTS-MIGRATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/NEXT-CACHE-COMPONENTS-MIGRATION.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,61 +54,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.2727614090519794" />
-      <entry key="MS500" value="5.483394587624177" />
-      <entry key="S2" value="17.02691474127208" />
-      <entry key="S5" value="33.75834173920582" />
-      <entry key="S10" value="52.68773136923884" />
-      <entry key="S30" value="82.02946103984868" />
-      <entry key="S60" value="109.31502551448888" />
-      <entry key="M2" value="193.00348152876762" />
-      <entry key="M5" value="486.3276585201989" />
-      <entry key="M10" value="885.0340797365748" />
-      <entry key="M15" value="1191.6307061872453" />
-      <entry key="M30" value="1851.0003602634852" />
-      <entry key="H1" value="2598.3273178393215" />
-      <entry key="H2" value="3240.2827012509365" />
-      <entry key="H4" value="3677.943670497348" />
-      <entry key="D1" value="4128.491035832924" />
-      <entry key="W1" value="4216.046518056592" />
+      <entry key="MS100" value="1.5266007117216516" />
+      <entry key="MS500" value="4.981328082780326" />
+      <entry key="S2" value="16.67073805025759" />
+      <entry key="S5" value="35.91572409967198" />
+      <entry key="S10" value="63.55849102471184" />
+      <entry key="S30" value="137.49066299278545" />
+      <entry key="S60" value="194.09678863187682" />
+      <entry key="M2" value="283.5940467356395" />
+      <entry key="M5" value="561.6057208104558" />
+      <entry key="M10" value="979.1592014525694" />
+      <entry key="M15" value="1313.3057742172107" />
+      <entry key="M30" value="2033.0164026556959" />
+      <entry key="H1" value="2846.5022179925186" />
+      <entry key="H2" value="3548.2164665988503" />
+      <entry key="H4" value="4029.023401123704" />
+      <entry key="D1" value="4525.82048189325" />
+      <entry key="W1" value="4622.489266869313" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.548370715093545E-73" />
-      <entry key="MS500" value="2.741416294076752E-15" />
-      <entry key="S2" value="2.2881987680100578E-4" />
-      <entry key="S5" value="0.03497820340866939" />
-      <entry key="S10" value="0.1870246998387182" />
-      <entry key="S30" value="0.5764103407701322" />
-      <entry key="S60" value="0.8235830751607817" />
-      <entry key="M2" value="1.1299284426319802" />
-      <entry key="M5" value="1.6529467238541797" />
-      <entry key="M10" value="2.5774530621455924" />
-      <entry key="M15" value="3.5405176831070575" />
-      <entry key="M30" value="5.915141669258042" />
-      <entry key="H1" value="8.74476233898448" />
-      <entry key="H2" value="11.20594400977896" />
-      <entry key="H4" value="12.889667469922166" />
-      <entry key="D1" value="14.613472627475176" />
-      <entry key="W1" value="14.943851555454852" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="1.289924063534546E-149" />
+      <entry key="S2" value="5.992955268777448E-38" />
+      <entry key="S5" value="1.2913930115877487E-15" />
+      <entry key="S10" value="3.6013326008792014E-8" />
+      <entry key="S30" value="0.0037296111365394697" />
+      <entry key="S60" value="0.07993052472534287" />
+      <entry key="M2" value="0.42637809599870513" />
+      <entry key="M5" value="1.3691887781441263" />
+      <entry key="M10" value="2.5495767569373706" />
+      <entry key="M15" value="3.6114976136943424" />
+      <entry key="M30" value="6.155282025238312" />
+      <entry key="H1" value="9.18889670399283" />
+      <entry key="H2" value="11.85115865120614" />
+      <entry key="H4" value="13.685889346553006" />
+      <entry key="D1" value="15.574994397357598" />
+      <entry key="W1" value="15.938230837706119" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.2022348391267155" />
-      <entry key="MS500" value="5.448020967168951" />
-      <entry key="S2" value="16.99942743643726" />
-      <entry key="S5" value="33.76430205764145" />
-      <entry key="S10" value="52.83755144613127" />
-      <entry key="S30" value="82.57560806254901" />
-      <entry key="S60" value="110.1175131365108" />
-      <entry key="M2" value="194.11800206574793" />
-      <entry key="M5" value="487.964656601428" />
-      <entry key="M10" value="887.5868180534782" />
-      <entry key="M15" value="1195.156419839472" />
-      <entry key="M30" value="1857.0143250218657" />
-      <entry key="H1" value="2607.4090967892353" />
-      <entry key="H2" value="3252.0741774802814" />
-      <entry key="H4" value="3691.5997361912987" />
-      <entry key="D1" value="4144.0613067152135" />
-      <entry key="W1" value="4231.984084429806" />
+      <entry key="MS100" value="1.4751115137723811" />
+      <entry key="MS500" value="4.947877789485191" />
+      <entry key="S2" value="16.64448440597317" />
+      <entry key="S5" value="35.89393501306419" />
+      <entry key="S10" value="63.539370213511475" />
+      <entry key="S30" value="137.48030864215676" />
+      <entry key="S60" value="194.1655515642227" />
+      <entry key="M2" value="284.0097296871476" />
+      <entry key="M5" value="562.9622177531264" />
+      <entry key="M10" value="981.6886193379543" />
+      <entry key="M15" value="1316.9035629812279" />
+      <entry key="M30" value="2039.258233317153" />
+      <entry key="H1" value="2856.007934720387" />
+      <entry key="H2" value="3560.635561063634" />
+      <entry key="H4" value="4043.4641310843713" />
+      <entry key="D1" value="4542.3498606941375" />
+      <entry key="W1" value="4639.4208541338985" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -226,7 +222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786605395639</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience.">
+      <option name="closed" value="true" />
+      <created>1786607878046</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1786607878046</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,6 +241,8 @@
     <MESSAGE value="Remove unused components, APIs, and libraries to streamline the frontend and reduce bundle size." />
     <MESSAGE value="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification" />
     <MESSAGE value="feat: Add customizable profile avatar picker with emoji, glyph, and color options" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="feat: Refactor and unify activity intensity logic with reusable scale system&#10;&#10;Introduce `activityLevelFor` utility and standardized activity level scales for dashboard and heatmap components. Replace duplicated intensity mapping across the app with shared constants and helper functions for better maintainability and consistency. Update visuals for charts and heatmaps to match new scale." />
+    <MESSAGE value="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience." />
   </component>
 </project>
