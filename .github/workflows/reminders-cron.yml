@@ -1,11 +1,12 @@
 name: reminders-cron
 
-# Hourly UTC tick. Nest resolves each user's local timezone and only sends at
-# 09:00 (morning) or 18:00 (evening) local time for due-today incomplete moves.
-# Evening is skipped automatically once the task/milestone is completed.
+# Global 9 AM / 6 PM local delivery requires an hourly UTC tick: at every UTC hour,
+# at least one IANA timezone is at local 09:00 or 18:00. Nest reads each user's
+# user_timezone and only sends when their local hour is exactly 9 (morning) or
+# 18 (evening). Evening is skipped automatically once the move is completed.
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 * * * *' # top of every hour UTC → covers all local 09:00 / 18:00 slots
   workflow_dispatch: {}
 
 concurrency:

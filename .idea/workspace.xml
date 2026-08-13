@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +21,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="684" />
+    <option name="cachedIndexableFilesCount" value="681" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -48,61 +48,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.08526518788681" />
-      <entry key="MS500" value="4.682141358907735" />
-      <entry key="S2" value="16.015647250039564" />
-      <entry key="S5" value="38.73078874479615" />
-      <entry key="S10" value="63.3592956187784" />
-      <entry key="S30" value="107.1226260292744" />
-      <entry key="S60" value="148.45227372674907" />
-      <entry key="M2" value="205.33914193019143" />
-      <entry key="M5" value="382.72625326753473" />
-      <entry key="M10" value="708.8365283108561" />
-      <entry key="M15" value="1011.4948981085398" />
-      <entry key="M30" value="1807.633082125139" />
-      <entry key="H1" value="3098.903194516401" />
-      <entry key="H2" value="4657.961939684496" />
-      <entry key="H4" value="5991.971462958732" />
-      <entry key="D1" value="7601.03202216148" />
-      <entry key="W1" value="7939.4627899742045" />
+      <entry key="MS100" value="2.219479820342839" />
+      <entry key="MS500" value="5.983823192915989" />
+      <entry key="S2" value="14.827465062208175" />
+      <entry key="S5" value="25.49248399525993" />
+      <entry key="S10" value="34.56159735081985" />
+      <entry key="S30" value="45.233956809266566" />
+      <entry key="S60" value="52.06623249636969" />
+      <entry key="M2" value="79.13537190982483" />
+      <entry key="M5" value="158.02693882996883" />
+      <entry key="M10" value="252.90576860373088" />
+      <entry key="M15" value="384.2932065928245" />
+      <entry key="M30" value="951.5057974303146" />
+      <entry key="H1" value="2189.1776336078315" />
+      <entry key="H2" value="3945.1432520996873" />
+      <entry key="H4" value="5604.0375573672345" />
+      <entry key="D1" value="7752.231073671729" />
+      <entry key="W1" value="8221.318199555502" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="1.2441413277306096E-103" />
-      <entry key="S2" value="2.7789809559094675E-26" />
-      <entry key="S5" value="1.0809004208511149E-10" />
-      <entry key="S10" value="1.945478551482874E-5" />
-      <entry key="S30" value="0.06661496176194116" />
-      <entry key="S60" value="0.5150317020269453" />
-      <entry key="M2" value="1.4345387852834655" />
-      <entry key="M5" value="2.695051623386541" />
-      <entry key="M10" value="3.6987375192743945" />
-      <entry key="M15" value="4.496508576934644" />
-      <entry key="M30" value="6.487918052328443" />
-      <entry key="H1" value="9.926452911564574" />
-      <entry key="H2" value="14.480891442946719" />
-      <entry key="H4" value="18.595724107095553" />
-      <entry key="D1" value="23.71976188086881" />
-      <entry key="W1" value="24.81099214638199" />
+      <entry key="MS100" value="3.762519441195407E-32" />
+      <entry key="MS500" value="5.18914433322336E-7" />
+      <entry key="S2" value="0.026839470128501578" />
+      <entry key="S5" value="0.23523913568685606" />
+      <entry key="S10" value="0.48501457265501824" />
+      <entry key="S30" value="0.7857872597651935" />
+      <entry key="S60" value="0.8962199602116376" />
+      <entry key="M2" value="1.040620905675313" />
+      <entry key="M5" value="1.380601892519075" />
+      <entry key="M10" value="1.8156347833735968" />
+      <entry key="M15" value="2.364944284218705" />
+      <entry key="M30" value="4.297363678563505" />
+      <entry key="H1" value="8.01651220688526" />
+      <entry key="H2" value="13.306143074511581" />
+      <entry key="H4" value="18.439915104127884" />
+      <entry key="D1" value="25.238928465160196" />
+      <entry key="W1" value="26.73853903149593" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.017423353311181" />
-      <entry key="MS500" value="4.651431949107128" />
-      <entry key="S2" value="15.990353590183107" />
-      <entry key="S5" value="38.70646965009938" />
-      <entry key="S10" value="63.33953298311145" />
-      <entry key="S30" value="107.17456904219927" />
-      <entry key="S60" value="148.94518638856718" />
-      <entry key="M2" value="206.74775807107252" />
-      <entry key="M5" value="385.40163640896515" />
-      <entry key="M10" value="712.5207674588439" />
-      <entry key="M15" value="1015.9789725299638" />
-      <entry key="M30" value="1814.119677262549" />
-      <entry key="H1" value="3108.918391168008" />
-      <entry key="H2" value="4672.749821290889" />
-      <entry key="H4" value="6011.123396249701" />
-      <entry key="D1" value="7625.658985850438" />
-      <entry key="W1" value="7965.259973166236" />
+      <entry key="MS100" value="2.148973513626856" />
+      <entry key="MS500" value="5.947884565013384" />
+      <entry key="S2" value="14.818869216834104" />
+      <entry key="S5" value="25.65853942279536" />
+      <entry key="S10" value="34.97736575051675" />
+      <entry key="S30" value="45.9821225113837" />
+      <entry key="S60" value="52.94076873593594" />
+      <entry key="M2" value="80.16282719771876" />
+      <entry key="M5" value="159.39993075383856" />
+      <entry key="M10" value="254.71600467483648" />
+      <entry key="M15" value="386.6530531591399" />
+      <entry key="M30" value="955.8008508832287" />
+      <entry key="H1" value="2197.247668532083" />
+      <entry key="H2" value="3958.689420124138" />
+      <entry key="H4" value="5622.9695409802025" />
+      <entry key="D1" value="7778.35889826971" />
+      <entry key="W1" value="8249.04006256187" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -114,28 +114,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.backend > db:migrate.executor": "Run",
+    "npm.start:backend.executor": "Run",
+    "npm.start:frontend.executor": "Run",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "SQL Dialects"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="npm.start:backend">
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
@@ -282,7 +283,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786628047542</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements.">
+      <option name="closed" value="true" />
+      <created>1786630301627</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1786630301627</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -303,6 +312,8 @@
     <MESSAGE value="Switch from Render to Vercel: Merge workflows, enable coordinated frontend/backend deploys  &#10;&#10;Replaces the Render backend pipeline with a comprehensive GitHub Actions workflow targeting Vercel. Consolidates frontend and backend deploys into a single orchestrated process with environment-aware migrations, health-check gating, and sequential deploys. Adjusts paths and configurations for Vercel-specific runtime and deployment nuances." />
     <MESSAGE value="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly." />
     <MESSAGE value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
+    <MESSAGE value="chore: Update deploy workflow and documentation for Vercel root directory clarification&#10;&#10;Standardized `vercel deploy` execution from the repo root in GitHub Actions for both frontend and backend. Updated READMEs and workflow comments to reflect Vercel project Root Directory behavior and prevent deployment path issues." />
+    <MESSAGE value="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
   </component>
 </project>

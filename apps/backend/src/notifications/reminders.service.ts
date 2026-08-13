@@ -35,9 +35,9 @@ export class RemindersService {
   constructor(private readonly pushService: PushService) {}
 
   /**
-   * Cron entrypoint (GitHub Actions hourly).
-   * Morning window: local hour >= 9 and < 18 (dedupe sends once).
-   * Evening window: local hour >= 18 (again once; only still-incomplete / overdue items).
+   * Cron entrypoint (GitHub Actions hourly UTC).
+   * Morning: local hour === 9. Evening: local hour === 18.
+   * Hourly ticks cover every timezone; dedupe keys prevent repeats.
    */
   async runDueTodaySweep(now = new Date()): Promise<ReminderSweepResult> {
     // Global status hygiene first so overdue ambitions become `missed` even when
@@ -113,15 +113,12 @@ export class RemindersService {
     return { notificationsCreated: createdForUser.length, pushesAttempted };
   }
 
-  /**
-   * Cron: any hour in the morning window (9–17) → morning slot;
-   * any hour from 18 onward → evening. Dedupe keys prevent repeats.
-   */
+  /** Cron: local hour 9 → morning; local hour 18 → evening. */
   resolveCronSlot(timezone: string, now = new Date()): ReminderSlot | null {
     const hour = this.localHour(timezone, now);
     if (hour < 0) return null;
-    if (hour >= RemindersService.EVENING_HOUR) return 'evening';
-    if (hour >= RemindersService.MORNING_HOUR) return 'morning';
+    if (hour === RemindersService.EVENING_HOUR) return 'evening';
+    if (hour === RemindersService.MORNING_HOUR) return 'morning';
     return null;
   }
 

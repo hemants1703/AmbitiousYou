@@ -18,10 +18,11 @@ describe('RemindersService', () => {
   });
 
   describe('slot resolution', () => {
-    it('opens morning from 09:00 through 17:xx and evening from 18:00', () => {
+    it('opens morning at 09:xx and evening at 18:xx only', () => {
       expect(service.resolveCronSlot('UTC', new Date('2026-08-05T09:00:00.000Z'))).toBe('morning');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T12:00:00.000Z'))).toBe('morning');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T17:59:00.000Z'))).toBe('morning');
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T09:45:00.000Z'))).toBe('morning');
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T12:00:00.000Z'))).toBeNull();
+      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T17:59:00.000Z'))).toBeNull();
       expect(service.resolveCronSlot('UTC', new Date('2026-08-05T18:00:00.000Z'))).toBe('evening');
       expect(service.resolveCronSlot('UTC', new Date('2026-08-05T08:59:00.000Z'))).toBeNull();
     });

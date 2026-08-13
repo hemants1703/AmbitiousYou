@@ -103,10 +103,10 @@ GitHub environment names use **`development-*`** (not Vercel’s “Preview” l
 
 | Environment | Secrets |
 |---|---|
-| `production-backend` | `DATABASE_URL` (or `SUPABASE_POOLER_DATABASE_URL`), `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_BACKEND_PROJECT_ID`, `BACKEND_HEALTH_URL` |
+| `production-backend` | `SUPABASE_POOLER_DATABASE_URL` (preferred) or `DATABASE_URL` — Session pooler only (`*.pooler.supabase.com:5432`); `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_BACKEND_PROJECT_ID`, `BACKEND_HEALTH_URL` |
 | `production-frontend` | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_FRONTEND_PROJECT_ID` |
-| `development-backend` | same keys as `production-backend`, **dev** Supabase + dev API URL |
-| `development-frontend` | same keys as `production-frontend` |
+| `development-backend` | Same keys as `production-backend`, with **dev** Supabase pooler URI + dev API URL |
+| `development-frontend` | Same keys as `production-frontend` |
 
 **Vercel dashboard env vars** (Settings → Environment Variables per project — use Vercel’s **Production** / **Preview** scopes):
 
