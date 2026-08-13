@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly.">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-frontend-and-backend-to-vercel.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-frontend-and-backend-to-vercel.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/eslint.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/eslint.config.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/dto/create-ambition-with-items.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/dto/create-ambition-with-items.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" afterDir="false" />
-    </list>
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -283,7 +274,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786627613741</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency.">
+      <option name="closed" value="true" />
+      <created>1786628047542</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1786628047542</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -303,6 +302,7 @@
     <MESSAGE value="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports." />
     <MESSAGE value="Switch from Render to Vercel: Merge workflows, enable coordinated frontend/backend deploys  &#10;&#10;Replaces the Render backend pipeline with a comprehensive GitHub Actions workflow targeting Vercel. Consolidates frontend and backend deploys into a single orchestrated process with environment-aware migrations, health-check gating, and sequential deploys. Adjusts paths and configurations for Vercel-specific runtime and deployment nuances." />
     <MESSAGE value="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly." />
+    <MESSAGE value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
   </component>
 </project>

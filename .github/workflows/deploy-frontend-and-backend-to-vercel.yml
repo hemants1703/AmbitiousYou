@@ -169,7 +169,8 @@ jobs:
       - name: Deploy backend to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/backend
+        # Run from repo root — Vercel project Root Directory is already `apps/backend`.
+        # Deploying from apps/backend would resolve apps/backend/apps/backend and fail.
         run: |
           set -euo pipefail
           PROD_FLAG=""
@@ -221,7 +222,7 @@ jobs:
       - name: Deploy frontend to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/frontend
+        # Run from repo root — Vercel project Root Directory is already `apps/frontend`.
         run: |
           set -euo pipefail
           PROD_FLAG=""

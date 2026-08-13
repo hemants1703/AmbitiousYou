@@ -150,7 +150,7 @@ src/
 
 ## Deployment
 
-Hosted on **Vercel**. Root Directory `apps/frontend`. Deploys are triggered only by [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](../../.github/workflows/deploy-frontend-and-backend-to-vercel.yml) (after backend deploy on the same push). Git auto-deploy is disabled in [`vercel.json`](vercel.json). Apex `ambitiousyou.pro` permanently redirects to `www`.
+Hosted on **Vercel**. Root Directory `apps/frontend`. Deploys via [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](../../.github/workflows/deploy-frontend-and-backend-to-vercel.yml) — `vercel deploy` runs from the **repo root** (not `apps/frontend`) because Vercel Root Directory is already set. Git auto-deploy is disabled in [`vercel.json`](vercel.json). Apex `ambitiousyou.pro` redirects to `www`.
 
 | Environment | Branch | URL |
 |---|---|---|
