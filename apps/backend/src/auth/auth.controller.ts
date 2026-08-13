@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import type { Session } from 'src/db';
+import type { Session } from '../db';
 import { AuthService } from './auth.service';
 import { CurrentSession } from './decorators/current-session.decorator';
 import { CurrentUserId } from './decorators/current-user-id.decorator';

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
-import type { User } from 'src/db';
+import type { User } from '../db';
 import { SessionGuard } from '../auth/guards/session.guard';
 import { UsersService } from './users.service';
 import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';

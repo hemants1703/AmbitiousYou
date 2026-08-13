@@ -1,4 +1,4 @@
-import type { NewUser } from 'src/db';
+import type { NewUser } from '../../db';
 import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
 
 export class RegisterUserDto implements NewUser {

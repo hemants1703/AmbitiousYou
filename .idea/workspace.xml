@@ -4,119 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Introduce session-scoped caching and invalidation for improved performance and UI responsiveness&#10;&#10;Added session-based caching utilities for user data, ambitions, notifications, and settings. Implemented matching invalidation methods to ensure cache consistency after mutations. Updated components and API calls to leverage the new caching for faster load times and reduced server overhead.">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-render.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-render.yml" afterDir="false" />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/docs/notifications-cron.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/docs/notifications-cron.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/drizzle.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/drizzle.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.controller.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.controller.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/dto/create-ambition.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/dto/create-ambition.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/auth.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/decorators/current-session.decorator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/decorators/current-session.decorator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/decorators/current-user-id.decorator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/decorators/current-user-id.decorator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/dto/register-auth.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/dto/register-auth.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/__mocks__/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/__mocks__/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/milestones/dto/create-milestone.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/milestones/dto/create-milestone.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/notes/dto/create-note.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notes/dto/create-note.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/tasks/dto/create-task.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/tasks/dto/create-task.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/dto/create-user.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/dto/create-user.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/dto/update-user.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/dto/update-user.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.controller.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.controller.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/vercel.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/AGENTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-details-section.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/note-detail-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/note-detail-dialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/note-display.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/note-display.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/note-preview-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/note-preview-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/edit-ambition/end-date-history.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/edit-ambition/end-date-history.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-activity.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-activity.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-stats.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-stats.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/revive-missed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/revive-missed.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/welcome-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/welcome-header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/notifications/notifications-inbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/notifications/notifications-inbox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/account-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/account-settings-tab.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/security-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/security-settings-tab.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-shared.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-shared.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tab-panel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tab-panel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/user-avatar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/user-avatar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/experience/persona-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/experience/persona-data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/ambitions/ambitions-client-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/ambitions/ambitions-client-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/nav-user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/nav-user.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/mutations/ambition-notes-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/mutations/ambition-notes-context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/mutations/dashboard-moves-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/mutations/dashboard-moves-context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/profile-icon-glyphs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/profile-icon-glyphs.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/profile-icon-tones.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/profile-icon-tones.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/tracked-item.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/tracked-item.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/tracked-item.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/tracked-item.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/milestones/create-milestone.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/milestones/create-milestone.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/milestones/update-milestone.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/milestones/update-milestone.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notes/create-note.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notes/create-note.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notes/update-note.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notes/update-note.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notifications/notification-actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notifications/notification-actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-profile-icon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-profile-icon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/tasks/create-task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/tasks/create-task.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/tasks/update-task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/tasks/update-task.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-active-ambition-details.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-active-ambition-details.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-all-ambition-moves.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-all-ambition-moves.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-details.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-details.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-full.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-full.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-moves-batch.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-moves-batch.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/auth/get-sessions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/auth/get-sessions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/notifications/get-notifications.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/notifications/get-notifications.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/settings/get-user-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/settings/get-user-settings.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/sidebar/get-user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/sidebar/get-user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/auth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/cache/fetch-session-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/cache/fetch-session-data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/cache/session-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/cache/session-data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/activity-calendar.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/activity-calendar.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/movement.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/movement.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vercel.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/profile-icons.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/ambitions.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/enums.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/milestones.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/notes.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/notifications.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/push-subscriptions.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/sessions.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/settings.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/tasks.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/users.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/verifications.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/tsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/types/api.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/types/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-workspace.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-workspace.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,28 +116,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.backend > db:migrate.executor": "Run",
+    "npm.start:backend.executor": "Run",
+    "npm.start:frontend.executor": "Run",
+    "settings.editor.selected.configurable": "SQL Dialects"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="npm.start:backend">
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
@@ -313,7 +202,7 @@
       <workItem from="1786600784810" duration="2203000" />
       <workItem from="1786603033167" duration="2783000" />
       <workItem from="1786614993983" duration="2720000" />
-      <workItem from="1786622730924" duration="1125000" />
+      <workItem from="1786622730924" duration="1893000" />
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />
@@ -363,7 +252,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786617422282</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability.">
+      <option name="closed" value="true" />
+      <created>1786623892850</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1786623892850</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,6 +276,7 @@
     <MESSAGE value="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
     <MESSAGE value="clarity: Update StatCard and AGENTS.md to refine emphasis styles&#10;&#10;Revised `solid` emphasis description in `StatCard` and `AGENTS.md` to specify themed icon disc (`bg-card`) usage for improved visual consistency. Updated associated component logic for better tone handling." />
     <MESSAGE value="feat: Introduce session-scoped caching and invalidation for improved performance and UI responsiveness&#10;&#10;Added session-based caching utilities for user data, ambitions, notifications, and settings. Implemented matching invalidation methods to ensure cache consistency after mutations. Updated components and API calls to leverage the new caching for faster load times and reduced server overhead." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Introduce session-scoped caching and invalidation for improved performance and UI responsiveness&#10;&#10;Added session-based caching utilities for user data, ambitions, notifications, and settings. Implemented matching invalidation methods to ensure cache consistency after mutations. Updated components and API calls to leverage the new caching for faster load times and reduced server overhead." />
+    <MESSAGE value="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability." />
   </component>
 </project>

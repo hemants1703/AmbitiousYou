@@ -1,4 +1,4 @@
-import type { Ambition, Milestone, Note, Task } from 'src/db';
+import type { Ambition, Milestone, Note, Task } from '../db';
 
 /** Batch tasks + milestones for dashboard feeds (replaces N×2 per-ambition fetches). */
 export type AmbitionMovesBatch = {

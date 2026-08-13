@@ -1,4 +1,4 @@
-import { NewMilestone } from 'src/db';
+import type { NewMilestone } from '../../db';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 

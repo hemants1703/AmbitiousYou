@@ -164,9 +164,7 @@ export function isProfileAvatarValue(value: string): boolean {
 
 /** All valid stored values (marks × tones + color-only initials). Used by API allowlists. */
 export const PROFILE_ICON_VALUES: readonly string[] = [
-  ...PROFILE_MARK_IDS.flatMap((markId) =>
-    PROFILE_TONE_IDS.map((toneId) => serializeProfileAvatar({ markId, toneId })),
-  ),
+  ...PROFILE_MARK_IDS.flatMap((markId) => PROFILE_TONE_IDS.map((toneId) => serializeProfileAvatar({ markId, toneId }))),
   ...PROFILE_TONE_IDS.map((toneId) => serializeProfileAvatar({ markId: null, toneId })),
 ];
 

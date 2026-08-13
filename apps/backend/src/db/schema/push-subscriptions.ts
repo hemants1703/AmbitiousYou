@@ -24,5 +24,4 @@ export const pushSubscriptions = pgTable(
 );
 
 export type PushSubscription = typeof pushSubscriptions.$inferSelect;
-export type NewPushSubscription = Pick<PushSubscription, 'userId' | 'endpoint' | 'p256dh' | 'auth'> &
-  Partial<Pick<PushSubscription, 'userAgent' | 'expirationTime'>>;
+export type NewPushSubscription = Pick<PushSubscription, 'userId' | 'endpoint' | 'p256dh' | 'auth'> & Partial<Pick<PushSubscription, 'userAgent' | 'expirationTime'>>;

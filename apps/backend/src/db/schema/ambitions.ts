@@ -37,13 +37,6 @@ export type NewAmbition = Pick<Ambition, 'ambitionName' | 'ambitionStartDate' | 
   Partial<
     Pick<
       Ambition,
-      | 'ambitionDefinition'
-      | 'ambitionMotivation'
-      | 'ambitionCompletionDate'
-      | 'ambitionStatus'
-      | 'ambitionPriority'
-      | 'ambitionPercentageCompleted'
-      | 'isFavourited'
-      | 'ambitionEndDateHistory'
+      'ambitionDefinition' | 'ambitionMotivation' | 'ambitionCompletionDate' | 'ambitionStatus' | 'ambitionPriority' | 'ambitionPercentageCompleted' | 'isFavourited' | 'ambitionEndDateHistory'
     >
   >;

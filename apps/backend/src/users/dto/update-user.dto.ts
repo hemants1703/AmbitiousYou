@@ -1,5 +1,5 @@
 import { IsIn, ValidateIf } from 'class-validator';
-import { PROFILE_ICON_VALUES } from 'src/db';
+import { PROFILE_ICON_VALUES } from '../../db';
 
 /**
  * Profile avatar update. `image` is a catalog value

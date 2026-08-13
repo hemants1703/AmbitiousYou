@@ -24,5 +24,4 @@ export const milestones = pgTable('milestones', {
 });
 
 export type Milestone = typeof milestones.$inferSelect;
-export type NewMilestone = Pick<Milestone, 'ambitionId' | 'milestone' | 'milestoneTargetDate'> &
-  Partial<Pick<Milestone, 'milestoneDescription' | 'milestoneCompleted'>>;
+export type NewMilestone = Pick<Milestone, 'ambitionId' | 'milestone' | 'milestoneTargetDate'> & Partial<Pick<Milestone, 'milestoneDescription' | 'milestoneCompleted'>>;

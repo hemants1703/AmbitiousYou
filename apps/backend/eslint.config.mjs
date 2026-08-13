@@ -35,4 +35,22 @@ export default tseslint.config(
       "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },
+  {
+    files: ['src/**/*.ts'],
+    ignores: ['**/*.spec.ts', '**/__mocks__/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['src/*'],
+              message:
+                'Use relative imports — Vercel Nest builder and Node CJS cannot resolve src/* path aliases at runtime.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

@@ -1,4 +1,4 @@
-import { NewTask } from 'src/db';
+import type { NewTask } from '../../db';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 

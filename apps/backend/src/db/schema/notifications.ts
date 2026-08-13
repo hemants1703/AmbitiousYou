@@ -26,5 +26,4 @@ export const notifications = pgTable(
 );
 
 export type Notification = typeof notifications.$inferSelect;
-export type NewNotification = Pick<Notification, 'userId' | 'type' | 'title' | 'body' | 'href' | 'dedupeKey'> &
-  Partial<Pick<Notification, 'ambitionId' | 'resourceId' | 'readAt'>>;
+export type NewNotification = Pick<Notification, 'userId' | 'type' | 'title' | 'body' | 'href' | 'dedupeKey'> & Partial<Pick<Notification, 'ambitionId' | 'resourceId' | 'readAt'>>;
