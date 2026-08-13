@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency.">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-vps.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-vps.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-frontend-and-backend-to-vercel.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-frontend-and-backend-to-vercel.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-    </list>
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,7 +21,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="684" />
+    <option name="cachedIndexableFilesCount" value="681" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -53,61 +48,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.813928895484431" />
-      <entry key="MS500" value="4.946101426260009" />
-      <entry key="S2" value="14.184071083729332" />
-      <entry key="S5" value="32.96064387191384" />
-      <entry key="S10" value="62.56828384556496" />
-      <entry key="S30" value="133.28617806781426" />
-      <entry key="S60" value="177.10176950086372" />
-      <entry key="M2" value="209.18425357575026" />
-      <entry key="M5" value="235.75400993543556" />
-      <entry key="M10" value="298.9179660774112" />
-      <entry key="M15" value="432.95548893710276" />
-      <entry key="M30" value="1026.8656971443672" />
-      <entry key="H1" value="2283.5626459705986" />
-      <entry key="H2" value="4024.1409706297864" />
-      <entry key="H4" value="5644.3733123157235" />
-      <entry key="D1" value="7720.656198150292" />
-      <entry key="W1" value="8171.561518244258" />
+      <entry key="MS100" value="2.219479820342839" />
+      <entry key="MS500" value="5.983823192915989" />
+      <entry key="S2" value="14.827465062208175" />
+      <entry key="S5" value="25.49248399525993" />
+      <entry key="S10" value="34.56159735081985" />
+      <entry key="S30" value="45.233956809266566" />
+      <entry key="S60" value="52.06623249636969" />
+      <entry key="M2" value="79.13537190982483" />
+      <entry key="M5" value="158.02693882996883" />
+      <entry key="M10" value="252.90576860373088" />
+      <entry key="M15" value="384.2932065928245" />
+      <entry key="M30" value="951.5057974303146" />
+      <entry key="H1" value="2189.1776336078315" />
+      <entry key="H2" value="3945.1432520996873" />
+      <entry key="H4" value="5604.0375573672345" />
+      <entry key="D1" value="7752.231073671729" />
+      <entry key="W1" value="8221.318199555502" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.1347318178729988E-162" />
-      <entry key="MS500" value="4.082993105040901E-33" />
-      <entry key="S2" value="7.993641400125899E-9" />
-      <entry key="S5" value="5.768964475673233E-4" />
-      <entry key="S10" value="0.024018668730121505" />
-      <entry key="S30" value="0.2885246862550732" />
-      <entry key="S60" value="0.5371449397144531" />
-      <entry key="M2" value="0.7329063595437204" />
-      <entry key="M5" value="0.9002667171764223" />
-      <entry key="M10" value="1.2347941077616218" />
-      <entry key="M15" value="1.7926560920085242" />
-      <entry key="M30" value="3.772382904988884" />
-      <entry key="H1" value="7.502499461020395" />
-      <entry key="H2" value="12.724408955756745" />
-      <entry key="H4" value="17.73360301295859" />
-      <entry key="D1" value="24.306453791768416" />
-      <entry key="W1" value="25.748769364837298" />
+      <entry key="MS100" value="3.762519441195407E-32" />
+      <entry key="MS500" value="5.18914433322336E-7" />
+      <entry key="S2" value="0.026839470128501578" />
+      <entry key="S5" value="0.23523913568685606" />
+      <entry key="S10" value="0.48501457265501824" />
+      <entry key="S30" value="0.7857872597651935" />
+      <entry key="S60" value="0.8962199602116376" />
+      <entry key="M2" value="1.040620905675313" />
+      <entry key="M5" value="1.380601892519075" />
+      <entry key="M10" value="1.8156347833735968" />
+      <entry key="M15" value="2.364944284218705" />
+      <entry key="M30" value="4.297363678563505" />
+      <entry key="H1" value="8.01651220688526" />
+      <entry key="H2" value="13.306143074511581" />
+      <entry key="H4" value="18.439915104127884" />
+      <entry key="D1" value="25.238928465160196" />
+      <entry key="W1" value="26.73853903149593" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.7714556950624103" />
-      <entry key="MS500" value="4.917960194204794" />
-      <entry key="S2" value="14.161552986334357" />
-      <entry key="S5" value="32.940268145563124" />
-      <entry key="S10" value="62.569755771759425" />
-      <entry key="S30" value="133.54835561749044" />
-      <entry key="S60" value="177.61794042596375" />
-      <entry key="M2" value="209.90364644283974" />
-      <entry key="M5" value="236.64781922355115" />
-      <entry key="M10" value="300.1482627436493" />
-      <entry key="M15" value="434.743573122543" />
-      <entry key="M30" value="1030.6363560216985" />
-      <entry key="H1" value="2291.1227881987784" />
-      <entry key="H2" value="4037.113750148205" />
-      <entry key="H4" value="5662.607358091735" />
-      <entry key="D1" value="7745.8540381134535" />
-      <entry key="W1" value="8198.294004366102" />
+      <entry key="MS100" value="2.148973513626856" />
+      <entry key="MS500" value="5.947884565013384" />
+      <entry key="S2" value="14.818869216834104" />
+      <entry key="S5" value="25.65853942279536" />
+      <entry key="S10" value="34.97736575051675" />
+      <entry key="S30" value="45.9821225113837" />
+      <entry key="S60" value="52.94076873593594" />
+      <entry key="M2" value="80.16282719771876" />
+      <entry key="M5" value="159.39993075383856" />
+      <entry key="M10" value="254.71600467483648" />
+      <entry key="M15" value="386.6530531591399" />
+      <entry key="M30" value="955.8008508832287" />
+      <entry key="H1" value="2197.247668532083" />
+      <entry key="H2" value="3958.689420124138" />
+      <entry key="H4" value="5622.9695409802025" />
+      <entry key="D1" value="7778.35889826971" />
+      <entry key="W1" value="8249.04006256187" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -119,28 +114,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.backend > db:migrate.executor": "Run",
+    "npm.start:backend.executor": "Run",
+    "npm.start:frontend.executor": "Run",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "SQL Dialects"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="npm.start:backend">
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
@@ -287,7 +283,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786628047542</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements.">
+      <option name="closed" value="true" />
+      <created>1786630301627</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1786630301627</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -308,6 +312,8 @@
     <MESSAGE value="Switch from Render to Vercel: Merge workflows, enable coordinated frontend/backend deploys  &#10;&#10;Replaces the Render backend pipeline with a comprehensive GitHub Actions workflow targeting Vercel. Consolidates frontend and backend deploys into a single orchestrated process with environment-aware migrations, health-check gating, and sequential deploys. Adjusts paths and configurations for Vercel-specific runtime and deployment nuances." />
     <MESSAGE value="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly." />
     <MESSAGE value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
+    <MESSAGE value="chore: Update deploy workflow and documentation for Vercel root directory clarification&#10;&#10;Standardized `vercel deploy` execution from the repo root in GitHub Actions for both frontend and backend. Updated READMEs and workflow comments to reflect Vercel project Root Directory behavior and prevent deployment path issues." />
+    <MESSAGE value="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
   </component>
 </project>
