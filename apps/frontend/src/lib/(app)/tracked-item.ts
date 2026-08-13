@@ -10,8 +10,6 @@ import { parseISO } from "date-fns";
 
 /** The two sub-types of a "move". A move is a Task (reversible) or a Milestone (permanent). */
 export type MoveKind = "task" | "milestone";
-/** @deprecated Ambitions are no longer single-method; use {@link MoveKind} for a move's sub-type. */
-export type TrackingMethod = MoveKind;
 export type TrackedItem = Task | Milestone;
 
 export type DraftState = {

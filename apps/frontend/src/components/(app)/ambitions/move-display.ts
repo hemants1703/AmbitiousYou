@@ -11,7 +11,7 @@ export const MOVE_KIND_HEADER_STRIPE: Record<MoveKind, string> = {
   milestone: "border-l-fuchsia-500 dark:border-l-fuchsia-400",
 };
 
-export interface MoveUrgency {
+interface MoveUrgency {
   label: string;
   tone: "completed" | "overdue" | "today" | "soon" | "default";
 }
@@ -53,11 +53,7 @@ export function moveCompletionLabel(detail: Pick<MoveDetail, "kind" | "completed
   return detail.completedAt ? `${label} ${formatDate(detail.completedAt)}` : label;
 }
 
-export function descriptionNeedsExpand(text: string): boolean {
-  return text.length > 140 || text.split("\n").length > 2;
-}
-
-export type OpenMoveBucket = "overdue" | "dueSoon" | "later";
+type OpenMoveBucket = "overdue" | "dueSoon" | "later";
 
 export interface OpenMoveGroup {
   id: OpenMoveBucket;
@@ -67,7 +63,7 @@ export interface OpenMoveGroup {
 }
 
 /** Buckets open moves by deadline pressure so the workspace reads top-down by urgency. */
-export function groupOpenMovesByUrgency(items: TrackedItem[]): OpenMoveGroup[] {
+function groupOpenMovesByUrgency(items: TrackedItem[]): OpenMoveGroup[] {
   const overdue: TrackedItem[] = [];
   const dueSoon: TrackedItem[] = [];
   const later: TrackedItem[] = [];

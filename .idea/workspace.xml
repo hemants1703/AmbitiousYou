@@ -4,9 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="">
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/features/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/features/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/completed-drawer.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-cards-skeleton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-cards-skeleton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-status-badge.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-status-badge.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/move-display.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/move-display.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/dashboard-empty-state.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/experience/persona-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/experience/persona-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/features/faq-data.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/ui/breadcrumb.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/ui/table.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/ui/tabs.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/mutations/use-optimistic-list.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/tracked-item.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/tracked-item.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/settings/update-settings.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/milestones/get-milestones.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/notes/get-notes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/tasks/get-tasks.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/movement.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/movement.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/tracked-items.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/pages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/pages.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +47,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="678" />
+    <option name="cachedIndexableFilesCount" value="672" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -42,67 +65,70 @@
     &quot;accountId&quot;: &quot;70a6988e-1960-433c-8323-15b5975f0dcb&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-cards-skeleton.tsx" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.8343267994872764E-18" />
-      <entry key="MS500" value="3.434651505308654E-4" />
-      <entry key="S2" value="0.2508182779352896" />
-      <entry key="S5" value="1.089221964891961" />
-      <entry key="S10" value="1.899431340765527" />
-      <entry key="S30" value="3.0244104110813255" />
-      <entry key="S60" value="4.515036880594124" />
-      <entry key="M2" value="19.665232226598405" />
-      <entry key="M5" value="123.02618575860781" />
-      <entry key="M10" value="278.800976922311" />
-      <entry key="M15" value="387.5306043584393" />
-      <entry key="M30" value="565.9065708446583" />
-      <entry key="H1" value="700.3372487089455" />
-      <entry key="H2" value="784.5208104116607" />
-      <entry key="H4" value="832.3915013347383" />
-      <entry key="D1" value="878.8618787772735" />
-      <entry key="W1" value="888.3424551464345" />
+      <entry key="MS100" value="1.55865959865984" />
+      <entry key="MS500" value="2.1451624337483723" />
+      <entry key="S2" value="3.588335000057847" />
+      <entry key="S5" value="4.331011162576472" />
+      <entry key="S10" value="4.645122983291094" />
+      <entry key="S30" value="4.8799961285656694" />
+      <entry key="S60" value="5.4905833693986414" />
+      <entry key="M2" value="13.942131542424518" />
+      <entry key="M5" value="73.00773191355125" />
+      <entry key="M10" value="208.2570630544027" />
+      <entry key="M15" value="348.32093034574893" />
+      <entry key="M30" value="661.7337400675691" />
+      <entry key="H1" value="965.0621748059741" />
+      <entry key="H2" value="1183.5887758782426" />
+      <entry key="H4" value="1316.4864168407055" />
+      <entry key="D1" value="1445.021559348824" />
+      <entry key="W1" value="1469.7607275350224" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="9.32850352974166E-144" />
-      <entry key="S2" value="1.7476440995960872E-36" />
-      <entry key="S5" value="4.977155368345339E-15" />
-      <entry key="S10" value="7.054895724491851E-8" />
-      <entry key="S30" value="0.004132030852261355" />
-      <entry key="S60" value="0.06430155806423396" />
-      <entry key="M2" value="0.25996732755575896" />
-      <entry key="M5" value="0.783489283488065" />
-      <entry key="M10" value="1.4623633465371721" />
-      <entry key="M15" value="1.9295080734121792" />
-      <entry key="M30" value="2.684546475815334" />
-      <entry key="H1" value="3.245672187178082" />
-      <entry key="H2" value="3.5940919274113643" />
-      <entry key="H4" value="3.789178252067976" />
-      <entry key="D1" value="3.9637065699439766" />
-      <entry key="W1" value="3.9947860284391736" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="4.0924131978333735E-251" />
+      <entry key="S5" value="6.995065583123883E-101" />
+      <entry key="S10" value="8.363650876419841E-51" />
+      <entry key="S30" value="2.031940330835026E-17" />
+      <entry key="S60" value="4.649800125986488E-9" />
+      <entry key="M2" value="7.944199801393935E-5" />
+      <entry key="M5" value="0.036014850657398824" />
+      <entry key="M10" value="0.3459579494608642" />
+      <entry key="M15" value="0.7892340618837397" />
+      <entry key="M30" value="1.9092154776615957" />
+      <entry key="H1" value="3.0548846825392646" />
+      <entry key="H2" value="3.896524945606693" />
+      <entry key="H4" value="4.410505822613196" />
+      <entry key="D1" value="4.896011352397665" />
+      <entry key="W1" value="4.984996925008828" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.000087164385796" />
-      <entry key="S2" value="1.1615814233462143" />
-      <entry key="S5" value="1.910539889312341" />
-      <entry key="S10" value="2.7431111804840085" />
-      <entry key="S30" value="3.9512163974390218" />
-      <entry key="S60" value="5.532662435261367" />
-      <entry key="M2" value="20.893470803177017" />
-      <entry key="M5" value="124.7842083848198" />
-      <entry key="M10" value="281.24061836321033" />
-      <entry key="M15" value="390.4405290871482" />
-      <entry key="M30" value="569.5779899950526" />
-      <entry key="H1" value="704.5752076662584" />
-      <entry key="H2" value="789.1107048319852" />
-      <entry key="H4" value="837.1784871315035" />
-      <entry key="D1" value="883.8252055042115" />
-      <entry key="W1" value="893.3371865146097" />
+      <entry key="MS100" value="0.6135826813655135" />
+      <entry key="MS500" value="1.521691865672545" />
+      <entry key="S2" value="3.1525991985763757" />
+      <entry key="S5" value="4.080185380845519" />
+      <entry key="S10" value="4.501717321784342" />
+      <entry key="S30" value="4.827548860125614" />
+      <entry key="S60" value="5.46369582870004" />
+      <entry key="M2" value="13.928355344886617" />
+      <entry key="M5" value="73.05504609898158" />
+      <entry key="M10" value="208.73098474885958" />
+      <entry key="M15" value="349.3652046811719" />
+      <entry key="M30" value="664.1475072141235" />
+      <entry key="H1" value="968.8268496202336" />
+      <entry key="H2" value="1188.3275773373684" />
+      <entry key="H4" value="1321.8146116851585" />
+      <entry key="D1" value="1450.9033450631841" />
+      <entry key="W1" value="1475.7436793962593" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -132,7 +158,8 @@
     &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
     &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
     &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;
+    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AIAssistantPromptsLibrary&quot;
   }
 }</component>
   <component name="RunManager" selected="npm.start:backend">
@@ -193,10 +220,19 @@
       <workItem from="1786171353695" duration="599000" />
       <workItem from="1786374790018" duration="45000" />
       <workItem from="1786374848352" duration="1340000" />
+      <workItem from="1786429208824" duration="244000" />
+      <workItem from="1786546772616" duration="613000" />
+      <workItem from="1786600490839" duration="276000" />
+      <workItem from="1786600784810" duration="2203000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Remove unused components, APIs, and libraries to streamline the frontend and reduce bundle size." />
+    <MESSAGE value="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification" />
   </component>
 </project>

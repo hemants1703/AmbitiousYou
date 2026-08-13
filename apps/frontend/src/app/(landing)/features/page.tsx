@@ -10,7 +10,7 @@ import LandingSection, { Eyebrow, LANDING_CARD } from "@/components/(landing)/la
 import MockFrame from "@/components/(landing)/mock-frame";
 import JsonLd from "@/components/seo/json-ld";
 import WhatIsAmbitiousYou from "@/components/(landing)/marketing/what-is-ambitiousyou";
-import { featuresFaq } from "@/components/(landing)/features/faq-data";
+import { featuresFaq } from "@/lib/seo/faqs";
 import { breadcrumbSchema, faqPageSchema } from "@/lib/seo/schemas";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";

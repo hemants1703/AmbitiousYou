@@ -538,20 +538,3 @@ export const personas: Persona[] = [
     ],
   },
 ];
-
-export const getPersonaById = (id: string): Persona | undefined => {
-  return personas.find((persona) => persona.id === id);
-};
-
-export const getPersonaIcon = (iconName: string): string => {
-  const iconMap: Record<string, string> = {
-    briefcase: "IconBriefcase",
-    "graduation-cap": "IconSchool",
-    rocket: "IconRocket",
-    heart: "IconHeart",
-    refresh: "IconRefresh",
-    palette: "IconPalette",
-    "chart-line": "IconChartLine",
-  };
-  return iconMap[iconName] || "IconTarget";
-};

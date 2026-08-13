@@ -42,8 +42,6 @@ export interface MovementSeries {
   stats: MovementStats;
 }
 
-export const MOVEMENT_WINDOWS: MovementWindow[] = [7, 14, 30];
-
 const LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
 const DAY_MS = 24 * 60 * 60 * 1000;
 

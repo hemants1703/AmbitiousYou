@@ -132,27 +132,6 @@ export function flattenOpenItems(ambitions: AmbitionDetails[]): QueueItem[] {
   return openItems.sort(sortByUrgency);
 }
 
-export interface DeadlineBuckets {
-  overdue: number;
-  today: number;
-  thisWeek: number;
-  nextWeek: number;
-}
-
-/** Counts of open items by deadline pressure window. */
-export function bucketByDeadline(items: QueueItem[]): DeadlineBuckets {
-  const buckets: DeadlineBuckets = { overdue: 0, today: 0, thisWeek: 0, nextWeek: 0 };
-
-  for (const item of items) {
-    if (item.daysUntil < 0) buckets.overdue += 1;
-    else if (item.daysUntil === 0) buckets.today += 1;
-    else if (item.daysUntil <= 7) buckets.thisWeek += 1;
-    else if (item.daysUntil <= 14) buckets.nextWeek += 1;
-  }
-
-  return buckets;
-}
-
 export interface DayGroup {
   /** Stable key for the calendar day (yyyy-mm-dd). */
   dateKey: string;

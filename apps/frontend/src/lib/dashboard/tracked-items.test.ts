@@ -1,7 +1,6 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import type { QueueItem } from "@/lib/dashboard/tracked-items";
 import {
-  bucketByDeadline,
   computeAttentionFlags,
   summarizeAttention,
   dayKey,
@@ -102,20 +101,6 @@ describe("sortByUrgency", () => {
     const sorted = [todayLow, overdue, todayHigh].sort(sortByUrgency);
 
     expect(sorted.map((item) => item.id)).toEqual(["a", "b", "c"]);
-  });
-});
-
-describe("bucketByDeadline", () => {
-  it("counts items in each deadline window", () => {
-    const buckets = bucketByDeadline([
-      buildQueueItem({ daysUntil: -1 }),
-      buildQueueItem({ daysUntil: 0 }),
-      buildQueueItem({ daysUntil: 3 }),
-      buildQueueItem({ daysUntil: 10 }),
-      buildQueueItem({ daysUntil: 20 }),
-    ]);
-
-    expect(buckets).toEqual({ overdue: 1, today: 1, thisWeek: 1, nextWeek: 1 });
   });
 });
 

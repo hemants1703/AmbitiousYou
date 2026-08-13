@@ -173,7 +173,7 @@ Concise rules for building accessible, fast, delightful UIs. Use MUST/SHOULD/NEV
 - **Reads:** `src/lib/api/` — wrap helpers in React `cache()` for request-scoped dedup; prefer batch/composite backend endpoints (`getAmbitionFull`, `getAmbitionMovesBatch`) over N×per-resource fetches
 - **Writes:** `src/lib/actions/` — all mutations via `mutateApi()`; scoped invalidation via `revalidateAmbition(id, scopes)` where scopes are `detail` | `list` | `dashboard` (never blanket triple-revalidate when unnecessary)
 - **Client sync:** Optimistic local state reconciles from action responses; `useBackgroundRefresh()` only when server-derived aggregates change (progress %, dashboard buckets) — not after every click
-- **Shared optimistic primitives:** `src/lib/(app)/mutations/` (`usePendingMap`, `useOptimisticList`, `useBackgroundRefresh`, `AmbitionNotesProvider`, `DashboardMovesProvider`)
+- **Shared optimistic primitives:** `src/lib/(app)/mutations/` (`usePendingMap`, `useBackgroundRefresh`, `AmbitionNotesProvider`, `DashboardMovesProvider`)
 - **NEVER:** SWR/React Query — fights the server-first model and adds bundle cost
 - **Streaming:** `Suspense` + skeleton fallbacks for heavy server children (dashboard insights, activity)
 

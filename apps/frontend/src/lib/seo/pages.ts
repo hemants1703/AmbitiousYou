@@ -148,7 +148,3 @@ export const indexablePages: readonly IndexablePage[] = [
   ...templatePages,
   ...guidePages,
 ];
-
-export function getIndexablePage(path: string): IndexablePage | undefined {
-  return indexablePages.find((page) => page.path === path);
-}
