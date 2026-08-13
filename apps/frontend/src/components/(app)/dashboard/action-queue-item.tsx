@@ -15,8 +15,8 @@ import { toggleMilestoneCompletionAction } from "@/lib/actions/(app)/milestones/
 import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-task-completion";
 import { EyeIcon, FlagIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
 
 interface ActionQueueItemProps {
   id: string;
@@ -65,16 +65,18 @@ export function ActionQueueItem(props: ActionQueueItemProps) {
 
     startTransition(async () => {
       const toggle = props.kind === "task" ? toggleTaskCompletionAction : toggleMilestoneCompletionAction;
-      const result = await toggle(props.id);
+      const result = await toastMutation(() => toggle(props.id), {
+        loading: "Completing…",
+        success: `Completed “${props.title}”`,
+        error: (msg) => msg,
+      }, { getError: (r) => r.error });
 
       if (result.error) {
         setDone(false);
-        toast.error(result.error);
         refreshInBackground();
         return;
       }
 
-      toast.success(`Completed “${props.title}”`);
       refreshInBackground();
     });
   }

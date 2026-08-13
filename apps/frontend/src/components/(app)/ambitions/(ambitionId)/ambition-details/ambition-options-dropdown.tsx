@@ -5,8 +5,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { HeartIcon, Loader2Icon, MoreVertical, PencilIcon, Trash2Icon } from "lucide-react";
 import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import Link from "next/link";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
 import { DeleteAmbitionDialog } from "./delete-ambition-dialog";
 import { toggleAmbitionFavouriteAction } from "@/lib/actions/(app)/ambitions/toggle-ambition-favourite";
 
@@ -39,16 +39,22 @@ export default function AmbitionOptionsDropdown(props: AmbitionOptionsDropdownPr
     setIsFavourited(!previous);
 
     startToggleFavourite(async () => {
-      const result = await toggleAmbitionFavouriteAction(props.ambitionId);
+      const result = await toastMutation(
+        () => toggleAmbitionFavouriteAction(props.ambitionId),
+        {
+          loading: "Updating favourite…",
+          success: (r) => (r.isFavourited ? "Added to favourites" : "Removed from favourites"),
+          error: (msg) => msg,
+        },
+        { getError: (r) => r.error },
+      );
 
       if (result.error) {
         setIsFavourited(previous);
-        toast.error(result.error);
         return;
       }
 
       setIsFavourited(result.isFavourited);
-      toast.success(result.isFavourited ? "Added to favourites" : "Removed from favourites");
     });
   };
 

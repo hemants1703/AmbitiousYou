@@ -24,6 +24,7 @@ import {
 } from "@ambitiousyou/shared";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
@@ -135,16 +136,22 @@ export function ProfileIconPicker(props: ProfileIconPickerProps) {
     setOpen(false);
 
     startTransition(async () => {
-      const result = await updateProfileAvatarAction(previousDraft);
+      const result = await toastMutation(
+        () => updateProfileAvatarAction(previousDraft),
+        {
+          loading: "Updating avatar…",
+          success: previousDraft ? "Profile avatar updated" : "Using your initials again",
+          error: (msg) => msg,
+        },
+        { getError: (r) => r.error },
+      );
       if (result.error) {
         setCommittedImage(previousImage);
         setDraft(parseProfileAvatar(previousImage));
-        toast.error(result.error);
         return;
       }
 
       setCommittedImage(result.data?.image ?? nextImage);
-      toast.success(previousDraft ? "Profile avatar updated" : "Using your initials again");
       // Sidebar chip lives in the layout Suspense island — refresh in the background.
       router.refresh();
     });

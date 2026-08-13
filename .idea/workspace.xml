@@ -4,27 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Add customizable profile avatar picker with emoji, glyph, and color options">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambition-status.util.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambition-status.util.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.service.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/client.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/health.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/health.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/milestones/milestones.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/milestones/milestones.service.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/inbox.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/inbox.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/notifications.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/notifications.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/push.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/push.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/tasks/tasks.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/tasks/tasks.service.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/dto/update-user.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/dto/update-user.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.controller.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.controller.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.service.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/account-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/account-settings-tab.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/nav-user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/nav-user.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/shared/db/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/db/schema/users.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/shared/db/schema/users.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/shared/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/shared/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/move-detail-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/move-detail-dialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/action-queue-item.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/action-queue-item.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/quick-add.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/quick-add.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/enable-reminders-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/enable-reminders-dialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/resend-verification-button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/resend-verification-button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/reset-password-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/reset-password-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.test.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +35,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="669" />
+    <option name="cachedIndexableFilesCount" value="676" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -69,61 +62,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.6503618137253946" />
-      <entry key="MS500" value="4.223125548764303" />
-      <entry key="S2" value="14.723148815896023" />
-      <entry key="S5" value="35.15869602852" />
-      <entry key="S10" value="61.73607002191132" />
-      <entry key="S30" value="109.99484929353977" />
-      <entry key="S60" value="133.25875717447096" />
-      <entry key="M2" value="161.37295959966056" />
-      <entry key="M5" value="256.5818993967222" />
-      <entry key="M10" value="434.20410832230374" />
-      <entry key="M15" value="605.7892975176542" />
-      <entry key="M30" value="1018.1143575507986" />
-      <entry key="H1" value="1472.866241394755" />
-      <entry key="H2" value="1834.3944511117952" />
-      <entry key="H4" value="2067.0141532374632" />
-      <entry key="D1" value="2298.00680286869" />
-      <entry key="W1" value="2342.4152306097167" />
+      <entry key="MS100" value="2.254976743073871" />
+      <entry key="MS500" value="6.395856012644492" />
+      <entry key="S2" value="14.611906550622779" />
+      <entry key="S5" value="18.944466042547283" />
+      <entry key="S10" value="20.830394356319236" />
+      <entry key="S30" value="23.14192288191281" />
+      <entry key="S60" value="33.1386094654988" />
+      <entry key="M2" value="67.34702135154646" />
+      <entry key="M5" value="181.3846847525727" />
+      <entry key="M10" value="368.2492571830035" />
+      <entry key="M15" value="546.8333497120512" />
+      <entry key="M30" value="988.5954433661703" />
+      <entry key="H1" value="1500.0644845235677" />
+      <entry key="H2" value="1922.39121024116" />
+      <entry key="H4" value="2200.3195092776377" />
+      <entry key="D1" value="2479.859488545304" />
+      <entry key="W1" value="2533.7897941700908" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="1.890655594638129E-238" />
-      <entry key="S2" value="3.708114244839198E-60" />
-      <entry key="S5" value="1.6891228711330975E-24" />
-      <entry key="S10" value="1.2996625989590833E-12" />
-      <entry key="S30" value="1.0912984552096834E-4" />
-      <entry key="S60" value="0.010446652857079405" />
-      <entry key="M2" value="0.10271605444611524" />
-      <entry key="M5" value="0.47566747982981555" />
-      <entry key="M10" value="1.0783955333247173" />
-      <entry key="M15" value="1.6541973908598928" />
-      <entry key="M30" value="3.092323577093913" />
-      <entry key="H1" value="4.743980670531731" />
-      <entry key="H2" value="6.085577882982354" />
-      <entry key="H4" value="6.9560304327568865" />
-      <entry key="D1" value="7.81238334726161" />
-      <entry key="W1" value="7.972841244899866" />
+      <entry key="MS500" value="5.537085876899765E-73" />
+      <entry key="S2" value="1.195407067081627E-18" />
+      <entry key="S5" value="1.0021342761702966E-7" />
+      <entry key="S10" value="4.457729224416086E-4" />
+      <entry key="S30" value="0.12122935056231197" />
+      <entry key="S60" value="0.5051373025203487" />
+      <entry key="M2" value="1.156545351821767" />
+      <entry key="M5" value="2.36373201903714" />
+      <entry key="M10" value="3.4946944579505543" />
+      <entry key="M15" value="4.304308754232825" />
+      <entry key="M30" value="6.067211152315499" />
+      <entry key="H1" value="8.030632901149218" />
+      <entry key="H2" value="9.646376333849185" />
+      <entry key="H4" value="10.709408747412503" />
+      <entry key="D1" value="11.766819100608185" />
+      <entry key="W1" value="11.966212212125027" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.5962424337449046" />
-      <entry key="MS500" value="4.194683718500159" />
-      <entry key="S2" value="14.69756425144056" />
-      <entry key="S5" value="35.133516814136996" />
-      <entry key="S10" value="61.713498634647856" />
-      <entry key="S30" value="109.98131104216192" />
-      <entry key="S60" value="133.26056636497466" />
-      <entry key="M2" value="161.46893684140022" />
-      <entry key="M5" value="257.0505170746479" />
-      <entry key="M10" value="435.29701490378335" />
-      <entry key="M15" value="607.5168359723829" />
-      <entry key="M30" value="1021.4860731361244" />
-      <entry key="H1" value="1478.1404533172854" />
-      <entry key="H2" value="1841.2085207215282" />
-      <entry key="H4" value="2074.8237651128375" />
-      <entry key="D1" value="2306.7931524421733" />
-      <entry key="W1" value="2351.3843106730174" />
+      <entry key="MS100" value="2.1913341112961713" />
+      <entry key="MS500" value="6.359474146398162" />
+      <entry key="S2" value="14.590217695480643" />
+      <entry key="S5" value="18.933113128209595" />
+      <entry key="S10" value="20.824387714272813" />
+      <entry key="S30" value="23.21895535415549" />
+      <entry key="S60" value="33.50333823043015" />
+      <entry key="M2" value="68.30358039060543" />
+      <entry key="M5" value="183.58937418997212" />
+      <entry key="M10" value="371.6518493829461" />
+      <entry key="M15" value="551.1125489278412" />
+      <entry key="M30" value="994.846710036332" />
+      <entry key="H1" value="1508.5485330325341" />
+      <entry key="H2" value="1932.71579407331" />
+      <entry key="H4" value="2211.853544964061" />
+      <entry key="D1" value="2492.5948296518686" />
+      <entry key="W1" value="2546.751451009315" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -219,7 +212,7 @@
       <workItem from="1786546772616" duration="613000" />
       <workItem from="1786600490839" duration="276000" />
       <workItem from="1786600784810" duration="2203000" />
-      <workItem from="1786603033167" duration="1880000" />
+      <workItem from="1786603033167" duration="2783000" />
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />
@@ -229,15 +222,25 @@
       <option name="project" value="LOCAL" />
       <updated>1786603205872</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat: Add customizable profile avatar picker with emoji, glyph, and color options">
+      <option name="closed" value="true" />
+      <created>1786605395639</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1786605395639</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <MESSAGE value="Remove unused components, APIs, and libraries to streamline the frontend and reduce bundle size." />
     <MESSAGE value="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification" />
+    <MESSAGE value="feat: Add customizable profile avatar picker with emoji, glyph, and color options" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Add customizable profile avatar picker with emoji, glyph, and color options" />
   </component>
 </project>

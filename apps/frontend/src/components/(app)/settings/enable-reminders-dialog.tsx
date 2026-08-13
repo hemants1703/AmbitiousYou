@@ -76,6 +76,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
     }
 
     startTransition(async () => {
+      const toastId = toast.loading("Enabling reminders…");
       try {
         const permission =
           typeof Notification !== "undefined" && Notification.permission === "granted"
@@ -83,6 +84,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
             : await Notification.requestPermission();
 
         if (permission !== "granted") {
+          toast.dismiss(toastId);
           setError(
             permission === "denied"
               ? "Notifications are blocked for this site. Allow them in your browser settings, then try again."
@@ -94,6 +96,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
         const subscription = await subscribeToWebPush(vapidPublicKey);
         const saveResult = await savePushSubscriptionAction(subscriptionToJson(subscription));
         if (saveResult.error) {
+          toast.dismiss(toastId);
           setError(saveResult.error);
           return;
         }
@@ -101,6 +104,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const settingsResult = await togglePushAmbitionRemindersSetting(true, timeZone);
         if (settingsResult.error || !settingsResult.data) {
+          toast.dismiss(toastId);
           setError(settingsResult.error ?? "Could not save your reminder preference.");
           return;
         }
@@ -108,6 +112,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
         const syncResult = await syncDueTodayRemindersAction();
         if (syncResult.error) {
           toast.message(isConnect ? "This device is connected" : "Reminders saved", {
+            id: toastId,
             description: "You’ll get the next scheduled nudge for due or overdue moves.",
           });
         } else {
@@ -115,6 +120,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
             isConnect
               ? "This device will receive ambition reminders."
               : "Ambition reminders are on. Check for a confirmation on this device.",
+            { id: toastId },
           );
         }
 
@@ -123,6 +129,7 @@ export function EnableRemindersDialog(props: EnableRemindersDialogProps) {
         router.refresh();
       } catch (err) {
         console.error(err);
+        toast.dismiss(toastId);
         setError("Something went wrong enabling reminders. Please try again.");
       }
     });

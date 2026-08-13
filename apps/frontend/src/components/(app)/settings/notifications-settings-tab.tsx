@@ -23,6 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import type { Settings } from "@ambitiousyou/shared";
 import { BellIcon, CheckIcon, MailIcon, SmartphoneIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
@@ -123,23 +124,29 @@ export function NotificationsSettingsTab(props: NotificationsSettingsTabProps) {
     }
 
     startTransition(async () => {
-      try {
-        const endpoint = await unsubscribeFromWebPush();
-        if (endpoint) {
-          await removePushSubscriptionAction(endpoint);
-        }
-        const settingsResult = await togglePushAmbitionRemindersSetting(false);
-        if (settingsResult.error || !settingsResult.data) {
-          toast.error(settingsResult.error ?? "Failed to update notification settings.");
-          return;
-        }
-        setPushAmbitionReminders(settingsResult.data.pushAmbitionReminders);
-        setDeviceStatus(await getLocalPushDeviceStatus());
-        toast.success("Ambition reminders disabled.");
-      } catch (error) {
-        console.error(error);
-        toast.error("Could not disable device notifications. Please try again.");
-      }
+      const settingsResult = await toastMutation(
+        async () => {
+          try {
+            const endpoint = await unsubscribeFromWebPush();
+            if (endpoint) {
+              await removePushSubscriptionAction(endpoint);
+            }
+            return togglePushAmbitionRemindersSetting(false);
+          } catch (error) {
+            console.error(error);
+            return { error: "Could not disable device notifications. Please try again.", data: null };
+          }
+        },
+        {
+          loading: "Disabling reminders…",
+          success: "Ambition reminders disabled.",
+          error: (msg) => msg,
+        },
+        { getError: (r) => (r.error || !r.data ? (r.error ?? "Failed to update notification settings.") : null) },
+      );
+      if (settingsResult.error || !settingsResult.data) return;
+      setPushAmbitionReminders(settingsResult.data.pushAmbitionReminders);
+      setDeviceStatus(await getLocalPushDeviceStatus());
     });
   }
 

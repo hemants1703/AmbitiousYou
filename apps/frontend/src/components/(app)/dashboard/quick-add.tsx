@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { CalendarIcon, FlagIcon, ListTodoIcon, StickyNoteIcon, ZapIcon } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 import type { Matcher } from "react-day-picker";
-import { toast } from "sonner";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { PendingButton } from "@/components/(app)/mutations/pending-button";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -108,30 +108,38 @@ export function QuickAdd(props: QuickAddProps) {
     resetAndClose();
 
     startTransition(async () => {
-      let error: string | null = null;
+      const result = await toastMutation(
+        async () => {
+          if (mode === "task") {
+            const created = await createTaskAction({ ambitionId, task: value, taskDescription: description.trim(), taskDeadline: date });
+            if (created.task) {
+              dashboardMoves?.addOpenItem(created.task, ambition);
+            }
+            return { error: created.error };
+          }
+          if (mode === "milestone") {
+            const created = await createMilestoneAction({
+              ambitionId,
+              milestone: value,
+              milestoneDescription: description.trim(),
+              milestoneTargetDate: date,
+            });
+            if (created.milestone) {
+              dashboardMoves?.addOpenItem(created.milestone, ambition);
+            }
+            return { error: created.error };
+          }
+          return { error: (await createNoteAction(ambitionId, value)).error };
+        },
+        {
+          loading: "Adding…",
+          success: mode === "note" ? "Note added" : `Added “${value}”`,
+          error: (msg) => msg,
+        },
+        { getError: (r) => r.error },
+      );
 
-      if (mode === "task") {
-        const result = await createTaskAction({ ambitionId, task: value, taskDescription: description.trim(), taskDeadline: date });
-        error = result.error;
-        if (result.task) {
-          dashboardMoves?.addOpenItem(result.task, ambition);
-        }
-      } else if (mode === "milestone") {
-        const result = await createMilestoneAction({ ambitionId, milestone: value, milestoneDescription: description.trim(), milestoneTargetDate: date });
-        error = result.error;
-        if (result.milestone) {
-          dashboardMoves?.addOpenItem(result.milestone, ambition);
-        }
-      } else {
-        error = (await createNoteAction(ambitionId, value)).error;
-      }
-
-      if (error) {
-        toast.error(error);
-        return;
-      }
-
-      toast.success(mode === "note" ? "Note added" : `Added “${value}”`);
+      if (result.error) return;
       refreshInBackground();
     });
   }

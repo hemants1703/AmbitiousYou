@@ -20,7 +20,7 @@ import Link from "next/link";
 import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { useMemo, useState, useTransition } from "react";
 import type { Matcher } from "react-day-picker";
-import { toast } from "sonner";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useMoveDetail } from "@/components/(app)/ambitions/move-detail-context";
 
 interface MoveDetailDialogProps {
@@ -107,39 +107,52 @@ function MoveDetailContent(props: { detail: MoveDetail; ambitionStartDate?: Date
       setError(null);
       const description = editDraft.description.trim();
 
-      if (detail.kind === "task") {
-        const result = await updateTaskAction(detail.id!, {
-          task: title,
-          taskDescription: description,
-          taskCompleted: detail.completed,
-          taskDeadline: editDraft.date,
-        });
-        if (result.error || !result.task) {
-          setError(result.error ?? "Failed to update move. Please try again.");
-          return;
-        }
-        moveDetail.syncDetail({
-          ...toMoveDetail(result.task),
-          ambitionName: detail.ambitionName,
-        });
-      } else {
-        const result = await updateMilestoneAction(detail.id!, {
-          milestone: title,
-          milestoneDescription: description,
-          milestoneCompleted: detail.completed,
-          milestoneTargetDate: editDraft.date,
-        });
-        if (result.error || !result.milestone) {
-          setError(result.error ?? "Failed to update move. Please try again.");
-          return;
-        }
-        moveDetail.syncDetail({
-          ...toMoveDetail(result.milestone),
-          ambitionName: detail.ambitionName,
-        });
+      const result = await toastMutation(
+        async () => {
+          if (detail.kind === "task") {
+            const updated = await updateTaskAction(detail.id!, {
+              task: title,
+              taskDescription: description,
+              taskCompleted: detail.completed,
+              taskDeadline: editDraft.date,
+            });
+            if (updated.error || !updated.task) {
+              return { error: updated.error ?? "Failed to update move. Please try again." };
+            }
+            moveDetail.syncDetail({
+              ...toMoveDetail(updated.task),
+              ambitionName: detail.ambitionName,
+            });
+            return { error: null };
+          }
+
+          const updated = await updateMilestoneAction(detail.id!, {
+            milestone: title,
+            milestoneDescription: description,
+            milestoneCompleted: detail.completed,
+            milestoneTargetDate: editDraft.date,
+          });
+          if (updated.error || !updated.milestone) {
+            return { error: updated.error ?? "Failed to update move. Please try again." };
+          }
+          moveDetail.syncDetail({
+            ...toMoveDetail(updated.milestone),
+            ambitionName: detail.ambitionName,
+          });
+          return { error: null };
+        },
+        {
+          loading: "Updating move…",
+          success: "Move updated",
+        },
+        { getError: (r) => r.error, toastOnError: false },
+      );
+
+      if (result.error) {
+        setError(result.error);
+        return;
       }
 
-      toast.success("Move updated");
       setMode("read");
       refreshInBackground();
     });
@@ -150,13 +163,19 @@ function MoveDetailContent(props: { detail: MoveDetail; ambitionStartDate?: Date
 
     startTransition(async () => {
       setError(null);
-      const result = detail.kind === "task" ? await deleteTaskAction(detail.id!) : await deleteMilestoneAction(detail.id!);
+      const result = await toastMutation(
+        async () => (detail.kind === "task" ? deleteTaskAction(detail.id!) : deleteMilestoneAction(detail.id!)),
+        {
+          loading: "Deleting…",
+          success: `${isMs ? "Milestone" : "Task"} deleted`,
+        },
+        { getError: (r) => r.error, toastOnError: false },
+      );
       if (result.error) {
         setError(result.error);
         return;
       }
 
-      toast.success(`${isMs ? "Milestone" : "Task"} deleted`);
       handleOpenChange(false);
       refreshInBackground();
     });

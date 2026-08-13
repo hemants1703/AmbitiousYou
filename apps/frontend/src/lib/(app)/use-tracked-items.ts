@@ -11,8 +11,8 @@ import { usePendingMap } from "@/lib/(app)/mutations/use-pending-map";
 import { getCompletedVerb, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import type { Milestone, Task } from "@ambitiousyou/shared/types";
 import { parseISO } from "date-fns";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
 
 function trackedItemsKey(items: TrackedItem[]): string {
   return items.map((item) => `${item.id}:${isCompleted(item)}`).join(",");
@@ -160,16 +160,22 @@ export function useTrackedItems(params: UseTrackedItemsParams): UseTrackedItemsR
         }),
       );
 
-      const result = isMilestone(item) ? await toggleMilestoneCompletionAction(item.id) : await toggleTaskCompletionAction(item.id);
+      const result = await toastMutation(
+        async () => (isMilestone(item) ? toggleMilestoneCompletionAction(item.id) : toggleTaskCompletionAction(item.id)),
+        {
+          loading: "Updating move…",
+          success: wasCompleted ? `${kindLabel} marked as not ${verb}.` : `${kindLabel} marked as ${verb}.`,
+          error: "Failed to update move. Please try again.",
+        },
+        { getError: (r) => r.error },
+      );
       pending.clearPending(item.id);
 
       if (result.error) {
         setError(result.error);
         setItems(snapshot);
-        toast.error("Failed to update move. Please try again.");
       } else {
         refreshInBackground();
-        toast.success(wasCompleted ? `${kindLabel} marked as not ${verb}.` : `${kindLabel} marked as ${verb}.`);
       }
     });
   }

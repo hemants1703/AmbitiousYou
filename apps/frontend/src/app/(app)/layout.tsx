@@ -8,7 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   ...createPrivateMetadata("AmbitiousYou"),

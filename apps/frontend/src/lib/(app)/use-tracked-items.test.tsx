@@ -20,8 +20,10 @@ vi.mock("@/lib/actions/(app)/milestones/toggle-milestone-completion", () => ({
 vi.mock("@/lib/actions/(app)/milestones/delete-milestone", () => ({ deleteMilestoneAction: vi.fn() }));
 vi.mock("sonner", () => ({
   toast: {
+    loading: vi.fn(() => "toast-1"),
     error: vi.fn(),
     success: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 vi.mock("@/lib/(app)/mutations/background-refresh", () => ({
@@ -116,7 +118,8 @@ describe("useTrackedItems", () => {
     await waitFor(() => {
       expect(isCompleted(result.current.items[0]!)).toBe(false);
       expect(result.current.error).toBe("Cannot toggle");
-      expect(toast.error).toHaveBeenCalled();
+      expect(toast.loading).toHaveBeenCalledWith("Updating move…");
+      expect(toast.error).toHaveBeenCalledWith("Failed to update move. Please try again.", { id: "toast-1" });
     });
   });
 

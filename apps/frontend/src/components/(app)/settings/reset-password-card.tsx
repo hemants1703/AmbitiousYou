@@ -11,8 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { resetPasswordAction } from "@/lib/actions/(app)/settings/reset-password";
 import { KeyRoundIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState } from "react";
-import { toast } from "sonner";
 
 type ChangePasswordStep = 1 | 2;
 
@@ -57,31 +57,38 @@ export function ResetPasswordCard() {
     setError(null);
     setIsPending(true);
 
-    try {
-      const result = await resetPasswordAction(newPassword, signOutAllDevices);
+    const result = await toastMutation(
+      async () => {
+        try {
+          return await resetPasswordAction(newPassword, signOutAllDevices);
+        } catch {
+          return { error: "Unable to update your password. Please try again.", signedOut: false as const };
+        }
+      },
+      {
+        loading: "Updating password…",
+        success: (r) => (r.signedOut ? "Password updated. Signing you out of all devices…" : "Your password has been updated."),
+        error: (msg) => msg,
+      },
+      { getError: (r) => r.error },
+    );
 
-      if (result.error) {
-        setError(result.error);
-        toast.error(result.error);
-        return;
-      }
+    setIsPending(false);
 
-      if (result.signedOut) {
-        toast.success("Password updated. Signing you out of all devices…");
-        setOpen(false);
-        resetForm();
-        router.push("/login");
-        return;
-      }
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
 
-      toast.success("Your password has been updated.");
+    if (result.signedOut) {
       setOpen(false);
       resetForm();
-    } catch {
-      toast.error("Unable to update your password. Please try again.");
-    } finally {
-      setIsPending(false);
+      router.push("/login");
+      return;
     }
+
+    setOpen(false);
+    resetForm();
   }
 
   return (
