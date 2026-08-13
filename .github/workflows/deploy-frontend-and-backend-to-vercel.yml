@@ -1,0 +1,207 @@
+name: deploy-frontend-and-backend-to-vercel
+
+# Orchestrated Vercel deploys for both apps. Vercel Git auto-deploy is disabled
+# in each app's vercel.json (`git.deploymentEnabled: false`) — this workflow is
+# the only deploy path.
+#
+# push dev  -> GitHub Environments development-backend → development-frontend (Supabase dev)
+# push main -> GitHub Environments production-backend  → production-frontend  (Supabase prod)
+#
+# Vercel CLI: main uses --prod (Production slot); dev uses Preview slot — GitHub env names
+# use "development-*" to match the dev branch / Supabase dev project, not Vercel's "Preview" label.
+#
+# Order: test → migrate (when backend changed) → deploy backend → deploy frontend
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'apps/backend/**'
+      - 'apps/frontend/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy-frontend-and-backend-to-vercel.yml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-vercel-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'apps/backend/**'
+              - 'pnpm-lock.yaml'
+            frontend:
+              - 'apps/frontend/**'
+              - 'pnpm-lock.yaml'
+
+  test-backend:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install (backend + workspace deps)
+        run: pnpm install --frozen-lockfile --filter backend...
+
+      - name: Run unit tests
+        run: pnpm --filter backend test
+
+  test-frontend:
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install (frontend + workspace deps)
+        run: pnpm install --frozen-lockfile --filter frontend...
+
+      - name: Lint
+        run: pnpm --filter frontend lint
+
+      - name: Run unit and component tests
+        run: pnpm --filter frontend test
+
+      - name: Production build
+        run: pnpm --filter frontend build
+
+  migrate:
+    needs: [changes, test-backend]
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    # Names MUST match repo Settings → Environments exactly (case-sensitive).
+    environment: ${{ github.ref == 'refs/heads/main' && 'production-backend' || 'development-backend' }}
+    env:
+      NODE_OPTIONS: --dns-result-order=ipv4first
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install (backend + workspace deps)
+        run: pnpm install --frozen-lockfile --filter backend...
+
+      - name: Verify DB connectivity
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_POOLER_DATABASE_URL || secrets.DATABASE_URL }}
+        run: |
+          node -e "const v=process.env.DATABASE_URL||''; if(v!==v.trim())console.log('WARNING: DATABASE_URL has leading/trailing whitespace (len '+v.length+' vs trimmed '+v.trim().length+')'); try{const u=new URL(v.trim()); console.log('Target -> host='+u.hostname+' port='+(u.port||'5432')+' user='+decodeURIComponent(u.username)+' params='+(u.search||'(none)'));}catch(e){console.log('URL parse error: '+e.message+' (password may contain unescaped special characters)');}"
+          node -e "const {Client}=require('pg'); const url=process.env.DATABASE_URL||''; const ssl=url.includes('supabase.com')?{rejectUnauthorized:false}:undefined; const c=new Client({connectionString:url, connectionTimeoutMillis:10000, ssl}); c.connect().then(()=>c.query('select 1')).then(()=>{console.log('DB connection OK');return c.end();}).then(()=>process.exit(0)).catch(e=>{console.error('DB connection FAILED:', e.message); if(/tenant\/user.*not found/i.test(e.message))console.error('Hint: copy the Session pooler URI verbatim from Supabase (correct project + aws-0/aws-1 region). See apps/backend/.env.example'); process.exit(1);});"
+
+      - name: Run DB migrations
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_POOLER_DATABASE_URL || secrets.DATABASE_URL }}
+        run: pnpm exec drizzle-kit migrate
+
+  deploy-backend:
+    needs: [changes, migrate]
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production-backend' || 'development-backend' }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BACKEND_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy backend to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/backend
+        run: |
+          set -euo pipefail
+          PROD_FLAG=""
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            PROD_FLAG="--prod"
+            echo "Deploying backend to Vercel Production (main → production-backend)"
+          else
+            echo "Deploying backend to Vercel Preview slot (dev → development-backend)"
+          fi
+          npx --yes vercel@latest deploy $PROD_FLAG --token="$VERCEL_TOKEN" --yes
+
+      - name: Wait for backend /health
+        env:
+          BACKEND_HEALTH_URL: ${{ secrets.BACKEND_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BACKEND_HEALTH_URL:-}" ]; then
+            echo "BACKEND_HEALTH_URL not set — skipping health gate (set it in production-backend / development-backend)."
+            exit 0
+          fi
+          echo "Polling ${BACKEND_HEALTH_URL}/health ..."
+          for attempt in $(seq 1 30); do
+            if curl --silent --show-error --fail "${BACKEND_HEALTH_URL}/health" | grep -q '"db":"up"'; then
+              echo "Backend healthy after ${attempt} attempt(s)."
+              exit 0
+            fi
+            echo "Attempt ${attempt}/30 — not ready yet, waiting 10s ..."
+            sleep 10
+          done
+          echo "Backend /health did not return db:up within 5 minutes."
+          exit 1
+
+  deploy-frontend:
+    needs: [changes, test-frontend, deploy-backend]
+    if: |
+      always() &&
+      needs.changes.outputs.frontend == 'true' &&
+      (needs.test-frontend.result == 'success' || needs.test-frontend.result == 'skipped') &&
+      (needs.changes.outputs.backend != 'true' || needs.deploy-backend.result == 'success')
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production-frontend' || 'development-frontend' }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONTEND_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy frontend to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/frontend
+        run: |
+          set -euo pipefail
+          PROD_FLAG=""
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            PROD_FLAG="--prod"
+            echo "Deploying frontend to Vercel Production (main → production-frontend)"
+          else
+            echo "Deploying frontend to Vercel Preview slot (dev → development-frontend)"
+          fi
+          npx --yes vercel@latest deploy $PROD_FLAG --token="$VERCEL_TOKEN" --yes

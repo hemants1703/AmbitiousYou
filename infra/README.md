@@ -25,71 +25,51 @@ starts on the idle port (prod 3001/3002, dev 3101/3102), `/health` gate, nginx
 
 ## How the CI/CD works (plain-English)
 
-Think of it as **two independent robots** that wake up every time you `git push`:
+Every `git push` to `dev` or `main` triggers **GitHub Actions** — not Vercel Git hooks directly.
 
-- **Robot A — Vercel** rebuilds your **frontend** (and optionally the **backend** on serverless — see `apps/backend/README.md`).
-- **Robot B — GitHub Actions** rebuilds your **backend** for the VPS (Docker image) and ships it over SSH.
+### Vercel path (frontend + backend) — primary
 
-They run in parallel and don't talk to each other. The branch you push to decides
-which environment gets updated:
+Workflow: `.github/workflows/deploy-frontend-and-backend-to-vercel.yml`
 
-| You push to… | Frontend goes live at | Backend goes live at | Database used |
-|---|---|---|---|
-| `dev`  | dev.ambitiousyou.pro | api.dev.ambitiousyou.pro | Supabase **dev** |
-| `main` | www.ambitiousyou.pro | api.ambitiousyou.pro     | Supabase **prod** |
+1. **Test** backend and/or frontend (path-filtered).
+2. **Verify DB + migrate** against the branch's Supabase project (dev or prod).
+3. **Deploy backend** to Vercel (`--prod` on `main`, Preview on `dev`).
+4. **Poll `/health`** on the deployed API (optional `BACKEND_HEALTH_URL` secret).
+5. **Deploy frontend** to Vercel last.
 
-### The big picture
+Vercel `git.deploymentEnabled: false` in both apps — this workflow is the sole deploy trigger. Runtime env vars stay in the Vercel dashboard; migration credentials stay in GitHub Environment secrets. See root [`AGENTS.md`](../AGENTS.md#deployment).
+
+| You push to… | GitHub Environments | Frontend | Backend (Vercel) | Database |
+|---|---|---|---|---|
+| `dev`  | `development-backend` → `development-frontend` | dev.ambitiousyou.pro | Vercel Preview slot | Supabase **dev** |
+| `main` | `production-backend` → `production-frontend` | www.ambitiousyou.pro | Vercel Production (`--prod`) | Supabase **prod** |
+
+### VPS path (backend Docker) — optional parallel
+
+Workflow: `.github/workflows/deploy-backend-to-vps.yml` (manual `workflow_dispatch` today; push trigger commented out).
+
+Same **migrate-before-deploy** pattern, then Docker → GHCR → SSH blue-green swap to `api.dev` / `api` domains.
 
 ```
                             you: git push  (to dev or main)
                                      │
               ┌──────────────────────┴───────────────────────┐
               ▼                                               ▼
-   ┌────────────────────┐                      ┌──────────────────────────────┐
-   │  VERCEL (automatic)│                      │  GITHUB ACTIONS (free runner) │
-   │  runs `next build` │                      │  builds + ships the backend   │
-   └─────────┬──────────┘                      │  1. run DB migrations          │
-             │ publishes                       │  2. build Docker image         │
-             ▼                                 │  3. push image to GHCR         │
-   dev / www .ambitiousyou.pro                 │  4. ssh into the VPS ──────────┼──┐
-   (the website)                               └──────────────────────────────┘  │
-                                                                                  ▼
-                                                        ┌───────────────────────────────┐
-                                                        │  YOUR VPS                      │
-                                                        │  deploy.sh does a blue-green   │
-                                                        │  swap:  nginx ──► backend box  │
-                                                        └───────────────┬───────────────┘
-                                                                        ▼
-                                                        api.dev / api .ambitiousyou.pro
-                                                                        │
-                                                                        ▼
-                                                              Supabase (dev / prod DB)
+   ┌────────────────────────────┐              ┌──────────────────────────────┐
+   │  GITHUB ACTIONS → VERCEL   │              │  GITHUB ACTIONS → VPS (opt.) │
+   │  test → migrate → BE → FE  │              │  migrate → Docker → SSH swap │
+   └─────────┬──────────────────┘              └──────────────┬───────────────┘
+             │                                                 │
+             ▼                                                 ▼
+   dev / www + Vercel API                            api.dev / api .ambitiousyou.pro
+             │                                                 │
+             └─────────────────────┬───────────────────────────┘
+                                   ▼
+                         Supabase (dev / prod DB)
 ```
 
-The key idea: **all the heavy lifting (building the image) happens on GitHub's
-free machine, not your VPS.** Your VPS only downloads the finished "box" (the
-Docker image) and runs it. That's why the VPS can be small — but not *too* small
-(see **VPS sizing** below).
-
-### The frontend half (Vercel) — you run nothing
-You connect the repo to Vercel once. After that, every push: Vercel pulls the
-code, runs `next build`, and publishes it to the right domain automatically. The
-only per-environment difference is two env vars (`API_URL`, `NEXT_PUBLIC_SITE_URL`)
-that you set once in the Vercel dashboard so the dev site talks to the dev API and
-the prod site to the prod API.
-
-### The backend half (GitHub Actions → VPS) — the 5 steps
-A push to `dev`/`main` triggers `.github/workflows/deploy-backend.yml`, which runs
-these steps on a throwaway GitHub machine:
-
-1. **Checkout + install** the code.
-2. **Migrate the database** — `drizzle-kit migrate` applies any new schema changes
-   to that environment's Supabase, *before* the new code goes live.
-3. **Build the Docker image** — packages the NestJS server into a self-contained
-   "box" that runs identically anywhere.
-4. **Push the image to GHCR** (GitHub Container Registry — free image storage).
-5. **SSH into the VPS** and run `deploy.sh`, which swaps the running container
-   with **zero downtime** (next section).
+The key idea for VPS: **all the heavy lifting (building the image) happens on GitHub's
+free machine, not your VPS.** Your VPS only downloads the finished Docker image and runs it.
 
 ### Why "zero downtime"? The blue-green swap
 

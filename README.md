@@ -192,50 +192,50 @@ A client component calls a typed **Server Action** → the action attaches the s
 
 ## 🔄 CI/CD Pipelines
 
-Path-filtered workflows: frontend-only changes never redeploy the backend, and vice versa.
+Path-filtered workflows: frontend-only changes skip backend deploy; backend-only changes skip frontend deploy.
 
 ```mermaid
 flowchart TB
-    subgraph PUSH["git push"]
+    subgraph PUSH["git push (dev / main)"]
         DEV["dev branch"]
         MAIN["main branch"]
     end
 
-    subgraph FE_CI["ci-frontend.yml"]
+    subgraph FE_CI["ci-frontend.yml (PR + push quality gate)"]
         direction TB
-        FE1["checkout + pnpm install"]
-        FE2["lint"]
-        FE3["unit & component tests"]
-        FE4["production build"]
-        FE5["Lighthouse CI"]
-        FE1 --> FE2 --> FE3 --> FE4 --> FE5
+        FE1["lint · tests · build · Lighthouse"]
     end
 
-    subgraph BE_CI["deploy-backend.yml"]
+    subgraph VERCEL_CI["deploy-frontend-and-backend-to-vercel.yml"]
         direction TB
-        BE1["unit tests"]
-        BE2["verify DB connectivity"]
-        BE3["drizzle-kit migrate"]
-        BE4["build & push Docker → GHCR"]
-        BE5["scp deploy.sh → VPS"]
-        BE6["SSH blue-green swap"]
-        BE1 --> BE2 --> BE3 --> BE4 --> BE5 --> BE6
+        V1["test backend / frontend"]
+        V2["verify DB + migrate"]
+        V3["deploy backend → Vercel"]
+        V4["deploy frontend → Vercel"]
+        V1 --> V2 --> V3 --> V4
+    end
+
+    subgraph VPS_CI["deploy-backend-to-vps.yml (optional)"]
+        direction TB
+        BE1["test · migrate · Docker → GHCR · SSH swap"]
     end
 
     subgraph DEPLOY["Live environments"]
         VERCEL_FE["Vercel — frontend"]
-        VERCEL_BE["Vercel — backend (serverless)"]
-        VPS["DigitalOcean VPS — API (Docker)"]
+        VERCEL_BE["Vercel — backend"]
+        VPS["DigitalOcean VPS — API (optional)"]
         SUPA[("Supabase PostgreSQL")]
     end
 
     PUSH --> FE_CI
-    PUSH --> BE_CI
-    FE5 --> VERCEL_FE
-    BE6 --> VPS
-    BE3 -.-> SUPA
+    PUSH --> VERCEL_CI
+    PUSH -.-> VPS_CI
+    V4 --> VERCEL_FE
+    V3 --> VERCEL_BE
+    V2 --> SUPA
+    BE1 --> VPS
     VPS --> SUPA
-    VERCEL_BE -.->|"optional parallel target"| SUPA
+    VERCEL_BE --> SUPA
 ```
 
 > **Portfolio tip:** for LinkedIn or talks, screenshot a green **Actions** run of `deploy-backend` on `main` — it reads more credibly than a diagram alone.
@@ -244,55 +244,62 @@ flowchart TB
 
 ## 🚢 Deployment & Infrastructure
 
-Two environments ship on every `git push`. The **frontend** always deploys via Vercel. The **backend** is **platform-agnostic** — the same NestJS app runs on **Vercel serverless** (current choice for cost management) or on a **Docker container on a self-managed VPS** with zero-downtime blue-green swaps. Both paths share one codebase, one `nest build`, and env vars injected by the host (never committed).
+Two environments ship on every `git push` to `main` or `dev`. **Frontend and backend** deploy to **Vercel** via a single orchestrated GitHub Actions workflow. The **VPS Docker** path remains available as an optional parallel backend target.
 
 ```mermaid
 flowchart LR
     PUSH["git push<br/>(dev / main)"]
 
-    subgraph VERCEL["Vercel"]
-        FE["Next.js frontend"]
-        BE_SLS["NestJS backend<br/>serverless · Fluid compute"]
+    subgraph GHA_V["GitHub Actions — Vercel path"]
+        direction TB
+        TEST["test backend + frontend"]
+        MIG["verify DB + migrate<br/>(drizzle-kit)"]
+        BE["deploy backend → Vercel"]
+        FE["deploy frontend → Vercel"]
+        TEST --> MIG --> BE --> FE
     end
 
-    subgraph GHA["GitHub Actions — VPS path"]
+    subgraph GHA_VPS["GitHub Actions — VPS path (optional)"]
         direction TB
-        MIG["migrate Supabase<br/>(drizzle-kit)"]
-        BUILD["build multi-stage<br/>Docker image"]
-        GHCR["push → GHCR"]
-        MIG --> BUILD --> GHCR
+        MIG2["migrate"]
+        BUILD["Docker → GHCR → SSH swap"]
+        MIG2 --> BUILD
+    end
+
+    subgraph VERCEL["Vercel"]
+        FE_LIVE["Next.js frontend"]
+        BE_SLS["NestJS backend · serverless"]
     end
 
     subgraph VPS["DigitalOcean VPS"]
-        direction TB
-        NGINX["nginx + Let's Encrypt TLS"]
-        SWAP["blue-green swap<br/>health-gated"]
-        CTR["NestJS container :3001"]
-        NGINX --> SWAP --> CTR
+        CTR["NestJS container"]
     end
 
     SUPA[("Supabase<br/>PostgreSQL")]
 
-    PUSH --> VERCEL
-    PUSH --> GHA
-    GHCR -->|"scp + SSH"| NGINX
-    CTR --> SUPA
+    PUSH --> GHA_V
+    PUSH -.-> GHA_VPS
+    BE --> BE_SLS
+    FE --> FE_LIVE
+    BUILD --> CTR
+    MIG --> SUPA
+    MIG2 --> SUPA
     BE_SLS --> SUPA
-    MIG -.-> SUPA
+    CTR --> SUPA
 ```
 
-| Surface | Production | Development |
+| Surface | Production (`main`) | Development (`dev`) |
 |---|---|---|
 | Frontend (Vercel) | `www.ambitiousyou.pro` | `dev.ambitiousyou.pro` |
-| Backend (Vercel serverless) | Vercel project URL or custom domain | Preview deployments |
-| Backend (VPS + Docker) | `api.ambitiousyou.pro` | `api.dev.ambitiousyou.pro` |
+| Backend (Vercel serverless) | Production deploy (`--prod`) | Preview deploy |
+| Backend (VPS + Docker, optional) | `api.ambitiousyou.pro` | `api.dev.ambitiousyou.pro` |
 | Database (Supabase) | prod project | dev project |
 
-**Vercel backend (current).** Separate Vercel project, Root Directory `apps/backend`. Set `DATABASE_URL`, `APP_BASE_URL`, and optional `AZURE_CONNECTION_STRING` in the Vercel dashboard. [`apps/backend/vercel.json`](apps/backend/vercel.json) installs the monorepo workspace and runs `nest build`. Run `drizzle-kit migrate` manually against the target DB — Vercel does not migrate on deploy. See [`apps/backend/README.md`](apps/backend/README.md).
+**Vercel pipeline (primary).** [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](.github/workflows/deploy-frontend-and-backend-to-vercel.yml): test → verify DB → migrate → deploy backend → health gate → deploy frontend. GitHub Environments: `production-backend` / `production-frontend` (main) and `development-backend` / `development-frontend` (dev). Runtime env vars live in each Vercel project dashboard. See [`AGENTS.md` — Deployment](AGENTS.md#deployment).
 
-**VPS backend (supported).** Zero-downtime blue-green swap: new container on an idle port (prod `3001`↔`3002`, dev `3101`↔`3102`) while the old one serves. Only after **DB-aware `/health`** passes does nginx rewrite upstream and reload; failed health **aborts the deploy**. Multi-stage Docker image (`node:22-bookworm-slim`), non-root runtime, `pnpm deploy` prod closure, `HEALTHCHECK` on `/health`.
+**VPS backend (optional).** Zero-downtime blue-green swap: new container on an idle port (prod `3001`↔`3002`, dev `3101`↔`3102`) while the old one serves. Only after **DB-aware `/health`** passes does nginx rewrite upstream and reload; failed health **aborts the deploy**. Multi-stage Docker image (`node:22-bookworm-slim`), non-root runtime, `pnpm deploy` prod closure, `HEALTHCHECK` on `/health`.
 
-**The VPS pipeline** ([`.github/workflows/deploy-backend.yml`](.github/workflows/deploy-backend.yml)): `git push` → verify DB → migrate → build & push image to GHCR → `scp` deploy script → SSH blue-green swap. Branch picks env — `dev` → dev, `main` → prod — each with its own Supabase project.
+**The VPS pipeline** ([`.github/workflows/deploy-backend-to-vps.yml`](.github/workflows/deploy-backend-to-vps.yml)): `git push` → verify DB → migrate → build & push image to GHCR → `scp` deploy script → SSH blue-green swap. Branch picks env — `dev` → dev, `main` → prod — each with its own Supabase project.
 
 **Dual entry points.** Docker runs `node dist/main`. Vercel Nest zero-config uses [`src/main.ts`](apps/backend/src/main.ts). Backend app code uses **relative imports** so NFT includes the full module graph (bare `src/*` aliases are not traced and fail at runtime).
 

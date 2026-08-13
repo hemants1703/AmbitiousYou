@@ -78,18 +78,16 @@ flowchart LR
 
 ### Vercel (serverless)
 
-Used **for the time being** to reduce infra cost. Separate Vercel project, Root Directory **`apps/backend`**.
+Separate Vercel project, Root Directory **`apps/backend`**. Deploys are **only** triggered by [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](../../.github/workflows/deploy-frontend-and-backend-to-vercel.yml) — Git auto-deploy is disabled in [`vercel.json`](vercel.json).
 
-1. Import the repo (or `vercel link` from `apps/backend`).
-2. Set **Environment Variables** for Production / Preview: `DATABASE_URL`, `APP_BASE_URL`, optional `AZURE_CONNECTION_STRING`.
-3. [`vercel.json`](vercel.json) runs monorepo install/build (`@ambitiousyou/shared` prebuild).
-4. Push or `vercel --prod` to deploy.
+1. Import the repo (or `vercel link` from `apps/backend`) and note the project ID for GitHub secrets.
+2. Set **Environment Variables** in the Vercel dashboard (Production / Preview): `DATABASE_URL`, `APP_BASE_URL`, optional `AZURE_CONNECTION_STRING`, VAPID keys, `CRON_SECRET`.
+3. [`vercel.json`](vercel.json) runs monorepo install/build on each deploy.
 
-`ignoreCommand` in `vercel.json` skips the build when a push only touches other workspaces (same idea as path filters in GitHub Actions).
-
-**Migrations** are not run by Vercel — apply manually before or after deploy:
+**Migrations** run in GitHub Actions **before** the Vercel deploy (not during the Vercel build):
 
 ```bash
+# Manual fallback only
 cd apps/backend
 DATABASE_URL="<target-db>" pnpm exec drizzle-kit migrate
 ```

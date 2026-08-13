@@ -1,14 +1,11 @@
 name: ci-frontend
 
 # Lint, unit/component tests, and production build for the Next.js frontend.
-# Vercel auto-deploys on push to main/dev — this workflow is the quality gate
-# when paired with GitHub branch protection:
+# Deploys are orchestrated by deploy-frontend-and-backend-to-vercel.yml (not Vercel
+# Git auto-deploy). Pair with branch protection on main/dev:
 #
 #   Settings → Branches → Add rule for `main` and `dev`
-#   → Require status checks → select the `ci` job from this workflow
-#
-# That blocks merges (and therefore Vercel deploys via PR workflow) when lint,
-# tests, or build fail. Direct pushes to protected branches should be disabled.
+#   → Require status checks → select jobs from ci-frontend and deploy workflows
 on:
   pull_request:
     paths:

@@ -150,12 +150,12 @@ src/
 
 ## Deployment
 
-Hosted on **Vercel**. Root Directory `apps/frontend`; [`vercel.json`](vercel.json) runs `pnpm build` (so `@ambitiousyou/shared` is built via `prebuild`) and skips redeploys when the push only touches other workspaces. Apex `ambitiousyou.pro` permanently redirects to `www`.
+Hosted on **Vercel**. Root Directory `apps/frontend`. Deploys are triggered only by [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](../../.github/workflows/deploy-frontend-and-backend-to-vercel.yml) (after backend deploy on the same push). Git auto-deploy is disabled in [`vercel.json`](vercel.json). Apex `ambitiousyou.pro` permanently redirects to `www`.
 
-| Environment | URL |
-|---|---|
-| Production | https://www.ambitiousyou.pro |
-| Development | https://dev.ambitiousyou.pro |
+| Environment | Branch | URL |
+|---|---|---|
+| Production | `main` | https://www.ambitiousyou.pro |
+| Development | `dev` | https://dev.ambitiousyou.pro |
 
 Set at least `API_URL` and `NEXT_PUBLIC_SITE_URL` per environment in the Vercel dashboard. CSP, HSTS, and related headers are configured in [`next.config.ts`](next.config.ts).
 

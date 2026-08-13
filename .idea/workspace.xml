@@ -4,8 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability.">
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports.">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-render.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/vercel.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vercel.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/infra/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +33,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="685" />
+    <option name="cachedIndexableFilesCount" value="684" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -50,61 +60,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.714549086737565" />
-      <entry key="MS500" value="4.3622878559368825" />
-      <entry key="S2" value="12.36108571172204" />
-      <entry key="S5" value="24.844300342660983" />
-      <entry key="S10" value="34.640398444435014" />
-      <entry key="S30" value="48.85150311488111" />
-      <entry key="S60" value="78.02796649043805" />
-      <entry key="M2" value="143.875905495283" />
-      <entry key="M5" value="290.39277921363527" />
-      <entry key="M10" value="501.9253699387211" />
-      <entry key="M15" value="741.4176146781913" />
-      <entry key="M30" value="1481.303670500233" />
-      <entry key="H1" value="2569.682845797457" />
-      <entry key="H2" value="3660.277051605282" />
-      <entry key="H4" value="4474.680232592984" />
-      <entry key="D1" value="5364.728716905319" />
-      <entry key="W1" value="5542.518987016815" />
+      <entry key="MS100" value="1.6317659151868829" />
+      <entry key="MS500" value="2.734255433176915" />
+      <entry key="S2" value="9.6829459056132" />
+      <entry key="S5" value="29.187515712627523" />
+      <entry key="S10" value="54.75048972240658" />
+      <entry key="S30" value="102.93042423575633" />
+      <entry key="S60" value="159.6450107766016" />
+      <entry key="M2" value="259.25779924822587" />
+      <entry key="M5" value="498.6724254870219" />
+      <entry key="M10" value="838.6248132483126" />
+      <entry key="M15" value="1128.6980911041542" />
+      <entry key="M30" value="1887.1277336472158" />
+      <entry key="H1" value="3128.64355284392" />
+      <entry key="H2" value="4609.569147880721" />
+      <entry key="H4" value="5858.639233646812" />
+      <entry key="D1" value="7347.243425835975" />
+      <entry key="W1" value="7658.267066333874" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="1.617778690862527E-164" />
-      <entry key="S10" value="1.2746576942330583E-82" />
-      <entry key="S30" value="5.683820221167182E-28" />
-      <entry key="S60" value="3.120333788828175E-14" />
-      <entry key="M2" value="2.6640298140274454E-7" />
-      <entry key="M5" value="0.00451607357744182" />
-      <entry key="M10" value="0.1464255723417083" />
-      <entry key="M15" value="0.5375925293215801" />
-      <entry key="M30" value="2.3748211208369723" />
-      <entry key="H1" value="5.707617260489891" />
-      <entry key="H2" value="9.340208018467163" />
-      <entry key="H4" value="12.149849338580767" />
-      <entry key="D1" value="15.26900991661429" />
-      <entry key="W1" value="15.893118056279567" />
+      <entry key="S2" value="4.7925976020408736E-206" />
+      <entry key="S5" value="1.0521380879774389E-82" />
+      <entry key="S10" value="1.4348662697910102E-41" />
+      <entry key="S30" value="4.175302869015513E-14" />
+      <entry key="S60" value="3.3547151249171497E-7" />
+      <entry key="M2" value="0.0010196361768638165" />
+      <entry key="M5" value="0.145444702266501" />
+      <entry key="M10" value="0.8268643116773245" />
+      <entry key="M15" value="1.5331338912204886" />
+      <entry key="M30" value="3.394568381702711" />
+      <entry key="H1" value="6.730987850149319" />
+      <entry key="H2" value="11.116516448551815" />
+      <entry key="H4" value="15.01835670856136" />
+      <entry key="D1" value="19.811827373883002" />
+      <entry key="W1" value="20.824800015977157" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.651205036752905" />
-      <entry key="MS500" value="4.332581571948579" />
-      <entry key="S2" value="12.339928273979908" />
-      <entry key="S5" value="24.826917055828908" />
-      <entry key="S10" value="34.62813637662712" />
-      <entry key="S30" value="48.845242894400954" />
-      <entry key="S60" value="78.02140468196934" />
-      <entry key="M2" value="143.8681595263504" />
-      <entry key="M5" value="290.3901861238564" />
-      <entry key="M10" value="502.06539935723254" />
-      <entry key="M15" value="741.9490616886726" />
-      <entry key="M30" value="1483.7094137196468" />
-      <entry key="H1" value="2575.58588369404" />
-      <entry key="H2" value="3670.0641410105186" />
-      <entry key="H4" value="4487.499830519903" />
-      <entry key="D1" value="5380.933297946469" />
-      <entry key="W1" value="5559.402640710829" />
+      <entry key="MS100" value="1.5792306154363165" />
+      <entry key="MS500" value="2.716654245735007" />
+      <entry key="S2" value="9.667878948026372" />
+      <entry key="S5" value="29.169517798502202" />
+      <entry key="S10" value="54.73351834804975" />
+      <entry key="S30" value="102.91971335682312" />
+      <entry key="S60" value="159.63665970190812" />
+      <entry key="M2" value="259.25197752742235" />
+      <entry key="M5" value="498.8119206892787" />
+      <entry key="M10" value="839.4449442994106" />
+      <entry key="M15" value="1130.2241183336307" />
+      <entry key="M30" value="1890.5257803619359" />
+      <entry key="H1" value="3135.475472421585" />
+      <entry key="H2" value="4621.010325386203" />
+      <entry key="H4" value="5874.229135895128" />
+      <entry key="D1" value="7367.966519710014" />
+      <entry key="W1" value="7680.078686285972" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -116,28 +126,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "javascript.preferred.runtime.type.id": "node",
-    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "npm.backend > db:migrate.executor": "Run",
-    "npm.start:backend.executor": "Run",
-    "npm.start:frontend.executor": "Run",
-    "settings.editor.selected.configurable": "SQL Dialects"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="npm.start:backend">
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
@@ -202,7 +212,7 @@
       <workItem from="1786600784810" duration="2203000" />
       <workItem from="1786603033167" duration="2783000" />
       <workItem from="1786614993983" duration="2720000" />
-      <workItem from="1786622730924" duration="1893000" />
+      <workItem from="1786622730924" duration="2193000" />
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />
@@ -260,7 +270,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786623892850</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports.">
+      <option name="closed" value="true" />
+      <created>1786624928402</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1786624928402</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,6 +295,7 @@
     <MESSAGE value="clarity: Update StatCard and AGENTS.md to refine emphasis styles&#10;&#10;Revised `solid` emphasis description in `StatCard` and `AGENTS.md` to specify themed icon disc (`bg-card`) usage for improved visual consistency. Updated associated component logic for better tone handling." />
     <MESSAGE value="feat: Introduce session-scoped caching and invalidation for improved performance and UI responsiveness&#10;&#10;Added session-based caching utilities for user data, ambitions, notifications, and settings. Implemented matching invalidation methods to ensure cache consistency after mutations. Updated components and API calls to leverage the new caching for faster load times and reduced server overhead." />
     <MESSAGE value="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability." />
+    <MESSAGE value="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports." />
   </component>
 </project>

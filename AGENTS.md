@@ -54,7 +54,7 @@ Drizzle is used in **raw SQL-style** — no DI ceremony, no `db.query.*` relatio
   - `src/db/client.ts` creates a process-wide `pg.Pool` from `process.env.DATABASE_URL` (throws at boot if missing) and exports `db` (the Drizzle client), `closeDatabase()`, and the transaction-scope type `Tx = Parameters<Parameters<typeof db.transaction>[0]>[0]`.
   - `src/db/index.ts` is a barrel: re-exports everything from `client.ts`, `./schema`, and `./profile-icons` so feature code uses a single import.
   - **Schema lives at `src/db/schema/`** — per-table TS files with a barrel `index.ts`. Each file is `pgTable(...)` + the inferred row type (`User` is `Omit<typeof users.$inferSelect, 'passwordHash'>`; everything else is `typeof foo.$inferSelect`) + a hand-narrowed `NewFoo` (`Pick<Foo, ...> ± Partial<Pick<...>>`) for API request body shapes. **No `relations()`** declarations — joins are written explicitly with `.innerJoin()`.
-- Services do `import { db, users, sessions, type User } from 'src/db';` plus operators from `drizzle-orm` (`eq`, `and`, `desc`, `getTableColumns`, `sql`). No `@Inject(DRIZZLE)`, no constructor param for the database. The few services with cross-service deps (e.g. `UsersService` → `SettingsService`, `AuthService` → `UsersService`) still take those via standard NestJS DI.
+- Services do `import { db, users, sessions, type User } from '../db'` (relative paths in app code — **not** `src/*` aliases; Vercel's Nest builder cannot resolve bare aliases at runtime) plus operators from `drizzle-orm` (`eq`, `and`, `desc`, `getTableColumns`, `sql`). No `@Inject(DRIZZLE)`, no constructor param for the database. The few services with cross-service deps (e.g. `UsersService` → `SettingsService`, `AuthService` → `UsersService`) still take those via standard NestJS DI.
 - Query style:
   - Reads: `const [user] = await db.select(publicUserColumns).from(users).where(eq(users.email, email)).limit(1);`
   - Joins: `db.select(publicUserColumns).from(sessions).innerJoin(users, eq(users.id, sessions.userId)).where(...).limit(1);`
@@ -77,3 +77,55 @@ All frontend architecture, UI/UX MUST/SHOULD/NEVER, dashboard viz (activity inte
 
 - Backend domain types are **derived from the Drizzle schema** at `apps/backend/src/db/schema/*`. Frontend API types are **hand-written** in `apps/frontend/src/types/*` — update both when the API shape changes. The frontend should never import from `apps/backend`.
 - Field naming convention is verbose and resource-prefixed (`ambitionName`, `ambitionStartDate`, `taskDeadline`, `milestoneTargetDate`). Keep it consistent — DTOs, types, columns, and UI all use the same names.
+
+## Deployment
+
+Two independent deploy pipelines share one codebase. **Runtime secrets never go in the repo** — they live in GitHub Environments (CI migrations) and Vercel project env vars (runtime).
+
+### Vercel (frontend + backend) — primary
+
+Workflow: [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](.github/workflows/deploy-frontend-and-backend-to-vercel.yml)
+
+| Branch | GitHub Environments (in order) | Supabase | Vercel CLI target |
+|---|---|---|---|
+| `main` | `production-backend` → `production-frontend` | prod project | `--prod` (Production slot) |
+| `dev` | `development-backend` → `development-frontend` | dev project | Preview slot (no `--prod`) |
+
+**Order on every push** (path-filtered): backend unit tests → DB connectivity check → `drizzle-kit migrate` → deploy backend → poll `/health` → deploy frontend.
+
+Vercel Git auto-deploy is **disabled** in [`apps/backend/vercel.json`](apps/backend/vercel.json) and [`apps/frontend/vercel.json`](apps/frontend/vercel.json) (`git.deploymentEnabled: false`). Only the GitHub Actions workflow deploys.
+
+GitHub environment names use **`development-*`** (not Vercel’s “Preview” label) so they align with the `dev` branch and Supabase dev project.
+
+**GitHub Environment secrets** (Settings → Environments — names are case-sensitive):
+
+| Environment | Secrets |
+|---|---|
+| `production-backend` | `DATABASE_URL` (or `SUPABASE_POOLER_DATABASE_URL`), `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_BACKEND_PROJECT_ID`, `BACKEND_HEALTH_URL` |
+| `production-frontend` | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_FRONTEND_PROJECT_ID` |
+| `development-backend` | same keys as `production-backend`, **dev** Supabase + dev API URL |
+| `development-frontend` | same keys as `production-frontend` |
+
+**Vercel dashboard env vars** (Settings → Environment Variables per project — use Vercel’s **Production** / **Preview** scopes):
+
+| Variable | Backend | Frontend |
+|---|---|---|
+| `DATABASE_URL` | yes | no |
+| `APP_BASE_URL` | yes | no |
+| `API_URL` | no | yes |
+| `NEXT_PUBLIC_SITE_URL` | no | yes |
+| `AZURE_CONNECTION_STRING` | optional | no |
+| VAPID / `CRON_SECRET` | optional | as needed |
+
+Use **Secrets** in GitHub for credentials CI needs; use **Vercel env vars** for runtime values the deployed apps read. Same Supabase URI can appear in both places (different scopes).
+
+### VPS (backend Docker) — optional parallel path
+
+Workflow: [`.github/workflows/deploy-backend-to-vps.yml`](.github/workflows/deploy-backend-to-vps.yml) — same migrate-before-deploy pattern, then GHCR + SSH blue-green swap. See [`infra/README.md`](infra/README.md).
+
+### Schema changes
+
+1. Edit `apps/backend/src/db/schema/*`
+2. `pnpm --filter backend db:generate` → review SQL
+3. Push — the Vercel workflow applies migrations before deploying new code
+4. Never run migrations inside Vercel `buildCommand`
