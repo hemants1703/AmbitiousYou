@@ -62,10 +62,10 @@ const sidebarNav: { title: string; icon: LucideIcon; active: boolean }[] = [
 const HEAT_WEEKS = 30;
 const heatClass: Record<number, string> = {
   0: "bg-muted",
-  1: "bg-emerald-500/25",
-  2: "bg-emerald-500/45",
-  3: "bg-emerald-500/70",
-  4: "bg-emerald-500",
+  1: "bg-chart-1",
+  2: "bg-chart-2",
+  3: "bg-chart-3",
+  4: "bg-chart-4",
 };
 function mockHeatLevel(week: number, day: number): number {
   const noise = Math.sin(week * 12.9898 + day * 4.1414) * 43758.5453;

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ActivityDay, ActivityMonthLabel, ActivityWeek } from "@/lib/dashboard/activity-calendar";
+import { ACTIVITY_LEVEL_CLASS, ACTIVITY_LEVELS } from "@/lib/dashboard/activity-intensity";
 import { cn } from "@/lib/utils";
 import type { CSSProperties } from "react";
 import { useCallback, useMemo, useState } from "react";
@@ -13,15 +14,6 @@ interface ActivityHeatmapProps {
   weekdayLabels: string[];
 }
 
-const LEVEL_CLASS: Record<0 | 1 | 2 | 3 | 4, string> = {
-  0: "bg-muted",
-  1: "bg-emerald-500/25",
-  2: "bg-emerald-500/45",
-  3: "bg-emerald-500/70",
-  4: "bg-emerald-500",
-};
-
-const LEVELS: (0 | 1 | 2 | 3 | 4)[] = [0, 1, 2, 3, 4];
 /** Weekday rows to label on the left (Mon/Wed/Fri), GitHub-style. */
 const LABELLED_WEEKDAYS = new Set([1, 3, 5]);
 
@@ -65,7 +57,10 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
               aria-label={`${day.label}, ${day.count} ${day.count === 1 ? "move" : "moves"} completed`}
               onMouseEnter={(event) => showTip(event.currentTarget, day)}
               onMouseLeave={hideTip}
-              className={cn("rounded-[3px] ring-1 ring-inset ring-foreground/5 transition-[box-shadow] hover:ring-foreground/25", LEVEL_CLASS[day.level])}
+              className={cn(
+                "rounded-[3px] ring-1 ring-inset ring-foreground/5 transition-[box-shadow] hover:ring-foreground/25",
+                ACTIVITY_LEVEL_CLASS[day.level],
+              )}
             />
           ),
         ),
@@ -111,8 +106,12 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 
       <div className="flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground" aria-label="Activity level legend">
         <span>Less</span>
-        {LEVELS.map((level) => (
-          <span key={level} className={cn("size-2.75 rounded-[3px] ring-1 ring-inset ring-foreground/5", LEVEL_CLASS[level])} aria-hidden="true" />
+        {ACTIVITY_LEVELS.map((level) => (
+          <span
+            key={level}
+            className={cn("size-2.75 rounded-[3px] ring-1 ring-inset ring-foreground/5", ACTIVITY_LEVEL_CLASS[level])}
+            aria-hidden="true"
+          />
         ))}
         <span>More</span>
       </div>

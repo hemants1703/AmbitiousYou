@@ -24,12 +24,6 @@ function attentionHelper(summary: Pick<AttentionSummary, "totalCount" | "overdue
   return parts.join(" · ");
 }
 
-function attentionTone(summary: Pick<AttentionSummary, "totalCount" | "overdueCount">) {
-  if (summary.totalCount === 0) return "positive" as const;
-  if (summary.overdueCount > 0) return "danger" as const;
-  return "warning" as const;
-}
-
 function formatUrgentLabel(daysUntil: number): string {
   if (daysUntil < 0) return `${Math.abs(daysUntil)}d overdue`;
   if (daysUntil === 0) return "Due today";
@@ -69,8 +63,10 @@ export function NeedsAttentionStat(props: NeedsAttentionStatProps) {
     urgentItems,
   };
   const helper = props.loadFailed ? "couldn't load moves" : attentionHelper(summary);
-  const tone = props.loadFailed ? "warning" : attentionTone(summary);
-  const isInteractive = !props.loadFailed && summary.totalCount > 0;
+  // Binary alert surface: calm white + soft red chip at 0; soft wash + white chip when anything needs action.
+  const needsAction = !props.loadFailed && summary.totalCount > 0;
+  const tone = props.loadFailed ? ("warning" as const) : ("danger" as const);
+  const isInteractive = needsAction;
 
   const card = (
     <StatCard
@@ -79,7 +75,9 @@ export function NeedsAttentionStat(props: NeedsAttentionStatProps) {
       value={`${summary.totalCount}`}
       helper={helper}
       tone={tone}
-      className={cn("h-full w-full min-h-0", isInteractive && "transition-shadow hover:shadow-lg")}>
+      emphasis={needsAction ? "solid" : "subtle"}
+      className={cn("h-full w-full min-h-0", isInteractive && "hover:shadow-lg")}
+    >
       {/* Matches Avg progress stat row height so all four cards align. */}
       <div className="invisible h-1.5" aria-hidden="true" />
     </StatCard>
@@ -95,8 +93,9 @@ export function NeedsAttentionStat(props: NeedsAttentionStatProps) {
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="flex h-full min-h-0 w-full flex-col items-stretch rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            aria-label={`${summary.totalCount} items need attention. Open details.`}>
+            className="flex h-full min-h-0 w-full flex-col items-stretch rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-destructive/40 focus-visible:ring-offset-2"
+            aria-label={`${summary.totalCount} items need attention. Open details.`}
+          >
             {card}
           </button>
         </PopoverTrigger>

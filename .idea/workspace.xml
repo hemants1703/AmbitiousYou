@@ -6,18 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Add customizable profile avatar picker with emoji, glyph, and color options">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/move-detail-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/move-detail-dialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/action-queue-item.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/action-queue-item.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/quick-add.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/quick-add.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/enable-reminders-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/enable-reminders-dialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/profile-icon-picker.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/resend-verification-button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/resend-verification-button.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/reset-password-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/reset-password-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/use-tracked-items.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-calendar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-calendar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-heatmap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/activity-heatmap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/movement-chart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/movement-chart.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/needs-attention-stat.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/needs-attention-stat.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/stat-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/stat-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/dashboard-preview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/dashboard-preview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/features.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(landing)/homepage/features.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/activity-calendar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/dashboard/activity-calendar.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +31,7 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="676" />
+    <option name="cachedIndexableFilesCount" value="677" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -47,12 +43,12 @@
     &quot;assignee&quot;: &quot;hemants1703&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/hemants1703/AmbitiousYou.git",
-    "accountId": "1eabbbe4-58b8-4cbc-bde6-a602b87ada12"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hemants1703/AmbitiousYou.git&quot;,
+    &quot;accountId&quot;: &quot;1eabbbe4-58b8-4cbc-bde6-a602b87ada12&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambition-cards-skeleton.tsx" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -62,61 +58,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.254976743073871" />
-      <entry key="MS500" value="6.395856012644492" />
-      <entry key="S2" value="14.611906550622779" />
-      <entry key="S5" value="18.944466042547283" />
-      <entry key="S10" value="20.830394356319236" />
-      <entry key="S30" value="23.14192288191281" />
-      <entry key="S60" value="33.1386094654988" />
-      <entry key="M2" value="67.34702135154646" />
-      <entry key="M5" value="181.3846847525727" />
-      <entry key="M10" value="368.2492571830035" />
-      <entry key="M15" value="546.8333497120512" />
-      <entry key="M30" value="988.5954433661703" />
-      <entry key="H1" value="1500.0644845235677" />
-      <entry key="H2" value="1922.39121024116" />
-      <entry key="H4" value="2200.3195092776377" />
-      <entry key="D1" value="2479.859488545304" />
-      <entry key="W1" value="2533.7897941700908" />
+      <entry key="MS100" value="2.2727614090519794" />
+      <entry key="MS500" value="5.483394587624177" />
+      <entry key="S2" value="17.02691474127208" />
+      <entry key="S5" value="33.75834173920582" />
+      <entry key="S10" value="52.68773136923884" />
+      <entry key="S30" value="82.02946103984868" />
+      <entry key="S60" value="109.31502551448888" />
+      <entry key="M2" value="193.00348152876762" />
+      <entry key="M5" value="486.3276585201989" />
+      <entry key="M10" value="885.0340797365748" />
+      <entry key="M15" value="1191.6307061872453" />
+      <entry key="M30" value="1851.0003602634852" />
+      <entry key="H1" value="2598.3273178393215" />
+      <entry key="H2" value="3240.2827012509365" />
+      <entry key="H4" value="3677.943670497348" />
+      <entry key="D1" value="4128.491035832924" />
+      <entry key="W1" value="4216.046518056592" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="5.537085876899765E-73" />
-      <entry key="S2" value="1.195407067081627E-18" />
-      <entry key="S5" value="1.0021342761702966E-7" />
-      <entry key="S10" value="4.457729224416086E-4" />
-      <entry key="S30" value="0.12122935056231197" />
-      <entry key="S60" value="0.5051373025203487" />
-      <entry key="M2" value="1.156545351821767" />
-      <entry key="M5" value="2.36373201903714" />
-      <entry key="M10" value="3.4946944579505543" />
-      <entry key="M15" value="4.304308754232825" />
-      <entry key="M30" value="6.067211152315499" />
-      <entry key="H1" value="8.030632901149218" />
-      <entry key="H2" value="9.646376333849185" />
-      <entry key="H4" value="10.709408747412503" />
-      <entry key="D1" value="11.766819100608185" />
-      <entry key="W1" value="11.966212212125027" />
+      <entry key="MS100" value="1.548370715093545E-73" />
+      <entry key="MS500" value="2.741416294076752E-15" />
+      <entry key="S2" value="2.2881987680100578E-4" />
+      <entry key="S5" value="0.03497820340866939" />
+      <entry key="S10" value="0.1870246998387182" />
+      <entry key="S30" value="0.5764103407701322" />
+      <entry key="S60" value="0.8235830751607817" />
+      <entry key="M2" value="1.1299284426319802" />
+      <entry key="M5" value="1.6529467238541797" />
+      <entry key="M10" value="2.5774530621455924" />
+      <entry key="M15" value="3.5405176831070575" />
+      <entry key="M30" value="5.915141669258042" />
+      <entry key="H1" value="8.74476233898448" />
+      <entry key="H2" value="11.20594400977896" />
+      <entry key="H4" value="12.889667469922166" />
+      <entry key="D1" value="14.613472627475176" />
+      <entry key="W1" value="14.943851555454852" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.1913341112961713" />
-      <entry key="MS500" value="6.359474146398162" />
-      <entry key="S2" value="14.590217695480643" />
-      <entry key="S5" value="18.933113128209595" />
-      <entry key="S10" value="20.824387714272813" />
-      <entry key="S30" value="23.21895535415549" />
-      <entry key="S60" value="33.50333823043015" />
-      <entry key="M2" value="68.30358039060543" />
-      <entry key="M5" value="183.58937418997212" />
-      <entry key="M10" value="371.6518493829461" />
-      <entry key="M15" value="551.1125489278412" />
-      <entry key="M30" value="994.846710036332" />
-      <entry key="H1" value="1508.5485330325341" />
-      <entry key="H2" value="1932.71579407331" />
-      <entry key="H4" value="2211.853544964061" />
-      <entry key="D1" value="2492.5948296518686" />
-      <entry key="W1" value="2546.751451009315" />
+      <entry key="MS100" value="2.2022348391267155" />
+      <entry key="MS500" value="5.448020967168951" />
+      <entry key="S2" value="16.99942743643726" />
+      <entry key="S5" value="33.76430205764145" />
+      <entry key="S10" value="52.83755144613127" />
+      <entry key="S30" value="82.57560806254901" />
+      <entry key="S60" value="110.1175131365108" />
+      <entry key="M2" value="194.11800206574793" />
+      <entry key="M5" value="487.964656601428" />
+      <entry key="M10" value="887.5868180534782" />
+      <entry key="M15" value="1195.156419839472" />
+      <entry key="M30" value="1857.0143250218657" />
+      <entry key="H1" value="2607.4090967892353" />
+      <entry key="H2" value="3252.0741774802814" />
+      <entry key="H4" value="3691.5997361912987" />
+      <entry key="D1" value="4144.0613067152135" />
+      <entry key="W1" value="4231.984084429806" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -147,7 +143,7 @@
     "npm.backend > db:migrate.executor": "Run",
     "npm.start:backend.executor": "Run",
     "npm.start:frontend.executor": "Run",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+    "settings.editor.selected.configurable": "SQL Dialects"
   }
 }]]></component>
   <component name="RunManager" selected="npm.start:backend">
@@ -241,6 +237,6 @@
     <MESSAGE value="Remove unused components, APIs, and libraries to streamline the frontend and reduce bundle size." />
     <MESSAGE value="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification" />
     <MESSAGE value="feat: Add customizable profile avatar picker with emoji, glyph, and color options" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Add customizable profile avatar picker with emoji, glyph, and color options" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>

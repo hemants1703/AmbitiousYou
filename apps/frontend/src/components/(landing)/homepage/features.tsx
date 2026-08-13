@@ -112,10 +112,10 @@ function MomentumVignette() {
 
 const HEAT_CLASS: Record<number, string> = {
   0: "bg-muted",
-  1: "bg-emerald-500/25",
-  2: "bg-emerald-500/45",
-  3: "bg-emerald-500/70",
-  4: "bg-emerald-500",
+  1: "bg-chart-1",
+  2: "bg-chart-2",
+  3: "bg-chart-3",
+  4: "bg-chart-4",
 };
 // Deterministic mini-heatmap (no Math.random → no hydration drift): denser recently, lighter on weekends.
 const miniHeatWeeks: number[][] = Array.from({ length: 20 }, (_, week) =>

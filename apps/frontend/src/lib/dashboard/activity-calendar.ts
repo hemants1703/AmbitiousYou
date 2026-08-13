@@ -1,4 +1,5 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
+import { activityLevelFor, type ActivityLevel } from "@/lib/dashboard/activity-intensity";
 import { eachDayOfInterval, startOfWeek, subWeeks } from "date-fns";
 import { dayKey, getItemCompletedAt, getItemKind, getTrackedItems, isItemCompleted } from "./tracked-items";
 
@@ -20,7 +21,7 @@ export interface ActivityDay {
   milestoneCount: number;
   count: number;
   /** 0 = none; 1–4 scaled against the user's busiest day in range. */
-  level: 0 | 1 | 2 | 3 | 4;
+  level: ActivityLevel;
 }
 
 /** Seven slots, Sunday → Saturday. `null` = a day outside the range (future days in the current week). */
@@ -107,11 +108,6 @@ export function buildActivityCalendar(ambitions: AmbitionDetails[], now: Date = 
 
   let maxCount = 0;
   for (const bucket of counts.values()) if (bucket.total > maxCount) maxCount = bucket.total;
-  const levelFor = (count: number): ActivityDay["level"] => {
-    if (count <= 0) return 0;
-    if (maxCount <= 0) return 1; // unreachable for count > 0, but keeps the divide safe
-    return Math.min(4, Math.ceil((count / maxCount) * 4)) as ActivityDay["level"];
-  };
 
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
   const weeks: ActivityWeek[] = [];
@@ -145,7 +141,7 @@ export function buildActivityCalendar(ambitions: AmbitionDetails[], now: Date = 
         taskCount: bucket?.task ?? 0,
         milestoneCount: bucket?.milestone ?? 0,
         count,
-        level: levelFor(count),
+        level: activityLevelFor(count, maxCount),
       });
       if (count > 0) {
         weekdayTotals[dn.getDay()] += count;
