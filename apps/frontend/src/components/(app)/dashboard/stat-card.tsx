@@ -13,7 +13,7 @@ interface StatCardProps {
   tone?: StatTone;
   /**
    * `subtle` — default card with a tinted icon chip (calm).
-   * `solid` — soft tone wash + stronger ring; white icon disc (serious, not shouting).
+   * `solid` — soft tone wash + stronger ring; themed icon disc (serious, not shouting).
    */
   emphasis?: StatEmphasis;
   /** Optional extra content rendered above the helper (e.g. a mini progress bar). */
@@ -100,7 +100,7 @@ export function StatCard(props: StatCardProps) {
           className={cn(
             "flex size-9 shrink-0 items-center justify-center rounded-2xl transition-colors duration-200",
             isEmphasized
-              ? cn("bg-white shadow-sm ring-1 ring-black/5 dark:bg-white/95", emphasisChipInkByTone[tone])
+              ? cn("bg-card shadow-sm ring-1 ring-foreground/10", emphasisChipInkByTone[tone])
               : chipByTone[tone],
           )}
           aria-hidden="true"

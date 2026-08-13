@@ -250,7 +250,7 @@ Monorepo overview, shared schema, and backend conventions: root [`AGENTS.md`](..
 - MUST: Tooltips still expose task vs milestone counts even when the bar encodes total intensity only
 - MUST: Binary Needs Attention surface on `NeedsAttentionStat` / `StatCard` `emphasis`:
   - **0 items (or load failed):** calm default card + soft tone chip (`subtle`)
-  - **1+ items needing action:** soft destructive wash + stronger ring + destructive type + white icon disc (`emphasis="solid"`) — accountable, never a solid saturated red block
+  - **1+ items needing action:** soft destructive wash + stronger ring + destructive type + themed icon disc (`bg-card`, `emphasis="solid"`) — accountable, never a solid saturated red block
 - NEVER: Paint the whole Needs Attention card opaque `bg-destructive` with white body text
 - SHOULD: Keep the card interactive (popover) only when `totalCount > 0` and load succeeded
 

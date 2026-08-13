@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience.">
-      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/CLAUDE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambitions-filters-fallback.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/ambitions-filters-fallback.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/NEXT-CACHE-COMPONENTS-MIGRATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/NEXT-CACHE-COMPONENTS-MIGRATION.md" afterDir="false" />
-    </list>
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,61 +48,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.5266007117216516" />
-      <entry key="MS500" value="4.981328082780326" />
-      <entry key="S2" value="16.67073805025759" />
-      <entry key="S5" value="35.91572409967198" />
-      <entry key="S10" value="63.55849102471184" />
-      <entry key="S30" value="137.49066299278545" />
-      <entry key="S60" value="194.09678863187682" />
-      <entry key="M2" value="283.5940467356395" />
-      <entry key="M5" value="561.6057208104558" />
-      <entry key="M10" value="979.1592014525694" />
-      <entry key="M15" value="1313.3057742172107" />
-      <entry key="M30" value="2033.0164026556959" />
-      <entry key="H1" value="2846.5022179925186" />
-      <entry key="H2" value="3548.2164665988503" />
-      <entry key="H4" value="4029.023401123704" />
-      <entry key="D1" value="4525.82048189325" />
-      <entry key="W1" value="4622.489266869313" />
+      <entry key="MS100" value="2.2299024428716416" />
+      <entry key="MS500" value="5.8633293104937305" />
+      <entry key="S2" value="12.260861032790077" />
+      <entry key="S5" value="15.29213051616749" />
+      <entry key="S10" value="16.564677762580892" />
+      <entry key="S30" value="17.510415374496926" />
+      <entry key="S60" value="19.25826295413524" />
+      <entry key="M2" value="42.88507340340126" />
+      <entry key="M5" value="230.57130792761652" />
+      <entry key="M10" value="620.453270174829" />
+      <entry key="M15" value="968.0585069578013" />
+      <entry key="M30" value="1747.1587769241098" />
+      <entry key="H1" value="2643.1787775277157" />
+      <entry key="H2" value="3425.4843233326837" />
+      <entry key="H4" value="3966.314038645574" />
+      <entry key="D1" value="4528.582621522912" />
+      <entry key="W1" value="4638.2627195109635" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="1.289924063534546E-149" />
-      <entry key="S2" value="5.992955268777448E-38" />
-      <entry key="S5" value="1.2913930115877487E-15" />
-      <entry key="S10" value="3.6013326008792014E-8" />
-      <entry key="S30" value="0.0037296111365394697" />
-      <entry key="S60" value="0.07993052472534287" />
-      <entry key="M2" value="0.42637809599870513" />
-      <entry key="M5" value="1.3691887781441263" />
-      <entry key="M10" value="2.5495767569373706" />
-      <entry key="M15" value="3.6114976136943424" />
-      <entry key="M30" value="6.155282025238312" />
-      <entry key="H1" value="9.18889670399283" />
-      <entry key="H2" value="11.85115865120614" />
-      <entry key="H4" value="13.685889346553006" />
-      <entry key="D1" value="15.574994397357598" />
-      <entry key="W1" value="15.938230837706119" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="3.192612778146153E-101" />
+      <entry key="S5" value="6.333744153786402E-41" />
+      <entry key="S10" value="7.975616712656748E-21" />
+      <entry key="S30" value="2.2564752121394575E-7" />
+      <entry key="S60" value="6.217219078947697E-4" />
+      <entry key="M2" value="0.03760422472876539" />
+      <entry key="M5" value="0.5183702065679241" />
+      <entry key="M10" value="1.5687597642733544" />
+      <entry key="M15" value="2.612639965984802" />
+      <entry key="M30" value="5.2353301377386225" />
+      <entry key="H1" value="8.474448171057393" />
+      <entry key="H2" value="11.381115775793322" />
+      <entry key="H4" value="13.411737323016272" />
+      <entry key="D1" value="15.522555984655884" />
+      <entry key="W1" value="15.930553843333346" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.4751115137723811" />
-      <entry key="MS500" value="4.947877789485191" />
-      <entry key="S2" value="16.64448440597317" />
-      <entry key="S5" value="35.89393501306419" />
-      <entry key="S10" value="63.539370213511475" />
-      <entry key="S30" value="137.48030864215676" />
-      <entry key="S60" value="194.1655515642227" />
-      <entry key="M2" value="284.0097296871476" />
-      <entry key="M5" value="562.9622177531264" />
-      <entry key="M10" value="981.6886193379543" />
-      <entry key="M15" value="1316.9035629812279" />
-      <entry key="M30" value="2039.258233317153" />
-      <entry key="H1" value="2856.007934720387" />
-      <entry key="H2" value="3560.635561063634" />
-      <entry key="H4" value="4043.4641310843713" />
-      <entry key="D1" value="4542.3498606941375" />
-      <entry key="W1" value="4639.4208541338985" />
+      <entry key="MS100" value="2.155826556982344" />
+      <entry key="MS500" value="5.8242914978663" />
+      <entry key="S2" value="12.241124039524076" />
+      <entry key="S5" value="15.28233241331015" />
+      <entry key="S10" value="16.559377781500658" />
+      <entry key="S30" value="17.508549473743916" />
+      <entry key="S60" value="19.257852201278553" />
+      <entry key="M2" value="42.921258275835925" />
+      <entry key="M5" value="231.08468181192276" />
+      <entry key="M10" value="622.0095303927438" />
+      <entry key="M15" value="970.6611657642748" />
+      <entry key="M30" value="1752.4676884248777" />
+      <entry key="H1" value="2651.945396581277" />
+      <entry key="H2" value="3437.4108413558624" />
+      <entry key="H4" value="3980.465491825258" />
+      <entry key="D1" value="4545.056347991865" />
+      <entry key="W1" value="4655.186151214398" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -230,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786607878046</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation.">
+      <option name="closed" value="true" />
+      <created>1786608473060</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1786608473060</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,6 +245,7 @@
     <MESSAGE value="feat: Add customizable profile avatar picker with emoji, glyph, and color options" />
     <MESSAGE value="feat: Refactor and unify activity intensity logic with reusable scale system&#10;&#10;Introduce `activityLevelFor` utility and standardized activity level scales for dashboard and heatmap components. Replace duplicated intensity mapping across the app with shared constants and helper functions for better maintainability and consistency. Update visuals for charts and heatmaps to match new scale." />
     <MESSAGE value="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Standardize activity scaling and emphasize simplified visual feedback&#10;&#10;Introduce reusable activity intensity utilities with `activityLevelFor` and theme-specific classes for consistent heatmap and chart visuals. Refactor dashboard and landing elements to use unified scaling logic and styles for a polished, cohesive user experience." />
+    <MESSAGE value="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Consolidate frontend guidance into `AGENTS.md` and remove `CLAUDE.md`&#10;&#10;Migrated and standardized all frontend architecture rules, Cache Components guidance, and UI/UX conventions into `apps/frontend/AGENTS.md`. Removed redundant `CLAUDE.md` and updated references across the repo. Simplified, clarified, and improved accessibility of key developer documentation." />
   </component>
 </project>
