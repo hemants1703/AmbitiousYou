@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getAmbitionFull } from "@/lib/api/ambitions/get-ambition-full";
 import { startOfDay } from "@/lib/(app)/ambition-window";
 import { requireUser } from "@/lib/auth";
-import { Milestone, Note, Task } from "@ambitiousyou/shared/types";
+import { Milestone, Note, Task } from "@/types";
 import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";

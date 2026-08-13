@@ -1,7 +1,7 @@
 import { getAllAmbitionMoves } from "@/lib/api/ambitions/get-all-ambition-moves";
 import { buildActivityCalendar } from "@/lib/dashboard/activity-calendar";
 import { buildAllMovementSeries } from "@/lib/dashboard/movement";
-import type { Ambition } from "@ambitiousyou/shared/types";
+import type { Ambition } from "@/types";
 import { connection } from "next/server";
 import { ActivityCalendarCard } from "./activity-calendar";
 import { MovementChart } from "./movement-chart";

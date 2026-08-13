@@ -1,7 +1,7 @@
 "use server";
 
 import { getSessionToken } from "@/lib/auth";
-import type { Note } from "@ambitiousyou/shared/types";
+import type { Note } from "@/types";
 
 export async function createNoteAction(ambitionId: string, note: string): Promise<{ note: Note | null; error: string | null }> {
   const sessionToken = await getSessionToken();

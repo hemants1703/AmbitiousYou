@@ -1,4 +1,4 @@
-import type { AmbitionFull } from "@ambitiousyou/shared/types";
+import type { AmbitionFull } from "@/types";
 
 import { getCachedAmbitionFull } from "@/lib/cache/session-data";
 

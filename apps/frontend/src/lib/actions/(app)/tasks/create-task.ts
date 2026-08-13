@@ -2,7 +2,7 @@
 
 import { getErrorMessage } from "@/lib/actions/(app)/ambitions/form-data-parsers";
 import { getSessionToken } from "@/lib/auth";
-import type { Task } from "@ambitiousyou/shared/types";
+import type { Task } from "@/types";
 
 export type CreateTaskInput = {
   ambitionId: string;

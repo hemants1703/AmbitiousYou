@@ -9,7 +9,7 @@ import { updateTaskAction } from "@/lib/actions/(app)/tasks/update-task";
 import { useBackgroundRefresh } from "@/lib/(app)/mutations/background-refresh";
 import { usePendingMap } from "@/lib/(app)/mutations/use-pending-map";
 import { getCompletedVerb, isCompleted, isMilestone, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
-import type { Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Milestone, Task } from "@/types";
 import { parseISO } from "date-fns";
 import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";

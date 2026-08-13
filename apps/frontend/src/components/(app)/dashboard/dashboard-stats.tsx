@@ -1,7 +1,7 @@
 import { NeedsAttentionStat } from "@/components/(app)/dashboard/needs-attention-stat";
 import { Progress } from "@/components/ui/progress";
 import type { AttentionSummary } from "@/lib/dashboard/tracked-items";
-import type { Ambition } from "@ambitiousyou/shared/types";
+import type { Ambition } from "@/types";
 import { GaugeIcon, TargetIcon, TrophyIcon } from "lucide-react";
 import { StatCard } from "./stat-card";
 

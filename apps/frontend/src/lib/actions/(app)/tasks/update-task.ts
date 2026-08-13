@@ -1,7 +1,7 @@
 "use server";
 
 import { getSessionToken } from "@/lib/auth";
-import type { Task } from "@ambitiousyou/shared/types";
+import type { Task } from "@/types";
 
 export type UpdateTaskInput = {
   task: string;

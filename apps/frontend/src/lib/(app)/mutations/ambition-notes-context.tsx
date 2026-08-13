@@ -4,7 +4,7 @@ import { createNoteAction } from "@/lib/actions/(app)/notes/create-note";
 import { deleteNoteAction } from "@/lib/actions/(app)/notes/delete-note";
 import { updateNoteAction } from "@/lib/actions/(app)/notes/update-note";
 import { usePendingMap } from "@/lib/(app)/mutations/use-pending-map";
-import type { Note } from "@ambitiousyou/shared/types";
+import type { Note } from "@/types";
 import { createContext, useCallback, useContext, useMemo, useState, useTransition, type ReactNode } from "react";
 
 function notesKey(notes: Note[]): string {

@@ -1,4 +1,4 @@
-import { Ambition, Milestone, Task } from "@ambitiousyou/shared/types";
+import { Ambition, Milestone, Task } from "@/types";
 
 export interface PersonaAmbition {
   ambition: Omit<Ambition, "userId" | "createdAt" | "updatedAt">;

@@ -1,4 +1,4 @@
-import type { Ambition, Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Ambition, Milestone, Task } from "@/types";
 import type { AmbitionDetails } from "./get-ambition-details";
 import { getAmbitionMovesBatch } from "./get-ambition-moves-batch";
 

@@ -1,7 +1,7 @@
 import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import type { Session } from '@ambitiousyou/shared/types';
+import type { Session } from 'src/db';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { AmbitionsController } from './ambitions.controller';
 import { AmbitionsService } from './ambitions.service';

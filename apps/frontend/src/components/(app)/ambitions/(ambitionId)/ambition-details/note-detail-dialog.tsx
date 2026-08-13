@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useAmbitionNotes } from "@/lib/(app)/mutations/ambition-notes-context";
-import type { Note } from "@ambitiousyou/shared/types";
+import type { Note } from "@/types";
 import { cn } from "@/lib/utils";
 import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { NotebookPenIcon, Trash2Icon } from "lucide-react";

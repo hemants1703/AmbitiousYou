@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { startOfDay } from "@/lib/(app)/ambition-window";
 import { emptyDraft, sortByPriority, type DraftState, type TrackedItem } from "@/lib/(app)/tracked-item";
 import { useTrackedItems } from "@/lib/(app)/use-tracked-items";
-import type { Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Milestone, Task } from "@/types";
 import { CalendarClockIcon, ListChecksIcon } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";

@@ -11,8 +11,5 @@
   "author": "Hemant Sharma",
   "license": "ISC",
   "packageManager": "pnpm@11.5.0",
-  "dependencies": {
-    "@ambitiousyou/shared": "workspace:*"
-  },
   "type": "module"
 }

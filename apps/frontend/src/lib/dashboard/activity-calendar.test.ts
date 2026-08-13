@@ -1,6 +1,6 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { buildActivityCalendar } from "@/lib/dashboard/activity-calendar";
-import type { Task } from "@ambitiousyou/shared/types";
+import type { Task } from "@/types";
 import { describe, expect, it } from "vitest";
 
 const FIXED_NOW = new Date("2026-06-15T12:00:00");

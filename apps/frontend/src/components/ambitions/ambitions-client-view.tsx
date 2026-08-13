@@ -3,7 +3,7 @@
 import AmbitionCard from "@/components/(app)/ambitions/ambition-card";
 import AmbitionFilters, { AmbitionFiltersState } from "@/components/(app)/ambitions/ambition-filters";
 import { FadeIn } from "@/components/motion-wrapper";
-import { Ambition } from "@ambitiousyou/shared/types";
+import { Ambition } from "@/types";
 import { FilterIcon } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";

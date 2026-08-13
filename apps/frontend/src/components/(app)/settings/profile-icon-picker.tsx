@@ -21,7 +21,7 @@ import {
   type ProfileMark,
   type ProfileMarkId,
   type ProfileToneId,
-} from "@ambitiousyou/shared";
+} from "@/lib/profile-icons";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { useState, useTransition } from "react";

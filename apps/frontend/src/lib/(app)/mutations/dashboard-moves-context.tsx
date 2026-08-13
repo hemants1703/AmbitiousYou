@@ -1,6 +1,6 @@
 "use client";
 
-import type { Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Milestone, Task } from "@/types";
 import type { QueueItem } from "@/lib/dashboard/tracked-items";
 import { getDaysUntil, getItemDate, getItemDescription, getItemKind, getItemTitle, sortByUrgency } from "@/lib/dashboard/tracked-items";
 import type { QuickAddAmbition } from "@/components/(app)/dashboard/quick-add";

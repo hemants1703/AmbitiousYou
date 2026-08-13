@@ -1,4 +1,4 @@
-import type { Session } from "@ambitiousyou/shared";
+import type { Session } from "@/types";
 
 import { getCachedSessions } from "@/lib/cache/session-data";
 

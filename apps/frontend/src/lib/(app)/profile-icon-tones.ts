@@ -1,4 +1,4 @@
-import type { ProfileToneId } from "@ambitiousyou/shared";
+import type { ProfileToneId } from "@/lib/profile-icons";
 
 /** Soft tinted surfaces for catalog profile avatars — readable in light and dark. */
 export const PROFILE_ICON_TONE_CLASS: Record<ProfileToneId, string> = {

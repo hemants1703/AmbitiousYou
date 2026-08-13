@@ -9,7 +9,7 @@ Server Components by default, typed Server Actions for mutations, and a statical
 - **Next.js 16** (App Router) · **React 19** · **React Compiler** · **Turbopack**
 - **TypeScript 5** · **Tailwind CSS v4** · **shadcn/ui** (Radix)
 - **next-themes** · **sonner** · **Recharts** · **dnd-kit** · **TanStack Table**
-- Domain types from `@ambitiousyou/shared` (Drizzle-inferred — no duplicated DTOs)
+- Domain types from `@/types` (hand-written API contract types)
 - **Vitest** + Testing Library for unit/component tests
 
 ## What this app does

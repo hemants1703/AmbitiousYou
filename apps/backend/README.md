@@ -7,7 +7,7 @@ NestJS 11 REST API for [AmbitiousYou](https://www.ambitiousyou.pro). PostgreSQL 
 - **NestJS 11** · **Drizzle ORM** · **PostgreSQL** (`pg`)
 - **bcrypt** sessions · **Helmet** · **@nestjs/throttler**
 - Transactional email via **Azure Communication Services**
-- Schema + domain types from `@ambitiousyou/shared`
+- Schema + domain types from `src/db/schema/*` (Drizzle-inferred)
 
 ## Local development
 

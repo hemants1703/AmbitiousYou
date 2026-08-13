@@ -3,7 +3,7 @@ import { toggleTaskCompletionAction } from "@/lib/actions/(app)/tasks/toggle-tas
 import { createTaskAction } from "@/lib/actions/(app)/tasks/create-task";
 import { isCompleted } from "@/lib/(app)/tracked-item";
 import { useTrackedItems, type UseTrackedItemsParams } from "@/lib/(app)/use-tracked-items";
-import type { Task } from "@ambitiousyou/shared/types";
+import type { Task } from "@/types";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";

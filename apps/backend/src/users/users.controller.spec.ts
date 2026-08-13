@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import type { User } from '@ambitiousyou/shared/types';
+import type { User } from 'src/db';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 
 jest.mock('src/db');

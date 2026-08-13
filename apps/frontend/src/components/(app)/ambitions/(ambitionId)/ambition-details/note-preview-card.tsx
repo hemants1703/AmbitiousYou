@@ -1,7 +1,7 @@
 "use client";
 
 import { LinkifiedText } from "@/components/linkified-text";
-import type { Note } from "@ambitiousyou/shared/types";
+import type { Note } from "@/types";
 import { cn } from "@/lib/utils";
 import { ExpandIcon } from "lucide-react";
 import { formatNoteDate, NOTE_SURFACE, noteNeedsExpandPreview, splitNoteHeadline } from "./note-display";

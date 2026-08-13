@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import type { Request } from 'express';
-import type { Session } from '@ambitiousyou/shared/types';
+import type { Session } from 'src/db';
 
 type RequestWithSession = Request & { session?: Session };
 

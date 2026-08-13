@@ -13,13 +13,11 @@ on:
   pull_request:
     paths:
       - "apps/frontend/**"
-      - "packages/shared/**"
       - ".github/workflows/ci-frontend.yml"
   push:
     branches: [main, dev]
     paths:
       - "apps/frontend/**"
-      - "packages/shared/**"
       - ".github/workflows/ci-frontend.yml"
 
 concurrency:
@@ -58,7 +56,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: apps/frontend/.next/cache
-          key: nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/frontend/src/**', 'packages/shared/**') }}
+          key: nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/frontend/src/**') }}
           restore-keys: |
             nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
 

@@ -3,7 +3,7 @@ import { BillingSettingsTab } from "@/components/(app)/settings/billing-settings
 import { NotificationsSettingsPanel } from "@/components/(app)/settings/notifications-settings-panel";
 import { SecuritySettingsTab } from "@/components/(app)/settings/security-settings-tab";
 import { getCachedSessions, getCachedUser } from "@/lib/cache/session-data";
-import type { User } from "@ambitiousyou/shared";
+import type { User } from "@/types";
 
 import type { SettingsTabValue } from "./settings-shared";
 

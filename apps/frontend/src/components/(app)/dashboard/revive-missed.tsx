@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDaysUntil } from "@/lib/dashboard/tracked-items";
-import type { Ambition } from "@ambitiousyou/shared/types";
+import type { Ambition } from "@/types";
 import { ChevronRightIcon, RotateCcwIcon } from "lucide-react";
 import Link from "next/link";
 

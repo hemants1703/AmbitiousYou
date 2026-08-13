@@ -293,7 +293,7 @@ Example response:
 
 | Area | Path |
 |---|---|
-| Schema | `packages/shared/db/schema/notifications.ts`, `push-subscriptions.ts` |
+| Schema | `apps/backend/src/db/schema/notifications.ts`, `push-subscriptions.ts` |
 | Sweep + 9/18 slots | `apps/backend/src/notifications/reminders.service.ts` |
 | Push send | `apps/backend/src/notifications/push.service.ts` |
 | HTTP | `apps/backend/src/notifications/notifications.controller.ts`, `reminders.controller.ts` |

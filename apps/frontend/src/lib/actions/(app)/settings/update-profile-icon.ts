@@ -2,8 +2,8 @@
 
 import { mutateApi } from "@/lib/actions/mutate-api";
 import { invalidateUserCache } from "@/lib/cache/invalidate-session-data";
-import type { ProfileAvatarSelection, User } from "@ambitiousyou/shared";
-import { serializeProfileAvatar } from "@ambitiousyou/shared";
+import type { User } from "@/types";
+import { serializeProfileAvatar, type ProfileAvatarSelection } from "@/lib/profile-icons";
 import { revalidatePath } from "next/cache";
 
 /**

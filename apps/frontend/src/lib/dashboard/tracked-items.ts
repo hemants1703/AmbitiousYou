@@ -1,5 +1,5 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
-import type { Ambition, Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Ambition, Milestone, Task } from "@/types";
 
 /**
  * Shared, pure helpers for reasoning about an ambition's tracked work (tasks or

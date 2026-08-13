@@ -14,10 +14,7 @@ if (!databaseUrl) {
 
 export default defineConfig({
   dialect: 'postgresql',
-  // Schema is the single source of truth at packages/shared. Drizzle-kit
-  // resolves drizzle-orm from this backend's node_modules; the shared package
-  // declares it as a dep so esbuild also finds it from packages/shared/.
-  schema: '../../packages/shared/db/schema/index.ts',
+  schema: './src/db/schema/index.ts',
   out: './src/db/migrations',
   dbCredentials: { url: databaseUrl },
   strict: true,

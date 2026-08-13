@@ -14,7 +14,7 @@ FROM node:22-bookworm-slim AS base
 RUN npm install -g pnpm@11.1.2
 WORKDIR /app
 
-# ---------- build: full (incl. dev) install + compile shared + backend ----------
+# ---------- build: full (incl. dev) install + compile backend ----------
 FROM base AS build
 RUN apt-get update \
   && apt-get install -y --no-install-recommends python3 make g++ \
@@ -26,25 +26,19 @@ RUN apt-get update \
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/backend/package.json    apps/backend/package.json
 COPY apps/frontend/package.json   apps/frontend/package.json
-COPY packages/shared/package.json packages/shared/package.json
 
-# Workspace-aware, frozen install of backend + its workspace deps (shared).
+# Workspace-aware, frozen install of backend + its workspace deps.
 # `backend...` pulls backend AND everything it depends on, skipping the frontend.
 RUN pnpm install --frozen-lockfile --filter backend...
 
 # Now copy sources (after install to preserve the dep-install cache layer).
-COPY packages/shared ./packages/shared
-COPY apps/backend    ./apps/backend
+COPY apps/backend ./apps/backend
 
-# Build shared FIRST (tsc -> packages/shared/dist), then backend
-# (nest build -> apps/backend/dist/main.js + copied email templates).
-RUN pnpm --filter @ambitiousyou/shared build \
- && pnpm --filter backend build
+# nest build -> apps/backend/dist/main.js + copied email templates
+RUN pnpm --filter backend build
 
 # Prune to a self-contained PROD deployment. `pnpm deploy` flattens the backend
-# + its production-dep closure into /out and copies the built workspace package
-# into node_modules/@ambitiousyou/shared (with its freshly built dist).
-# Shared MUST already be built (above) or /out ships an empty dist.
+# + its production-dep closure into /out.
 # --legacy: pnpm v10+ refuses `deploy` unless inject-workspace-packages=true;
 # the legacy algorithm is exactly the copy-the-workspace-package behavior we want.
 # NOTE: pnpm's pack logic falls back to .gitignore when a package has no `files`
@@ -59,7 +53,7 @@ FROM node:22-bookworm-slim AS runtime
 ENV NODE_ENV=production PORT=3001
 WORKDIR /app
 
-# Self-contained deployment: app dist + pruned prod node_modules (incl. shared).
+# Self-contained deployment: app dist + pruned prod node_modules.
 COPY --from=build --chown=node:node /out ./
 
 USER node

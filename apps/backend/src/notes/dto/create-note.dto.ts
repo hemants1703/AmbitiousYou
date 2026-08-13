@@ -1,4 +1,4 @@
-import { NewNote } from '@ambitiousyou/shared';
+import { NewNote } from 'src/db';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateNoteDto implements NewNote {

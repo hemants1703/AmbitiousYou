@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import type { Settings } from "@ambitiousyou/shared";
+import type { Settings } from "@/types";
 import { BellIcon, CheckIcon, MailIcon, SmartphoneIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { toastMutation } from "@/lib/(app)/toast-mutation";

@@ -1,4 +1,4 @@
-import type { Note } from "@ambitiousyou/shared/types";
+import type { Note } from "@/types";
 
 export const NOTE_SURFACE =
   "border-yellow-400/40 bg-yellow-100/70 dark:border-yellow-400/15 dark:bg-yellow-400/10";

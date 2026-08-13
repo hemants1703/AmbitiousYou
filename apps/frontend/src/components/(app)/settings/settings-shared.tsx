@@ -1,4 +1,4 @@
-import type { Settings } from "@ambitiousyou/shared";
+import type { Settings } from "@/types";
 
 export type SettingsTabValue = "account" | "billing" | "notifications" | "security";
 

@@ -13,10 +13,9 @@
  * - `db.transaction(cb)` invokes the callback with the same mock as `tx`, so
  *   transactional code paths exercise the same chain mocks.
  *
- * - The schema re-exports are the REAL Drizzle table objects from the shared
- *   package (`@ambitiousyou/shared/db`). They're pure column metadata — no
- *   pool, no connection, no env vars required — so call-time helpers like
- *   `getTableColumns(users)` keep working unmodified.
+ * - The schema re-exports are the REAL Drizzle table objects from `src/db/schema`.
+ *   They're pure column metadata — no pool, no connection, no env vars required —
+ *   so call-time helpers like `getTableColumns(users)` keep working unmodified.
  */
 
 import { buildChain } from '../../test-utils/db-chain';
@@ -32,7 +31,5 @@ const dbMock: any = {
 export const db = dbMock;
 export const closeDatabase = jest.fn();
 
-// Re-export the real schema from shared. Schema files only declare metadata
-// via `pgTable(...)`, so importing them here doesn't touch `client.ts` (which
-// is the only file that actually creates a pg.Pool).
-export * from '@ambitiousyou/shared/db';
+export * from '../schema';
+export * from '../profile-icons';

@@ -4,7 +4,7 @@ import { CalendarIcon, ChevronRightIcon, HeartIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { AmbitionPriorityBadge } from "./ambition-priority-badge";
 import { AmbitionStatusBadge } from "./ambition-status-badge";
-import { Ambition } from "@ambitiousyou/shared/types";
+import { Ambition } from "@/types";
 
 interface AmbitionCardProps {
   ambition: Ambition;

@@ -1,4 +1,4 @@
-import { Settings } from "@ambitiousyou/shared";
+import { Settings } from "@/types";
 
 import { getCachedUserSettings } from "@/lib/cache/session-data";
 

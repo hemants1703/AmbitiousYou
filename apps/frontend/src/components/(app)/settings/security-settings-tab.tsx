@@ -1,6 +1,6 @@
 "use client";
 
-import type { Session } from "@ambitiousyou/shared";
+import type { Session } from "@/types";
 import { ChevronDownIcon, KeyRoundIcon, LockKeyholeIcon, MonitorIcon } from "lucide-react";
 import { useState } from "react";
 

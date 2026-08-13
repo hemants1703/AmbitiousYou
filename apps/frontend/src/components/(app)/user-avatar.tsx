@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PROFILE_GLYPH_ICON } from "@/lib/(app)/profile-icon-glyphs";
 import { PROFILE_ICON_TONE_CLASS } from "@/lib/(app)/profile-icon-tones";
 import { cn } from "@/lib/utils";
-import { getProfileMark, parseProfileAvatar } from "@ambitiousyou/shared";
+import { getProfileMark, parseProfileAvatar } from "@/lib/profile-icons";
 
 interface UserAvatarProps {
   name: string;

@@ -1,4 +1,4 @@
-import type { Notification } from "@ambitiousyou/shared";
+import type { Notification } from "@/types";
 
 import { getCachedNotifications } from "@/lib/cache/session-data";
 

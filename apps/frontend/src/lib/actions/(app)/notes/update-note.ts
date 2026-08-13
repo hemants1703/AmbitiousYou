@@ -1,7 +1,7 @@
 "use server";
 
 import { mutateApi } from "@/lib/actions/mutate-api";
-import type { Note } from "@ambitiousyou/shared/types";
+import type { Note } from "@/types";
 
 export async function updateNoteAction(noteId: string, noteText: string): Promise<{ note: Note | null; error: string | null }> {
   const result = await mutateApi<Note>({

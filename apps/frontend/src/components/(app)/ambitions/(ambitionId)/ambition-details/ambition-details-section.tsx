@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import type { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
+import type { Ambition, Milestone, Note, Task } from "@/types";
 import NotesCard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/notes-card";
 import ExecutionBoard from "@/components/(app)/ambitions/(ambitionId)/ambition-details/execution-board";
 import { MoveDetailProvider } from "@/components/(app)/ambitions/move-detail-context";

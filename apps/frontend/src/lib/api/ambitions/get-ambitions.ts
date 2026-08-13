@@ -1,4 +1,4 @@
-import { Ambition } from "@ambitiousyou/shared";
+import { Ambition } from "@/types";
 
 import { getCachedAmbitions } from "@/lib/cache/session-data";
 

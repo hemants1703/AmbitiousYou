@@ -1,4 +1,4 @@
-import { NewTask } from '@ambitiousyou/shared';
+import { NewTask } from 'src/db';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 

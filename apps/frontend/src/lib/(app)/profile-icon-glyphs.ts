@@ -1,4 +1,4 @@
-import type { ProfileGlyphKey } from "@ambitiousyou/shared";
+import type { ProfileGlyphKey } from "@/lib/profile-icons";
 import {
   AwardIcon,
   CompassIcon,

@@ -1,4 +1,4 @@
-import { Ambition, Milestone, Note, Task } from "@ambitiousyou/shared/types";
+import { Ambition, Milestone, Note, Task } from "@/types";
 
 import { getCachedAmbitionDetails } from "@/lib/cache/session-data";
 

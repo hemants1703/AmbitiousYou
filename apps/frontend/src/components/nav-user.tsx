@@ -3,7 +3,7 @@
 import { UserAvatar } from "@/components/(app)/user-avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { User } from "@ambitiousyou/shared";
+import { User } from "@/types";
 import { logoutAction } from "@/lib/actions/(auth)/logout/logout";
 import { useCloseOnActivityHide } from "@/lib/(app)/use-close-on-activity-hide";
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react";

@@ -1,4 +1,4 @@
-import type { User } from "@ambitiousyou/shared";
+import type { User } from "@/types";
 import { CircleCheckBigIcon, MailIcon, UserRoundIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";

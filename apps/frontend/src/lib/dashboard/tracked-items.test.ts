@@ -8,7 +8,7 @@ import {
   pickLeadMotivation,
   sortByUrgency,
 } from "@/lib/dashboard/tracked-items";
-import type { Task } from "@ambitiousyou/shared/types";
+import type { Task } from "@/types";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const FIXED_NOW = new Date("2026-06-15T12:00:00");

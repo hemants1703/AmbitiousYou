@@ -231,12 +231,12 @@ Cache Components here is **composition + prefetch shells**, not “cache all use
 Monorepo overview, shared schema, and backend conventions: root [`AGENTS.md`](../../AGENTS.md). This file is the single frontend instruction source — there is no `CLAUDE.md`.
 
 - Next.js App Router (React 19, React Compiler, Turbopack); API via `process.env.API_URL` + Bearer session token
-- Domain types from `@ambitiousyou/shared` only — never import from `apps/backend`
+- Domain types from `@/types` only — never import from `apps/backend`
 - Commands: `pnpm dev` / `pnpm build` / `pnpm lint` / `pnpm test` (vitest) / `pnpm test:watch`
 - Route groups: `(landing)/`, `(auth)/` (`redirectIfAuthenticated()`), `(app)/` (static chrome; stream auth + inbox behind Suspense — never block `{children}` with `requireUser()` at layout top); Route Handlers only for `api/logout/` and `api/auth/status/`
 - Auth helpers in `src/lib/auth.ts`: `requireUser()` (uncached page gate), `getCachedUser()` in `session-data.ts` (display-only private cache), `getSessionToken()` (raw cookie for SessionGuard-backed calls — never gate renders), `redirectIfAuthenticated()`
 - Reads: `src/lib/api/`; writes: `src/lib/actions/(app)/` via `mutateApi()` + scoped revalidation; backend `ValidationPipe` is strict
-- Config: `cacheComponents` + `partialPrefetching` + `transpilePackages: ['@ambitiousyou/shared']`; theme tokens in `src/app/globals.css`
+- Config: `cacheComponents` + `partialPrefetching`; theme tokens in `src/app/globals.css`
 
 ## Theme & dashboard viz (additive)
 

@@ -1,6 +1,6 @@
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import { buildMovementSeries } from "@/lib/dashboard/movement";
-import type { Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Milestone, Task } from "@/types";
 import { describe, expect, it } from "vitest";
 
 const FIXED_NOW = new Date("2026-06-15T12:00:00");

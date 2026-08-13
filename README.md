@@ -56,7 +56,7 @@ The parts I'm most proud of — each one is a deliberate decision, not an accide
 
 | # | Decision | Why it matters |
 |---|----------|----------------|
-| 1 | **One schema, two consumers.** The Drizzle `pgTable` definitions in `packages/shared` are the single source of truth. The backend imports them for runtime queries *and* migration generation; the frontend imports the **inferred types** for its API contracts. | Change a column once and both sides' types update on the next build. There is no hand-written, drift-prone DTO duplicated across the stack. |
+| 1 | **Schema in backend, types in frontend.** Drizzle `pgTable` definitions live in `apps/backend/src/db/schema/` for runtime queries and migrations; the frontend keeps hand-written API types in `apps/frontend/src/types/`. | Each app is self-contained — no shared workspace package. Update both sides when the API shape changes. |
 | 2 | **Data integrity by construction.** An ambition's completion `%` and derived status (`active` / `completed` / `missed`) are **recomputed on the server inside the same DB transaction** as the task/milestone mutation that triggered them — via a single SQL `count(*) FILTER (WHERE …)` aggregate. | Progress can never drift out of sync, there's no race between two queries, and the client needs **zero** extra round-trips to stay accurate. |
 | 3 | **Opaque session auth, no JWT.** Server-issued UUID session tokens stored in Postgres, delivered via an `httpOnly` cookie, validated by a `SessionGuard` that also **self-cleans expired sessions**. | Tokens are revocable and stateless-token pitfalls (can't-revoke, oversized cookies) are avoided. Auth state lives where it can be trusted. |
 | 4 | **Secure-by-default reads.** A `passwordHash` "default-deny" column projection means every public user query physically cannot leak the hash — only the single login path opts into reading it. | Security is enforced by the query shape, not by remembering to omit a field. |
@@ -96,10 +96,9 @@ The parts I'm most proud of — each one is a deliberate decision, not an accide
 </td></tr>
 <tr><td valign="top">
 
-**Shared** — `packages/shared`
-- Drizzle schema = **single source of truth**
-- Inferred domain types (`User`, `Ambition`, `Task`, …)
-- Built to CJS; consumed type-only by the frontend
+**Backend schema** — `apps/backend/src/db/schema`
+- Drizzle schema + inferred domain types
+- drizzle-kit migrations co-located under `src/db/migrations/`
 
 </td><td valign="top">
 
@@ -497,7 +496,7 @@ pnpm --filter frontend build          # production build
 pnpm --filter frontend lint
 ```
 
-The schema lives in `packages/shared/db/schema/*`. Edit a table there, run `db:generate`, review the SQL, then `db:migrate` — and both the API and the frontend types update on the next build.
+The schema lives in `apps/backend/src/db/schema/*`. Edit a table there, run `db:generate`, review the SQL, then `db:migrate` — and update frontend types in `apps/frontend/src/types/` when the API shape changes.
 
 </details>
 

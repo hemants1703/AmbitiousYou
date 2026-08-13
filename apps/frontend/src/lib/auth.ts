@@ -1,5 +1,5 @@
 import { fetchUserFromApi } from "@/lib/cache/fetch-session-data";
-import type { User } from "@ambitiousyou/shared";
+import type { User } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";

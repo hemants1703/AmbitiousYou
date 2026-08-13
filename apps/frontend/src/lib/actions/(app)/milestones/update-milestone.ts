@@ -1,7 +1,7 @@
 "use server";
 
 import { getSessionToken } from "@/lib/auth";
-import type { Milestone } from "@ambitiousyou/shared/types";
+import type { Milestone } from "@/types";
 
 export type UpdateMilestoneInput = {
   milestone: string;

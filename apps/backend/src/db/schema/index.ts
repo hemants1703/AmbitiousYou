@@ -1,7 +1,4 @@
-// Barrel re-export of every table + enum + derived type. The single source of
-// truth for the database shape — consumed by `apps/backend` (runtime queries
-// + drizzle-kit migrations) and `apps/frontend` (type-only imports for API
-// response shapes).
+// Barrel re-export of every table + enum + derived type.
 
 export * from './enums';
 export * from './users';

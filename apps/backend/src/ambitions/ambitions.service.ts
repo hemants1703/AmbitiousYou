@@ -4,7 +4,7 @@ import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
 import { markOverdueAmbitionsMissed, startOfDay, syncAmbitionMissedStatus } from './ambition-status.util';
 import { db, ambitions, milestones, notes, tasks, type Ambition, type AmbitionEndDateChange } from '../db';
-import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
+import type { AmbitionFull, AmbitionMovesBatch } from 'src/types/api';
 
 function toIsoDate(value: Date): string {
   return new Date(value).toISOString();

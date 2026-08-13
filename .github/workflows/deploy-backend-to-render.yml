@@ -7,7 +7,6 @@ on:
     branches: [main]
     paths:
       - 'apps/backend/**'
-      - 'packages/shared/**'
       - '.github/workflows/deploy-backend-to-render.yml'
   workflow_dispatch: {}
 

@@ -1,8 +1,8 @@
 import "server-only";
 
-import type { AmbitionMovesBatch } from "@ambitiousyou/shared/types";
-import type { Ambition, Notification, Session, Settings, User } from "@ambitiousyou/shared";
-import type { AmbitionFull } from "@ambitiousyou/shared/types";
+import type { AmbitionMovesBatch } from "@/types";
+import type { Ambition, Notification, Session, Settings, User } from "@/types";
+import type { AmbitionFull } from "@/types";
 
 import type { AmbitionDetails } from "@/lib/api/ambitions/get-ambition-details";
 import type { NotificationsPayload } from "@/lib/api/notifications/get-notifications";

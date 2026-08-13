@@ -10,7 +10,7 @@ import {
   toMoveDetail,
   toSelectedDate,
 } from "@/lib/(app)/tracked-item";
-import type { Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Milestone, Task } from "@/types";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const FIXED_NOW = new Date("2026-06-15T12:00:00");

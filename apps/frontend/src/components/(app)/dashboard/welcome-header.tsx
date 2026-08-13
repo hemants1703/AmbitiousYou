@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import type { Ambition, User } from "@ambitiousyou/shared/types";
+import type { Ambition, User } from "@/types";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { LocalTodayLabel } from "./local-today-label";

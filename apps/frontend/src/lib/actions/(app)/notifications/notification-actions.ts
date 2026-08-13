@@ -6,7 +6,7 @@ import {
   invalidateInboxCache,
   invalidateSettingsCache,
 } from "@/lib/cache/invalidate-session-data";
-import type { Notification, Settings } from "@ambitiousyou/shared";
+import type { Notification, Settings } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export async function markNotificationReadAction(notificationId: string) {

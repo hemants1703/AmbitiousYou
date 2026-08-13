@@ -1,4 +1,4 @@
-import { NewMilestone } from '@ambitiousyou/shared';
+import { NewMilestone } from 'src/db';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 

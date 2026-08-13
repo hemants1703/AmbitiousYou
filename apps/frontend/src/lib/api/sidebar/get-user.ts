@@ -1,4 +1,4 @@
-import { User } from "@ambitiousyou/shared";
+import { User } from "@/types";
 import { cache } from "react";
 
 import { fetchUserFromApi } from "@/lib/cache/fetch-session-data";

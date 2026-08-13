@@ -5,7 +5,7 @@ import { CreateAmbitionWithItemsDto } from './dto/create-ambition-with-items.dto
 import { UpdateAmbitionDto } from './dto/update-ambition.dto';
 import type { Ambition } from '../db';
 import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
-import type { AmbitionFull, AmbitionMovesBatch } from '@ambitiousyou/shared/types';
+import type { AmbitionFull, AmbitionMovesBatch } from 'src/types/api';
 
 @Controller('ambitions')
 @UseGuards(SessionGuard)

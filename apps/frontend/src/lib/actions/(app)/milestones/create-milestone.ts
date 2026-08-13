@@ -2,7 +2,7 @@
 
 import { getErrorMessage } from "@/lib/actions/(app)/ambitions/form-data-parsers";
 import { getSessionToken } from "@/lib/auth";
-import type { Milestone } from "@ambitiousyou/shared/types";
+import type { Milestone } from "@/types";
 
 export type CreateMilestoneInput = {
   ambitionId: string;

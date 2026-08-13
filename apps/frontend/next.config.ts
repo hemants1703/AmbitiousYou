@@ -45,14 +45,6 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,
-  // Transpile the workspace `@ambitiousyou/shared` package's TS source
-  // directly. NOTE: this only handles transpilation — module resolution
-  // still follows the package's `exports` map, which points at `dist/`.
-  // So `next build`'s type-check needs `@ambitiousyou/shared` built first.
-  // That's wired via this app's `prebuild` script (see package.json), and
-  // Vercel triggers it by running `pnpm build` (see vercel.json) rather
-  // than bare `next build`.
-  transpilePackages: ["@ambitiousyou/shared"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },

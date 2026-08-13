@@ -1,4 +1,4 @@
-import type { AmbitionEndDateChange } from "@ambitiousyou/shared/types";
+import type { AmbitionEndDateChange } from "@/types";
 import { HistoryIcon } from "lucide-react";
 
 interface EndDateHistoryProps {

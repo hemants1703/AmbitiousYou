@@ -1,4 +1,4 @@
-import { NewAmbition } from '@ambitiousyou/shared';
+import { NewAmbition } from 'src/db';
 import { Type } from 'class-transformer';
 import { IsDate, IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 

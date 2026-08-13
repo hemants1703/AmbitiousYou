@@ -1,4 +1,4 @@
-import type { AmbitionMovesBatch } from "@ambitiousyou/shared/types";
+import type { AmbitionMovesBatch } from "@/types";
 
 import { getCachedAmbitionMovesBatch } from "@/lib/cache/session-data";
 

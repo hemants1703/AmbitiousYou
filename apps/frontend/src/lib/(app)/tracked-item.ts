@@ -1,4 +1,4 @@
-import type { Milestone, Task } from "@ambitiousyou/shared/types";
+import type { Milestone, Task } from "@/types";
 import { parseISO } from "date-fns";
 
 /**
