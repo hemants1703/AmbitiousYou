@@ -271,7 +271,7 @@ export class RemindersService {
 
   private sanitizeTimezone(raw: string | null | undefined): string {
     const value = raw?.trim() || 'UTC';
-    if (!/^[A-Za-z0-9_+\-\/]+$/.test(value)) {
+    if (!/^[A-Za-z0-9_+\-/]+$/.test(value)) {
       return 'UTC';
     }
     return value;

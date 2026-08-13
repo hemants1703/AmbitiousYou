@@ -4,18 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports.">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-backend-to-render.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly.">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci-frontend.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-frontend-and-backend-to-vercel.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-frontend-and-backend-to-vercel.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/vercel.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vercel.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/infra/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/eslint.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/eslint.config.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/dto/create-ambition-with-items.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/dto/create-ambition-with-items.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,61 +57,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.6317659151868829" />
-      <entry key="MS500" value="2.734255433176915" />
-      <entry key="S2" value="9.6829459056132" />
-      <entry key="S5" value="29.187515712627523" />
-      <entry key="S10" value="54.75048972240658" />
-      <entry key="S30" value="102.93042423575633" />
-      <entry key="S60" value="159.6450107766016" />
-      <entry key="M2" value="259.25779924822587" />
-      <entry key="M5" value="498.6724254870219" />
-      <entry key="M10" value="838.6248132483126" />
-      <entry key="M15" value="1128.6980911041542" />
-      <entry key="M30" value="1887.1277336472158" />
-      <entry key="H1" value="3128.64355284392" />
-      <entry key="H2" value="4609.569147880721" />
-      <entry key="H4" value="5858.639233646812" />
-      <entry key="D1" value="7347.243425835975" />
-      <entry key="W1" value="7658.267066333874" />
+      <entry key="MS100" value="2.08526518788681" />
+      <entry key="MS500" value="4.682141358907735" />
+      <entry key="S2" value="16.015647250039564" />
+      <entry key="S5" value="38.73078874479615" />
+      <entry key="S10" value="63.3592956187784" />
+      <entry key="S30" value="107.1226260292744" />
+      <entry key="S60" value="148.45227372674907" />
+      <entry key="M2" value="205.33914193019143" />
+      <entry key="M5" value="382.72625326753473" />
+      <entry key="M10" value="708.8365283108561" />
+      <entry key="M15" value="1011.4948981085398" />
+      <entry key="M30" value="1807.633082125139" />
+      <entry key="H1" value="3098.903194516401" />
+      <entry key="H2" value="4657.961939684496" />
+      <entry key="H4" value="5991.971462958732" />
+      <entry key="D1" value="7601.03202216148" />
+      <entry key="W1" value="7939.4627899742045" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="4.7925976020408736E-206" />
-      <entry key="S5" value="1.0521380879774389E-82" />
-      <entry key="S10" value="1.4348662697910102E-41" />
-      <entry key="S30" value="4.175302869015513E-14" />
-      <entry key="S60" value="3.3547151249171497E-7" />
-      <entry key="M2" value="0.0010196361768638165" />
-      <entry key="M5" value="0.145444702266501" />
-      <entry key="M10" value="0.8268643116773245" />
-      <entry key="M15" value="1.5331338912204886" />
-      <entry key="M30" value="3.394568381702711" />
-      <entry key="H1" value="6.730987850149319" />
-      <entry key="H2" value="11.116516448551815" />
-      <entry key="H4" value="15.01835670856136" />
-      <entry key="D1" value="19.811827373883002" />
-      <entry key="W1" value="20.824800015977157" />
+      <entry key="MS500" value="1.2441413277306096E-103" />
+      <entry key="S2" value="2.7789809559094675E-26" />
+      <entry key="S5" value="1.0809004208511149E-10" />
+      <entry key="S10" value="1.945478551482874E-5" />
+      <entry key="S30" value="0.06661496176194116" />
+      <entry key="S60" value="0.5150317020269453" />
+      <entry key="M2" value="1.4345387852834655" />
+      <entry key="M5" value="2.695051623386541" />
+      <entry key="M10" value="3.6987375192743945" />
+      <entry key="M15" value="4.496508576934644" />
+      <entry key="M30" value="6.487918052328443" />
+      <entry key="H1" value="9.926452911564574" />
+      <entry key="H2" value="14.480891442946719" />
+      <entry key="H4" value="18.595724107095553" />
+      <entry key="D1" value="23.71976188086881" />
+      <entry key="W1" value="24.81099214638199" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.5792306154363165" />
-      <entry key="MS500" value="2.716654245735007" />
-      <entry key="S2" value="9.667878948026372" />
-      <entry key="S5" value="29.169517798502202" />
-      <entry key="S10" value="54.73351834804975" />
-      <entry key="S30" value="102.91971335682312" />
-      <entry key="S60" value="159.63665970190812" />
-      <entry key="M2" value="259.25197752742235" />
-      <entry key="M5" value="498.8119206892787" />
-      <entry key="M10" value="839.4449442994106" />
-      <entry key="M15" value="1130.2241183336307" />
-      <entry key="M30" value="1890.5257803619359" />
-      <entry key="H1" value="3135.475472421585" />
-      <entry key="H2" value="4621.010325386203" />
-      <entry key="H4" value="5874.229135895128" />
-      <entry key="D1" value="7367.966519710014" />
-      <entry key="W1" value="7680.078686285972" />
+      <entry key="MS100" value="2.017423353311181" />
+      <entry key="MS500" value="4.651431949107128" />
+      <entry key="S2" value="15.990353590183107" />
+      <entry key="S5" value="38.70646965009938" />
+      <entry key="S10" value="63.33953298311145" />
+      <entry key="S30" value="107.17456904219927" />
+      <entry key="S60" value="148.94518638856718" />
+      <entry key="M2" value="206.74775807107252" />
+      <entry key="M5" value="385.40163640896515" />
+      <entry key="M10" value="712.5207674588439" />
+      <entry key="M15" value="1015.9789725299638" />
+      <entry key="M30" value="1814.119677262549" />
+      <entry key="H1" value="3108.918391168008" />
+      <entry key="H2" value="4672.749821290889" />
+      <entry key="H4" value="6011.123396249701" />
+      <entry key="D1" value="7625.658985850438" />
+      <entry key="W1" value="7965.259973166236" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -278,7 +275,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786624928402</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly.">
+      <option name="closed" value="true" />
+      <created>1786627613741</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1786627613741</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,6 +301,8 @@
     <MESSAGE value="feat: Introduce session-scoped caching and invalidation for improved performance and UI responsiveness&#10;&#10;Added session-based caching utilities for user data, ambitions, notifications, and settings. Implemented matching invalidation methods to ensure cache consistency after mutations. Updated components and API calls to leverage the new caching for faster load times and reduced server overhead." />
     <MESSAGE value="refactor: Remove shared package and migrate schemas, types, and utilities to app-specific directories&#10;&#10;Eliminated `@ambitiousyou/shared` package and distributed its schemas, types, and utilities into `apps/backend` and `apps/frontend`. Updated imports and structure for better modularity and maintainability." />
     <MESSAGE value="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: Replace `src/*` path aliases with relative imports and adjust formatting across files&#10;&#10;Updated all `src/*` imports to relative paths for compatibility with the Vercel Nest builder and Node CJS runtime. Enforced consistent formatting on long type definitions and array mappings. Added ESLint rule to restrict `src/*` imports." />
+    <MESSAGE value="Switch from Render to Vercel: Merge workflows, enable coordinated frontend/backend deploys  &#10;&#10;Replaces the Render backend pipeline with a comprehensive GitHub Actions workflow targeting Vercel. Consolidates frontend and backend deploys into a single orchestrated process with environment-aware migrations, health-check gating, and sequential deploys. Adjusts paths and configurations for Vercel-specific runtime and deployment nuances." />
+    <MESSAGE value="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Replace Render backend deploys with unified Vercel deploy pipeline&#10;&#10;Replaced the backend-specific Render deploy workflow with a unified GitHub Actions pipeline for deploying both the frontend and backend to Vercel. Standardized environment management, database migrations, and deploy orchestration for consistency across development and production environments. Updated documentation and Vercel configuration accordingly." />
   </component>
 </project>

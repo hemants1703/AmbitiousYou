@@ -1,17 +1,24 @@
 name: deploy-frontend-and-backend-to-vercel
 
-# Orchestrated Vercel deploys for both apps. Vercel Git auto-deploy is disabled
-# in each app's vercel.json (`git.deploymentEnabled: false`) — this workflow is
-# the only deploy path.
+# Single CI + deploy workflow for both apps. Vercel Git auto-deploy is disabled
+# in each app's vercel.json (`git.deploymentEnabled: false`).
 #
-# push dev  -> GitHub Environments development-backend → development-frontend (Supabase dev)
-# push main -> GitHub Environments production-backend  → production-frontend  (Supabase prod)
+# pull_request → test-backend (lint · test · build) / test-frontend (lint · test · build · Lighthouse)
+# push main/dev → test → migrate → deploy backend → deploy frontend
 #
-# Vercel CLI: main uses --prod (Production slot); dev uses Preview slot — GitHub env names
-# use "development-*" to match the dev branch / Supabase dev project, not Vercel's "Preview" label.
+# GitHub Environments (push deploy jobs only):
+#   main → production-backend  → production-frontend  (Supabase prod)
+#   dev  → development-backend → development-frontend (Supabase dev)
 #
-# Order: test → migrate (when backend changed) → deploy backend → deploy frontend
+# Branch protection: require status checks `test-backend` and/or `test-frontend`
+# (whichever ran for the changed paths).
 on:
+  pull_request:
+    paths:
+      - 'apps/backend/**'
+      - 'apps/frontend/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy-frontend-and-backend-to-vercel.yml'
   push:
     branches: [main, dev]
     paths:
@@ -22,8 +29,8 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: deploy-vercel-${{ github.ref }}
-  cancel-in-progress: false
+  group: deploy-vercel-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -65,8 +72,14 @@ jobs:
       - name: Install (backend + workspace deps)
         run: pnpm install --frozen-lockfile --filter backend...
 
+      - name: Lint
+        run: pnpm --filter backend lint:check
+
       - name: Run unit tests
         run: pnpm --filter backend test
+
+      - name: Build
+        run: pnpm --filter backend build
 
   test-frontend:
     needs: changes
@@ -91,14 +104,27 @@ jobs:
       - name: Run unit and component tests
         run: pnpm --filter frontend test
 
+      - name: Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: apps/frontend/.next/cache
+          key: nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/frontend/src/**') }}
+          restore-keys: |
+            nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+
       - name: Production build
         run: pnpm --filter frontend build
 
+      - name: Lighthouse CI (SEO & performance budgets)
+        working-directory: apps/frontend
+        run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   migrate:
     needs: [changes, test-backend]
-    if: needs.changes.outputs.backend == 'true'
+    if: github.event_name == 'push' && needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    # Names MUST match repo Settings → Environments exactly (case-sensitive).
     environment: ${{ github.ref == 'refs/heads/main' && 'production-backend' || 'development-backend' }}
     env:
       NODE_OPTIONS: --dns-result-order=ipv4first
@@ -131,7 +157,7 @@ jobs:
 
   deploy-backend:
     needs: [changes, migrate]
-    if: needs.changes.outputs.backend == 'true'
+    if: github.event_name == 'push' && needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment: ${{ github.ref == 'refs/heads/main' && 'production-backend' || 'development-backend' }}
     env:
@@ -179,6 +205,7 @@ jobs:
   deploy-frontend:
     needs: [changes, test-frontend, deploy-backend]
     if: |
+      github.event_name == 'push' &&
       always() &&
       needs.changes.outputs.frontend == 'true' &&
       (needs.test-frontend.result == 'success' || needs.test-frontend.result == 'skipped') &&

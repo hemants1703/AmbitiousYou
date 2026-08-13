@@ -201,18 +201,10 @@ flowchart TB
         MAIN["main branch"]
     end
 
-    subgraph FE_CI["ci-frontend.yml (PR + push quality gate)"]
+    subgraph FE_CI["deploy-frontend-and-backend-to-vercel.yml"]
         direction TB
-        FE1["lint · tests · build · Lighthouse"]
-    end
-
-    subgraph VERCEL_CI["deploy-frontend-and-backend-to-vercel.yml"]
-        direction TB
-        V1["test backend / frontend"]
-        V2["verify DB + migrate"]
-        V3["deploy backend → Vercel"]
-        V4["deploy frontend → Vercel"]
-        V1 --> V2 --> V3 --> V4
+        V0["PR: test-backend / test-frontend only"]
+        V1["push: test → migrate → deploy BE → deploy FE"]
     end
 
     subgraph VPS_CI["deploy-backend-to-vps.yml (optional)"]
@@ -228,17 +220,16 @@ flowchart TB
     end
 
     PUSH --> FE_CI
-    PUSH --> VERCEL_CI
     PUSH -.-> VPS_CI
-    V4 --> VERCEL_FE
-    V3 --> VERCEL_BE
-    V2 --> SUPA
+    V1 --> VERCEL_FE
+    V1 --> VERCEL_BE
+    V1 -.-> SUPA
     BE1 --> VPS
     VPS --> SUPA
     VERCEL_BE --> SUPA
 ```
 
-> **Portfolio tip:** for LinkedIn or talks, screenshot a green **Actions** run of `deploy-backend` on `main` — it reads more credibly than a diagram alone.
+> **Portfolio tip:** screenshot a green **Actions** run of `deploy-frontend-and-backend-to-vercel` on `main`.
 
 ---
 

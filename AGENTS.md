@@ -84,14 +84,16 @@ Two independent deploy pipelines share one codebase. **Runtime secrets never go 
 
 ### Vercel (frontend + backend) — primary
 
-Workflow: [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](.github/workflows/deploy-frontend-and-backend-to-vercel.yml)
+Workflow: [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](.github/workflows/deploy-frontend-and-backend-to-vercel.yml) — **single workflow** for PR checks and push deploys.
 
 | Branch | GitHub Environments (in order) | Supabase | Vercel CLI target |
 |---|---|---|---|
 | `main` | `production-backend` → `production-frontend` | prod project | `--prod` (Production slot) |
 | `dev` | `development-backend` → `development-frontend` | dev project | Preview slot (no `--prod`) |
 
-**Order on every push** (path-filtered): backend unit tests → DB connectivity check → `drizzle-kit migrate` → deploy backend → poll `/health` → deploy frontend.
+**Order on push** (path-filtered): backend unit tests → DB connectivity check → `drizzle-kit migrate` → deploy backend → poll `/health` → deploy frontend.
+
+**On pull_request:** `test-backend` (lint, unit tests, `nest build`) and/or `test-frontend` (lint, tests, build, Lighthouse) — no migrate, no deploy.
 
 Vercel Git auto-deploy is **disabled** in [`apps/backend/vercel.json`](apps/backend/vercel.json) and [`apps/frontend/vercel.json`](apps/frontend/vercel.json) (`git.deploymentEnabled: false`). Only the GitHub Actions workflow deploys.
 

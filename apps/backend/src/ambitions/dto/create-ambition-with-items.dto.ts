@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, Validate, ValidateNested, ValidatorConstraint, ValidatorConstraintInterface, type ValidationArguments } from 'class-validator';
+import { IsArray, Validate, ValidateNested, ValidatorConstraint, ValidatorConstraintInterface, type ValidationArguments } from 'class-validator';
 import { OmitType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
 import { CreateTaskDto } from '../../tasks/dto/create-task.dto';
