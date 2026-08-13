@@ -146,8 +146,70 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_POOLER_DATABASE_URL || secrets.DATABASE_URL }}
         run: |
-          node -e "const v=process.env.DATABASE_URL||''; if(v!==v.trim())console.log('WARNING: DATABASE_URL has leading/trailing whitespace (len '+v.length+' vs trimmed '+v.trim().length+')'); try{const u=new URL(v.trim()); console.log('Target -> host='+u.hostname+' port='+(u.port||'5432')+' user='+decodeURIComponent(u.username)+' params='+(u.search||'(none)'));}catch(e){console.log('URL parse error: '+e.message+' (password may contain unescaped special characters)');}"
-          node -e "const {Client}=require('pg'); const url=process.env.DATABASE_URL||''; const ssl=url.includes('supabase.com')?{rejectUnauthorized:false}:undefined; const c=new Client({connectionString:url, connectionTimeoutMillis:10000, ssl}); c.connect().then(()=>c.query('select 1')).then(()=>{console.log('DB connection OK');return c.end();}).then(()=>process.exit(0)).catch(e=>{console.error('DB connection FAILED:', e.message); if(/tenant\/user.*not found/i.test(e.message))console.error('Hint: copy the Session pooler URI verbatim from Supabase (correct project + aws-0/aws-1 region). See apps/backend/.env.example'); process.exit(1);});"
+          node <<'NODE'
+          const { Client } = require('pg');
+          const raw = process.env.DATABASE_URL ?? '';
+          const url = raw.trim();
+          if (!url) {
+            console.error('DATABASE_URL is empty');
+            process.exit(1);
+          }
+          if (url !== raw) {
+            console.log(
+              `WARNING: DATABASE_URL has leading/trailing whitespace (len ${raw.length} vs trimmed ${url.length})`,
+            );
+          }
+          let parsed;
+          try {
+            parsed = new URL(url);
+          } catch (err) {
+            const message = err instanceof Error ? err.message : String(err);
+            console.error(`URL parse error: ${message} (password may contain unescaped special characters)`);
+            process.exit(1);
+          }
+          const host = parsed.hostname;
+          const port = parsed.port || '5432';
+          const user = decodeURIComponent(parsed.username);
+          console.log(
+            `Target -> host=${host} port=${port} user=${user} params=${parsed.search || '(none)'}`,
+          );
+          if (/^db\.[^.]+\.supabase\.co$/i.test(host)) {
+            console.error('');
+            console.error('ERROR: Direct Supabase host (db.*.supabase.co) is not usable from GitHub Actions.');
+            console.error('It resolves to IPv6; hosted runners have no IPv6 egress → ENETUNREACH.');
+            console.error('');
+            console.error('Fix: set SUPABASE_POOLER_DATABASE_URL to the Session pooler URI');
+            console.error('(host *.pooler.supabase.com, port 5432, user postgres.<ref>). See apps/backend/.env.example');
+            process.exit(1);
+          }
+          if (host.includes('pooler.supabase.com') && port === '6543') {
+            console.error('');
+            console.error('ERROR: Transaction pooler (port 6543) is incompatible with NestJS transactions.');
+            console.error('Use Session pooler on port 5432 instead.');
+            process.exit(1);
+          }
+          const ssl = url.includes('supabase.com') ? { rejectUnauthorized: false } : undefined;
+          const client = new Client({ connectionString: url, connectionTimeoutMillis: 10_000, ssl });
+          client
+            .connect()
+            .then(() => client.query('select 1'))
+            .then(() => {
+              console.log('DB connection OK');
+              return client.end();
+            })
+            .then(() => process.exit(0))
+            .catch((err) => {
+              const message = err instanceof Error ? err.message : String(err);
+              console.error(`DB connection FAILED: ${message}`);
+              if (/tenant\/user.*not found/i.test(message)) {
+                console.error('Hint: copy the Session pooler URI verbatim (correct project + aws-0 vs aws-1 region).');
+              }
+              if (/ENETUNREACH|(?:^|[:\s])(?:2406|2600):/i.test(message)) {
+                console.error('Hint: IPv6 unreachable — use Session pooler (pooler.supabase.com:5432), not db.*.supabase.co.');
+              }
+              process.exit(1);
+            });
+          NODE
 
       - name: Run DB migrations
         working-directory: apps/backend
@@ -167,6 +229,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy backend to Vercel
+        id: deploy
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         # Run from repo root — Vercel project Root Directory is already `apps/backend`.
@@ -180,20 +243,23 @@ jobs:
           else
             echo "Deploying backend to Vercel Preview slot (dev → development-backend)"
           fi
-          npx --yes vercel@latest deploy $PROD_FLAG --token="$VERCEL_TOKEN" --yes
+          DEPLOY_URL=$(npx --yes vercel@latest deploy $PROD_FLAG --token="$VERCEL_TOKEN" --yes)
+          echo "Backend deployed to: ${DEPLOY_URL}"
+          echo "deployment_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
 
       - name: Wait for backend /health
         env:
           BACKEND_HEALTH_URL: ${{ secrets.BACKEND_HEALTH_URL }}
         run: |
           set -euo pipefail
-          if [ -z "${BACKEND_HEALTH_URL:-}" ]; then
-            echo "BACKEND_HEALTH_URL not set — skipping health gate (set it in production-backend / development-backend)."
+          HEALTH_BASE="${BACKEND_HEALTH_URL:-${{ steps.deploy.outputs.deployment_url }}}"
+          if [ -z "${HEALTH_BASE:-}" ]; then
+            echo "No health URL available — skipping health gate."
             exit 0
           fi
-          echo "Polling ${BACKEND_HEALTH_URL}/health ..."
+          echo "Polling ${HEALTH_BASE}/health ..."
           for attempt in $(seq 1 30); do
-            if curl --silent --show-error --fail "${BACKEND_HEALTH_URL}/health" | grep -q '"db":"up"'; then
+            if curl --silent --show-error --fail "${HEALTH_BASE}/health" | grep -q '"db":"up"'; then
               echo "Backend healthy after ${attempt} attempt(s)."
               exit 0
             fi
@@ -232,4 +298,5 @@ jobs:
           else
             echo "Deploying frontend to Vercel Preview slot (dev → development-frontend)"
           fi
-          npx --yes vercel@latest deploy $PROD_FLAG --token="$VERCEL_TOKEN" --yes
+          DEPLOY_URL=$(npx --yes vercel@latest deploy $PROD_FLAG --token="$VERCEL_TOKEN" --yes)
+          echo "Frontend deployed to: ${DEPLOY_URL}"
