@@ -1,9 +1,11 @@
 import type { User } from "@/types";
-import { CircleCheckBigIcon, MailIcon, UserRoundIcon } from "lucide-react";
+import { CalendarIcon, CircleCheckBigIcon, MailIcon, UserRoundIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { ProfileIconPicker } from "@/components/(app)/settings/profile-icon-picker";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { formatDate } from "./settings-shared";
 import { ResendVerificationButton } from "./resend-verification-button";
@@ -65,6 +67,66 @@ export function AccountSettingsTab(props: AccountSettingsTabProps) {
             <dd className="mt-1 text-sm font-medium text-foreground">
               {formatDate(props.userDetails.createdAt)}
             </dd>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CalendarIcon className="size-4 text-accent-brand" />
+            Week schedule
+          </CardTitle>
+          <CardDescription>
+            Configure your week start and end days. The weekly review prompt appears on your week-end day.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="week-start-day">Week starts on</Label>
+              <Select
+                value={props.userDetails.weekStartDay?.toString() ?? "0"}
+                onValueChange={(_value) => {
+                  // TODO: Add update settings action call
+                }}
+              >
+                <SelectTrigger id="week-start-day">
+                  <SelectValue placeholder="Select day" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Sunday</SelectItem>
+                  <SelectItem value="1">Monday</SelectItem>
+                  <SelectItem value="2">Tuesday</SelectItem>
+                  <SelectItem value="3">Wednesday</SelectItem>
+                  <SelectItem value="4">Thursday</SelectItem>
+                  <SelectItem value="5">Friday</SelectItem>
+                  <SelectItem value="6">Saturday</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="week-end-day">Week ends on</Label>
+              <Select
+                value={props.userDetails.weekEndDay?.toString() ?? "6"}
+                onValueChange={(_value) => {
+                  // TODO: Add update settings action call
+                }}
+              >
+                <SelectTrigger id="week-end-day">
+                  <SelectValue placeholder="Select day" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Sunday</SelectItem>
+                  <SelectItem value="1">Monday</SelectItem>
+                  <SelectItem value="2">Tuesday</SelectItem>
+                  <SelectItem value="3">Wednesday</SelectItem>
+                  <SelectItem value="4">Thursday</SelectItem>
+                  <SelectItem value="5">Friday</SelectItem>
+                  <SelectItem value="6">Saturday</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>

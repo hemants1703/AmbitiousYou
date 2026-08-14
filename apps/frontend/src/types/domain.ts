@@ -13,6 +13,8 @@ export type User = {
   emailVerified: boolean;
   plan: UserPlan;
   image: string | null;
+  weekStartDay: number;
+  weekEndDay: number;
   createdAt: Date;
   updatedAt: Date;
 };

@@ -39,8 +39,16 @@ export async function getCachedUser(): Promise<User> {
   const user = await fetchUserFromApi(sessionToken);
   if (!user) redirect("/login");
 
+  // Fetch settings to get week start/end days
+  const settings = await fetchUserSettingsFromApi(sessionToken);
+  const userWithSettings = {
+    ...user,
+    weekStartDay: settings?.weekStartDay ?? 0,
+    weekEndDay: settings?.weekEndDay ?? 6,
+  };
+
   cacheTag(`user:${user.id}`);
-  return user;
+  return userWithSettings;
 }
 
 export async function getCachedUserSettings(): Promise<Settings | null> {
