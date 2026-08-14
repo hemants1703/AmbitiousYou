@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { AiSidebarTrigger } from "@/components/ui/ai-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { HeaderNav } from "@/components/header-nav";
 import { Suspense } from "react";
@@ -19,6 +20,7 @@ export function SiteHeader(props: SiteHeaderProps) {
         </Suspense>
         <div className="ml-auto flex items-center gap-2">
           {props.inboxSlot}
+          <AiSidebarTrigger className="-mr-1" />
           <ThemeToggle />
         </div>
       </div>
