@@ -1,16 +1,8 @@
-import { CheckIcon, CreditCardIcon, SparklesIcon, ZapIcon } from "lucide-react";
+import { CheckIcon, CreditCardIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { freePlan } from "@/lib/pricing/free-plan";
-
-const PRO_PLAN_FEATURES = [
-  "Advanced analytics & insights",
-  "Priority reminders",
-  "Export data (CSV / PDF)",
-  "Early access to new features",
-];
 
 export function BillingSettingsTab() {
   return (
@@ -21,7 +13,9 @@ export function BillingSettingsTab() {
             <CreditCardIcon className="size-4 text-accent-brand" />
             Current plan
           </CardTitle>
-          <CardDescription>You are on the {freePlan.name} plan. Upgrade any time.</CardDescription>
+          <CardDescription>
+            AmbitiousYou is free for a limited time. {freePlan.lede}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-muted/30 p-4">
@@ -40,36 +34,6 @@ export function BillingSettingsTab() {
               </li>
             ))}
           </ul>
-        </CardContent>
-      </Card>
-
-      <Card className="border-accent-brand/20">
-        <CardHeader>
-          <div className="flex items-center justify-between gap-2">
-            <CardTitle className="flex items-center gap-2">
-              <SparklesIcon className="size-4 text-accent-brand" />
-              AmbitiousYou Pro
-            </CardTitle>
-            <Badge variant="outline" className="shrink-0 border-accent-brand/30 text-accent-brand">
-              Coming soon
-            </Badge>
-          </div>
-          <CardDescription>
-            Everything in Free, plus premium capabilities to push further.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          <ul className="space-y-2">
-            {PRO_PLAN_FEATURES.map((feature) => (
-              <li key={feature} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                <ZapIcon className="size-4 shrink-0 text-accent-brand/60" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <Button disabled size="sm" className="w-full sm:w-auto">
-            Upgrade to Pro
-          </Button>
         </CardContent>
       </Card>
     </div>

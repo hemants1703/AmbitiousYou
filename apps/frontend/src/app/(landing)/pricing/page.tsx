@@ -14,7 +14,7 @@ import Link from "next/link";
 
 
 const title = "Pricing";
-const description = "AmbitiousYou is free to use — no credit card, no billing tiers, and no cap on ambitions. Start tracking your goals today.";
+const description = `${freePlan.tagline}. ${freePlan.lede}`;
 
 export const metadata: Metadata = createPageMetadata({
   title,
@@ -36,7 +36,7 @@ export default function PricingPage() {
           faqPageSchema(pricingFaq),
         ]}
       />
-      <LandingSection eyebrow="Pricing" title="Free. Actually free." lede={description} className="pt-16 md:pt-24" align="center">
+      <LandingSection eyebrow="Pricing" title="Free for a limited time" lede={description} className="pt-16 md:pt-24" align="center">
         <div className="mx-auto max-w-lg rounded-2xl border border-primary/30 bg-card/80 p-8 text-center shadow-sm">
           <p className="font-brand text-5xl font-semibold tracking-[-0.03em]">{freePlan.price}</p>
           <p className="mt-2 text-lg text-muted-foreground">{freePlan.tagline}</p>

@@ -17,7 +17,8 @@ export const homepageFaq: readonly FaqItem[] = [
   },
   {
     question: "Is AmbitiousYou free?",
-    answer: "Yes. AmbitiousYou is free to use with no billing tiers, no trial period, and no credit card required at signup. There is no cap on how many ambitions you create.",
+    answer:
+      "Yes — AmbitiousYou is free for a limited time. No credit card required. An upgraded version with significant, meaningful upgrades is underway, so create your account today.",
   },
   {
     question: "How is AmbitiousYou different from Todoist or Notion?",
@@ -39,7 +40,8 @@ export const featuresFaq: readonly FaqItem[] = [
   },
   {
     question: "Is there a free plan available?",
-    answer: "AmbitiousYou is free to use. There are no billing tiers, no credit card, and no cap on how many ambitions you create — sign up and start.",
+    answer:
+      "Yes. AmbitiousYou is free for a limited time — no credit card, no checkout. Sign up today while an upgraded version with significant, meaningful upgrades is underway.",
   },
   {
     question: "How secure is my data?",
@@ -55,15 +57,17 @@ export const featuresFaq: readonly FaqItem[] = [
 export const pricingFaq: readonly FaqItem[] = [
   {
     question: "Is AmbitiousYou really free?",
-    answer: "Yes. AmbitiousYou is free to use with no billing tiers, no trial period, and no credit card required at signup.",
+    answer:
+      "Yes — free for a limited time. No credit card, no checkout, no billing tiers to pick. Create your account today.",
   },
   {
     question: "Are there limits on ambitions or moves?",
-    answer: "No artificial caps. Create as many ambitions as you need, each with any mix of tasks and milestones.",
+    answer: "No artificial caps today. Create as many ambitions as you need, each with any mix of tasks and milestones.",
   },
   {
-    question: "Will you add paid plans later?",
-    answer: "We may introduce optional paid features in the future, but the core ambition-tracking experience you use today will remain free.",
+    question: "Is something new coming?",
+    answer:
+      "An upgraded version with significant, meaningful upgrades is underway. Grab your account now so you are already in when it ships. There is nothing to buy today.",
   },
 ];
 
