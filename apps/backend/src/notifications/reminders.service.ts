@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { and, eq, ne, sql } from 'drizzle-orm';
 import { markOverdueAmbitionsMissed } from '../ambitions/ambition-status.util';
-import { ambitions, db, milestones, notifications, settings, tasks, type Notification } from '../db';
+import { ambitions, db, milestones, notifications, settings, tasks, users, type Notification } from '../db';
+import { isProPlan } from '../auth/plan';
+import { LoopService } from '../loop/loop.service';
 import { PushService } from './push.service';
 
 export type ReminderSlot = 'morning' | 'evening';
@@ -32,7 +34,10 @@ export class RemindersService {
   static readonly MORNING_HOUR = 9;
   static readonly EVENING_HOUR = 18;
 
-  constructor(private readonly pushService: PushService) {}
+  constructor(
+    private readonly pushService: PushService,
+    private readonly loopService: LoopService,
+  ) {}
 
   /**
    * Cron entrypoint (GitHub Actions hourly UTC).
@@ -48,8 +53,10 @@ export class RemindersService {
       .select({
         userId: settings.userId,
         userTimezone: settings.userTimezone,
+        plan: users.plan,
       })
       .from(settings)
+      .innerJoin(users, eq(users.id, settings.userId))
       .where(eq(settings.pushAmbitionReminders, true));
 
     let usersInSlot = 0;
@@ -64,7 +71,7 @@ export class RemindersService {
       }
 
       usersInSlot += 1;
-      const result = await this.syncDueTodayForUser(user.userId, tz, true, slot, now);
+      const result = await this.syncDueTodayForUser(user.userId, tz, true, slot, now, user.plan);
       notificationsCreated += result.notificationsCreated;
       pushesAttempted += result.pushesAttempted;
     }
@@ -91,11 +98,14 @@ export class RemindersService {
     sendPush: boolean,
     slot?: ReminderSlot,
     now = new Date(),
+    plan: string = 'free',
   ): Promise<{ notificationsCreated: number; pushesAttempted: number }> {
     const tz = this.sanitizeTimezone(userTimezone);
     const resolvedSlot = slot ?? this.resolveManualSlot(tz, now);
 
-    const createdForUser = await this.createDueOrOverdueForUser(userId, tz, resolvedSlot, now);
+    const createdForUser = isProPlan(plan)
+      ? await this.createContractReminderForUser(userId, tz, resolvedSlot, now)
+      : await this.createDueOrOverdueForUser(userId, tz, resolvedSlot, now);
     let pushesAttempted = 0;
 
     if (sendPush) {
@@ -211,6 +221,56 @@ export class RemindersService {
     return created;
   }
 
+  private async createContractReminderForUser(userId: string, timezone: string, slot: ReminderSlot, now: Date): Promise<Notification[]> {
+    const dayKey = this.localDayKey(timezone, now);
+    const contract = await this.loopService.findActiveContractForLocalDate(userId, dayKey);
+
+    if (!contract) {
+      if (slot === 'morning') {
+        const row = await this.insertIfNew({
+          userId,
+          type: 'contract_due_morning',
+          title: "Set today's move",
+          body: 'Open your dashboard and pin one move on your primary ambition.',
+          href: '/dashboard#today-contract',
+          ambitionId: null,
+          resourceId: userId,
+          dedupeKey: `contract:unset:${dayKey}:morning`,
+        });
+        return row ? [row] : [];
+      }
+      return [];
+    }
+
+    const title = await this.loopService.getContractMoveTitle(userId, contract);
+
+    if (slot === 'evening') {
+      const row = await this.insertIfNew({
+        userId,
+        type: 'contract_due_evening',
+        title: `Did you finish today's contract: ${title}?`,
+        body: 'Yes, or snooze to tomorrow from your dashboard.',
+        href: '/dashboard#today-contract',
+        ambitionId: contract.ambitionId,
+        resourceId: contract.id,
+        dedupeKey: `contract:${contract.id}:${dayKey}:evening`,
+      });
+      return row ? [row] : [];
+    }
+
+    const row = await this.insertIfNew({
+      userId,
+      type: 'contract_due_morning',
+      title: `Today's contract: ${title}`,
+      body: 'One move on your primary ambition — finish it before the day ends.',
+      href: '/dashboard#today-contract',
+      ambitionId: contract.ambitionId,
+      resourceId: contract.id,
+      dedupeKey: `contract:${contract.id}:${dayKey}:morning`,
+    });
+    return row ? [row] : [];
+  }
+
   private copyForMove(kind: DueMove['kind'], slot: ReminderSlot, overdue: boolean): { title: string } {
     if (slot === 'evening') {
       if (kind === 'ambition') {
@@ -280,7 +340,7 @@ export class RemindersService {
     title: string;
     body: string;
     href: string;
-    ambitionId: string;
+    ambitionId: string | null;
     resourceId: string;
     dedupeKey: string;
   }): Promise<Notification | null> {

@@ -2,6 +2,7 @@ jest.mock('../db');
 
 import { db } from '../db';
 import { buildChain } from '../test-utils/db-chain';
+import { LoopService } from '../loop/loop.service';
 import { PushService } from './push.service';
 import { RemindersService } from './reminders.service';
 
@@ -10,11 +11,16 @@ describe('RemindersService', () => {
     sendToUser: jest.fn(),
   } as unknown as PushService;
 
+  const loopService = {
+    findActiveContractForLocalDate: jest.fn(),
+    getContractMoveTitle: jest.fn(),
+  } as unknown as LoopService;
+
   let service: RemindersService;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    service = new RemindersService(pushService);
+    service = new RemindersService(pushService, loopService);
   });
 
   describe('slot resolution', () => {
@@ -35,7 +41,7 @@ describe('RemindersService', () => {
   });
 
   it('skips users before the 9 AM local window during cron', async () => {
-    (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]));
+    (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC', plan: 'free' }]));
 
     const result = await service.runDueTodaySweep(new Date('2026-08-05T08:00:00.000Z'));
 
@@ -47,7 +53,7 @@ describe('RemindersService', () => {
 
   it('creates morning notifications for due/overdue tasks', async () => {
     (db.select as jest.Mock)
-      .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]))
+      .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC', plan: 'free' }]))
       .mockReturnValueOnce(
         buildChain([
           {
@@ -94,7 +100,7 @@ describe('RemindersService', () => {
 
   it('creates evening follow-up when items are still incomplete', async () => {
     (db.select as jest.Mock)
-      .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]))
+      .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC', plan: 'free' }]))
       .mockReturnValueOnce(
         buildChain([
           {
@@ -138,7 +144,7 @@ describe('RemindersService', () => {
 
   it('skips push when dedupe insert hits unique violation', async () => {
     (db.select as jest.Mock)
-      .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC' }]))
+      .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC', plan: 'free' }]))
       .mockReturnValueOnce(
         buildChain([
           {
@@ -169,5 +175,46 @@ describe('RemindersService', () => {
     expect(result.notificationsCreated).toBe(0);
     expect(result.pushesAttempted).toBe(0);
     expect(pushService.sendToUser).not.toHaveBeenCalled();
+  });
+
+  it('creates contract evening reminder for pro users with an active contract', async () => {
+    (db.select as jest.Mock).mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC', plan: 'pro' }]));
+    (loopService.findActiveContractForLocalDate as jest.Mock).mockResolvedValue({
+      id: 'contract-1',
+      ambitionId: 'amb-1',
+      moveKind: 'task',
+      moveId: 'task-1',
+      localDate: '2026-08-05',
+      status: 'active',
+    });
+    (loopService.getContractMoveTitle as jest.Mock).mockResolvedValue('Ship reminders');
+
+    const created = {
+      id: 'notif-pro',
+      userId: 'user-1',
+      type: 'contract_due_evening',
+      title: "Did you finish today's contract: Ship reminders?",
+      body: 'Yes, or snooze to tomorrow from your dashboard.',
+      href: '/dashboard#today-contract',
+      ambitionId: 'amb-1',
+      resourceId: 'contract-1',
+      dedupeKey: 'contract:contract-1:2026-08-05:evening',
+      readAt: null,
+      createdAt: new Date(),
+    };
+
+    (db.insert as jest.Mock).mockReturnValueOnce(buildChain([created]));
+
+    const result = await service.runDueTodaySweep(new Date('2026-08-05T18:00:00.000Z'));
+
+    expect(result.notificationsCreated).toBe(1);
+    expect(loopService.findActiveContractForLocalDate).toHaveBeenCalledWith('user-1', '2026-08-05');
+    expect(pushService.sendToUser).toHaveBeenCalledWith(
+      'user-1',
+      expect.objectContaining({
+        title: "Did you finish today's contract: Ship reminders?",
+        href: '/dashboard#today-contract',
+      }),
+    );
   });
 });
