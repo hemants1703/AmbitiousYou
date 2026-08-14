@@ -13,6 +13,7 @@ import { MilestonesModule } from './milestones/milestones.module';
 import { AmbitionsModule } from './ambitions/ambitions.module';
 import { SettingsModule } from './settings/settings.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { LoopModule } from './loop/loop.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     AmbitionsModule,
     SettingsModule,
     NotificationsModule,
+    LoopModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
