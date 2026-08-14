@@ -6,6 +6,6 @@ export const contentType = ogImageContentType;
 export default function OgImage() {
   return createOgImageResponse({
     title: "Pricing",
-    subtitle: "Free for a limited time. Create your account today.",
+    subtitle: "Free to use. No credit card. No ambition limits.",
   });
 }

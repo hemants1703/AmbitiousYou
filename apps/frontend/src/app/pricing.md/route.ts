@@ -18,8 +18,8 @@ export async function GET() {
     ...freePlan.features.map((f) => `  - ${f}`),
     "",
     "## Notes",
-    `- ${freePlan.lede}`,
-    "- There is no checkout today. New accounts sign up on the free plan.",
+    "- There are no paid tiers today.",
+    "- Optional paid features may appear later; the core ambition-tracking experience remains free.",
     `- Human-readable page: ${siteConfig.url}/pricing`,
     `- Contact: support@ambitiousyou.pro`,
   ];

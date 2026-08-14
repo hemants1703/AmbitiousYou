@@ -13,9 +13,7 @@ export function BillingSettingsTab() {
             <CreditCardIcon className="size-4 text-accent-brand" />
             Current plan
           </CardTitle>
-          <CardDescription>
-            AmbitiousYou is free for a limited time. {freePlan.lede}
-          </CardDescription>
+          <CardDescription>You are on the {freePlan.name} plan.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-muted/30 p-4">

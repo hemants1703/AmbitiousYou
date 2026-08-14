@@ -65,7 +65,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    await this.maybePromoteBetaPro(user.id, user.email, user.plan);
+    await this.maybePromoteFounderPlan(user.id, user.email, user.plan);
 
     const [session] = await db
       .insert(sessions)
@@ -240,9 +240,9 @@ export class AuthService {
     return { success: true, signedOut: signOutAllDevices };
   }
 
-  /** Optional bootstrap: flip plan to pro for emails listed in BETA_PRO_EMAILS (login only). */
-  private async maybePromoteBetaPro(userId: string, email: string, plan: string): Promise<void> {
-    const raw = process.env.BETA_PRO_EMAILS?.trim();
+  /** Optional bootstrap: flip plan to pro for emails listed in FOUNDER_PLAN_EMAILS (login only). */
+  private async maybePromoteFounderPlan(userId: string, email: string, plan: string): Promise<void> {
+    const raw = process.env.FOUNDER_PLAN_EMAILS?.trim();
     if (!raw || plan !== 'free') {
       return;
     }
