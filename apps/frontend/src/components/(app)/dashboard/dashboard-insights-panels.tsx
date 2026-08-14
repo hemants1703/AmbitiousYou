@@ -1,8 +1,11 @@
 "use client";
 
 import { MotivationBanner } from "@/components/(app)/dashboard/motivation-banner";
+import { TodayContract } from "@/components/(app)/dashboard/today-contract";
 import { TodayFocus } from "@/components/(app)/dashboard/today-focus";
 import { WeeklyPreview } from "@/components/(app)/dashboard/weekly-preview";
+import { WeeklyReviewCard } from "@/components/(app)/dashboard/weekly-review-card";
+import type { ContractPayload, WeeklyReviewPayload } from "@/types";
 import type { DayGroup, QueueItem } from "@/lib/dashboard/tracked-items";
 import { InfoIcon } from "lucide-react";
 
@@ -13,12 +16,15 @@ interface DashboardInsightsPanelsProps {
   leadMotivation: { ambitionId: string; ambitionName: string; motivation: string } | null;
   hadErrors: boolean;
   loadFailed: boolean;
+  isPro: boolean;
+  contractPayload: ContractPayload | null;
+  weeklyReview: WeeklyReviewPayload | null;
 }
 
 export function DashboardInsightsPanels(props: DashboardInsightsPanelsProps) {
   return (
     <section className="flex flex-col gap-6 duration-500 animate-in fade-in">
-      {props.leadMotivation ? (
+      {props.leadMotivation && !props.isPro ? (
         <MotivationBanner ambitionId={props.leadMotivation.ambitionId} ambitionName={props.leadMotivation.ambitionName} motivation={props.leadMotivation.motivation} />
       ) : null}
 
@@ -30,9 +36,15 @@ export function DashboardInsightsPanels(props: DashboardInsightsPanelsProps) {
       ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <TodayFocus loadFailed={props.loadFailed} />
+        {props.isPro && props.contractPayload ? (
+          <TodayContract initialPayload={props.contractPayload} />
+        ) : (
+          <TodayFocus loadFailed={props.loadFailed} />
+        )}
         <WeeklyPreview groups={props.upcoming} weekGroups={props.weekGroups} />
       </div>
+
+      {props.isPro && props.weeklyReview ? <WeeklyReviewCard initialPayload={props.weeklyReview} /> : null}
     </section>
   );
 }

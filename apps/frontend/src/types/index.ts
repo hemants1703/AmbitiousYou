@@ -13,4 +13,4 @@ export type {
   User,
 } from "./domain";
 
-export type { AmbitionFull, AmbitionMovesBatch, ToggleFavouriteResult } from "./api";
+export type { AmbitionFull, AmbitionMovesBatch, AttentionCoachPayload, ContractPayload, DailyContract, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, ToggleFavouriteResult, WeeklyReview, WeeklyReviewPayload } from "./api";

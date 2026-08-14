@@ -1,5 +1,6 @@
 import { DashboardInsightsPanels } from "@/components/(app)/dashboard/dashboard-insights-panels";
 import type { DayGroup, LeadMotivation, QueueItem } from "@/lib/dashboard/tracked-items";
+import type { ContractPayload, WeeklyReviewPayload } from "@/types";
 
 interface DashboardInsightsProps {
   hadErrors: boolean;
@@ -8,6 +9,9 @@ interface DashboardInsightsProps {
   upcoming: DayGroup[];
   weekGroups: DayGroup[];
   leadMotivation: LeadMotivation | null;
+  isPro: boolean;
+  contractPayload: ContractPayload | null;
+  weeklyReview: WeeklyReviewPayload | null;
 }
 
 export function DashboardInsights(props: DashboardInsightsProps) {
@@ -19,6 +23,9 @@ export function DashboardInsights(props: DashboardInsightsProps) {
       leadMotivation={props.leadMotivation}
       hadErrors={props.hadErrors}
       loadFailed={props.loadFailed}
+      isPro={props.isPro}
+      contractPayload={props.contractPayload}
+      weeklyReview={props.weeklyReview}
     />
   );
 }

@@ -1,7 +1,8 @@
+import { NeedsAttentionCoach } from "@/components/(app)/dashboard/needs-attention-coach";
 import { NeedsAttentionStat } from "@/components/(app)/dashboard/needs-attention-stat";
 import { Progress } from "@/components/ui/progress";
 import type { AttentionSummary } from "@/lib/dashboard/tracked-items";
-import type { Ambition } from "@/types";
+import type { Ambition, AttentionCoachPayload } from "@/types";
 import { GaugeIcon, TargetIcon, TrophyIcon } from "lucide-react";
 import { StatCard } from "./stat-card";
 
@@ -9,6 +10,8 @@ interface DashboardStatsProps {
   ambitions: Ambition[];
   attentionSummary: AttentionSummary;
   loadFailed: boolean;
+  isPro: boolean;
+  coach: AttentionCoachPayload | null;
 }
 
 export function DashboardStats(props: DashboardStatsProps) {
@@ -36,7 +39,11 @@ export function DashboardStats(props: DashboardStatsProps) {
         className="h-full"
       />
 
-      <NeedsAttentionStat initialSummary={props.attentionSummary} loadFailed={props.loadFailed} />
+      {props.isPro && props.coach ? (
+        <NeedsAttentionCoach coach={props.coach} />
+      ) : (
+        <NeedsAttentionStat initialSummary={props.attentionSummary} loadFailed={props.loadFailed} />
+      )}
     </div>
   );
 }
