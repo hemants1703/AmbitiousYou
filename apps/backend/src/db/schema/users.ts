@@ -1,10 +1,12 @@
 import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { userPlanEnum } from './enums';
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
   email: text('email').notNull().unique('users_email_key'),
   emailVerified: boolean('email_verified').notNull().default(false),
+  plan: userPlanEnum('plan').notNull().default('free'),
   passwordHash: text('password_hash').notNull(),
   /** Avatar: catalog value `icon:<id>` (see profile-icons), remote URL, or null for initials. */
   image: text('image'),

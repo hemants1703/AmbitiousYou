@@ -1,0 +1,25 @@
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
+import type { Request } from 'express';
+import { db, users } from '../../db';
+import { isProPlan } from '../plan';
+
+@Injectable()
+export class ProGuard implements CanActivate {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest<Request>();
+    const userId = request['user']?.id as string | undefined;
+
+    if (!userId) {
+      throw new ForbiddenException('Pro access required');
+    }
+
+    const [user] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, userId)).limit(1);
+
+    if (!user || !isProPlan(user.plan)) {
+      throw new ForbiddenException('Pro access required');
+    }
+
+    return true;
+  }
+}

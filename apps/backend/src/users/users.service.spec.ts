@@ -40,6 +40,7 @@ describe('UsersService', () => {
         name: createUserDto.name,
         email: createUserDto.email,
         emailVerified: false,
+        plan: 'free',
         image: null,
         createdAt: new Date('2026-01-01T00:00:00.000Z'),
         updatedAt: new Date('2026-01-01T00:00:00.000Z'),
@@ -55,6 +56,7 @@ describe('UsersService', () => {
       expect(db.insert).toHaveBeenCalled();
       expect(settingsService.createSettingsForUserId).toHaveBeenCalledWith(createdUser.id);
       expect(result).toEqual(createdUser);
+      expect(result.plan).toBe('free');
     });
   });
 
@@ -78,6 +80,7 @@ describe('UsersService', () => {
       // public columns projection (no passwordHash) is passed as the first arg to db.select
       const selectArg = (db.select as jest.Mock).mock.calls[0][0];
       expect(selectArg).not.toHaveProperty('passwordHash');
+      expect(selectArg).toHaveProperty('plan');
       expect(result).toEqual(user);
     });
 

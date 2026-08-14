@@ -4,11 +4,14 @@ export type AmbitionStatus = "active" | "completed" | "missed";
 export type AmbitionPriority = "low" | "medium" | "high";
 export type NotificationType = "task_due_today" | "milestone_due_today";
 
+export type UserPlan = "free" | "pro";
+
 export type User = {
   id: string;
   name: string;
   email: string;
   emailVerified: boolean;
+  plan: UserPlan;
   image: string | null;
   createdAt: Date;
   updatedAt: Date;

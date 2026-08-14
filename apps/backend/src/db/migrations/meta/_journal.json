@@ -50,6 +50,13 @@
       "when": 1786188270149,
       "tag": "0006_simple_mandarin",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1786714434771,
+      "tag": "0007_ordinary_mister_fear",
+      "breakpoints": true
     }
   ]
 }
