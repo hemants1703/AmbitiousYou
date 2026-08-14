@@ -1,18 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { recalculateAmbitionProgress } from '../ambitions/ambition-progress.util';
-import {
-  ambitions,
-  dailyContracts,
-  db,
-  milestones,
-  settings,
-  tasks,
-  weeklyReviews,
-  type Ambition,
-  type DailyContract,
-} from '../db';
-import type { AttentionCoachPayload, ContractPayload, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, WeeklyReviewPayload } from '../types/api';
+import { ambitions, dailyContracts, db, milestones, settings, tasks, weeklyReviews, type Ambition, type DailyContract } from '../db';
+import type { AttentionCoachPayload, ContractPayload, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, WeeklyReviewPayload, WeeklyReviewStatusPayload } from '../types/api';
 import { UpsertContractDto } from './dto/upsert-contract.dto';
 import { UpsertWeeklyReviewDto } from './dto/upsert-weekly-review.dto';
 
@@ -59,7 +49,8 @@ export class LoopService {
 
   async getCurrentWeeklyReview(userId: string): Promise<WeeklyReviewPayload> {
     const timezone = await this.getUserTimezone(userId);
-    const weekStartDate = this.weekStartDateKey(timezone);
+    const { weekStartDay } = await this.getUserWeekSettings(userId);
+    const weekStartDate = this.weekStartDateKey(timezone, new Date(), weekStartDay);
     const [review] = await db
       .select()
       .from(weeklyReviews)
@@ -73,9 +64,38 @@ export class LoopService {
     };
   }
 
+  async getWeeklyReviewStatus(userId: string): Promise<WeeklyReviewStatusPayload> {
+    const timezone = await this.getUserTimezone(userId);
+    const { weekStartDay, weekEndDay } = await this.getUserWeekSettings(userId);
+    const now = new Date();
+    const weekStartDate = this.weekStartDateKey(timezone, now, weekStartDay);
+    const weekEndDate = this.weekEndDateKey(timezone, now, weekStartDay);
+    const todayKey = this.localDayKey(timezone, now);
+
+    const [review] = await db
+      .select()
+      .from(weeklyReviews)
+      .where(and(eq(weeklyReviews.userId, userId), eq(weeklyReviews.weekStartDate, weekStartDate)))
+      .limit(1);
+
+    // Check if today is the week end day
+    const isWeekEnd = todayKey === weekEndDate;
+    const hasCompletedReview = Boolean(review);
+
+    return {
+      isWeekEnd,
+      weekStartDate,
+      weekEndDate,
+      hasCompletedReview,
+      weekStartDay,
+      weekEndDay,
+    };
+  }
+
   async upsertWeeklyReview(userId: string, dto: UpsertWeeklyReviewDto): Promise<WeeklyReviewPayload> {
     const timezone = await this.getUserTimezone(userId);
-    const weekStartDate = dto.weekStartDate ?? this.weekStartDateKey(timezone);
+    const { weekStartDay } = await this.getUserWeekSettings(userId);
+    const weekStartDate = dto.weekStartDate ?? this.weekStartDateKey(timezone, new Date(), weekStartDay);
     const primary = await this.getPrimaryAmbition(userId);
 
     if (!primary) {
@@ -131,8 +151,7 @@ export class LoopService {
     const daysSinceLastCompletedMove = await this.daysSinceLastCompletedMove(userId, primary.id, todayKey);
 
     const suggestedMove = await this.suggestMove(userId, primary.id);
-    const nextMilestoneTitle =
-      suggestedMove?.kind === 'milestone' ? suggestedMove.title : await this.nextMilestoneTitle(userId, primary.id);
+    const nextMilestoneTitle = suggestedMove?.kind === 'milestone' ? suggestedMove.title : await this.nextMilestoneTitle(userId, primary.id);
     const proposedAction = suggestedMove ? `${suggestedMove.title} (20 min)` : null;
 
     const parts: string[] = [];
@@ -169,9 +188,7 @@ export class LoopService {
     const [yesterdayContract] = await db
       .select()
       .from(dailyContracts)
-      .where(
-        and(eq(dailyContracts.userId, userId), eq(dailyContracts.localDate, yesterdayKey), eq(dailyContracts.status, 'active')),
-      )
+      .where(and(eq(dailyContracts.userId, userId), eq(dailyContracts.localDate, yesterdayKey), eq(dailyContracts.status, 'active')))
       .limit(1);
 
     return {
@@ -275,11 +292,7 @@ export class LoopService {
     const contract = await this.findOwnedContract(userId, contractId);
 
     await db.transaction(async (tx) => {
-      const [updated] = await tx
-        .update(dailyContracts)
-        .set({ status: 'completed' })
-        .where(eq(dailyContracts.id, contract.id))
-        .returning();
+      const [updated] = await tx.update(dailyContracts).set({ status: 'completed' }).where(eq(dailyContracts.id, contract.id)).returning();
 
       if (updated.moveKind === 'task') {
         await tx
@@ -456,13 +469,25 @@ export class LoopService {
     return this.sanitizeTimezone(row?.userTimezone);
   }
 
-  private weekStartDateKey(timezone: string, now = new Date()): string {
+  private async getUserWeekSettings(userId: string): Promise<{ weekStartDay: number; weekEndDay: number }> {
+    const [row] = await db.select({ weekStartDay: settings.weekStartDay, weekEndDay: settings.weekEndDay }).from(settings).where(eq(settings.userId, userId)).limit(1);
+    return { weekStartDay: row?.weekStartDay ?? 0, weekEndDay: row?.weekEndDay ?? 6 };
+  }
+
+  private weekStartDateKey(timezone: string, now = new Date(), weekStartDay = 0): string {
     const local = this.localDayKey(timezone, now);
     const weekday = new Intl.DateTimeFormat('en-US', { timeZone: timezone, weekday: 'short' }).format(now);
     const map: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
     const dayIndex = map[weekday] ?? 0;
-    const daysFromMonday = (dayIndex + 6) % 7;
-    return this.addDays(local, -daysFromMonday);
+    // Calculate days from the configured week start day
+    const daysFromWeekStart = (dayIndex - weekStartDay + 7) % 7;
+    return this.addDays(local, -daysFromWeekStart);
+  }
+
+  private weekEndDateKey(timezone: string, now = new Date(), weekStartDay = 0): string {
+    // Week end is 6 days after week start
+    const weekStart = this.weekStartDateKey(timezone, now, weekStartDay);
+    return this.addDays(weekStart, 6);
   }
 
   private daysBetween(fromKey: string, toKey: string): number {
@@ -547,13 +572,7 @@ export class LoopService {
     const [row] = await db
       .select()
       .from(dailyContracts)
-      .where(
-        and(
-          eq(dailyContracts.userId, userId),
-          eq(dailyContracts.localDate, localDate),
-          sql`${dailyContracts.status} IN ('active', 'snoozed')`,
-        ),
-      )
+      .where(and(eq(dailyContracts.userId, userId), eq(dailyContracts.localDate, localDate), sql`${dailyContracts.status} IN ('active', 'snoozed')`))
       .limit(1);
     return row ?? null;
   }

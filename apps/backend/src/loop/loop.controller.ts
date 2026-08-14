@@ -5,7 +5,7 @@ import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
 import { LoopService } from './loop.service';
 import { UpsertContractDto } from './dto/upsert-contract.dto';
 import { UpsertWeeklyReviewDto } from './dto/upsert-weekly-review.dto';
-import type { AttentionCoachPayload, ContractPayload, MissedDayPayload, PrimaryAmbitionPayload, WeeklyReviewPayload } from '../types/api';
+import type { AttentionCoachPayload, ContractPayload, MissedDayPayload, PrimaryAmbitionPayload, WeeklyReviewPayload, WeeklyReviewStatusPayload } from '../types/api';
 
 @Controller('loop')
 @UseGuards(SessionGuard, ProGuard)
@@ -40,6 +40,11 @@ export class LoopController {
   @Get('reviews/current')
   getCurrentReview(@CurrentUserId() userId: string): Promise<WeeklyReviewPayload> {
     return this.loopService.getCurrentWeeklyReview(userId);
+  }
+
+  @Get('reviews/status')
+  getReviewStatus(@CurrentUserId() userId: string): Promise<WeeklyReviewStatusPayload> {
+    return this.loopService.getWeeklyReviewStatus(userId);
   }
 
   @Post('reviews')

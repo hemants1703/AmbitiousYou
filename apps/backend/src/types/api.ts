@@ -59,3 +59,12 @@ export type WeeklyReviewPayload = {
   weekStartDate: string;
   title: string;
 };
+
+export type WeeklyReviewStatusPayload = {
+  isWeekEnd: boolean;
+  weekStartDate: string;
+  weekEndDate: string;
+  hasCompletedReview: boolean;
+  weekStartDay: number;
+  weekEndDay: number;
+};

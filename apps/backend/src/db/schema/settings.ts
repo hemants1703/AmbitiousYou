@@ -1,4 +1,4 @@
-import { boolean, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 // `user_id` intentionally has no FK constraint — matches the original Prisma
 // schema, where Settings had no `@relation` declared. The unique constraint
@@ -9,6 +9,8 @@ export const settings = pgTable('settings', {
   userTimezone: varchar('user_timezone', { length: 255 }).notNull(),
   emailAccountActivity: boolean('email_account_activity').notNull().default(false),
   pushAmbitionReminders: boolean('push_ambition_reminders').notNull().default(false),
+  weekStartDay: integer('week_start_day').notNull().default(0),
+  weekEndDay: integer('week_end_day').notNull().default(6),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
