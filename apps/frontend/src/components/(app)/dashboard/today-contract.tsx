@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { completeLoopContract, snoozeLoopContract, upsertLoopContract } from "@/lib/actions/(app)/loop/contract-actions";
-import { MOVE_KIND_STYLE } from "@/lib/(app)/tracked-item";
 import { toastMutation } from "@/lib/(app)/toast-mutation";
 import type { ContractPayload } from "@/types";
 import { CheckCircle2Icon, ClockIcon, Loader2Icon, SunriseIcon } from "lucide-react";
@@ -114,7 +113,7 @@ export function TodayContract(props: TodayContractProps) {
         ) : !contract && activeMove ? (
           <div className="space-y-3 rounded-2xl border border-border/60 bg-muted/20 p-4">
             <div className="flex items-start gap-3">
-              <MoveKindBadge kind={activeMove.kind} className={MOVE_KIND_STYLE[activeMove.kind]} />
+              <MoveKindBadge kind={activeMove.kind} />
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-foreground">{activeMove.title}</p>
                 {activeMove.description ? <p className="mt-1 text-sm text-muted-foreground">{activeMove.description}</p> : null}
@@ -129,7 +128,7 @@ export function TodayContract(props: TodayContractProps) {
           <MoveDetailProvider>
             <div className="space-y-3 rounded-2xl border border-border/60 p-4">
               <div className="flex items-start gap-3">
-                <MoveKindBadge kind={activeMove.kind} className={MOVE_KIND_STYLE[activeMove.kind]} />
+                <MoveKindBadge kind={activeMove.kind} />
                 <div className="min-w-0 flex-1">
                   <p className="font-medium text-foreground">{activeMove.title}</p>
                   {activeMove.description ? <p className="mt-1 text-sm text-muted-foreground">{activeMove.description}</p> : null}
