@@ -9,3 +9,7 @@ export const userPlanEnum = pgEnum('UserPlan', ['free', 'pro']);
 export const contractMoveKindEnum = pgEnum('ContractMoveKind', ['task', 'milestone']);
 
 export const contractStatusEnum = pgEnum('ContractStatus', ['active', 'completed', 'snoozed']);
+
+export const calendarProviderEnum = pgEnum('CalendarProvider', ['google']);
+
+export const embeddingSourceTypeEnum = pgEnum('EmbeddingSourceType', ['ambition', 'task', 'milestone', 'note']);

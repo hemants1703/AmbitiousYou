@@ -1,6 +1,10 @@
 import { and, eq, sql } from 'drizzle-orm';
 import type { Tx } from '../db';
-import { ambitions, milestones, tasks } from '../db';
+import { ambitions, milestones, tasks, users } from '../db';
+import { isProPlan } from '../auth/plan';
+
+const TASK_MOVE_WEIGHT = 1;
+const MILESTONE_MOVE_WEIGHT = 2;
 
 /**
  * Recompute and persist an ambition's completion percentage (and derived status)
@@ -38,10 +42,17 @@ export async function recalculateAmbitionProgress(tx: Tx, params: { userId: stri
     .from(milestones)
     .where(and(eq(milestones.ambitionId, params.ambitionId), eq(milestones.userId, params.userId)));
 
-  const total = taskAgg.total + milestoneAgg.total;
-  const completed = taskAgg.completed + milestoneAgg.completed;
+  const [userRow] = await tx.select({ plan: users.plan }).from(users).where(eq(users.id, params.userId)).limit(1);
+  const useMilestoneWeighting = isProPlan(userRow?.plan ?? 'free');
 
-  const ambitionPercentageCompleted = total === 0 ? 0 : Math.round((completed / total) * 100);
+  const totalWeight = useMilestoneWeighting
+    ? taskAgg.total * TASK_MOVE_WEIGHT + milestoneAgg.total * MILESTONE_MOVE_WEIGHT
+    : taskAgg.total + milestoneAgg.total;
+  const completedWeight = useMilestoneWeighting
+    ? taskAgg.completed * TASK_MOVE_WEIGHT + milestoneAgg.completed * MILESTONE_MOVE_WEIGHT
+    : taskAgg.completed + milestoneAgg.completed;
+
+  const ambitionPercentageCompleted = totalWeight === 0 ? 0 : Math.round((completedWeight / totalWeight) * 100);
 
   let ambitionStatus: 'active' | 'completed' | 'missed';
   let ambitionCompletionDate: Date | null;

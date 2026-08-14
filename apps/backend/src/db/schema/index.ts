@@ -13,3 +13,6 @@ export * from './notifications';
 export * from './push-subscriptions';
 export * from './daily-contracts';
 export * from './weekly-reviews';
+export * from './proof-logs';
+export * from './calendar-integrations';
+export * from './embeddings';

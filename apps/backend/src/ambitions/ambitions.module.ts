@@ -6,5 +6,6 @@ import { SessionGuard } from '../auth/guards/session.guard';
 @Module({
   controllers: [AmbitionsController],
   providers: [AmbitionsService, SessionGuard],
+  exports: [AmbitionsService],
 })
 export class AmbitionsModule {}

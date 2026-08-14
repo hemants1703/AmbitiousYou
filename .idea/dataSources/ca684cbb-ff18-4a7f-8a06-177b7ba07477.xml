@@ -3,9 +3,17 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.55">
     <root id="1">
       <DateStyle>dmy</DateStyle>
-      <IntrospectionStateNumber>1119</IntrospectionStateNumber>
+      <Grants>1||-9223372036854775808|c|G
+1||10|c|G
+1||10|C|G
+1||10|T|G
+4||-9223372036854775808|c|G
+4||10|c|G
+4||10|C|G
+4||10|T|G</Grants>
+      <IntrospectionStateNumber>1148</IntrospectionStateNumber>
       <ServerVersion>18.4</ServerVersion>
-      <StartupTime>1785411736</StartupTime>
+      <StartupTime>1786600198</StartupTime>
       <TimeZones>true ACDT
 true ACSST
 false ACST
@@ -800,7 +808,6 @@ false Zulu
 14860||10|C|G
 14860||-9223372036854775808|U|G
 14860||10|U|G</Grants>
-      <IntrospectionStateNumber>1102</IntrospectionStateNumber>
       <ObjectId>24576</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -815,7 +822,7 @@ false Zulu
 14860||10|C|G
 14860||-9223372036854775808|U|G
 14860||10|U|G</Grants>
-      <IntrospectionStateNumber>1119</IntrospectionStateNumber>
+      <IntrospectionStateNumber>1148</IntrospectionStateNumber>
       <ObjectId>41400</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -829,7 +836,6 @@ false Zulu
 14860||10|C|G
 14860||-9223372036854775808|U|G
 14860||10|U|G</Grants>
-      <IntrospectionStateNumber>1103</IntrospectionStateNumber>
       <ObjectId>24736</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -844,7 +850,6 @@ false Zulu
 14860||10|C|G
 14860||-9223372036854775808|U|G
 14860||10|U|G</Grants>
-      <IntrospectionStateNumber>1104</IntrospectionStateNumber>
       <ObjectId>5</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -7815,11 +7820,11 @@ false Zulu
       <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <LastIntrospectionL1Xid>1119</LastIntrospectionL1Xid>
-      <LastIntrospectionL2Xid>1119</LastIntrospectionL2Xid>
-      <LastIntrospectionL3Xid>1119</LastIntrospectionL3Xid>
+      <LastIntrospectionL1Xid>1148</LastIntrospectionL1Xid>
+      <LastIntrospectionL2Xid>1148</LastIntrospectionL2Xid>
+      <LastIntrospectionL3Xid>1148</LastIntrospectionL3Xid>
       <LastIntrospectionLevel>3</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2026-08-10.15:44:28</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2026-08-14.14:05:16</LastIntrospectionLocalTimestamp>
       <LastIntrospectionVersion>260210</LastIntrospectionVersion>
       <ObjectId>2200</ObjectId>
       <StateNumber>546</StateNumber>
@@ -14737,77 +14742,122 @@ missed</Labels>
       <SubKind>enum</SubKind>
       <OwnerName>postgres</OwnerName>
     </object-type>
-    <table id="1029" parent="526" name="ambitions">
+    <object-type id="1029" parent="526" name="ContractMoveKind">
+      <DetailsLevel>2</DetailsLevel>
+      <Labels>task
+milestone</Labels>
+      <ObjectId>49642</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <SubCategory>enum</SubCategory>
+      <SubKind>enum</SubKind>
+      <OwnerName>postgres</OwnerName>
+    </object-type>
+    <object-type id="1030" parent="526" name="ContractStatus">
+      <DetailsLevel>2</DetailsLevel>
+      <Labels>active
+completed
+snoozed</Labels>
+      <ObjectId>49648</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <SubCategory>enum</SubCategory>
+      <SubKind>enum</SubKind>
+      <OwnerName>postgres</OwnerName>
+    </object-type>
+    <object-type id="1031" parent="526" name="UserPlan">
+      <DetailsLevel>2</DetailsLevel>
+      <Labels>free
+pro</Labels>
+      <ObjectId>49635</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <SubCategory>enum</SubCategory>
+      <SubKind>enum</SubKind>
+      <OwnerName>postgres</OwnerName>
+    </object-type>
+    <table id="1032" parent="526" name="ambitions">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41485</ObjectId>
       <StateNumber>1118</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1030" parent="526" name="milestones">
+    <table id="1033" parent="526" name="daily_contracts">
+      <DetailsLevel>2</DetailsLevel>
+      <ObjectId>49655</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="1034" parent="526" name="milestones">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41528</ObjectId>
       <StateNumber>1051</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1031" parent="526" name="notes">
+    <table id="1035" parent="526" name="notes">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41546</ObjectId>
       <StateNumber>1051</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1032" parent="526" name="notifications">
+    <table id="1036" parent="526" name="notifications">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>49580</ObjectId>
       <StateNumber>1105</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1033" parent="526" name="push_subscriptions">
+    <table id="1037" parent="526" name="push_subscriptions">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>49597</ObjectId>
       <StateNumber>1105</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1034" parent="526" name="sessions">
+    <table id="1038" parent="526" name="sessions">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41454</ObjectId>
       <StateNumber>1051</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1035" parent="526" name="settings">
+    <table id="1039" parent="526" name="settings">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41561</ObjectId>
       <StateNumber>1051</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1036" parent="526" name="tasks">
+    <table id="1040" parent="526" name="tasks">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41510</ObjectId>
       <StateNumber>1051</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1037" parent="526" name="users">
+    <table id="1041" parent="526" name="users">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41435</ObjectId>
-      <StateNumber>1051</StateNumber>
+      <StateNumber>1147</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="1038" parent="526" name="verifications">
+    <table id="1042" parent="526" name="verifications">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>41469</ObjectId>
       <StateNumber>1051</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="1039" parent="1029" name="id">
+    <table id="1043" parent="526" name="weekly_reviews">
+      <DetailsLevel>2</DetailsLevel>
+      <ObjectId>49685</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <column id="1044" parent="1032" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -14815,47 +14865,47 @@ missed</Labels>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1040" parent="1029" name="user_id">
+    <column id="1045" parent="1032" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1041" parent="1029" name="ambition_name">
+    <column id="1046" parent="1032" name="ambition_name">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1042" parent="1029" name="ambition_definition">
+    <column id="1047" parent="1032" name="ambition_definition">
       <Position>4</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1043" parent="1029" name="ambition_start_date">
+    <column id="1048" parent="1032" name="ambition_start_date">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1044" parent="1029" name="ambition_end_date">
+    <column id="1049" parent="1032" name="ambition_end_date">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1045" parent="1029" name="ambition_completion_date">
+    <column id="1050" parent="1032" name="ambition_completion_date">
       <Position>8</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1046" parent="1029" name="ambition_status">
+    <column id="1051" parent="1032" name="ambition_status">
       <DefaultExpression>&apos;active&apos;::&quot;AmbitionStatus&quot;</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>9</Position>
@@ -14863,7 +14913,7 @@ missed</Labels>
       <StoredType>&quot;AmbitionStatus&quot;|0s</StoredType>
       <TypeId>41422</TypeId>
     </column>
-    <column id="1047" parent="1029" name="ambition_priority">
+    <column id="1052" parent="1032" name="ambition_priority">
       <DefaultExpression>&apos;medium&apos;::&quot;AmbitionPriority&quot;</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>10</Position>
@@ -14871,7 +14921,7 @@ missed</Labels>
       <StoredType>&quot;AmbitionPriority&quot;|0s</StoredType>
       <TypeId>41414</TypeId>
     </column>
-    <column id="1048" parent="1029" name="ambition_percentage_completed">
+    <column id="1053" parent="1032" name="ambition_percentage_completed">
       <DefaultExpression>0</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>11</Position>
@@ -14879,7 +14929,7 @@ missed</Labels>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="1049" parent="1029" name="is_favourited">
+    <column id="1054" parent="1032" name="is_favourited">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>12</Position>
@@ -14887,7 +14937,7 @@ missed</Labels>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="1050" parent="1029" name="created_at">
+    <column id="1055" parent="1032" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>13</Position>
@@ -14895,20 +14945,20 @@ missed</Labels>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1051" parent="1029" name="updated_at">
+    <column id="1056" parent="1032" name="updated_at">
       <NotNull>1</NotNull>
       <Position>14</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1052" parent="1029" name="ambition_motivation">
+    <column id="1057" parent="1032" name="ambition_motivation">
       <Position>15</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1053" parent="1029" name="ambition_end_date_history">
+    <column id="1058" parent="1032" name="ambition_end_date_history">
       <DefaultExpression>&apos;[]&apos;::jsonb</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>16</Position>
@@ -14916,7 +14966,7 @@ missed</Labels>
       <StoredType>jsonb|0s</StoredType>
       <TypeId>3802</TypeId>
     </column>
-    <foreign-key id="1054" parent="1029" name="ambitions_user_id_users_id_fk">
+    <foreign-key id="1059" parent="1032" name="ambitions_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>41584</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -14925,7 +14975,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <index id="1055" parent="1029" name="ambitions_pkey">
+    <index id="1060" parent="1032" name="ambitions_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41508</ObjectId>
@@ -14934,14 +14984,132 @@ missed</Labels>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1056" parent="1029" name="ambitions_pkey">
+    <key id="1061" parent="1032" name="ambitions_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41509</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41508</UnderlyingIndexId>
     </key>
-    <column id="1057" parent="1030" name="id">
+    <column id="1062" parent="1033" name="id">
+      <DefaultExpression>gen_random_uuid()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1063" parent="1033" name="user_id">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1064" parent="1033" name="ambition_id">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1065" parent="1033" name="move_kind">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>&quot;ContractMoveKind&quot;|0s</StoredType>
+      <TypeId>49642</TypeId>
+    </column>
+    <column id="1066" parent="1033" name="move_id">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1067" parent="1033" name="local_date">
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>date|0s</StoredType>
+      <TypeId>1082</TypeId>
+    </column>
+    <column id="1068" parent="1033" name="status">
+      <DefaultExpression>&apos;active&apos;::&quot;ContractStatus&quot;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>&quot;ContractStatus&quot;|0s</StoredType>
+      <TypeId>49648</TypeId>
+    </column>
+    <column id="1069" parent="1033" name="if_trigger">
+      <Position>8</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>text|0s</StoredType>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="1070" parent="1033" name="then_action">
+      <Position>9</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>text|0s</StoredType>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="1071" parent="1033" name="created_at">
+      <DefaultExpression>now()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>10</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>timestamp(3)|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <foreign-key id="1072" parent="1033" name="daily_contracts_user_id_users_id_fk">
+      <ColNames>user_id</ColNames>
+      <ObjectId>49675</ObjectId>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+      <StateNumber>1147</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>41435</RefTableId>
+    </foreign-key>
+    <foreign-key id="1073" parent="1033" name="daily_contracts_ambition_id_ambitions_id_fk">
+      <ColNames>ambition_id</ColNames>
+      <ObjectId>49680</ObjectId>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+      <StateNumber>1147</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>41485</RefTableId>
+    </foreign-key>
+    <index id="1074" parent="1033" name="daily_contracts_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>49671</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>1147</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <index id="1075" parent="1033" name="daily_contracts_user_local_date_key">
+      <ColNames>user_id
+local_date</ColNames>
+      <ObjectId>49673</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="1076" parent="1033" name="daily_contracts_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>49672</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>1147</StateNumber>
+      <UnderlyingIndexId>49671</UnderlyingIndexId>
+    </key>
+    <key id="1077" parent="1033" name="daily_contracts_user_local_date_key">
+      <ObjectId>49674</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <UnderlyingIndexId>49673</UnderlyingIndexId>
+    </key>
+    <column id="1078" parent="1034" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -14949,34 +15117,34 @@ missed</Labels>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1058" parent="1030" name="user_id">
+    <column id="1079" parent="1034" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1059" parent="1030" name="ambition_id">
+    <column id="1080" parent="1034" name="ambition_id">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1060" parent="1030" name="milestone">
+    <column id="1081" parent="1034" name="milestone">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1061" parent="1030" name="milestone_description">
+    <column id="1082" parent="1034" name="milestone_description">
       <Position>5</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1062" parent="1030" name="milestone_completed">
+    <column id="1083" parent="1034" name="milestone_completed">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>6</Position>
@@ -14984,14 +15152,14 @@ missed</Labels>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="1063" parent="1030" name="milestone_target_date">
+    <column id="1084" parent="1034" name="milestone_target_date">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1064" parent="1030" name="created_at">
+    <column id="1085" parent="1034" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>8</Position>
@@ -14999,20 +15167,20 @@ missed</Labels>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1065" parent="1030" name="updated_at">
+    <column id="1086" parent="1034" name="updated_at">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1066" parent="1030" name="milestone_completed_at">
+    <column id="1087" parent="1034" name="milestone_completed_at">
       <Position>10</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <foreign-key id="1067" parent="1030" name="milestones_user_id_users_id_fk">
+    <foreign-key id="1088" parent="1034" name="milestones_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>41599</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15021,7 +15189,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <foreign-key id="1068" parent="1030" name="milestones_ambition_id_ambitions_id_fk">
+    <foreign-key id="1089" parent="1034" name="milestones_ambition_id_ambitions_id_fk">
       <ColNames>ambition_id</ColNames>
       <ObjectId>41604</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15030,7 +15198,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41485</RefTableId>
     </foreign-key>
-    <index id="1069" parent="1030" name="milestones_pkey">
+    <index id="1090" parent="1034" name="milestones_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41544</ObjectId>
@@ -15039,14 +15207,14 @@ missed</Labels>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1070" parent="1030" name="milestones_pkey">
+    <key id="1091" parent="1034" name="milestones_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41545</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41544</UnderlyingIndexId>
     </key>
-    <column id="1071" parent="1031" name="id">
+    <column id="1092" parent="1035" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15054,28 +15222,28 @@ missed</Labels>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1072" parent="1031" name="user_id">
+    <column id="1093" parent="1035" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1073" parent="1031" name="ambition_id">
+    <column id="1094" parent="1035" name="ambition_id">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1074" parent="1031" name="note">
+    <column id="1095" parent="1035" name="note">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1075" parent="1031" name="created_at">
+    <column id="1096" parent="1035" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>5</Position>
@@ -15083,14 +15251,14 @@ missed</Labels>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1076" parent="1031" name="updated_at">
+    <column id="1097" parent="1035" name="updated_at">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <foreign-key id="1077" parent="1031" name="notes_user_id_users_id_fk">
+    <foreign-key id="1098" parent="1035" name="notes_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>41609</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15099,7 +15267,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <foreign-key id="1078" parent="1031" name="notes_ambition_id_ambitions_id_fk">
+    <foreign-key id="1099" parent="1035" name="notes_ambition_id_ambitions_id_fk">
       <ColNames>ambition_id</ColNames>
       <ObjectId>41614</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15108,7 +15276,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41485</RefTableId>
     </foreign-key>
-    <index id="1079" parent="1031" name="notes_pkey">
+    <index id="1100" parent="1035" name="notes_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41559</ObjectId>
@@ -15117,14 +15285,14 @@ missed</Labels>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1080" parent="1031" name="notes_pkey">
+    <key id="1101" parent="1035" name="notes_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41560</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41559</UnderlyingIndexId>
     </key>
-    <column id="1081" parent="1032" name="id">
+    <column id="1102" parent="1036" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15132,67 +15300,67 @@ missed</Labels>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1082" parent="1032" name="user_id">
+    <column id="1103" parent="1036" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1083" parent="1032" name="type">
+    <column id="1104" parent="1036" name="type">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>varchar(64)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1084" parent="1032" name="title">
+    <column id="1105" parent="1036" name="title">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1085" parent="1032" name="body">
+    <column id="1106" parent="1036" name="body">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1086" parent="1032" name="href">
+    <column id="1107" parent="1036" name="href">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>varchar(512)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1087" parent="1032" name="ambition_id">
+    <column id="1108" parent="1036" name="ambition_id">
       <Position>7</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1088" parent="1032" name="resource_id">
+    <column id="1109" parent="1036" name="resource_id">
       <Position>8</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1089" parent="1032" name="dedupe_key">
+    <column id="1110" parent="1036" name="dedupe_key">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1090" parent="1032" name="read_at">
+    <column id="1111" parent="1036" name="read_at">
       <Position>10</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="1091" parent="1032" name="created_at">
+    <column id="1112" parent="1036" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>11</Position>
@@ -15200,7 +15368,7 @@ missed</Labels>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <foreign-key id="1092" parent="1032" name="notifications_user_id_users_id_fk">
+    <foreign-key id="1113" parent="1036" name="notifications_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>49614</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15209,7 +15377,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <foreign-key id="1093" parent="1032" name="notifications_ambition_id_ambitions_id_fk">
+    <foreign-key id="1114" parent="1036" name="notifications_ambition_id_ambitions_id_fk">
       <ColNames>ambition_id</ColNames>
       <ObjectId>49619</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15218,7 +15386,7 @@ missed</Labels>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41485</RefTableId>
     </foreign-key>
-    <index id="1094" parent="1032" name="notifications_pkey">
+    <index id="1115" parent="1036" name="notifications_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>49595</ObjectId>
@@ -15227,7 +15395,7 @@ missed</Labels>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="1095" parent="1032" name="notifications_user_id_dedupe_key_key">
+    <index id="1116" parent="1036" name="notifications_user_id_dedupe_key_key">
       <ColNames>user_id
 dedupe_key</ColNames>
       <NameSurrogate>1</NameSurrogate>
@@ -15242,14 +15410,14 @@ pg_catalog</CollationParentNames>
       <CollationNames>
 default</CollationNames>
     </index>
-    <key id="1096" parent="1032" name="notifications_pkey">
+    <key id="1117" parent="1036" name="notifications_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>49596</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1105</StateNumber>
       <UnderlyingIndexId>49595</UnderlyingIndexId>
     </key>
-    <column id="1097" parent="1033" name="id">
+    <column id="1118" parent="1037" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15257,53 +15425,53 @@ default</CollationNames>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1098" parent="1033" name="user_id">
+    <column id="1119" parent="1037" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1099" parent="1033" name="endpoint">
+    <column id="1120" parent="1037" name="endpoint">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1100" parent="1033" name="p256dh">
+    <column id="1121" parent="1037" name="p256dh">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1101" parent="1033" name="auth">
+    <column id="1122" parent="1037" name="auth">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1102" parent="1033" name="user_agent">
+    <column id="1123" parent="1037" name="user_agent">
       <Position>6</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>varchar(512)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1103" parent="1033" name="expiration_time">
+    <column id="1124" parent="1037" name="expiration_time">
       <Position>7</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="1104" parent="1033" name="revoked_at">
+    <column id="1125" parent="1037" name="revoked_at">
       <Position>8</Position>
       <StateNumber>1105</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="1105" parent="1033" name="created_at">
+    <column id="1126" parent="1037" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>9</Position>
@@ -15311,7 +15479,7 @@ default</CollationNames>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="1106" parent="1033" name="updated_at">
+    <column id="1127" parent="1037" name="updated_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>10</Position>
@@ -15319,7 +15487,7 @@ default</CollationNames>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <foreign-key id="1107" parent="1033" name="push_subscriptions_user_id_users_id_fk">
+    <foreign-key id="1128" parent="1037" name="push_subscriptions_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>49624</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15328,7 +15496,7 @@ default</CollationNames>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <index id="1108" parent="1033" name="push_subscriptions_pkey">
+    <index id="1129" parent="1037" name="push_subscriptions_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>49612</ObjectId>
@@ -15337,7 +15505,7 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="1109" parent="1033" name="push_subscriptions_endpoint_key">
+    <index id="1130" parent="1037" name="push_subscriptions_endpoint_key">
       <ColNames>endpoint</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>49630</ObjectId>
@@ -15348,14 +15516,14 @@ default</CollationNames>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="1110" parent="1033" name="push_subscriptions_pkey">
+    <key id="1131" parent="1037" name="push_subscriptions_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>49613</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1105</StateNumber>
       <UnderlyingIndexId>49612</UnderlyingIndexId>
     </key>
-    <column id="1111" parent="1034" name="id">
+    <column id="1132" parent="1038" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15363,40 +15531,40 @@ default</CollationNames>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1112" parent="1034" name="user_id">
+    <column id="1133" parent="1038" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1113" parent="1034" name="token">
+    <column id="1134" parent="1038" name="token">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1114" parent="1034" name="expires_at">
+    <column id="1135" parent="1038" name="expires_at">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1115" parent="1034" name="ip_address">
+    <column id="1136" parent="1038" name="ip_address">
       <Position>5</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1116" parent="1034" name="user_agent">
+    <column id="1137" parent="1038" name="user_agent">
       <Position>6</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1117" parent="1034" name="created_at">
+    <column id="1138" parent="1038" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>7</Position>
@@ -15404,14 +15572,14 @@ default</CollationNames>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1118" parent="1034" name="updated_at">
+    <column id="1139" parent="1038" name="updated_at">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <foreign-key id="1119" parent="1034" name="sessions_user_id_users_id_fk">
+    <foreign-key id="1140" parent="1038" name="sessions_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>41579</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15420,7 +15588,7 @@ default</CollationNames>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <index id="1120" parent="1034" name="sessions_pkey">
+    <index id="1141" parent="1038" name="sessions_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41467</ObjectId>
@@ -15429,14 +15597,14 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1121" parent="1034" name="sessions_pkey">
+    <key id="1142" parent="1038" name="sessions_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41468</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41467</UnderlyingIndexId>
     </key>
-    <column id="1122" parent="1035" name="id">
+    <column id="1143" parent="1039" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15444,21 +15612,21 @@ default</CollationNames>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1123" parent="1035" name="user_id">
+    <column id="1144" parent="1039" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1124" parent="1035" name="user_timezone">
+    <column id="1145" parent="1039" name="user_timezone">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1125" parent="1035" name="email_account_activity">
+    <column id="1146" parent="1039" name="email_account_activity">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>4</Position>
@@ -15466,7 +15634,7 @@ default</CollationNames>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="1126" parent="1035" name="push_ambition_reminders">
+    <column id="1147" parent="1039" name="push_ambition_reminders">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>5</Position>
@@ -15474,7 +15642,7 @@ default</CollationNames>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="1127" parent="1035" name="created_at">
+    <column id="1148" parent="1039" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>6</Position>
@@ -15482,14 +15650,14 @@ default</CollationNames>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="1128" parent="1035" name="updated_at">
+    <column id="1149" parent="1039" name="updated_at">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <index id="1129" parent="1035" name="settings_pkey">
+    <index id="1150" parent="1039" name="settings_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41575</ObjectId>
@@ -15498,7 +15666,7 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="1130" parent="1035" name="settings_user_id_key">
+    <index id="1151" parent="1039" name="settings_user_id_key">
       <ColNames>user_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41577</ObjectId>
@@ -15506,20 +15674,20 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1131" parent="1035" name="settings_pkey">
+    <key id="1152" parent="1039" name="settings_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41576</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41575</UnderlyingIndexId>
     </key>
-    <key id="1132" parent="1035" name="settings_user_id_key">
+    <key id="1153" parent="1039" name="settings_user_id_key">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41578</ObjectId>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41577</UnderlyingIndexId>
     </key>
-    <column id="1133" parent="1036" name="id">
+    <column id="1154" parent="1040" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15527,34 +15695,34 @@ default</CollationNames>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1134" parent="1036" name="user_id">
+    <column id="1155" parent="1040" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1135" parent="1036" name="ambition_id">
+    <column id="1156" parent="1040" name="ambition_id">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1136" parent="1036" name="task">
+    <column id="1157" parent="1040" name="task">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1137" parent="1036" name="task_description">
+    <column id="1158" parent="1040" name="task_description">
       <Position>5</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1138" parent="1036" name="task_completed">
+    <column id="1159" parent="1040" name="task_completed">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>6</Position>
@@ -15562,14 +15730,14 @@ default</CollationNames>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="1139" parent="1036" name="task_deadline">
+    <column id="1160" parent="1040" name="task_deadline">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="1140" parent="1036" name="created_at">
+    <column id="1161" parent="1040" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>8</Position>
@@ -15577,20 +15745,20 @@ default</CollationNames>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1141" parent="1036" name="updated_at">
+    <column id="1162" parent="1040" name="updated_at">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1142" parent="1036" name="task_completed_at">
+    <column id="1163" parent="1040" name="task_completed_at">
       <Position>10</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <foreign-key id="1143" parent="1036" name="tasks_user_id_users_id_fk">
+    <foreign-key id="1164" parent="1040" name="tasks_user_id_users_id_fk">
       <ColNames>user_id</ColNames>
       <ObjectId>41589</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15599,7 +15767,7 @@ default</CollationNames>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41435</RefTableId>
     </foreign-key>
-    <foreign-key id="1144" parent="1036" name="tasks_ambition_id_ambitions_id_fk">
+    <foreign-key id="1165" parent="1040" name="tasks_ambition_id_ambitions_id_fk">
       <ColNames>ambition_id</ColNames>
       <ObjectId>41594</ObjectId>
       <OnDelete>cascade</OnDelete>
@@ -15608,7 +15776,7 @@ default</CollationNames>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>41485</RefTableId>
     </foreign-key>
-    <index id="1145" parent="1036" name="tasks_pkey">
+    <index id="1166" parent="1040" name="tasks_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41526</ObjectId>
@@ -15617,14 +15785,14 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1146" parent="1036" name="tasks_pkey">
+    <key id="1167" parent="1040" name="tasks_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41527</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41526</UnderlyingIndexId>
     </key>
-    <column id="1147" parent="1037" name="id">
+    <column id="1168" parent="1041" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15632,21 +15800,21 @@ default</CollationNames>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1148" parent="1037" name="name">
+    <column id="1169" parent="1041" name="name">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1149" parent="1037" name="email">
+    <column id="1170" parent="1041" name="email">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1150" parent="1037" name="email_verified">
+    <column id="1171" parent="1041" name="email_verified">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>4</Position>
@@ -15654,20 +15822,20 @@ default</CollationNames>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="1151" parent="1037" name="password_hash">
+    <column id="1172" parent="1041" name="password_hash">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1152" parent="1037" name="image">
+    <column id="1173" parent="1041" name="image">
       <Position>6</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="1153" parent="1037" name="created_at">
+    <column id="1174" parent="1041" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>7</Position>
@@ -15675,14 +15843,22 @@ default</CollationNames>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1154" parent="1037" name="updated_at">
+    <column id="1175" parent="1041" name="updated_at">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <index id="1155" parent="1037" name="users_pkey">
+    <column id="1176" parent="1041" name="plan">
+      <DefaultExpression>&apos;free&apos;::&quot;UserPlan&quot;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>&quot;UserPlan&quot;|0s</StoredType>
+      <TypeId>49635</TypeId>
+    </column>
+    <index id="1177" parent="1041" name="users_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41450</ObjectId>
@@ -15691,7 +15867,7 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="1156" parent="1037" name="users_email_key">
+    <index id="1178" parent="1041" name="users_email_key">
       <ColNames>email</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41452</ObjectId>
@@ -15702,20 +15878,20 @@ default</CollationNames>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="1157" parent="1037" name="users_pkey">
+    <key id="1179" parent="1041" name="users_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41451</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41450</UnderlyingIndexId>
     </key>
-    <key id="1158" parent="1037" name="users_email_key">
+    <key id="1180" parent="1041" name="users_email_key">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41453</ObjectId>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41452</UnderlyingIndexId>
     </key>
-    <column id="1159" parent="1038" name="id">
+    <column id="1181" parent="1042" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -15723,35 +15899,35 @@ default</CollationNames>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1160" parent="1038" name="user_id">
+    <column id="1182" parent="1042" name="user_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="1161" parent="1038" name="identifier">
+    <column id="1183" parent="1042" name="identifier">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1162" parent="1038" name="value">
+    <column id="1184" parent="1042" name="value">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="1163" parent="1038" name="expires_at">
+    <column id="1185" parent="1042" name="expires_at">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1164" parent="1038" name="created_at">
+    <column id="1186" parent="1042" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>6</Position>
@@ -15759,14 +15935,14 @@ default</CollationNames>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="1165" parent="1038" name="updated_at">
+    <column id="1187" parent="1042" name="updated_at">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StateNumber>1051</StateNumber>
       <StoredType>timestamp(3)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <index id="1166" parent="1038" name="verifications_pkey">
+    <index id="1188" parent="1042" name="verifications_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41483</ObjectId>
@@ -15775,12 +15951,130 @@ default</CollationNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="1167" parent="1038" name="verifications_pkey">
+    <key id="1189" parent="1042" name="verifications_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>41484</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1051</StateNumber>
       <UnderlyingIndexId>41483</UnderlyingIndexId>
+    </key>
+    <column id="1190" parent="1043" name="id">
+      <DefaultExpression>gen_random_uuid()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1191" parent="1043" name="user_id">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1192" parent="1043" name="ambition_id">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="1193" parent="1043" name="week_start_date">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>date|0s</StoredType>
+      <TypeId>1082</TypeId>
+    </column>
+    <column id="1194" parent="1043" name="moved">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>text|0s</StoredType>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="1195" parent="1043" name="stalled">
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>text|0s</StoredType>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="1196" parent="1043" name="skip_reason">
+      <Position>7</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>text|0s</StoredType>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="1197" parent="1043" name="next_week_contract">
+      <NotNull>1</NotNull>
+      <Position>8</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>text|0s</StoredType>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="1198" parent="1043" name="created_at">
+      <DefaultExpression>now()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>timestamp(3)|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="1199" parent="1043" name="updated_at">
+      <NotNull>1</NotNull>
+      <Position>10</Position>
+      <StateNumber>1147</StateNumber>
+      <StoredType>timestamp(3)|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <foreign-key id="1200" parent="1043" name="weekly_reviews_user_id_users_id_fk">
+      <ColNames>user_id</ColNames>
+      <ObjectId>49705</ObjectId>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+      <StateNumber>1147</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>41435</RefTableId>
+    </foreign-key>
+    <foreign-key id="1201" parent="1043" name="weekly_reviews_ambition_id_ambitions_id_fk">
+      <ColNames>ambition_id</ColNames>
+      <ObjectId>49710</ObjectId>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+      <StateNumber>1147</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>41485</RefTableId>
+    </foreign-key>
+    <index id="1202" parent="1043" name="weekly_reviews_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>49701</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>1147</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <index id="1203" parent="1043" name="weekly_reviews_user_week_key">
+      <ColNames>user_id
+week_start_date</ColNames>
+      <ObjectId>49703</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="1204" parent="1043" name="weekly_reviews_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>49702</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>1147</StateNumber>
+      <UnderlyingIndexId>49701</UnderlyingIndexId>
+    </key>
+    <key id="1205" parent="1043" name="weekly_reviews_user_week_key">
+      <ObjectId>49704</ObjectId>
+      <StateNumber>1147</StateNumber>
+      <UnderlyingIndexId>49703</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>

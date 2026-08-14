@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
+    <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Simplify cron logic for reminders and improve timezone alignment&#10;&#10;Streamlined reminder service cron handling by restricting morning/evening slots to exact local hours (9:00 and 18:00). Updated tests and workflow documentation to reflect refined logic, ensuring clarity around hourly UTC ticks for global timezone coverage.">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477/storage_v2/_src_/database/ambitiousyou_dev.MLnBsQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477/storage_v2/_src_/database/ambitiousyou_dev.MLnBsQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambition-progress.util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambition-progress.util.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/migrations/meta/_journal.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/migrations/meta/_journal.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/schema/enums.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/schema/enums.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/schema/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/schema/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/domain.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/domain.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,7 +33,8 @@
   </component>
   <component name="DatabaseLocalColorSettings">
     <colors>
-      <entry key="ca684cbb-ff18-4a7f-8a06-177b7ba07477" value="" />
+      <entry key="ca684cbb-ff18-4a7f-8a06-177b7ba07477" value="yellow" />
+      <entry key="f3b4975a-e960-4d39-a726-4dcdddcc87aa" value="red" />
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
@@ -48,61 +65,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.219479820342839" />
-      <entry key="MS500" value="5.983823192915989" />
-      <entry key="S2" value="14.827465062208175" />
-      <entry key="S5" value="25.49248399525993" />
-      <entry key="S10" value="34.56159735081985" />
-      <entry key="S30" value="45.233956809266566" />
-      <entry key="S60" value="52.06623249636969" />
-      <entry key="M2" value="79.13537190982483" />
-      <entry key="M5" value="158.02693882996883" />
-      <entry key="M10" value="252.90576860373088" />
-      <entry key="M15" value="384.2932065928245" />
-      <entry key="M30" value="951.5057974303146" />
-      <entry key="H1" value="2189.1776336078315" />
-      <entry key="H2" value="3945.1432520996873" />
-      <entry key="H4" value="5604.0375573672345" />
-      <entry key="D1" value="7752.231073671729" />
-      <entry key="W1" value="8221.318199555502" />
+      <entry key="MS100" value="4.269257668540739" />
+      <entry key="MS500" value="9.21591993373487" />
+      <entry key="S2" value="11.201106132919225" />
+      <entry key="S5" value="11.67110868356497" />
+      <entry key="S10" value="11.841331388677974" />
+      <entry key="S30" value="14.856524331462548" />
+      <entry key="S60" value="27.887084141774167" />
+      <entry key="M2" value="64.97844835953236" />
+      <entry key="M5" value="148.76203587715437" />
+      <entry key="M10" value="259.3219404434607" />
+      <entry key="M15" value="460.2563057061576" />
+      <entry key="M30" value="1407.3384436287804" />
+      <entry key="H1" value="3415.5388838812664" />
+      <entry key="H2" value="6488.865740144098" />
+      <entry key="H4" value="9914.889038634448" />
+      <entry key="D1" value="15248.149943252078" />
+      <entry key="W1" value="16551.084596349236" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="3.762519441195407E-32" />
-      <entry key="MS500" value="5.18914433322336E-7" />
-      <entry key="S2" value="0.026839470128501578" />
-      <entry key="S5" value="0.23523913568685606" />
-      <entry key="S10" value="0.48501457265501824" />
-      <entry key="S30" value="0.7857872597651935" />
-      <entry key="S60" value="0.8962199602116376" />
-      <entry key="M2" value="1.040620905675313" />
-      <entry key="M5" value="1.380601892519075" />
-      <entry key="M10" value="1.8156347833735968" />
-      <entry key="M15" value="2.364944284218705" />
-      <entry key="M30" value="4.297363678563505" />
-      <entry key="H1" value="8.01651220688526" />
-      <entry key="H2" value="13.306143074511581" />
-      <entry key="H4" value="18.439915104127884" />
-      <entry key="D1" value="25.238928465160196" />
-      <entry key="W1" value="26.73853903149593" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="7.346661539612325E-188" />
+      <entry key="S10" value="2.7186420981006363E-94" />
+      <entry key="S30" value="7.945473097927845E-32" />
+      <entry key="S60" value="4.259271079306716E-16" />
+      <entry key="M2" value="3.446759686790189E-8" />
+      <entry key="M5" value="0.001984103955112678" />
+      <entry key="M10" value="0.07725952296386791" />
+      <entry key="M15" value="0.2662399296651483" />
+      <entry key="M30" value="1.0644610494076812" />
+      <entry key="H1" value="3.2114827304952644" />
+      <entry key="H2" value="8.191551788801222" />
+      <entry key="H4" value="15.30476222396236" />
+      <entry key="D1" value="28.085291280726825" />
+      <entry key="W1" value="31.4033886031115" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.148973513626856" />
-      <entry key="MS500" value="5.947884565013384" />
-      <entry key="S2" value="14.818869216834104" />
-      <entry key="S5" value="25.65853942279536" />
-      <entry key="S10" value="34.97736575051675" />
-      <entry key="S30" value="45.9821225113837" />
-      <entry key="S60" value="52.94076873593594" />
-      <entry key="M2" value="80.16282719771876" />
-      <entry key="M5" value="159.39993075383856" />
-      <entry key="M10" value="254.71600467483648" />
-      <entry key="M15" value="386.6530531591399" />
-      <entry key="M30" value="955.8008508832287" />
-      <entry key="H1" value="2197.247668532083" />
-      <entry key="H2" value="3958.689420124138" />
-      <entry key="H4" value="5622.9695409802025" />
-      <entry key="D1" value="7778.35889826971" />
-      <entry key="W1" value="8249.04006256187" />
+      <entry key="MS100" value="4.1155091536975466" />
+      <entry key="MS500" value="9.149163073729033" />
+      <entry key="S2" value="11.180752933456272" />
+      <entry key="S5" value="11.662619066553079" />
+      <entry key="S10" value="11.837023736191586" />
+      <entry key="S30" value="14.854753165502206" />
+      <entry key="S60" value="27.88546066837305" />
+      <entry key="M2" value="64.97653436268584" />
+      <entry key="M5" value="148.7621951385572" />
+      <entry key="M10" value="259.3973963218179" />
+      <entry key="M15" value="460.5202145318204" />
+      <entry key="M30" value="1408.3992496748776" />
+      <entry key="H1" value="3418.7541206166434" />
+      <entry key="H2" value="6497.145424446428" />
+      <entry key="H4" value="9930.495277083812" />
+      <entry key="D1" value="15277.054937253306" />
+      <entry key="W1" value="16583.459999681225" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -135,6 +152,12 @@
     "npm.start:frontend.executor": "Run",
     "prettierjs.PrettierConfiguration.Package": "C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier",
     "settings.editor.selected.configurable": "SQL Dialects"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql",
+      "mysql_aurora"
+    ]
   }
 }]]></component>
   <component name="RunManager" selected="npm.start:backend">
@@ -202,6 +225,9 @@
       <workItem from="1786603033167" duration="2783000" />
       <workItem from="1786614993983" duration="2720000" />
       <workItem from="1786622730924" duration="2193000" />
+      <workItem from="1786631149681" duration="1182000" />
+      <workItem from="1786687002265" duration="16000" />
+      <workItem from="1786706962501" duration="9397000" />
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />
@@ -291,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786630301627</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="refactor: Simplify cron logic for reminders and improve timezone alignment&#10;&#10;Streamlined reminder service cron handling by restricting morning/evening slots to exact local hours (9:00 and 18:00). Updated tests and workflow documentation to reflect refined logic, ensuring clarity around hourly UTC ticks for global timezone coverage.">
+      <option name="closed" value="true" />
+      <created>1786630567923</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1786630567923</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,6 +348,7 @@
     <MESSAGE value="chore: Remove `ci-frontend` and integrate its checks into unified deploy workflow&#10;&#10;Deleted the `ci-frontend.yml` workflow and merged its lint, test, and build steps for the frontend into the streamlined `deploy-frontend-and-backend-to-vercel.yml` workflow. Updated PR and push logic to combine CI and deploy flows. Adjusted corresponding documentation, scripts, and ESLint settings for consistency." />
     <MESSAGE value="chore: Update deploy workflow and documentation for Vercel root directory clarification&#10;&#10;Standardized `vercel deploy` execution from the repo root in GitHub Actions for both frontend and backend. Updated READMEs and workflow comments to reflect Vercel project Root Directory behavior and prevent deployment path issues." />
     <MESSAGE value="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: Improve database URL validation and update deploy workflows&#10;&#10;Refactored database URL handling in deployment workflows to enhance validation, error messaging, and compatibility checks. Updated workflows to use dynamic health URLs and standardized environment handling for backend/frontend Vercel deployments. Adjusted documentation to reflect updated pooler requirements." />
+    <MESSAGE value="refactor: Simplify cron logic for reminders and improve timezone alignment&#10;&#10;Streamlined reminder service cron handling by restricting morning/evening slots to exact local hours (9:00 and 18:00). Updated tests and workflow documentation to reflect refined logic, ensuring clarity around hourly UTC ticks for global timezone coverage." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Simplify cron logic for reminders and improve timezone alignment&#10;&#10;Streamlined reminder service cron handling by restricting morning/evening slots to exact local hours (9:00 and 18:00). Updated tests and workflow documentation to reflect refined logic, ensuring clarity around hourly UTC ticks for global timezone coverage." />
   </component>
 </project>

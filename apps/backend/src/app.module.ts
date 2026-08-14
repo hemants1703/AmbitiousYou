@@ -14,6 +14,10 @@ import { AmbitionsModule } from './ambitions/ambitions.module';
 import { SettingsModule } from './settings/settings.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { LoopModule } from './loop/loop.module';
+import { ProofModule } from './proof/proof.module';
+import { ExportModule } from './export/export.module';
+import { AiModule } from './ai/ai.module';
+import { CalendarModule } from './calendar/calendar.module';
 
 @Module({
   imports: [
@@ -31,6 +35,10 @@ import { LoopModule } from './loop/loop.module';
     SettingsModule,
     NotificationsModule,
     LoopModule,
+    ProofModule,
+    ExportModule,
+    AiModule,
+    CalendarModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],

@@ -17,6 +17,16 @@ export type User = {
   updatedAt: Date;
 };
 
+export type ProofLog = {
+  id: string;
+  userId: string;
+  ambitionId: string | null;
+  proofTitle: string;
+  proofNote: string | null;
+  loggedAt: Date;
+  createdAt: Date;
+};
+
 export type Session = {
   id: string;
   userId: string;
