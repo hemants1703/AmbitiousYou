@@ -53,7 +53,7 @@ export async function toggleAmbitionFavouriteAction(ambitionId: string): Promise
     return { error: "Unable to reach the ambitions server.", isFavourited: !nextIsFavourited };
   }
 
-  const user = await getCachedUser();
+  const user = await getCachedUser(sessionToken);
   revalidateAmbitionFull(user.id, ambitionId);
 
   return { error: null, isFavourited: nextIsFavourited };

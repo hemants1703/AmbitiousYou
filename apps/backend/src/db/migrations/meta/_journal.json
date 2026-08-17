@@ -78,6 +78,13 @@
       "when": 1786716735243,
       "tag": "0010_normal_magneto",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1786726077941,
+      "tag": "0011_bright_sunfire",
+      "breakpoints": true
     }
   ]
 }

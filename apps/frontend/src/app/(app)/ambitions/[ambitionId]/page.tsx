@@ -2,6 +2,7 @@ import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/am
 import { AmbitionMotivationCallout } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-motivation-callout";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
 import { AmbitionTracking } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-tracking";
+import { AmbitionAiBreakdown } from "@/components/(app)/ambitions/(ambitionId)/ambition-ai-breakdown";
 
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
@@ -19,6 +20,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { cache, Suspense } from "react";
+import { isPro } from "@/lib/plan";
 import AmbitionDetailsLoading from "./loading";
 
 interface AmbitionDetailsPageProps {
@@ -139,6 +141,12 @@ async function AmbitionDetailsContent(props: {
         <FadeIn delayMs={80}>
           <AmbitionDetailsSection ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
         </FadeIn>
+
+        {isPro(userDetails) && (
+          <FadeIn delayMs={160}>
+            <AmbitionAiBreakdown ambitionId={ambition.id} />
+          </FadeIn>
+        )}
       </div>
     </section>
   );

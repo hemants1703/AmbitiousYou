@@ -48,10 +48,10 @@ export async function mutateApi<T>(options: MutateApiOptions<T>): Promise<Mutate
 
     if (revalidateFromResponse && data) {
       const { ambitionId: id, scopes } = revalidateFromResponse(data);
-      const user = await getCachedUser();
+      const user = await getCachedUser(sessionToken);
       revalidateAmbition(id, scopes, user.id);
     } else if (ambitionId && revalidate?.length) {
-      const user = await getCachedUser();
+      const user = await getCachedUser(sessionToken);
       revalidateAmbition(ambitionId, revalidate, user.id);
     }
 

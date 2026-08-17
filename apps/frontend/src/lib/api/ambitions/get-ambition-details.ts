@@ -8,6 +8,6 @@ export type AmbitionDetails = Ambition & {
   notes?: Note[];
 };
 
-export async function getAmbitionDetails(_sessionToken: string, ambitionId: string): Promise<AmbitionDetails | null> {
-  return getCachedAmbitionDetails(ambitionId);
+export async function getAmbitionDetails(sessionToken: string, ambitionId: string): Promise<AmbitionDetails | null> {
+  return getCachedAmbitionDetails(ambitionId, sessionToken);
 }

@@ -2,7 +2,8 @@
 export const freePlan = {
   name: "Free",
   price: "$0",
-  tagline: "Forever, for the core experience",
+  tagline: "Free for a limited time",
+  lede: "An upgraded version with significant, meaningful upgrades is underway. Create your account today.",
   features: [
     "Unlimited ambitions",
     "Tasks and milestones in any mix",

@@ -15,5 +15,12 @@
       <jdbc-url>jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="[MBA] ambitiousyou_development_database@localhost" uuid="77e3355e-4048-4cdc-907f-1e4921791664">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/ambitiousyou_development_database</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

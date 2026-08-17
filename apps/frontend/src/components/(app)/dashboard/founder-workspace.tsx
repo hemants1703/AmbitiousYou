@@ -100,7 +100,7 @@ export function FounderWorkspace(props: FounderWorkspaceProps) {
     startTransition(async () => {
       await toastMutation(() => indexAiCorpus(), {
         loading: "Indexing your data…",
-        success: (data) => `Indexed ${data?.indexed ?? 0} items.`,
+        success: (result) => `Indexed ${result?.data?.indexed ?? 0} items.`,
         error: (msg) => msg,
       }, { getError: (r) => r.error });
     });
@@ -116,7 +116,7 @@ export function FounderWorkspace(props: FounderWorkspaceProps) {
         error: (msg) => msg,
       }, { getError: (r) => r.error });
 
-      if (result.data) {
+      if (result?.data?.answer) {
         setChatAnswer(result.data.answer);
       }
     });

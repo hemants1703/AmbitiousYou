@@ -3,22 +3,89 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BackgroundAgentGlobalSettings">
+    <option name="selectedModelId" value="auto" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Simplify cron logic for reminders and improve timezone alignment&#10;&#10;Streamlined reminder service cron handling by restricting morning/evening slots to exact local hours (9:00 and 18:00). Updated tests and workflow documentation to reflect refined logic, ensuring clarity around hourly UTC ticks for global timezone coverage.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477/storage_v2/_src_/database/ambitiousyou_dev.MLnBsQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ca684cbb-ff18-4a7f-8a06-177b7ba07477/storage_v2/_src_/database/ambitiousyou_dev.MLnBsQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/db-forest-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/db-forest-config.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/drizzle.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/drizzle.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/ai/ai.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ai/ai.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/ai/ai.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ai/ai.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambition-progress.util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambition-progress.util.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/ambitions/ambitions.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/auth.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/auth.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/guards/pro.guard.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/guards/pro.guard.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/auth/guards/pro.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/auth/guards/pro.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/calendar/calendar.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/calendar/calendar.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/src/db/migrations/meta/_journal.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/migrations/meta/_journal.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/schema/enums.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/schema/enums.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/schema/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/schema/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/schema/daily-contracts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/schema/daily-contracts.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db/schema/weekly-reviews.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db/schema/weekly-reviews.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/loop/loop.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/loop/loop.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/email.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/email.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/notifications/reminders.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/users/users.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/users/users.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/eslint.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/eslint.config.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/skills-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/skills-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/[ambitionId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/ambitions/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(app)/settings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(app)/settings/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/opengraph-image.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/opengraph-image.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/pricing.md/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/pricing.md/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-breakdown-panel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-breakdown-panel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-chat-panel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-chat-panel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-coach-panel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-coach-panel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-sidebar-content.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-sidebar-content.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-sidebar-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ai-sidebar/ai-sidebar-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/create-ambition-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/ambitions/create-ambition-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/founder-workspace.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/founder-workspace.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/loop/weekly-review-modal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/loop/weekly-review-modal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/notifications/notifications-inbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/notifications/notifications-inbox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/account-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/account-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/billing-settings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/billing-settings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-panel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/notifications-settings-panel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-shared.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-shared.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tab-items.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tab-items.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tab-panel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tab-panel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/settings/settings-tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/authenticated-nav-user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/authenticated-nav-user.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/header-inbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/header-inbox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/weekly-review-modal-wrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/shell/weekly-review-modal-wrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/app-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/app-sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/site-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/site-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/ui/ai-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/ui/ai-sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/use-weekly-review.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/use-weekly-review.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/sidebar-state.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/(app)/sidebar-state.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/create-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/create-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/delete-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/delete-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/toggle-ambition-favourite.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/toggle-ambition-favourite.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/update-ambition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/ambitions/update-ambition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notifications/notification-actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(app)/notifications/notification-actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(auth)/verify-email/verify-email.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/(auth)/verify-email/verify-email.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/actions/mutate-api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/actions/mutate-api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-details.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-details.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-full.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-full.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-moves-batch.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambition-moves-batch.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/ambitions/get-ambitions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/auth/get-sessions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/auth/get-sessions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/loop/get-weekly-review-status.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/loop/get-weekly-review-status.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/notifications/get-notifications.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/notifications/get-notifications.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/settings/get-user-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/settings/get-user-settings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/cache/session-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/cache/session-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/pricing/free-plan.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/pricing/free-plan.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/faqs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/faqs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/pages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/pages.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/domain.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/domain.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,17 +95,19 @@
   </component>
   <component name="CopilotPersistence">
     <persistenceIdMap>
+      <entry key="_/Users/hemantsharma/Developer/GitHub/AmbitiousYou" value="3HuaEolzHVjV7uFBNMgR5dTJmaS" />
       <entry key="_C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou" value="3HUbUUnbPS2AOD68cj2AoHTeGwa" />
     </persistenceIdMap>
   </component>
   <component name="DatabaseLocalColorSettings">
     <colors>
+      <entry key="77e3355e-4048-4cdc-907f-1e4921791664" value="yellow" />
       <entry key="ca684cbb-ff18-4a7f-8a06-177b7ba07477" value="yellow" />
       <entry key="f3b4975a-e960-4d39-a726-4dcdddcc87aa" value="red" />
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="681" />
+    <option name="cachedIndexableFilesCount" value="759" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -65,61 +134,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="4.269257668540739" />
-      <entry key="MS500" value="9.21591993373487" />
-      <entry key="S2" value="11.201106132919225" />
-      <entry key="S5" value="11.67110868356497" />
-      <entry key="S10" value="11.841331388677974" />
-      <entry key="S30" value="14.856524331462548" />
-      <entry key="S60" value="27.887084141774167" />
-      <entry key="M2" value="64.97844835953236" />
-      <entry key="M5" value="148.76203587715437" />
-      <entry key="M10" value="259.3219404434607" />
-      <entry key="M15" value="460.2563057061576" />
-      <entry key="M30" value="1407.3384436287804" />
-      <entry key="H1" value="3415.5388838812664" />
-      <entry key="H2" value="6488.865740144098" />
-      <entry key="H4" value="9914.889038634448" />
-      <entry key="D1" value="15248.149943252078" />
-      <entry key="W1" value="16551.084596349236" />
+      <entry key="MS100" value="1.9260941945117622" />
+      <entry key="MS500" value="4.1102064673773295" />
+      <entry key="S2" value="6.836490881259537" />
+      <entry key="S5" value="7.999838221730965" />
+      <entry key="S10" value="8.47386034466771" />
+      <entry key="S30" value="8.843284835683402" />
+      <entry key="S60" value="9.437819239996607" />
+      <entry key="M2" value="16.932740053132683" />
+      <entry key="M5" value="72.69577870312435" />
+      <entry key="M10" value="178.61671318707016" />
+      <entry key="M15" value="355.56521348918017" />
+      <entry key="M30" value="1229.6059189145567" />
+      <entry key="H1" value="3189.631195121596" />
+      <entry key="H2" value="6270.782841933005" />
+      <entry key="H4" value="9749.081218292918" />
+      <entry key="D1" value="15212.751530434456" />
+      <entry key="W1" value="16554.035950555357" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="7.346661539612325E-188" />
-      <entry key="S10" value="2.7186420981006363E-94" />
-      <entry key="S30" value="7.945473097927845E-32" />
-      <entry key="S60" value="4.259271079306716E-16" />
-      <entry key="M2" value="3.446759686790189E-8" />
-      <entry key="M5" value="0.001984103955112678" />
-      <entry key="M10" value="0.07725952296386791" />
-      <entry key="M15" value="0.2662399296651483" />
-      <entry key="M30" value="1.0644610494076812" />
-      <entry key="H1" value="3.2114827304952644" />
-      <entry key="H2" value="8.191551788801222" />
-      <entry key="H4" value="15.30476222396236" />
-      <entry key="D1" value="28.085291280726825" />
-      <entry key="W1" value="31.4033886031115" />
+      <entry key="MS500" value="1.4681151816084343E-223" />
+      <entry key="S2" value="1.957447092506153E-56" />
+      <entry key="S5" value="5.208060408252824E-23" />
+      <entry key="S10" value="7.216689274350687E-12" />
+      <entry key="S30" value="1.9324695917344033E-4" />
+      <entry key="S60" value="0.013901329403098125" />
+      <entry key="M2" value="0.11790390304350164" />
+      <entry key="M5" value="0.4260583097405149" />
+      <entry key="M10" value="0.7023774117813513" />
+      <entry key="M15" value="0.9519439237465165" />
+      <entry key="M30" value="1.7896809817699117" />
+      <entry key="H1" value="3.9209169360260883" />
+      <entry key="H2" value="8.868636442641003" />
+      <entry key="H4" value="16.01573765748355" />
+      <entry key="D1" value="28.998710440231164" />
+      <entry key="W1" value="32.38959105743789" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="4.1155091536975466" />
-      <entry key="MS500" value="9.149163073729033" />
-      <entry key="S2" value="11.180752933456272" />
-      <entry key="S5" value="11.662619066553079" />
-      <entry key="S10" value="11.837023736191586" />
-      <entry key="S30" value="14.854753165502206" />
-      <entry key="S60" value="27.88546066837305" />
-      <entry key="M2" value="64.97653436268584" />
-      <entry key="M5" value="148.7621951385572" />
-      <entry key="M10" value="259.3973963218179" />
-      <entry key="M15" value="460.5202145318204" />
-      <entry key="M30" value="1408.3992496748776" />
-      <entry key="H1" value="3418.7541206166434" />
-      <entry key="H2" value="6497.145424446428" />
-      <entry key="H4" value="9930.495277083812" />
-      <entry key="D1" value="15277.054937253306" />
-      <entry key="W1" value="16583.459999681225" />
+      <entry key="MS100" value="1.8471652133464314" />
+      <entry key="MS500" value="4.075023667520358" />
+      <entry key="S2" value="6.8196802751408185" />
+      <entry key="S5" value="7.991605971596813" />
+      <entry key="S10" value="8.46942966666507" />
+      <entry key="S30" value="8.841606997102168" />
+      <entry key="S60" value="9.449617675716418" />
+      <entry key="M2" value="17.047616398589" />
+      <entry key="M5" value="73.11842595036572" />
+      <entry key="M10" value="179.31609133812844" />
+      <entry key="M15" value="356.5140452957553" />
+      <entry key="M30" value="1231.3916694671198" />
+      <entry key="H1" value="3193.5552027663452" />
+      <entry key="H2" value="6279.736305300015" />
+      <entry key="H4" value="9765.392981237386" />
+      <entry key="D1" value="15242.567485364852" />
+      <entry key="W1" value="16587.39713985134" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -127,45 +196,71 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="3HUbUZWjHSwnrc6KAHM00JkafuI" />
+  <component name="ProjectSessionTemplates">
+    <option name="panelTemplate">
+      <template>
+        <option name="modeId" value="Ask" />
+        <option name="model">
+          <model>
+            <option name="modelType" value="builtin_id" />
+            <option name="modelValue" value="auto" />
+          </model>
+        </option>
+        <option name="targetType" value="BACKGROUND" />
+        <option name="worktreeMode" value="WORKSPACE" />
+      </template>
+    </option>
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "javascript.preferred.runtime.type.id": "node",
-    "last_opened_file_path": "C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "npm.backend > db:migrate.executor": "Run",
-    "npm.start:backend.executor": "Run",
-    "npm.start:frontend.executor": "Run",
-    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "SQL Dialects"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/heman/Developer/ambitiousyou-monorepo/AmbitiousYou&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
+    &quot;npm.backend &gt; db:push.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AcpAgentsConfigurable&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql",
-      "mysql_aurora"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;,
+      &quot;mysql_aurora&quot;
     ]
   }
-}]]></component>
-  <component name="RunManager" selected="npm.start:backend">
+}</component>
+  <component name="RunManager" selected="npm.start:frontend">
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
       <command value="run" />
       <scripts>
         <script value="db:migrate" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="backend &gt; db:push" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="db:push" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -195,6 +290,7 @@
       <list>
         <item itemvalue="npm.start:frontend" />
         <item itemvalue="npm.start:backend" />
+        <item itemvalue="npm.backend &gt; db:push" />
         <item itemvalue="npm.backend &gt; db:migrate" />
       </list>
     </recent_temporary>
@@ -228,6 +324,9 @@
       <workItem from="1786631149681" duration="1182000" />
       <workItem from="1786687002265" duration="16000" />
       <workItem from="1786706962501" duration="9397000" />
+      <workItem from="1786720300194" duration="260000" />
+      <workItem from="1786720585671" duration="4468000" />
+      <workItem from="1786821385454" duration="19000" />
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />

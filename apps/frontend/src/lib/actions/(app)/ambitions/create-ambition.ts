@@ -91,7 +91,7 @@ export async function createAmbitionAction(_: CreateAmbitionState, formData: For
 
     const created = (await response.json()) as { id: string; ambitionName: string };
 
-    const user = await getCachedUser();
+    const user = await getCachedUser(sessionToken);
     revalidateAmbitionFull(user.id, created.id);
 
     return {

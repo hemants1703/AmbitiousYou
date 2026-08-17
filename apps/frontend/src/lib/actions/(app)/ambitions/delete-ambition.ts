@@ -3,12 +3,14 @@
 import { mutateApi } from "@/lib/actions/mutate-api";
 import { revalidateAmbition } from "@/lib/actions/revalidate-ambition";
 import { getCachedUser } from "@/lib/cache/session-data";
+import { getSessionToken } from "@/lib/auth";
 
 export async function deleteAmbitionAction(ambitionId: string): Promise<{ error: string | null }> {
   if (!ambitionId) {
     return { error: "We couldn't tell which ambition to delete. Refresh the page and try again." };
   }
 
+  const sessionToken = await getSessionToken();
   const result = await mutateApi<null>({
     path: `/ambitions/${ambitionId}`,
     method: "DELETE",
@@ -16,7 +18,7 @@ export async function deleteAmbitionAction(ambitionId: string): Promise<{ error:
   });
 
   if (!result.error) {
-    const user = await getCachedUser();
+    const user = await getCachedUser(sessionToken);
     revalidateAmbition(ambitionId, ["detail", "list", "dashboard"], user.id);
   }
 

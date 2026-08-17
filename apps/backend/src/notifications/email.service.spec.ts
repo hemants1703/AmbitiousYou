@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access -- assertions read into the mocked Azure EmailClient's `any`-typed beginSend payload. */
 import { EmailService } from './email.service';
 
 const beginSendMock = jest.fn().mockResolvedValue(undefined);

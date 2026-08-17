@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException, ServiceUnavailableE
 import Anthropic from '@anthropic-ai/sdk';
 import { and, eq, sql } from 'drizzle-orm';
 import { AmbitionsService } from '../ambitions/ambitions.service';
-import { db, ambitions, embeddings, milestones, notes, tasks } from '../db';
+import { db, ambitions, milestones, notes, tasks } from '../db';
 import type { AcceptAiBreakdownDto } from './dto/ai.dto';
 
 export type AiBreakdownProposal = {

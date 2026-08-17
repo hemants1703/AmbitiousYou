@@ -46,6 +46,8 @@ export type Settings = {
   userTimezone: string;
   emailAccountActivity: boolean;
   pushAmbitionReminders: boolean;
+  weekStartDay: number;
+  weekEndDay: number;
   createdAt: Date;
   updatedAt: Date;
 };

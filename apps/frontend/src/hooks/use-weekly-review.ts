@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { getWeeklyReviewStatus } from "@/lib/api/loop/get-weekly-review-status";
-import { getSessionToken } from "@/lib/cache/session-data";
 
 interface WeeklyReviewStatus {
   isWeekEnd: boolean;
@@ -22,15 +21,29 @@ export function useWeeklyReview() {
 
     async function checkStatus() {
       try {
-        const sessionToken = await getSessionToken();
+        const match = document.cookie.match(/sessionToken=([^;]+)/);
+        const sessionToken = match ? match[1] : "";
         if (!sessionToken) {
           setLoading(false);
           return;
         }
 
         const data = await getWeeklyReviewStatus(sessionToken);
-        if (mounted) {
-          setStatus(data);
+        if (mounted && data) {
+          // Transform WeeklyReviewPayload to WeeklyReviewStatus
+          const review = data.review;
+          const weekStart = data.weekStartDate ? new Date(data.weekStartDate) : null;
+          const weekEnd = weekStart ? new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000) : null;
+          const now = new Date();
+          
+          setStatus({
+            isWeekEnd: weekEnd ? now >= weekEnd : false,
+            weekStartDate: data.weekStartDate,
+            weekEndDate: weekEnd ? weekEnd.toISOString().split("T")[0] : "",
+            hasCompletedReview: review !== null,
+            weekStartDay: weekStart ? weekStart.getDay() : 0,
+            weekEndDay: weekEnd ? weekEnd.getDay() : 6,
+          });
           setLoading(false);
         }
       } catch {

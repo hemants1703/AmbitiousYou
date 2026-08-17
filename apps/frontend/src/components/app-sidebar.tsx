@@ -4,10 +4,9 @@ import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { CircleHelpIcon, LayoutDashboardIcon, Settings2Icon, TargetIcon, TrophyIcon } from "lucide-react";
 import AmbitiousYouLogo from "./(landing)/ambitiousyou-logo";
-import { useAiSidebar } from "@/components/ui/ai-sidebar";
 
 interface NavItem {
   title: string;
@@ -53,23 +52,13 @@ function getNavData(isPro: boolean) {
 }
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  isPro: boolean;
+  isPro?: boolean;
   userSlot: React.ReactNode;
 }
 
 export function AppSidebar(props: AppSidebarProps) {
-  const { isPro, userSlot, ...sidebarProps } = props;
+  const { isPro = false, userSlot, ...sidebarProps } = props;
   const { navMain, navSecondary } = getNavData(isPro);
-  const { open: leftOpen, setOpen: setLeftOpen } = useSidebar();
-  const { open: aiOpen } = useAiSidebar();
-
-  // Auto-collapse left sidebar when AI sidebar opens
-  React.useEffect(() => {
-    if (aiOpen && leftOpen) {
-      setLeftOpen(false);
-    }
-  }, [aiOpen, leftOpen, setLeftOpen]);
-
   return (
     <Sidebar collapsible="offcanvas" {...sidebarProps}>
       <SidebarHeader>

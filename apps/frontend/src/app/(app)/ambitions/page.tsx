@@ -32,7 +32,8 @@ export default function AmbitionsPage() {
 }
 
 async function AmbitionsContent() {
-  const [, ambitions] = await Promise.all([requireUser(), getCachedAmbitions()]);
+  const [{ sessionToken }] = await Promise.all([requireUser()]);
+  const ambitions = await getCachedAmbitions(sessionToken);
 
   if (!ambitions || ambitions.length === 0) {
     return <NoAmbitionsFound />;

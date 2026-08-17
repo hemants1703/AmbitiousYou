@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access -- the auto-mocked Drizzle `db` is intentionally `any`-typed in tests. */
 import { ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { ProGuard } from './pro.guard';
 import { db } from 'src/db';

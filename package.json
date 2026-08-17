@@ -10,6 +10,6 @@
   "keywords": [],
   "author": "Hemant Sharma",
   "license": "ISC",
-  "packageManager": "pnpm@11.5.0",
+  "packageManager": "pnpm@11.21.0",
   "type": "module"
 }

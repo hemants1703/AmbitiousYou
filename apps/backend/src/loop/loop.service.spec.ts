@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/unbound-method -- the auto-mocked Drizzle `db` is intentionally `any`-typed in tests. */
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoopService } from './loop.service';
 import { db } from 'src/db';

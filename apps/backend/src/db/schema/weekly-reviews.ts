@@ -26,5 +26,4 @@ export const weeklyReviews = pgTable(
 );
 
 export type WeeklyReview = typeof weeklyReviews.$inferSelect;
-export type NewWeeklyReview = Pick<WeeklyReview, 'ambitionId' | 'weekStartDate' | 'moved' | 'stalled' | 'nextWeekContract'> &
-  Partial<Pick<WeeklyReview, 'skipReason'>>;
+export type NewWeeklyReview = Pick<WeeklyReview, 'ambitionId' | 'weekStartDate' | 'moved' | 'stalled' | 'nextWeekContract'> & Partial<Pick<WeeklyReview, 'skipReason'>>;

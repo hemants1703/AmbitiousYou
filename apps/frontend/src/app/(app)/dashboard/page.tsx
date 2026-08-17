@@ -3,18 +3,19 @@ import { DashboardInsights } from "@/components/(app)/dashboard/dashboard-insigh
 import { ActivitySkeleton } from "@/components/(app)/dashboard/activity-skeleton";
 import { DashboardStats } from "@/components/(app)/dashboard/dashboard-stats";
 import { MissedDayRecovery } from "@/components/(app)/dashboard/missed-day-recovery";
+import { ProToolkitCard } from "@/components/(app)/dashboard/pro-toolkit/pro-toolkit-card";
 import { ReviveMissed } from "@/components/(app)/dashboard/revive-missed";
 import { WelcomeHeader } from "@/components/(app)/dashboard/welcome-header";
 import { DashboardMovesProvider } from "@/lib/(app)/mutations/dashboard-moves-context";
 import { getActiveAmbitionDetails } from "@/lib/api/ambitions/get-active-ambition-details";
 import { getLoopContract } from "@/lib/api/loop/get-contract";
 import { getAttentionCoach, getMissedDay, getWeeklyReview } from "@/lib/api/loop/get-loop-data";
+import { getProofLogs } from "@/lib/api/proof/get-proof-logs";
 import { getCachedAmbitions } from "@/lib/cache/session-data";
 import { flattenOpenItems, groupUpcomingByDay, pickLeadMotivation, startOfDay, summarizeAttention } from "@/lib/dashboard/tracked-items";
 import { requireUser } from "@/lib/auth";
 import { isPro } from "@/lib/plan";
 import { Metadata } from "next";
-import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import DashboardLoading from "./loading";
@@ -22,6 +23,10 @@ import DashboardLoading from "./loading";
 export const metadata: Metadata = {
   title: "Dashboard",
 };
+
+// instant = false: auth redirect in requireUser() blocks instant validation;
+// layout chrome (sidebar, header) still renders instantly via (app)/layout
+export const instant = false;
 
 export default function DashboardPage() {
   return (
@@ -32,9 +37,8 @@ export default function DashboardPage() {
 }
 
 async function DashboardContent() {
-  await connection();
-
-  const [{ user: userDetails, sessionToken }, ambitions] = await Promise.all([requireUser(), getCachedAmbitions()]);
+  const [{ user: userDetails, sessionToken }] = await Promise.all([requireUser()]);
+  const ambitions = await getCachedAmbitions(sessionToken);
   const pro = isPro(userDetails);
   const today = startOfDay();
 
@@ -58,13 +62,14 @@ async function DashboardContent() {
       })
     : null;
 
-  const [weeklyReview, coach, missedDay] = pro
+  const [weeklyReview, coach, missedDay, proofLogs] = pro
     ? await Promise.all([
         getWeeklyReview(sessionToken),
         getAttentionCoach(sessionToken),
         getMissedDay(sessionToken),
+        getProofLogs(sessionToken),
       ])
-    : [null, null, null];
+    : [null, null, null, []];
 
   return (
     <DashboardMovesProvider initialOpenItems={openItems}>
@@ -91,6 +96,7 @@ async function DashboardContent() {
         <Suspense fallback={<ActivitySkeleton />}>
           <DashboardActivity ambitions={ambitions} />
         </Suspense>
+        {pro && <ProToolkitCard proofLogsCount={proofLogs.length} />}
       </div>
     </DashboardMovesProvider>
   );

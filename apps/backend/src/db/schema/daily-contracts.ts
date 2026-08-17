@@ -25,5 +25,4 @@ export const dailyContracts = pgTable(
 );
 
 export type DailyContract = typeof dailyContracts.$inferSelect;
-export type NewDailyContract = Pick<DailyContract, 'ambitionId' | 'moveKind' | 'moveId' | 'localDate'> &
-  Partial<Pick<DailyContract, 'status' | 'ifTrigger' | 'thenAction'>>;
+export type NewDailyContract = Pick<DailyContract, 'ambitionId' | 'moveKind' | 'moveId' | 'localDate'> & Partial<Pick<DailyContract, 'status' | 'ifTrigger' | 'thenAction'>>;

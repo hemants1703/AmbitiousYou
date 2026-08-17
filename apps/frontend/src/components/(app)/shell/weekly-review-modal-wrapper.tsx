@@ -2,7 +2,6 @@
 
 import { useWeeklyReview } from "@/hooks/use-weekly-review";
 import { WeeklyReviewModal } from "@/components/(app)/loop/weekly-review-modal";
-import { getSessionToken } from "@/lib/cache/session-data";
 
 export function WeeklyReviewModalWrapper() {
   const { status, loading, shouldShowModal, dismissModal } = useWeeklyReview();

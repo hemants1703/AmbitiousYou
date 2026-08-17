@@ -103,9 +103,7 @@ export class RemindersService {
     const tz = this.sanitizeTimezone(userTimezone);
     const resolvedSlot = slot ?? this.resolveManualSlot(tz, now);
 
-    const createdForUser = isProPlan(plan)
-      ? await this.createContractReminderForUser(userId, tz, resolvedSlot, now)
-      : await this.createDueOrOverdueForUser(userId, tz, resolvedSlot, now);
+    const createdForUser = isProPlan(plan) ? await this.createContractReminderForUser(userId, tz, resolvedSlot, now) : await this.createDueOrOverdueForUser(userId, tz, resolvedSlot, now);
     let pushesAttempted = 0;
 
     if (sendPush) {

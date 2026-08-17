@@ -91,7 +91,7 @@ export async function updateAmbitionAction(_: UpdateAmbitionState, formData: For
     };
   }
 
-  const user = await getCachedUser();
+  const user = await getCachedUser(sessionToken);
   revalidateAmbitionFull(user.id, ambitionId);
 
   redirect(`/ambitions/${ambitionId}`);

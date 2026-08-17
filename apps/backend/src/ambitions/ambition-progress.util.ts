@@ -45,12 +45,8 @@ export async function recalculateAmbitionProgress(tx: Tx, params: { userId: stri
   const [userRow] = await tx.select({ plan: users.plan }).from(users).where(eq(users.id, params.userId)).limit(1);
   const useMilestoneWeighting = isProPlan(userRow?.plan ?? 'free');
 
-  const totalWeight = useMilestoneWeighting
-    ? taskAgg.total * TASK_MOVE_WEIGHT + milestoneAgg.total * MILESTONE_MOVE_WEIGHT
-    : taskAgg.total + milestoneAgg.total;
-  const completedWeight = useMilestoneWeighting
-    ? taskAgg.completed * TASK_MOVE_WEIGHT + milestoneAgg.completed * MILESTONE_MOVE_WEIGHT
-    : taskAgg.completed + milestoneAgg.completed;
+  const totalWeight = useMilestoneWeighting ? taskAgg.total * TASK_MOVE_WEIGHT + milestoneAgg.total * MILESTONE_MOVE_WEIGHT : taskAgg.total + milestoneAgg.total;
+  const completedWeight = useMilestoneWeighting ? taskAgg.completed * TASK_MOVE_WEIGHT + milestoneAgg.completed * MILESTONE_MOVE_WEIGHT : taskAgg.completed + milestoneAgg.completed;
 
   const ambitionPercentageCompleted = totalWeight === 0 ? 0 : Math.round((completedWeight / totalWeight) * 100);
 

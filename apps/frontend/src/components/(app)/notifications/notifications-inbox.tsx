@@ -83,7 +83,7 @@ export function NotificationsInbox(props: NotificationsInboxProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="icon"
+          size="icon-sm"
           aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
           className="relative"
         >

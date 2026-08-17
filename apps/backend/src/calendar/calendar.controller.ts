@@ -5,7 +5,6 @@ import { ProGuard } from '../auth/guards/pro.guard';
 import { CurrentUserId } from '../auth/decorators/current-user-id.decorator';
 import { CalendarService, type CalendarStatusPayload } from './calendar.service';
 import { db, calendarIntegrations } from '../db';
-import { eq } from 'drizzle-orm';
 
 @Controller('calendar')
 export class CalendarController {

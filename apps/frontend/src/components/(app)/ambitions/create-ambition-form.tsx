@@ -128,11 +128,10 @@ export default function CreateAmbitionForm(props: { isInitiation?: boolean }) {
   // Hydrate from localStorage once, after mount. Seeding editable form state from an
   // external store has to happen post-mount: reading storage during render would diverge
   // from the server HTML and break hydration. React 19 batches these into a single
-  // re-render, so there's no cascade — the lint rule just can't model this case.
+  // re-render, so there's no cascade.
   useEffect(() => {
     const draft = loadDraft();
     if (draft) {
-      /* eslint-disable react-hooks/set-state-in-effect -- one-time external-store hydration (see comment above) */
       setAmbitionName(draft.ambitionName);
       setAmbitionDefinition(draft.ambitionDefinition);
       setAmbitionMotivation(draft.ambitionMotivation);
@@ -148,7 +147,6 @@ export default function CreateAmbitionForm(props: { isInitiation?: boolean }) {
       if (draft.moves.length > 0) setMoves(draft.moves);
 
       if (draftHasContent(draft)) setRestored(true);
-      /* eslint-enable react-hooks/set-state-in-effect */
     } else if (props.isInitiation) {
       const base = new Date();
       base.setHours(0, 0, 0, 0);

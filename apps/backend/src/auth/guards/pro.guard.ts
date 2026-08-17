@@ -4,11 +4,15 @@ import type { Request } from 'express';
 import { db, users } from '../../db';
 import { isProPlan } from '../plan';
 
+interface RequestWithUser extends Request {
+  user: { id: string };
+}
+
 @Injectable()
 export class ProGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const userId = request['user']?.id as string | undefined;
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const userId = request.user?.id;
 
     if (!userId) {
       throw new ForbiddenException('Pro access required');

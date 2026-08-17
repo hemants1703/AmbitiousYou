@@ -19,11 +19,7 @@ export class AiController {
 
   @Post('ambitions/:ambitionId/breakdown/accept')
   @Throttle({ default: { limit: 10, ttl: 60000 } })
-  acceptBreakdown(
-    @CurrentUserId() userId: string,
-    @Param('ambitionId', ParseUUIDPipe) ambitionId: string,
-    @Body() dto: AcceptAiBreakdownDto,
-  ): Promise<{ success: true }> {
+  acceptBreakdown(@CurrentUserId() userId: string, @Param('ambitionId', ParseUUIDPipe) ambitionId: string, @Body() dto: AcceptAiBreakdownDto): Promise<{ success: true }> {
     return this.aiService.acceptBreakdown(userId, ambitionId, dto).then(() => ({ success: true }));
   }
 

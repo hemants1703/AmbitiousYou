@@ -55,7 +55,7 @@ export const featuresFaq: readonly FaqItem[] = [
 export const pricingFaq: readonly FaqItem[] = [
   {
     question: "Is AmbitiousYou really free?",
-    answer: "Yes. AmbitiousYou is free to use with no billing tiers, no trial period, and no credit card required at signup.",
+    answer: "AmbitiousYou is free for a limited time. An upgraded version with significant, meaningful upgrades is underway. Create your account today.",
   },
   {
     question: "Are there limits on ambitions or moves?",
@@ -63,7 +63,7 @@ export const pricingFaq: readonly FaqItem[] = [
   },
   {
     question: "Will you add paid plans later?",
-    answer: "We may introduce optional paid features in the future, but the core ambition-tracking experience you use today will remain free.",
+    answer: "An upgraded version with significant, meaningful upgrades is underway. The free plan you use today will continue to work; new paid features will be additive.",
   },
 ];
 

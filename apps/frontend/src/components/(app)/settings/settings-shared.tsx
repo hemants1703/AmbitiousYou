@@ -1,8 +1,8 @@
 import type { Settings } from "@/types";
 
-export type SettingsTabValue = "account" | "billing" | "notifications" | "security";
+export type SettingsTabValue = "account" | "billing" | "notifications" | "security" | "integrations" | "data" | "ai";
 
-export const SETTINGS_TAB_VALUES: SettingsTabValue[] = ["account", "billing", "notifications", "security"];
+export const SETTINGS_TAB_VALUES: SettingsTabValue[] = ["account", "billing", "notifications", "security", "integrations", "data", "ai"];
 
 export function parseSettingsTab(tab: string | undefined | null): SettingsTabValue {
   if (tab && SETTINGS_TAB_VALUES.includes(tab as SettingsTabValue)) {
@@ -56,6 +56,8 @@ export const dummySettingsByTab = {
     userTimezone: "America/New_York",
     emailAccountActivity: true,
     pushAmbitionReminders: false,
+    weekStartDay: 0,
+    weekEndDay: 6,
     createdAt: new Date("2026-05-01T08:00:00.000Z"),
     updatedAt: new Date("2026-05-12T14:30:00.000Z"),
   },
@@ -65,6 +67,8 @@ export const dummySettingsByTab = {
     userTimezone: "Europe/London",
     emailAccountActivity: false,
     pushAmbitionReminders: true,
+    weekStartDay: 0,
+    weekEndDay: 6,
     createdAt: new Date("2026-04-21T09:15:00.000Z"),
     updatedAt: new Date("2026-05-20T16:45:00.000Z"),
   },
@@ -74,6 +78,8 @@ export const dummySettingsByTab = {
     userTimezone: "Asia/Tokyo",
     emailAccountActivity: true,
     pushAmbitionReminders: true,
+    weekStartDay: 0,
+    weekEndDay: 6,
     createdAt: new Date("2026-03-10T12:00:00.000Z"),
     updatedAt: new Date("2026-05-25T10:20:00.000Z"),
   },

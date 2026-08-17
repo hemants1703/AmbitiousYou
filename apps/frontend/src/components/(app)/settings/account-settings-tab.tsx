@@ -87,7 +87,7 @@ export function AccountSettingsTab(props: AccountSettingsTabProps) {
               <Label htmlFor="week-start-day">Week starts on</Label>
               <Select
                 value={props.userDetails.weekStartDay?.toString() ?? "0"}
-                onValueChange={(_value) => {
+                onValueChange={() => {
                   // TODO: Add update settings action call
                 }}
               >
@@ -109,7 +109,7 @@ export function AccountSettingsTab(props: AccountSettingsTabProps) {
               <Label htmlFor="week-end-day">Week ends on</Label>
               <Select
                 value={props.userDetails.weekEndDay?.toString() ?? "6"}
-                onValueChange={(_value) => {
+                onValueChange={() => {
                   // TODO: Add update settings action call
                 }}
               >
