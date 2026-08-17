@@ -81,7 +81,7 @@ flowchart LR
 Separate Vercel project, Root Directory **`apps/backend`**. Deploys are **only** triggered by [`.github/workflows/deploy-frontend-and-backend-to-vercel.yml`](../../.github/workflows/deploy-frontend-and-backend-to-vercel.yml) — Git auto-deploy is disabled in [`vercel.json`](vercel.json).
 
 1. Import the repo (or `vercel link` from `apps/backend`) and note the project ID for GitHub secrets.
-2. Set **Environment Variables** in the Vercel dashboard (Production / Preview): `DATABASE_URL`, `APP_BASE_URL`, optional `AZURE_CONNECTION_STRING`, VAPID keys, `CRON_SECRET`.
+2. Set **Environment Variables** in the Vercel dashboard (Production / Preview): `DATABASE_URL`, `APP_BASE_URL`, optional `AZURE_CONNECTION_STRING`, VAPID keys, **`CRON_SECRET`** (required — hourly ambition reminders via Vercel Cron in [`vercel.json`](vercel.json); see [`docs/notifications-cron.md`](docs/notifications-cron.md)).
 3. [`vercel.json`](vercel.json) runs monorepo install/build on each deploy. GitHub Actions runs `vercel deploy` from the **repo root** (not `apps/backend`) because the Vercel project Root Directory is already `apps/backend`.
 
 **Migrations** run in GitHub Actions **before** the Vercel deploy (not during the Vercel build):
