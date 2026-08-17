@@ -9,7 +9,8 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import { completeLoopContract, snoozeLoopContract, upsertLoopContract } from "@/lib/actions/(app)/loop/contract-actions";
 import { toastMutation } from "@/lib/(app)/toast-mutation";
 import type { ContractPayload } from "@/types";
-import { CheckCircle2Icon, ClockIcon, Loader2Icon, SunriseIcon } from "lucide-react";
+import { CheckCircle2Icon, ClockIcon, Loader2Icon, SparklesIcon, SunriseIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -23,9 +24,10 @@ export function TodayContract(props: TodayContractProps) {
   const [isPending, startTransition] = useTransition();
 
   const todayLabel = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
-  const { contract, primaryAmbition, move, suggestedMove } = payload;
+  const { contract, primaryAmbition, move, suggestedMove, assignedBy } = payload;
   const activeMove = move ?? suggestedMove;
   const isCompleted = contract?.status === "completed";
+  const systemAssigned = assignedBy === "system";
 
   function pinSuggestedMove() {
     if (!suggestedMove || !primaryAmbition) return;
@@ -94,11 +96,21 @@ export function TodayContract(props: TodayContractProps) {
           Today
         </CardTitle>
         <CardDescription>
-          <span className="font-semibold text-foreground">{todayLabel}</span> · one move on your primary ambition.
+          <span className="font-semibold text-foreground">{todayLabel}</span>
+          {systemAssigned
+            ? " · we picked one move on your primary ambition — change it anytime."
+            : " · one move on your primary ambition."}
         </CardDescription>
         {contract?.status === "active" ? (
           <CardAction>
-            <Badge variant="secondary">Today&apos;s move</Badge>
+            {systemAssigned ? (
+              <Badge variant="secondary" className="gap-1">
+                <SparklesIcon className="size-3" />
+                Picked for you
+              </Badge>
+            ) : (
+              <Badge variant="secondary">Today&apos;s move</Badge>
+            )}
           </CardAction>
         ) : null}
       </CardHeader>
@@ -160,6 +172,11 @@ export function TodayContract(props: TodayContractProps) {
                     <ClockIcon className="size-4" />
                     Snooze to tomorrow
                   </Button>
+                  {primaryAmbition ? (
+                    <Button variant="ghost" asChild>
+                      <Link href={`/ambitions/${primaryAmbition.id}`}>Choose different</Link>
+                    </Button>
+                  ) : null}
                 </div>
               )}
             </div>

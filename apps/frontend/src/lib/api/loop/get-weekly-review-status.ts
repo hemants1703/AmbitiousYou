@@ -1,5 +1,4 @@
-import type { WeeklyReviewPayload } from "@/types";
-import { cache } from "react";
+import type { WeeklyReviewPayload, WeeklyReviewStatusPayload } from "@/types";
 
 function authHeaders(sessionToken: string) {
   return {
@@ -20,6 +19,10 @@ async function fetchProJson<T>(sessionToken: string, path: string): Promise<T | 
   return (await response.json()) as T;
 }
 
-export const getWeeklyReviewStatus = cache((sessionToken: string) =>
-  fetchProJson<WeeklyReviewPayload>(sessionToken, "/loop/reviews/status")
-);
+export function getWeeklyReviewStatus(sessionToken: string) {
+  return fetchProJson<WeeklyReviewStatusPayload>(sessionToken, "/loop/reviews/status");
+}
+
+export function fetchWeeklyReviewCurrent(sessionToken: string) {
+  return fetchProJson<WeeklyReviewPayload>(sessionToken, "/loop/reviews/current");
+}

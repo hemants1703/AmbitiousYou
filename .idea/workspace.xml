@@ -8,6 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e491602e-9eb9-4784-b208-a88d9fdfc638" name="Changes" comment="refactor: Simplify cron logic for reminders and improve timezone alignment&#10;&#10;Streamlined reminder service cron handling by restricting morning/evening slots to exact local hours (9:00 and 18:00). Updated tests and workflow documentation to reflect refined logic, ensuring clarity around hourly UTC ticks for global timezone coverage.">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
@@ -87,6 +88,23 @@
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/domain.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/domain.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/loop/loop.controller.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/loop/loop.controller.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/loop/loop.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/loop/loop.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/loop/loop.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/loop/loop.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/types/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/types/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/opengraph-image.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/opengraph-image.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/(landing)/pricing/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/app/pricing.md/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/app/pricing.md/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/today-contract.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/(app)/dashboard/today-contract.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/api/loop/get-contract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/api/loop/get-contract.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/pricing/free-plan.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/pricing/free-plan.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/lib/seo/faqs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/lib/seo/faqs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/types/index.ts" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +125,11 @@
     </colors>
   </component>
   <component name="EmbeddingIndexingInfo">
+<<<<<<< Updated upstream
     <option name="cachedIndexableFilesCount" value="759" />
+=======
+    <option name="cachedIndexableFilesCount" value="755" />
+>>>>>>> Stashed changes
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -134,6 +156,7 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
+<<<<<<< Updated upstream
       <entry key="MS100" value="1.9260941945117622" />
       <entry key="MS500" value="4.1102064673773295" />
       <entry key="S2" value="6.836490881259537" />
@@ -189,6 +212,63 @@
       <entry key="H4" value="9765.392981237386" />
       <entry key="D1" value="15242.567485364852" />
       <entry key="W1" value="16587.39713985134" />
+=======
+      <entry key="MS100" value="1.0000015836166174" />
+      <entry key="MS500" value="1.0938761075860863" />
+      <entry key="S2" value="2.4634764831573026" />
+      <entry key="S5" value="3.9810893613474336" />
+      <entry key="S10" value="5.08157350827629" />
+      <entry key="S30" value="9.281076577986353" />
+      <entry key="S60" value="13.597584959554615" />
+      <entry key="M2" value="17.371518344590097" />
+      <entry key="M5" value="21.868416501332405" />
+      <entry key="M10" value="46.844569065867844" />
+      <entry key="M15" value="118.2649292119295" />
+      <entry key="M30" value="660.1962035325735" />
+      <entry key="H1" value="2318.508861826368" />
+      <entry key="H2" value="5343.385497978469" />
+      <entry key="H4" value="9005.157449987206" />
+      <entry key="D1" value="15036.750532862783" />
+      <entry key="W1" value="16554.355704008507" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="5.805533972E-314" />
+      <entry key="S10" value="2.4167298532327344E-157" />
+      <entry key="S30" value="7.639737758938702E-53" />
+      <entry key="S60" value="1.3207317743554825E-26" />
+      <entry key="M2" value="1.9193345328380244E-13" />
+      <entry key="M5" value="1.5698577155594107E-5" />
+      <entry key="M10" value="0.006872265931738874" />
+      <entry key="M15" value="0.053052413532752425" />
+      <entry key="M30" value="0.47516643216097143" />
+      <entry key="H1" value="2.145673216119757" />
+      <entry key="H2" value="6.695687495481564" />
+      <entry key="H4" value="13.836972697886507" />
+      <entry key="D1" value="27.6173083329789" />
+      <entry key="W1" value="31.32809603673187" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9201890878102847" />
+      <entry key="MS500" value="1.075634074721466" />
+      <entry key="S2" value="2.4526102008376593" />
+      <entry key="S5" value="3.9739245197244943" />
+      <entry key="S10" value="5.076981672853902" />
+      <entry key="S30" value="9.278264237740617" />
+      <entry key="S60" value="13.595498302692759" />
+      <entry key="M2" value="17.370172629853165" />
+      <entry key="M5" value="21.867776114492813" />
+      <entry key="M10" value="46.85092725567716" />
+      <entry key="M15" value="118.31726573329156" />
+      <entry key="M30" value="660.6695986316705" />
+      <entry key="H1" value="2320.6569676317836" />
+      <entry key="H2" value="5350.153184449901" />
+      <entry key="H4" value="9019.266965780138" />
+      <entry key="D1" value="15065.173881810402" />
+      <entry key="W1" value="16586.653483780687" />
+>>>>>>> Stashed changes
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -232,11 +312,18 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
     &quot;npm.backend &gt; db:migrate.executor&quot;: &quot;Run&quot;,
+<<<<<<< Updated upstream
     &quot;npm.backend &gt; db:push.executor&quot;: &quot;Run&quot;,
     &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
     &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AcpAgentsConfigurable&quot;
+=======
+    &quot;npm.start:backend.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:frontend.executor&quot;: &quot;Run&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\heman\\Developer\\ambitiousyou-monorepo\\AmbitiousYou\\apps\\backend\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;
+>>>>>>> Stashed changes
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -245,7 +332,11 @@
     ]
   }
 }</component>
+<<<<<<< Updated upstream
   <component name="RunManager" selected="npm.start:frontend">
+=======
+  <component name="RunManager" selected="npm.start:backend">
+>>>>>>> Stashed changes
     <configuration name="backend &gt; db:migrate" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/backend/package.json" />
       <command value="run" />
@@ -324,9 +415,13 @@
       <workItem from="1786631149681" duration="1182000" />
       <workItem from="1786687002265" duration="16000" />
       <workItem from="1786706962501" duration="9397000" />
+<<<<<<< Updated upstream
       <workItem from="1786720300194" duration="260000" />
       <workItem from="1786720585671" duration="4468000" />
       <workItem from="1786821385454" duration="19000" />
+=======
+      <workItem from="1786949323998" duration="3019000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="Cleanup: Remove unused components, APIs, and dependencies for frontend simplification">
       <option name="closed" value="true" />

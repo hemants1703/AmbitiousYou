@@ -24,12 +24,20 @@ export type SuggestedMove = {
   date: Date | string;
 };
 
+export type WeeklyReviewDraft = {
+  moved: string;
+  stalled: string;
+  skipReason: string;
+  nextWeekContract: string;
+};
+
 export type ContractPayload = {
   contract: DailyContract | null;
   localDate: string;
   primaryAmbition: Ambition | null;
   suggestedMove: SuggestedMove | null;
   move: SuggestedMove | null;
+  assignedBy?: "user" | "system" | null;
 };
 
 export type PrimaryAmbitionPayload = {
@@ -54,6 +62,8 @@ export type WeeklyReviewPayload = {
   review: WeeklyReview | null;
   weekStartDate: string;
   title: string;
+  reviewDue: boolean;
+  draft: WeeklyReviewDraft | null;
 };
 
 export type AttentionCoachPayload = {
@@ -62,7 +72,17 @@ export type AttentionCoachPayload = {
   daysUntilEndDate: number | null;
   nextMilestoneTitle: string | null;
   proposedAction: string | null;
+  suggestedMove: SuggestedMove | null;
   summary: string;
+};
+
+export type WeeklyReviewStatusPayload = {
+  isWeekEnd: boolean;
+  weekStartDate: string;
+  weekEndDate: string;
+  hasCompletedReview: boolean;
+  weekStartDay: number;
+  weekEndDay: number;
 };
 
 export type MissedDayPayload = {

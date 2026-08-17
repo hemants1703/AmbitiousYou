@@ -14,4 +14,4 @@ export type {
   ProofLog,
 } from "./domain";
 
-export type { AmbitionFull, AmbitionMovesBatch, AttentionCoachPayload, ContractPayload, DailyContract, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, ToggleFavouriteResult, WeeklyReview, WeeklyReviewPayload } from "./api";
+export type { AmbitionFull, AmbitionMovesBatch, AttentionCoachPayload, ContractPayload, DailyContract, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, ToggleFavouriteResult, WeeklyReview, WeeklyReviewDraft, WeeklyReviewPayload, WeeklyReviewStatusPayload } from "./api";

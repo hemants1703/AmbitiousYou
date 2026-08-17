@@ -2,13 +2,13 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { recalculateAmbitionProgress } from '../ambitions/ambition-progress.util';
 import { ambitions, dailyContracts, db, milestones, settings, tasks, weeklyReviews, type Ambition, type DailyContract } from '../db';
-import type { AttentionCoachPayload, ContractPayload, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, WeeklyReviewPayload, WeeklyReviewStatusPayload } from '../types/api';
+import type { AttentionCoachPayload, ContractPayload, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, WeeklyReviewDraft, WeeklyReviewPayload, WeeklyReviewStatusPayload } from '../types/api';
 import { UpsertContractDto } from './dto/upsert-contract.dto';
 import { UpsertWeeklyReviewDto } from './dto/upsert-weekly-review.dto';
 
 @Injectable()
 export class LoopService {
-  async getContract(userId: string, dateKey?: string): Promise<ContractPayload> {
+  async getContract(userId: string, dateKey?: string, options?: { assignIfEmpty?: boolean }): Promise<ContractPayload> {
     const timezone = await this.getUserTimezone(userId);
     const localDate = dateKey ?? this.localDayKey(timezone);
 
@@ -21,6 +21,19 @@ export class LoopService {
     const primary = await this.getPrimaryAmbition(userId);
     const suggestedMove = primary ? await this.suggestMove(userId, primary.id) : null;
 
+    if (!row && options?.assignIfEmpty && primary && suggestedMove) {
+      const contract = await this.insertSuggestedContract(userId, primary.id, suggestedMove, localDate);
+      const move = await this.resolveMoveDetails(userId, contract.moveKind, contract.moveId);
+      return {
+        contract,
+        localDate,
+        primaryAmbition: primary,
+        suggestedMove,
+        move,
+        assignedBy: 'system',
+      };
+    }
+
     if (!row) {
       return {
         contract: null,
@@ -28,6 +41,7 @@ export class LoopService {
         primaryAmbition: primary,
         suggestedMove,
         move: suggestedMove,
+        assignedBy: null,
       };
     }
 
@@ -38,6 +52,7 @@ export class LoopService {
       primaryAmbition: primary,
       suggestedMove,
       move,
+      assignedBy: null,
     };
   }
 
@@ -57,10 +72,15 @@ export class LoopService {
       .where(and(eq(weeklyReviews.userId, userId), eq(weeklyReviews.weekStartDate, weekStartDate)))
       .limit(1);
 
+    const primary = await this.getPrimaryAmbition(userId);
+    const draft = primary ? await this.buildWeeklyReviewDraft(userId, primary, weekStartDate, timezone) : null;
+
     return {
       review: review ?? null,
       weekStartDate,
       title: `Weekly review ${weekStartDate}`,
+      reviewDue: await this.isReviewDueWindow(userId, timezone),
+      draft,
     };
   }
 
@@ -129,6 +149,8 @@ export class LoopService {
       review,
       weekStartDate,
       title: `Weekly review ${weekStartDate}`,
+      reviewDue: await this.isReviewDueWindow(userId, timezone),
+      draft: await this.buildWeeklyReviewDraft(userId, primary, weekStartDate, timezone),
     };
   }
 
@@ -141,6 +163,7 @@ export class LoopService {
         daysUntilEndDate: null,
         nextMilestoneTitle: null,
         proposedAction: null,
+        suggestedMove: null,
         summary: 'Favourite one active ambition to get coaching.',
       };
     }
@@ -176,6 +199,7 @@ export class LoopService {
       daysUntilEndDate,
       nextMilestoneTitle,
       proposedAction,
+      suggestedMove,
       summary,
     };
   }
@@ -529,6 +553,125 @@ export class LoopService {
       .orderBy(asc(milestones.milestoneTargetDate))
       .limit(1);
     return milestone?.title ?? null;
+  }
+
+  private async insertSuggestedContract(
+    userId: string,
+    ambitionId: string,
+    suggestedMove: SuggestedMove,
+    localDate: string,
+  ): Promise<DailyContract> {
+    const [contract] = await db
+      .insert(dailyContracts)
+      .values({
+        userId,
+        ambitionId,
+        moveKind: suggestedMove.kind,
+        moveId: suggestedMove.id,
+        localDate,
+        status: 'active',
+      })
+      .onConflictDoUpdate({
+        target: [dailyContracts.userId, dailyContracts.localDate],
+        set: {
+          ambitionId,
+          moveKind: suggestedMove.kind,
+          moveId: suggestedMove.id,
+          status: 'active',
+        },
+      })
+      .returning();
+
+    return contract;
+  }
+
+  private async buildWeeklyReviewDraft(
+    userId: string,
+    primary: Ambition,
+    weekStartDate: string,
+    timezone: string,
+  ): Promise<WeeklyReviewDraft> {
+    const weekEndDate = this.addDays(weekStartDate, 6);
+    const todayKey = this.localDayKey(timezone);
+
+    const completedTasks = await db
+      .select()
+      .from(tasks)
+      .where(and(eq(tasks.userId, userId), eq(tasks.ambitionId, primary.id), eq(tasks.taskCompleted, true)));
+
+    const completedMilestones = await db
+      .select()
+      .from(milestones)
+      .where(and(eq(milestones.userId, userId), eq(milestones.ambitionId, primary.id), eq(milestones.milestoneCompleted, true)));
+
+    const movedLines: string[] = [];
+
+    for (const task of completedTasks) {
+      if (!task.taskCompletedAt) continue;
+      const completedKey = this.localDayKey(timezone, task.taskCompletedAt);
+      if (completedKey >= weekStartDate && completedKey <= weekEndDate) {
+        movedLines.push(`• ${task.task}`);
+      }
+    }
+
+    for (const milestone of completedMilestones) {
+      if (!milestone.milestoneCompletedAt) continue;
+      const completedKey = this.localDayKey(timezone, milestone.milestoneCompletedAt);
+      if (completedKey >= weekStartDate && completedKey <= weekEndDate) {
+        movedLines.push(`• ${milestone.milestone} (milestone)`);
+      }
+    }
+
+    const openTasks = await db
+      .select()
+      .from(tasks)
+      .where(and(eq(tasks.userId, userId), eq(tasks.ambitionId, primary.id), eq(tasks.taskCompleted, false)));
+
+    const openMilestones = await db
+      .select()
+      .from(milestones)
+      .where(and(eq(milestones.userId, userId), eq(milestones.ambitionId, primary.id), eq(milestones.milestoneCompleted, false)));
+
+    const stalledLines: string[] = [];
+
+    for (const task of openTasks) {
+      const deadlineKey = this.localDayKey(timezone, new Date(task.taskDeadline));
+      if (deadlineKey < todayKey) {
+        stalledLines.push(`• Overdue task: ${task.task}`);
+      }
+    }
+
+    for (const milestone of openMilestones) {
+      const targetKey = this.localDayKey(timezone, new Date(milestone.milestoneTargetDate));
+      if (targetKey < todayKey) {
+        stalledLines.push(`• Overdue milestone: ${milestone.milestone}`);
+      }
+    }
+
+    const daysSince = await this.daysSinceLastCompletedMove(userId, primary.id, todayKey);
+    if (movedLines.length === 0 && daysSince !== null && daysSince > 0) {
+      stalledLines.push(`• No completed moves in ${daysSince} day${daysSince === 1 ? '' : 's'} on ${primary.ambitionName}`);
+    }
+
+    const suggestedMove = await this.suggestMove(userId, primary.id);
+    const nextWeekContract = suggestedMove
+      ? `${suggestedMove.title} — start with about 20 minutes.`
+      : `Pick one small move on ${primary.ambitionName} to open the week.`;
+
+    return {
+      moved: movedLines.length > 0 ? movedLines.join('\n') : `Nothing marked complete yet this week on ${primary.ambitionName}.`,
+      stalled: stalledLines.length > 0 ? stalledLines.join('\n') : 'Nothing overdue — you are on pace.',
+      skipReason: '',
+      nextWeekContract,
+    };
+  }
+
+  private async isReviewDueWindow(userId: string, timezone: string, now = new Date()): Promise<boolean> {
+    const { weekStartDay } = await this.getUserWeekSettings(userId);
+    const weekEndDate = this.weekEndDateKey(timezone, now, weekStartDay);
+    const todayKey = this.localDayKey(timezone, now);
+    const windowStart = this.addDays(weekEndDate, -2);
+    return todayKey >= windowStart && todayKey <= weekEndDate;
   }
 
   localDayKey(timezone: string, now = new Date()): string {

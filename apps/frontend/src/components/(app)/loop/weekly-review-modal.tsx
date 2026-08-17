@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { saveWeeklyReview } from "@/lib/actions/(app)/loop/review-actions";
+import { initialWeeklyReviewField } from "@/lib/loop/weekly-review-initial";
 import { toastMutation } from "@/lib/(app)/toast-mutation";
 import type { WeeklyReviewPayload } from "@/types";
 import { CalendarCheckIcon, Loader2Icon, XIcon } from "lucide-react";
@@ -16,17 +17,21 @@ interface WeeklyReviewModalProps {
   onClose: () => void;
   weekStartDate: string;
   weekEndDate: string;
-  existingReview?: WeeklyReviewPayload | null;
+  reviewPayload: WeeklyReviewPayload | null;
 }
 
 export function WeeklyReviewModal(props: WeeklyReviewModalProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  // State only for user-typed values (not initial review values)
-  const [moved, setMoved] = useState("");
-  const [stalled, setStalled] = useState("");
-  const [skipReason, setSkipReason] = useState("");
-  const [nextWeekContract, setNextWeekContract] = useState("");
+  const review = props.reviewPayload?.review;
+  const draft = props.reviewPayload?.draft;
+
+  const [moved, setMoved] = useState(() => initialWeeklyReviewField(review, draft, "moved"));
+  const [stalled, setStalled] = useState(() => initialWeeklyReviewField(review, draft, "stalled"));
+  const [skipReason, setSkipReason] = useState(() => initialWeeklyReviewField(review, draft, "skipReason"));
+  const [nextWeekContract, setNextWeekContract] = useState(() => initialWeeklyReviewField(review, draft, "nextWeekContract"));
+
+  const showDraftHint = !review && draft && (moved === draft.moved || stalled === draft.stalled);
 
   function handleSave() {
     startTransition(async () => {
@@ -47,6 +52,7 @@ export function WeeklyReviewModal(props: WeeklyReviewModalProps) {
       );
 
       if (!result.error) {
+        props.onClose();
         router.refresh();
       }
     });
@@ -71,28 +77,34 @@ export function WeeklyReviewModal(props: WeeklyReviewModalProps) {
       );
 
       if (!result.error) {
+        props.onClose();
         router.refresh();
       }
     });
   }
 
-  const saved = Boolean(props.existingReview);
+  const saved = Boolean(review);
 
   if (!props.isOpen) return null;
 
   return (
     <Dialog open={props.isOpen} onOpenChange={props.onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CalendarCheckIcon className="size-6 text-accent-brand" />
             Weekly Review
           </DialogTitle>
           <DialogDescription>
-            Week of {props.weekStartDate} – {props.weekEndDate}. Four prompts: what moved, what stalled, what to skip, and next week&apos;s contract.
+            Week of {props.weekStartDate} – {props.weekEndDate}. We drafted a starting point from your week — edit anything before saving.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 pt-4">
+          {showDraftHint ? (
+            <p className="rounded-xl border border-border/60 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+              Pre-filled from your activity — adjust as needed.
+            </p>
+          ) : null}
           <div className="space-y-2">
             <Label htmlFor="review-moved">What moved this week?</Label>
             <Textarea
@@ -133,9 +145,9 @@ export function WeeklyReviewModal(props: WeeklyReviewModalProps) {
               placeholder="What's the one thing you'll commit to next week?"
             />
           </div>
-          <div className="flex gap-3 pt-4 border-t">
+          <div className="flex gap-3 border-t pt-4">
             <Button variant="outline" onClick={handleSkip} disabled={isPending}>
-              <XIcon className="size-4 mr-2" />
+              <XIcon className="mr-2 size-4" />
               Skip this week
             </Button>
             <Button onClick={handleSave} disabled={isPending || !moved.trim() || !stalled.trim() || !nextWeekContract.trim()} className="ml-auto">

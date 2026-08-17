@@ -4,7 +4,7 @@ import type { ContractPayload } from "@/types";
 import { cache } from "react";
 
 async function fetchContractPayload(sessionToken: string): Promise<ContractPayload | null> {
-  const response = await fetch(`${process.env.API_URL}/loop/contract`, {
+  const response = await fetch(`${process.env.API_URL}/loop/contract?assignIfEmpty=true`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

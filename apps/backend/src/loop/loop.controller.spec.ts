@@ -40,6 +40,14 @@ describe('LoopController', () => {
     loopService.getContract.mockResolvedValue(payload);
 
     await expect(controller.getContract('user-1')).resolves.toEqual(payload);
-    expect(loopService.getContract).toHaveBeenCalledWith('user-1', undefined);
+    expect(loopService.getContract).toHaveBeenCalledWith('user-1', undefined, { assignIfEmpty: false });
+  });
+
+  it('passes assignIfEmpty when requested', async () => {
+    const payload = { contract: null, localDate: '2026-08-14', primaryAmbition: null, suggestedMove: null, move: null };
+    loopService.getContract.mockResolvedValue(payload);
+
+    await expect(controller.getContract('user-1', undefined, 'true')).resolves.toEqual(payload);
+    expect(loopService.getContract).toHaveBeenCalledWith('user-1', undefined, { assignIfEmpty: true });
   });
 });

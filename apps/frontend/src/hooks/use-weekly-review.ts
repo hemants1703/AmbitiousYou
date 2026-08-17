@@ -1,19 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getWeeklyReviewStatus } from "@/lib/api/loop/get-weekly-review-status";
+import { fetchWeeklyReviewCurrent, getWeeklyReviewStatus } from "@/lib/api/loop/get-weekly-review-status";
+import type { WeeklyReviewPayload, WeeklyReviewStatusPayload } from "@/types";
 
-interface WeeklyReviewStatus {
-  isWeekEnd: boolean;
-  weekStartDate: string;
-  weekEndDate: string;
-  hasCompletedReview: boolean;
-  weekStartDay: number;
-  weekEndDay: number;
+function readSessionToken(): string {
+  const match = document.cookie.match(/sessionToken=([^;]+)/);
+  return match ? match[1] : "";
 }
 
 export function useWeeklyReview() {
-  const [status, setStatus] = useState<WeeklyReviewStatus | null>(null);
+  const [status, setStatus] = useState<WeeklyReviewStatusPayload | null>(null);
+  const [reviewPayload, setReviewPayload] = useState<WeeklyReviewPayload | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,59 +19,52 @@ export function useWeeklyReview() {
 
     async function checkStatus() {
       try {
-        const match = document.cookie.match(/sessionToken=([^;]+)/);
-        const sessionToken = match ? match[1] : "";
+        const sessionToken = readSessionToken();
         if (!sessionToken) {
-          setLoading(false);
+          if (mounted) setLoading(false);
           return;
         }
 
         const data = await getWeeklyReviewStatus(sessionToken);
-        if (mounted && data) {
-          // Transform WeeklyReviewPayload to WeeklyReviewStatus
-          const review = data.review;
-          const weekStart = data.weekStartDate ? new Date(data.weekStartDate) : null;
-          const weekEnd = weekStart ? new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000) : null;
-          const now = new Date();
-          
-          setStatus({
-            isWeekEnd: weekEnd ? now >= weekEnd : false,
-            weekStartDate: data.weekStartDate,
-            weekEndDate: weekEnd ? weekEnd.toISOString().split("T")[0] : "",
-            hasCompletedReview: review !== null,
-            weekStartDay: weekStart ? weekStart.getDay() : 0,
-            weekEndDay: weekEnd ? weekEnd.getDay() : 6,
-          });
-          setLoading(false);
+        if (!mounted) return;
+
+        if (data) {
+          setStatus(data);
+
+          if (data.isWeekEnd && !data.hasCompletedReview) {
+            const review = await fetchWeeklyReviewCurrent(sessionToken);
+            if (mounted) setReviewPayload(review);
+          }
         }
-      } catch {
-        if (mounted) {
-          setLoading(false);
-        }
+      } finally {
+        if (mounted) setLoading(false);
       }
     }
 
-    checkStatus();
+    void checkStatus();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  const shouldShowModal = status?.isWeekEnd && !status?.hasCompletedReview && !loading;
+  const [dismissed, setDismissed] = useState(false);
 
-  // Check localStorage for dismissal
-  const dismissedKey = `weekly-review-dismissed-${status?.weekStartDate}`;
-  const wasDismissed = typeof window !== "undefined" && localStorage.getItem(dismissedKey) === "true";
+  const shouldShowModal = Boolean(status?.isWeekEnd && !status.hasCompletedReview && !loading);
+
+  const dismissedKey = status ? `weekly-review-dismissed-${status.weekStartDate}` : null;
+  const wasDismissed = dismissedKey && typeof window !== "undefined" && localStorage.getItem(dismissedKey) === "true";
 
   return {
     status,
+    reviewPayload,
     loading,
-    shouldShowModal: shouldShowModal && !wasDismissed,
+    shouldShowModal: shouldShowModal && !wasDismissed && !dismissed,
     dismissModal: () => {
-      if (status?.weekStartDate) {
-        localStorage.setItem(`weekly-review-dismissed-${status.weekStartDate}`, "true");
+      if (dismissedKey) {
+        localStorage.setItem(dismissedKey, "true");
       }
+      setDismissed(true);
     },
   };
 }

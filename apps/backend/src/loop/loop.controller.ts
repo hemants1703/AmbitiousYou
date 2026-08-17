@@ -13,8 +13,12 @@ export class LoopController {
   constructor(private readonly loopService: LoopService) {}
 
   @Get('contract')
-  getContract(@CurrentUserId() userId: string, @Query('date') date?: string): Promise<ContractPayload> {
-    return this.loopService.getContract(userId, date);
+  getContract(
+    @CurrentUserId() userId: string,
+    @Query('date') date?: string,
+    @Query('assignIfEmpty') assignIfEmpty?: string,
+  ): Promise<ContractPayload> {
+    return this.loopService.getContract(userId, date, { assignIfEmpty: assignIfEmpty === 'true' });
   }
 
   @Post('contract')

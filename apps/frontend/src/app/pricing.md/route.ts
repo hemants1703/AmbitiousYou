@@ -7,7 +7,7 @@ export async function GET() {
   const lines = [
     `# Pricing — ${siteConfig.name}`,
     "",
-    `> ${siteConfig.description}`,
+    `> ${freePlan.lede}`,
     "",
     `## ${freePlan.name}`,
     `- Price: ${freePlan.price}/month`,

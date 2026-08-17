@@ -33,6 +33,15 @@ export type ContractPayload = {
   primaryAmbition: Ambition | null;
   suggestedMove: SuggestedMove | null;
   move: SuggestedMove | null;
+  /** Present when today's contract was auto-assigned from the suggested move. */
+  assignedBy?: 'user' | 'system' | null;
+};
+
+export type WeeklyReviewDraft = {
+  moved: string;
+  stalled: string;
+  skipReason: string;
+  nextWeekContract: string;
 };
 
 export type PrimaryAmbitionPayload = {
@@ -46,6 +55,7 @@ export type AttentionCoachPayload = {
   daysUntilEndDate: number | null;
   nextMilestoneTitle: string | null;
   proposedAction: string | null;
+  suggestedMove: SuggestedMove | null;
   summary: string;
 };
 
@@ -58,6 +68,9 @@ export type WeeklyReviewPayload = {
   review: WeeklyReview | null;
   weekStartDate: string;
   title: string;
+  /** Fri–Sun in the user's timezone — a gentle nudge, not a hard gate. */
+  reviewDue: boolean;
+  draft: WeeklyReviewDraft | null;
 };
 
 export type WeeklyReviewStatusPayload = {

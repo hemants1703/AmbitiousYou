@@ -3,7 +3,7 @@ export const freePlan = {
   name: "Free",
   price: "$0",
   tagline: "Free for a limited time",
-  lede: "An upgraded version with significant, meaningful upgrades is underway. Create your account today.",
+  lede: "AmbitiousYou is free for a limited time. An upgraded version with significant, meaningful upgrades is underway. Create your account today.",
   features: [
     "Unlimited ambitions",
     "Tasks and milestones in any mix",

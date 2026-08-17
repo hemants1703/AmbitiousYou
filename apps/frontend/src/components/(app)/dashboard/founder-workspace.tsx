@@ -100,7 +100,7 @@ export function FounderWorkspace(props: FounderWorkspaceProps) {
     startTransition(async () => {
       await toastMutation(() => indexAiCorpus(), {
         loading: "Indexing your data…",
-        success: (result) => `Indexed ${result?.data?.indexed ?? 0} items.`,
+        success: (result) => `Indexed ${result.data?.indexed ?? 0} items.`,
         error: (msg) => msg,
       }, { getError: (r) => r.error });
     });

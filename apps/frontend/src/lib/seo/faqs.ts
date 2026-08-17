@@ -17,7 +17,7 @@ export const homepageFaq: readonly FaqItem[] = [
   },
   {
     question: "Is AmbitiousYou free?",
-    answer: "Yes. AmbitiousYou is free to use with no billing tiers, no trial period, and no credit card required at signup. There is no cap on how many ambitions you create.",
+    answer: "AmbitiousYou is free for a limited time. An upgraded version with significant, meaningful upgrades is underway. Create your account today — no credit card required at signup.",
   },
   {
     question: "How is AmbitiousYou different from Todoist or Notion?",
@@ -39,7 +39,7 @@ export const featuresFaq: readonly FaqItem[] = [
   },
   {
     question: "Is there a free plan available?",
-    answer: "AmbitiousYou is free to use. There are no billing tiers, no credit card, and no cap on how many ambitions you create — sign up and start.",
+    answer: "AmbitiousYou is free for a limited time while a significantly upgraded version is underway. Sign up today — no credit card required.",
   },
   {
     question: "How secure is my data?",
@@ -55,7 +55,7 @@ export const featuresFaq: readonly FaqItem[] = [
 export const pricingFaq: readonly FaqItem[] = [
   {
     question: "Is AmbitiousYou really free?",
-    answer: "AmbitiousYou is free for a limited time. An upgraded version with significant, meaningful upgrades is underway. Create your account today.",
+    answer: "AmbitiousYou is free for a limited time. An upgraded version with significant, meaningful upgrades is underway. Create your account today — no credit card required.",
   },
   {
     question: "Are there limits on ambitions or moves?",

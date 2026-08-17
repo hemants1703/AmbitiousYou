@@ -1,7 +1,6 @@
 "use client";
 
-import type { AttentionCoachPayload } from "@/types";
-import { CompassIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -9,13 +8,22 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { upsertLoopContract } from "@/lib/actions/(app)/loop/contract-actions";
+import { toastMutation } from "@/lib/(app)/toast-mutation";
 import { cn } from "@/lib/utils";
+import type { AttentionCoachPayload } from "@/types";
+import { CompassIcon, Loader2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 interface AiCoachPanelProps {
   coach: AttentionCoachPayload | null;
 }
 
 export function AiCoachPanel(props: AiCoachPanelProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   if (!props.coach) {
     return (
       <div className="flex min-h-0 flex-1 flex-col px-4 py-2 md:px-5">
@@ -38,6 +46,31 @@ export function AiCoachPanel(props: AiCoachPanelProps) {
     (props.coach.daysSinceLastCompletedMove ?? 0) > 2 ||
     (props.coach.daysUntilEndDate !== null && props.coach.daysUntilEndDate <= 14);
 
+  function handleUseForToday() {
+    const move = props.coach?.suggestedMove;
+    if (!move || isPending) return;
+
+    startTransition(async () => {
+      const result = await toastMutation(
+        () =>
+          upsertLoopContract({
+            moveKind: move.kind,
+            moveId: move.id,
+          }),
+        {
+          loading: "Setting today's move…",
+          success: "Today's move is set — open the dashboard to complete when ready.",
+          error: (msg) => msg,
+        },
+        { getError: (r) => r.error },
+      );
+
+      if (!result.error) {
+        router.refresh();
+      }
+    });
+  }
+
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-4 py-2 md:px-5">
       <div
@@ -51,9 +84,15 @@ export function AiCoachPanel(props: AiCoachPanelProps) {
         </div>
         <p className="text-sm leading-relaxed text-foreground">{props.coach.summary}</p>
         {props.coach.proposedAction ? (
-          <div className="flex flex-col gap-1 rounded-xl bg-background/70 px-3 py-2.5">
+          <div className="flex flex-col gap-3 rounded-xl bg-background/70 px-3 py-2.5">
             <p className="text-xs font-medium text-muted-foreground">Suggested action</p>
             <p className="text-sm text-foreground">{props.coach.proposedAction}</p>
+            {props.coach.suggestedMove ? (
+              <Button size="sm" onClick={handleUseForToday} disabled={isPending}>
+                {isPending ? <Loader2Icon className="size-4 animate-spin" /> : null}
+                Use for today
+              </Button>
+            ) : null}
           </div>
         ) : null}
       </div>
