@@ -43,9 +43,9 @@ export class RemindersService {
   }
 
   /**
-   * Cron entrypoint (Vercel Cron hourly UTC).
-   * Morning: local hour >= 9 and < 18. Evening: local hour >= 18.
-   * Hourly ticks cover every timezone; dedupe keys prevent repeats within a slot.
+   * Cron entrypoint (Vercel Cron — daily UTC ticks on Hobby; see vercel.json).
+   * Each run applies every slot that is due for the user's local hour; dedupe keys
+   * prevent repeats when morning and evening land on the same tick.
    */
   async runDueTodaySweep(now = new Date()): Promise<ReminderSweepResult> {
     // Global status hygiene first so overdue ambitions become `missed` even when
@@ -68,15 +68,17 @@ export class RemindersService {
 
     for (const user of eligibleUsers) {
       const tz = this.sanitizeTimezone(user.userTimezone);
-      const slot = this.resolveCronSlot(tz, now);
-      if (!slot) {
+      const slots = this.resolveCronSlots(tz, now);
+      if (slots.length === 0) {
         continue;
       }
 
       usersInSlot += 1;
-      const result = await this.syncDueTodayForUser(user.userId, tz, true, slot, now, user.plan);
-      notificationsCreated += result.notificationsCreated;
-      pushesAttempted += result.pushesAttempted;
+      for (const slot of slots) {
+        const result = await this.syncDueTodayForUser(user.userId, tz, true, slot, now, user.plan);
+        notificationsCreated += result.notificationsCreated;
+        pushesAttempted += result.pushesAttempted;
+      }
     }
 
     const result: ReminderSweepResult = {
@@ -124,13 +126,16 @@ export class RemindersService {
     return { notificationsCreated: createdForUser.length, pushesAttempted };
   }
 
-  /** Cron: morning window 9–17 local; evening window 18+ local. Dedupe prevents repeats. */
-  resolveCronSlot(timezone: string, now = new Date()): ReminderSlot | null {
+  /**
+   * Cron slots for the user's local hour on a daily tick.
+   * Before 09:00 — none. 09:00–17:59 — morning. 18:00+ — morning catch-up + evening.
+   */
+  resolveCronSlots(timezone: string, now = new Date()): ReminderSlot[] {
     const hour = this.localHour(timezone, now);
-    if (hour < 0) return null;
-    if (hour >= RemindersService.EVENING_HOUR) return 'evening';
-    if (hour >= RemindersService.MORNING_HOUR) return 'morning';
-    return null;
+    if (hour < 0) return [];
+    if (hour >= RemindersService.EVENING_HOUR) return ['morning', 'evening'];
+    if (hour >= RemindersService.MORNING_HOUR) return ['morning'];
+    return [];
   }
 
   resolveManualSlot(timezone: string, now = new Date()): ReminderSlot {

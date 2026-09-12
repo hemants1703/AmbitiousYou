@@ -26,14 +26,12 @@ describe('RemindersService', () => {
   });
 
   describe('slot resolution', () => {
-    it('opens morning from 09:xx through 17:xx and evening from 18:xx', () => {
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T09:00:00.000Z'))).toBe('morning');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T09:45:00.000Z'))).toBe('morning');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T12:00:00.000Z'))).toBe('morning');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T17:59:00.000Z'))).toBe('morning');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T18:00:00.000Z'))).toBe('evening');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T20:00:00.000Z'))).toBe('evening');
-      expect(service.resolveCronSlot('UTC', new Date('2026-08-05T08:59:00.000Z'))).toBeNull();
+    it('opens morning from 09:xx through 17:xx and both slots from 18:xx', () => {
+      expect(service.resolveCronSlots('UTC', new Date('2026-08-05T09:00:00.000Z'))).toEqual(['morning']);
+      expect(service.resolveCronSlots('UTC', new Date('2026-08-05T17:59:00.000Z'))).toEqual(['morning']);
+      expect(service.resolveCronSlots('UTC', new Date('2026-08-05T18:00:00.000Z'))).toEqual(['morning', 'evening']);
+      expect(service.resolveCronSlots('UTC', new Date('2026-08-05T20:00:00.000Z'))).toEqual(['morning', 'evening']);
+      expect(service.resolveCronSlots('UTC', new Date('2026-08-05T08:59:00.000Z'))).toEqual([]);
     });
 
     it('manual slot is morning before 18:00 and evening after', () => {
@@ -101,24 +99,39 @@ describe('RemindersService', () => {
     );
   });
 
-  it('creates evening follow-up when items are still incomplete', async () => {
+  it('creates morning catch-up and evening follow-up when items are still incomplete at 18:00', async () => {
+    const taskRow = {
+      id: 'task-1',
+      label: 'Ship reminders',
+      ambitionId: 'amb-1',
+      ambitionName: 'Launch',
+      dueDate: new Date('2026-08-05T00:00:00.000Z'),
+    };
+
     (db.select as jest.Mock)
       .mockReturnValueOnce(buildChain([{ userId: 'user-1', userTimezone: 'UTC', plan: 'free' }]))
-      .mockReturnValueOnce(
-        buildChain([
-          {
-            id: 'task-1',
-            label: 'Ship reminders',
-            ambitionId: 'amb-1',
-            ambitionName: 'Launch',
-            dueDate: new Date('2026-08-05T00:00:00.000Z'),
-          },
-        ]),
-      )
+      .mockReturnValueOnce(buildChain([taskRow]))
+      .mockReturnValueOnce(buildChain([]))
+      .mockReturnValueOnce(buildChain([]))
+      .mockReturnValueOnce(buildChain([taskRow]))
       .mockReturnValueOnce(buildChain([]))
       .mockReturnValueOnce(buildChain([]));
 
-    const created = {
+    const morningCreated = {
+      id: 'notif-1',
+      userId: 'user-1',
+      type: 'task_due_today',
+      title: 'Task due today',
+      body: 'Ship reminders · Launch',
+      href: '/ambitions/amb-1',
+      ambitionId: 'amb-1',
+      resourceId: 'task-1',
+      dedupeKey: 'task_due_today:task-1:2026-08-05:morning',
+      readAt: null,
+      createdAt: new Date(),
+    };
+
+    const eveningCreated = {
       id: 'notif-2',
       userId: 'user-1',
       type: 'task_due_today',
@@ -132,11 +145,12 @@ describe('RemindersService', () => {
       createdAt: new Date(),
     };
 
-    (db.insert as jest.Mock).mockReturnValueOnce(buildChain([created]));
+    (db.insert as jest.Mock).mockReturnValueOnce(buildChain([morningCreated])).mockReturnValueOnce(buildChain([eveningCreated]));
 
     const result = await service.runDueTodaySweep(new Date('2026-08-05T18:00:00.000Z'));
 
-    expect(result.notificationsCreated).toBe(1);
+    expect(result.notificationsCreated).toBe(2);
+    expect(pushService.sendToUser).toHaveBeenCalledTimes(2);
     expect(pushService.sendToUser).toHaveBeenCalledWith(
       'user-1',
       expect.objectContaining({
@@ -206,11 +220,24 @@ describe('RemindersService', () => {
       createdAt: new Date(),
     };
 
-    (db.insert as jest.Mock).mockReturnValueOnce(buildChain([created]));
+    (db.insert as jest.Mock)
+      .mockReturnValueOnce(
+        buildChain([
+          {
+            ...created,
+            id: 'notif-pro-morning',
+            type: 'contract_due_morning',
+            title: "Today's contract: Ship reminders",
+            dedupeKey: 'contract:contract-1:2026-08-05:morning',
+          },
+        ]),
+      )
+      .mockReturnValueOnce(buildChain([created]));
 
     const result = await service.runDueTodaySweep(new Date('2026-08-05T18:00:00.000Z'));
 
-    expect(result.notificationsCreated).toBe(1);
+    expect(result.notificationsCreated).toBe(2);
+    expect(loopService.findActiveContractForLocalDate).toHaveBeenCalledTimes(2);
     expect(loopService.findActiveContractForLocalDate).toHaveBeenCalledWith('user-1', '2026-08-05');
     expect(pushService.sendToUser).toHaveBeenCalledWith(
       'user-1',

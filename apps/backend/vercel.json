@@ -9,7 +9,11 @@
   "crons": [
     {
       "path": "/internal/reminders/run",
-      "schedule": "0 * * * *"
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/internal/reminders/run",
+      "schedule": "0 14 * * *"
     }
   ]
 }

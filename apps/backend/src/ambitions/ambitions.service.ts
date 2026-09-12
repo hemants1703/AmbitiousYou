@@ -36,7 +36,7 @@ export class AmbitionsService {
   }
 
   async findAllAmbitionsByUserId(userId: string): Promise<Ambition[] | null> {
-    // Keep list filters / ReviveMissed accurate without waiting for the hourly cron.
+    // Keep list filters / ReviveMissed accurate without waiting for the daily cron.
     await markOverdueAmbitionsMissed({ userId });
     const rows = await db.select().from(ambitions).where(eq(ambitions.userId, userId)).orderBy(desc(ambitions.createdAt));
     return rows.length ? rows : null;

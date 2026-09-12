@@ -7,7 +7,7 @@ AmbitiousYou notifies opted-in users about **incomplete tasks, milestones, and a
 | **Morning** | Local hour **≥ 9 and &lt; 18** | Notify open due/overdue moves once (deduped). |
 | **Evening** | Local hour **≥ 18** | Notify again only if still open. |
 
-Hourly Vercel Cron ticks are enough — Nest picks the slot from the user’s local hour, and dedupe keys prevent repeats inside the window.
+Two daily Vercel Cron ticks (Hobby-compatible) cover global timezones — Nest picks the slot(s) from each user’s local hour, and dedupe keys prevent repeats inside a window.
 
 Delivery channels:
 
@@ -45,7 +45,7 @@ flowchart TB
   end
 
   subgraph schedule [Vercel Cron]
-    VC["vercel.json crons\n0 * * * *"]
+    VC["vercel.json crons\n0 2,14 * * *"]
   end
 
   Settings -->|enable + permission| SubAPI
@@ -65,19 +65,19 @@ flowchart TB
   InboxAPI --> Notifs
 ```
 
-### Why hourly cron, not two fixed UTC schedules?
+### Why daily cron ticks, not hourly?
 
-Users live in many timezones. “9 AM” and “6 PM” must be **local**.
+Vercel **Hobby** allows each cron expression to run **at most once per day** (Pro unlocks hourly and sub-daily schedules). Users still need **local** 9 AM / 6 PM windows across timezones.
 
-1. Vercel Cron runs **every hour UTC** (`0 * * * *`) — configured in [`vercel.json`](../vercel.json).
+1. Vercel Cron runs **twice daily UTC** — `0 2 * * *` and `0 14 * * *` in [`vercel.json`](../vercel.json) — hitting most timezones during morning or evening local hours across the two ticks.
 2. Nest loads users with `push_ambition_reminders = true`.
 3. For each user, Nest reads `user_timezone` and computes the **local hour**.
-4. **Morning window** (hour ≥ 9 and &lt; 18) or **evening window** (hour ≥ 18) creates/sends once per slot (deduped).
+4. **Morning window** (hour ≥ 9 and &lt; 18) → morning slot only. **Evening window** (hour ≥ 18) → morning catch-up **and** evening slot on the same tick (dedupe prevents duplicates if morning already ran).
 5. Queries **incomplete** tasks/milestones/ambitions with due/end date **≤ local today** (includes overdue).
 
 Constants live in `RemindersService.MORNING_HOUR` / `EVENING_HOUR`.
 
-Using hour **ranges** (not a single hour) means a delayed cron tick still delivers — dedupe keys prevent duplicate sends.
+Hour **ranges** plus dedupe keys mean a delayed cron tick still delivers without duplicate sends.
 
 ---
 
@@ -110,7 +110,7 @@ sequenceDiagram
   participant Push as Browser push services
   participant Device as User device
 
-  loop Every hour UTC
+  loop Twice daily UTC (02:00 and 14:00)
     VC->>API: GET + CRON_SECRET
     API->>DB: Users with pushAmbitionReminders
     alt User local hour in morning or evening window
@@ -156,7 +156,7 @@ Cron definition: [`apps/backend/vercel.json`](../vercel.json) → `crons` array.
 
 | Trigger | Behavior |
 |---|---|
-| `schedule: '0 * * * *'` | Automatic hourly UTC tick (production deployment) |
+| `schedule: '0 2 * * *'` and `'0 14 * * *'` | Automatic twice-daily UTC ticks (Hobby-compatible) |
 | Manual | `curl` with `CRON_SECRET` (see Operations below) |
 
 ### Common control actions
@@ -204,7 +204,7 @@ Silent push is not used (`userVisibleOnly: true`). Tapping a notification opens 
 | `POST /notifications/push/subscribe` | Session | Save Web Push subscription |
 | `POST /notifications/push/unsubscribe` | Session | Revoke subscription |
 | `POST /notifications/reminders/sync` | Session | Immediate sync for current user/slot |
-| `GET /internal/reminders/run` | `Bearer CRON_SECRET` | Hourly cron sweep (Vercel Cron) |
+| `GET /internal/reminders/run` | `Bearer CRON_SECRET` | Scheduled cron sweep (Vercel Cron) |
 | `POST /internal/reminders/run` | `Bearer CRON_SECRET` | Manual sweep (curl / debugging) |
 
 ---
@@ -264,14 +264,15 @@ Example response:
 }
 ```
 
-`usersInSlot` counts users whose **local** hour is currently in the morning or evening window. At other UTC hours this is often `0` even when many users are opted in — that is expected.
+`usersInSlot` counts users whose **local** hour is currently in the morning or evening window. With twice-daily UTC ticks, many runs still show `0` when no opted-in users are in-window — that is expected.
 
 `ambitionsMarkedMissed` is the count of overdue `active` ambitions flipped to `missed` at the start of the sweep (end date before today, progress &lt; 100%).
 
 ### Schedule caveats
 
 - Delivery is tied to **local** 9 / 18 windows, not “9 UTC”.
-- Vercel can delay cron invocations by several minutes — hour ranges + dedupe handle this.
+- Vercel can delay cron invocations by several minutes — slot ranges + dedupe handle this.
+- On **Pro**, you can switch back to `0 * * * *` for finer timezone coverage if desired.
 - Check Vercel dashboard → Cron Jobs after deploy to confirm invocations succeed.
 
 ### Troubleshooting

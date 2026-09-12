@@ -43,7 +43,7 @@ export async function assertAmbitionAcceptsNewMoves(tx: Tx, ambition: AmbitionWi
 }
 
 /**
- * Flip overdue `active` ambitions to `missed`. Used by the hourly reminders cron (global)
+ * Flip overdue `active` ambitions to `missed`. Used by the daily reminders cron (global)
  * and by ambition list/detail reads (scoped to the current user) so status stays fresh
  * without waiting for a move mutation.
  */
