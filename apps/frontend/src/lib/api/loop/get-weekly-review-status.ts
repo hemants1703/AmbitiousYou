@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { WeeklyReviewPayload, WeeklyReviewStatusPayload } from "@/types";
 
 function authHeaders(sessionToken: string) {

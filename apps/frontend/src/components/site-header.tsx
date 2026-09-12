@@ -1,12 +1,15 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { AiSidebarTrigger } from "@/components/ui/ai-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { HeaderNav } from "@/components/header-nav";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 
 interface SiteHeaderProps {
-  inboxSlot: React.ReactNode;
-  aiSidebarTrigger?: React.ReactNode;
+  inboxSlot: ReactNode;
+  showAiSidebar?: boolean;
 }
 
 export function SiteHeader(props: SiteHeaderProps) {
@@ -20,7 +23,7 @@ export function SiteHeader(props: SiteHeaderProps) {
         </Suspense>
         <div className="ml-auto flex items-center gap-1">
           {props.inboxSlot}
-          {props.aiSidebarTrigger}
+          {props.showAiSidebar ? <AiSidebarTrigger /> : null}
           <ThemeToggle />
         </div>
       </div>

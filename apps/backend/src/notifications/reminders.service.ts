@@ -34,15 +34,18 @@ export class RemindersService {
   static readonly MORNING_HOUR = 9;
   static readonly EVENING_HOUR = 18;
 
-  constructor(
-    private readonly pushService: PushService,
-    private readonly loopService: LoopService,
-  ) {}
+  private readonly pushService: PushService;
+  private readonly loopService: LoopService;
+
+  constructor(pushService: PushService, loopService: LoopService) {
+    this.pushService = pushService;
+    this.loopService = loopService;
+  }
 
   /**
-   * Cron entrypoint (GitHub Actions hourly UTC).
-   * Morning: local hour === 9. Evening: local hour === 18.
-   * Hourly ticks cover every timezone; dedupe keys prevent repeats.
+   * Cron entrypoint (Vercel Cron hourly UTC).
+   * Morning: local hour >= 9 and < 18. Evening: local hour >= 18.
+   * Hourly ticks cover every timezone; dedupe keys prevent repeats within a slot.
    */
   async runDueTodaySweep(now = new Date()): Promise<ReminderSweepResult> {
     // Global status hygiene first so overdue ambitions become `missed` even when
@@ -121,12 +124,12 @@ export class RemindersService {
     return { notificationsCreated: createdForUser.length, pushesAttempted };
   }
 
-  /** Cron: local hour 9 → morning; local hour 18 → evening. */
+  /** Cron: morning window 9–17 local; evening window 18+ local. Dedupe prevents repeats. */
   resolveCronSlot(timezone: string, now = new Date()): ReminderSlot | null {
     const hour = this.localHour(timezone, now);
     if (hour < 0) return null;
-    if (hour === RemindersService.EVENING_HOUR) return 'evening';
-    if (hour === RemindersService.MORNING_HOUR) return 'morning';
+    if (hour >= RemindersService.EVENING_HOUR) return 'evening';
+    if (hour >= RemindersService.MORNING_HOUR) return 'morning';
     return null;
   }
 

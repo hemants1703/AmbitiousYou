@@ -7,14 +7,14 @@ AmbitiousYou notifies opted-in users about **incomplete tasks, milestones, and a
 | **Morning** | Local hour **≥ 9 and &lt; 18** | Notify open due/overdue moves once (deduped). |
 | **Evening** | Local hour **≥ 18** | Notify again only if still open. |
 
-Hourly GitHub Actions ticks are enough — Nest picks the slot from the user’s local hour, and dedupe keys prevent repeats inside the window.
+Hourly Vercel Cron ticks are enough — Nest picks the slot from the user’s local hour, and dedupe keys prevent repeats inside the window.
 
 Delivery channels:
 
 1. **In-app inbox** — bell in the authenticated app header  
 2. **On-device OS notification** — Web Push via the PWA (Windows / macOS / Android / iOS Home Screen)
 
-No native apps. Scheduling is **GitHub Actions → Nest on Render**. Supabase Cron is not used.
+No native apps. Scheduling is **Vercel Cron → Nest on Vercel**. Supabase Cron and GitHub Actions are not used.
 
 ---
 
@@ -28,10 +28,10 @@ flowchart TB
     Inbox[Header inbox]
   end
 
-  subgraph backend [NestJS on Render]
+  subgraph backend [NestJS on Vercel]
     SubAPI[POST /notifications/push/subscribe]
     SyncAPI[POST /notifications/reminders/sync]
-    CronAPI[POST /internal/reminders/run]
+    CronAPI[GET /internal/reminders/run]
     Reminders[RemindersService]
     Push[PushService web-push VAPID]
     InboxAPI[GET /notifications]
@@ -44,15 +44,15 @@ flowchart TB
     Tasks[(tasks / milestones)]
   end
 
-  subgraph schedule [GitHub Actions]
-    GA["reminders-cron.yml\nschedule: 0 * * * *\n+ workflow_dispatch"]
+  subgraph schedule [Vercel Cron]
+    VC["vercel.json crons\n0 * * * *"]
   end
 
   Settings -->|enable + permission| SubAPI
   SubAPI --> Subs
   Settings -->|opt-in flag + timezone| SettingsTbl
   Settings -->|immediate sync| SyncAPI
-  GA -->|Bearer CRON_SECRET| CronAPI
+  VC -->|Bearer CRON_SECRET| CronAPI
   CronAPI --> Reminders
   SyncAPI --> Reminders
   Reminders --> Tasks
@@ -65,17 +65,19 @@ flowchart TB
   InboxAPI --> Notifs
 ```
 
-### Why hourly Actions, not two fixed UTC crons?
+### Why hourly cron, not two fixed UTC schedules?
 
 Users live in many timezones. “9 AM” and “6 PM” must be **local**.
 
-1. GitHub Actions runs **every hour UTC** (`0 * * * *`).
+1. Vercel Cron runs **every hour UTC** (`0 * * * *`) — configured in [`vercel.json`](../vercel.json).
 2. Nest loads users with `push_ambition_reminders = true`.
 3. For each user, Nest reads `user_timezone` and computes the **local hour**.
 4. **Morning window** (hour ≥ 9 and &lt; 18) or **evening window** (hour ≥ 18) creates/sends once per slot (deduped).
 5. Queries **incomplete** tasks/milestones/ambitions with due/end date **≤ local today** (includes overdue).
 
 Constants live in `RemindersService.MORNING_HOUR` / `EVENING_HOUR`.
+
+Using hour **ranges** (not a single hour) means a delayed cron tick still delivers — dedupe keys prevent duplicate sends.
 
 ---
 
@@ -85,8 +87,8 @@ Constants live in `RemindersService.MORNING_HOUR` / `EVENING_HOUR`.
 
 ```mermaid
 flowchart TD
-  A[User opens Settings → Notifications] --> B{iOS and not installed to Home Screen?}
-  B -->|yes| C[Show install steps\nShare → Add to Home Screen]
+  A[User opens Settings -> Notifications] --> B{iOS and not installed to Home Screen?}
+  B -->|yes| C[Show install steps\nShare -> Add to Home Screen]
   B -->|no| D[Toggle Ambition reminders ON]
   D --> E[Browser permission prompt]
   E -->|denied| F[Toast: permission not granted]
@@ -102,14 +104,14 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-  participant GA as GitHub Actions
+  participant VC as Vercel Cron
   participant API as Nest /internal/reminders/run
   participant DB as Supabase
   participant Push as Browser push services
   participant Device as User device
 
   loop Every hour UTC
-    GA->>API: POST + CRON_SECRET
+    VC->>API: GET + CRON_SECRET
     API->>DB: Users with pushAmbitionReminders
     alt User local hour in morning or evening window
       API->>DB: Incomplete tasks/milestones/ambitions due today or overdue
@@ -117,7 +119,7 @@ sequenceDiagram
       API->>Push: web-push payload
       Push->>Device: OS notification
     else Before 9 AM local
-      API-->>GA: Skip user
+      API-->>VC: Skip user
     end
   end
 ```
@@ -148,38 +150,35 @@ Max **two** notifications per item per local day. Completing before 18:00 remove
 
 ---
 
-## Managing the GitHub Actions cron
+## Managing the Vercel Cron schedule
 
-Workflow file: [`.github/workflows/reminders-cron.yml`](../../../.github/workflows/reminders-cron.yml)
-
-Triggers today:
+Cron definition: [`apps/backend/vercel.json`](../vercel.json) → `crons` array.
 
 | Trigger | Behavior |
 |---|---|
-| `schedule: '0 * * * *'` | Automatic hourly UTC tick |
-| `workflow_dispatch` | Manual **Run workflow** from the Actions UI |
+| `schedule: '0 * * * *'` | Automatic hourly UTC tick (production deployment) |
+| Manual | `curl` with `CRON_SECRET` (see Operations below) |
 
 ### Common control actions
 
 | Goal | What to do |
 |---|---|
-| **Run now** | GitHub → Actions → **reminders-cron** → **Run workflow** |
-| **Manual-only (stop automatic)** | Edit the workflow: remove the `schedule:` block; keep only `workflow_dispatch` |
-| **Change frequency** | Edit the cron expression in the YAML and push |
-| **Pause without deleting file** | Remove or rotate `CRON_SECRET` / `REMINDERS_API_URL` so the job fails closed; or comment out `schedule` |
-| **Delete the cron entirely** | Delete `.github/workflows/reminders-cron.yml` and push |
-| **Disable all Actions** | Repo Settings → Actions → disable (affects every workflow) |
+| **Run now** | `curl` the endpoint with `CRON_SECRET` (see Operations) |
+| **Change frequency** | Edit the cron expression in `vercel.json` and redeploy |
+| **Pause** | Remove the `crons` block from `vercel.json` and redeploy |
+| **Delete the cron entirely** | Remove `crons` from `vercel.json` |
 
-There is no separate “cron dashboard” — **the workflow YAML is the schedule**. Change the file = change the job.
+Vercel dashboard → Project → **Cron Jobs** shows invocation history and errors.
 
-### Required GitHub secrets
+### Required Vercel env var
 
-Environment: **`production-backend`**
+Backend Vercel project → **Settings → Environment Variables** (Production scope at minimum):
 
-| Secret | Purpose |
+| Variable | Purpose |
 |---|---|
-| `REMINDERS_API_URL` | Render API base, e.g. `https://api.ambitiousyou.pro` |
-| `CRON_SECRET` | Same value as Render `CRON_SECRET` |
+| `CRON_SECRET` | Vercel Cron sends `Authorization: Bearer <CRON_SECRET>` on each invocation |
+
+Generate a strong random string (e.g. `openssl rand -hex 32`). **Without this, cron invocations return 401 and no reminders are sent.**
 
 ---
 
@@ -205,20 +204,21 @@ Silent push is not used (`userVisibleOnly: true`). Tapping a notification opens 
 | `POST /notifications/push/subscribe` | Session | Save Web Push subscription |
 | `POST /notifications/push/unsubscribe` | Session | Revoke subscription |
 | `POST /notifications/reminders/sync` | Session | Immediate sync for current user/slot |
-| `POST /internal/reminders/run` | `Bearer CRON_SECRET` | Hourly cron sweep |
+| `GET /internal/reminders/run` | `Bearer CRON_SECRET` | Hourly cron sweep (Vercel Cron) |
+| `POST /internal/reminders/run` | `Bearer CRON_SECRET` | Manual sweep (curl / debugging) |
 
 ---
 
 ## Environment variables
 
-### Render (backend)
+### Vercel (backend)
 
 | Variable | Purpose |
 |---|---|
 | `VAPID_PUBLIC_KEY` | Web Push public key |
 | `VAPID_PRIVATE_KEY` | Web Push private key |
 | `VAPID_SUBJECT` | e.g. `mailto:support@ambitiousyou.pro` |
-| `CRON_SECRET` | Shared secret for `/internal/reminders/run` |
+| `CRON_SECRET` | Shared secret for `/internal/reminders/run` (required for cron) |
 
 Generate keys: `npx web-push generate-vapid-keys`
 
@@ -247,10 +247,8 @@ Apply: `cd apps/backend && pnpm db:migrate`
 ### Manual API test
 
 ```bash
-curl -X POST "$API_URL/internal/reminders/run" \
-  -H "Authorization: Bearer $CRON_SECRET" \
-  -H "Content-Type: application/json" \
-  -d '{}'
+curl -X GET "$API_URL/internal/reminders/run" \
+  -H "Authorization: Bearer $CRON_SECRET"
 ```
 
 Example response:
@@ -266,24 +264,25 @@ Example response:
 }
 ```
 
-`usersInSlot` counts users whose **local** hour is currently 9 or 18. At other UTC hours this is often `0` even when many users are opted in — that is expected.
+`usersInSlot` counts users whose **local** hour is currently in the morning or evening window. At other UTC hours this is often `0` even when many users are opted in — that is expected.
 
 `ambitionsMarkedMissed` is the count of overdue `active` ambitions flipped to `missed` at the start of the sweep (end date before today, progress &lt; 100%).
 
 ### Schedule caveats
 
-- Delivery is tied to **local** 9 / 18, not “9 UTC”.
-- GitHub can delay scheduled workflows by several minutes — fine for day-level reminders.
-- Use **Run workflow** to verify secrets after deploy.
+- Delivery is tied to **local** 9 / 18 windows, not “9 UTC”.
+- Vercel can delay cron invocations by several minutes — hour ranges + dedupe handle this.
+- Check Vercel dashboard → Cron Jobs after deploy to confirm invocations succeed.
 
 ### Troubleshooting
 
 | Symptom | Check |
 |---|---|
-| No OS notification | Permission? VAPID on Render + Vercel? `/sw.js` registered? |
+| No OS notification | Permission? VAPID on Vercel backend + frontend? `/sw.js` registered? |
 | iOS silent | Opened from Home Screen icon (standalone)? |
-| Cron 401 | `CRON_SECRET` matches Render and GitHub `production-backend` |
-| Cron `usersInSlot: 0` | Not currently 9 or 18 in any opted-in user’s timezone |
+| Cron 401 | `CRON_SECRET` set on backend Vercel project (Production) |
+| Cron never runs | `crons` in `vercel.json` deployed? Vercel plan supports cron? |
+| `usersInSlot: 0` | No opted-in users currently in morning/evening local window |
 | Evening empty | Item already completed, or evening dedupe already inserted |
 | Inbox empty after enable | Migration applied? Opt-in true? Due dates today in user TZ? |
 
@@ -300,4 +299,4 @@ Example response:
 | Service worker | `apps/frontend/public/sw.js` |
 | Settings UX | `apps/frontend/src/components/(app)/settings/notifications-settings-tab.tsx` |
 | Inbox UI | `apps/frontend/src/components/(app)/notifications/notifications-inbox.tsx` |
-| Cron workflow | `.github/workflows/reminders-cron.yml` |
+| Cron config | `apps/backend/vercel.json` |

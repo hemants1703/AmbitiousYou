@@ -7,9 +7,15 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />
+export type SheetProps = {
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  modal?: boolean
+  children?: React.ReactNode
 }
+
+export const Sheet: React.FC<SheetProps> = (props) => <SheetPrimitive.Root data-slot="sheet" {...props} />
 
 function SheetTrigger({
   ...props
@@ -45,16 +51,18 @@ function SheetOverlay({
   )
 }
 
-function SheetContent({
+export type SheetContentProps = React.ComponentPropsWithoutRef<"div"> & {
+  side?: "top" | "right" | "bottom" | "left"
+  showCloseButton?: boolean
+}
+
+export const SheetContent: React.FC<SheetContentProps> = ({
   className,
   children,
   side = "right",
   showCloseButton = true,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: "top" | "right" | "bottom" | "left"
-  showCloseButton?: boolean
-}) {
+}) => {
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -86,15 +94,15 @@ function SheetContent({
   )
 }
 
-function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="sheet-header"
-      className={cn("flex flex-col gap-1.5 p-6", className)}
-      {...props}
-    />
-  )
-}
+export type SheetHeaderProps = React.ComponentProps<"div">
+
+export const SheetHeader: React.FC<SheetHeaderProps> = ({ className, ...props }) => (
+  <div
+    data-slot="sheet-header"
+    className={cn("flex flex-col gap-1.5 p-6", className)}
+    {...props}
+  />
+)
 
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -136,11 +144,8 @@ function SheetDescription({
 }
 
 export {
-  Sheet,
   SheetTrigger,
   SheetClose,
-  SheetContent,
-  SheetHeader,
   SheetFooter,
   SheetTitle,
   SheetDescription,

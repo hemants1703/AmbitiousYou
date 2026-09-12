@@ -1,9 +1,8 @@
-import { HeaderInbox, HeaderInboxSkeleton } from "@/components/(app)/shell/header-inbox";
 import { AuthenticatedNavUser, NavUserSkeleton } from "@/components/(app)/shell/authenticated-nav-user";
 import { RegisterPushSw } from "@/components/(app)/notifications/register-push-sw";
 import { WeeklyReviewModalWrapper } from "@/components/(app)/shell/weekly-review-modal-wrapper";
+import { SiteHeaderWithPro } from "@/components/(app)/shell/site-header-with-pro";
 import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AiSidebarProvider } from "@/components/ui/ai-sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,7 +12,6 @@ import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AiSidebarNavCollapse } from "@/components/(app)/shell/ai-sidebar-nav-collapse";
 import { AiSidebarWrapper } from "@/components/(app)/shell/ai-sidebar-wrapper";
-import { ProAiSidebarTrigger } from "@/components/(app)/shell/pro-ai-sidebar-trigger";
 
 export const metadata: Metadata = {
   ...createPrivateMetadata("AmbitiousYou"),
@@ -57,18 +55,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               }
             />
             <SidebarInset className="min-w-0 md:group-data-[ai-state=expanded]/ai-sidebar-wrapper:mr-0!">
-              <SiteHeader
-                inboxSlot={
-                  <Suspense fallback={<HeaderInboxSkeleton />}>
-                    <HeaderInbox />
-                  </Suspense>
-                }
-                aiSidebarTrigger={
-                  <Suspense fallback={null}>
-                    <ProAiSidebarTrigger />
-                  </Suspense>
-                }
-              />
+              <SiteHeaderWithPro />
               <div id="main-content" className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">
                 {children}
               </div>

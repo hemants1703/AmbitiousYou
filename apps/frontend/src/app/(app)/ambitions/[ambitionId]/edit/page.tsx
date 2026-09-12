@@ -10,6 +10,8 @@ import { CalendarRangeIcon, ChevronLeftIcon, ListChecksIcon, LockIcon } from "lu
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { cache, Suspense, type ReactNode } from "react";
 
 interface EditAmbitionPageProps {
@@ -19,6 +21,9 @@ interface EditAmbitionPageProps {
 const getAmbitionData = cache(async (sessionToken: string, ambitionId: string): Promise<AmbitionDetails | null> => {
   return await getAmbitionDetails(sessionToken, ambitionId);
 });
+
+// instant = false: same rationale as ambition detail — auth + fetch stay in Suspense.
+export const instant = false;
 
 export async function generateMetadata(props: EditAmbitionPageProps): Promise<Metadata> {
   const { sessionToken } = await requireUser();
@@ -41,12 +46,14 @@ export default function EditAmbitionPage(props: EditAmbitionPageProps) {
 }
 
 async function EditAmbitionContent(props: { params: Promise<{ ambitionId: string }> }) {
+  await connection();
+
   const { sessionToken } = await requireUser();
   const { ambitionId } = await props.params;
 
   const ambition = await getAmbitionData(sessionToken, ambitionId);
   if (!ambition) {
-    throw new Error(`Failed to fetch ambition ${ambitionId}`);
+    notFound();
   }
 
   const dateWindowLabel = `${formatDate(ambition.ambitionStartDate)} – ${formatDate(ambition.ambitionEndDate)}`;

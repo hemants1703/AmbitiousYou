@@ -39,27 +39,31 @@ const buttonVariants = cva(
   }
 )
 
-function Button({
+export type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }
+
+export const Button: React.FC<ButtonProps> = ({
   className,
   variant = "default",
   size = "default",
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot.Root : "button"
+}) => {
+  const sharedProps = {
+    "data-slot": "button",
+    "data-variant": variant,
+    "data-size": size,
+    className: cn(buttonVariants({ variant, size, className })),
+    ...props,
+  }
 
-  return (
-    <Comp
-      data-slot="button"
-      data-variant={variant}
-      data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+  if (asChild) {
+    return <Slot.Root {...sharedProps} />
+  }
+
+  return <button type="button" {...sharedProps} />
 }
 
-export { Button, buttonVariants }
+export { buttonVariants }

@@ -1,13 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchWeeklyReviewCurrent, getWeeklyReviewStatus } from "@/lib/api/loop/get-weekly-review-status";
+import { loadWeeklyReviewCurrent, loadWeeklyReviewStatus } from "@/lib/actions/(app)/loop/review-actions";
 import type { WeeklyReviewPayload, WeeklyReviewStatusPayload } from "@/types";
-
-function readSessionToken(): string {
-  const match = document.cookie.match(/sessionToken=([^;]+)/);
-  return match ? match[1] : "";
-}
+import { useEffect, useState } from "react";
 
 export function useWeeklyReview() {
   const [status, setStatus] = useState<WeeklyReviewStatusPayload | null>(null);
@@ -19,23 +14,19 @@ export function useWeeklyReview() {
 
     async function checkStatus() {
       try {
-        const sessionToken = readSessionToken();
-        if (!sessionToken) {
-          if (mounted) setLoading(false);
-          return;
-        }
-
-        const data = await getWeeklyReviewStatus(sessionToken);
+        const data = await loadWeeklyReviewStatus();
         if (!mounted) return;
 
         if (data) {
           setStatus(data);
 
           if (data.isWeekEnd && !data.hasCompletedReview) {
-            const review = await fetchWeeklyReviewCurrent(sessionToken);
+            const review = await loadWeeklyReviewCurrent();
             if (mounted) setReviewPayload(review);
           }
         }
+      } catch {
+        // Backend unreachable or session invalid — modal stays hidden.
       } finally {
         if (mounted) setLoading(false);
       }

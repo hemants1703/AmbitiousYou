@@ -7,7 +7,7 @@ import { Slot } from "radix-ui";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { persistSidebarOpen } from "@/lib/(app)/sidebar-state";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -213,7 +213,9 @@ function Sidebar({
   );
 }
 
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+export type SidebarTriggerProps = ButtonProps
+
+export const SidebarTrigger: React.FC<SidebarTriggerProps> = ({ className, onClick, ...props }) => {
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -232,7 +234,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
-}
+};
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   const { toggleSidebar } = useSidebar();
@@ -523,6 +525,5 @@ export {
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
-  SidebarTrigger,
   useSidebar,
 };
