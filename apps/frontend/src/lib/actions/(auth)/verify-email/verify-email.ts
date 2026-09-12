@@ -2,6 +2,7 @@
 
 import { invalidateUserCache } from "@/lib/cache/invalidate-session-data";
 import { getCachedUser } from "@/lib/cache/session-data";
+import { getSessionToken } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export async function verifyEmailAction(token: string): Promise<{ error: string | null }> {
@@ -33,7 +34,8 @@ export async function verifyEmailAction(token: string): Promise<{ error: string 
   }
 
   try {
-    const user = await getCachedUser();
+    const sessionToken = await getSessionToken();
+    const user = await getCachedUser(sessionToken);
     invalidateUserCache(user.id);
   } catch {
     // Visitor may verify while logged out — path revalidation still updates UI on next login.

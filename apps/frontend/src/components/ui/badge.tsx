@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
@@ -23,27 +25,32 @@ const badgeVariants = cva(
     },
     defaultVariants: {
       variant: "default",
-    },
+    } as const,
   }
 )
 
-function Badge({
+export type BadgeProps = React.ComponentProps<"span"> &
+  VariantProps<typeof badgeVariants> & { asChild?: boolean }
+
+export function Badge({
   className,
   variant = "default",
   asChild = false,
   ...props
-}: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "span"
+}: BadgeProps): React.ReactElement {
+  const resolvedVariant = variant ?? "default"
+  const sharedProps = {
+    "data-slot": "badge",
+    "data-variant": resolvedVariant,
+    className: cn(badgeVariants({ variant: resolvedVariant }), className),
+    ...props,
+  }
 
-  return (
-    <Comp
-      data-slot="badge"
-      data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
-  )
+  if (asChild) {
+    return <Slot.Root {...sharedProps} />
+  }
+
+  return <span {...sharedProps} />
 }
 
-export { Badge, badgeVariants }
+export { badgeVariants }

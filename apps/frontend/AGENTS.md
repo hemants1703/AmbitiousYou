@@ -254,6 +254,18 @@ Monorepo overview, shared schema, and backend conventions: root [`AGENTS.md`](..
 - NEVER: Paint the whole Needs Attention card opaque `bg-destructive` with white body text
 - SHOULD: Keep the card interactive (popover) only when `totalCount > 0` and load succeeded
 
+## Skills (frontend)
+
+When a task matches, load the relevant skill from `.agents/skills/` before diving in:
+
+- `frontend-design` — distinctive visual direction for new UI or reshaping existing screens
+- `web-design-guidelines` — UI/accessibility reviews against Web Interface Guidelines
+- `vercel-react-best-practices` — React/Next.js performance patterns
+- `next-dev-loop` — verify a change actually works in a running `next dev`
+- `next-cache-components-adoption` / `next-cache-components-optimizer` — Cache Components work, incl. `instant()` e2e guards
+- `next-partial-prefetching-adoption` — Partial Prefetching flag and `<Link>` prefetch policy
+- `seo-audit` / `ai-seo` — on-page/AI SEO audits for landing routes
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

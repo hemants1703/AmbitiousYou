@@ -1,3 +1,5 @@
+import "server-only";
+
 import { fetchUserFromApi } from "@/lib/cache/fetch-session-data";
 import type { User } from "@/types";
 import { cookies } from "next/headers";

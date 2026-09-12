@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/unbound-method -- the auto-mocked Drizzle `db` and mocked bcrypt module are intentionally `any`-typed in tests. */
+/* eslint-disable @typescript-eslint/no-unsafe-call -- the auto-mocked Drizzle `db` and mocked bcrypt module are intentionally `any`-typed in tests. */
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, ConflictException, HttpException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';

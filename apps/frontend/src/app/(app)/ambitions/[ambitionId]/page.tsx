@@ -2,6 +2,7 @@ import AmbitionDetailsSection from "@/components/(app)/ambitions/(ambitionId)/am
 import { AmbitionMotivationCallout } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-motivation-callout";
 import AmbitionOptionsDropdown from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-options-dropdown";
 import { AmbitionTracking } from "@/components/(app)/ambitions/(ambitionId)/ambition-details/ambition-tracking";
+import { AmbitionAiBreakdown } from "@/components/(app)/ambitions/(ambitionId)/ambition-ai-breakdown";
 
 import { AmbitionPriorityBadge } from "@/components/(app)/ambitions/ambition-priority-badge";
 import { AmbitionStatusBadge } from "@/components/(app)/ambitions/ambition-status-badge";
@@ -17,8 +18,10 @@ import { CheckCircle2Icon, ChevronLeftIcon, HeartIcon } from "lucide-react";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { cache, Suspense } from "react";
+import { isPro } from "@/lib/plan";
 import AmbitionDetailsLoading from "./loading";
 
 interface AmbitionDetailsPageProps {
@@ -31,6 +34,11 @@ interface AmbitionDetailsPageProps {
 const getAmbitionData = cache(async (sessionToken: string, ambitionId: string) => {
   return await getAmbitionFull(sessionToken, ambitionId);
 });
+
+// instant = false: requireUser() + ambition fetch run inside Suspense; auth redirects
+// and API failures must not block instant-validation probes. App chrome still paints
+// immediately via (app)/layout + this route's loading.tsx fallback.
+export const instant = false;
 
 export async function generateMetadata(props: AmbitionDetailsPageProps): Promise<Metadata> {
   const { sessionToken } = await requireUser();
@@ -65,7 +73,7 @@ async function AmbitionDetailsContent(props: {
 
   const ambitionData = await getAmbitionData(sessionToken, ambitionId);
   if (!ambitionData) {
-    throw new Error(`Failed to fetch ambition ${ambitionId}`);
+    notFound();
   }
 
   const ambition = ambitionData.ambition;
@@ -139,6 +147,12 @@ async function AmbitionDetailsContent(props: {
         <FadeIn delayMs={80}>
           <AmbitionDetailsSection ambition={ambition} tasks={tasks} milestones={milestones} notes={notes} />
         </FadeIn>
+
+        {isPro(userDetails) && (
+          <FadeIn delayMs={160}>
+            <AmbitionAiBreakdown ambitionId={ambition.id} />
+          </FadeIn>
+        )}
       </div>
     </section>
   );

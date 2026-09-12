@@ -9,6 +9,11 @@ pnpm workspace monorepo with two apps:
 - `apps/backend` — NestJS 11 + Drizzle ORM + PostgreSQL. REST API on port `3001`. Owns the Drizzle schema at `src/db/schema/*`, migrations, and Drizzle-inferred domain types. Feature modules: `auth`, `users`, `ambitions`, `tasks`, `milestones`, `notes`, `settings`.
 - `apps/frontend` — Next.js App Router (React 19, React Compiler, Turbopack). **Cache Components + Partial Prefetching are enabled.** Hand-written API types live in `src/types/*`; profile avatar catalog in `src/lib/profile-icons.ts`. Day-to-day frontend UI rules live in [`apps/frontend/AGENTS.md`](apps/frontend/AGENTS.md). Adoption record: [`docs/NEXT-CACHE-COMPONENTS-MIGRATION.md`](docs/NEXT-CACHE-COMPONENTS-MIGRATION.md).
 
+## Software Design Principles - Coding Standards
+> **SOLID Principles**: Both the backend and frontend codebases must follow the SOLID principles.
+> **DRY Principle**: The codebase must follow the DRY principle.
+> **Feature-based Project Structure**: The codebase must follow the feature-based project structure.
+
 ## Commands
 
 Run from the repo root (uses `pnpm --filter`):

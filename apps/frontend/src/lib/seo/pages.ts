@@ -78,7 +78,7 @@ const corePages: IndexablePage[] = [
     path: "/pricing",
     changeFrequency: "monthly",
     priority: 0.85,
-    summary: "Pricing — free to use, no credit card, no ambition limits.",
+    summary: "Pricing — free for a limited time. Create your account today.",
   },
   {
     path: "/use-cases",

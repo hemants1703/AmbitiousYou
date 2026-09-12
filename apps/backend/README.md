@@ -63,7 +63,7 @@ The backend is **platform-agnostic**: the same codebase deploys to **Vercel serv
 
 ```mermaid
 flowchart LR
-    subgraph targets [Deploy targets — pick one or both]
+    subgraph targets [Deploy targets - pick one or both]
         V["Vercel serverless<br/>Fluid compute"]
         D["Docker on VPS<br/>node dist/main"]
     end

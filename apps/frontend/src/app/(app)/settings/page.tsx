@@ -32,10 +32,11 @@ export default function SettingsPage(props: SettingsPageProps) {
 async function SettingsContent(props: { searchParams: Promise<{ tab?: string }> }) {
   const [{ tab }, auth] = await Promise.all([props.searchParams, requireUser()]);
   const initialTab = parseSettingsTab(tab);
+  const pro = auth.user?.plan === "pro";
 
   return (
     <FadeIn delayMs={100}>
-      <SettingsTabs initialTab={initialTab}>
+      <SettingsTabs initialTab={initialTab} isPro={pro}>
         <SettingsTabPanel tab={initialTab} user={auth.user} />
       </SettingsTabs>
     </FadeIn>

@@ -4,14 +4,29 @@ export type AmbitionStatus = "active" | "completed" | "missed";
 export type AmbitionPriority = "low" | "medium" | "high";
 export type NotificationType = "task_due_today" | "milestone_due_today";
 
+export type UserPlan = "free" | "pro";
+
 export type User = {
   id: string;
   name: string;
   email: string;
   emailVerified: boolean;
+  plan: UserPlan;
   image: string | null;
+  weekStartDay: number;
+  weekEndDay: number;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type ProofLog = {
+  id: string;
+  userId: string;
+  ambitionId: string | null;
+  proofTitle: string;
+  proofNote: string | null;
+  loggedAt: Date;
+  createdAt: Date;
 };
 
 export type Session = {
@@ -31,6 +46,8 @@ export type Settings = {
   userTimezone: string;
   emailAccountActivity: boolean;
   pushAmbitionReminders: boolean;
+  weekStartDay: number;
+  weekEndDay: number;
   createdAt: Date;
   updatedAt: Date;
 };

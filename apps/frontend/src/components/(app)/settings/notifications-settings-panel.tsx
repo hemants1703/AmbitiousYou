@@ -4,9 +4,11 @@ import { NotificationsSettingsTab } from "@/components/(app)/settings/notificati
 import { NotificationsSettingsControlsSkeleton } from "@/components/(app)/settings/notifications-settings-controls-skeleton";
 import { NotificationsSettingsStaticShell } from "@/components/(app)/settings/notifications-settings-static-shell";
 import { getCachedUserSettings } from "@/lib/cache/session-data";
+import { getSessionToken } from "@/lib/auth";
 
 async function NotificationsSettingsData() {
-  const userSettings = await getCachedUserSettings();
+  const sessionToken = await getSessionToken();
+  const userSettings = await getCachedUserSettings(sessionToken);
 
   if (!userSettings) {
     return (

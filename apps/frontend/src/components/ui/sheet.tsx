@@ -4,10 +4,18 @@ import * as React from "react"
 import { Dialog as SheetPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, type ButtonProps } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
+export type SheetProps = {
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  modal?: boolean
+  children?: React.ReactNode
+}
+
+export function Sheet(props: SheetProps): React.ReactElement {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
 }
 
@@ -45,16 +53,25 @@ function SheetOverlay({
   )
 }
 
-function SheetContent({
+export type SheetContentProps = React.ComponentPropsWithoutRef<"div"> & {
+  side?: "top" | "right" | "bottom" | "left"
+  showCloseButton?: boolean
+  dir?: React.ComponentPropsWithoutRef<"div">["dir"]
+}
+
+export function SheetContent({
   className,
   children,
   side = "right",
   showCloseButton = true,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: "top" | "right" | "bottom" | "left"
-  showCloseButton?: boolean
-}) {
+}: SheetContentProps): React.ReactElement {
+  const closeButtonProps: ButtonProps = {
+    variant: "ghost",
+    className: "absolute top-4 right-4 bg-secondary",
+    size: "icon-sm",
+  };
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -70,11 +87,7 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
-            <Button
-              variant="ghost"
-              className="absolute top-4 right-4 bg-secondary"
-              size="icon-sm"
-            >
+            <Button {...closeButtonProps}>
               <XIcon
               />
               <span className="sr-only">Close</span>
@@ -86,7 +99,9 @@ function SheetContent({
   )
 }
 
-function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
+export type SheetHeaderProps = React.ComponentProps<"div">
+
+export function SheetHeader({ className, ...props }: SheetHeaderProps): React.ReactElement {
   return (
     <div
       data-slot="sheet-header"
@@ -136,11 +151,8 @@ function SheetDescription({
 }
 
 export {
-  Sheet,
   SheetTrigger,
   SheetClose,
-  SheetContent,
-  SheetHeader,
   SheetFooter,
   SheetTitle,
   SheetDescription,

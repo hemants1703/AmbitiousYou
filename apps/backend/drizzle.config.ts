@@ -7,8 +7,8 @@ import { defineConfig } from 'drizzle-kit';
 // `.env`, which would leave DATABASE_URL unset. Missing files are skipped.
 config({ path: ['.env.local', '.env.development', '.env.production', '.env'] });
 
-const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) {
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
   throw new Error('DATABASE_URL must be set to run drizzle-kit (check apps/backend/.env.local)');
 }
 
@@ -16,7 +16,7 @@ export default defineConfig({
   dialect: 'postgresql',
   schema: './src/db/schema/index.ts',
   out: './src/db/migrations',
-  dbCredentials: { url: databaseUrl },
+  dbCredentials: { url: DATABASE_URL },
   strict: true,
   verbose: true,
 });

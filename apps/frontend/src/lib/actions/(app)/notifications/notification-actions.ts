@@ -2,6 +2,7 @@
 
 import { mutateApi } from "@/lib/actions/mutate-api";
 import { getCachedUser } from "@/lib/cache/session-data";
+import { getSessionToken } from "@/lib/auth";
 import {
   invalidateInboxCache,
   invalidateSettingsCache,
@@ -10,13 +11,14 @@ import type { Notification, Settings } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export async function markNotificationReadAction(notificationId: string) {
+  const sessionToken = await getSessionToken();
   const result = await mutateApi<Notification>({
     path: `/notifications/${notificationId}/read`,
     method: "PATCH",
     errorMessage: "Could not mark notification as read.",
   });
   if (!result.error) {
-    const user = await getCachedUser();
+    const user = await getCachedUser(sessionToken);
     invalidateInboxCache(user.id);
     revalidatePath("/dashboard");
     revalidatePath("/settings");
@@ -25,13 +27,14 @@ export async function markNotificationReadAction(notificationId: string) {
 }
 
 export async function markAllNotificationsReadAction() {
+  const sessionToken = await getSessionToken();
   const result = await mutateApi<{ updated: number }>({
     path: "/notifications/read-all",
     method: "PATCH",
     errorMessage: "Could not mark notifications as read.",
   });
   if (!result.error) {
-    const user = await getCachedUser();
+    const user = await getCachedUser(sessionToken);
     invalidateInboxCache(user.id);
     revalidatePath("/dashboard");
     revalidatePath("/settings");
@@ -79,13 +82,14 @@ export async function removePushSubscriptionAction(endpoint: string) {
 }
 
 export async function syncDueTodayRemindersAction() {
+  const sessionToken = await getSessionToken();
   const result = await mutateApi<{ notificationsCreated: number; pushesAttempted: number }>({
     path: "/notifications/reminders/sync",
     method: "POST",
     errorMessage: "Could not sync due-today reminders.",
   });
   if (!result.error) {
-    const user = await getCachedUser();
+    const user = await getCachedUser(sessionToken);
     invalidateInboxCache(user.id);
     revalidatePath("/dashboard");
     revalidatePath("/settings");

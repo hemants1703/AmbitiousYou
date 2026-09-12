@@ -11,6 +11,7 @@ export type { SettingsTabValue };
 
 interface SettingsTabsProps {
   initialTab: SettingsTabValue;
+  isPro: boolean;
   children: ReactNode;
 }
 
@@ -28,6 +29,8 @@ export function SettingsTabs(props: SettingsTabsProps) {
     }
   }
 
+  const visibleTabs = SETTINGS_TAB_ITEMS.filter((tab) => !tab.proOnly || props.isPro);
+
   return (
     <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-8">
       <nav aria-label="Settings sections" className="lg:w-52 lg:shrink-0">
@@ -35,7 +38,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
           className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-x-visible lg:pb-0"
           role="tablist"
         >
-          {SETTINGS_TAB_ITEMS.map((tab) => {
+          {visibleTabs.map((tab) => {
             const isActive = props.initialTab === tab.value;
             return (
               <Link

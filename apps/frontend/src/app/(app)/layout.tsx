@@ -1,14 +1,19 @@
-import { HeaderInbox, HeaderInboxSkeleton } from "@/components/(app)/shell/header-inbox";
 import { AuthenticatedNavUser, NavUserSkeleton } from "@/components/(app)/shell/authenticated-nav-user";
 import { RegisterPushSw } from "@/components/(app)/notifications/register-push-sw";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { WeeklyReviewModalWrapper } from "@/components/(app)/shell/weekly-review-modal-wrapper";
+import { SiteHeaderWithPro } from "@/components/(app)/shell/site-header-with-pro";
+import { AppSidebar, type AppSidebarProps } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider, type SidebarInsetProps, type SidebarProviderProps } from "@/components/ui/sidebar";
+import { AiSidebarProvider, type AiSidebarProviderProps } from "@/components/ui/ai-sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { createPrivateMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
+import type { CSSProperties, ReactNode } from "react";
 import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import type { ToasterProps } from "sonner";
+import { AiSidebarNavCollapse } from "@/components/(app)/shell/ai-sidebar-nav-collapse";
+import { AiSidebarWrapper } from "@/components/(app)/shell/ai-sidebar-wrapper";
 
 export const metadata: Metadata = {
   ...createPrivateMetadata("AmbitiousYou"),
@@ -23,45 +28,61 @@ export const metadata: Metadata = {
  * user chip, and the inbox stream behind Suspense so they do not block
  * `{children}`. Sidebar open state defaults to expanded on the server; the
  * client persists toggles via cookie/localStorage for the next interaction.
+ *
+ * Provider order: SidebarProvider → AiSidebarProvider so AI open can collapse
+ * the app nav, and AppSidebar remains the `peer` for SidebarInset inset styles.
  */
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: ReactNode }) {
+  const sidebarProviderProps: SidebarProviderProps = {
+    defaultOpen: true,
+    style: {
+      "--sidebar-width": "calc(var(--spacing) * 72)",
+      "--header-height": "calc(var(--spacing) * 12)",
+    } as CSSProperties,
+  };
+  const aiSidebarProviderProps: Pick<AiSidebarProviderProps, "defaultOpen"> = {
+    defaultOpen: false,
+  };
+  const appSidebarProps: AppSidebarProps = {
+    variant: "inset",
+    userSlot: (
+      <Suspense fallback={<NavUserSkeleton />}>
+        <AuthenticatedNavUser />
+      </Suspense>
+    ),
+  };
+  const sidebarInsetProps: SidebarInsetProps = {
+    className: "min-w-0 md:group-data-[ai-state=expanded]/ai-sidebar-wrapper:mr-0!",
+  };
+  const toasterProps: ToasterProps = {
+    richColors: true,
+    theme: "system",
+  };
+
   return (
     <TooltipProvider>
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-md">
-        Skip to content
-      </a>
       <main>
-        <SidebarProvider
-          defaultOpen={true}
-          style={
-            {
-              "--sidebar-width": "calc(var(--spacing) * 72)",
-              "--header-height": "calc(var(--spacing) * 12)",
-            } as React.CSSProperties
-          }>
-          <AppSidebar
-            variant="inset"
-            userSlot={
-              <Suspense fallback={<NavUserSkeleton />}>
-                <AuthenticatedNavUser />
-              </Suspense>
-            }
-          />
-          <SidebarInset className="min-w-0">
-            <SiteHeader
-              inboxSlot={
-                <Suspense fallback={<HeaderInboxSkeleton />}>
-                  <HeaderInbox />
-                </Suspense>
-              }
-            />
-            <div id="main-content" className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">
-              {children}
-            </div>
-          </SidebarInset>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-md">
+          Skip to content
+        </a>
+        <SidebarProvider {...sidebarProviderProps}>
+          <AiSidebarProvider {...aiSidebarProviderProps}>
+            <AppSidebar {...appSidebarProps} />
+            <SidebarInset {...sidebarInsetProps}>
+              <SiteHeaderWithPro />
+              <div id="main-content" className="flex flex-col gap-4 overflow-x-clip px-6 py-4 md:gap-6 md:px-8 md:py-6">
+                {children}
+              </div>
+            </SidebarInset>
+            <Suspense fallback={null}>
+              <AiSidebarWrapper />
+            </Suspense>
+            <AiSidebarNavCollapse />
+          </AiSidebarProvider>
         </SidebarProvider>
         <RegisterPushSw />
-        <Toaster richColors theme="system" />
+        <Toaster {...toasterProps} />
+        <WeeklyReviewModalWrapper />
       </main>
     </TooltipProvider>
   );

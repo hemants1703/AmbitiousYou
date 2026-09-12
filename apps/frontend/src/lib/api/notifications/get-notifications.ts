@@ -7,6 +7,6 @@ export interface NotificationsPayload {
   unreadCount: number;
 }
 
-export async function getNotifications(_sessionToken: string, limit = 30): Promise<NotificationsPayload | null> {
-  return getCachedNotifications(limit);
+export async function getNotifications(sessionToken: string, limit = 30): Promise<NotificationsPayload | null> {
+  return getCachedNotifications(sessionToken, limit);
 }

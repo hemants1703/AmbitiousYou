@@ -197,11 +197,15 @@ export class AmbitionsService {
       throw new BadRequestException(`Ambition with id ${ambitionId} not found`);
     }
 
-    const [updated] = await db
-      .update(ambitions)
-      .set({ isFavourited: !(ambition.isFavourited ?? false) })
-      .where(eq(ambitions.id, ambition.id))
-      .returning();
-    return updated;
+    const nextFavourited = !(ambition.isFavourited ?? false);
+
+    return await db.transaction(async (tx) => {
+      if (nextFavourited) {
+        await tx.update(ambitions).set({ isFavourited: false }).where(eq(ambitions.userId, userId));
+      }
+
+      const [updated] = await tx.update(ambitions).set({ isFavourited: nextFavourited }).where(eq(ambitions.id, ambition.id)).returning();
+      return updated;
+    });
   }
 }

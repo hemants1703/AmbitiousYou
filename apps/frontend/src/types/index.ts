@@ -11,6 +11,7 @@ export type {
   Settings,
   Task,
   User,
+  ProofLog,
 } from "./domain";
 
-export type { AmbitionFull, AmbitionMovesBatch, ToggleFavouriteResult } from "./api";
+export type { AmbitionFull, AmbitionMovesBatch, AttentionCoachPayload, ContractPayload, DailyContract, MissedDayPayload, PrimaryAmbitionPayload, SuggestedMove, ToggleFavouriteResult, WeeklyReview, WeeklyReviewDraft, WeeklyReviewPayload, WeeklyReviewStatusPayload } from "./api";
