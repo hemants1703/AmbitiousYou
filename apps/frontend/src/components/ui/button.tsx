@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
@@ -35,7 +37,7 @@ const buttonVariants = cva(
     defaultVariants: {
       variant: "default",
       size: "default",
-    },
+    } as const,
   }
 )
 
@@ -44,18 +46,20 @@ export type ButtonProps = React.ComponentProps<"button"> &
     asChild?: boolean
   }
 
-export const Button: React.FC<ButtonProps> = ({
+export function Button({
   className,
-  variant = "default",
-  size = "default",
+  variant,
+  size,
   asChild = false,
   ...props
-}) => {
+}: ButtonProps): React.ReactElement {
+  const resolvedVariant = variant ?? "default"
+  const resolvedSize = size ?? "default"
   const sharedProps = {
     "data-slot": "button",
-    "data-variant": variant,
-    "data-size": size,
-    className: cn(buttonVariants({ variant, size, className })),
+    "data-variant": resolvedVariant,
+    "data-size": resolvedSize,
+    className: cn(buttonVariants({ variant: resolvedVariant, size: resolvedSize, className })),
     ...props,
   }
 

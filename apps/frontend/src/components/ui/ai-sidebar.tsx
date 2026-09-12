@@ -6,7 +6,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { AI_SIDEBAR_STORAGE_KEY, persistSidebarOpen } from "@/lib/(app)/sidebar-state";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, type SheetContentProps, type SheetProps } from "@/components/ui/sheet";
 import { SparklesIcon } from "lucide-react";
 
 // react-remove-scroll-bar: only when expanded — zeroRight overrides `right` and would
@@ -41,28 +41,29 @@ function useAiSidebarOptional() {
   return useContext(AiSidebarContext);
 }
 
-interface AiSidebarProviderProps extends React.ComponentProps<"div"> {
+export type AiSidebarProviderProps = React.ComponentProps<"div"> & {
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
-}
+};
 
 /**
  * Wraps app chrome + AI panel. Nest under `SidebarProvider` so
  * `AiSidebarNavCollapse` can collapse the app nav when AI opens.
  */
-function AiSidebarProvider(props: AiSidebarProviderProps) {
+export function AiSidebarProvider(props: AiSidebarProviderProps): React.ReactElement {
   const { defaultOpen = false, open: openProp, onOpenChange: setOpenProp, children, className, style, ...rest } = props;
   const [openMobile, setOpenMobile] = useState(false);
   const isMobile = useIsMobile();
 
   const [_open, _setOpen] = useState(defaultOpen);
-  const open = openProp ?? _open;
+  const open: boolean = openProp ?? _open;
 
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
-      const openState = typeof value === "function" ? value(open) : value;
+      const currentOpen = openProp ?? _open;
+      const openState = typeof value === "function" ? value(currentOpen) : value;
       if (setOpenProp) {
         setOpenProp(openState);
       } else {
@@ -70,7 +71,7 @@ function AiSidebarProvider(props: AiSidebarProviderProps) {
       }
       persistSidebarOpen(openState, AI_SIDEBAR_STORAGE_KEY);
     },
-    [setOpenProp, open],
+    [setOpenProp, openProp, _open],
   );
 
   const toggleSidebar = useCallback(() => {
@@ -150,21 +151,29 @@ function AiSidebar(props: AiSidebarProps) {
   }
 
   if (isMobile) {
+    const mobileSheetProps: SheetProps = {
+      open: openMobile,
+      onOpenChange: setOpenMobile,
+    };
+    const mobileSheetContentProps = {
+      id: "ai-sidebar",
+      "data-sidebar": "ai-sidebar",
+      "data-slot": "ai-sidebar",
+      "data-mobile": "true",
+      className: "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
+      style: {
+        "--sidebar-width": AI_SIDEBAR_WIDTH_MOBILE,
+      } as React.CSSProperties,
+      side,
+    } as SheetContentProps;
+    const mobileSheetHeaderProps: React.ComponentProps<typeof SheetHeader> = {
+      className: "sr-only",
+    };
+
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
-        <SheetContent
-          id="ai-sidebar"
-          data-sidebar="ai-sidebar"
-          data-slot="ai-sidebar"
-          data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-          style={
-            {
-              "--sidebar-width": AI_SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
-          }
-          side={side}>
-          <SheetHeader className="sr-only">
+      <Sheet {...mobileSheetProps}>
+        <SheetContent {...mobileSheetContentProps}>
+          <SheetHeader {...mobileSheetHeaderProps}>
             <SheetTitle>{AI_SIDEBAR_TITLE}</SheetTitle>
             <SheetDescription>Opens the AI assistant panel for planning, coaching, and quick actions.</SheetDescription>
           </SheetHeader>
@@ -227,30 +236,33 @@ function AiSidebar(props: AiSidebarProps) {
   );
 }
 
-export const AiSidebarTrigger: React.FC<ButtonProps> = ({ className, onClick, ...props }) => {
+export function AiSidebarTrigger({ className, onClick, ...props }: ButtonProps): React.ReactElement {
   const { open, openMobile, isMobile, toggleSidebar } = useAiSidebar();
 
+  const triggerProps = {
+    "data-ai-sidebar": "trigger",
+    "data-slot": "ai-sidebar-trigger",
+    type: "button",
+    variant: "ghost",
+    size: "icon-sm",
+    className: cn(className),
+    "aria-label": props["aria-label"] ?? (isMobile ? "Open AI assistant" : open ? "Close AI assistant" : "Open AI assistant"),
+    "aria-expanded": isMobile ? openMobile : open,
+    "aria-controls": "ai-sidebar",
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+      onClick?.(event);
+      toggleSidebar();
+    },
+    ...props,
+  } as ButtonProps;
+
   return (
-    <Button
-      data-ai-sidebar="trigger"
-      data-slot="ai-sidebar-trigger"
-      type="button"
-      variant="ghost"
-      size="icon-sm"
-      className={cn(className)}
-      aria-label={props["aria-label"] ?? (isMobile ? "Open AI assistant" : open ? "Close AI assistant" : "Open AI assistant")}
-      aria-expanded={isMobile ? openMobile : open}
-      aria-controls="ai-sidebar"
-      onClick={(event) => {
-        onClick?.(event);
-        toggleSidebar();
-      }}
-      {...props}>
+    <Button {...triggerProps}>
       <SparklesIcon />
       <span className="sr-only">Toggle AI assistant</span>
     </Button>
   );
-};
+}
 
 function AiSidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -312,7 +324,6 @@ export {
   AiSidebarGroupContent,
   AiSidebarGroupLabel,
   AiSidebarHeader,
-  AiSidebarProvider,
   useAiSidebar,
   useAiSidebarOptional,
 };

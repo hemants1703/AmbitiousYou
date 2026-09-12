@@ -10,20 +10,22 @@ export type SeparatorProps = React.ComponentPropsWithoutRef<"div"> & {
   decorative?: boolean
 }
 
-export const Separator: React.FC<SeparatorProps> = ({
+export function Separator({
   className,
   orientation = "horizontal",
   decorative = true,
   ...props
-}) => (
-  <SeparatorPrimitive.Root
-    data-slot="separator"
-    decorative={decorative}
-    orientation={orientation}
-    className={cn(
-      "shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
-      className
-    )}
-    {...props}
-  />
-)
+}: SeparatorProps): React.ReactElement {
+  return (
+    <SeparatorPrimitive.Root
+      data-slot="separator"
+      decorative={decorative}
+      orientation={orientation}
+      className={cn(
+        "shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
+        className
+      )}
+      {...props}
+    />
+  )
+}

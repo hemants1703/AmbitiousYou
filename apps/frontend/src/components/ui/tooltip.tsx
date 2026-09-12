@@ -13,11 +13,20 @@ function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root
   return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
 }
 
-function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
+export type TooltipTriggerProps = React.ComponentProps<typeof TooltipPrimitive.Trigger>;
+
+export function TooltipTrigger({ ...props }: TooltipTriggerProps): React.ReactElement {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 
-function TooltipContent({ className, sideOffset = 0, children, ...props }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+export type TooltipContentProps = React.ComponentProps<typeof TooltipPrimitive.Content>;
+
+export function TooltipContent({
+  className,
+  sideOffset = 0,
+  children,
+  ...props
+}: TooltipContentProps): React.ReactElement {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
@@ -35,4 +44,4 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
   );
 }
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+export { Tooltip, TooltipProvider };

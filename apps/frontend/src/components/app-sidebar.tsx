@@ -51,12 +51,12 @@ function getNavData(isPro: boolean) {
   return { navMain, navSecondary };
 }
 
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+export type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   isPro?: boolean;
   userSlot: React.ReactNode;
-}
+};
 
-export function AppSidebar(props: AppSidebarProps) {
+export function AppSidebar(props: AppSidebarProps): React.ReactElement {
   const { isPro = false, userSlot, ...sidebarProps } = props;
   const { navMain, navSecondary } = getNavData(isPro);
   return (

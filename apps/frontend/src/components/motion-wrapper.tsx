@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
-interface FadeInProps {
+export type FadeInProps = {
   children: ReactNode;
   className?: string;
   delayMs?: number;
-}
+};
 
 /** Lightweight CSS entrance — avoids framer-motion on hot routes. */
-export function FadeIn(props: FadeInProps) {
+export function FadeIn(props: FadeInProps): ReactElement {
   const delayMs = props.delayMs ?? 0;
 
   return (
